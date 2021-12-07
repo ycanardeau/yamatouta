@@ -1,0 +1,24 @@
+{
+	"artists": {
+		"addArtist": "うたよみをかきたす",
+		"artistType": "くさわい",
+		"name": "なまえ"
+	},
+	"artistTypeNames": {
+		"person": "ひと",
+		"group": "くみあい",
+		"other": "そのほか",
+		"character": "ものがたりのひと"
+	},
+	"shared": {
+		"artists": "うたよみ",
+		"cancel": "とりけす",
+		"details": "くわしくみる",
+		"home": "まちうけ",
+		"quotes": "やまとうた",
+		"source": "でどころ",
+		"words": "ことのは",
+		"works": "しながき",
+		"users": "つかいて"
+	}
+}

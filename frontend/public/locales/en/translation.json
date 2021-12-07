@@ -1,0 +1,24 @@
+{
+	"artists": {
+		"addArtist": "Add Artist",
+		"artistType": "Type",
+		"name": "Name"
+	},
+	"artistTypeNames": {
+		"person": "Person",
+		"group": "Group",
+		"other": "Other",
+		"character": "Character"
+	},
+	"shared": {
+		"artists": "Artists",
+		"cancel": "Cancel",
+		"details": "Details",
+		"home": "Home",
+		"quotes": "Quotes",
+		"source": "Source",
+		"words": "Words",
+		"works": "Works",
+		"users": "Users"
+	}
+}
