@@ -17,11 +17,13 @@ export class UserController {
 	listUsers(
 		@Query() query: ListUsersQuery,
 	): Promise<SearchResultObject<UserObject>> {
+		const { offset, limit, getTotalCount } = query;
+
 		return this.listUsersService.listUsers({
-			// TODO: sort: UserSortRule[query.sort as keyof typeof UserSortRule],
-			offset: Number(query.offset),
-			limit: Number(query.limit),
-			getTotalCount: query.getTotalCount === 'true',
+			// TODO: sort: UserSortRule[sort as keyof typeof UserSortRule],
+			offset: Number(offset),
+			limit: Number(limit),
+			getTotalCount: getTotalCount === 'true',
 		});
 	}
 

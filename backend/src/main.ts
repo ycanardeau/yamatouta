@@ -1,5 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
@@ -7,14 +9,19 @@ import { AppModule } from './app.module';
 async function bootstrap(): Promise<void> {
 	const app = await NestFactory.create(AppModule);
 
+	const configService = app.get(ConfigService);
+
 	app.use(helmet());
 
 	app.useGlobalPipes(new ValidationPipe());
 
 	app.enableCors({
-		origin: process.env.ALLOWED_CORS_ORIGINS?.split(','),
+		origin: configService.get('ALLOWED_CORS_ORIGINS').split(','),
+		credentials: true,
 	});
 
-	await app.listen(process.env.PORT || 5000);
+	app.use(cookieParser());
+
+	await app.listen(configService.get('PORT') || 5000);
 }
 bootstrap();

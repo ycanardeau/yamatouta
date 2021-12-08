@@ -18,12 +18,14 @@ export class ArtistController {
 	listArtists(
 		@Query() query: ListArtistsQuery,
 	): Promise<SearchResultObject<ArtistObject>> {
+		const { artistType, offset, limit, getTotalCount } = query;
+
 		return this.listArtistsService.listArtists({
-			artistType: ArtistType[query.artistType as keyof typeof ArtistType],
-			// TODO: sort: ArtistSortRule[query.sort as keyof typeof ArtistSortRule],
-			offset: Number(query.offset),
-			limit: Number(query.limit),
-			getTotalCount: query.getTotalCount === 'true',
+			artistType: ArtistType[artistType as keyof typeof ArtistType],
+			// TODO: sort: ArtistSortRule[sort as keyof typeof ArtistSortRule],
+			offset: Number(offset),
+			limit: Number(limit),
+			getTotalCount: getTotalCount === 'true',
 		});
 	}
 

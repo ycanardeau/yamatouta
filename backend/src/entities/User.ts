@@ -18,25 +18,25 @@ export class User {
 	hidden = false;
 
 	@Property()
-	name!: string;
+	name: string;
 
 	@Property()
-	email!: string;
+	email: string;
 
 	@Property()
-	normalizedEmail!: string;
+	normalizedEmail: string;
 
 	@Property()
 	emailConfirmed = false;
 
 	@Property()
-	passwordHashAlgorithm!: string;
+	passwordHashAlgorithm: string;
 
 	@Property()
-	salt!: string;
+	salt: string;
 
 	@Property()
-	passwordHash!: string;
+	passwordHash: string;
 
 	@Property()
 	securityStamp?: string;
@@ -61,4 +61,29 @@ export class User {
 
 	@Property()
 	accessFailedCount = 0;
+
+	constructor(params: {
+		name: string;
+		email: string;
+		normalizedEmail: string;
+		passwordHashAlgorithm: string;
+		salt: string;
+		passwordHash: string;
+	}) {
+		const {
+			name,
+			email,
+			normalizedEmail,
+			passwordHashAlgorithm,
+			salt,
+			passwordHash,
+		} = params;
+
+		this.name = name;
+		this.email = email;
+		this.normalizedEmail = normalizedEmail;
+		this.passwordHashAlgorithm = passwordHashAlgorithm;
+		this.salt = salt;
+		this.passwordHash = passwordHash;
+	}
 }
