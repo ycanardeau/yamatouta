@@ -1,8 +1,8 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 
-import { ArtistDto } from '../../../dto/artists/ArtistDto';
-import { Artist } from '../../../entities/Artist';
+import { ArtistDto } from '../../dto/artists/ArtistDto';
+import { Artist } from '../../entities/Artist';
 
 @Injectable()
 export class GetArtistService {

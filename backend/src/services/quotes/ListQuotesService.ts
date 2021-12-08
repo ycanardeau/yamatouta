@@ -2,10 +2,10 @@ import { QueryOrder, QueryOrderMap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 
-import { SearchResultDto } from '../../../dto/SearchResultDto';
-import { QuoteDto } from '../../../dto/quotes/QuoteDto';
-import { QuoteSortRule } from '../../../dto/quotes/QuoteSortRule';
-import { Quote, QuoteType } from '../../../entities/Quote';
+import { SearchResultDto } from '../../dto/SearchResultDto';
+import { QuoteDto } from '../../dto/quotes/QuoteDto';
+import { QuoteSortRule } from '../../dto/quotes/QuoteSortRule';
+import { Quote, QuoteType } from '../../entities/Quote';
 
 @Injectable()
 export class ListQuotesService {

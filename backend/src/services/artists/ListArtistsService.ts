@@ -2,10 +2,10 @@ import { QueryOrder, QueryOrderMap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 
-import { SearchResultDto } from '../../../dto/SearchResultDto';
-import { ArtistDto } from '../../../dto/artists/ArtistDto';
-import { ArtistSortRule } from '../../../dto/artists/ArtistSortRule';
-import { Artist, ArtistType } from '../../../entities/Artist';
+import { SearchResultDto } from '../../dto/SearchResultDto';
+import { ArtistDto } from '../../dto/artists/ArtistDto';
+import { ArtistSortRule } from '../../dto/artists/ArtistSortRule';
+import { Artist, ArtistType } from '../../entities/Artist';
 
 @Injectable()
 export class ListArtistsService {

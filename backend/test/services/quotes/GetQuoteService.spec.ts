@@ -1,13 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { GetQuoteService } from './get-quote.service';
+import { AppModule } from '../../../src/app.module';
+import { GetQuoteService } from '../../../src/services/quotes/GetQuoteService';
 
 describe('GetQuoteService', () => {
 	let service: GetQuoteService;
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [GetQuoteService],
+			imports: [AppModule],
 		}).compile();
 
 		service = module.get<GetQuoteService>(GetQuoteService);

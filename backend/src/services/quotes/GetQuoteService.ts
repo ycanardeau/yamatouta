@@ -1,8 +1,8 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 
-import { QuoteDto } from '../../../dto/quotes/QuoteDto';
-import { Quote } from '../../../entities/Quote';
+import { QuoteDto } from '../../dto/quotes/QuoteDto';
+import { Quote } from '../../entities/Quote';
 
 @Injectable()
 export class GetQuoteService {
