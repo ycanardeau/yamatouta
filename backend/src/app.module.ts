@@ -11,6 +11,7 @@ import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
 import { GetQuoteService } from './services/quotes/GetQuoteService';
 import { ListQuotesService } from './services/quotes/ListQuotesService';
+import { GetUserService } from './services/users/GetUserService';
 import { ListUsersService } from './services/users/ListUsersService';
 
 @Module({
@@ -38,6 +39,7 @@ import { ListUsersService } from './services/users/ListUsersService';
 		ListQuotesService,
 		GetQuoteService,
 		ListUsersService,
+		GetUserService,
 	],
 })
 export class AppModule {}

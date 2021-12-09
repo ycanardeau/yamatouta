@@ -1,5 +1,4 @@
-import { NotFoundError } from '@mikro-orm/core';
-import { Controller, Get, NotFoundException } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AjvParams, AjvQuery } from 'nestjs-ajv-glue/dist';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
@@ -31,15 +30,10 @@ export class ArtistController {
 	}
 
 	@Get(':artistId')
-	async getArtist(
+	getArtist(
 		@AjvParams(getArtistParamsSchema)
 		{ artistId }: IGetArtistParams,
 	): Promise<ArtistObject> {
-		try {
-			return await this.getArtistService.getArtist(artistId);
-		} catch (error) {
-			if (error instanceof NotFoundError) throw new NotFoundException();
-			throw error;
-		}
+		return this.getArtistService.getArtist(artistId);
 	}
 }
