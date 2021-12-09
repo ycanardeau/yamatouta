@@ -6,10 +6,12 @@ import Joi from 'joi';
 
 import { ArtistController } from './controllers/ArtistController';
 import { QuoteController } from './controllers/QuoteController';
+import { UserController } from './controllers/UserController';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
 import { GetQuoteService } from './services/quotes/GetQuoteService';
 import { ListQuotesService } from './services/quotes/ListQuotesService';
+import { ListUsersService } from './services/users/ListUsersService';
 
 @Module({
 	imports: [
@@ -29,12 +31,13 @@ import { ListQuotesService } from './services/quotes/ListQuotesService';
 		}),
 		MikroOrmModule.forRoot(),
 	],
-	controllers: [ArtistController, QuoteController],
+	controllers: [ArtistController, QuoteController, UserController],
 	providers: [
 		ListArtistsService,
 		GetArtistService,
 		ListQuotesService,
 		GetQuoteService,
+		ListUsersService,
 	],
 })
 export class AppModule {}
