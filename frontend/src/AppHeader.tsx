@@ -40,6 +40,12 @@ const AppHeader = (): React.ReactElement => {
 							component={RouterLink}
 							to="/artists"
 						/>
+						<Tab
+							label={t('shared.users')}
+							value="/users"
+							component={RouterLink}
+							to="/users"
+						/>
 					</Tabs>
 					<Box sx={{ flexGrow: 1 }} />
 					<Stack direction="row" spacing={2}>
