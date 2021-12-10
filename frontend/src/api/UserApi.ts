@@ -17,3 +17,11 @@ export const listUsers = async (params: {
 
 	return response.data;
 };
+
+export const getUser = async (userId: number): Promise<IUserObject> => {
+	const response = await axios.get<IUserObject>(
+		`${config.apiEndpoint}/users/${userId}`,
+	);
+
+	return response.data;
+};
