@@ -7,6 +7,7 @@ import Joi from 'joi';
 import { ArtistController } from './controllers/ArtistController';
 import { QuoteController } from './controllers/QuoteController';
 import { UserController } from './controllers/UserController';
+import { AuditLogService } from './services/AuditLogService';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
 import { GetQuoteService } from './services/quotes/GetQuoteService';
@@ -40,6 +41,7 @@ import { ListUsersService } from './services/users/ListUsersService';
 		GetQuoteService,
 		ListUsersService,
 		GetUserService,
+		AuditLogService,
 	],
 })
 export class AppModule {}
