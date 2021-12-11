@@ -1,11 +1,11 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 
-import { IQuoteDto } from '../dto/quotes/IQuoteDto';
+import { IQuoteObject } from '../dto/quotes/IQuoteObject';
 import QuoteListItem from './QuoteListItem';
 
 interface IQuoteListProps {
-	quotes: IQuoteDto[];
+	quotes: IQuoteObject[];
 }
 
 const QuoteList = observer(

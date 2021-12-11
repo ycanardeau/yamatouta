@@ -3,8 +3,8 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listQuotes } from '../../api/QuoteApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { ISearchResultDto } from '../../dto/ISearchResultDto';
-import { IQuoteDto } from '../../dto/quotes/IQuoteDto';
+import { ISearchResultObject } from '../../dto/ISearchResultObject';
+import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { PaginationStore } from '../PaginationStore';
 
 interface IQuoteIndexRouteParams {
@@ -33,12 +33,12 @@ export class QuoteIndexStore
 	implements
 		IStoreWithPagination<
 			IQuoteIndexRouteParams,
-			ISearchResultDto<IQuoteDto>
+			ISearchResultObject<IQuoteObject>
 		>
 {
 	readonly paginationStore = new PaginationStore();
 
-	@observable quotes: IQuoteDto[] = [];
+	@observable quotes: IQuoteObject[] = [];
 	@observable artistId?: number;
 
 	constructor() {
@@ -51,7 +51,7 @@ export class QuoteIndexStore
 
 	updateResults = async (
 		clearResults: boolean,
-	): Promise<ISearchResultDto<IQuoteDto>> => {
+	): Promise<ISearchResultObject<IQuoteObject>> => {
 		const paginationParams = this.paginationStore.toParams(clearResults);
 
 		const result = await listQuotes({

@@ -1,6 +1,6 @@
 import { Artist, ArtistType } from '../../entities/Artist';
 
-export class ArtistDto {
+export class ArtistObject {
 	readonly id: number;
 	readonly name: string;
 	readonly artistType: ArtistType;

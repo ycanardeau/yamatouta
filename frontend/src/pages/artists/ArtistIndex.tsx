@@ -14,14 +14,14 @@ import { Link as RouterLink } from 'react-router-dom';
 import Pagination from '../../components/Pagination';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import { IArtistDto } from '../../dto/artists/IArtistDto';
+import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistIndexStore } from '../../stores/artists/ArtistIndexStore';
 import Layout from '../Layout';
 
 const store = new ArtistIndexStore();
 
 interface IArtistListItemProps {
-	artist: IArtistDto;
+	artist: IArtistObject;
 }
 
 const ArtistListItem = ({

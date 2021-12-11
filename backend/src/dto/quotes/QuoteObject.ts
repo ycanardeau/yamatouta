@@ -1,6 +1,6 @@
 import { AuthorType, IAuthor, Quote, QuoteType } from '../../entities/Quote';
 
-export class AuthorDto {
+export class AuthorObject {
 	readonly authorType: AuthorType;
 	readonly id: number;
 	readonly name: string;
@@ -14,12 +14,12 @@ export class AuthorDto {
 	}
 }
 
-export class QuoteDto {
+export class QuoteObject {
 	readonly id: number;
 	readonly quoteType: QuoteType;
 	readonly phrases: string[];
 	readonly locale?: string;
-	readonly author: AuthorDto;
+	readonly author: AuthorObject;
 	readonly sourceUrl?: string;
 
 	constructor(quote: Quote) {
@@ -30,7 +30,7 @@ export class QuoteDto {
 		this.quoteType = quote.quoteType;
 		this.phrases = quote.text.split('\n');
 		this.locale = quote.locale;
-		this.author = new AuthorDto(quote.author);
+		this.author = new AuthorObject(quote.author);
 		this.sourceUrl = quote.sourceUrl;
 	}
 }

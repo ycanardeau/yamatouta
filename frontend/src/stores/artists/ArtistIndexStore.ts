@@ -3,8 +3,8 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listArtists } from '../../api/ArtistApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { ISearchResultDto } from '../../dto/ISearchResultDto';
-import { IArtistDto } from '../../dto/artists/IArtistDto';
+import { ISearchResultObject } from '../../dto/ISearchResultObject';
+import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { CreateArtistDialogStore } from '../CreateArtistDialogStore';
 import { PaginationStore } from '../PaginationStore';
 
@@ -34,13 +34,13 @@ export class ArtistIndexStore
 	implements
 		IStoreWithPagination<
 			IArtistIndexRouteParams,
-			ISearchResultDto<IArtistDto>
+			ISearchResultObject<IArtistObject>
 		>
 {
 	readonly paginationStore = new PaginationStore();
 	readonly createArtistDialogStore = new CreateArtistDialogStore();
 
-	@observable artists: IArtistDto[] = [];
+	@observable artists: IArtistObject[] = [];
 
 	constructor() {
 		makeObservable(this);
@@ -52,7 +52,7 @@ export class ArtistIndexStore
 
 	updateResults = async (
 		clearResults: boolean,
-	): Promise<ISearchResultDto<IArtistDto>> => {
+	): Promise<ISearchResultObject<IArtistObject>> => {
 		const paginationParams = this.paginationStore.toParams(clearResults);
 
 		const result = await listArtists({

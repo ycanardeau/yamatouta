@@ -2,10 +2,10 @@ import { Link } from '@mui/material';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { IAuthorDto } from '../dto/quotes/IQuoteDto';
+import { IAuthorObject } from '../dto/quotes/IQuoteObject';
 
 interface IAuthorLinkProps {
-	author: IAuthorDto;
+	author: IAuthorObject;
 	children: React.ReactNode;
 }
 

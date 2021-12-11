@@ -2,8 +2,8 @@ import { QueryOrder, QueryOrderMap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 
-import { SearchResultDto } from '../../dto/SearchResultDto';
-import { QuoteDto } from '../../dto/quotes/QuoteDto';
+import { SearchResultObject } from '../../dto/SearchResultObject';
+import { QuoteObject } from '../../dto/quotes/QuoteObject';
 import { QuoteSortRule } from '../../dto/quotes/QuoteSortRule';
 import { Quote, QuoteType } from '../../entities/Quote';
 
@@ -35,7 +35,7 @@ export class ListQuotesService {
 		limit?: number;
 		getTotalCount?: boolean;
 		artistId?: number;
-	}): Promise<SearchResultDto<QuoteDto>> {
+	}): Promise<SearchResultObject<QuoteObject>> {
 		return this.em.transactional(async (em) => {
 			const qb = em
 				.createQueryBuilder(Quote)
@@ -83,8 +83,8 @@ export class ListQuotesService {
 
 			const [quotes, count] = await Promise.all([getItems(), getCount()]);
 
-			return new SearchResultDto<QuoteDto>(
-				quotes.map((quote) => new QuoteDto(quote)),
+			return new SearchResultObject<QuoteObject>(
+				quotes.map((quote) => new QuoteObject(quote)),
 				count,
 			);
 		});

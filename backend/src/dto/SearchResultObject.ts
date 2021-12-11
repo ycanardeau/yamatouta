@@ -1,4 +1,4 @@
-export class SearchResultDto<T> {
+export class SearchResultObject<T> {
 	readonly items: T[];
 	readonly totalCount: number;
 

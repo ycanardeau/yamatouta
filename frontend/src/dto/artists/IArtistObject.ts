@@ -1,6 +1,6 @@
 import { ArtistType } from './ArtistType';
 
-export interface IArtistDto {
+export interface IArtistObject {
 	id: number;
 	name: string;
 	artistType: ArtistType;

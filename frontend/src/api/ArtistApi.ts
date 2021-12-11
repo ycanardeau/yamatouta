@@ -1,17 +1,17 @@
 import axios from 'axios';
 
 import { config } from '../config';
-import { ISearchResultDto } from '../dto/ISearchResultDto';
+import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { ArtistType } from '../dto/artists/ArtistType';
-import { IArtistDto } from '../dto/artists/IArtistDto';
+import { IArtistObject } from '../dto/artists/IArtistObject';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 export const listArtists = async ({
 	pagination,
 }: {
 	pagination: IPaginationParams;
-}): Promise<ISearchResultDto<IArtistDto>> => {
-	const response = await axios.get<ISearchResultDto<IArtistDto>>(
+}): Promise<ISearchResultObject<IArtistObject>> => {
+	const response = await axios.get<ISearchResultObject<IArtistObject>>(
 		`${config.apiEndpoint}/artists`,
 		{ params: { ...pagination } },
 	);
@@ -19,8 +19,8 @@ export const listArtists = async ({
 	return response.data;
 };
 
-export const getArtist = async (artistId: number): Promise<IArtistDto> => {
-	const response = await axios.get<IArtistDto>(
+export const getArtist = async (artistId: number): Promise<IArtistObject> => {
+	const response = await axios.get<IArtistObject>(
 		`${config.apiEndpoint}/artists/${artistId}`,
 	);
 
@@ -33,8 +33,8 @@ export const createArtist = async ({
 }: {
 	name: string;
 	artistType: ArtistType;
-}): Promise<IArtistDto> => {
-	const response = await axios.post<IArtistDto>(
+}): Promise<IArtistObject> => {
+	const response = await axios.post<IArtistObject>(
 		`${config.apiEndpoint}/artists`,
 		{
 			name,

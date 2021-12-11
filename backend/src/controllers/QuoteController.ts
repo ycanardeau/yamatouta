@@ -2,8 +2,8 @@ import { NotFoundError } from '@mikro-orm/core';
 import { Controller, Get, NotFoundException } from '@nestjs/common';
 import { AjvParams, AjvQuery } from 'nestjs-ajv-glue/dist';
 
-import { SearchResultDto } from '../dto/SearchResultDto';
-import { QuoteDto } from '../dto/quotes/QuoteDto';
+import { SearchResultObject } from '../dto/SearchResultObject';
+import { QuoteObject } from '../dto/quotes/QuoteObject';
 import {
 	getQuoteParamsSchema,
 	IGetQuoteParams,
@@ -26,7 +26,7 @@ export class QuoteController {
 	listQuotes(
 		@AjvQuery(listQuotesQuerySchema)
 		query: IListQuotesQuery,
-	): Promise<SearchResultDto<QuoteDto>> {
+	): Promise<SearchResultObject<QuoteObject>> {
 		return this.listQuotesService.listQuotes(query);
 	}
 
@@ -34,7 +34,7 @@ export class QuoteController {
 	async getQuote(
 		@AjvParams(getQuoteParamsSchema)
 		{ quoteId }: IGetQuoteParams,
-	): Promise<QuoteDto> {
+	): Promise<QuoteObject> {
 		try {
 			return await this.getQuoteService.getQuote(quoteId);
 		} catch (error) {

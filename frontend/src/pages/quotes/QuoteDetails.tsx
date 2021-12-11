@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 
 import { getQuote } from '../../api/QuoteApi';
 import QuoteListItem from '../../components/QuoteListItem';
-import { IQuoteDto } from '../../dto/quotes/IQuoteDto';
+import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import Layout from '../Layout';
 
 interface IQuoteDetailsLayoutProps {
-	quote: IQuoteDto;
+	quote: IQuoteObject;
 }
 
 const QuoteDetailsLayout = ({
@@ -51,7 +51,7 @@ const QuoteDetailsLayout = ({
 
 const QuoteDetails = (): React.ReactElement | null => {
 	const [model, setModel] = React.useState<
-		{ quote: IQuoteDto } | undefined
+		{ quote: IQuoteObject } | undefined
 	>();
 
 	const { quoteId } = useParams();

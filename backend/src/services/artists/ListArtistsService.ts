@@ -2,8 +2,8 @@ import { QueryOrder, QueryOrderMap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 
-import { SearchResultDto } from '../../dto/SearchResultDto';
-import { ArtistDto } from '../../dto/artists/ArtistDto';
+import { SearchResultObject } from '../../dto/SearchResultObject';
+import { ArtistObject } from '../../dto/artists/ArtistObject';
 import { ArtistSortRule } from '../../dto/artists/ArtistSortRule';
 import { Artist, ArtistType } from '../../entities/Artist';
 
@@ -33,7 +33,7 @@ export class ListArtistsService {
 		offset?: number;
 		limit?: number;
 		getTotalCount?: boolean;
-	}): Promise<SearchResultDto<ArtistDto>> {
+	}): Promise<SearchResultObject<ArtistObject>> {
 		return this.em.transactional(async (em) => {
 			const qb = em
 				.createQueryBuilder(Artist)
@@ -79,8 +79,8 @@ export class ListArtistsService {
 				getCount(),
 			]);
 
-			return new SearchResultDto<ArtistDto>(
-				artists.map((artist) => new ArtistDto(artist)),
+			return new SearchResultObject<ArtistObject>(
+				artists.map((artist) => new ArtistObject(artist)),
 				count,
 			);
 		});

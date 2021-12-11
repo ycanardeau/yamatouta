@@ -1,14 +1,14 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 
-import { QuoteDto } from '../../dto/quotes/QuoteDto';
+import { QuoteObject } from '../../dto/quotes/QuoteObject';
 import { Quote } from '../../entities/Quote';
 
 @Injectable()
 export class GetQuoteService {
 	constructor(private readonly em: EntityManager) {}
 
-	async getQuote(quoteId: number): Promise<QuoteDto> {
+	async getQuote(quoteId: number): Promise<QuoteObject> {
 		const quote = await this.em.findOneOrFail(
 			Quote,
 			{
@@ -19,6 +19,6 @@ export class GetQuoteService {
 			{ populate: ['artist'] },
 		);
 
-		return new QuoteDto(quote);
+		return new QuoteObject(quote);
 	}
 }

@@ -3,11 +3,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { IQuoteDto } from '../dto/quotes/IQuoteDto';
+import { IQuoteObject } from '../dto/quotes/IQuoteObject';
 import AuthorLink from './AuthorLink';
 
 interface IQuoteListItemProps {
-	quote: IQuoteDto;
+	quote: IQuoteObject;
 	showDetailsButton: boolean;
 }
 

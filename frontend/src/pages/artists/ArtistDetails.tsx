@@ -2,13 +2,13 @@ import React from 'react';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 
 import { getArtist } from '../../api/ArtistApi';
-import { IArtistDto } from '../../dto/artists/IArtistDto';
+import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 
 const ArtistQuotes = React.lazy(() => import('./ArtistQuotes'));
 
 interface IArtistDetailsLayoutProps {
-	artist: IArtistDto;
+	artist: IArtistObject;
 	store: ArtistDetailsStore;
 }
 
@@ -37,7 +37,7 @@ const ArtistDetailsLayout = ({
 
 const ArtistDetails = (): React.ReactElement | null => {
 	const [model, setModel] = React.useState<
-		{ artist: IArtistDto; store: ArtistDetailsStore } | undefined
+		{ artist: IArtistObject; store: ArtistDetailsStore } | undefined
 	>();
 
 	const { artistId } = useParams();

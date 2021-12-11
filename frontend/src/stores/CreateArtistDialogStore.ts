@@ -8,7 +8,7 @@ import {
 
 import { createArtist } from '../api/ArtistApi';
 import { ArtistType } from '../dto/artists/ArtistType';
-import { IArtistDto } from '../dto/artists/IArtistDto';
+import { IArtistObject } from '../dto/artists/IArtistObject';
 
 export class CreateArtistDialogStore {
 	@observable dialogOpen = false;
@@ -52,7 +52,7 @@ export class CreateArtistDialogStore {
 		this.artistType = value;
 	};
 
-	@action submit = async (): Promise<IArtistDto> => {
+	@action submit = async (): Promise<IArtistObject> => {
 		try {
 			this.submitting = true;
 
