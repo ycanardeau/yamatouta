@@ -21,19 +21,15 @@ export class ListArtistsService {
 		}
 	}
 
-	listArtists({
-		artistType,
-		sort,
-		offset,
-		limit,
-		getTotalCount,
-	}: {
+	listArtists(params: {
 		artistType?: ArtistType;
 		sort?: ArtistSortRule;
 		offset?: number;
 		limit?: number;
 		getTotalCount?: boolean;
 	}): Promise<SearchResultObject<ArtistObject>> {
+		const { artistType, sort, offset, limit, getTotalCount } = params;
+
 		return this.em.transactional(async (em) => {
 			const qb = em
 				.createQueryBuilder(Artist)

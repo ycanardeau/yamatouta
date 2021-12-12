@@ -66,15 +66,13 @@ export abstract class Quote {
 	@Embedded({ prefix: false })
 	date = new PartialDate();
 
-	protected constructor({
-		quoteType,
-		text,
-		locale,
-	}: {
+	protected constructor(params: {
 		quoteType: QuoteType;
 		text: string;
 		locale?: string;
 	}) {
+		const { quoteType, text, locale } = params;
+
 		this.quoteType = quoteType;
 		this.text = text;
 		this.locale = locale;

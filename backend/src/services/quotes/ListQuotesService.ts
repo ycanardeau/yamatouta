@@ -21,14 +21,7 @@ export class ListQuotesService {
 		}
 	}
 
-	listQuotes({
-		quoteType,
-		sort,
-		offset,
-		limit,
-		getTotalCount,
-		artistId,
-	}: {
+	listQuotes(params: {
 		quoteType?: QuoteType;
 		sort?: QuoteSortRule;
 		offset?: number;
@@ -36,6 +29,9 @@ export class ListQuotesService {
 		getTotalCount?: boolean;
 		artistId?: number;
 	}): Promise<SearchResultObject<QuoteObject>> {
+		const { quoteType, sort, offset, limit, getTotalCount, artistId } =
+			params;
+
 		return this.em.transactional(async (em) => {
 			const qb = em
 				.createQueryBuilder(Quote)
