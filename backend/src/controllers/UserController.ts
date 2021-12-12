@@ -1,16 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
-import { AjvParams, AjvQuery } from 'nestjs-ajv-glue/dist';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { UserObject } from '../dto/users/UserObject';
-import {
-	getUserParamsSchema,
-	IGetUserParams,
-} from '../requests/users/IGetUserParams';
-import {
-	IListUsersQuery,
-	listUsersQuerySchema,
-} from '../requests/users/IListUsersQuery';
+import { ListUsersQuery } from '../requests/users/ListUsersQuery';
 import { GetUserService } from '../services/users/GetUserService';
 import { ListUsersService } from '../services/users/ListUsersService';
 
@@ -23,16 +15,19 @@ export class UserController {
 
 	@Get()
 	listUsers(
-		@AjvQuery(listUsersQuerySchema)
-		query: IListUsersQuery,
+		@Query() query: ListUsersQuery,
 	): Promise<SearchResultObject<UserObject>> {
-		return this.listUsersService.listUsers(query);
+		return this.listUsersService.listUsers({
+			// TODO: sort: UserSortRule[query.sort as keyof typeof UserSortRule],
+			offset: Number(query.offset),
+			limit: Number(query.limit),
+			getTotalCount: query.getTotalCount === 'true',
+		});
 	}
 
 	@Get(':userId')
 	getUser(
-		@AjvParams(getUserParamsSchema)
-		{ userId }: IGetUserParams,
+		@Param('userId', ParseIntPipe) userId: number,
 	): Promise<UserObject> {
 		return this.getUserService.getUser(userId);
 	}

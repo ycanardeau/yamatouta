@@ -1,16 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
-import { AjvParams, AjvQuery } from 'nestjs-ajv-glue/dist';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { ArtistObject } from '../dto/artists/ArtistObject';
-import {
-	getArtistParamsSchema,
-	IGetArtistParams,
-} from '../requests/artists/IGetArtistParams';
-import {
-	IListArtistsQuery,
-	listArtistsQuerySchema,
-} from '../requests/artists/IListArtistsQuery';
+import { ArtistType } from '../entities/Artist';
+import { ListArtistsQuery } from '../requests/artists/ListArtistsQuery';
 import { GetArtistService } from '../services/artists/GetArtistService';
 import { ListArtistsService } from '../services/artists/ListArtistsService';
 
@@ -23,16 +16,20 @@ export class ArtistController {
 
 	@Get()
 	listArtists(
-		@AjvQuery(listArtistsQuerySchema)
-		query: IListArtistsQuery,
+		@Query() query: ListArtistsQuery,
 	): Promise<SearchResultObject<ArtistObject>> {
-		return this.listArtistsService.listArtists(query);
+		return this.listArtistsService.listArtists({
+			artistType: ArtistType[query.artistType as keyof typeof ArtistType],
+			// TODO: sort: ArtistSortRule[query.sort as keyof typeof ArtistSortRule],
+			offset: Number(query.offset),
+			limit: Number(query.limit),
+			getTotalCount: query.getTotalCount === 'true',
+		});
 	}
 
 	@Get(':artistId')
 	getArtist(
-		@AjvParams(getArtistParamsSchema)
-		{ artistId }: IGetArtistParams,
+		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<ArtistObject> {
 		return this.getArtistService.getArtist(artistId);
 	}

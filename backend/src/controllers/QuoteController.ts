@@ -1,16 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
-import { AjvParams, AjvQuery } from 'nestjs-ajv-glue/dist';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { QuoteObject } from '../dto/quotes/QuoteObject';
-import {
-	getQuoteParamsSchema,
-	IGetQuoteParams,
-} from '../requests/quotes/IGetQuoteParams';
-import {
-	IListQuotesQuery,
-	listQuotesQuerySchema,
-} from '../requests/quotes/IListQuotesQuery';
+import { QuoteType } from '../entities/Quote';
+import { ListQuotesQuery } from '../requests/quotes/ListQuotesQuery';
 import { GetQuoteService } from '../services/quotes/GetQuoteService';
 import { ListQuotesService } from '../services/quotes/ListQuotesService';
 
@@ -23,16 +16,21 @@ export class QuoteController {
 
 	@Get()
 	listQuotes(
-		@AjvQuery(listQuotesQuerySchema)
-		query: IListQuotesQuery,
+		@Query() query: ListQuotesQuery,
 	): Promise<SearchResultObject<QuoteObject>> {
-		return this.listQuotesService.listQuotes(query);
+		return this.listQuotesService.listQuotes({
+			quoteType: QuoteType[query.quoteType as keyof typeof QuoteType],
+			// TODO: sort: QuoteSortRule[query.sort as keyof typeof QuoteSortRule],
+			offset: Number(query.offset),
+			limit: Number(query.limit),
+			getTotalCount: query.getTotalCount === 'true',
+			artistId: Number(query.artistId),
+		});
 	}
 
 	@Get(':quoteId')
 	getQuote(
-		@AjvParams(getQuoteParamsSchema)
-		{ quoteId }: IGetQuoteParams,
+		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<QuoteObject> {
 		return this.getQuoteService.getQuote(quoteId);
 	}
