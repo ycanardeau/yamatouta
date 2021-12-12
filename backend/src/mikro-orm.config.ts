@@ -19,6 +19,7 @@ const config: Options = {
 	},
 	logger: logger.log.bind(logger),
 	metadataProvider: TsMorphMetadataProvider,
+	forceUndefined: true,
 };
 
 export default config;
