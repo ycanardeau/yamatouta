@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import { getQuote } from '../../api/QuoteApi';
 import QuoteListItem from '../../components/QuoteListItem';
+import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import Layout from '../Layout';
 
@@ -16,6 +17,8 @@ const QuoteDetailsLayout = ({
 	quote,
 }: IQuoteDetailsLayoutProps): React.ReactElement => {
 	const { t } = useTranslation();
+
+	useYamatoutaTitle(quote.phrases.join(''), true);
 
 	return (
 		<Layout
