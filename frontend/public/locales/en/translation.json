@@ -10,6 +10,14 @@
 		"other": "Other",
 		"character": "Character"
 	},
+	"auth": {
+		"email": "Email",
+		"logIn": "Sign in",
+		"logOut": "Sign out",
+		"password": "Password",
+		"register": "Sign up",
+		"username": "Username"
+	},
 	"shared": {
 		"artists": "Artists",
 		"cancel": "Cancel",
