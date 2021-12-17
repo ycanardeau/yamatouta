@@ -2,7 +2,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
 import helmet from 'helmet';
+import passport from 'passport';
 
 import { AppModule } from './app.module';
 
@@ -21,6 +23,18 @@ async function bootstrap(): Promise<void> {
 	});
 
 	app.use(cookieParser());
+
+	// TODO: Replace MemoryStore with a compatible session store.
+	app.use(
+		session({
+			secret: configService.get('SESSION_SECRET') as string,
+			resave: false,
+			saveUninitialized: false,
+		}),
+	);
+
+	app.use(passport.initialize());
+	app.use(passport.session());
 
 	await app.listen(configService.get('PORT') || 5000);
 }

@@ -12,6 +12,7 @@ import { UserController } from './controllers/UserController';
 import { AuditLogService } from './services/AuditLogService';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
+import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
 import { LoginService } from './services/auth/LoginService';
 import { LogoutService } from './services/auth/LogoutService';
@@ -36,6 +37,7 @@ import { ListUsersService } from './services/users/ListUsersService';
 				DB_DEBUG: Joi.boolean().default(false),
 				DB_USERNAME: Joi.string(),
 				DB_PASSWORD: Joi.string(),
+				SESSION_SECRET: Joi.string().required(),
 			}),
 		}),
 		MikroOrmModule.forRoot(),
@@ -58,6 +60,7 @@ import { ListUsersService } from './services/users/ListUsersService';
 		CreateUserService,
 		AuthenticateUserService,
 		LocalStrategy,
+		LocalSerializer,
 		LoginService,
 		LogoutService,
 	],
