@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -5,6 +6,8 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
+
+axios.defaults.withCredentials = true;
 
 ReactDOM.render(
 	<React.StrictMode>
