@@ -22,6 +22,7 @@ import { AuthenticateUserService } from './services/users/AuthenticateUserServic
 import { CreateUserService } from './services/users/CreateUserService';
 import { GetUserService } from './services/users/GetUserService';
 import { ListUsersService } from './services/users/ListUsersService';
+import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 
 @Module({
 	imports: [
@@ -63,6 +64,7 @@ import { ListUsersService } from './services/users/ListUsersService';
 		LocalSerializer,
 		LoginService,
 		LogoutService,
+		NormalizeEmailService,
 	],
 })
 export class AppModule {}

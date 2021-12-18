@@ -7,12 +7,14 @@ import { UserObject } from '../../dto/users/UserObject';
 import { User } from '../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../exceptions/UserEmailAlreadyExistsException';
 import { AuditLogService } from '../AuditLogService';
+import { NormalizeEmailService } from './NormalizeEmailService';
 
 @Injectable()
 export class CreateUserService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly auditLogService: AuditLogService,
+		private readonly normalizeEmailService: NormalizeEmailService,
 	) {}
 
 	async createUser({
@@ -36,8 +38,9 @@ export class CreateUserService {
 
 		const { username, email, password } = params;
 
-		const normalizedEmail =
-			email.toUpperCase(); /* TODO: Normalize email. */
+		const normalizedEmail = await this.normalizeEmailService.normalizeEmail(
+			email,
+		);
 
 		const user = await this.em.transactional(async (em) => {
 			await em
