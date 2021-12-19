@@ -1,10 +1,38 @@
 import { EntityManager } from '@mikro-orm/core';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import bcrypt from 'bcrypt';
 
 import { UserObject } from '../../dto/users/UserObject';
 import { User } from '../../entities/User';
 import { AuditLogService } from '../AuditLogService';
+
+export enum LoginError {
+	None,
+	NotFound,
+	InvalidPassword,
+}
+
+export type LoginResult =
+	| {
+			error: LoginError.None;
+			user: UserObject;
+	  }
+	| {
+			error: Exclude<LoginError, LoginError.None>;
+			user: undefined;
+	  };
+
+const createSuccess = (user: UserObject): LoginResult => ({
+	error: LoginError.None,
+	user: user,
+});
+
+const createError = (
+	error: Exclude<LoginError, LoginError.None>,
+): LoginResult => ({
+	error: error,
+	user: undefined,
+});
 
 @Injectable()
 export class AuthenticateUserService {
@@ -32,21 +60,21 @@ export class AuthenticateUserService {
 		}
 	}
 
-	async authenticateUser(params: {
+	authenticateUser(params: {
 		email: string;
 		password: string;
 		ip: string;
-	}): Promise<UserObject> {
+	}): Promise<LoginResult> {
 		const { email, password, ip } = params;
 
-		const user = await this.em.transactional(async (em) => {
+		return this.em.transactional(async (em) => {
 			const user = await em.findOne(User, {
 				email: email,
 				deleted: false,
 				hidden: false,
 			});
 
-			if (!user) throw new UnauthorizedException();
+			if (!user) return createError(LoginError.NotFound);
 
 			const passwordHash = await this.hashPassword({
 				algorithm: user.passwordHashAlgorithm,
@@ -61,7 +89,7 @@ export class AuthenticateUserService {
 					user: user,
 				});
 
-				return user;
+				return createSuccess(new UserObject(user));
 			}
 
 			await this.auditLogService.user_failedLogin({
@@ -70,9 +98,7 @@ export class AuthenticateUserService {
 				user: user,
 			});
 
-			throw new UnauthorizedException();
+			return createError(LoginError.InvalidPassword);
 		});
-
-		return new UserObject(user);
 	}
 }
