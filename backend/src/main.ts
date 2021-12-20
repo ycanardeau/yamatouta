@@ -1,5 +1,7 @@
+import { EntityManager } from '@mikro-orm/postgresql';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import connectSessionKnex from 'connect-session-knex';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import helmet from 'helmet';
@@ -7,6 +9,8 @@ import passport from 'passport';
 
 import { AppModule } from './app.module';
 import config from './config';
+
+const KnexSessionStore = connectSessionKnex(session);
 
 async function bootstrap(): Promise<void> {
 	const app = await NestFactory.create(AppModule);
@@ -22,12 +26,17 @@ async function bootstrap(): Promise<void> {
 
 	app.use(cookieParser());
 
-	// TODO: Replace MemoryStore with a compatible session store.
+	// TODO: Replace with connect-redis.
 	app.use(
 		session({
 			secret: config.session.secret,
 			resave: false,
 			saveUninitialized: false,
+			store: new KnexSessionStore({
+				knex: app
+					.get<EntityManager>(EntityManager)
+					.getKnex() as unknown as any,
+			}),
 		}),
 	);
 
