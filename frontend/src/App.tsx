@@ -7,7 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import ScrollToTop from './ScrollToTop';
-import { config } from './config';
+import config from './config';
 
 const theme = createTheme({
 	palette: {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { config } from '../config';
+import config from '../config';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { ArtistType } from '../dto/artists/ArtistType';
 import { IArtistObject } from '../dto/artists/IArtistObject';

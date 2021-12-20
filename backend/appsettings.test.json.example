@@ -1,0 +1,16 @@
+{
+	"port": 5000,
+	"cors": {
+		"allowedOrigins": ["http://localhost:3000"]
+	},
+	"db": {
+		"connection": "postgresql",
+		"database": "yamatouta_test_db",
+		"debug": true,
+		"username": "",
+		"password": ""
+	},
+	"session": {
+		"secret": ""
+	}
+}

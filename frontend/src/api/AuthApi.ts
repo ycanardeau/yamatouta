@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { config } from '../config';
+import config from '../config';
 import { IUserObject } from '../dto/users/IUserObject';
 
 export const register = async (params: {

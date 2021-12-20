@@ -1,9 +1,6 @@
-import { Configuration } from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
-import Joi from 'joi';
 
 import { ArtistController } from './controllers/ArtistController';
 import { AuthController } from './controllers/AuthController';
@@ -25,25 +22,7 @@ import { ListUsersService } from './services/users/ListUsersService';
 import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 
 @Module({
-	imports: [
-		ConfigModule.forRoot({
-			envFilePath: `.env.${process.env.NODE_ENV}`,
-			validationSchema: Joi.object({
-				PORT: Joi.number(),
-				ALLOWED_CORS_ORIGINS: Joi.string(),
-				DB_CONNECTION: Joi.string()
-					.required()
-					.valid(...Object.keys(Configuration.PLATFORMS)),
-				DB_DATABASE: Joi.string().required(),
-				DB_DEBUG: Joi.boolean().default(false),
-				DB_USERNAME: Joi.string(),
-				DB_PASSWORD: Joi.string(),
-				SESSION_SECRET: Joi.string().required(),
-			}),
-		}),
-		MikroOrmModule.forRoot(),
-		PassportModule,
-	],
+	imports: [MikroOrmModule.forRoot(), PassportModule],
 	controllers: [
 		ArtistController,
 		QuoteController,

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { config } from '../config';
+import config from '../config';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IUserObject } from '../dto/users/IUserObject';
 import { IPaginationParams } from '../stores/PaginationStore';
