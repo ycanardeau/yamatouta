@@ -14,6 +14,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import LoginDialog from './components/LoginDialog';
 import RegisterDialog from './components/RegisterDialog';
+import config from './config';
 
 const AppHeader = (): React.ReactElement => {
 	const { t } = useTranslation();
@@ -58,6 +59,7 @@ const AppHeader = (): React.ReactElement => {
 						<Button
 							variant="outlined"
 							onClick={(): void => setRegisterDialogOpen(true)}
+							disabled={config.disableAccountCreation}
 						>
 							{t('auth.register')}
 						</Button>

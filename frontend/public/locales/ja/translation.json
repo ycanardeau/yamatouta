@@ -12,6 +12,7 @@
 	},
 	"auth": {
 		"password": "あいことば",
+		"register": "たずさわる",
 		"username": "なまえ"
 	},
 	"shared": {

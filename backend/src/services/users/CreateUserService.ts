@@ -1,8 +1,13 @@
 import { EntityManager } from '@mikro-orm/core';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+	BadRequestException,
+	ForbiddenException,
+	Injectable,
+} from '@nestjs/common';
 import bcrypt from 'bcrypt';
 import Joi from 'joi';
 
+import config from '../../config';
 import { UserObject } from '../../dto/users/UserObject';
 import { User } from '../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../exceptions/UserEmailAlreadyExistsException';
@@ -17,6 +22,7 @@ export class CreateUserService {
 		private readonly normalizeEmailService: NormalizeEmailService,
 	) {}
 
+	// TODO: Use CAPTCHA.
 	async createUser({
 		ip,
 		...params
@@ -26,6 +32,9 @@ export class CreateUserService {
 		password: string;
 		ip: string;
 	}): Promise<UserObject> {
+		if (config.disableAccountCreation)
+			throw new ForbiddenException('Account creation is restricted.');
+
 		const schema = Joi.object({
 			username: Joi.string().required().trim().min(2).max(32),
 			email: Joi.string().required().email().max(50),

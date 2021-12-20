@@ -3,6 +3,7 @@ import Joi from 'joi';
 
 interface IConfig {
 	port: number;
+	disableAccountCreation: boolean;
 	cors: {
 		allowedOrigins: string[];
 	};
@@ -20,6 +21,7 @@ interface IConfig {
 
 const schema: Joi.ObjectSchema<IConfig> = Joi.object({
 	port: Joi.number().required(),
+	disableAccountCreation: Joi.boolean().required(),
 	cors: {
 		allowedOrigins: Joi.array().items(Joi.string().required()),
 	},
