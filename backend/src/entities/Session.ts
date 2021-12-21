@@ -6,8 +6,9 @@ export class Session {
 	@PrimaryKey()
 	sid!: string;
 
-	@Property()
-	sess: any;
+	// TODO: Use jsonb instead of text.
+	@Property({ columnType: 'text' })
+	sess!: string;
 
 	// TODO: Index using btree.
 	@Property()
