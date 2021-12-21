@@ -1,5 +1,5 @@
 import { Container, CssBaseline } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React from 'react';
 import ReactGA from 'react-ga4';
 import { Route, Routes } from 'react-router-dom';
