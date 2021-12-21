@@ -1,17 +1,9 @@
-import { NotFoundError } from '@mikro-orm/core';
-import { Controller, Get, NotFoundException } from '@nestjs/common';
-import { AjvParams, AjvQuery } from 'nestjs-ajv-glue/dist';
+import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { ArtistObject } from '../dto/artists/ArtistObject';
-import {
-	getArtistParamsSchema,
-	IGetArtistParams,
-} from '../requests/artists/IGetArtistParams';
-import {
-	IListArtistsQuery,
-	listArtistsQuerySchema,
-} from '../requests/artists/IListArtistsQuery';
+import { ArtistType } from '../entities/Artist';
+import { ListArtistsQuery } from '../requests/artists/ListArtistsQuery';
 import { GetArtistService } from '../services/artists/GetArtistService';
 import { ListArtistsService } from '../services/artists/ListArtistsService';
 
@@ -24,22 +16,23 @@ export class ArtistController {
 
 	@Get()
 	listArtists(
-		@AjvQuery(listArtistsQuerySchema)
-		query: IListArtistsQuery,
+		@Query() query: ListArtistsQuery,
 	): Promise<SearchResultObject<ArtistObject>> {
-		return this.listArtistsService.listArtists(query);
+		const { artistType, offset, limit, getTotalCount } = query;
+
+		return this.listArtistsService.listArtists({
+			artistType: ArtistType[artistType as keyof typeof ArtistType],
+			// TODO: sort: ArtistSortRule[sort as keyof typeof ArtistSortRule],
+			offset: Number(offset),
+			limit: Number(limit),
+			getTotalCount: getTotalCount === 'true',
+		});
 	}
 
 	@Get(':artistId')
-	async getArtist(
-		@AjvParams(getArtistParamsSchema)
-		{ artistId }: IGetArtistParams,
+	getArtist(
+		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<ArtistObject> {
-		try {
-			return await this.getArtistService.getArtist(artistId);
-		} catch (error) {
-			if (error instanceof NotFoundError) throw new NotFoundException();
-			throw error;
-		}
+		return this.getArtistService.getArtist(artistId);
 	}
 }

@@ -11,22 +11,12 @@ import { ArtistType } from '../dto/artists/ArtistType';
 import { IArtistObject } from '../dto/artists/IArtistObject';
 
 export class CreateArtistDialogStore {
-	@observable dialogOpen = false;
+	@observable submitting = false;
 	@observable name = '';
 	@observable artistType = ArtistType.Person;
-	@observable submitting = false;
-
-	@action private reset = (): void => {
-		this.dialogOpen = false;
-		this.name = '';
-		this.artistType = ArtistType.Person;
-		this.submitting = false;
-	};
 
 	constructor() {
 		makeObservable(this);
-
-		this.reset();
 	}
 
 	@computed get isValid(): boolean {
@@ -35,14 +25,6 @@ export class CreateArtistDialogStore {
 			Object.values(ArtistType).includes(this.artistType)
 		);
 	}
-
-	@action show = (): void => {
-		this.dialogOpen = true;
-	};
-
-	@action hide = (): void => {
-		this.dialogOpen = false;
-	};
 
 	@action setName = (value: string): void => {
 		this.name = value;
@@ -56,20 +38,14 @@ export class CreateArtistDialogStore {
 		try {
 			this.submitting = true;
 
-			const artist = await createArtist({
+			return createArtist({
 				name: this.name,
 				artistType: this.artistType,
 			});
-
-			this.reset();
-
-			return artist;
-		} catch (error) {
+		} finally {
 			runInAction(() => {
 				this.submitting = false;
 			});
-
-			throw error;
 		}
 	};
 }

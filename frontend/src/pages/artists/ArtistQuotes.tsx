@@ -16,7 +16,7 @@ interface IArtistQuotesProps {
 }
 
 const ArtistQuotes = observer(
-	({ artist, store }: IArtistQuotesProps): React.ReactElement | null => {
+	({ artist, store }: IArtistQuotesProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		useYamatoutaTitle(artist.name, true);

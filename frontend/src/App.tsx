@@ -7,7 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import ScrollToTop from './ScrollToTop';
-import { config } from './config';
+import config from './config';
 
 const theme = createTheme({
 	palette: {
@@ -17,11 +17,12 @@ const theme = createTheme({
 
 const ArtistRoutes = React.lazy(() => import('./pages/artists/ArtistRoutes'));
 const QuoteRoutes = React.lazy(() => import('./pages/quotes/QuoteRoutes'));
+const UserRoutes = React.lazy(() => import('./pages/users/UserRoutes'));
 const HomeRoutes = React.lazy(() => import('./pages/home/HomeRoutes'));
 
 const App = (): React.ReactElement => {
 	React.useEffect(() => {
-		ReactGA.initialize(config.gaMeasurementId || '');
+		if (config.gaMeasurementId) ReactGA.initialize(config.gaMeasurementId);
 	}, []);
 
 	return (
@@ -39,6 +40,7 @@ const App = (): React.ReactElement => {
 					<Routes>
 						<Route path="artists/*" element={<ArtistRoutes />} />
 						<Route path="quotes/*" element={<QuoteRoutes />} />
+						<Route path="users/*" element={<UserRoutes />} />
 						<Route path="*" element={<HomeRoutes />} />
 					</Routes>
 				</React.Suspense>

@@ -1,0 +1,17 @@
+{
+	"port": 5000,
+	"disableAccountCreation": true,
+	"cors": {
+		"allowedOrigins": ["https://yamatouta.net"]
+	},
+	"db": {
+		"connection": "postgresql",
+		"database": "yamatouta_db",
+		"debug": false,
+		"username": "",
+		"password": ""
+	},
+	"session": {
+		"secret": ""
+	}
+}

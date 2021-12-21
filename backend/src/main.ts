@@ -1,22 +1,48 @@
+import { EntityManager } from '@mikro-orm/postgresql';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import Ajv from 'ajv';
-import { AjvValidationPipe } from 'nestjs-ajv-glue/dist/index';
+import connectSessionKnex from 'connect-session-knex';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import helmet from 'helmet';
+import passport from 'passport';
 
 import { AppModule } from './app.module';
+import config from './config';
+
+const KnexSessionStore = connectSessionKnex(session);
 
 async function bootstrap(): Promise<void> {
 	const app = await NestFactory.create(AppModule);
 
-	app.useGlobalPipes(
-		new AjvValidationPipe(
-			new Ajv({ coerceTypes: true, removeAdditional: 'all' }),
-		),
-	);
+	app.use(helmet());
+
+	app.useGlobalPipes(new ValidationPipe());
 
 	app.enableCors({
-		origin: process.env.ALLOWED_CORS_ORIGINS?.split(','),
+		origin: config.cors.allowedOrigins,
+		credentials: true,
 	});
 
-	await app.listen(process.env.PORT || 5000);
+	app.use(cookieParser());
+
+	// TODO: Replace with connect-redis.
+	app.use(
+		session({
+			secret: config.session.secret,
+			resave: false,
+			saveUninitialized: false,
+			store: new KnexSessionStore({
+				knex: app
+					.get<EntityManager>(EntityManager)
+					.getKnex() as unknown as any,
+			}),
+		}),
+	);
+
+	app.use(passport.initialize());
+	app.use(passport.session());
+
+	await app.listen(config.port);
 }
 bootstrap();

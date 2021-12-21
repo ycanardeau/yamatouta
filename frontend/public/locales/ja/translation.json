@@ -10,6 +10,11 @@
 		"other": "そのほか",
 		"character": "ものがたりのひと"
 	},
+	"auth": {
+		"password": "あいことば",
+		"register": "たずさわる",
+		"username": "なまえ"
+	},
 	"shared": {
 		"artists": "うたよみ",
 		"cancel": "とりけす",
