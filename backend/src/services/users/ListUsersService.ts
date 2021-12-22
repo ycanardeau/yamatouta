@@ -11,6 +11,7 @@ import { User } from '../../entities/User';
 export class ListUsersService {
 	private static readonly defaultLimit = 10;
 	private static readonly maxLimit = 100;
+	private static readonly maxOffset = 5000;
 
 	constructor(private readonly em: EntityManager) {}
 
@@ -35,6 +36,8 @@ export class ListUsersService {
 				.andWhere({ deleted: false, hidden: false });
 
 			const getItems = async (): Promise<User[]> => {
+				if (offset && offset > ListUsersService.maxOffset) return [];
+
 				const idsQB = qb
 					.clone()
 					.select('id')

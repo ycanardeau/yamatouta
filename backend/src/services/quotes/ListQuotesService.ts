@@ -11,6 +11,7 @@ import { Quote, QuoteType } from '../../entities/Quote';
 export class ListQuotesService {
 	private static readonly defaultLimit = 10;
 	private static readonly maxLimit = 100;
+	private static readonly maxOffset = 5000;
 
 	constructor(private readonly em: EntityManager) {}
 
@@ -42,6 +43,8 @@ export class ListQuotesService {
 			if (artistId) qb.andWhere({ artist: artistId });
 
 			const getItems = async (): Promise<Quote[]> => {
+				if (offset && offset > ListQuotesService.maxOffset) return [];
+
 				const idsQB = qb
 					.clone()
 					.select('id')

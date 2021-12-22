@@ -11,6 +11,7 @@ import { Artist, ArtistType } from '../../entities/Artist';
 export class ListArtistsService {
 	private static readonly defaultLimit = 10;
 	private static readonly maxLimit = 100;
+	private static readonly maxOffset = 5000;
 
 	constructor(private readonly em: EntityManager) {}
 
@@ -38,6 +39,8 @@ export class ListArtistsService {
 			if (artistType) qb.andWhere({ artistType: artistType });
 
 			const getItems = async (): Promise<Artist[]> => {
+				if (offset && offset > ListArtistsService.maxOffset) return [];
+
 				const idsQB = qb
 					.clone()
 					.select('id')
