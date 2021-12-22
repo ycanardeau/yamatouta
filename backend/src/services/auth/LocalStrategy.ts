@@ -1,16 +1,17 @@
-import { EntityManager } from '@mikro-orm/postgresql';
+import { EntityManager } from '@mikro-orm/mariadb';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-local';
-import { RateLimiterPostgres } from 'rate-limiter-flexible';
 
+import config from '../../config';
 import { UserObject } from '../../dto/users/UserObject';
 import { TooManyRequestsException } from '../../exceptions/TooManyRequestsException';
 import {
 	AuthenticateUserService,
 	LoginError,
 } from '../users/AuthenticateUserService';
+import { RateLimiterMariaDb } from './RateLimiterMariaDb';
 
 // Code from: https://gist.github.com/animir/dc59b9da82494437f0a6009589e427f6.
 @Injectable()
@@ -19,8 +20,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 	private static readonly maxConsecutiveFailsByEmailAndIp = 10;
 
 	// TODO: Replace with RateLimiterRedis.
-	private readonly limiterSlowBruteByIp: RateLimiterPostgres;
-	private readonly limiterConsecutiveFailsByEmailAndIp: RateLimiterPostgres;
+	private readonly limiterSlowBruteByIp: RateLimiterMariaDb;
+	private readonly limiterConsecutiveFailsByEmailAndIp: RateLimiterMariaDb;
 
 	constructor(
 		private readonly authenticateUserService: AuthenticateUserService,
@@ -28,15 +29,16 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 	) {
 		super({ usernameField: 'email', passReqToCallback: true });
 
-		const postgresOptions = {
+		const mariaDbOptions = {
 			storeClient: em.getKnex(),
 			storeType: 'knex',
 			tableName: 'rate_limit_entries',
 			tableCreated: true,
+			dbName: config.db.database,
 		};
 
-		this.limiterSlowBruteByIp = new RateLimiterPostgres({
-			...postgresOptions,
+		this.limiterSlowBruteByIp = new RateLimiterMariaDb({
+			...mariaDbOptions,
 			keyPrefix: 'login_fail_ip_per_day',
 			points: LocalStrategy.maxWrongAttemptsByIpPerDay,
 			duration: 60 * 60 * 24,
@@ -44,8 +46,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 			blockDuration: 60 * 60 * 24,
 		});
 
-		this.limiterConsecutiveFailsByEmailAndIp = new RateLimiterPostgres({
-			...postgresOptions,
+		this.limiterConsecutiveFailsByEmailAndIp = new RateLimiterMariaDb({
+			...mariaDbOptions,
 			keyPrefix: 'login_fail_consecutive_email_and_ip',
 			points: LocalStrategy.maxConsecutiveFailsByEmailAndIp,
 			// Store number for 90 days since first fail

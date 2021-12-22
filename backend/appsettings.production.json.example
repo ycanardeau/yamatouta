@@ -5,7 +5,7 @@
 		"allowedOrigins": ["https://yamatouta.net"]
 	},
 	"db": {
-		"connection": "postgresql",
+		"connection": "mariadb",
 		"database": "yamatouta_db",
 		"debug": false,
 		"username": "",

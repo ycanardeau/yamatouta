@@ -22,7 +22,7 @@ export class AuditLogEntry {
 	@ManyToOne()
 	actor: User;
 
-	@Property({ length: 64 })
+	@Property()
 	actorName: string;
 
 	@Property()
@@ -31,7 +31,7 @@ export class AuditLogEntry {
 	@ManyToOne()
 	user?: User;
 
-	@Property({ length: 64 })
+	@Property()
 	userName?: string;
 
 	constructor(params: {

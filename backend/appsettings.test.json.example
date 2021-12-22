@@ -5,7 +5,7 @@
 		"allowedOrigins": ["http://localhost:3000"]
 	},
 	"db": {
-		"connection": "postgresql",
+		"connection": "mariadb",
 		"database": "yamatouta_test_db",
 		"debug": true,
 		"username": "",
