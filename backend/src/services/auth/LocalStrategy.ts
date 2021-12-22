@@ -1,8 +1,13 @@
 import { EntityManager } from '@mikro-orm/mariadb';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-local';
+import requestIp from 'request-ip';
 
 import config from '../../config';
 import { UserObject } from '../../dto/users/UserObject';
@@ -62,11 +67,15 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		email: string,
 		password: string,
 	): Promise<UserObject> {
-		const cacheKey = `${email}_${request.ip}`;
+		const ip = requestIp.getClientIp(request);
+
+		if (!ip) throw new BadRequestException('IP address cannot be found.');
+
+		const cacheKey = `${email}_${ip}`;
 
 		const [resEmailAndIp, resSlowByIp] = await Promise.all([
 			this.limiterConsecutiveFailsByEmailAndIp.get(cacheKey),
-			this.limiterSlowBruteByIp.get(request.ip),
+			this.limiterSlowBruteByIp.get(ip),
 		]);
 
 		if (
@@ -88,7 +97,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		const result = await this.authenticateUserService.authenticateUser({
 			email: email,
 			password: password,
-			ip: request.ip,
+			ip: ip,
 		});
 
 		if (result.error === LoginError.None) {
@@ -101,7 +110,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		// Consume 1 point from limiters on wrong attempt and block if limits reached.
 		try {
 			await Promise.all([
-				this.limiterSlowBruteByIp.consume(request.ip),
+				this.limiterSlowBruteByIp.consume(ip),
 
 				// Count failed attempts by Email + IP only for registered users.
 				result.error !== LoginError.NotFound

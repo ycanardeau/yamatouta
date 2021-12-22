@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	Body,
 	Controller,
 	HttpCode,
@@ -8,6 +9,7 @@ import {
 	UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
+import requestIp from 'request-ip';
 
 import { UserObject } from '../dto/users/UserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
@@ -31,11 +33,15 @@ export class AuthController {
 	): Promise<UserObject> {
 		const { username, email, password } = body;
 
+		const ip = requestIp.getClientIp(request);
+
+		if (!ip) throw new BadRequestException('IP address cannot be found.');
+
 		return this.createUserService.createUser({
 			username: username,
 			email: email,
 			password: password,
-			ip: request.ip,
+			ip: ip,
 		});
 	}
 
