@@ -15,6 +15,9 @@
 		"register": "たずさわる",
 		"username": "なまえ"
 	},
+	"layout": {
+		"siteDescription": "やまとうた は 大和言葉 (やまとことば) と 大和歌 (やまとうた) のためのオープンソースのオンラインデータベースです。"
+	},
 	"shared": {
 		"artists": "うたよみ",
 		"cancel": "とりけす",

@@ -18,18 +18,21 @@ const QuoteDetailsLayout = ({
 }: IQuoteDetailsLayoutProps): React.ReactElement => {
 	const { t } = useTranslation();
 
-	useYamatoutaTitle(quote.phrases.join(''), true);
+	const quoteText = quote.phrases.join('');
+
+	useYamatoutaTitle(quoteText, true);
 
 	return (
 		<Layout
 			breadcrumbItems={[
 				{ text: t('shared.quotes'), to: '/quotes' },
 				{
-					text: quote.phrases.join(''),
+					text: quoteText,
 					to: `/quotes/${quote.id}`,
 					isCurrentItem: true,
 				},
 			]}
+			meta={{ description: quoteText }}
 		>
 			<QuoteListItem quote={quote} showDetailsButton={false} />
 
