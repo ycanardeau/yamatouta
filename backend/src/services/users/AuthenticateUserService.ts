@@ -1,10 +1,10 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
-import bcrypt from 'bcrypt';
 
 import { UserObject } from '../../dto/users/UserObject';
 import { User } from '../../entities/User';
 import { AuditLogService } from '../AuditLogService';
+import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
 
 export enum LoginError {
 	None,
@@ -39,26 +39,8 @@ export class AuthenticateUserService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly auditLogService: AuditLogService,
+		private readonly passwordHasherFactory: PasswordHasherFactory,
 	) {}
-
-	private hashPassword(params: {
-		algorithm: string;
-		password: string;
-		salt: string;
-	}): Promise<string> {
-		const { algorithm, password, salt } = params;
-
-		switch (algorithm) {
-			case 'bcrypt':
-				// TODO: bcrypt has a maximum length input length of 72 bytes.
-				return bcrypt.hash(password, salt);
-
-			default:
-				throw new Error(
-					`Unsupported password hash algorithm: ${algorithm}`,
-				);
-		}
-	}
 
 	authenticateUser(params: {
 		email: string;
@@ -76,11 +58,14 @@ export class AuthenticateUserService {
 
 			if (!user) return createError(LoginError.NotFound);
 
-			const passwordHash = await this.hashPassword({
-				algorithm: user.passwordHashAlgorithm,
-				password: password,
-				salt: user.salt,
-			});
+			const passwordHasher = this.passwordHasherFactory.create(
+				user.passwordHashAlgorithm,
+			);
+
+			const passwordHash = await passwordHasher.hashPassword(
+				password,
+				user.salt,
+			);
 
 			if (user.passwordHash === passwordHash) {
 				await this.auditLogService.user_login({

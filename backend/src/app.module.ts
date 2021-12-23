@@ -13,6 +13,7 @@ import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
 import { LoginService } from './services/auth/LoginService';
 import { LogoutService } from './services/auth/LogoutService';
+import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasherFactory';
 import { GetQuoteService } from './services/quotes/GetQuoteService';
 import { ListQuotesService } from './services/quotes/ListQuotesService';
 import { AuthenticateUserService } from './services/users/AuthenticateUserService';
@@ -44,6 +45,7 @@ import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 		LoginService,
 		LogoutService,
 		NormalizeEmailService,
+		PasswordHasherFactory,
 	],
 })
 export class AppModule {}

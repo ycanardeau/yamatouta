@@ -1,4 +1,9 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
+
+export enum PasswordHashAlgorithm {
+	Bcrypt = 'bcrypt',
+	Inishienomanabi = 'inishienomanabi',
+}
 
 @Entity({ tableName: 'users' })
 export class User {
@@ -29,8 +34,8 @@ export class User {
 	@Property()
 	emailConfirmed = false;
 
-	@Property()
-	passwordHashAlgorithm: string;
+	@Enum()
+	passwordHashAlgorithm: PasswordHashAlgorithm;
 
 	@Property()
 	salt: string;
@@ -66,7 +71,7 @@ export class User {
 		name: string;
 		email: string;
 		normalizedEmail: string;
-		passwordHashAlgorithm: string;
+		passwordHashAlgorithm: PasswordHashAlgorithm;
 		salt: string;
 		passwordHash: string;
 	}) {

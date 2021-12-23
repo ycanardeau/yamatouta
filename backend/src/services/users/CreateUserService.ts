@@ -4,7 +4,6 @@ import {
 	ForbiddenException,
 	Injectable,
 } from '@nestjs/common';
-import bcrypt from 'bcrypt';
 import Joi from 'joi';
 
 import config from '../../config';
@@ -12,6 +11,7 @@ import { UserObject } from '../../dto/users/UserObject';
 import { User } from '../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../exceptions/UserEmailAlreadyExistsException';
 import { AuditLogService } from '../AuditLogService';
+import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
 import { NormalizeEmailService } from './NormalizeEmailService';
 
 @Injectable()
@@ -20,6 +20,7 @@ export class CreateUserService {
 		private readonly em: EntityManager,
 		private readonly auditLogService: AuditLogService,
 		private readonly normalizeEmailService: NormalizeEmailService,
+		private readonly passwordHasherFactory: PasswordHasherFactory,
 	) {}
 
 	// TODO: Use CAPTCHA.
@@ -58,17 +59,21 @@ export class CreateUserService {
 					if (existing) throw new UserEmailAlreadyExistsException();
 				});
 
-			const salt = await bcrypt.genSalt(10);
+			const passwordHasher = this.passwordHasherFactory.default;
 
-			// TODO: bcrypt has a maximum length input length of 72 bytes.
-			const passwordHash = await bcrypt.hash(password, salt);
+			const salt = await passwordHasher.generateSalt();
+
+			const passwordHash = await passwordHasher.hashPassword(
+				password,
+				salt,
+			);
 
 			const user = new User({
 				name: username.trim(),
 				email: email,
 				normalizedEmail: normalizedEmail,
 				salt: salt,
-				passwordHashAlgorithm: 'bcrypt',
+				passwordHashAlgorithm: passwordHasher.algorithm,
 				passwordHash: passwordHash,
 			});
 
