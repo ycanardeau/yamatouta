@@ -11,8 +11,13 @@
 		"character": "ものがたりのひと"
 	},
 	"auth": {
+		"email": "くものたより",
+		"logIn": "はいる",
+		"logOut": "でる",
 		"password": "あいことば",
 		"register": "たずさわる",
+		"dialogSubtitle": "またおあいしましたね！",
+		"dialogTitle": "おかえりなさい！",
 		"username": "なまえ"
 	},
 	"layout": {

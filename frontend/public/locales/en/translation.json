@@ -16,6 +16,8 @@
 		"logOut": "Sign out",
 		"password": "Password",
 		"register": "Sign up",
+		"dialogSubtitle": "We're so excited to see you again!",
+		"dialogTitle": "Welcome back!",
 		"username": "Username"
 	},
 	"layout": {

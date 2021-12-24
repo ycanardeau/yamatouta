@@ -3,6 +3,7 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
+	DialogContentText,
 	DialogTitle,
 	FormControl,
 	Grid,
@@ -37,9 +38,15 @@ const LoginDialog = observer(
 						onLoginComplete(user);
 					}}
 				>
-					<DialogTitle>{t('auth.logIn')}</DialogTitle>
+					<DialogTitle>{t('auth.dialogTitle')}</DialogTitle>
 					<DialogContent>
 						<Grid container spacing={2}>
+							<Grid item xs={12}>
+								<DialogContentText>
+									{t('auth.dialogSubtitle')}
+								</DialogContentText>
+							</Grid>
+
 							<Grid item xs={12}>
 								<FormControl variant="standard" fullWidth>
 									<TextField
