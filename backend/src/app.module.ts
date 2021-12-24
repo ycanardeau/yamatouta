@@ -21,6 +21,7 @@ import { CreateUserService } from './services/users/CreateUserService';
 import { GetUserService } from './services/users/GetUserService';
 import { ListUsersService } from './services/users/ListUsersService';
 import { NormalizeEmailService } from './services/users/NormalizeEmailService';
+import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 
 @Module({
 	imports: [MikroOrmModule.forRoot(), PassportModule],
@@ -46,6 +47,7 @@ import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 		LogoutService,
 		NormalizeEmailService,
 		PasswordHasherFactory,
+		UpdatePasswordService,
 	],
 })
 export class AppModule {}
