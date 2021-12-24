@@ -11,6 +11,14 @@ export class PasswordHasherFactory {
 			case PasswordHashAlgorithm.Bcrypt:
 				return new BcryptPasswordHasher();
 
+			// TODO: Remove.
+			case PasswordHashAlgorithm.Inishienomanabi:
+				const { InishienomanabiPasswordHasher } =
+					// eslint-disable-next-line @typescript-eslint/no-var-requires
+					require('./InishienomanabiPasswordHasher');
+
+				return new InishienomanabiPasswordHasher();
+
 			default:
 				throw new Error(
 					`Unsupported password hash algorithm: ${algorithm}`,
