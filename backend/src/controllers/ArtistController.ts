@@ -21,7 +21,7 @@ export class ArtistController {
 		const { artistType, offset, limit, getTotalCount } = query;
 
 		return this.listArtistsService.listArtists({
-			artistType: ArtistType[artistType as keyof typeof ArtistType],
+			artistType: artistType as ArtistType,
 			// TODO: sort: ArtistSortRule[sort as keyof typeof ArtistSortRule],
 			offset: Number(offset),
 			limit: Number(limit),

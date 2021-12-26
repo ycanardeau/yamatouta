@@ -1,10 +1,17 @@
-import { QueryOrder, QueryOrderMap } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/mariadb';
+import {
+	FilterQuery,
+	FindOptions,
+	QueryOrder,
+	QueryOrderMap,
+} from '@mikro-orm/core';
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
 import { QuoteObject } from '../../dto/quotes/QuoteObject';
 import { QuoteSortRule } from '../../dto/quotes/QuoteSortRule';
+import { ArtistQuote } from '../../entities/ArtistQuote';
 import { Quote, QuoteType } from '../../entities/Quote';
 
 @Injectable()
@@ -13,7 +20,10 @@ export class ListQuotesService {
 	private static readonly maxLimit = 100;
 	private static readonly maxOffset = 5000;
 
-	constructor(private readonly em: EntityManager) {}
+	constructor(
+		@InjectRepository(Quote)
+		private readonly quoteRepo: EntityRepository<Quote>,
+	) {}
 
 	private orderBy(sort?: QuoteSortRule): QueryOrderMap {
 		switch (sort) {
@@ -22,7 +32,7 @@ export class ListQuotesService {
 		}
 	}
 
-	listQuotes(params: {
+	async listQuotes(params: {
 		quoteType?: QuoteType;
 		sort?: QuoteSortRule;
 		offset?: number;
@@ -33,59 +43,39 @@ export class ListQuotesService {
 		const { quoteType, sort, offset, limit, getTotalCount, artistId } =
 			params;
 
-		return this.em.transactional(async (em) => {
-			const qb = em
-				.createQueryBuilder(Quote)
-				.andWhere({ deleted: false, hidden: false })
-				.andWhere({ $not: { quoteType: QuoteType.Word } });
+		const where: FilterQuery<ArtistQuote> = {
+			$and: [
+				{ deleted: false },
+				{ hidden: false },
+				{ $not: { quoteType: QuoteType.Word } },
+				quoteType ? { quoteType: quoteType } : {},
+				artistId ? { artist: artistId } : {},
+			],
+		};
 
-			if (quoteType) qb.andWhere({ quoteType: quoteType });
-			if (artistId) qb.andWhere({ artist: artistId });
+		const options: FindOptions<Quote> = {
+			limit: limit
+				? Math.min(limit, ListQuotesService.maxLimit)
+				: ListQuotesService.defaultLimit,
+			offset: offset,
+			populate: ['artist'],
+		};
 
-			const getItems = async (): Promise<Quote[]> => {
-				if (offset && offset > ListQuotesService.maxOffset) return [];
+		const [quotes, count] = await Promise.all([
+			offset && offset > ListQuotesService.maxOffset
+				? Promise.resolve([])
+				: this.quoteRepo.find(where, {
+						...options,
+						orderBy: this.orderBy(sort),
+				  }),
+			getTotalCount
+				? this.quoteRepo.count(where, options)
+				: Promise.resolve(0),
+		]);
 
-				const idsQB = qb
-					.clone()
-					.select('id')
-					.limit(
-						limit
-							? Math.min(limit, ListQuotesService.maxLimit)
-							: ListQuotesService.defaultLimit,
-						offset,
-					);
-
-				const orderBy = this.orderBy(sort);
-				idsQB.orderBy(orderBy);
-
-				const ids = (await idsQB.execute<{ id: number }[]>()).map(
-					(x) => x.id,
-				);
-
-				return em.find(
-					Quote,
-					{ id: { $in: ids } },
-					{
-						orderBy: orderBy,
-						populate: ['artist'],
-					},
-				);
-			};
-
-			const getCount = async (): Promise<number> => {
-				if (!getTotalCount) return 0;
-
-				return (
-					await qb.clone().count().execute<{ count: number }[]>()
-				)[0].count;
-			};
-
-			const [quotes, count] = await Promise.all([getItems(), getCount()]);
-
-			return new SearchResultObject<QuoteObject>(
-				quotes.map((quote) => new QuoteObject(quote)),
-				count,
-			);
-		});
+		return new SearchResultObject<QuoteObject>(
+			quotes.map((quote) => new QuoteObject(quote)),
+			count,
+		);
 	}
 }

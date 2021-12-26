@@ -1,4 +1,5 @@
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { UserObject } from '../../dto/users/UserObject';
@@ -39,6 +40,8 @@ const createError = (
 export class AuthenticateUserService {
 	constructor(
 		private readonly em: EntityManager,
+		@InjectRepository(User)
+		private readonly userRepo: EntityRepository<User>,
 		private readonly auditLogService: AuditLogService,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
 		private readonly updatePasswordService: UpdatePasswordService,
@@ -51,8 +54,8 @@ export class AuthenticateUserService {
 	}): Promise<LoginResult> {
 		const { email, password, ip } = params;
 
-		return this.em.transactional(async (em) => {
-			const user = await em.findOne(User, {
+		return this.em.transactional(async () => {
+			const user = await this.userRepo.findOne({
 				email: email,
 				deleted: false,
 				hidden: false,

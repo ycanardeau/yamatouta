@@ -6,6 +6,9 @@ import { ArtistController } from './controllers/ArtistController';
 import { AuthController } from './controllers/AuthController';
 import { QuoteController } from './controllers/QuoteController';
 import { UserController } from './controllers/UserController';
+import { Artist } from './entities/Artist';
+import { Quote } from './entities/Quote';
+import { User } from './entities/User';
 import { AuditLogService } from './services/AuditLogService';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
@@ -24,7 +27,11 @@ import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 
 @Module({
-	imports: [MikroOrmModule.forRoot(), PassportModule],
+	imports: [
+		MikroOrmModule.forRoot(),
+		MikroOrmModule.forFeature([Artist, Quote, User]),
+		PassportModule,
+	],
 	controllers: [
 		ArtistController,
 		QuoteController,

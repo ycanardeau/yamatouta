@@ -1,5 +1,11 @@
-import { QueryOrder, QueryOrderMap } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/mariadb';
+import {
+	EntityRepository,
+	FilterQuery,
+	FindOptions,
+	QueryOrder,
+	QueryOrderMap,
+} from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
@@ -13,7 +19,10 @@ export class ListUsersService {
 	private static readonly maxLimit = 100;
 	private static readonly maxOffset = 5000;
 
-	constructor(private readonly em: EntityManager) {}
+	constructor(
+		@InjectRepository(User)
+		private readonly userRepo: EntityRepository<User>,
+	) {}
 
 	private orderBy(sort?: UserSortRule): QueryOrderMap {
 		switch (sort) {
@@ -22,7 +31,7 @@ export class ListUsersService {
 		}
 	}
 
-	listUsers(params: {
+	async listUsers(params: {
 		sort?: UserSortRule;
 		offset?: number;
 		limit?: number;
@@ -30,52 +39,33 @@ export class ListUsersService {
 	}): Promise<SearchResultObject<UserObject>> {
 		const { sort, offset, limit, getTotalCount } = params;
 
-		return this.em.transactional(async (em) => {
-			const qb = em
-				.createQueryBuilder(User)
-				.andWhere({ deleted: false, hidden: false });
+		const where: FilterQuery<User> = {
+			deleted: false,
+			hidden: false,
+		};
 
-			const getItems = async (): Promise<User[]> => {
-				if (offset && offset > ListUsersService.maxOffset) return [];
+		const options: FindOptions<User> = {
+			limit: limit
+				? Math.min(limit, ListUsersService.maxLimit)
+				: ListUsersService.defaultLimit,
+			offset: offset,
+		};
 
-				const idsQB = qb
-					.clone()
-					.select('id')
-					.limit(
-						limit
-							? Math.min(limit, ListUsersService.maxLimit)
-							: ListUsersService.defaultLimit,
-						offset,
-					);
+		const [users, count] = await Promise.all([
+			offset && offset > ListUsersService.maxOffset
+				? Promise.resolve([])
+				: this.userRepo.find(where, {
+						...options,
+						orderBy: this.orderBy(sort),
+				  }),
+			getTotalCount
+				? this.userRepo.count(where, options)
+				: Promise.resolve(0),
+		]);
 
-				const orderBy = this.orderBy(sort);
-				idsQB.orderBy(orderBy);
-
-				const ids = (await idsQB.execute<{ id: number }[]>()).map(
-					(x) => x.id,
-				);
-
-				return em.find(
-					User,
-					{ id: { $in: ids } },
-					{ orderBy: orderBy },
-				);
-			};
-
-			const getCount = async (): Promise<number> => {
-				if (!getTotalCount) return 0;
-
-				return (
-					await qb.clone().count().execute<{ count: number }[]>()
-				)[0].count;
-			};
-
-			const [users, count] = await Promise.all([getItems(), getCount()]);
-
-			return new SearchResultObject<UserObject>(
-				users.map((user) => new UserObject(user)),
-				count,
-			);
-		});
+		return new SearchResultObject<UserObject>(
+			users.map((user) => new UserObject(user)),
+			count,
+		);
 	}
 }

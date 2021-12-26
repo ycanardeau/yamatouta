@@ -1,5 +1,5 @@
 // Code from: https://github.com/VocaDB/vocadb/blob/dc352077711421e5d2c07a196aa427cc401b2841/VocaDbModel/Domain/Users/User.cs
-import { EntityManager } from '@mikro-orm/mariadb';
+import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 
 import { User } from '../../entities/User';

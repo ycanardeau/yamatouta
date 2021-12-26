@@ -1,5 +1,11 @@
-import { QueryOrder, QueryOrderMap } from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/mariadb';
+import {
+	FilterQuery,
+	FindOptions,
+	QueryOrder,
+	QueryOrderMap,
+} from '@mikro-orm/core';
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
@@ -13,7 +19,10 @@ export class ListArtistsService {
 	private static readonly maxLimit = 100;
 	private static readonly maxOffset = 5000;
 
-	constructor(private readonly em: EntityManager) {}
+	constructor(
+		@InjectRepository(Artist)
+		private readonly artistRepo: EntityRepository<Artist>,
+	) {}
 
 	private orderBy(sort?: ArtistSortRule): QueryOrderMap {
 		switch (sort) {
@@ -22,7 +31,7 @@ export class ListArtistsService {
 		}
 	}
 
-	listArtists(params: {
+	async listArtists(params: {
 		artistType?: ArtistType;
 		sort?: ArtistSortRule;
 		offset?: number;
@@ -31,57 +40,36 @@ export class ListArtistsService {
 	}): Promise<SearchResultObject<ArtistObject>> {
 		const { artistType, sort, offset, limit, getTotalCount } = params;
 
-		return this.em.transactional(async (em) => {
-			const qb = em
-				.createQueryBuilder(Artist)
-				.andWhere({ deleted: false, hidden: false });
+		const where: FilterQuery<Artist> = {
+			$and: [
+				{ deleted: false },
+				{ hidden: false },
+				artistType ? { artistType: artistType } : {},
+			],
+		};
 
-			if (artistType) qb.andWhere({ artistType: artistType });
+		const options: FindOptions<Artist> = {
+			limit: limit
+				? Math.min(limit, ListArtistsService.maxLimit)
+				: ListArtistsService.defaultLimit,
+			offset: offset,
+		};
 
-			const getItems = async (): Promise<Artist[]> => {
-				if (offset && offset > ListArtistsService.maxOffset) return [];
+		const [artists, count] = await Promise.all([
+			offset && offset > ListArtistsService.maxOffset
+				? Promise.resolve([])
+				: this.artistRepo.find(where, {
+						...options,
+						orderBy: this.orderBy(sort),
+				  }),
+			getTotalCount
+				? this.artistRepo.count(where, options)
+				: Promise.resolve(0),
+		]);
 
-				const idsQB = qb
-					.clone()
-					.select('id')
-					.limit(
-						limit
-							? Math.min(limit, ListArtistsService.maxLimit)
-							: ListArtistsService.defaultLimit,
-						offset,
-					);
-
-				const orderBy = this.orderBy(sort);
-				idsQB.orderBy(orderBy);
-
-				const ids = (await idsQB.execute<{ id: number }[]>()).map(
-					(x) => x.id,
-				);
-
-				return em.find(
-					Artist,
-					{ id: { $in: ids } },
-					{ orderBy: orderBy },
-				);
-			};
-
-			const getCount = async (): Promise<number> => {
-				if (!getTotalCount) return 0;
-
-				return (
-					await qb.clone().count().execute<{ count: number }[]>()
-				)[0].count;
-			};
-
-			const [artists, count] = await Promise.all([
-				getItems(),
-				getCount(),
-			]);
-
-			return new SearchResultObject<ArtistObject>(
-				artists.map((artist) => new ArtistObject(artist)),
-				count,
-			);
-		});
+		return new SearchResultObject<ArtistObject>(
+			artists.map((artist) => new ArtistObject(artist)),
+			count,
+		);
 	}
 }

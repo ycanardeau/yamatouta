@@ -1,4 +1,5 @@
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import {
 	BadRequestException,
 	ForbiddenException,
@@ -18,6 +19,8 @@ import { NormalizeEmailService } from './NormalizeEmailService';
 export class CreateUserService {
 	constructor(
 		private readonly em: EntityManager,
+		@InjectRepository(User)
+		private readonly userRepo: EntityRepository<User>,
 		private readonly auditLogService: AuditLogService,
 		private readonly normalizeEmailService: NormalizeEmailService,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
@@ -52,9 +55,9 @@ export class CreateUserService {
 			email,
 		);
 
-		const user = await this.em.transactional(async (em) => {
-			await em
-				.findOne(User, { normalizedEmail: normalizedEmail })
+		const user = await this.em.transactional(async () => {
+			await this.userRepo
+				.findOne({ normalizedEmail: normalizedEmail })
 				.then((existing) => {
 					if (existing) throw new UserEmailAlreadyExistsException();
 				});
@@ -77,7 +80,7 @@ export class CreateUserService {
 				passwordHash: passwordHash,
 			});
 
-			em.persist(user);
+			this.userRepo.persist(user);
 
 			await this.auditLogService.user_create({
 				actor: user,

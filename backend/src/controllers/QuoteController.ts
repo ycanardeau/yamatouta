@@ -21,7 +21,7 @@ export class QuoteController {
 		const { quoteType, offset, limit, getTotalCount, artistId } = query;
 
 		return this.listQuotesService.listQuotes({
-			quoteType: QuoteType[quoteType as keyof typeof QuoteType],
+			quoteType: quoteType as QuoteType,
 			// TODO: sort: QuoteSortRule[sort as keyof typeof QuoteSortRule],
 			offset: Number(offset),
 			limit: Number(limit),
