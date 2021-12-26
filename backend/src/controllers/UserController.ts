@@ -2,7 +2,11 @@ import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { UserObject } from '../dto/users/UserObject';
-import { ListUsersQuery } from '../requests/users/ListUsersQuery';
+import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
+import {
+	IListUsersQuery,
+	listUsersQuerySchema,
+} from '../requests/users/IListUsersQuery';
 import { GetUserService } from '../services/users/GetUserService';
 import { ListUsersService } from '../services/users/ListUsersService';
 
@@ -15,16 +19,10 @@ export class UserController {
 
 	@Get()
 	listUsers(
-		@Query() query: ListUsersQuery,
+		@Query(new JoiValidationPipe(listUsersQuerySchema))
+		query: IListUsersQuery,
 	): Promise<SearchResultObject<UserObject>> {
-		const { offset, limit, getTotalCount } = query;
-
-		return this.listUsersService.listUsers({
-			// TODO: sort: UserSortRule[sort as keyof typeof UserSortRule],
-			offset: Number(offset),
-			limit: Number(limit),
-			getTotalCount: getTotalCount === 'true',
-		});
+		return this.listUsersService.listUsers(query);
 	}
 
 	@Get(':userId')

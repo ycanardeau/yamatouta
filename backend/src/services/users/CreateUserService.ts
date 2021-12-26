@@ -5,7 +5,7 @@ import {
 	ForbiddenException,
 	Injectable,
 } from '@nestjs/common';
-import Joi from 'joi';
+import Joi, { ObjectSchema } from 'joi';
 
 import config from '../../config';
 import { UserObject } from '../../dto/users/UserObject';
@@ -39,17 +39,22 @@ export class CreateUserService {
 		if (config.disableAccountCreation)
 			throw new ForbiddenException('Account creation is restricted.');
 
-		const schema = Joi.object({
+		const schema: ObjectSchema<{
+			username: string;
+			email: string;
+			password: string;
+		}> = Joi.object({
 			username: Joi.string().required().trim().min(2).max(32),
 			email: Joi.string().required().email().max(50),
 			password: Joi.string().required().min(8),
 		});
 
-		const { error } = schema.validate(params);
+		const result = schema.validate(params, { convert: true });
 
-		if (error) throw new BadRequestException(error.details[0].message);
+		if (result.error)
+			throw new BadRequestException(result.error.details[0].message);
 
-		const { username, email, password } = params;
+		const { username, email, password } = result.value;
 
 		const normalizedEmail = await this.normalizeEmailService.normalizeEmail(
 			email,

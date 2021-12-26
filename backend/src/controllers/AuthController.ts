@@ -13,7 +13,11 @@ import requestIp from 'request-ip';
 
 import { UserObject } from '../dto/users/UserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
-import { CreateUserBody } from '../requests/auth/CreateUserBody';
+import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
+import {
+	createUserBodySchema,
+	ICreateUserBody,
+} from '../requests/auth/ICreateUserBody';
 import { LoginService } from '../services/auth/LoginService';
 import { LogoutService } from '../services/auth/LogoutService';
 import { CreateUserService } from '../services/users/CreateUserService';
@@ -28,19 +32,16 @@ export class AuthController {
 
 	@Post('register')
 	createUser(
-		@Body() body: CreateUserBody,
+		@Body(new JoiValidationPipe(createUserBodySchema))
+		body: ICreateUserBody,
 		@Req() request: Request,
 	): Promise<UserObject> {
-		const { username, email, password } = body;
-
 		const ip = requestIp.getClientIp(request);
 
 		if (!ip) throw new BadRequestException('IP address cannot be found.');
 
 		return this.createUserService.createUser({
-			username: username,
-			email: email,
-			password: password,
+			...body,
 			ip: ip,
 		});
 	}

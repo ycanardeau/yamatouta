@@ -2,8 +2,11 @@ import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { ArtistObject } from '../dto/artists/ArtistObject';
-import { ArtistType } from '../entities/Artist';
-import { ListArtistsQuery } from '../requests/artists/ListArtistsQuery';
+import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
+import {
+	IListArtistsQuery,
+	listArtistsQuerySchema,
+} from '../requests/artists/IListArtistsQuery';
 import { GetArtistService } from '../services/artists/GetArtistService';
 import { ListArtistsService } from '../services/artists/ListArtistsService';
 
@@ -16,17 +19,10 @@ export class ArtistController {
 
 	@Get()
 	listArtists(
-		@Query() query: ListArtistsQuery,
+		@Query(new JoiValidationPipe(listArtistsQuerySchema))
+		query: IListArtistsQuery,
 	): Promise<SearchResultObject<ArtistObject>> {
-		const { artistType, offset, limit, getTotalCount } = query;
-
-		return this.listArtistsService.listArtists({
-			artistType: artistType as ArtistType,
-			// TODO: sort: ArtistSortRule[sort as keyof typeof ArtistSortRule],
-			offset: Number(offset),
-			limit: Number(limit),
-			getTotalCount: getTotalCount === 'true',
-		});
+		return this.listArtistsService.listArtists(query);
 	}
 
 	@Get(':artistId')

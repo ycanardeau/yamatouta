@@ -1,5 +1,4 @@
 import { EntityManager } from '@mikro-orm/mariadb';
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import connectSessionKnex from 'connect-session-knex';
 import cookieParser from 'cookie-parser';
@@ -16,8 +15,6 @@ async function bootstrap(): Promise<void> {
 	const app = await NestFactory.create(AppModule);
 
 	app.use(helmet());
-
-	app.useGlobalPipes(new ValidationPipe());
 
 	app.enableCors({
 		origin: config.cors.allowedOrigins,
