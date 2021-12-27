@@ -5,6 +5,15 @@ export enum PasswordHashAlgorithm {
 	Inishienomanabi = 'inishienomanabi',
 }
 
+export enum UserGroup {
+	LimitedUser = 'limited_user',
+	User = 'user',
+	AdvancedUser = 'advanced_user',
+	Mod = 'mod',
+	SeniorMod = 'senior_mod',
+	Admin = 'admin',
+}
+
 @Entity({ tableName: 'users' })
 export class User {
 	@PrimaryKey()
@@ -66,6 +75,9 @@ export class User {
 
 	@Property()
 	accessFailedCount = 0;
+
+	@Enum()
+	userGroup = UserGroup.User;
 
 	constructor(params: {
 		name: string;
