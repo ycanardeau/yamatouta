@@ -1,4 +1,7 @@
-import { AuthorType, IAuthor, Quote, QuoteType } from '../../entities/Quote';
+import { Quote } from '../../entities/Quote';
+import { AuthorType } from '../../models/AuthorType';
+import { IAuthor } from '../../models/IAuthor';
+import { QuoteType } from '../../models/QuoteType';
 
 export class AuthorObject {
 	readonly authorType: AuthorType;

@@ -12,7 +12,8 @@ import { SearchResultObject } from '../../dto/SearchResultObject';
 import { QuoteObject } from '../../dto/quotes/QuoteObject';
 import { QuoteSortRule } from '../../dto/quotes/QuoteSortRule';
 import { ArtistQuote } from '../../entities/ArtistQuote';
-import { Quote, QuoteType } from '../../entities/Quote';
+import { Quote } from '../../entities/Quote';
+import { QuoteType } from '../../models/QuoteType';
 
 @Injectable()
 export class ListQuotesService {

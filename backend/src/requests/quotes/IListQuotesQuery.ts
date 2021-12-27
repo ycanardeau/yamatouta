@@ -1,7 +1,7 @@
 import Joi, { ObjectSchema } from 'joi';
 
 import { QuoteSortRule } from '../../dto/quotes/QuoteSortRule';
-import { QuoteType } from '../../entities/Quote';
+import { QuoteType } from '../../models/QuoteType';
 
 export interface IListQuotesQuery {
 	quoteType?: QuoteType;

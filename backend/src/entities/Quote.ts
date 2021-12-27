@@ -1,25 +1,9 @@
 import { Embedded, Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
 
+import { AuthorType } from '../models/AuthorType';
+import { IAuthor } from '../models/IAuthor';
+import { QuoteType } from '../models/QuoteType';
 import { PartialDate } from './PartialDate';
-
-export enum QuoteType {
-	Word = 'word',
-	Haiku = 'haiku',
-	Tanka = 'tanka',
-	Lyrics = 'lyrics',
-	Other = 'other',
-}
-
-export enum AuthorType {
-	Artist = 'artist',
-	User = 'user',
-}
-
-export interface IAuthor {
-	authorType: AuthorType;
-	id: number;
-	name: string;
-}
 
 @Entity({
 	tableName: 'quotes',

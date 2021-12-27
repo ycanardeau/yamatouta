@@ -1,4 +1,5 @@
-import { Artist, ArtistType } from '../../entities/Artist';
+import { Artist } from '../../entities/Artist';
+import { ArtistType } from '../../models/ArtistType';
 
 export class ArtistObject {
 	readonly id: number;

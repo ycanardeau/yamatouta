@@ -1,8 +1,9 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 
-import { AuditedAction, AuditLogEntry } from '../entities/AuditLogEntry';
+import { AuditLogEntry } from '../entities/AuditLogEntry';
 import { User } from '../entities/User';
+import { AuditedAction } from '../models/AuditedAction';
 
 @Injectable()
 export class AuditLogService {

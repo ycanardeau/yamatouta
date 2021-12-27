@@ -1,12 +1,7 @@
 import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
+import { AuditedAction } from '../models/AuditedAction';
 import { User } from './User';
-
-export enum AuditedAction {
-	User_Create = 'user.create',
-	User_FailedLogin = 'user.failed_login',
-	User_Login = 'user.login',
-}
 
 @Entity({ tableName: 'audit_log_entries' })
 export class AuditLogEntry {

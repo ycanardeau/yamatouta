@@ -11,7 +11,8 @@ import { Injectable } from '@nestjs/common';
 import { SearchResultObject } from '../../dto/SearchResultObject';
 import { ArtistObject } from '../../dto/artists/ArtistObject';
 import { ArtistSortRule } from '../../dto/artists/ArtistSortRule';
-import { Artist, ArtistType } from '../../entities/Artist';
+import { Artist } from '../../entities/Artist';
+import { ArtistType } from '../../models/ArtistType';
 
 @Injectable()
 export class ListArtistsService {

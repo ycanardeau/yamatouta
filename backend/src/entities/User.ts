@@ -1,18 +1,7 @@
 import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
 
-export enum PasswordHashAlgorithm {
-	Bcrypt = 'bcrypt',
-	Inishienomanabi = 'inishienomanabi',
-}
-
-export enum UserGroup {
-	LimitedUser = 'limited_user',
-	User = 'user',
-	AdvancedUser = 'advanced_user',
-	Mod = 'mod',
-	SeniorMod = 'senior_mod',
-	Admin = 'admin',
-}
+import { PasswordHashAlgorithm } from '../models/PasswordHashAlgorithm';
+import { UserGroup } from '../models/UserGroup';
 
 @Entity({ tableName: 'users' })
 export class User {
