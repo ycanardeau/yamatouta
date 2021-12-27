@@ -11,7 +11,7 @@ import {
 import { Request } from 'express';
 import requestIp from 'request-ip';
 
-import { UserObject } from '../dto/users/UserObject';
+import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import {
@@ -35,7 +35,7 @@ export class AuthController {
 		@Body(new JoiValidationPipe(createUserBodySchema))
 		body: ICreateUserBody,
 		@Req() request: Request,
-	): Promise<UserObject> {
+	): Promise<AuthenticatedUserObject> {
 		const ip = requestIp.getClientIp(request);
 
 		if (!ip) throw new BadRequestException('IP address cannot be found.');
@@ -49,7 +49,7 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	login(@Req() request: Request): Promise<UserObject> {
+	login(@Req() request: Request): Promise<AuthenticatedUserObject> {
 		return this.loginService.login(request);
 	}
 

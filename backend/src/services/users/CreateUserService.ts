@@ -8,7 +8,7 @@ import {
 import Joi, { ObjectSchema } from 'joi';
 
 import config from '../../config';
-import { UserObject } from '../../dto/users/UserObject';
+import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
 import { User } from '../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../exceptions/UserEmailAlreadyExistsException';
 import { AuditLogService } from '../AuditLogService';
@@ -35,7 +35,7 @@ export class CreateUserService {
 		email: string;
 		password: string;
 		ip: string;
-	}): Promise<UserObject> {
+	}): Promise<AuthenticatedUserObject> {
 		if (config.disableAccountCreation)
 			throw new ForbiddenException('Account creation is restricted.');
 
@@ -96,6 +96,6 @@ export class CreateUserService {
 			return user;
 		});
 
-		return new UserObject(user);
+		return new AuthenticatedUserObject(user);
 	}
 }
