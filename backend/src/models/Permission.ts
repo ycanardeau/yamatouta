@@ -1,1 +1,4 @@
-export enum Permission {}
+export enum Permission {
+	ViewDeletedEntries = 'ViewDeletedEntries',
+	ViewHiddenEntries = 'ViewHiddenEntries',
+}

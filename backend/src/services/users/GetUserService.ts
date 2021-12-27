@@ -4,23 +4,28 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { UserObject } from '../../dto/users/UserObject';
 import { User } from '../../entities/User';
+import { PermissionContext } from '../PermissionContext';
+import { whereNotDeleted, whereNotHidden } from '../filters';
 
 @Injectable()
 export class GetUserService {
 	constructor(
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
+		private readonly permissionContext: PermissionContext,
 	) {}
 
 	async getUser(userId: number): Promise<UserObject> {
 		const user = await this.userRepo.findOne({
 			id: userId,
-			deleted: false,
-			hidden: false,
+			$and: [
+				whereNotDeleted(this.permissionContext),
+				whereNotHidden(this.permissionContext),
+			],
 		});
 
 		if (!user) throw new NotFoundException();
 
-		return new UserObject(user);
+		return new UserObject(user, this.permissionContext);
 	}
 }

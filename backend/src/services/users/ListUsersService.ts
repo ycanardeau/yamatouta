@@ -12,6 +12,8 @@ import { SearchResultObject } from '../../dto/SearchResultObject';
 import { UserObject } from '../../dto/users/UserObject';
 import { UserSortRule } from '../../dto/users/UserSortRule';
 import { User } from '../../entities/User';
+import { PermissionContext } from '../PermissionContext';
+import { whereNotDeleted, whereNotHidden } from '../filters';
 
 @Injectable()
 export class ListUsersService {
@@ -22,6 +24,7 @@ export class ListUsersService {
 	constructor(
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
+		private readonly permissionContext: PermissionContext,
 	) {}
 
 	private orderBy(sort?: UserSortRule): QueryOrderMap {
@@ -40,8 +43,10 @@ export class ListUsersService {
 		const { sort, offset, limit, getTotalCount } = params;
 
 		const where: FilterQuery<User> = {
-			deleted: false,
-			hidden: false,
+			$and: [
+				whereNotDeleted(this.permissionContext),
+				whereNotHidden(this.permissionContext),
+			],
 		};
 
 		const options: FindOptions<User> = {
@@ -64,7 +69,7 @@ export class ListUsersService {
 		]);
 
 		return new SearchResultObject<UserObject>(
-			users.map((user) => new UserObject(user)),
+			users.map((user) => new UserObject(user, this.permissionContext)),
 			count,
 		);
 	}

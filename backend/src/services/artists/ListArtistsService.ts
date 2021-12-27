@@ -13,6 +13,8 @@ import { ArtistObject } from '../../dto/artists/ArtistObject';
 import { ArtistSortRule } from '../../dto/artists/ArtistSortRule';
 import { Artist } from '../../entities/Artist';
 import { ArtistType } from '../../models/ArtistType';
+import { PermissionContext } from '../PermissionContext';
+import { whereNotDeleted, whereNotHidden } from '../filters';
 
 @Injectable()
 export class ListArtistsService {
@@ -23,6 +25,7 @@ export class ListArtistsService {
 	constructor(
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
+		private readonly permissionContext: PermissionContext,
 	) {}
 
 	private orderBy(sort?: ArtistSortRule): QueryOrderMap {
@@ -43,8 +46,8 @@ export class ListArtistsService {
 
 		const where: FilterQuery<Artist> = {
 			$and: [
-				{ deleted: false },
-				{ hidden: false },
+				whereNotDeleted(this.permissionContext),
+				whereNotHidden(this.permissionContext),
 				artistType ? { artistType: artistType } : {},
 			],
 		};
@@ -69,7 +72,9 @@ export class ListArtistsService {
 		]);
 
 		return new SearchResultObject<ArtistObject>(
-			artists.map((artist) => new ArtistObject(artist)),
+			artists.map(
+				(artist) => new ArtistObject(artist, this.permissionContext),
+			),
 			count,
 		);
 	}

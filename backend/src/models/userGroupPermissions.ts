@@ -11,7 +11,11 @@ const modPermissions: Permission[] = [...advancedUserPermissions];
 
 const seniorModPermissions: Permission[] = [...modPermissions];
 
-const adminPermissions: Permission[] = [...seniorModPermissions];
+const adminPermissions: Permission[] = [
+	...seniorModPermissions,
+	Permission.ViewDeletedEntries,
+	Permission.ViewHiddenEntries,
+];
 
 export const userGroupPermissions: Record<UserGroup, Permission[]> = {
 	[UserGroup.LimitedUser]: limitedUserPermissions,

@@ -1,7 +1,9 @@
 import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { PasswordHashAlgorithm } from '../models/PasswordHashAlgorithm';
+import { Permission } from '../models/Permission';
 import { UserGroup } from '../models/UserGroup';
+import { userGroupPermissions } from '../models/userGroupPermissions';
 
 @Entity({ tableName: 'users' })
 export class User {
@@ -91,5 +93,12 @@ export class User {
 		this.passwordHashAlgorithm = passwordHashAlgorithm;
 		this.salt = salt;
 		this.passwordHash = passwordHash;
+	}
+
+	get effectivePermissions(): Permission[] {
+		return [
+			...userGroupPermissions[this.userGroup],
+			// TODO: Implement additional permissions.
+		];
 	}
 }
