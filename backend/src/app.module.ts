@@ -11,6 +11,7 @@ import { Quote } from './entities/Quote';
 import { User } from './entities/User';
 import { AuditLogService } from './services/AuditLogService';
 import { GetArtistService } from './services/artists/GetArtistService';
+import { ListArtistIdsService } from './services/artists/ListArtistIdsService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
 import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
@@ -18,6 +19,7 @@ import { LoginService } from './services/auth/LoginService';
 import { LogoutService } from './services/auth/LogoutService';
 import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasherFactory';
 import { GetQuoteService } from './services/quotes/GetQuoteService';
+import { ListQuoteIdsService } from './services/quotes/ListQuoteIdsService';
 import { ListQuotesService } from './services/quotes/ListQuotesService';
 import { AuthenticateUserService } from './services/users/AuthenticateUserService';
 import { CreateUserService } from './services/users/CreateUserService';
@@ -55,6 +57,8 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		NormalizeEmailService,
 		PasswordHasherFactory,
 		UpdatePasswordService,
+		ListArtistIdsService,
+		ListQuoteIdsService,
 	],
 })
 export class AppModule {}
