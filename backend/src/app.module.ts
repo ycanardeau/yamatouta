@@ -5,11 +5,13 @@ import { PassportModule } from '@nestjs/passport';
 import { ArtistController } from './controllers/ArtistController';
 import { AuthController } from './controllers/AuthController';
 import { QuoteController } from './controllers/QuoteController';
+import { SitemapController } from './controllers/SitemapController';
 import { UserController } from './controllers/UserController';
 import { Artist } from './entities/Artist';
 import { Quote } from './entities/Quote';
 import { User } from './entities/User';
 import { AuditLogService } from './services/AuditLogService';
+import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistIdsService } from './services/artists/ListArtistIdsService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
@@ -39,6 +41,7 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		QuoteController,
 		UserController,
 		AuthController,
+		SitemapController,
 	],
 	providers: [
 		ListArtistsService,
@@ -59,6 +62,7 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		UpdatePasswordService,
 		ListArtistIdsService,
 		ListQuoteIdsService,
+		GenerateSitemapService,
 	],
 })
 export class AppModule {}
