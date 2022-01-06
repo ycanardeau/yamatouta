@@ -26,7 +26,7 @@ const AppFooter = (): React.ReactElement => {
 				}}
 			>
 				<Typography color="text.secondary" variant="body2">
-					Copyright © {new Date().getFullYear()}{' '}
+					Copyright © 2021-{new Date().getFullYear()}{' '}
 					<Link
 						target="_blank"
 						rel="noopener noreferrer"
