@@ -33,5 +33,13 @@
 		"words": "Words",
 		"works": "Works",
 		"users": "Users"
+	},
+	"translations": {
+		"addWord": "Add Word",
+		"foreignLanguage": "Foreign language",
+		"headword": "Headword",
+		"japanese": "Japanese",
+		"reading": "Reading",
+		"yamatokotoba": "Yamato-kotoba"
 	}
 }

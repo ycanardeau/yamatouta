@@ -30,8 +30,16 @@
 		"home": "まちうけ",
 		"quotes": "やまとうた",
 		"source": "でどころ",
-		"words": "ことのは",
+		"words": "やまとことば",
 		"works": "しながき",
 		"users": "つかいて"
+	},
+	"translations": {
+		"addWord": "やまとことばをかきたす",
+		"foreignLanguage": "とつくにことば",
+		"headword": "みだしことば",
+		"japanese": "みくにことば",
+		"reading": "よみかた",
+		"yamatokotoba": "やまとことば"
 	}
 }

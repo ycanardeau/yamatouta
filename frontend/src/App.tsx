@@ -20,6 +20,9 @@ const ArtistRoutes = lazyWithRetry(
 	() => import('./pages/artists/ArtistRoutes'),
 );
 const QuoteRoutes = lazyWithRetry(() => import('./pages/quotes/QuoteRoutes'));
+const TranslationRoutes = lazyWithRetry(
+	() => import('./pages/translations/TranslationRoutes'),
+);
 const UserRoutes = lazyWithRetry(() => import('./pages/users/UserRoutes'));
 const HomeRoutes = lazyWithRetry(() => import('./pages/home/HomeRoutes'));
 
@@ -43,6 +46,10 @@ const App = (): React.ReactElement => {
 					<Routes>
 						<Route path="artists/*" element={<ArtistRoutes />} />
 						<Route path="quotes/*" element={<QuoteRoutes />} />
+						<Route
+							path="translations/*"
+							element={<TranslationRoutes />}
+						/>
 						<Route path="users/*" element={<UserRoutes />} />
 						<Route path="*" element={<HomeRoutes />} />
 					</Routes>

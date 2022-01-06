@@ -5,7 +5,6 @@ import { listArtists } from '../../api/ArtistApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
 import { ISearchResultObject } from '../../dto/ISearchResultObject';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
-import { CreateArtistDialogStore } from '../CreateArtistDialogStore';
 import { PaginationStore } from '../PaginationStore';
 
 interface IArtistIndexRouteParams {
@@ -38,7 +37,6 @@ export class ArtistIndexStore
 		>
 {
 	readonly paginationStore = new PaginationStore();
-	readonly createArtistDialogStore = new CreateArtistDialogStore();
 
 	@observable artists: IArtistObject[] = [];
 

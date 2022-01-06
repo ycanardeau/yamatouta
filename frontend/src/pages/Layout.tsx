@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ interface ILayoutProps {
 		to: string;
 		isCurrentItem?: boolean;
 	}[];
+	actions?: React.ReactNode;
 	children?: React.ReactNode;
 	meta?: {
 		description?: string;
@@ -19,6 +20,7 @@ interface ILayoutProps {
 
 const Layout = ({
 	breadcrumbItems,
+	actions,
 	children,
 	meta,
 }: ILayoutProps): React.ReactElement => {
@@ -36,7 +38,11 @@ const Layout = ({
 				/>
 			</Helmet>
 
-			<Breadcrumb items={breadcrumbItems} />
+			<Stack direction="row">
+				<Breadcrumb items={breadcrumbItems} />
+				<Box sx={{ flex: 1 }} />
+				{actions}
+			</Stack>
 
 			<Grid container>
 				<Grid item xs={12} md={9}>
