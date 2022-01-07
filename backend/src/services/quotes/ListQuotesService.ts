@@ -12,7 +12,10 @@ import { SearchResultObject } from '../../dto/SearchResultObject';
 import { QuoteObject } from '../../dto/quotes/QuoteObject';
 import { QuoteSortRule } from '../../dto/quotes/QuoteSortRule';
 import { ArtistQuote } from '../../entities/ArtistQuote';
-import { Quote, QuoteType } from '../../entities/Quote';
+import { Quote } from '../../entities/Quote';
+import { QuoteType } from '../../models/QuoteType';
+import { PermissionContext } from '../PermissionContext';
+import { whereNotDeleted, whereNotHidden } from '../filters';
 
 @Injectable()
 export class ListQuotesService {
@@ -23,6 +26,7 @@ export class ListQuotesService {
 	constructor(
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
+		private readonly permissionContext: PermissionContext,
 	) {}
 
 	private orderBy(sort?: QuoteSortRule): QueryOrderMap {
@@ -45,8 +49,8 @@ export class ListQuotesService {
 
 		const where: FilterQuery<ArtistQuote> = {
 			$and: [
-				{ deleted: false },
-				{ hidden: false },
+				whereNotDeleted(this.permissionContext),
+				whereNotHidden(this.permissionContext),
 				{ $not: { quoteType: QuoteType.Word } },
 				quoteType ? { quoteType: quoteType } : {},
 				artistId ? { artist: artistId } : {},
@@ -74,7 +78,9 @@ export class ListQuotesService {
 		]);
 
 		return new SearchResultObject<QuoteObject>(
-			quotes.map((quote) => new QuoteObject(quote)),
+			quotes.map(
+				(quote) => new QuoteObject(quote, this.permissionContext),
+			),
 			count,
 		);
 	}

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-import { PasswordHashAlgorithm } from '../../entities/User';
+import { PasswordHashAlgorithm } from '../../models/PasswordHashAlgorithm';
 import { IPasswordHasher } from './IPasswordHasher';
 
 export class BcryptPasswordHasher implements IPasswordHasher {

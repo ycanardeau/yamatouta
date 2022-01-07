@@ -1,4 +1,10 @@
-import { AuthorType, IAuthor, Quote, QuoteType } from '../../entities/Quote';
+import { NotFoundException } from '@nestjs/common';
+
+import { Quote } from '../../entities/Quote';
+import { AuthorType } from '../../models/AuthorType';
+import { IAuthor } from '../../models/IAuthor';
+import { QuoteType } from '../../models/QuoteType';
+import { PermissionContext } from '../../services/PermissionContext';
 
 export class AuthorObject {
 	readonly authorType: AuthorType;
@@ -16,17 +22,24 @@ export class AuthorObject {
 
 export class QuoteObject {
 	readonly id: number;
+	readonly deleted: boolean;
+	readonly hidden: boolean;
 	readonly quoteType: QuoteType;
 	readonly phrases: string[];
 	readonly locale?: string;
 	readonly author: AuthorObject;
 	readonly sourceUrl?: string;
 
-	constructor(quote: Quote) {
-		if (quote.deleted || quote.hidden)
-			throw new Error(`Quote ${quote.id} has already been deleted.`);
+	constructor(quote: Quote, permissionContext: PermissionContext) {
+		if (quote.deleted && !permissionContext.canViewDeletedEntries)
+			throw new NotFoundException();
+
+		if (quote.hidden && !permissionContext.canViewHiddenEntries)
+			throw new NotFoundException();
 
 		this.id = quote.id;
+		this.deleted = quote.deleted;
+		this.hidden = quote.hidden;
 		this.quoteType = quote.quoteType;
 		this.phrases = quote.text.split('\n');
 		this.locale = quote.locale;

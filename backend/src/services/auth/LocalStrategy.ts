@@ -10,7 +10,7 @@ import { Strategy } from 'passport-local';
 import requestIp from 'request-ip';
 
 import config from '../../config';
-import { UserObject } from '../../dto/users/UserObject';
+import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
 import { TooManyRequestsException } from '../../exceptions/TooManyRequestsException';
 import {
 	AuthenticateUserService,
@@ -66,7 +66,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		request: Request,
 		email: string,
 		password: string,
-	): Promise<UserObject> {
+	): Promise<AuthenticatedUserObject> {
 		const ip = requestIp.getClientIp(request);
 
 		if (!ip) throw new BadRequestException('IP address cannot be found.');

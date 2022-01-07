@@ -1,13 +1,8 @@
 import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
 
-import { AuthorType, IAuthor } from './Quote';
-
-export enum ArtistType {
-	Person = 'person',
-	Group = 'group',
-	Other = 'other',
-	Character = 'character',
-}
+import { ArtistType } from '../models/ArtistType';
+import { AuthorType } from '../models/AuthorType';
+import { IAuthor } from '../models/IAuthor';
 
 @Entity({ tableName: 'artists' })
 export class Artist implements IAuthor {

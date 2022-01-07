@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { PasswordHashAlgorithm } from '../../entities/User';
+import { PasswordHashAlgorithm } from '../../models/PasswordHashAlgorithm';
 import { BcryptPasswordHasher } from './BcryptPasswordHasher';
 import { IPasswordHasher } from './IPasswordHasher';
 

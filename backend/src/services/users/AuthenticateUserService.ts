@@ -2,7 +2,7 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 
-import { UserObject } from '../../dto/users/UserObject';
+import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
 import { User } from '../../entities/User';
 import { AuditLogService } from '../AuditLogService';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
@@ -17,14 +17,14 @@ export enum LoginError {
 export type LoginResult =
 	| {
 			error: LoginError.None;
-			user: UserObject;
+			user: AuthenticatedUserObject;
 	  }
 	| {
 			error: Exclude<LoginError, LoginError.None>;
 			user: undefined;
 	  };
 
-const createSuccess = (user: UserObject): LoginResult => ({
+const createSuccess = (user: AuthenticatedUserObject): LoginResult => ({
 	error: LoginError.None,
 	user: user,
 });
@@ -93,7 +93,7 @@ export class AuthenticateUserService {
 					);
 				}
 
-				return createSuccess(new UserObject(user));
+				return createSuccess(new AuthenticatedUserObject(user));
 			}
 
 			await this.auditLogService.user_failedLogin({

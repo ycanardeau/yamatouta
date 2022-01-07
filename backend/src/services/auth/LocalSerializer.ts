@@ -1,21 +1,31 @@
+import { EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
 
-import { UserObject } from '../../dto/users/UserObject';
-import { GetUserService } from '../users/GetUserService';
+import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
+import { User } from '../../entities/User';
 
 @Injectable()
 export class LocalSerializer extends PassportSerializer {
-	constructor(private readonly getUserService: GetUserService) {
+	constructor(
+		@InjectRepository(User)
+		private readonly userRepo: EntityRepository<User>,
+	) {
 		super();
 	}
 
-	serializeUser(user: UserObject, done: CallableFunction): void {
+	serializeUser(user: AuthenticatedUserObject, done: CallableFunction): void {
 		done(null, user.id);
 	}
 
 	async deserializeUser(payload: any, done: CallableFunction): Promise<void> {
-		const user = await this.getUserService.getUser(Number(payload));
-		done(null, user);
+		const user = await this.userRepo.findOneOrFail({
+			id: Number(payload),
+			deleted: false,
+			hidden: false,
+		});
+
+		done(null, new AuthenticatedUserObject(user));
 	}
 }

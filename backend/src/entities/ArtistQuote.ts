@@ -1,7 +1,10 @@
 import { Entity, ManyToOne } from '@mikro-orm/core';
 
+import { AuthorType } from '../models/AuthorType';
+import { IAuthor } from '../models/IAuthor';
+import { QuoteType } from '../models/QuoteType';
 import { Artist } from './Artist';
-import { AuthorType, IAuthor, Quote, QuoteType } from './Quote';
+import { Quote } from './Quote';
 
 @Entity({ tableName: 'quotes', discriminatorValue: AuthorType.Artist })
 export class ArtistQuote extends Quote {

@@ -12,6 +12,7 @@ import { Quote } from './entities/Quote';
 import { User } from './entities/User';
 import { AuditLogService } from './services/AuditLogService';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
+import { PermissionContext } from './services/PermissionContext';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistIdsService } from './services/artists/ListArtistIdsService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
@@ -63,6 +64,7 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		ListArtistIdsService,
 		ListQuoteIdsService,
 		GenerateSitemapService,
+		PermissionContext,
 	],
 })
 export class AppModule {}
