@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import CreateTranslationDialog from '../../components/CreateTranslationDialog';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
@@ -13,6 +14,8 @@ const TranslationIndex = (): React.ReactElement => {
 
 	const [createTranslationDialogOpen, setCreateTranslationDialogOpen] =
 		React.useState(false);
+
+	const navigate = useNavigate();
 
 	return (
 		<Layout
@@ -36,6 +39,11 @@ const TranslationIndex = (): React.ReactElement => {
 			{createTranslationDialogOpen && (
 				<CreateTranslationDialog
 					onClose={(): void => setCreateTranslationDialogOpen(false)}
+					onCreateTranslationComplete={(translation): void => {
+						setCreateTranslationDialogOpen(false);
+
+						navigate(`/translations/${translation.id}`);
+					}}
 				/>
 			)}
 		</Layout>

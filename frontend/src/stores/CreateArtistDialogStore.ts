@@ -38,7 +38,7 @@ export class CreateArtistDialogStore {
 		try {
 			this.submitting = true;
 
-			return createArtist({
+			return await createArtist({
 				name: this.name,
 				artistType: this.artistType,
 			});

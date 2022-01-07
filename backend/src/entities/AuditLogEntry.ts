@@ -1,6 +1,7 @@
 import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { AuditedAction } from '../models/AuditedAction';
+import { Translation } from './Translation';
 import { User } from './User';
 
 @Entity({ tableName: 'audit_log_entries' })
@@ -29,13 +30,17 @@ export class AuditLogEntry {
 	@Property()
 	userName?: string;
 
+	@ManyToOne()
+	translation?: Translation;
+
 	constructor(params: {
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
 		user?: User;
+		translation?: Translation;
 	}) {
-		const { action, actor, actorIp, user } = params;
+		const { action, actor, actorIp, user, translation } = params;
 
 		this.action = action;
 		this.actor = actor;
@@ -43,5 +48,6 @@ export class AuditLogEntry {
 		this.actorIp = actorIp;
 		this.user = user;
 		this.userName = user?.name;
+		this.translation = translation;
 	}
 }

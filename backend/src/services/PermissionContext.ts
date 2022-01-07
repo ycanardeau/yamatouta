@@ -1,4 +1,9 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
+import {
+	Inject,
+	Injectable,
+	Scope,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
 
@@ -7,7 +12,7 @@ import { Permission } from '../models/Permission';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PermissionContext {
-	private readonly user?: AuthenticatedUserObject;
+	readonly user?: AuthenticatedUserObject;
 
 	constructor(@Inject(REQUEST) request: Request) {
 		const { user } = request;
@@ -29,5 +34,9 @@ export class PermissionContext {
 
 	get canViewHiddenEntries(): boolean {
 		return this.hasPermission(Permission.ViewHiddenEntries);
+	}
+
+	verifyPermission(permission: Permission): void {
+		if (!this.hasPermission(permission)) throw new UnauthorizedException();
 	}
 }

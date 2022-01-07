@@ -15,6 +15,7 @@ const adminPermissions: Permission[] = [
 	...seniorModPermissions,
 	Permission.ViewDeletedEntries,
 	Permission.ViewHiddenEntries,
+	Permission.CreateTranslations,
 ];
 
 export const userGroupPermissions: Record<UserGroup, Permission[]> = {

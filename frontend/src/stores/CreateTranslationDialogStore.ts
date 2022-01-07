@@ -6,6 +6,9 @@ import {
 	runInAction,
 } from 'mobx';
 
+import { createTranslation } from '../api/TranslationApi';
+import { ITranslationObject } from '../dto/translations/ITranslationObject';
+
 export class CreateTranslationDialogStore {
 	@observable submitting = false;
 	@observable headword = '';
@@ -29,11 +32,16 @@ export class CreateTranslationDialogStore {
 		);
 	}
 
-	@action submit = async (): Promise<any /* TODO */> => {
+	@action submit = async (): Promise<ITranslationObject> => {
 		try {
 			this.submitting = true;
 
-			// TODO
+			return await createTranslation({
+				headword: this.headword,
+				locale: this.locale,
+				reading: this.reading,
+				yamatokotoba: this.yamatokotoba,
+			});
 		} finally {
 			runInAction(() => {
 				this.submitting = false;
