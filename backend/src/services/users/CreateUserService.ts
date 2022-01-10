@@ -87,7 +87,7 @@ export class CreateUserService {
 
 			this.userRepo.persist(user);
 
-			await this.auditLogService.user_create({
+			this.auditLogService.user_create({
 				actor: user,
 				actorIp: ip,
 				user: user,

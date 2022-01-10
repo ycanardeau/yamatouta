@@ -14,18 +14,12 @@ export class AuditLogService {
 		actor: User;
 		actorIp: string;
 		user?: User;
-	}): Promise<void> {
-		return this.em.transactional(async (em) => {
-			em.persist(new AuditLogEntry(params));
-		});
+	}): void {
+		this.em.persist(new AuditLogEntry(params));
 	}
 
-	user_create(params: {
-		actor: User;
-		actorIp: string;
-		user: User;
-	}): Promise<void> {
-		return this.createAuditLogEntry({
+	user_create(params: { actor: User; actorIp: string; user: User }): void {
+		this.createAuditLogEntry({
 			...params,
 			action: AuditedAction.User_Create,
 		});
@@ -35,19 +29,15 @@ export class AuditLogService {
 		actor: User;
 		actorIp: string;
 		user: User;
-	}): Promise<void> {
-		return this.createAuditLogEntry({
+	}): void {
+		this.createAuditLogEntry({
 			...params,
 			action: AuditedAction.User_FailedLogin,
 		});
 	}
 
-	user_login(params: {
-		actor: User;
-		actorIp: string;
-		user: User;
-	}): Promise<void> {
-		return this.createAuditLogEntry({
+	user_login(params: { actor: User; actorIp: string; user: User }): void {
+		this.createAuditLogEntry({
 			...params,
 			action: AuditedAction.User_Login,
 		});

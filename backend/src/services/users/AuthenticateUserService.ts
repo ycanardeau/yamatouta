@@ -73,7 +73,7 @@ export class AuthenticateUserService {
 			);
 
 			if (user.passwordHash === passwordHash) {
-				await this.auditLogService.user_login({
+				this.auditLogService.user_login({
 					actor: user,
 					actorIp: ip,
 					user: user,
@@ -96,7 +96,7 @@ export class AuthenticateUserService {
 				return createSuccess(new AuthenticatedUserObject(user));
 			}
 
-			await this.auditLogService.user_failedLogin({
+			this.auditLogService.user_failedLogin({
 				actor: user,
 				actorIp: ip,
 				user: user,
