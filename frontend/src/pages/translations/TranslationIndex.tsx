@@ -1,16 +1,24 @@
 import { Button } from '@mui/material';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import CreateTranslationDialog from '../../components/CreateTranslationDialog';
+import Pagination from '../../components/Pagination';
+import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { TranslationIndexStore } from '../../stores/translations/TranslationIndexStore';
 import Layout from '../Layout';
 
-const TranslationIndex = (): React.ReactElement => {
+const store = new TranslationIndexStore();
+
+const TranslationIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
 
 	useYamatoutaTitle(t('shared.words'), ready);
+
+	useStoreWithPagination(store);
 
 	const [createTranslationDialogOpen, setCreateTranslationDialogOpen] =
 		React.useState(false);
@@ -36,6 +44,10 @@ const TranslationIndex = (): React.ReactElement => {
 				</Button>
 			}
 		>
+			<Pagination store={store.paginationStore} />
+
+			<Pagination store={store.paginationStore} />
+
 			{createTranslationDialogOpen && (
 				<CreateTranslationDialog
 					onClose={(): void => setCreateTranslationDialogOpen(false)}
@@ -48,6 +60,6 @@ const TranslationIndex = (): React.ReactElement => {
 			)}
 		</Layout>
 	);
-};
+});
 
 export default TranslationIndex;
