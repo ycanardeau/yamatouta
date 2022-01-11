@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import CreateTranslationDialog from '../../components/CreateTranslationDialog';
 import Pagination from '../../components/Pagination';
+import TranslationList from '../../components/TranslationList';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { TranslationIndexStore } from '../../stores/translations/TranslationIndexStore';
@@ -45,6 +46,8 @@ const TranslationIndex = observer((): React.ReactElement => {
 			}
 		>
 			<Pagination store={store.paginationStore} />
+
+			<TranslationList translations={store.translations} />
 
 			<Pagination store={store.paginationStore} />
 

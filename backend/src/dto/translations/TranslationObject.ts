@@ -1,6 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { Translation } from '../../entities/Translation';
+import { WordCategory } from '../../models/WordCategory';
 import { PermissionContext } from '../../services/PermissionContext';
 
 export class TranslationObject {
@@ -9,6 +10,7 @@ export class TranslationObject {
 	readonly locale?: string;
 	readonly reading?: string;
 	readonly yamatokotoba: string;
+	readonly category?: WordCategory;
 
 	constructor(
 		translation: Translation,
@@ -25,5 +27,6 @@ export class TranslationObject {
 		this.locale = translation.translatedString.locale;
 		this.reading = translation.translatedString.reading;
 		this.yamatokotoba = translation.translatedString.yamatokotoba;
+		this.category = translation.category;
 	}
 }
