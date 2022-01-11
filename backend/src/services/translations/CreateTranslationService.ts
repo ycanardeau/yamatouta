@@ -6,6 +6,7 @@ import { TranslationObject } from '../../dto/translations/TranslationObject';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
 import { Permission } from '../../models/Permission';
+import { WordCategory } from '../../models/WordCategory';
 import { AuditLogService } from '../AuditLogService';
 import { PermissionContext } from '../PermissionContext';
 
@@ -24,13 +25,15 @@ export class CreateTranslationService {
 		locale?: string;
 		reading?: string;
 		yamatokotoba: string;
+		category?: WordCategory;
 		ip: string;
 	}): Promise<TranslationObject> {
 		this.permissionContext.verifyPermission(Permission.CreateTranslations);
 
 		// TODO: Validate.
 
-		const { headword, locale, reading, yamatokotoba, ip } = params;
+		const { headword, locale, reading, yamatokotoba, category, ip } =
+			params;
 
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
@@ -46,6 +49,7 @@ export class CreateTranslationService {
 					reading: reading,
 					yamatokotoba: yamatokotoba,
 				},
+				category: category,
 				user: user,
 			});
 

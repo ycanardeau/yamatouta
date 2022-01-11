@@ -38,10 +38,13 @@ export class CreateArtistDialogStore {
 		try {
 			this.submitting = true;
 
-			return await createArtist({
+			// Await.
+			const artist = await createArtist({
 				name: this.name,
 				artistType: this.artistType,
 			});
+
+			return artist;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

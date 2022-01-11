@@ -3,7 +3,7 @@ import { Migration } from '@mikro-orm/migrations';
 export class Migration20220106105525 extends Migration {
 	async up(): Promise<void> {
 		this.addSql(
-			'create table `translations` (`id` int unsigned not null auto_increment primary key, `created_at` datetime not null, `updated_at` datetime not null, `deleted` tinyint(1) not null, `hidden` tinyint(1) not null, `headword` varchar(255) not null, `locale` varchar(85) null, `reading` varchar(255) null, `yamatokotoba` varchar(255) not null, `user_id` int(11) unsigned not null) default character set utf8mb4 engine = InnoDB;',
+			"create table `translations` (`id` int unsigned not null auto_increment primary key, `created_at` datetime not null, `updated_at` datetime not null, `deleted` tinyint(1) not null, `hidden` tinyint(1) not null, `headword` varchar(255) not null, `locale` varchar(85) null, `reading` varchar(255) null, `yamatokotoba` varchar(255) not null, `category` enum('noun', 'verb', 'adjective', 'adjectivalNoun', 'adverb', 'postpositionalParticle', 'auxiliaryVerb', 'attributive', 'conjunction', 'prefix', 'suffix', 'interjection', 'other', 'pronoun') null, `user_id` int(11) unsigned not null) default character set utf8mb4 engine = InnoDB;",
 		);
 		this.addSql(
 			'alter table `translations` add index `translations_user_id_index`(`user_id`);',

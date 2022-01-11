@@ -58,12 +58,16 @@ export class CreateTranslationDialogStore {
 		try {
 			this.submitting = true;
 
-			return await createTranslation({
+			// Await.
+			const translation = await createTranslation({
 				headword: this.headword,
 				locale: this.locale,
 				reading: this.reading,
 				yamatokotoba: this.yamatokotoba,
+				category: this.category,
 			});
+
+			return translation;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

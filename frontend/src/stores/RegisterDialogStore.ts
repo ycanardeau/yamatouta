@@ -39,11 +39,14 @@ export class RegisterDialogStore {
 		try {
 			this.submitting = true;
 
-			return await register({
+			// Await.
+			const user = await register({
 				email: this.email,
 				username: this.username,
 				password: this.password,
 			});
+
+			return user;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

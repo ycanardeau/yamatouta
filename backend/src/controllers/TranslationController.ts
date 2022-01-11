@@ -37,6 +37,7 @@ export class TranslationController {
 			locale: body.locale,
 			reading: body.reading,
 			yamatokotoba: body.yamatokotoba,
+			category: body.category,
 			ip: ip,
 		});
 	}

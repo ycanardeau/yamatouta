@@ -34,10 +34,13 @@ export class LoginDialogStore {
 		try {
 			this.submitting = true;
 
-			return await login({
+			// Await.
+			const user = await login({
 				email: this.email,
 				password: this.password,
 			});
+
+			return user;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;
