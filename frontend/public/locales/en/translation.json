@@ -40,6 +40,24 @@
 		"headword": "Headword",
 		"japanese": "Japanese",
 		"reading": "Reading",
-		"yamatokotoba": "Yamato-kotoba"
+		"yamatokotoba": "Yamato-kotoba",
+		"category": "Part of Speech"
+	},
+	"wordCategoryNames": {
+		"unspecified": "(なし)",
+		"noun": "Noun",
+		"verb": "Verb",
+		"adjective": "Adjective",
+		"adjectivalNoun": "Adjectival Noun",
+		"adverb": "Adverb",
+		"postpositionalParticle": "Postpositional Particle",
+		"auxiliaryVerb": "Auxiliary Verb",
+		"attributive": "Attributive",
+		"conjunction": "Conjunction",
+		"prefix": "Prefix",
+		"suffix": "Suffix",
+		"interjection": "Interjection",
+		"other": "Other",
+		"pronoun": "Pronoun"
 	}
 }

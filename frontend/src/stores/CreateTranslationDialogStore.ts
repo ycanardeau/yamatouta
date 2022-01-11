@@ -8,6 +8,7 @@ import {
 
 import { createTranslation } from '../api/TranslationApi';
 import { ITranslationObject } from '../dto/translations/ITranslationObject';
+import { WordCategory } from '../models/WordCategory';
 
 export class CreateTranslationDialogStore {
 	@observable submitting = false;
@@ -15,6 +16,7 @@ export class CreateTranslationDialogStore {
 	@observable locale = 'ja';
 	@observable reading = '';
 	@observable yamatokotoba = '';
+	@observable category?: WordCategory;
 
 	constructor() {
 		makeObservable(this);
@@ -31,6 +33,26 @@ export class CreateTranslationDialogStore {
 			!!this.yamatokotoba
 		);
 	}
+
+	@action public setHeadword = (value: string): void => {
+		this.headword = value;
+	};
+
+	@action public setLocale = (value: string): void => {
+		this.locale = value;
+	};
+
+	@action public setReading = (value: string): void => {
+		this.reading = value;
+	};
+
+	@action public setYamatokotoba = (value: string): void => {
+		this.yamatokotoba = value;
+	};
+
+	@action public setCategory = (value?: WordCategory): void => {
+		this.category = value;
+	};
 
 	@action submit = async (): Promise<ITranslationObject> => {
 		try {

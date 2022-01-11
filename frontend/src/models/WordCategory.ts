@@ -1,0 +1,16 @@
+export enum WordCategory {
+	Noun = 'noun',
+	Verb = 'verb',
+	Adjective = 'adjective',
+	AdjectivalNoun = 'adjectivalNoun',
+	Adverb = 'adverb',
+	PostpositionalParticle = 'postpositionalParticle',
+	AuxiliaryVerb = 'auxiliaryVerb',
+	Attributive = 'attributive',
+	Conjunction = 'conjunction',
+	Prefix = 'prefix',
+	Suffix = 'suffix',
+	Interjection = 'interjection',
+	Other = 'other',
+	Pronoun = 'pronoun',
+}

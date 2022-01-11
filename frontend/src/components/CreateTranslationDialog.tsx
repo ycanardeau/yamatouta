@@ -6,14 +6,17 @@ import {
 	DialogTitle,
 	FormControl,
 	Grid,
+	InputLabel,
+	MenuItem,
+	Select,
 	TextField,
 } from '@mui/material';
-import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ITranslationObject } from '../dto/translations/ITranslationObject';
+import { WordCategory } from '../models/WordCategory';
 import { CreateTranslationDialogStore } from '../stores/CreateTranslationDialogStore';
 
 interface ICreateTranslationDialogProps {
@@ -57,9 +60,7 @@ const CreateTranslationDialog = observer(
 										variant="standard"
 										value={store.headword}
 										onChange={(e): void =>
-											runInAction(() => {
-												store.headword = e.target.value;
-											})
+											store.setHeadword(e.target.value)
 										}
 									/>
 								</FormControl>
@@ -76,10 +77,7 @@ const CreateTranslationDialog = observer(
 											variant="standard"
 											value={store.reading}
 											onChange={(e): void =>
-												runInAction(() => {
-													store.reading =
-														e.target.value;
-												})
+												store.setReading(e.target.value)
 											}
 										/>
 									</FormControl>
@@ -96,12 +94,45 @@ const CreateTranslationDialog = observer(
 										variant="standard"
 										value={store.yamatokotoba}
 										onChange={(e): void =>
-											runInAction(() => {
-												store.yamatokotoba =
-													e.target.value;
-											})
+											store.setYamatokotoba(
+												e.target.value,
+											)
 										}
 									/>
+								</FormControl>
+							</Grid>
+
+							<Grid item xs={12}>
+								<FormControl variant="standard" fullWidth>
+									<InputLabel id="category">
+										{t('translations.category')}
+									</InputLabel>
+									<Select
+										labelId="category"
+										id="category"
+										value={store.category}
+										onChange={(e): void =>
+											store.setCategory(
+												e.target.value as WordCategory,
+											)
+										}
+									>
+										<MenuItem>
+											{t('wordCategoryNames.unspecified')}
+										</MenuItem>
+										{Object.values(WordCategory).map(
+											(value) => (
+												<MenuItem
+													key={value}
+													value={value}
+												>
+													{t(
+														`wordCategoryNames.${value}`,
+													)}
+												</MenuItem>
+											),
+										)}
+									</Select>
 								</FormControl>
 							</Grid>
 						</Grid>

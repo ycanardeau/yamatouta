@@ -41,5 +41,20 @@
 		"japanese": "みくにことば",
 		"reading": "よみかた",
 		"yamatokotoba": "やまとことば"
+	},
+	"wordCategoryNames": {
+		"unspecified": "(なし)",
+		"noun": "なことば",
+		"verb": "しわざことば",
+		"adjective": "さまことば",
+		"adjectivalNoun": "ありかたことば",
+		"adverb": "そえことば",
+		"postpositionalParticle": "あとことば",
+		"auxiliaryVerb": "たすけことば",
+		"attributive": "そいことば",
+		"conjunction": "つなぎことば",
+		"interjection": "なげきことば",
+		"other": "そのほか",
+		"pronoun": "かわりことば"
 	}
 }
