@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import AppFooter from './AppFooter';
 import AppHeader from './AppHeader';
 import ScrollToTop from './ScrollToTop';
+import lazyWithRetry from './components/lazyWithRetry';
 import config from './config';
 
 const theme = createTheme({
@@ -15,10 +16,12 @@ const theme = createTheme({
 	},
 });
 
-const ArtistRoutes = React.lazy(() => import('./pages/artists/ArtistRoutes'));
-const QuoteRoutes = React.lazy(() => import('./pages/quotes/QuoteRoutes'));
-const UserRoutes = React.lazy(() => import('./pages/users/UserRoutes'));
-const HomeRoutes = React.lazy(() => import('./pages/home/HomeRoutes'));
+const ArtistRoutes = lazyWithRetry(
+	() => import('./pages/artists/ArtistRoutes'),
+);
+const QuoteRoutes = lazyWithRetry(() => import('./pages/quotes/QuoteRoutes'));
+const UserRoutes = lazyWithRetry(() => import('./pages/users/UserRoutes'));
+const HomeRoutes = lazyWithRetry(() => import('./pages/home/HomeRoutes'));
 
 const App = (): React.ReactElement => {
 	React.useEffect(() => {

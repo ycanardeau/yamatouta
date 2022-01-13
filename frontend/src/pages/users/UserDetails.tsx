@@ -2,9 +2,10 @@ import React from 'react';
 import { Route, Routes, useParams } from 'react-router-dom';
 
 import { getUser } from '../../api/UserApi';
+import lazyWithRetry from '../../components/lazyWithRetry';
 import { IUserObject } from '../../dto/users/IUserObject';
 
-const UserBasicInfo = React.lazy(() => import('./UserBasicInfo'));
+const UserBasicInfo = lazyWithRetry(() => import('./UserBasicInfo'));
 
 interface IUserDetailsLayoutProps {
 	user: IUserObject;

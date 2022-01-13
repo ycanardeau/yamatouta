@@ -1,8 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-const QuoteIndex = React.lazy(() => import('./QuoteIndex'));
-const QuoteDetails = React.lazy(() => import('./QuoteDetails'));
+import lazyWithRetry from '../../components/lazyWithRetry';
+
+const QuoteIndex = lazyWithRetry(() => import('./QuoteIndex'));
+const QuoteDetails = lazyWithRetry(() => import('./QuoteDetails'));
 
 const QuoteRoutes = (): React.ReactElement => {
 	return (

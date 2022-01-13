@@ -1,8 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-const UserIndex = React.lazy(() => import('./UserIndex'));
-const UserDetails = React.lazy(() => import('./UserDetails'));
+import lazyWithRetry from '../../components/lazyWithRetry';
+
+const UserIndex = lazyWithRetry(() => import('./UserIndex'));
+const UserDetails = lazyWithRetry(() => import('./UserDetails'));
 
 const UserRoutes = (): React.ReactElement => {
 	return (

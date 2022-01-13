@@ -1,8 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-const ArtistIndex = React.lazy(() => import('./ArtistIndex'));
-const ArtistDetails = React.lazy(() => import('./ArtistDetails'));
+import lazyWithRetry from '../../components/lazyWithRetry';
+
+const ArtistIndex = lazyWithRetry(() => import('./ArtistIndex'));
+const ArtistDetails = lazyWithRetry(() => import('./ArtistDetails'));
 
 const ArtistRoutes = (): React.ReactElement => {
 	return (

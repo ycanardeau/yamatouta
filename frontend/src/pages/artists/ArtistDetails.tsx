@@ -2,10 +2,11 @@ import React from 'react';
 import { Navigate, Route, Routes, useParams } from 'react-router-dom';
 
 import { getArtist } from '../../api/ArtistApi';
+import lazyWithRetry from '../../components/lazyWithRetry';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 
-const ArtistQuotes = React.lazy(() => import('./ArtistQuotes'));
+const ArtistQuotes = lazyWithRetry(() => import('./ArtistQuotes'));
 
 interface IArtistDetailsLayoutProps {
 	artist: IArtistObject;
