@@ -12,6 +12,7 @@ import { Artist } from './entities/Artist';
 import { Quote } from './entities/Quote';
 import { Translation } from './entities/Translation';
 import { User } from './entities/User';
+import { NgramConverter } from './helpers/NgramConverter';
 import { AuditLogService } from './services/AuditLogService';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { PermissionContext } from './services/PermissionContext';
@@ -72,6 +73,7 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		PermissionContext,
 		CreateTranslationService,
 		ListTranslationsService,
+		NgramConverter,
 	],
 })
 export class AppModule {}
