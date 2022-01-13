@@ -4,7 +4,9 @@ import { Injectable } from '@nestjs/common';
 
 import { TranslationObject } from '../../dto/translations/TranslationObject';
 import { Translation } from '../../entities/Translation';
+import { TranslationSearchIndex } from '../../entities/TranslationSearchIndex';
 import { User } from '../../entities/User';
+import { NgramConverter } from '../../helpers/NgramConverter';
 import { Permission } from '../../models/Permission';
 import { WordCategory } from '../../models/WordCategory';
 import { AuditLogService } from '../AuditLogService';
@@ -18,6 +20,7 @@ export class CreateTranslationService {
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
 		private readonly auditLogService: AuditLogService,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	async createTranslation(params: {
@@ -54,6 +57,15 @@ export class CreateTranslationService {
 			});
 
 			em.persist(translation);
+
+			const searchIndex = new TranslationSearchIndex({
+				translation: translation,
+				headword: this.ngramConverter.toFullText(headword, 2),
+				reading: this.ngramConverter.toFullText(reading ?? '', 2),
+				yamatokotoba: this.ngramConverter.toFullText(yamatokotoba, 2),
+			});
+
+			em.persist(searchIndex);
 
 			this.auditLogService.translation_create({
 				actor: user,

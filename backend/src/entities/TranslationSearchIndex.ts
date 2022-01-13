@@ -8,17 +8,31 @@ export class TranslationSearchIndex {
 	id!: number;
 
 	@OneToOne()
-	translation!: Translation;
+	translation: Translation;
 
 	@Property({ columnType: 'text', lazy: true })
 	@Index({ type: 'fulltext' })
-	headword!: string;
+	headword: string;
 
 	@Property({ columnType: 'text', lazy: true })
 	@Index({ type: 'fulltext' })
-	reading!: string;
+	reading: string;
 
 	@Property({ columnType: 'text', lazy: true })
 	@Index({ type: 'fulltext' })
-	yamatokotoba!: string;
+	yamatokotoba: string;
+
+	constructor(params: {
+		translation: Translation;
+		headword: string;
+		reading: string;
+		yamatokotoba: string;
+	}) {
+		const { translation, headword, reading, yamatokotoba } = params;
+
+		this.translation = translation;
+		this.headword = headword;
+		this.reading = reading;
+		this.yamatokotoba = yamatokotoba;
+	}
 }
