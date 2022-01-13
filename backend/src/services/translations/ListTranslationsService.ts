@@ -5,13 +5,17 @@ import {
 	QueryOrder,
 	QueryOrderMap,
 } from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/mariadb';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
+import _ from 'lodash';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
 import { TranslationObject } from '../../dto/translations/TranslationObject';
 import { TranslationSortRule } from '../../dto/translations/TranslationSortRule';
 import { Translation } from '../../entities/Translation';
+import { TranslationSearchIndex } from '../../entities/TranslationSearchIndex';
+import { NgramConverter } from '../../helpers/NgramConverter';
 import { PermissionContext } from '../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../filters';
 
@@ -25,6 +29,8 @@ export class ListTranslationsService {
 		@InjectRepository(Translation)
 		private readonly translationRepo: EntityRepository<Translation>,
 		private readonly permissionContext: PermissionContext,
+		private readonly em: EntityManager,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	private orderBy(sort?: TranslationSortRule): QueryOrderMap {
@@ -34,6 +40,22 @@ export class ListTranslationsService {
 		}
 	}
 
+	private async getIds(query?: string): Promise<number[]> {
+		const knex = this.em
+			.createQueryBuilder(TranslationSearchIndex)
+			.getKnex()
+			.select('translation_id');
+
+		if (query) {
+			knex.andWhereRaw(
+				'MATCH(headword, reading, yamatokotoba) AGAINST(? IN BOOLEAN MODE)',
+				this.ngramConverter.toQuery(query, 2),
+			);
+		}
+
+		return _.map(await this.em.execute(knex), 'translation_id');
+	}
+
 	async listTranslations(params: {
 		sort?: TranslationSortRule;
 		offset?: number;
@@ -41,9 +63,12 @@ export class ListTranslationsService {
 		getTotalCount?: boolean;
 		query?: string;
 	}): Promise<SearchResultObject<TranslationObject>> {
-		const { sort, offset, limit, getTotalCount } = params;
+		const { sort, offset, limit, getTotalCount, query } = params;
+
+		const ids = await this.getIds(query);
 
 		const where: FilterQuery<Translation> = {
+			id: ids,
 			$and: [
 				whereNotDeleted(this.permissionContext),
 				whereNotHidden(this.permissionContext),
