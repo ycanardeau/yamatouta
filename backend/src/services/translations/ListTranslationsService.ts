@@ -232,12 +232,11 @@ export class ListTranslationsService {
 	}
 
 	private async getCount(params: IListTranslationsQuery): Promise<number> {
-		const knex = this.createKnex(params).count('translations.id');
+		const knex = this.createKnex(params).countDistinct(
+			'translations.id as count',
+		);
 
-		const count = _.map(
-			await this.em.execute(knex),
-			'count(`translations`.`id`)',
-		)[0];
+		const count = _.map(await this.em.execute(knex), 'count')[0];
 
 		return count;
 	}
