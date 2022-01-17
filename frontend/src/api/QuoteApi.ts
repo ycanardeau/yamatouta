@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-import config from '../config';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IQuoteObject } from '../dto/quotes/IQuoteObject';
 import { IPaginationParams } from '../stores/PaginationStore';
@@ -12,7 +11,7 @@ export const listQuotes = async (params: {
 	const { pagination, artistId } = params;
 
 	const response = await axios.get<ISearchResultObject<IQuoteObject>>(
-		`${config.apiEndpoint}/quotes`,
+		'/quotes',
 		{ params: { ...pagination, artistId } },
 	);
 
@@ -20,9 +19,7 @@ export const listQuotes = async (params: {
 };
 
 export const getQuote = async (quoteId: number): Promise<IQuoteObject> => {
-	const response = await axios.get<IQuoteObject>(
-		`${config.apiEndpoint}/quotes/${quoteId}`,
-	);
+	const response = await axios.get<IQuoteObject>(`/quotes/${quoteId}`);
 
 	return response.data;
 };

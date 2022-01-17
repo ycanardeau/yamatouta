@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-import config from '../config';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IArtistObject } from '../dto/artists/IArtistObject';
 import { ArtistType } from '../models/ArtistType';
@@ -12,7 +11,7 @@ export const listArtists = async (params: {
 	const { pagination } = params;
 
 	const response = await axios.get<ISearchResultObject<IArtistObject>>(
-		`${config.apiEndpoint}/artists`,
+		'/artists',
 		{ params: { ...pagination } },
 	);
 
@@ -20,9 +19,7 @@ export const listArtists = async (params: {
 };
 
 export const getArtist = async (artistId: number): Promise<IArtistObject> => {
-	const response = await axios.get<IArtistObject>(
-		`${config.apiEndpoint}/artists/${artistId}`,
-	);
+	const response = await axios.get<IArtistObject>(`/artists/${artistId}`);
 
 	return response.data;
 };
@@ -33,13 +30,10 @@ export const createArtist = async (params: {
 }): Promise<IArtistObject> => {
 	const { name, artistType } = params;
 
-	const response = await axios.post<IArtistObject>(
-		`${config.apiEndpoint}/artists`,
-		{
-			name,
-			artistType,
-		},
-	);
+	const response = await axios.post<IArtistObject>('/artists', {
+		name,
+		artistType,
+	});
 
 	return response.data;
 };
