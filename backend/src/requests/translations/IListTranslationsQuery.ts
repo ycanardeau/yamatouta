@@ -11,6 +11,9 @@ export interface IListTranslationsQuery {
 }
 
 export const listTranslationsQuerySchema = Joi.object({
+	sort: Joi.string()
+		.optional()
+		.valid(...Object.values(TranslationSortRule)),
 	offset: Joi.number().optional(),
 	limit: Joi.number().optional(),
 	getTotalCount: Joi.boolean().optional(),

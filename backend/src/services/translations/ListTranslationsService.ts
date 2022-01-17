@@ -1,11 +1,4 @@
-import {
-	EntityRepository,
-	FilterQuery,
-	FindOptions,
-	QueryOrder,
-	QueryOrderMap,
-} from '@mikro-orm/core';
-import { EntityManager } from '@mikro-orm/mariadb';
+import { EntityManager, Knex } from '@mikro-orm/mariadb';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
@@ -14,10 +7,9 @@ import { SearchResultObject } from '../../dto/SearchResultObject';
 import { TranslationObject } from '../../dto/translations/TranslationObject';
 import { TranslationSortRule } from '../../dto/translations/TranslationSortRule';
 import { Translation } from '../../entities/Translation';
-import { TranslationSearchIndex } from '../../entities/TranslationSearchIndex';
 import { NgramConverter } from '../../helpers/NgramConverter';
+import { IListTranslationsQuery } from '../../requests/translations/IListTranslationsQuery';
 import { PermissionContext } from '../PermissionContext';
-import { whereNotDeleted, whereNotHidden } from '../filters';
 
 @Injectable()
 export class ListTranslationsService {
@@ -27,71 +19,133 @@ export class ListTranslationsService {
 
 	constructor(
 		@InjectRepository(Translation)
-		private readonly translationRepo: EntityRepository<Translation>,
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	private orderBy(sort?: TranslationSortRule): QueryOrderMap {
-		switch (sort) {
-			default:
-				return { id: QueryOrder.ASC };
-		}
-	}
+	private createKnex(params: IListTranslationsQuery): Knex.QueryBuilder {
+		const { query } = params;
 
-	private async getIds(query?: string): Promise<number[]> {
 		const knex = this.em
-			.createQueryBuilder(TranslationSearchIndex)
+			.createQueryBuilder(Translation)
 			.getKnex()
-			.select('translation_id');
+			.join(
+				'translation_search_index',
+				'translations.id',
+				'translation_search_index.translation_id',
+			)
+			.andWhere('translations.deleted', false)
+			.andWhere('translations.hidden', false);
 
 		if (query) {
 			knex.andWhereRaw(
-				'MATCH(headword, reading, yamatokotoba) AGAINST(? IN BOOLEAN MODE)',
+				'MATCH(translation_search_index.headword, translation_search_index.reading, translation_search_index.yamatokotoba) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(query, 2),
 			);
 		}
 
-		return _.map(await this.em.execute(knex), 'translation_id');
+		return knex;
 	}
 
-	async listTranslations(params: {
-		sort?: TranslationSortRule;
-		offset?: number;
-		limit?: number;
-		getTotalCount?: boolean;
-		query?: string;
-	}): Promise<SearchResultObject<TranslationObject>> {
-		const { sort, offset, limit, getTotalCount, query } = params;
+	private orderBy(
+		knex: Knex.QueryBuilder,
+		params: IListTranslationsQuery,
+	): Knex.QueryBuilder {
+		const { sort } = params;
 
-		const ids = await this.getIds(query);
+		switch (sort) {
+			case TranslationSortRule.HeadwordAsc:
+			default:
+				return knex
+					.orderBy('translations.reading', 'asc')
+					.orderBy('translations.headword', 'asc')
+					.orderBy('translations.yamatokotoba', 'asc');
 
-		const where: FilterQuery<Translation> = {
-			id: ids,
-			$and: [
-				whereNotDeleted(this.permissionContext),
-				whereNotHidden(this.permissionContext),
-			],
-		};
+			case TranslationSortRule.YamatokotobaAsc:
+				return knex
+					.orderBy('translations.yamatokotoba', 'asc')
+					.orderBy('translations.reading', 'asc')
+					.orderBy('translations.headword', 'asc');
+		}
+	}
 
-		const options: FindOptions<Translation> = {
-			limit: limit
-				? Math.min(limit, ListTranslationsService.maxLimit)
-				: ListTranslationsService.defaultLimit,
-			offset: offset,
-		};
+	private orderByIds(
+		knex: Knex.QueryBuilder,
+		ids: number[],
+	): Knex.QueryBuilder {
+		if (ids.length === 0) return knex;
+
+		return knex.orderByRaw(
+			`field(id, ${Array(ids.length).fill('?').join(', ')})`,
+			ids,
+		);
+	}
+
+	private async getIds(params: IListTranslationsQuery): Promise<number[]> {
+		const { offset, limit } = params;
+
+		const knex = this.createKnex(params)
+			.select('translations.id')
+			.limit(
+				limit
+					? Math.min(limit, ListTranslationsService.maxLimit)
+					: ListTranslationsService.defaultLimit,
+			);
+
+		if (offset) knex.offset(offset);
+
+		this.orderBy(knex, params);
+
+		const ids = _.map(await this.em.execute(knex), 'id');
+
+		return ids;
+	}
+
+	private async getItems(
+		params: IListTranslationsQuery,
+	): Promise<Translation[]> {
+		const ids = await this.getIds(params);
+
+		const knex = this.em
+			.createQueryBuilder(Translation)
+			.getKnex()
+			.whereIn('id', ids);
+
+		this.orderByIds(knex, ids);
+
+		const results = await this.em.execute(knex);
+
+		return results.map((translation) =>
+			this.em.map(Translation, translation),
+		);
+	}
+
+	private async getCount(params: IListTranslationsQuery): Promise<number> {
+		const { getTotalCount } = params;
+
+		if (!getTotalCount) return 0;
+
+		const knex = this.createKnex(params).count('translations.id');
+
+		const count = _.map(
+			await this.em.execute(knex),
+			'count(`translations`.`id`)',
+		)[0];
+
+		return count;
+	}
+
+	async listTranslations(
+		params: IListTranslationsQuery,
+	): Promise<SearchResultObject<TranslationObject>> {
+		const { offset } = params;
 
 		const [translations, count] = await Promise.all([
 			offset && offset > ListTranslationsService.maxOffset
 				? Promise.resolve([])
-				: this.translationRepo.find(where, {
-						...options,
-						orderBy: this.orderBy(sort),
-				  }),
-			getTotalCount
-				? this.translationRepo.count(where, options)
-				: Promise.resolve(0),
+				: this.getItems(params),
+			this.getCount(params),
 		]);
 
 		return new SearchResultObject(
