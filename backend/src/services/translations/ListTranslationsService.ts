@@ -232,10 +232,6 @@ export class ListTranslationsService {
 	}
 
 	private async getCount(params: IListTranslationsQuery): Promise<number> {
-		const { getTotalCount } = params;
-
-		if (!getTotalCount) return 0;
-
 		const knex = this.createKnex(params).count('translations.id');
 
 		const count = _.map(
@@ -249,13 +245,13 @@ export class ListTranslationsService {
 	async listTranslations(
 		params: IListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
-		const { offset } = params;
+		const { offset, getTotalCount } = params;
 
 		const [translations, count] = await Promise.all([
 			offset && offset > ListTranslationsService.maxOffset
 				? Promise.resolve([])
 				: this.getItems(params),
-			this.getCount(params),
+			getTotalCount ? this.getCount(params) : Promise.resolve(0),
 		]);
 
 		return new SearchResultObject(
