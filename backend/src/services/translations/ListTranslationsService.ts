@@ -186,10 +186,10 @@ export class ListTranslationsService {
 	): Knex.QueryBuilder {
 		if (ids.length === 0) return knex;
 
-		return knex.orderByRaw(
-			`field(id, ${Array(ids.length).fill('?').join(', ')})`,
-			ids,
-		);
+		// Yields `field(id, ?, ?, ..., ?)`.
+		const sql = `field(id, ${Array(ids.length).fill('?').join(', ')})`;
+
+		return knex.orderByRaw(sql, ids);
 	}
 
 	private async getIds(params: IListTranslationsQuery): Promise<number[]> {
