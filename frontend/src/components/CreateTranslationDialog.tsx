@@ -104,20 +104,21 @@ const CreateTranslationDialog = observer(
 
 							<Grid item xs={12}>
 								<FormControl variant="standard" fullWidth>
-									<InputLabel id="category">
+									<InputLabel id="category" shrink>
 										{t('translations.category')}
 									</InputLabel>
 									<Select
 										labelId="category"
 										id="category"
-										value={store.category}
+										value={store.category ?? ''}
 										onChange={(e): void =>
 											store.setCategory(
 												e.target.value as WordCategory,
 											)
 										}
+										displayEmpty
 									>
-										<MenuItem>
+										<MenuItem value="">
 											{t('wordCategoryNames.unspecified')}
 										</MenuItem>
 										{Object.values(WordCategory).map(
