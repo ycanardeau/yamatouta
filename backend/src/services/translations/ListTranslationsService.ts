@@ -9,6 +9,7 @@ import { TranslationSortRule } from '../../dto/translations/TranslationSortRule'
 import { Translation } from '../../entities/Translation';
 import { NgramConverter } from '../../helpers/NgramConverter';
 import { IListTranslationsQuery } from '../../requests/translations/IListTranslationsQuery';
+import { escapeWildcardCharacters } from '../../utils/escapeWildcardCharacters';
 import { PermissionContext } from '../PermissionContext';
 
 @Injectable()
@@ -54,7 +55,7 @@ export class ListTranslationsService {
 	): Knex.QueryBuilder {
 		return knex.orderByRaw(
 			'translations.headword = ? or translations.reading = ? desc',
-			Array(2).fill(query),
+			[query, query],
 		);
 	}
 
@@ -69,9 +70,11 @@ export class ListTranslationsService {
 		knex: Knex.QueryBuilder,
 		query: string,
 	): Knex.QueryBuilder {
+		const prefixSearchQuery = `${escapeWildcardCharacters(query)}%`;
+
 		return knex.orderByRaw(
 			'translations.headword like ? or translations.reading like ? desc',
-			Array(2).fill(`${query}%`),
+			[prefixSearchQuery, prefixSearchQuery],
 		);
 	}
 
@@ -79,9 +82,11 @@ export class ListTranslationsService {
 		knex: Knex.QueryBuilder,
 		query: string,
 	): Knex.QueryBuilder {
+		const prefixSearchQuery = `${escapeWildcardCharacters(query)}%`;
+
 		return knex.orderByRaw(
 			'translations.yamatokotoba like ? desc',
-			`${query}%`,
+			prefixSearchQuery,
 		);
 	}
 
