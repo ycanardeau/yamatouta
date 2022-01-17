@@ -48,6 +48,71 @@ export class ListTranslationsService {
 		return knex;
 	}
 
+	private orderByHeadwordExact(
+		knex: Knex.QueryBuilder,
+		query: string,
+	): Knex.QueryBuilder {
+		return knex.orderByRaw(
+			'translations.headword = ? or translations.reading = ? desc',
+			Array(2).fill(query),
+		);
+	}
+
+	private orderByYamatokotobaExact(
+		knex: Knex.QueryBuilder,
+		query: string,
+	): Knex.QueryBuilder {
+		return knex.orderByRaw('translations.yamatokotoba = ? desc', query);
+	}
+
+	private orderByHeadwordPrefix(
+		knex: Knex.QueryBuilder,
+		query: string,
+	): Knex.QueryBuilder {
+		return knex.orderByRaw(
+			'translations.headword like ? or translations.reading like ? desc',
+			Array(2).fill(`${query}%`),
+		);
+	}
+
+	private orderByYamatokotobaPrefix(
+		knex: Knex.QueryBuilder,
+		query: string,
+	): Knex.QueryBuilder {
+		return knex.orderByRaw(
+			'translations.yamatokotoba like ? desc',
+			`${query}%`,
+		);
+	}
+
+	private orderByQuery(
+		knex: Knex.QueryBuilder,
+		params: IListTranslationsQuery,
+	): Knex.QueryBuilder {
+		const { query, sort } = params;
+
+		if (!query) return knex;
+
+		switch (sort) {
+			case TranslationSortRule.HeadwordAsc:
+			case TranslationSortRule.HeadwordDesc:
+			default:
+				this.orderByHeadwordExact(knex, query);
+				this.orderByYamatokotobaExact(knex, query);
+				this.orderByHeadwordPrefix(knex, query);
+				this.orderByYamatokotobaPrefix(knex, query);
+				return knex;
+
+			case TranslationSortRule.YamatokotobaAsc:
+			case TranslationSortRule.YaamtokotobaDesc:
+				this.orderByYamatokotobaExact(knex, query);
+				this.orderByHeadwordExact(knex, query);
+				this.orderByYamatokotobaPrefix(knex, query);
+				this.orderByHeadwordPrefix(knex, query);
+				return knex;
+		}
+	}
+
 	private orderByHeadword(
 		knex: Knex.QueryBuilder,
 		order: 'asc' | 'desc',
@@ -83,6 +148,8 @@ export class ListTranslationsService {
 		params: IListTranslationsQuery,
 	): Knex.QueryBuilder {
 		const { sort } = params;
+
+		this.orderByQuery(knex, params);
 
 		switch (sort) {
 			case TranslationSortRule.HeadwordAsc:
