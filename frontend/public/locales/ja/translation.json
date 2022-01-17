@@ -30,8 +30,31 @@
 		"home": "まちうけ",
 		"quotes": "やまとうた",
 		"source": "でどころ",
-		"words": "ことのは",
+		"words": "やまとことば",
 		"works": "しながき",
 		"users": "つかいて"
+	},
+	"translations": {
+		"addWord": "やまとことばをかきたす",
+		"foreignLanguage": "とつくにことば",
+		"headword": "みだしことば",
+		"japanese": "みくにことば",
+		"reading": "よみかた",
+		"yamatokotoba": "やまとことば"
+	},
+	"wordCategoryNames": {
+		"unspecified": "(なし)",
+		"noun": "なことば",
+		"verb": "しわざことば",
+		"adjective": "さまことば",
+		"adjectivalNoun": "ありかたことば",
+		"adverb": "そえことば",
+		"postpositionalParticle": "あとことば",
+		"auxiliaryVerb": "たすけことば",
+		"attributive": "そいことば",
+		"conjunction": "つなぎことば",
+		"interjection": "なげきことば",
+		"other": "そのほか",
+		"pronoun": "かわりことば"
 	}
 }

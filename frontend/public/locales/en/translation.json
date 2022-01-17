@@ -33,5 +33,31 @@
 		"words": "Words",
 		"works": "Works",
 		"users": "Users"
+	},
+	"translations": {
+		"addWord": "Add Word",
+		"foreignLanguage": "Foreign language",
+		"headword": "Headword",
+		"japanese": "Japanese",
+		"reading": "Reading",
+		"yamatokotoba": "Yamato-kotoba",
+		"category": "Part of Speech"
+	},
+	"wordCategoryNames": {
+		"unspecified": "(Unspecified)",
+		"noun": "Noun",
+		"verb": "Verb",
+		"adjective": "Adjective",
+		"adjectivalNoun": "Adjectival Noun",
+		"adverb": "Adverb",
+		"postpositionalParticle": "Postpositional Particle",
+		"auxiliaryVerb": "Auxiliary Verb",
+		"attributive": "Attributive",
+		"conjunction": "Conjunction",
+		"prefix": "Prefix",
+		"suffix": "Suffix",
+		"interjection": "Interjection",
+		"other": "Other",
+		"pronoun": "Pronoun"
 	}
 }

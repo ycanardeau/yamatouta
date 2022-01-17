@@ -30,14 +30,17 @@ export class LoginDialogStore {
 		this.password = value;
 	};
 
-	@action submit = (): Promise<IUserObject> => {
+	@action submit = async (): Promise<IUserObject> => {
 		try {
 			this.submitting = true;
 
-			return login({
+			// Await.
+			const user = await login({
 				email: this.email,
 				password: this.password,
 			});
+
+			return user;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

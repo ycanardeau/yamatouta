@@ -1,18 +1,18 @@
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
-import { listArtists } from '../../api/ArtistApi';
+import { listTranslations } from '../../api/TranslationApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
 import { ISearchResultObject } from '../../dto/ISearchResultObject';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { PaginationStore } from '../PaginationStore';
 
-interface IArtistIndexRouteParams {
+interface ITranslationIndexRouteParams {
 	page?: number;
 	pageSize?: number;
 }
 
-const artistIndexRouteParamsSchema = {
+const translationIndexRouteParamsSchema = {
 	$schema: 'http://json-schema.org/draft-07/schema#',
 	properties: {
 		page: {
@@ -25,20 +25,20 @@ const artistIndexRouteParamsSchema = {
 	type: 'object',
 };
 
-const validate = ajv.compile<IArtistIndexRouteParams>(
-	artistIndexRouteParamsSchema,
+const validate = ajv.compile<ITranslationIndexRouteParams>(
+	translationIndexRouteParamsSchema,
 );
 
-export class ArtistIndexStore
+export class TranslationIndexStore
 	implements
 		IStoreWithPagination<
-			IArtistIndexRouteParams,
-			ISearchResultObject<IArtistObject>
+			ITranslationIndexRouteParams,
+			ISearchResultObject<ITranslationObject>
 		>
 {
 	readonly paginationStore = new PaginationStore();
 
-	@observable artists: IArtistObject[] = [];
+	@observable translations: ITranslationObject[] = [];
 
 	constructor() {
 		makeObservable(this);
@@ -46,19 +46,19 @@ export class ArtistIndexStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IArtistIndexRouteParams)[] = [];
+	clearResultsByQueryKeys: (keyof ITranslationIndexRouteParams)[] = [];
 
 	updateResults = async (
 		clearResults: boolean,
-	): Promise<ISearchResultObject<IArtistObject>> => {
+	): Promise<ISearchResultObject<ITranslationObject>> => {
 		const paginationParams = this.paginationStore.toParams(clearResults);
 
-		const result = await listArtists({
+		const result = await listTranslations({
 			pagination: paginationParams,
 		});
 
 		runInAction(() => {
-			this.artists = result.items;
+			this.translations = result.items;
 
 			if (paginationParams.getTotalCount)
 				this.paginationStore.totalItems = result.totalCount;
@@ -67,17 +67,17 @@ export class ArtistIndexStore
 		return result;
 	};
 
-	@computed.struct get routeParams(): IArtistIndexRouteParams {
+	@computed.struct get routeParams(): ITranslationIndexRouteParams {
 		return {
 			page: this.paginationStore.page,
 			pageSize: this.paginationStore.pageSize,
 		};
 	}
-	set routeParams(value: IArtistIndexRouteParams) {
+	set routeParams(value: ITranslationIndexRouteParams) {
 		this.paginationStore.page = value.page ?? 1;
-		this.paginationStore.pageSize = value.pageSize ?? 10;
+		this.paginationStore.pageSize = value.pageSize ?? 50;
 	}
 
-	validateRouteParams = (data: any): data is IArtistIndexRouteParams =>
+	validateRouteParams = (data: any): data is ITranslationIndexRouteParams =>
 		validate(data);
 }

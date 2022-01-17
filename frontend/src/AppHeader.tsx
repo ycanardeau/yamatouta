@@ -29,6 +29,12 @@ const AppHeader = (): React.ReactElement => {
 			<Container maxWidth="lg">
 				<Toolbar variant="dense" disableGutters>
 					<Tabs value={`/${pathname.split('/')[1]}`}>
+						{/*<Tab
+							label={t('shared.words')}
+							value="/translations"
+							component={RouterLink}
+							to="/translations"
+						/>*/}
 						<Tab
 							label={t('shared.quotes')}
 							value="/quotes"

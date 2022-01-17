@@ -7,8 +7,8 @@ import {
 } from 'mobx';
 
 import { createArtist } from '../api/ArtistApi';
-import { ArtistType } from '../dto/artists/ArtistType';
 import { IArtistObject } from '../dto/artists/IArtistObject';
+import { ArtistType } from '../models/ArtistType';
 
 export class CreateArtistDialogStore {
 	@observable submitting = false;
@@ -38,10 +38,13 @@ export class CreateArtistDialogStore {
 		try {
 			this.submitting = true;
 
-			return createArtist({
+			// Await.
+			const artist = await createArtist({
 				name: this.name,
 				artistType: this.artistType,
 			});
+
+			return artist;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

@@ -2,8 +2,8 @@ import axios from 'axios';
 
 import config from '../config';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { ArtistType } from '../dto/artists/ArtistType';
 import { IArtistObject } from '../dto/artists/IArtistObject';
+import { ArtistType } from '../models/ArtistType';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 export const listArtists = async (params: {

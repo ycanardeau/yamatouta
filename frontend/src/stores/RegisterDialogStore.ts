@@ -35,15 +35,18 @@ export class RegisterDialogStore {
 		this.password = value;
 	};
 
-	@action submit = (): Promise<IUserObject> => {
+	@action submit = async (): Promise<IUserObject> => {
 		try {
 			this.submitting = true;
 
-			return register({
+			// Await.
+			const user = await register({
 				email: this.email,
 				username: this.username,
 				password: this.password,
 			});
+
+			return user;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;
