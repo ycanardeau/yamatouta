@@ -17,7 +17,7 @@ export class Migration20220106105525 extends Migration {
 			'alter table `audit_log_entries` add `translation_id` int(11) unsigned null;',
 		);
 		this.addSql(
-			"alter table `audit_log_entries` modify `action` enum('user.create', 'user.failed_login', 'user.login', 'translation.create');",
+			"alter table `audit_log_entries` modify `action` enum('user.create', 'user.failed_login', 'user.login', 'translation.create') not null;",
 		);
 		this.addSql(
 			'alter table `audit_log_entries` add index `audit_log_entries_translation_id_index`(`translation_id`);',
@@ -42,13 +42,7 @@ export class Migration20220106105525 extends Migration {
 		);
 
 		this.addSql(
-			'alter table `translation_search_index` add fulltext index `translation_search_index_headword_index`(`headword`);',
-		);
-		this.addSql(
-			'alter table `translation_search_index` add fulltext index `translation_search_index_reading_index`(`reading`);',
-		);
-		this.addSql(
-			'alter table `translation_search_index` add fulltext index `translation_search_index_yamatokotoba_index`(`yamatokotoba`);',
+			'alter table `translation_search_index` add fulltext index `translation_search_index_headword_reading_yamatokotoba_index`(`headword`, `reading`, `yamatokotoba`);',
 		);
 	}
 }

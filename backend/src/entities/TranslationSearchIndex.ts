@@ -3,6 +3,10 @@ import { Entity, Index, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Translation } from './Translation';
 
 @Entity({ tableName: 'translation_search_index' })
+@Index({
+	properties: ['headword', 'reading', 'yamatokotoba'],
+	type: 'fulltext',
+})
 export class TranslationSearchIndex {
 	@PrimaryKey()
 	id!: number;
@@ -11,15 +15,12 @@ export class TranslationSearchIndex {
 	translation: Translation;
 
 	@Property({ columnType: 'text', lazy: true })
-	@Index({ type: 'fulltext' })
 	headword: string;
 
 	@Property({ columnType: 'text', lazy: true })
-	@Index({ type: 'fulltext' })
 	reading: string;
 
 	@Property({ columnType: 'text', lazy: true })
-	@Index({ type: 'fulltext' })
 	yamatokotoba: string;
 
 	constructor(params: {
