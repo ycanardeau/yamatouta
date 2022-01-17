@@ -48,6 +48,36 @@ export class ListTranslationsService {
 		return knex;
 	}
 
+	private orderByHeadword(
+		knex: Knex.QueryBuilder,
+		order: 'asc' | 'desc',
+	): Knex.QueryBuilder {
+		switch (order) {
+			case 'asc':
+				return knex
+					.orderBy('translations.reading', 'asc')
+					.orderBy('translations.headword', 'asc');
+
+			case 'desc':
+				return knex
+					.orderBy('translations.reading', 'desc')
+					.orderBy('translations.headword', 'desc');
+		}
+	}
+
+	private orderByYamatokotoba(
+		knex: Knex.QueryBuilder,
+		order: 'asc' | 'desc',
+	): Knex.QueryBuilder {
+		switch (order) {
+			case 'asc':
+				return knex.orderBy('translations.yamatokotoba', 'asc');
+
+			case 'desc':
+				return knex.orderBy('translations.yamatokotoba', 'desc');
+		}
+	}
+
 	private orderBy(
 		knex: Knex.QueryBuilder,
 		params: IListTranslationsQuery,
@@ -57,16 +87,24 @@ export class ListTranslationsService {
 		switch (sort) {
 			case TranslationSortRule.HeadwordAsc:
 			default:
-				return knex
-					.orderBy('translations.reading', 'asc')
-					.orderBy('translations.headword', 'asc')
-					.orderBy('translations.yamatokotoba', 'asc');
+				this.orderByHeadword(knex, 'asc');
+				this.orderByYamatokotoba(knex, 'asc');
+				return knex;
+
+			case TranslationSortRule.HeadwordDesc:
+				this.orderByHeadword(knex, 'desc');
+				this.orderByYamatokotoba(knex, 'desc');
+				return knex;
 
 			case TranslationSortRule.YamatokotobaAsc:
-				return knex
-					.orderBy('translations.yamatokotoba', 'asc')
-					.orderBy('translations.reading', 'asc')
-					.orderBy('translations.headword', 'asc');
+				this.orderByYamatokotoba(knex, 'asc');
+				this.orderByHeadword(knex, 'asc');
+				return knex;
+
+			case TranslationSortRule.YaamtokotobaDesc:
+				this.orderByYamatokotoba(knex, 'desc');
+				this.orderByHeadword(knex, 'desc');
+				return knex;
 		}
 	}
 
