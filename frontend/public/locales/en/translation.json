@@ -44,7 +44,7 @@
 		"category": "Part of Speech"
 	},
 	"wordCategoryNames": {
-		"unspecified": "(なし)",
+		"unspecified": "(Unspecified)",
 		"noun": "Noun",
 		"verb": "Verb",
 		"adjective": "Adjective",
