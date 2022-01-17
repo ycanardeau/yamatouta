@@ -27,7 +27,6 @@ import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasher
 import { GetQuoteService } from './services/quotes/GetQuoteService';
 import { ListQuoteIdsService } from './services/quotes/ListQuoteIdsService';
 import { ListQuotesService } from './services/quotes/ListQuotesService';
-import { CreateTranslationService } from './services/translations/CreateTranslationService';
 import { ListTranslationsService } from './services/translations/ListTranslationsService';
 import { AuthenticateUserService } from './services/users/AuthenticateUserService';
 import { CreateUserService } from './services/users/CreateUserService';
@@ -71,7 +70,7 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		ListQuoteIdsService,
 		GenerateSitemapService,
 		PermissionContext,
-		CreateTranslationService,
+		//CreateTranslationService,
 		ListTranslationsService,
 		NgramConverter,
 	],
