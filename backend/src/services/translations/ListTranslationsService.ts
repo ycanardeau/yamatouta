@@ -244,12 +244,12 @@ export class ListTranslationsService {
 	async listTranslations(
 		params: IListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
-		const { offset, getTotalCount } = params;
+		const { /*offset, */ getTotalCount } = params;
 
 		const [translations, count] = await Promise.all([
-			offset && offset > ListTranslationsService.maxOffset
+			/*offset && offset > ListTranslationsService.maxOffset
 				? Promise.resolve([])
-				: this.getItems(params),
+				: */ this.getItems(params),
 			getTotalCount ? this.getCount(params) : Promise.resolve(0),
 		]);
 

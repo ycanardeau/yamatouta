@@ -1,4 +1,5 @@
 import {
+	Link,
 	Paper,
 	Table,
 	TableBody,
@@ -21,17 +22,45 @@ const TranslationListItem = React.memo(
 		const { t } = useTranslation();
 
 		return (
-			<TableRow>
+			<TableRow hover>
 				<TableCell>
-					{translation.headword}
+					<Link
+						/* TODO: component={RouterLink}
+						to={`/words/${encodeURIComponent(
+							translation.headword,
+						)}/yamato-kotoba`} */
+						href="#"
+						onClick={(e): void => e.preventDefault()}
+						underline="hover"
+					>
+						{translation.headword}
+					</Link>
 					{translation.reading && (
 						<small>【{translation.reading}】</small>
 					)}
+					{translation.category && (
+						<>
+							{' '}
+							<small>
+								{`{${t(
+									`wordCategoryNames.${translation.category}`,
+								)}}`}
+							</small>
+						</>
+					)}
 				</TableCell>
-				<TableCell>{translation.yamatokotoba}</TableCell>
 				<TableCell>
-					{translation.category &&
-						t(`wordCategoryNames.${translation.category}`)}
+					<Link
+						/* TODO: component={RouterLink}
+						to={`/words/${encodeURIComponent(
+							translation.yamatokotoba,
+						)}/headwords`} */
+						href="#"
+						onClick={(e): void => e.preventDefault()}
+						underline="hover"
+					>
+						{translation.yamatokotoba}
+					</Link>
 				</TableCell>
 			</TableRow>
 		);
@@ -51,11 +80,12 @@ const TranslationList = React.memo(
 				<Table size="small">
 					<TableHead>
 						<TableRow>
-							<TableCell>{t('translations.headword')}</TableCell>
-							<TableCell>
+							<TableCell sx={{ width: '50%' }}>
+								{t('translations.headword')}
+							</TableCell>
+							<TableCell sx={{ width: '50%' }}>
 								{t('translations.yamatokotoba')}
 							</TableCell>
-							<TableCell>{t('translations.category')}</TableCell>
 						</TableRow>
 					</TableHead>
 
