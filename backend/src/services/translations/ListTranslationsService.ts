@@ -109,7 +109,7 @@ export class ListTranslationsService {
 				return knex;
 
 			case TranslationSortRule.YamatokotobaAsc:
-			case TranslationSortRule.YaamtokotobaDesc:
+			case TranslationSortRule.YamatokotobaDesc:
 				this.orderByYamatokotobaExact(knex, query);
 				this.orderByHeadwordExact(knex, query);
 				this.orderByYamatokotobaPrefix(knex, query);
@@ -173,7 +173,7 @@ export class ListTranslationsService {
 				this.orderByHeadword(knex, 'asc');
 				return knex;
 
-			case TranslationSortRule.YaamtokotobaDesc:
+			case TranslationSortRule.YamatokotobaDesc:
 				this.orderByYamatokotoba(knex, 'desc');
 				this.orderByHeadword(knex, 'desc');
 				return knex;
