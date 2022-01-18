@@ -16,12 +16,12 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IUserObject } from '../dto/users/IUserObject';
+import { IAuthenticatedUserObject } from '../dto/users/IAuthenticatedUserObject';
 import { LoginDialogStore } from '../stores/LoginDialogStore';
 
 interface ILoginDialogProps {
 	onClose: () => void;
-	onLoginComplete: (user: IUserObject) => void;
+	onLoginComplete: (user: IAuthenticatedUserObject) => void;
 }
 
 const LoginDialog = observer(
