@@ -19,6 +19,7 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 import LoginDialog from './components/LoginDialog';
 import RegisterDialog from './components/RegisterDialog';
+import { useAuth } from './components/useAuth';
 import config from './config';
 
 const AppHeader = (): React.ReactElement => {
@@ -51,6 +52,8 @@ const AppHeader = (): React.ReactElement => {
 	const handleCloseNavMenu = (): void => {
 		setAnchorElNav(undefined);
 	};
+
+	const auth = useAuth();
 
 	return (
 		<AppBar position="sticky">
@@ -118,19 +121,29 @@ const AppHeader = (): React.ReactElement => {
 					</Tabs>
 					<Box sx={{ flexGrow: 1 }} />
 					<Stack direction="row" spacing={2}>
-						<Button
-							variant="text"
-							onClick={(): void => setLoginDialogOpen(true)}
-						>
-							{t('auth.logIn')}
-						</Button>
-						<Button
-							variant="outlined"
-							onClick={(): void => setRegisterDialogOpen(true)}
-							disabled={config.disableAccountCreation}
-						>
-							{t('auth.register')}
-						</Button>
+						{auth.isAuthenticated ? (
+							<></>
+						) : (
+							<>
+								<Button
+									variant="text"
+									onClick={(): void =>
+										setLoginDialogOpen(true)
+									}
+								>
+									{t('auth.logIn')}
+								</Button>
+								<Button
+									variant="outlined"
+									onClick={(): void =>
+										setRegisterDialogOpen(true)
+									}
+									disabled={config.disableAccountCreation}
+								>
+									{t('auth.register')}
+								</Button>
+							</>
+						)}
 					</Stack>
 				</Toolbar>
 			</Container>

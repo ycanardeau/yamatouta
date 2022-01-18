@@ -5,6 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
+import { AuthProvider } from './AuthProvider';
 import config from './config';
 import './i18n';
 import reportWebVitals from './reportWebVitals';
@@ -14,11 +15,13 @@ axios.defaults.withCredentials = true;
 
 ReactDOM.render(
 	<React.StrictMode>
-		<BrowserRouter>
-			<HelmetProvider>
-				<App />
-			</HelmetProvider>
-		</BrowserRouter>
+		<AuthProvider>
+			<BrowserRouter>
+				<HelmetProvider>
+					<App />
+				</HelmetProvider>
+			</BrowserRouter>
+		</AuthProvider>
 	</React.StrictMode>,
 	document.getElementById('root'),
 );
