@@ -34,3 +34,7 @@ export const login = async (params: {
 
 	return response.data;
 };
+
+export const logout = (): Promise<void> => {
+	return axios.post('/auth/logout');
+};

@@ -56,5 +56,8 @@
 		"interjection": "なげきことば",
 		"other": "そのほか",
 		"pronoun": "かわりことば"
+	},
+	"users": {
+		"profile": "ひととなり"
 	}
 }
