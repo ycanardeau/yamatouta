@@ -41,7 +41,7 @@ const AppHeader = (): React.ReactElement => {
 
 	const pages = React.useMemo((): { title: string; path: string }[] => {
 		return [
-			// TODO: { title: t('shared.words'), path: '/translations' },
+			{ title: t('shared.words'), path: '/translations' },
 			{ title: t('shared.quotes'), path: '/quotes' },
 			{ title: t('shared.artists'), path: '/artists' },
 			{ title: t('shared.users'), path: '/users' },
