@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { ITranslationObject } from '../dto/translations/ITranslationObject';
+import { TranslationSortRule } from '../models/TranslationSortRule';
 import { WordCategory } from '../models/WordCategory';
 import { IPaginationParams } from '../stores/PaginationStore';
 
@@ -27,12 +28,13 @@ export const createTranslation = async (params: {
 
 export const listTranslations = async (params: {
 	pagination: IPaginationParams;
+	sort: TranslationSortRule;
 }): Promise<ISearchResultObject<ITranslationObject>> => {
-	const { pagination } = params;
+	const { pagination, sort } = params;
 
 	const response = await axios.get<ISearchResultObject<ITranslationObject>>(
 		'/translations',
-		{ params: { ...pagination } },
+		{ params: { ...pagination, sort: sort } },
 	);
 
 	return response.data;

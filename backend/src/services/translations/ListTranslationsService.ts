@@ -5,9 +5,9 @@ import _ from 'lodash';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
 import { TranslationObject } from '../../dto/translations/TranslationObject';
-import { TranslationSortRule } from '../../dto/translations/TranslationSortRule';
 import { Translation } from '../../entities/Translation';
 import { NgramConverter } from '../../helpers/NgramConverter';
+import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { IListTranslationsQuery } from '../../requests/translations/IListTranslationsQuery';
 import { escapeWildcardCharacters } from '../../utils/escapeWildcardCharacters';
 import { PermissionContext } from '../PermissionContext';

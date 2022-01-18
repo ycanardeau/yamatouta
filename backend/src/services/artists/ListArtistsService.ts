@@ -10,8 +10,8 @@ import { Injectable } from '@nestjs/common';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
 import { ArtistObject } from '../../dto/artists/ArtistObject';
-import { ArtistSortRule } from '../../dto/artists/ArtistSortRule';
 import { Artist } from '../../entities/Artist';
+import { ArtistSortRule } from '../../models/ArtistSortRule';
 import { ArtistType } from '../../models/ArtistType';
 import { PermissionContext } from '../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../filters';

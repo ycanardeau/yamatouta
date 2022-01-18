@@ -47,7 +47,11 @@ const TranslationIndex = observer((): React.ReactElement => {
 		>
 			<Pagination store={store.paginationStore} />
 
-			<TranslationList translations={store.translations} />
+			<TranslationList
+				translations={store.translations}
+				sort={store.sort}
+				onSortChange={(sort): void => store.setSort(sort)}
+			/>
 
 			<Pagination store={store.paginationStore} />
 

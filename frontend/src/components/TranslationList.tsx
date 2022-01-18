@@ -7,11 +7,13 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
+	TableSortLabel,
 } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ITranslationObject } from '../dto/translations/ITranslationObject';
+import { TranslationSortRule } from '../models/TranslationSortRule';
 
 interface TranslationListItemProps {
 	translation: ITranslationObject;
@@ -69,10 +71,16 @@ const TranslationListItem = React.memo(
 
 interface TranslationListProps {
 	translations: ITranslationObject[];
+	sort: TranslationSortRule;
+	onSortChange: (sort: TranslationSortRule) => void;
 }
 
 const TranslationList = React.memo(
-	({ translations }: TranslationListProps): React.ReactElement => {
+	({
+		translations,
+		sort,
+		onSortChange,
+	}: TranslationListProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (
@@ -81,10 +89,56 @@ const TranslationList = React.memo(
 					<TableHead>
 						<TableRow>
 							<TableCell sx={{ width: '50%' }}>
-								{t('translations.headword')}
+								<TableSortLabel
+									active={
+										sort ===
+											TranslationSortRule.HeadwordAsc ||
+										sort ===
+											TranslationSortRule.HeadwordDesc
+									}
+									direction={
+										sort ===
+										TranslationSortRule.HeadwordDesc
+											? 'desc'
+											: 'asc'
+									}
+									onClick={(): void =>
+										onSortChange(
+											sort ===
+												TranslationSortRule.HeadwordAsc
+												? TranslationSortRule.HeadwordDesc
+												: TranslationSortRule.HeadwordAsc,
+										)
+									}
+								>
+									{t('translations.headword')}
+								</TableSortLabel>
 							</TableCell>
 							<TableCell sx={{ width: '50%' }}>
-								{t('translations.yamatokotoba')}
+								<TableSortLabel
+									active={
+										sort ===
+											TranslationSortRule.YamatokotobaAsc ||
+										sort ===
+											TranslationSortRule.YamatokotobaDesc
+									}
+									direction={
+										sort ===
+										TranslationSortRule.YamatokotobaDesc
+											? 'desc'
+											: 'asc'
+									}
+									onClick={(): void =>
+										onSortChange(
+											sort ===
+												TranslationSortRule.YamatokotobaAsc
+												? TranslationSortRule.YamatokotobaDesc
+												: TranslationSortRule.YamatokotobaAsc,
+										)
+									}
+								>
+									{t('translations.yamatokotoba')}
+								</TableSortLabel>
 							</TableCell>
 						</TableRow>
 					</TableHead>

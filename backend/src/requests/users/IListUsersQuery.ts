@@ -1,6 +1,6 @@
 import Joi, { ObjectSchema } from 'joi';
 
-import { UserSortRule } from '../../dto/users/UserSortRule';
+import { UserSortRule } from '../../models/UserSortRule';
 
 export interface IListUsersQuery {
 	sort?: UserSortRule;

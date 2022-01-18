@@ -1,6 +1,6 @@
 import Joi, { ObjectSchema } from 'joi';
 
-import { ArtistSortRule } from '../../dto/artists/ArtistSortRule';
+import { ArtistSortRule } from '../../models/ArtistSortRule';
 import { ArtistType } from '../../models/ArtistType';
 
 export interface IListArtistsQuery {

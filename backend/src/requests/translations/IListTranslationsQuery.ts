@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-import { TranslationSortRule } from '../../dto/translations/TranslationSortRule';
+import { TranslationSortRule } from '../../models/TranslationSortRule';
 
 export interface IListTranslationsQuery {
 	sort?: TranslationSortRule;
