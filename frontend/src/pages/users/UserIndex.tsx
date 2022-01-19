@@ -22,28 +22,30 @@ interface IUserListItemProps {
 	user: IUserObject;
 }
 
-const UserListItem = ({ user }: IUserListItemProps): React.ReactElement => {
-	return (
-		<ListItem disablePadding>
-			<ListItemButton component={RouterLink} to={`/users/${user.id}`}>
-				<ListItemAvatar>
-					<Avatar src={user.avatarUrl} />
-				</ListItemAvatar>
-				<ListItemText primary={user.name} />
-			</ListItemButton>
-		</ListItem>
-	);
-};
+const UserListItem = React.memo(
+	({ user }: IUserListItemProps): React.ReactElement => {
+		return (
+			<ListItem disablePadding>
+				<ListItemButton component={RouterLink} to={`/users/${user.id}`}>
+					<ListItemAvatar>
+						<Avatar src={user.avatarUrl} />
+					</ListItemAvatar>
+					<ListItemText primary={user.name} />
+				</ListItemButton>
+			</ListItem>
+		);
+	},
+);
 
 interface UserListProps {
-	store: UserIndexStore;
+	users: IUserObject[];
 }
 
-const UserList = observer(
-	({ store }: UserListProps): React.ReactElement | null => {
-		return store.users.length > 0 ? (
+const UserList = React.memo(
+	({ users }: UserListProps): React.ReactElement | null => {
+		return users.length > 0 ? (
 			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
-				{store.users.map((user) => (
+				{users.map((user) => (
 					<UserListItem key={user.id} user={user} />
 				))}
 			</List>
@@ -72,7 +74,7 @@ const UserIndex = observer((): React.ReactElement => {
 		>
 			<Pagination store={store.paginationStore} />
 
-			<UserList store={store} />
+			<UserList users={store.users} />
 
 			<Pagination store={store.paginationStore} />
 		</Layout>

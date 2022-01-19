@@ -22,33 +22,33 @@ interface IArtistListItemProps {
 	artist: IArtistObject;
 }
 
-const ArtistListItem = ({
-	artist,
-}: IArtistListItemProps): React.ReactElement => {
-	return (
-		<ListItem disablePadding>
-			<ListItemButton
-				component={RouterLink}
-				to={`/artists/${artist.id}/quotes`}
-			>
-				<ListItemAvatar>
-					<Avatar src={artist.avatarUrl} />
-				</ListItemAvatar>
-				<ListItemText primary={artist.name} />
-			</ListItemButton>
-		</ListItem>
-	);
-};
+const ArtistListItem = React.memo(
+	({ artist }: IArtistListItemProps): React.ReactElement => {
+		return (
+			<ListItem disablePadding>
+				<ListItemButton
+					component={RouterLink}
+					to={`/artists/${artist.id}/quotes`}
+				>
+					<ListItemAvatar>
+						<Avatar src={artist.avatarUrl} />
+					</ListItemAvatar>
+					<ListItemText primary={artist.name} />
+				</ListItemButton>
+			</ListItem>
+		);
+	},
+);
 
 interface ArtistListProps {
-	store: ArtistIndexStore;
+	artists: IArtistObject[];
 }
 
-const ArtistList = observer(
-	({ store }: ArtistListProps): React.ReactElement | null => {
-		return store.artists.length > 0 ? (
+const ArtistList = React.memo(
+	({ artists }: ArtistListProps): React.ReactElement | null => {
+		return artists.length > 0 ? (
 			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
-				{store.artists.map((artist) => (
+				{artists.map((artist) => (
 					<ArtistListItem key={artist.id} artist={artist} />
 				))}
 			</List>
@@ -77,7 +77,7 @@ const ArtistIndex = observer((): React.ReactElement => {
 		>
 			<Pagination store={store.paginationStore} />
 
-			<ArtistList store={store} />
+			<ArtistList artists={store.artists} />
 
 			<Pagination store={store.paginationStore} />
 		</Layout>

@@ -11,56 +11,55 @@ interface IQuoteListItemProps {
 	showDetailsButton: boolean;
 }
 
-const QuoteListItem = ({
-	quote,
-	showDetailsButton,
-}: IQuoteListItemProps): React.ReactElement => {
-	const { t } = useTranslation();
+const QuoteListItem = React.memo(
+	({ quote, showDetailsButton }: IQuoteListItemProps): React.ReactElement => {
+		const { t } = useTranslation();
 
-	return (
-		<Paper sx={{ my: 1, p: 2 }}>
-			<Grid container wrap="nowrap" spacing={2}>
-				<Grid item>
-					<AuthorLink author={quote.author}>
-						<Avatar
-							alt={quote.author.name}
-							src={quote.author.avatarUrl}
-						/>
-					</AuthorLink>
-				</Grid>
-				<Grid item xs>
-					<Grid item container xs alignItems="center">
-						<Grid item xs>
-							<Typography>
-								<AuthorLink author={quote.author}>
-									{quote.author.name}
-								</AuthorLink>
-							</Typography>
-						</Grid>
-						<Grid item>
-							{showDetailsButton && (
-								<Button
-									size="small"
-									component={RouterLink}
-									to={`/quotes/${quote.id}`}
-								>
-									{t('shared.details')}
-								</Button>
-							)}
-						</Grid>
+		return (
+			<Paper sx={{ my: 1, p: 2 }}>
+				<Grid container wrap="nowrap" spacing={2}>
+					<Grid item>
+						<AuthorLink author={quote.author}>
+							<Avatar
+								alt={quote.author.name}
+								src={quote.author.avatarUrl}
+							/>
+						</AuthorLink>
 					</Grid>
-					<Typography variant="body2" color="text.secondary">
-						{quote.phrases.map((phrase, index) => (
-							<React.Fragment key={index}>
-								{index > 0 && <br />}
-								{phrase}
-							</React.Fragment>
-						))}
-					</Typography>
+					<Grid item xs>
+						<Grid item container xs alignItems="center">
+							<Grid item xs>
+								<Typography>
+									<AuthorLink author={quote.author}>
+										{quote.author.name}
+									</AuthorLink>
+								</Typography>
+							</Grid>
+							<Grid item>
+								{showDetailsButton && (
+									<Button
+										size="small"
+										component={RouterLink}
+										to={`/quotes/${quote.id}`}
+									>
+										{t('shared.details')}
+									</Button>
+								)}
+							</Grid>
+						</Grid>
+						<Typography variant="body2" color="text.secondary">
+							{quote.phrases.map((phrase, index) => (
+								<React.Fragment key={index}>
+									{index > 0 && <br />}
+									{phrase}
+								</React.Fragment>
+							))}
+						</Typography>
+					</Grid>
 				</Grid>
-			</Grid>
-		</Paper>
-	);
-};
+			</Paper>
+		);
+	},
+);
 
 export default QuoteListItem;

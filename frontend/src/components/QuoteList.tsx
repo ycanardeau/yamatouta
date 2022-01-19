@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react-lite';
 import React from 'react';
 
 import { IQuoteObject } from '../dto/quotes/IQuoteObject';
@@ -8,7 +7,7 @@ interface IQuoteListProps {
 	quotes: IQuoteObject[];
 }
 
-const QuoteList = observer(
+const QuoteList = React.memo(
 	({ quotes }: IQuoteListProps): React.ReactElement | null => {
 		return quotes.length > 0 ? (
 			<>
