@@ -14,6 +14,22 @@ const theme = createTheme({
 	palette: {
 		mode: 'dark',
 	},
+
+	// Disable all transitions and animations effects.
+	// See https://mui.com/getting-started/faq/#how-can-i-disable-transitions-globally.
+	transitions: {
+		create: () => 'none',
+	},
+	components: {
+		MuiCssBaseline: {
+			styleOverrides: {
+				'*, *::before, *::after': {
+					transition: 'none !important',
+					animation: 'none !important',
+				},
+			},
+		},
+	},
 });
 
 const ArtistRoutes = lazyWithRetry(
