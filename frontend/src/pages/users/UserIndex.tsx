@@ -18,8 +18,6 @@ import { IUserObject } from '../../dto/users/IUserObject';
 import { UserIndexStore } from '../../stores/users/UserIndexStore';
 import Layout from '../Layout';
 
-const store = new UserIndexStore();
-
 interface IUserListItemProps {
 	user: IUserObject;
 }
@@ -37,18 +35,26 @@ const UserListItem = ({ user }: IUserListItemProps): React.ReactElement => {
 	);
 };
 
-const UserList = observer((): React.ReactElement | null => {
-	return store.users.length > 0 ? (
-		<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
-			{store.users.map((user) => (
-				<UserListItem key={user.id} user={user} />
-			))}
-		</List>
-	) : null;
-});
+interface UserListProps {
+	store: UserIndexStore;
+}
 
-const UserIndex = (): React.ReactElement => {
+const UserList = observer(
+	({ store }: UserListProps): React.ReactElement | null => {
+		return store.users.length > 0 ? (
+			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
+				{store.users.map((user) => (
+					<UserListItem key={user.id} user={user} />
+				))}
+			</List>
+		) : null;
+	},
+);
+
+const UserIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
+
+	const [store] = React.useState(() => new UserIndexStore());
 
 	useYamatoutaTitle(t('shared.users'), ready);
 
@@ -66,11 +72,11 @@ const UserIndex = (): React.ReactElement => {
 		>
 			<Pagination store={store.paginationStore} />
 
-			<UserList />
+			<UserList store={store} />
 
 			<Pagination store={store.paginationStore} />
 		</Layout>
 	);
-};
+});
 
 export default UserIndex;

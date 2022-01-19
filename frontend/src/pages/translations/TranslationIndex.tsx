@@ -11,10 +11,10 @@ import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { TranslationIndexStore } from '../../stores/translations/TranslationIndexStore';
 import Layout from '../Layout';
 
-const store = new TranslationIndexStore();
-
 const TranslationIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
+
+	const [store] = React.useState(() => new TranslationIndexStore());
 
 	useYamatoutaTitle(t('shared.words'), ready);
 

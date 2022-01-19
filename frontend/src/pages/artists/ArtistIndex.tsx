@@ -18,8 +18,6 @@ import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistIndexStore } from '../../stores/artists/ArtistIndexStore';
 import Layout from '../Layout';
 
-const store = new ArtistIndexStore();
-
 interface IArtistListItemProps {
 	artist: IArtistObject;
 }
@@ -42,18 +40,26 @@ const ArtistListItem = ({
 	);
 };
 
-const ArtistList = observer((): React.ReactElement | null => {
-	return store.artists.length > 0 ? (
-		<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
-			{store.artists.map((artist) => (
-				<ArtistListItem key={artist.id} artist={artist} />
-			))}
-		</List>
-	) : null;
-});
+interface ArtistListProps {
+	store: ArtistIndexStore;
+}
+
+const ArtistList = observer(
+	({ store }: ArtistListProps): React.ReactElement | null => {
+		return store.artists.length > 0 ? (
+			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
+				{store.artists.map((artist) => (
+					<ArtistListItem key={artist.id} artist={artist} />
+				))}
+			</List>
+		) : null;
+	},
+);
 
 const ArtistIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
+
+	const [store] = React.useState(() => new ArtistIndexStore());
 
 	useYamatoutaTitle(t('shared.artists'), ready);
 
@@ -71,7 +77,7 @@ const ArtistIndex = observer((): React.ReactElement => {
 		>
 			<Pagination store={store.paginationStore} />
 
-			<ArtistList />
+			<ArtistList store={store} />
 
 			<Pagination store={store.paginationStore} />
 		</Layout>

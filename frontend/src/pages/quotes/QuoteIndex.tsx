@@ -9,10 +9,10 @@ import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { QuoteIndexStore } from '../../stores/quotes/QuoteIndexStore';
 import Layout from '../Layout';
 
-const store = new QuoteIndexStore();
-
 const QuoteIndex = observer((): React.ReactElement => {
 	const { t } = useTranslation();
+
+	const [store] = React.useState(() => new QuoteIndexStore());
 
 	useYamatoutaTitle(t('shared.quotes'), true);
 
