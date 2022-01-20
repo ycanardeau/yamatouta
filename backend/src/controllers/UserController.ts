@@ -37,10 +37,8 @@ export class UserController {
 
 	@Get('current')
 	getAuthenticatedUser(@Req() request: Request): AuthenticatedUserObject {
-		if (!request.user) throw new UnauthorizedException();
-
 		if (!(request.user instanceof AuthenticatedUserObject))
-			throw new Error('user must be of type AuthenticatedUserObject.');
+			throw new UnauthorizedException();
 
 		return request.user;
 	}
