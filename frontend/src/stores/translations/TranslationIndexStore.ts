@@ -18,6 +18,7 @@ interface ITranslationIndexRouteParams {
 	page?: number;
 	pageSize?: number;
 	sort?: TranslationSortRule;
+	query?: string;
 }
 
 const translationIndexRouteParamsSchema = {
@@ -28,6 +29,9 @@ const translationIndexRouteParamsSchema = {
 		},
 		pageSize: {
 			type: 'number',
+		},
+		query: {
+			type: 'string',
 		},
 		sort: {
 			enum: [
@@ -57,6 +61,7 @@ export class TranslationIndexStore
 
 	@observable translations: ITranslationObject[] = [];
 	@observable sort = TranslationSortRule.HeadwordAsc;
+	@observable query = '';
 
 	constructor() {
 		makeObservable(this);
@@ -64,7 +69,10 @@ export class TranslationIndexStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof ITranslationIndexRouteParams)[] = ['sort'];
+	clearResultsByQueryKeys: (keyof ITranslationIndexRouteParams)[] = [
+		'sort',
+		'query',
+	];
 
 	updateResults = async (
 		clearResults: boolean,
@@ -74,6 +82,7 @@ export class TranslationIndexStore
 		const result = await listTranslations({
 			pagination: paginationParams,
 			sort: this.sort,
+			query: this.query,
 		});
 
 		runInAction(() => {
@@ -91,12 +100,14 @@ export class TranslationIndexStore
 			page: this.paginationStore.page,
 			pageSize: this.paginationStore.pageSize,
 			sort: this.sort,
+			query: this.query,
 		};
 	}
 	set routeParams(value: ITranslationIndexRouteParams) {
 		this.paginationStore.page = value.page ?? 1;
 		this.paginationStore.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? TranslationSortRule.HeadwordAsc;
+		this.query = value.query ?? '';
 	}
 
 	validateRouteParams = (data: any): data is ITranslationIndexRouteParams =>

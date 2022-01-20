@@ -29,12 +29,13 @@ export const createTranslation = async (params: {
 export const listTranslations = async (params: {
 	pagination: IPaginationParams;
 	sort: TranslationSortRule;
+	query: string;
 }): Promise<ISearchResultObject<ITranslationObject>> => {
-	const { pagination, sort } = params;
+	const { pagination, sort, query } = params;
 
 	const response = await axios.get<ISearchResultObject<ITranslationObject>>(
 		'/translations',
-		{ params: { ...pagination, sort: sort } },
+		{ params: { ...pagination, sort: sort, query: query } },
 	);
 
 	return response.data;
