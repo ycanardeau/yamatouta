@@ -17,18 +17,17 @@ export const AuthProvider = ({
 	const [loading, setLoading] = React.useState(true);
 
 	React.useEffect(() => {
-		getAuthenticatedUser()
-			.then((user) => {
-				setUser(user);
-			})
-			.catch((error) => {
-				if (error.response && error.response.status === 401) return;
+		(async (): Promise<void> => {
+			try {
+				if (localStorage.getItem('isAuthenticated') === 'true') {
+					const user = await getAuthenticatedUser();
 
-				throw error;
-			})
-			.finally(() => {
+					setUser(user);
+				}
+			} finally {
 				setLoading(false);
-			});
+			}
+		})();
 	}, []);
 
 	return (

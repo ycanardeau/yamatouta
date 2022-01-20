@@ -193,6 +193,10 @@ const AppHeader = (): React.ReactElement => {
 
 												auth.setUser(undefined);
 
+												localStorage.removeItem(
+													'isAuthenticated',
+												);
+
 												navigate('/');
 											}}
 										>
@@ -237,6 +241,8 @@ const AppHeader = (): React.ReactElement => {
 						setLoginDialogOpen(false);
 
 						auth.setUser(user);
+
+						localStorage.setItem('isAuthenticated', 'true');
 
 						navigate('/');
 					}}
