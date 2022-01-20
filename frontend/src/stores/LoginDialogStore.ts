@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { login } from '../api/AuthApi';
-import { IUserObject } from '../dto/users/IUserObject';
+import { IAuthenticatedUserObject } from '../dto/users/IAuthenticatedUserObject';
 
 export class LoginDialogStore {
 	@observable submitting = false;
@@ -30,7 +30,7 @@ export class LoginDialogStore {
 		this.password = value;
 	};
 
-	@action submit = async (): Promise<IUserObject> => {
+	@action submit = async (): Promise<IAuthenticatedUserObject> => {
 		try {
 			this.submitting = true;
 

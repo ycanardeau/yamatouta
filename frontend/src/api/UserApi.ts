@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { ISearchResultObject } from '../dto/ISearchResultObject';
+import { IAuthenticatedUserObject } from '../dto/users/IAuthenticatedUserObject';
 import { IUserObject } from '../dto/users/IUserObject';
 import { IPaginationParams } from '../stores/PaginationStore';
 
@@ -22,3 +23,12 @@ export const getUser = async (userId: number): Promise<IUserObject> => {
 
 	return response.data;
 };
+
+export const getAuthenticatedUser =
+	async (): Promise<IAuthenticatedUserObject> => {
+		const response = await axios.get<IAuthenticatedUserObject>(
+			'/users/current',
+		);
+
+		return response.data;
+	};

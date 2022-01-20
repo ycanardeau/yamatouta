@@ -1,6 +1,16 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import {
+	Controller,
+	Get,
+	Param,
+	ParseIntPipe,
+	Query,
+	Req,
+	UnauthorizedException,
+} from '@nestjs/common';
+import { Request } from 'express';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
+import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { UserObject } from '../dto/users/UserObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import {
@@ -23,6 +33,14 @@ export class UserController {
 		query: IListUsersQuery,
 	): Promise<SearchResultObject<UserObject>> {
 		return this.listUsersService.listUsers(query);
+	}
+
+	@Get('current')
+	getAuthenticatedUser(@Req() request: Request): AuthenticatedUserObject {
+		if (!(request.user instanceof AuthenticatedUserObject))
+			throw new UnauthorizedException();
+
+		return request.user;
 	}
 
 	@Get(':userId')

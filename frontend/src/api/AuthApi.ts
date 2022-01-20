@@ -1,19 +1,22 @@
 import axios from 'axios';
 
-import { IUserObject } from '../dto/users/IUserObject';
+import { IAuthenticatedUserObject } from '../dto/users/IAuthenticatedUserObject';
 
 export const register = async (params: {
 	email: string;
 	username: string;
 	password: string;
-}): Promise<IUserObject> => {
+}): Promise<IAuthenticatedUserObject> => {
 	const { email, username, password } = params;
 
-	const response = await axios.post<IUserObject>('/auth/register', {
-		email,
-		username,
-		password,
-	});
+	const response = await axios.post<IAuthenticatedUserObject>(
+		'/auth/register',
+		{
+			email,
+			username,
+			password,
+		},
+	);
 
 	return response.data;
 };
@@ -21,13 +24,17 @@ export const register = async (params: {
 export const login = async (params: {
 	email: string;
 	password: string;
-}): Promise<IUserObject> => {
+}): Promise<IAuthenticatedUserObject> => {
 	const { email, password } = params;
 
-	const response = await axios.post<IUserObject>('/auth/login', {
+	const response = await axios.post<IAuthenticatedUserObject>('/auth/login', {
 		email,
 		password,
 	});
 
 	return response.data;
+};
+
+export const logout = (): Promise<void> => {
+	return axios.post('/auth/logout');
 };
