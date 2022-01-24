@@ -26,7 +26,7 @@ export class ListTranslationsService {
 	) {}
 
 	private createKnex(params: IListTranslationsQuery): Knex.QueryBuilder {
-		const { query } = params;
+		const { query, category } = params;
 
 		const knex = this.em
 			.createQueryBuilder(Translation)
@@ -45,6 +45,8 @@ export class ListTranslationsService {
 				this.ngramConverter.toQuery(query, 2),
 			);
 		}
+
+		if (category) knex.andWhere('translations.category', category);
 
 		return knex;
 	}
