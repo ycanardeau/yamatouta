@@ -2,6 +2,8 @@ import { EntityManager } from '@mikro-orm/mariadb';
 import { NestFactory } from '@nestjs/core';
 import connectSessionKnex from 'connect-session-knex';
 import cookieParser from 'cookie-parser';
+import csurf from 'csurf';
+import { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
 import passport from 'passport';
@@ -39,6 +41,20 @@ async function bootstrap(): Promise<void> {
 
 	app.use(passport.initialize());
 	app.use(passport.session());
+
+	app.use(
+		csurf({
+			cookie: {
+				httpOnly: true,
+			},
+		}),
+	);
+
+	app.use((request: Request, response: Response, next: NextFunction) => {
+		response.cookie('XSRF-TOKEN', request.csrfToken());
+
+		next();
+	});
 
 	await app.listen(config.port);
 }
