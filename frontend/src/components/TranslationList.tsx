@@ -10,35 +10,88 @@ import {
 	TableSortLabel,
 } from '@mui/material';
 import React from 'react';
+import Highlighter from 'react-highlight-words';
 import { useTranslation } from 'react-i18next';
 
 import { ITranslationObject } from '../dto/translations/ITranslationObject';
 import { TranslationSortRule } from '../models/TranslationSortRule';
 
+interface HighlightProps {
+	children: React.ReactNode;
+}
+
+const Highlight = ({ children }: HighlightProps): React.ReactElement => {
+	return <strong className="highlighted-text">{children}</strong>;
+};
+
+interface HighlightedTextProps {
+	text: string;
+	searchWords: string[];
+}
+
+const HighlightedText = React.memo(
+	({ text, searchWords }: HighlightedTextProps): React.ReactElement => {
+		return (
+			<Highlighter
+				searchWords={searchWords}
+				autoEscape={true}
+				textToHighlight={text}
+				highlightTag={Highlight}
+			/>
+		);
+	},
+);
+
 interface TranslationListItemProps {
 	translation: ITranslationObject;
+	searchWords: string[];
 }
 
 const TranslationListItem = React.memo(
-	({ translation }: TranslationListItemProps): React.ReactElement => {
+	({
+		translation,
+		searchWords,
+	}: TranslationListItemProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (
 			<TableRow hover>
 				<TableCell>
-					<Link
-						/* TODO: component={RouterLink}
-						to={`/words/${encodeURIComponent(
-							translation.headword,
-						)}/yamato-kotoba`} */
-						href="#"
-						onClick={(e): void => e.preventDefault()}
-						underline="hover"
-					>
-						{translation.headword}
-					</Link>
+					{translation.headword.split(/\s/).map((part, index) => (
+						<React.Fragment key={index}>
+							{index > 0 && ' '}
+							<Link
+								/* TODO: component={RouterLink}
+								to={`/words/${encodeURIComponent(
+									part,
+								)}/yamato-kotoba`} */
+								href="#"
+								onClick={(e): void => e.preventDefault()}
+								underline="hover"
+							>
+								<HighlightedText
+									text={part}
+									searchWords={searchWords}
+								/>
+							</Link>
+						</React.Fragment>
+					))}
 					{translation.reading && (
-						<small>【{translation.reading}】</small>
+						<small>
+							【
+							{translation.reading
+								.split(/\s/)
+								.map((part, index) => (
+									<React.Fragment key={index}>
+										{index > 0 && ' '}
+										<HighlightedText
+											text={part}
+											searchWords={searchWords}
+										/>
+									</React.Fragment>
+								))}
+							】
+						</small>
 					)}
 					{translation.category && (
 						<>
@@ -52,17 +105,25 @@ const TranslationListItem = React.memo(
 					)}
 				</TableCell>
 				<TableCell>
-					<Link
-						/* TODO: component={RouterLink}
-						to={`/words/${encodeURIComponent(
-							translation.yamatokotoba,
-						)}/headwords`} */
-						href="#"
-						onClick={(e): void => e.preventDefault()}
-						underline="hover"
-					>
-						{translation.yamatokotoba}
-					</Link>
+					{translation.yamatokotoba.split(/\s/).map((part, index) => (
+						<React.Fragment key={index}>
+							{index > 0 && ' '}
+							<Link
+								/* TODO: component={RouterLink}
+								to={`/words/${encodeURIComponent(
+									part,
+								)}/headwords`} */
+								href="#"
+								onClick={(e): void => e.preventDefault()}
+								underline="hover"
+							>
+								<HighlightedText
+									text={part}
+									searchWords={searchWords}
+								/>
+							</Link>
+						</React.Fragment>
+					))}
 				</TableCell>
 			</TableRow>
 		);
@@ -73,6 +134,7 @@ interface TranslationListProps {
 	translations: ITranslationObject[];
 	sort: TranslationSortRule;
 	onSortChange: (sort: TranslationSortRule) => void;
+	searchWords: string[];
 }
 
 const TranslationList = React.memo(
@@ -80,6 +142,7 @@ const TranslationList = React.memo(
 		translations,
 		sort,
 		onSortChange,
+		searchWords,
 	}: TranslationListProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -148,6 +211,7 @@ const TranslationList = React.memo(
 							<TranslationListItem
 								translation={translation}
 								key={translation.id}
+								searchWords={searchWords}
 							/>
 						))}
 					</TableBody>

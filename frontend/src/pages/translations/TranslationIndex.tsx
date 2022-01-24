@@ -51,6 +51,7 @@ const TranslationIndex = observer((): React.ReactElement => {
 				translations={store.translations}
 				sort={store.sort}
 				onSortChange={(sort): void => store.setSort(sort)}
+				searchWords={store.query.trim().split(/\s+/)}
 			/>
 
 			<Pagination store={store.paginationStore} />
