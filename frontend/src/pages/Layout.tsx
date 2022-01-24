@@ -16,6 +16,7 @@ interface ILayoutProps {
 	meta?: {
 		description?: string;
 	};
+	sidebar?: React.ReactNode;
 }
 
 const Layout = ({
@@ -23,6 +24,7 @@ const Layout = ({
 	actions,
 	children,
 	meta,
+	sidebar,
 }: ILayoutProps): React.ReactElement => {
 	const { t, ready } = useTranslation();
 
@@ -38,15 +40,19 @@ const Layout = ({
 				/>
 			</Helmet>
 
-			<Stack direction="row">
-				<Breadcrumb items={breadcrumbItems} />
-				<Box sx={{ flex: 1 }} />
-				{actions}
-			</Stack>
+			<Grid container spacing={2}>
+				<Grid item xs={12} md={9} order={{ xs: 2, md: 1 }}>
+					<Stack direction="row">
+						<Breadcrumb items={breadcrumbItems} />
+						<Box sx={{ flex: 1 }} />
+						{actions}
+					</Stack>
 
-			<Grid container>
-				<Grid item xs={12} md={9}>
 					{children}
+				</Grid>
+
+				<Grid item xs={12} md={3} order={{ xs: 1, md: 2 }}>
+					{sidebar}
 				</Grid>
 			</Grid>
 		</>

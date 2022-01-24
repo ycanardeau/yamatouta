@@ -41,7 +41,8 @@
 		"japanese": "みくにことば",
 		"reading": "よみかた",
 		"yamatokotoba": "やまとことば",
-		"category": "くさわい"
+		"category": "くさわい",
+		"search": "やまとことばをさがす"
 	},
 	"wordCategoryNames": {
 		"unspecified": "(なし)",

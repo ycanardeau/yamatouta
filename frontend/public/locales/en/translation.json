@@ -41,7 +41,8 @@
 		"japanese": "Japanese",
 		"reading": "Reading",
 		"yamatokotoba": "Yamato-kotoba",
-		"category": "Part of Speech"
+		"category": "Part of Speech",
+		"search": "Search"
 	},
 	"wordCategoryNames": {
 		"unspecified": "(Unspecified)",

@@ -10,10 +10,12 @@ export interface IPaginationParams {
 export class PaginationStore {
 	@observable page = 1;
 	@observable totalItems = 0;
-	@observable pageSize = 10;
+	@observable pageSize: number;
 
-	constructor() {
+	constructor({ pageSize = 10 }: { pageSize?: number } = {}) {
 		makeObservable(this);
+
+		this.pageSize = pageSize;
 	}
 
 	@computed get firstItem(): number {

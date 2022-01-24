@@ -12,6 +12,7 @@ import { IStoreWithPagination } from '../../components/useStoreWithPagination';
 import { ISearchResultObject } from '../../dto/ISearchResultObject';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
+import { WordCategory } from '../../models/WordCategory';
 import { PaginationStore } from '../PaginationStore';
 
 interface ITranslationIndexRouteParams {
@@ -19,11 +20,31 @@ interface ITranslationIndexRouteParams {
 	pageSize?: number;
 	sort?: TranslationSortRule;
 	query?: string;
+	category?: WordCategory;
 }
 
 const translationIndexRouteParamsSchema = {
 	$schema: 'http://json-schema.org/draft-07/schema#',
 	properties: {
+		category: {
+			enum: [
+				'adjectivalNoun',
+				'adjective',
+				'adverb',
+				'attributive',
+				'auxiliaryVerb',
+				'conjunction',
+				'interjection',
+				'noun',
+				'other',
+				'postpositionalParticle',
+				'prefix',
+				'pronoun',
+				'suffix',
+				'verb',
+			],
+			type: 'string',
+		},
 		page: {
 			type: 'number',
 		},
@@ -57,11 +78,12 @@ export class TranslationIndexStore
 			ISearchResultObject<ITranslationObject>
 		>
 {
-	readonly paginationStore = new PaginationStore();
+	readonly paginationStore = new PaginationStore({ pageSize: 50 });
 
 	@observable translations: ITranslationObject[] = [];
 	@observable sort = TranslationSortRule.HeadwordAsc;
 	@observable query = '';
+	@observable category?: WordCategory;
 
 	constructor() {
 		makeObservable(this);
@@ -72,6 +94,7 @@ export class TranslationIndexStore
 	clearResultsByQueryKeys: (keyof ITranslationIndexRouteParams)[] = [
 		'sort',
 		'query',
+		'category',
 	];
 
 	updateResults = async (
@@ -83,6 +106,7 @@ export class TranslationIndexStore
 			pagination: paginationParams,
 			sort: this.sort,
 			query: this.query,
+			category: this.category,
 		});
 
 		runInAction(() => {
@@ -101,6 +125,7 @@ export class TranslationIndexStore
 			pageSize: this.paginationStore.pageSize,
 			sort: this.sort,
 			query: this.query,
+			category: this.category ? this.category : undefined,
 		};
 	}
 	set routeParams(value: ITranslationIndexRouteParams) {
@@ -108,6 +133,7 @@ export class TranslationIndexStore
 		this.paginationStore.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? TranslationSortRule.HeadwordAsc;
 		this.query = value.query ?? '';
+		this.category = value.category;
 	}
 
 	validateRouteParams = (data: any): data is ITranslationIndexRouteParams =>
@@ -115,5 +141,15 @@ export class TranslationIndexStore
 
 	@action setSort = (value: TranslationSortRule): void => {
 		this.sort = value;
+	};
+
+	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	clearQuery = (): void => this.setQuery('');
+
+	@action setCategory = (value?: WordCategory): void => {
+		this.category = value;
 	};
 }
