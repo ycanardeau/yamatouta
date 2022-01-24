@@ -40,7 +40,8 @@
 		"headword": "みだしことば",
 		"japanese": "みくにことば",
 		"reading": "よみかた",
-		"yamatokotoba": "やまとことば"
+		"yamatokotoba": "やまとことば",
+		"category": "くさわい"
 	},
 	"wordCategoryNames": {
 		"unspecified": "(なし)",
