@@ -6,8 +6,12 @@ import {
 	Box,
 	Button,
 	Container,
+	Drawer,
 	IconButton,
+	List,
+	ListItemButton,
 	ListItemIcon,
+	ListItemText,
 	Menu,
 	MenuItem,
 	Stack,
@@ -44,19 +48,9 @@ const AppHeader = (): React.ReactElement => {
 		];
 	}, [t]);
 
-	const [anchorElNav, setAnchorElNav] = React.useState<
-		(EventTarget & HTMLButtonElement) | undefined
-	>();
-
 	const [anchorElUser, setAnchorElUser] = React.useState<
 		(EventTarget & HTMLButtonElement) | undefined
 	>();
-
-	const handleOpenNavMenu = (
-		e: React.MouseEvent<HTMLButtonElement>,
-	): void => {
-		setAnchorElNav(e.currentTarget);
-	};
 
 	const handleOpenUserMenu = (
 		e: React.MouseEvent<HTMLButtonElement>,
@@ -64,15 +58,15 @@ const AppHeader = (): React.ReactElement => {
 		setAnchorElUser(e.currentTarget);
 	};
 
-	const handleCloseNavMenu = (): void => {
-		setAnchorElNav(undefined);
-	};
-
 	const handleCloseUserMenu = (): void => {
 		setAnchorElUser(undefined);
 	};
 
 	const auth = useAuth();
+
+	const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+	const toggleDrawerOpen = (): void => setDrawerOpen(!drawerOpen);
 
 	return (
 		<AppBar position="sticky">
@@ -86,42 +80,11 @@ const AppHeader = (): React.ReactElement => {
 					>
 						<IconButton
 							size="large"
-							onClick={handleOpenNavMenu}
+							onClick={toggleDrawerOpen}
 							color="inherit"
 						>
 							<MenuIcon />
 						</IconButton>
-						<Menu
-							id="menu-appbar"
-							anchorEl={anchorElNav}
-							anchorOrigin={{
-								vertical: 'bottom',
-								horizontal: 'left',
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: 'top',
-								horizontal: 'left',
-							}}
-							open={Boolean(anchorElNav)}
-							onClose={handleCloseNavMenu}
-							sx={{
-								display: { xs: 'block', md: 'none' },
-							}}
-						>
-							{pages.map((page) => (
-								<MenuItem
-									onClick={handleCloseNavMenu}
-									component={RouterLink}
-									to={page.path}
-									key={page.path}
-								>
-									<Typography textAlign="center">
-										{page.title}
-									</Typography>
-								</MenuItem>
-							))}
-						</Menu>
 					</Box>
 
 					<Tabs
@@ -232,6 +195,22 @@ const AppHeader = (): React.ReactElement => {
 							))}
 					</Stack>
 				</Toolbar>
+
+				<Drawer open={drawerOpen} onClose={toggleDrawerOpen}>
+					<List>
+						{pages.map((page) => (
+							<React.Fragment key={page.path}>
+								<ListItemButton
+									component={RouterLink}
+									to={page.path}
+									onClick={toggleDrawerOpen}
+								>
+									<ListItemText>{page.title}</ListItemText>
+								</ListItemButton>
+							</React.Fragment>
+						))}
+					</List>
+				</Drawer>
 			</Container>
 
 			{loginDialogOpen && (
