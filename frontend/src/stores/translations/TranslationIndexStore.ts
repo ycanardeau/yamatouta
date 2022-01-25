@@ -28,16 +28,16 @@ const translationIndexRouteParamsSchema = {
 	properties: {
 		category: {
 			enum: [
-				'adjectivalNoun',
+				'adjectival-noun',
 				'adjective',
 				'adverb',
 				'attributive',
-				'auxiliaryVerb',
+				'auxiliary-verb',
 				'conjunction',
 				'interjection',
 				'noun',
 				'other',
-				'postpositionalParticle',
+				'postpositional-particle',
 				'prefix',
 				'pronoun',
 				'suffix',
