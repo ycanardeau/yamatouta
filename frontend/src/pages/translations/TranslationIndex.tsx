@@ -21,8 +21,10 @@ import { useNavigate } from 'react-router-dom';
 import CreateTranslationDialog from '../../components/CreateTranslationDialog';
 import Pagination from '../../components/Pagination';
 import TranslationList from '../../components/TranslationList';
+import { useAuth } from '../../components/useAuth';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { Permission } from '../../models/Permission';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';
 import { TranslationIndexStore } from '../../stores/translations/TranslationIndexStore';
@@ -128,6 +130,8 @@ const TranslationIndex = observer((): React.ReactElement => {
 
 	const navigate = useNavigate();
 
+	const auth = useAuth();
+
 	return (
 		<Layout
 			breadcrumbItems={[
@@ -143,6 +147,11 @@ const TranslationIndex = observer((): React.ReactElement => {
 					size="small"
 					onClick={(): void => setCreateTranslationDialogOpen(true)}
 					startIcon={<AddCircleIcon />}
+					disabled={
+						!auth.permissionContext.hasPermission(
+							Permission.CreateTranslations,
+						)
+					}
 				>
 					{t('translations.addWord')}
 				</Button>
