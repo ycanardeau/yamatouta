@@ -8,7 +8,7 @@ const HomeRoutes = (): React.ReactElement => {
 				path=""
 				element={
 					<Navigate
-						to="/quotes"
+						to="/translations"
 						replace
 					/> /* TODO: Create HomeIndex. */
 				}

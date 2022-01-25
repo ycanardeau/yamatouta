@@ -1,22 +1,37 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+	BadRequestException,
+	Body,
+	Controller,
+	Get,
+	Post,
+	Query,
+	Req,
+} from '@nestjs/common';
+import { Request } from 'express';
+import requestIp from 'request-ip';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { TranslationObject } from '../dto/translations/TranslationObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import {
+	createTranslationBodySchema,
+	ICreateTranslationBody,
+} from '../requests/translations/ICreateTranslationBody';
+import {
 	IListTranslationsQuery,
 	listTranslationsQuerySchema,
 } from '../requests/translations/IListTranslationsQuery';
+import { CreateTranslationService } from '../services/translations/CreateTranslationService';
 import { ListTranslationsService } from '../services/translations/ListTranslationsService';
 
 @Controller('translations')
 export class TranslationController {
 	constructor(
-		//private readonly createTranslationService: CreateTranslationService,
+		private readonly createTranslationService: CreateTranslationService,
 		private readonly listTranslationsService: ListTranslationsService,
 	) {}
 
-	/*@Post()
+	@Post()
 	createTranslation(
 		@Body(new JoiValidationPipe(createTranslationBodySchema))
 		body: ICreateTranslationBody,
@@ -30,7 +45,7 @@ export class TranslationController {
 			...body,
 			ip: ip,
 		});
-	}*/
+	}
 
 	@Get()
 	listTranslations(

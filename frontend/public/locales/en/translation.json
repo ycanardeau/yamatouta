@@ -41,17 +41,20 @@
 		"japanese": "Japanese",
 		"reading": "Reading",
 		"yamatokotoba": "Yamato-kotoba",
-		"category": "Part of Speech"
+		"category": "Part of Speech",
+		"search": "Search",
+		"sortBy": "Sort by",
+		"viewOnInishienomanabi": "View on Inishienomanabi"
 	},
 	"wordCategoryNames": {
 		"unspecified": "(Unspecified)",
 		"noun": "Noun",
 		"verb": "Verb",
 		"adjective": "Adjective",
-		"adjectivalNoun": "Adjectival Noun",
+		"adjectival-noun": "Adjectival Noun",
 		"adverb": "Adverb",
-		"postpositionalParticle": "Postpositional Particle",
-		"auxiliaryVerb": "Auxiliary Verb",
+		"postpositional-particle": "Postpositional Particle",
+		"auxiliary-verb": "Auxiliary Verb",
 		"attributive": "Attributive",
 		"conjunction": "Conjunction",
 		"prefix": "Prefix",
@@ -62,5 +65,11 @@
 	},
 	"users": {
 		"profile": "Profile"
+	},
+	"translationSortRuleNames": {
+		"headword-asc": "Headword (Ascending)",
+		"headword-desc": "Headword (Descending)",
+		"yamatokotoba-asc": "Yamato-kotoba (Ascending)",
+		"yamatokotoba-desc": "Yamato-kotoba (Descending)"
 	}
 }

@@ -8,8 +8,8 @@ import {
 	DialogContent,
 	DialogTitle,
 	FormControl,
-	Grid,
 	InputAdornment,
+	Stack,
 	TextField,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
@@ -46,77 +46,71 @@ const RegisterDialog = observer(
 				>
 					<DialogTitle>{t('auth.register')}</DialogTitle>
 					<DialogContent>
-						<Grid container spacing={2}>
-							<Grid item xs={12}>
-								<FormControl variant="standard" fullWidth>
-									<TextField
-										autoFocus
-										margin="dense"
-										id="email"
-										label={t('auth.email')}
-										type="email"
-										variant="standard"
-										value={store.email}
-										onChange={(e): void =>
-											store.setEmail(e.target.value)
-										}
-										InputProps={{
-											startAdornment: (
-												<InputAdornment position="start">
-													<EmailIcon />
-												</InputAdornment>
-											),
-										}}
-									/>
-								</FormControl>
-							</Grid>
+						<Stack spacing={2}>
+							<FormControl variant="standard" fullWidth>
+								<TextField
+									autoFocus
+									margin="dense"
+									id="email"
+									label={t('auth.email')}
+									type="email"
+									variant="standard"
+									value={store.email}
+									onChange={(e): void =>
+										store.setEmail(e.target.value)
+									}
+									InputProps={{
+										startAdornment: (
+											<InputAdornment position="start">
+												<EmailIcon />
+											</InputAdornment>
+										),
+									}}
+								/>
+							</FormControl>
 
-							<Grid item xs={12}>
-								<FormControl variant="standard" fullWidth>
-									<TextField
-										margin="dense"
-										id="username"
-										label={t('auth.username')}
-										type="text"
-										variant="standard"
-										value={store.username}
-										onChange={(e): void =>
-											store.setUsername(e.target.value)
-										}
-										InputProps={{
-											startAdornment: (
-												<InputAdornment position="start">
-													<AccountCircleIcon />
-												</InputAdornment>
-											),
-										}}
-									/>
-								</FormControl>
-							</Grid>
+							<FormControl variant="standard" fullWidth>
+								<TextField
+									margin="dense"
+									id="username"
+									label={t('auth.username')}
+									type="text"
+									variant="standard"
+									value={store.username}
+									onChange={(e): void =>
+										store.setUsername(e.target.value)
+									}
+									InputProps={{
+										startAdornment: (
+											<InputAdornment position="start">
+												<AccountCircleIcon />
+											</InputAdornment>
+										),
+									}}
+								/>
+							</FormControl>
 
-							<Grid item xs={12}>
-								<FormControl variant="standard" fullWidth>
-									<TextField
-										margin="dense"
-										id="password"
-										label={t('auth.password')}
-										type="password"
-										variant="standard"
-										value={store.password}
-										onChange={(e): void =>
-											store.setPassword(e.target.value)
-										}
-										InputProps={{
-											startAdornment: (
-												<InputAdornment position="start">
-													<LockIcon />
-												</InputAdornment>
-											),
-										}}
-									/>
-								</FormControl>
-							</Grid>
-						</Grid>
+							<FormControl variant="standard" fullWidth>
+								<TextField
+									margin="dense"
+									id="password"
+									label={t('auth.password')}
+									type="password"
+									variant="standard"
+									value={store.password}
+									onChange={(e): void =>
+										store.setPassword(e.target.value)
+									}
+									InputProps={{
+										startAdornment: (
+											<InputAdornment position="start">
+												<LockIcon />
+											</InputAdornment>
+										),
+									}}
+								/>
+							</FormControl>
+						</Stack>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={onClose}>{t('shared.cancel')}</Button>

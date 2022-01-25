@@ -1,3 +1,4 @@
+import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
@@ -41,7 +42,7 @@ const AppHeader = (): React.ReactElement => {
 
 	const pages = React.useMemo((): { title: string; path: string }[] => {
 		return [
-			// TODO: { title: t('shared.words'), path: '/translations' },
+			{ title: t('shared.words'), path: '/translations' },
 			{ title: t('shared.quotes'), path: '/quotes' },
 			{ title: t('shared.artists'), path: '/artists' },
 			{ title: t('shared.users'), path: '/users' },
@@ -179,6 +180,7 @@ const AppHeader = (): React.ReactElement => {
 										onClick={(): void =>
 											setLoginDialogOpen(true)
 										}
+										startIcon={<LoginIcon />}
 									>
 										{t('auth.logIn')}
 									</Button>

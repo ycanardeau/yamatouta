@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { PermissionContext } from './PermissionContext';
 import { IAuthenticatedUserObject } from './dto/users/IAuthenticatedUserObject';
 
 export interface IAuthContext {
@@ -7,6 +8,7 @@ export interface IAuthContext {
 	user?: IAuthenticatedUserObject;
 	setUser: (user?: IAuthenticatedUserObject) => void;
 	loading: boolean;
+	permissionContext: PermissionContext;
 }
 
 export const AuthContext = React.createContext<IAuthContext>({
@@ -14,4 +16,5 @@ export const AuthContext = React.createContext<IAuthContext>({
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	setUser: () => {},
 	loading: true,
+	permissionContext: new PermissionContext(),
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { AuthContext } from './AuthContext';
+import { PermissionContext } from './PermissionContext';
 import { getAuthenticatedUser } from './api/UserApi';
 import { IAuthenticatedUserObject } from './dto/users/IAuthenticatedUserObject';
 
@@ -37,6 +38,7 @@ export const AuthProvider = ({
 				user: user,
 				setUser: setUser,
 				loading: loading,
+				permissionContext: new PermissionContext(user),
 			}}
 		>
 			{children}

@@ -5,9 +5,9 @@ import _ from 'lodash';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
 import { TranslationObject } from '../../dto/translations/TranslationObject';
-import { TranslationSortRule } from '../../dto/translations/TranslationSortRule';
 import { Translation } from '../../entities/Translation';
 import { NgramConverter } from '../../helpers/NgramConverter';
+import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { IListTranslationsQuery } from '../../requests/translations/IListTranslationsQuery';
 import { escapeWildcardCharacters } from '../../utils/escapeWildcardCharacters';
 import { PermissionContext } from '../PermissionContext';
@@ -26,7 +26,7 @@ export class ListTranslationsService {
 	) {}
 
 	private createKnex(params: IListTranslationsQuery): Knex.QueryBuilder {
-		const { query } = params;
+		const { query, category } = params;
 
 		const knex = this.em
 			.createQueryBuilder(Translation)
@@ -45,6 +45,8 @@ export class ListTranslationsService {
 				this.ngramConverter.toQuery(query, 2),
 			);
 		}
+
+		if (category) knex.andWhere('translations.category', category);
 
 		return knex;
 	}
@@ -244,12 +246,12 @@ export class ListTranslationsService {
 	async listTranslations(
 		params: IListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
-		const { offset, getTotalCount } = params;
+		const { /*offset, */ getTotalCount } = params;
 
 		const [translations, count] = await Promise.all([
-			offset && offset > ListTranslationsService.maxOffset
+			/*offset && offset > ListTranslationsService.maxOffset
 				? Promise.resolve([])
-				: this.getItems(params),
+				: */ this.getItems(params),
 			getTotalCount ? this.getCount(params) : Promise.resolve(0),
 		]);
 

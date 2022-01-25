@@ -41,17 +41,20 @@
 		"japanese": "みくにことば",
 		"reading": "よみかた",
 		"yamatokotoba": "やまとことば",
-		"category": "くさわい"
+		"category": "くさわい",
+		"search": "やまとことばをさがす",
+		"sortBy": "ならべかえ",
+		"viewOnInishienomanabi": "いにしえのまなびでみる"
 	},
 	"wordCategoryNames": {
 		"unspecified": "(なし)",
 		"noun": "なことば",
 		"verb": "しわざことば",
 		"adjective": "さまことば",
-		"adjectivalNoun": "ありかたことば",
+		"adjectival-noun": "ありかたことば",
 		"adverb": "そえことば",
-		"postpositionalParticle": "あとことば",
-		"auxiliaryVerb": "たすけことば",
+		"postpositional-particle": "あとことば",
+		"auxiliary-verb": "たすけことば",
 		"attributive": "そいことば",
 		"conjunction": "つなぎことば",
 		"interjection": "なげきことば",
@@ -60,5 +63,11 @@
 	},
 	"users": {
 		"profile": "ひととなり"
+	},
+	"translationSortRuleNames": {
+		"headword-asc": "みだしことば (のぼり)",
+		"headword-desc": "みだしことば (くだり)",
+		"yamatokotoba-asc": "やまとことば (のぼり)",
+		"yamatokotoba-desc": "やまとことば (くだり)"
 	}
 }

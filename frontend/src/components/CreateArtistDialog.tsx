@@ -5,9 +5,9 @@ import {
 	DialogContent,
 	DialogTitle,
 	FormControl,
-	Grid,
 	InputLabel,
 	Select,
+	Stack,
 	TextField,
 } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
@@ -46,55 +46,44 @@ const CreateArtistDialog = observer(
 				>
 					<DialogTitle>{t('artists.addArtist')}</DialogTitle>
 					<DialogContent>
-						<Grid container spacing={2}>
-							<Grid item xs={12}>
-								<FormControl variant="standard" fullWidth>
-									<TextField
-										autoFocus
-										margin="dense"
-										id="name"
-										label={t('artists.name')}
-										type="text"
-										variant="standard"
-										value={store.name}
-										onChange={(e): void =>
-											store.setName(e.target.value)
-										}
-									/>
-								</FormControl>
-							</Grid>
+						<Stack spacing={2}>
+							<FormControl variant="standard" fullWidth>
+								<TextField
+									autoFocus
+									margin="dense"
+									id="name"
+									label={t('artists.name')}
+									type="text"
+									variant="standard"
+									value={store.name}
+									onChange={(e): void =>
+										store.setName(e.target.value)
+									}
+								/>
+							</FormControl>
 
-							<Grid item xs={12}>
-								<FormControl variant="standard" fullWidth>
-									<InputLabel id="artistType">
-										{t('artists.artistType')}
-									</InputLabel>
-									<Select
-										labelId="artistType"
-										id="artistType"
-										value={store.artistType}
-										onChange={(e): void =>
-											store.setArtistType(
-												e.target.value as ArtistType,
-											)
-										}
-									>
-										{Object.values(ArtistType).map(
-											(value) => (
-												<MenuItem
-													key={value}
-													value={value}
-												>
-													{t(
-														`artistTypeNames.${value}`,
-													)}
-												</MenuItem>
-											),
-										)}
-									</Select>
-								</FormControl>
-							</Grid>
-						</Grid>
+							<FormControl variant="standard" fullWidth>
+								<InputLabel id="artistType">
+									{t('artists.artistType')}
+								</InputLabel>
+								<Select
+									labelId="artistType"
+									id="artistType"
+									value={store.artistType}
+									onChange={(e): void =>
+										store.setArtistType(
+											e.target.value as ArtistType,
+										)
+									}
+								>
+									{Object.values(ArtistType).map((value) => (
+										<MenuItem key={value} value={value}>
+											{t(`artistTypeNames.${value}`)}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+						</Stack>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={onClose}>{t('shared.cancel')}</Button>

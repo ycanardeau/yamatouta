@@ -10,8 +10,8 @@ import { Injectable } from '@nestjs/common';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
 import { UserObject } from '../../dto/users/UserObject';
-import { UserSortRule } from '../../dto/users/UserSortRule';
 import { User } from '../../entities/User';
+import { UserSortRule } from '../../models/UserSortRule';
 import { PermissionContext } from '../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../filters';
 

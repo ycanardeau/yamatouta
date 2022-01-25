@@ -10,9 +10,9 @@ import { Injectable } from '@nestjs/common';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
 import { QuoteObject } from '../../dto/quotes/QuoteObject';
-import { QuoteSortRule } from '../../dto/quotes/QuoteSortRule';
 import { ArtistQuote } from '../../entities/ArtistQuote';
 import { Quote } from '../../entities/Quote';
+import { QuoteSortRule } from '../../models/QuoteSortRule';
 import { QuoteType } from '../../models/QuoteType';
 import { PermissionContext } from '../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../filters';
