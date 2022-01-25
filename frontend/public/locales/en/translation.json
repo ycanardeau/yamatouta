@@ -42,7 +42,8 @@
 		"reading": "Reading",
 		"yamatokotoba": "Yamato-kotoba",
 		"category": "Part of Speech",
-		"search": "Search"
+		"search": "Search",
+		"sortBy": "Sort by"
 	},
 	"wordCategoryNames": {
 		"unspecified": "(Unspecified)",
@@ -63,5 +64,11 @@
 	},
 	"users": {
 		"profile": "Profile"
+	},
+	"translationSortRuleNames": {
+		"headword-asc": "Headword (Ascending)",
+		"headword-desc": "Headword (Descending)",
+		"yamatokotoba-asc": "Yamato-kotoba (Ascending)",
+		"yamatokotoba-desc": "Yamato-kotoba (Descending)"
 	}
 }

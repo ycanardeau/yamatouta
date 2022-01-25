@@ -42,7 +42,8 @@
 		"reading": "よみかた",
 		"yamatokotoba": "やまとことば",
 		"category": "くさわい",
-		"search": "やまとことばをさがす"
+		"search": "やまとことばをさがす",
+		"sortBy": "ならべかえ"
 	},
 	"wordCategoryNames": {
 		"unspecified": "(なし)",
@@ -61,5 +62,11 @@
 	},
 	"users": {
 		"profile": "ひととなり"
+	},
+	"translationSortRuleNames": {
+		"headword-asc": "みだしことば (のぼり)",
+		"headword-desc": "みだしことば (くだり)",
+		"yamatokotoba-asc": "やまとことば (のぼり)",
+		"yamatokotoba-desc": "やまとことば (くだり)"
 	}
 }

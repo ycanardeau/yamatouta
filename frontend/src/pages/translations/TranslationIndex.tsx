@@ -22,6 +22,7 @@ import Pagination from '../../components/Pagination';
 import TranslationList from '../../components/TranslationList';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';
 import { TranslationIndexStore } from '../../stores/translations/TranslationIndexStore';
 import Layout from '../Layout';
@@ -112,6 +113,29 @@ const TranslationIndex = observer((): React.ReactElement => {
 							{Object.values(WordCategory).map((value) => (
 								<MenuItem key={value} value={value}>
 									{t(`wordCategoryNames.${value}`)}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+
+					<FormControl variant="standard" fullWidth>
+						<InputLabel id="sort" shrink>
+							{t('translations.sortBy')}
+						</InputLabel>
+						<Select
+							labelId="sort"
+							id="sort"
+							value={store.sort ?? ''}
+							onChange={(e): void =>
+								store.setSort(
+									e.target.value as TranslationSortRule,
+								)
+							}
+							displayEmpty
+						>
+							{Object.values(TranslationSortRule).map((value) => (
+								<MenuItem key={value} value={value}>
+									{t(`translationSortRuleNames.${value}`)}
 								</MenuItem>
 							))}
 						</Select>
