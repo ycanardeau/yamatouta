@@ -12,6 +12,7 @@ import {
 	Stack,
 	TextField,
 } from '@mui/material';
+import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { DebounceInput } from 'react-debounce-input';
@@ -165,6 +166,15 @@ const TranslationIndex = observer((): React.ReactElement => {
 				sort={store.sort}
 				onSortChange={(sort): void => store.setSort(sort)}
 				searchWords={store.query.trim().split(/\s+/)}
+				onWordClick={({ locale, value }): void => {
+					runInAction(() => {
+						store.query = value;
+						store.sort =
+							locale === 'ojp'
+								? TranslationSortRule.YamatokotobaAsc
+								: TranslationSortRule.HeadwordAsc;
+					});
+				}}
 			/>
 
 			<Pagination store={store.paginationStore} />

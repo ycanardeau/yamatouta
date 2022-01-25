@@ -45,12 +45,14 @@ const HighlightedText = React.memo(
 interface TranslationListItemProps {
 	translation: ITranslationObject;
 	searchWords: string[];
+	onWordClick?: (event: { locale?: string; value: string }) => void;
 }
 
 const TranslationListItem = React.memo(
 	({
 		translation,
 		searchWords,
+		onWordClick,
 	}: TranslationListItemProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -66,7 +68,14 @@ const TranslationListItem = React.memo(
 									part,
 								)}/yamato-kotoba`} */
 								href="#"
-								onClick={(e): void => e.preventDefault()}
+								onClick={(e): void => {
+									e.preventDefault();
+
+									onWordClick?.({
+										locale: translation.locale,
+										value: translation.headword,
+									});
+								}}
 								underline="hover"
 							>
 								<HighlightedText
@@ -114,7 +123,14 @@ const TranslationListItem = React.memo(
 									part,
 								)}/headwords`} */
 								href="#"
-								onClick={(e): void => e.preventDefault()}
+								onClick={(e): void => {
+									e.preventDefault();
+
+									onWordClick?.({
+										locale: 'ojp',
+										value: translation.yamatokotoba,
+									});
+								}}
 								underline="hover"
 							>
 								<HighlightedText
@@ -135,6 +151,7 @@ interface TranslationListProps {
 	sort: TranslationSortRule;
 	onSortChange: (sort: TranslationSortRule) => void;
 	searchWords: string[];
+	onWordClick?: (event: { locale?: string; value: string }) => void;
 }
 
 const TranslationList = React.memo(
@@ -143,6 +160,7 @@ const TranslationList = React.memo(
 		sort,
 		onSortChange,
 		searchWords,
+		onWordClick,
 	}: TranslationListProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -212,6 +230,7 @@ const TranslationList = React.memo(
 								translation={translation}
 								key={translation.id}
 								searchWords={searchWords}
+								onWordClick={onWordClick}
 							/>
 						))}
 					</TableBody>
