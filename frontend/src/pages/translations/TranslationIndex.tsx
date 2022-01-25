@@ -1,3 +1,4 @@
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ClearIcon from '@mui/icons-material/Clear';
 import SearchIcon from '@mui/icons-material/Search';
 import {
@@ -141,6 +142,7 @@ const TranslationIndex = observer((): React.ReactElement => {
 					variant="contained"
 					size="small"
 					onClick={(): void => setCreateTranslationDialogOpen(true)}
+					startIcon={<AddCircleIcon />}
 				>
 					{t('translations.addWord')}
 				</Button>

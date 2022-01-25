@@ -1,3 +1,4 @@
+import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
@@ -179,6 +180,7 @@ const AppHeader = (): React.ReactElement => {
 										onClick={(): void =>
 											setLoginDialogOpen(true)
 										}
+										startIcon={<LoginIcon />}
 									>
 										{t('auth.logIn')}
 									</Button>
