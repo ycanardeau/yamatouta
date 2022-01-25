@@ -33,8 +33,8 @@ const LoginDialog = observer(
 		return (
 			<Dialog open={true} onClose={onClose} fullWidth>
 				<form
-					onSubmit={async (e): Promise<void> => {
-						e.preventDefault();
+					onSubmit={async (event): Promise<void> => {
+						event.preventDefault();
 
 						const user = await store.submit();
 
@@ -57,8 +57,8 @@ const LoginDialog = observer(
 									type="email"
 									variant="standard"
 									value={store.email}
-									onChange={(e): void =>
-										store.setEmail(e.target.value)
+									onChange={(event): void =>
+										store.setEmail(event.target.value)
 									}
 									InputProps={{
 										startAdornment: (
@@ -78,8 +78,8 @@ const LoginDialog = observer(
 									type="password"
 									variant="standard"
 									value={store.password}
-									onChange={(e): void =>
-										store.setPassword(e.target.value)
+									onChange={(event): void =>
+										store.setPassword(event.target.value)
 									}
 									InputProps={{
 										startAdornment: (

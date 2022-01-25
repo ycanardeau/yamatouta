@@ -38,8 +38,8 @@ const CreateTranslationDialog = observer(
 		return (
 			<Dialog open={true} onClose={onClose} fullWidth>
 				<form
-					onSubmit={async (e): Promise<void> => {
-						e.preventDefault();
+					onSubmit={async (event): Promise<void> => {
+						event.preventDefault();
 
 						const translation = await store.submit();
 
@@ -58,8 +58,8 @@ const CreateTranslationDialog = observer(
 									type="text"
 									variant="standard"
 									value={store.headword}
-									onChange={(e): void =>
-										store.setHeadword(e.target.value)
+									onChange={(event): void =>
+										store.setHeadword(event.target.value)
 									}
 								/>
 							</FormControl>
@@ -73,8 +73,8 @@ const CreateTranslationDialog = observer(
 										type="text"
 										variant="standard"
 										value={store.reading}
-										onChange={(e): void =>
-											store.setReading(e.target.value)
+										onChange={(event): void =>
+											store.setReading(event.target.value)
 										}
 									/>
 								</FormControl>
@@ -88,8 +88,10 @@ const CreateTranslationDialog = observer(
 									type="text"
 									variant="standard"
 									value={store.yamatokotoba}
-									onChange={(e): void =>
-										store.setYamatokotoba(e.target.value)
+									onChange={(event): void =>
+										store.setYamatokotoba(
+											event.target.value,
+										)
 									}
 								/>
 							</FormControl>
@@ -102,9 +104,9 @@ const CreateTranslationDialog = observer(
 									labelId="category"
 									id="category"
 									value={store.category ?? ''}
-									onChange={(e): void =>
+									onChange={(event): void =>
 										store.setCategory(
-											e.target.value as WordCategory,
+											event.target.value as WordCategory,
 										)
 									}
 									displayEmpty

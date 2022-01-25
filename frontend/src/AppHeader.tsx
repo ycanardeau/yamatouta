@@ -54,9 +54,9 @@ const AppHeader = (): React.ReactElement => {
 	>();
 
 	const handleOpenUserMenu = (
-		e: React.MouseEvent<HTMLButtonElement>,
+		event: React.MouseEvent<HTMLButtonElement>,
 	): void => {
-		setAnchorElUser(e.currentTarget);
+		setAnchorElUser(event.currentTarget);
 	};
 
 	const handleCloseUserMenu = (): void => {

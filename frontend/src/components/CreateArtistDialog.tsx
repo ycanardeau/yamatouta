@@ -36,8 +36,8 @@ const CreateArtistDialog = observer(
 		return (
 			<Dialog open={true} onClose={onClose} fullWidth>
 				<form
-					onSubmit={async (e): Promise<void> => {
-						e.preventDefault();
+					onSubmit={async (event): Promise<void> => {
+						event.preventDefault();
 
 						const artist = await store.submit();
 
@@ -56,8 +56,8 @@ const CreateArtistDialog = observer(
 									type="text"
 									variant="standard"
 									value={store.name}
-									onChange={(e): void =>
-										store.setName(e.target.value)
+									onChange={(event): void =>
+										store.setName(event.target.value)
 									}
 								/>
 							</FormControl>
@@ -70,9 +70,9 @@ const CreateArtistDialog = observer(
 									labelId="artistType"
 									id="artistType"
 									value={store.artistType}
-									onChange={(e): void =>
+									onChange={(event): void =>
 										store.setArtistType(
-											e.target.value as ArtistType,
+											event.target.value as ArtistType,
 										)
 									}
 								>
