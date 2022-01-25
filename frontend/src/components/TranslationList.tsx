@@ -94,7 +94,7 @@ const TranslationListItem = React.memo(
 
 									onWordClick?.({
 										locale: translation.locale,
-										value: translation.headword,
+										value: part,
 									});
 								}}
 								underline="hover"
@@ -149,7 +149,7 @@ const TranslationListItem = React.memo(
 
 									onWordClick?.({
 										locale: 'ojp',
-										value: translation.yamatokotoba,
+										value: part,
 									});
 								}}
 								underline="hover"
