@@ -1,5 +1,12 @@
+import LaunchIcon from '@mui/icons-material/Launch';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
+	IconButton,
 	Link,
+	ListItemIcon,
+	ListItemText,
+	Menu,
+	MenuItem,
 	Paper,
 	Table,
 	TableBody,
@@ -56,6 +63,20 @@ const TranslationListItem = React.memo(
 	}: TranslationListItemProps): React.ReactElement => {
 		const { t } = useTranslation();
 
+		const [anchorElTranslation, setAnchorElTranslation] = React.useState<
+			(EventTarget & HTMLButtonElement) | undefined
+		>();
+
+		const handleOpenTranslationMenu = (
+			event: React.MouseEvent<HTMLButtonElement>,
+		): void => {
+			setAnchorElTranslation(event.currentTarget);
+		};
+
+		const handleCloseTranslationMenu = (): void => {
+			setAnchorElTranslation(undefined);
+		};
+
 		return (
 			<TableRow hover>
 				<TableCell>
@@ -68,8 +89,8 @@ const TranslationListItem = React.memo(
 									part,
 								)}/yamato-kotoba`} */
 								href="#"
-								onClick={(e): void => {
-									e.preventDefault();
+								onClick={(event): void => {
+									event.preventDefault();
 
 									onWordClick?.({
 										locale: translation.locale,
@@ -123,8 +144,8 @@ const TranslationListItem = React.memo(
 									part,
 								)}/headwords`} */
 								href="#"
-								onClick={(e): void => {
-									e.preventDefault();
+								onClick={(event): void => {
+									event.preventDefault();
 
 									onWordClick?.({
 										locale: 'ojp',
@@ -140,6 +161,42 @@ const TranslationListItem = React.memo(
 							</Link>
 						</React.Fragment>
 					))}
+				</TableCell>
+				<TableCell padding="checkbox">
+					<IconButton
+						size="small"
+						onClick={handleOpenTranslationMenu}
+					>
+						<MoreVertIcon fontSize="small" />
+					</IconButton>
+					<Menu
+						anchorEl={anchorElTranslation}
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'right',
+						}}
+						transformOrigin={{
+							vertical: 'top',
+							horizontal: 'right',
+						}}
+						open={Boolean(anchorElTranslation)}
+						onClose={handleCloseTranslationMenu}
+					>
+						<MenuItem
+							onClick={handleCloseTranslationMenu}
+							component="a"
+							href={`https://inishienomanabi.net/translations/${translation.id}/view`}
+							target="_blank"
+							rel="noreferrer"
+						>
+							<ListItemIcon>
+								<LaunchIcon fontSize="small" />
+							</ListItemIcon>
+							<ListItemText>
+								{t('translations.viewOnInishienomanabi')}
+							</ListItemText>
+						</MenuItem>
+					</Menu>
 				</TableCell>
 			</TableRow>
 		);
@@ -221,6 +278,7 @@ const TranslationList = React.memo(
 									{t('translations.yamatokotoba')}
 								</TableSortLabel>
 							</TableCell>
+							<TableCell />
 						</TableRow>
 					</TableHead>
 

@@ -43,7 +43,8 @@
 		"yamatokotoba": "Yamato-kotoba",
 		"category": "Part of Speech",
 		"search": "Search",
-		"sortBy": "Sort by"
+		"sortBy": "Sort by",
+		"viewOnInishienomanabi": "View on Inishienomanabi"
 	},
 	"wordCategoryNames": {
 		"unspecified": "(Unspecified)",

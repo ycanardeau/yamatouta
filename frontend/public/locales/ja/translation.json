@@ -43,7 +43,8 @@
 		"yamatokotoba": "やまとことば",
 		"category": "くさわい",
 		"search": "やまとことばをさがす",
-		"sortBy": "ならべかえ"
+		"sortBy": "ならべかえ",
+		"viewOnInishienomanabi": "いにしえのまなびでみる"
 	},
 	"wordCategoryNames": {
 		"unspecified": "(なし)",
