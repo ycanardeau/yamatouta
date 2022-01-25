@@ -5,10 +5,10 @@ import {
 	DialogContent,
 	DialogTitle,
 	FormControl,
-	Grid,
 	InputLabel,
 	MenuItem,
 	Select,
+	Stack,
 	TextField,
 } from '@mui/material';
 import { observer } from 'mobx-react-lite';
@@ -48,95 +48,82 @@ const CreateTranslationDialog = observer(
 				>
 					<DialogTitle>{t('translations.addWord')}</DialogTitle>
 					<DialogContent>
-						<Grid container spacing={2}>
-							<Grid item xs={12}>
-								<FormControl variant="standard" fullWidth>
-									<TextField
-										autoFocus
-										margin="dense"
-										id="headword"
-										label={t('translations.headword')}
-										type="text"
-										variant="standard"
-										value={store.headword}
-										onChange={(e): void =>
-											store.setHeadword(e.target.value)
-										}
-									/>
-								</FormControl>
-							</Grid>
+						<Stack spacing={2}>
+							<FormControl variant="standard" fullWidth>
+								<TextField
+									autoFocus
+									margin="dense"
+									id="headword"
+									label={t('translations.headword')}
+									type="text"
+									variant="standard"
+									value={store.headword}
+									onChange={(e): void =>
+										store.setHeadword(e.target.value)
+									}
+								/>
+							</FormControl>
 
 							{store.isJapanese && (
-								<Grid item xs={12}>
-									<FormControl variant="standard" fullWidth>
-										<TextField
-											margin="dense"
-											id="reading"
-											label={t('translations.reading')}
-											type="text"
-											variant="standard"
-											value={store.reading}
-											onChange={(e): void =>
-												store.setReading(e.target.value)
-											}
-										/>
-									</FormControl>
-								</Grid>
-							)}
-
-							<Grid item xs={12}>
 								<FormControl variant="standard" fullWidth>
 									<TextField
 										margin="dense"
-										id="yamatokotoba"
-										label={t('translations.yamatokotoba')}
+										id="reading"
+										label={t('translations.reading')}
 										type="text"
 										variant="standard"
-										value={store.yamatokotoba}
+										value={store.reading}
 										onChange={(e): void =>
-											store.setYamatokotoba(
-												e.target.value,
-											)
+											store.setReading(e.target.value)
 										}
 									/>
 								</FormControl>
-							</Grid>
+							)}
 
-							<Grid item xs={12}>
-								<FormControl variant="standard" fullWidth>
-									<InputLabel id="category" shrink>
-										{t('translations.category')}
-									</InputLabel>
-									<Select
-										labelId="category"
-										id="category"
-										value={store.category ?? ''}
-										onChange={(e): void =>
-											store.setCategory(
-												e.target.value as WordCategory,
-											)
-										}
-										displayEmpty
-									>
-										<MenuItem value="">
-											{t('wordCategoryNames.unspecified')}
-										</MenuItem>
-										{Object.values(WordCategory).map(
-											(value) => (
-												<MenuItem
-													key={value}
-													value={value}
-												>
-													{t(
-														`wordCategoryNames.${value}`,
-													)}
-												</MenuItem>
-											),
-										)}
-									</Select>
-								</FormControl>
-							</Grid>
-						</Grid>
+							<FormControl variant="standard" fullWidth>
+								<TextField
+									margin="dense"
+									id="yamatokotoba"
+									label={t('translations.yamatokotoba')}
+									type="text"
+									variant="standard"
+									value={store.yamatokotoba}
+									onChange={(e): void =>
+										store.setYamatokotoba(e.target.value)
+									}
+								/>
+							</FormControl>
+
+							<FormControl variant="standard" fullWidth>
+								<InputLabel id="category" shrink>
+									{t('translations.category')}
+								</InputLabel>
+								<Select
+									labelId="category"
+									id="category"
+									value={store.category ?? ''}
+									onChange={(e): void =>
+										store.setCategory(
+											e.target.value as WordCategory,
+										)
+									}
+									displayEmpty
+								>
+									<MenuItem value="">
+										{t('wordCategoryNames.unspecified')}
+									</MenuItem>
+									{Object.values(WordCategory).map(
+										(value) => (
+											<MenuItem key={value} value={value}>
+												{t(
+													`wordCategoryNames.${value}`,
+												)}
+											</MenuItem>
+										),
+									)}
+								</Select>
+							</FormControl>
+						</Stack>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={onClose}>{t('shared.cancel')}</Button>
