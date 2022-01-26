@@ -25,11 +25,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
-import { logout } from './api/AuthApi';
-import LoginDialog from './components/LoginDialog';
-import RegisterDialog from './components/RegisterDialog';
-import { useAuth } from './components/useAuth';
-import config from './config';
+import { logout } from '../api/AuthApi';
+import config from '../config';
+import LoginDialog from './LoginDialog';
+import RegisterDialog from './RegisterDialog';
+import { useAuth } from './useAuth';
 
 const AppHeader = (): React.ReactElement => {
 	const { t } = useTranslation();

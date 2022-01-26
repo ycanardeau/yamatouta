@@ -4,9 +4,9 @@ import React from 'react';
 import ReactGA from 'react-ga4';
 import { Route, Routes } from 'react-router-dom';
 
-import AppFooter from './AppFooter';
-import AppHeader from './AppHeader';
 import ScrollToTop from './ScrollToTop';
+import AppFooter from './components/AppFooter';
+import AppHeader from './components/AppHeader';
 import lazyWithRetry from './components/lazyWithRetry';
 import config from './config';
 
