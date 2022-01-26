@@ -37,6 +37,12 @@ const AppHeader = (): React.ReactElement => {
 	const [loginDialogOpen, setLoginDialogOpen] = React.useState(false);
 	const [registerDialogOpen, setRegisterDialogOpen] = React.useState(false);
 
+	const toggleLoginDialogOpen = (): void =>
+		setLoginDialogOpen(!loginDialogOpen);
+
+	const toggleRegisterDialogOpen = (): void =>
+		setRegisterDialogOpen(!registerDialogOpen);
+
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
 
@@ -177,18 +183,14 @@ const AppHeader = (): React.ReactElement => {
 								<>
 									<Button
 										variant="text"
-										onClick={(): void =>
-											setLoginDialogOpen(true)
-										}
+										onClick={toggleLoginDialogOpen}
 										startIcon={<LoginIcon />}
 									>
 										{t('auth.logIn')}
 									</Button>
 									<Button
 										variant="outlined"
-										onClick={(): void =>
-											setRegisterDialogOpen(true)
-										}
+										onClick={toggleRegisterDialogOpen}
 										disabled={config.disableAccountCreation}
 									>
 										{t('auth.register')}
@@ -217,9 +219,9 @@ const AppHeader = (): React.ReactElement => {
 
 			{loginDialogOpen && (
 				<LoginDialog
-					onClose={(): void => setLoginDialogOpen(false)}
+					onClose={toggleLoginDialogOpen}
 					onLoginComplete={(user): void => {
-						setLoginDialogOpen(false);
+						toggleLoginDialogOpen();
 
 						auth.setUser(user);
 
@@ -231,9 +233,9 @@ const AppHeader = (): React.ReactElement => {
 			)}
 			{registerDialogOpen && (
 				<RegisterDialog
-					onClose={(): void => setRegisterDialogOpen(false)}
+					onClose={toggleRegisterDialogOpen}
 					onRegisterComplete={(user): void => {
-						setRegisterDialogOpen(false);
+						toggleRegisterDialogOpen();
 
 						// TODO
 					}}

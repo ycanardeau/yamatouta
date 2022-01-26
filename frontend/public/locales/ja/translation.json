@@ -16,8 +16,8 @@
 		"logOut": "でる",
 		"password": "あいことば",
 		"register": "たずさわる",
-		"dialogSubtitle": "またおあいしましたね！",
-		"dialogTitle": "おかえりなさい！",
+		"loginDialogSubtitle": "またおあいしましたね！",
+		"loginDialogTitle": "おかえりなさい！",
 		"username": "なまえ"
 	},
 	"layout": {

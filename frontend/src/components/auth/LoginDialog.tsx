@@ -41,11 +41,11 @@ const LoginDialog = observer(
 						onLoginComplete(user);
 					}}
 				>
-					<DialogTitle>{t('auth.dialogTitle')}</DialogTitle>
+					<DialogTitle>{t('auth.loginDialogTitle')}</DialogTitle>
 					<DialogContent>
 						<Stack spacing={2}>
 							<DialogContentText>
-								{t('auth.dialogSubtitle')}
+								{t('auth.loginDialogSubtitle')}
 							</DialogContentText>
 
 							<FormControl variant="standard" fullWidth>
