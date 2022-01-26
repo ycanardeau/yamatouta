@@ -60,6 +60,8 @@ const translationIndexRouteParamsSchema = {
 				'headword-desc',
 				'yamatokotoba-asc',
 				'yamatokotoba-desc',
+				'created-asc',
+				'created-desc',
 			],
 			type: 'string',
 		},

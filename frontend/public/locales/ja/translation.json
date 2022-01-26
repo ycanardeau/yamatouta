@@ -68,6 +68,8 @@
 		"headword-asc": "みだしことば (のぼり)",
 		"headword-desc": "みだしことば (くだり)",
 		"yamatokotoba-asc": "やまとことば (のぼり)",
-		"yamatokotoba-desc": "やまとことば (くだり)"
+		"yamatokotoba-desc": "やまとことば (くだり)",
+		"created-asc": "ふるい",
+		"created-desc": "あたらしい"
 	}
 }

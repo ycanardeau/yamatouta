@@ -70,6 +70,8 @@
 		"headword-asc": "Headword (Ascending)",
 		"headword-desc": "Headword (Descending)",
 		"yamatokotoba-asc": "Yamato-kotoba (Ascending)",
-		"yamatokotoba-desc": "Yamato-kotoba (Descending)"
+		"yamatokotoba-desc": "Yamato-kotoba (Descending)",
+		"created-asc": "Oldest",
+		"created-desc": "Newest"
 	}
 }

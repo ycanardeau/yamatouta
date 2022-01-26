@@ -179,6 +179,16 @@ export class ListTranslationsService {
 				this.orderByYamatokotoba(knex, 'desc');
 				this.orderByHeadword(knex, 'desc');
 				return knex;
+
+			case TranslationSortRule.CreatedAsc:
+				return knex
+					.orderBy('translations.created_at', 'asc')
+					.orderBy('translations.id', 'asc');
+
+			case TranslationSortRule.CreatedDesc:
+				return knex
+					.orderBy('translations.created_at', 'desc')
+					.orderBy('translations.id', 'desc');
 		}
 	}
 
