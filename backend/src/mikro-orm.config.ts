@@ -23,6 +23,7 @@ const options: Options = {
 	logger: logger.log.bind(logger),
 	metadataProvider: TsMorphMetadataProvider,
 	forceUndefined: true,
+	forceUtcTimezone: true,
 };
 
 export default options;
