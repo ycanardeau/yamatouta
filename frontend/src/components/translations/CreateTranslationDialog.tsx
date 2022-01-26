@@ -15,9 +15,9 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ITranslationObject } from '../dto/translations/ITranslationObject';
-import { WordCategory } from '../models/WordCategory';
-import { CreateTranslationDialogStore } from '../stores/CreateTranslationDialogStore';
+import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { WordCategory } from '../../models/WordCategory';
+import { CreateTranslationDialogStore } from '../../stores/CreateTranslationDialogStore';
 
 interface ICreateTranslationDialogProps {
 	onClose: () => void;

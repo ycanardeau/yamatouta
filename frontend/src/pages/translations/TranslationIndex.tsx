@@ -19,9 +19,10 @@ import { DebounceInput } from 'react-debounce-input';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import CreateTranslationDialog from '../../components/CreateTranslationDialog';
 import Pagination from '../../components/Pagination';
-import TranslationList from '../../components/TranslationList';
+import Layout from '../../components/layout/Layout';
+import CreateTranslationDialog from '../../components/translations/CreateTranslationDialog';
+import TranslationList from '../../components/translations/TranslationList';
 import { useAuth } from '../../components/useAuth';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
@@ -29,7 +30,6 @@ import { Permission } from '../../models/Permission';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';
 import { TranslationIndexStore } from '../../stores/translations/TranslationIndexStore';
-import Layout from '../Layout';
 
 interface TranslationIndexSidebarProps {
 	store: TranslationIndexStore;

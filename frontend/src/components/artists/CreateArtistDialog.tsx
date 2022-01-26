@@ -15,9 +15,9 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IArtistObject } from '../dto/artists/IArtistObject';
-import { ArtistType } from '../models/ArtistType';
-import { CreateArtistDialogStore } from '../stores/CreateArtistDialogStore';
+import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { ArtistType } from '../../models/ArtistType';
+import { CreateArtistDialogStore } from '../../stores/CreateArtistDialogStore';
 
 interface ICreateArtistDialogProps {
 	onClose: () => void;

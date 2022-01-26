@@ -3,8 +3,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { IQuoteObject } from '../dto/quotes/IQuoteObject';
-import AuthorLink from './AuthorLink';
+import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import AuthorLink from '../AuthorLink';
 
 interface IQuoteListItemProps {
 	quote: IQuoteObject;

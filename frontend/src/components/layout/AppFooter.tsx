@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import React from 'react';
 
-import DiscordIcon from './simpleicons/DiscordIcon';
+import DiscordIcon from '../simpleicons/DiscordIcon';
 
 const AppFooter = (): React.ReactElement => {
 	return (

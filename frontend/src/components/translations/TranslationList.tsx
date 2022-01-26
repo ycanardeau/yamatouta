@@ -20,8 +20,8 @@ import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { useTranslation } from 'react-i18next';
 
-import { ITranslationObject } from '../dto/translations/ITranslationObject';
-import { TranslationSortRule } from '../models/TranslationSortRule';
+import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { TranslationSortRule } from '../../models/TranslationSortRule';
 
 interface HighlightProps {
 	children: React.ReactNode;

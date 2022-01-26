@@ -5,8 +5,8 @@ import ReactGA from 'react-ga4';
 import { Route, Routes } from 'react-router-dom';
 
 import ScrollToTop from './ScrollToTop';
-import AppFooter from './components/AppFooter';
-import AppHeader from './components/AppHeader';
+import AppFooter from './components/layout/AppFooter';
+import AppHeader from './components/layout/AppHeader';
 import lazyWithRetry from './components/lazyWithRetry';
 import config from './config';
 

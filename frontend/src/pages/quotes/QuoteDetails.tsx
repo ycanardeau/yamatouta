@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { getQuote } from '../../api/QuoteApi';
-import QuoteListItem from '../../components/QuoteListItem';
+import Layout from '../../components/layout/Layout';
+import QuoteListItem from '../../components/quotes/QuoteListItem';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
-import Layout from '../Layout';
 
 interface IQuoteDetailsLayoutProps {
 	quote: IQuoteObject;

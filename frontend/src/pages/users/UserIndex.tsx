@@ -12,11 +12,11 @@ import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
 import Pagination from '../../components/Pagination';
+import Layout from '../../components/layout/Layout';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IUserObject } from '../../dto/users/IUserObject';
 import { UserIndexStore } from '../../stores/users/UserIndexStore';
-import Layout from '../Layout';
 
 interface IUserListItemProps {
 	user: IUserObject;

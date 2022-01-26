@@ -1,4 +1,3 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import {
@@ -6,6 +5,7 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
+	DialogContentText,
 	DialogTitle,
 	FormControl,
 	InputAdornment,
@@ -16,22 +16,19 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IUserObject } from '../dto/users/IUserObject';
-import { RegisterDialogStore } from '../stores/RegisterDialogStore';
+import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
+import { LoginDialogStore } from '../../stores/LoginDialogStore';
 
-interface IRegisterDialogProps {
+interface ILoginDialogProps {
 	onClose: () => void;
-	onRegisterComplete: (user: IUserObject) => void;
+	onLoginComplete: (user: IAuthenticatedUserObject) => void;
 }
 
-const RegisterDialog = observer(
-	({
-		onClose,
-		onRegisterComplete,
-	}: IRegisterDialogProps): React.ReactElement => {
+const LoginDialog = observer(
+	({ onClose, onLoginComplete }: ILoginDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(() => new RegisterDialogStore());
+		const [store] = React.useState(() => new LoginDialogStore());
 
 		return (
 			<Dialog open={true} onClose={onClose} fullWidth>
@@ -41,12 +38,16 @@ const RegisterDialog = observer(
 
 						const user = await store.submit();
 
-						onRegisterComplete(user);
+						onLoginComplete(user);
 					}}
 				>
-					<DialogTitle>{t('auth.register')}</DialogTitle>
+					<DialogTitle>{t('auth.dialogTitle')}</DialogTitle>
 					<DialogContent>
 						<Stack spacing={2}>
+							<DialogContentText>
+								{t('auth.dialogSubtitle')}
+							</DialogContentText>
+
 							<FormControl variant="standard" fullWidth>
 								<TextField
 									autoFocus
@@ -63,27 +64,6 @@ const RegisterDialog = observer(
 										startAdornment: (
 											<InputAdornment position="start">
 												<EmailIcon />
-											</InputAdornment>
-										),
-									}}
-								/>
-							</FormControl>
-
-							<FormControl variant="standard" fullWidth>
-								<TextField
-									margin="dense"
-									id="username"
-									label={t('auth.username')}
-									type="text"
-									variant="standard"
-									value={store.username}
-									onChange={(event): void =>
-										store.setUsername(event.target.value)
-									}
-									InputProps={{
-										startAdornment: (
-											<InputAdornment position="start">
-												<AccountCircleIcon />
 											</InputAdornment>
 										),
 									}}
@@ -118,7 +98,7 @@ const RegisterDialog = observer(
 							type="submit"
 							disabled={!store.isValid || store.submitting}
 						>
-							{t('auth.register')}
+							{t('auth.logIn')}
 						</Button>
 					</DialogActions>
 				</form>
@@ -127,4 +107,4 @@ const RegisterDialog = observer(
 	},
 );
 
-export default RegisterDialog;
+export default LoginDialog;

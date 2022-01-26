@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import Layout from '../../components/layout/Layout';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IUserObject } from '../../dto/users/IUserObject';
-import Layout from '../Layout';
 
 interface IUserBasicInfoProps {
 	user: IUserObject;

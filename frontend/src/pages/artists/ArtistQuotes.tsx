@@ -3,12 +3,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Pagination from '../../components/Pagination';
-import QuoteList from '../../components/QuoteList';
+import Layout from '../../components/layout/Layout';
+import QuoteList from '../../components/quotes/QuoteList';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
-import Layout from '../Layout';
 
 interface IArtistQuotesProps {
 	artist: IArtistObject;

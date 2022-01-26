@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IQuoteObject } from '../dto/quotes/IQuoteObject';
+import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import QuoteListItem from './QuoteListItem';
 
 interface IQuoteListProps {

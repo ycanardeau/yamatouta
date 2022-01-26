@@ -12,11 +12,11 @@ import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 
 import Pagination from '../../components/Pagination';
+import Layout from '../../components/layout/Layout';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistIndexStore } from '../../stores/artists/ArtistIndexStore';
-import Layout from '../Layout';
 
 interface IArtistListItemProps {
 	artist: IArtistObject;
