@@ -1,6 +1,7 @@
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
+import SettingsIcon from '@mui/icons-material/Settings';
 import {
 	AppBar,
 	Avatar,
@@ -153,6 +154,18 @@ const AppHeader = (): React.ReactElement => {
 											/>
 											<Typography textAlign="center">
 												{t('users.profile')}
+											</Typography>
+										</MenuItem>
+										<MenuItem
+											onClick={handleCloseUserMenu}
+											component={RouterLink}
+											to={`/settings`}
+										>
+											<ListItemIcon>
+												<SettingsIcon fontSize="small" />
+											</ListItemIcon>
+											<Typography textAlign="center">
+												{t('users.settings')}
 											</Typography>
 										</MenuItem>
 										<MenuItem

@@ -64,7 +64,8 @@
 		"pronoun": "Pronoun"
 	},
 	"users": {
-		"profile": "Profile"
+		"profile": "Profile",
+		"settings": "Settings"
 	},
 	"translationSortRuleNames": {
 		"headword-asc": "Headword (Ascending)",
