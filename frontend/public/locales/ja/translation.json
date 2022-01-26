@@ -32,7 +32,9 @@
 		"source": "でどころ",
 		"words": "やまとことば",
 		"works": "しながき",
-		"users": "つかいて"
+		"users": "つかいて",
+		"change": "かえる",
+		"done": "きめる"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -62,7 +64,8 @@
 		"pronoun": "かわりことば"
 	},
 	"users": {
-		"profile": "ひととなり"
+		"profile": "ひととなり",
+		"settings": "あつらえ"
 	},
 	"translationSortRuleNames": {
 		"headword-asc": "みだしことば (のぼり)",
@@ -71,5 +74,14 @@
 		"yamatokotoba-desc": "やまとことば (くだり)",
 		"created-asc": "ふるい",
 		"created-desc": "あたらしい"
+	},
+	"settings": {
+		"currentPassword": "いまのあいことば",
+		"newPassword": "あたらしいあいことば",
+		"confirmNewPassword": "あたらしいあいことば (たしかめ)",
+		"changePasswordDialogTitle": "あいことばをかえる",
+		"changePasswordDialogSubtitle": "いまの あいことばと あたらしい あいことばを いれてください。",
+		"changeEmailDialogTitle": "くものたよりをかえる",
+		"changeEmailDialogSubtitle": "あたらしいくものたよりと いまのあいことばを いれてください。"
 	}
 }
