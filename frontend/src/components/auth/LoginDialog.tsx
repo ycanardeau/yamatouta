@@ -17,7 +17,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
-import { LoginDialogStore } from '../../stores/LoginDialogStore';
+import { LoginDialogStore } from '../../stores/auth/LoginDialogStore';
 
 interface ILoginDialogProps {
 	onClose: () => void;
@@ -33,8 +33,8 @@ const LoginDialog = observer(
 		return (
 			<Dialog open={true} onClose={onClose} fullWidth>
 				<form
-					onSubmit={async (event): Promise<void> => {
-						event.preventDefault();
+					onSubmit={async (e): Promise<void> => {
+						e.preventDefault();
 
 						const user = await store.submit();
 
@@ -57,8 +57,8 @@ const LoginDialog = observer(
 									type="email"
 									variant="standard"
 									value={store.email}
-									onChange={(event): void =>
-										store.setEmail(event.target.value)
+									onChange={(e): void =>
+										store.setEmail(e.target.value)
 									}
 									InputProps={{
 										startAdornment: (
@@ -78,8 +78,8 @@ const LoginDialog = observer(
 									type="password"
 									variant="standard"
 									value={store.password}
-									onChange={(event): void =>
-										store.setPassword(event.target.value)
+									onChange={(e): void =>
+										store.setPassword(e.target.value)
 									}
 									InputProps={{
 										startAdornment: (

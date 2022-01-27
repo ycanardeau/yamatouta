@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
-import { CreateTranslationDialogStore } from '../../stores/CreateTranslationDialogStore';
+import { CreateTranslationDialogStore } from '../../stores/translations/CreateTranslationDialogStore';
 
 interface ICreateTranslationDialogProps {
 	onClose: () => void;
@@ -38,8 +38,8 @@ const CreateTranslationDialog = observer(
 		return (
 			<Dialog open={true} onClose={onClose} fullWidth>
 				<form
-					onSubmit={async (event): Promise<void> => {
-						event.preventDefault();
+					onSubmit={async (e): Promise<void> => {
+						e.preventDefault();
 
 						const translation = await store.submit();
 
@@ -58,8 +58,8 @@ const CreateTranslationDialog = observer(
 									type="text"
 									variant="standard"
 									value={store.headword}
-									onChange={(event): void =>
-										store.setHeadword(event.target.value)
+									onChange={(e): void =>
+										store.setHeadword(e.target.value)
 									}
 								/>
 							</FormControl>
@@ -73,8 +73,8 @@ const CreateTranslationDialog = observer(
 										type="text"
 										variant="standard"
 										value={store.reading}
-										onChange={(event): void =>
-											store.setReading(event.target.value)
+										onChange={(e): void =>
+											store.setReading(e.target.value)
 										}
 									/>
 								</FormControl>
@@ -88,10 +88,8 @@ const CreateTranslationDialog = observer(
 									type="text"
 									variant="standard"
 									value={store.yamatokotoba}
-									onChange={(event): void =>
-										store.setYamatokotoba(
-											event.target.value,
-										)
+									onChange={(e): void =>
+										store.setYamatokotoba(e.target.value)
 									}
 								/>
 							</FormControl>
@@ -104,9 +102,9 @@ const CreateTranslationDialog = observer(
 									labelId="category"
 									id="category"
 									value={store.category ?? ''}
-									onChange={(event): void =>
+									onChange={(e): void =>
 										store.setCategory(
-											event.target.value as WordCategory,
+											e.target.value as WordCategory,
 										)
 									}
 									displayEmpty
