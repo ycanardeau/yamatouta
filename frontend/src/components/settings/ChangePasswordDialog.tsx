@@ -13,14 +13,19 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
 import { ChangePasswordDialogStore } from '../../stores/settings/ChangePasswordDialogStore';
 
 interface IChangePasswordDialogProps {
 	onClose: () => void;
+	onChangePasswordComplete: (user: IAuthenticatedUserObject) => void;
 }
 
 const ChangePasswordDialog = observer(
-	({ onClose }: IChangePasswordDialogProps): React.ReactElement => {
+	({
+		onClose,
+		onChangePasswordComplete,
+	}: IChangePasswordDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new ChangePasswordDialogStore());
@@ -31,7 +36,9 @@ const ChangePasswordDialog = observer(
 					onSubmit={async (e): Promise<void> => {
 						e.preventDefault();
 
-						await store.submit();
+						const user = await store.submit();
+
+						onChangePasswordComplete(user);
 					}}
 				>
 					<DialogTitle>

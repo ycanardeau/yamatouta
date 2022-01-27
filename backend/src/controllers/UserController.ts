@@ -1,13 +1,12 @@
 import {
+	Body,
 	Controller,
 	Get,
 	Param,
 	ParseIntPipe,
+	Patch,
 	Query,
-	Req,
-	UnauthorizedException,
 } from '@nestjs/common';
-import { Request } from 'express';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
@@ -17,14 +16,22 @@ import {
 	IListUsersQuery,
 	listUsersQuerySchema,
 } from '../requests/users/IListUsersQuery';
+import {
+	IUpdateAuthenticatedUserBody,
+	updateAuthenticatedUserBodySchema,
+} from '../requests/users/IUpdateAuthenticatedUserBody';
+import { GetAuthenticatedUserService } from '../services/users/GetAuthenticatedUserService';
 import { GetUserService } from '../services/users/GetUserService';
 import { ListUsersService } from '../services/users/ListUsersService';
+import { UpdateAuthenticatedUserService } from '../services/users/UpdateAuthenticatedUserService';
 
 @Controller('users')
 export class UserController {
 	constructor(
 		private readonly listUsersService: ListUsersService,
 		private readonly getUserService: GetUserService,
+		private readonly getAuthenticatedUserService: GetAuthenticatedUserService,
+		private readonly updateAuthenticatedUserService: UpdateAuthenticatedUserService,
 	) {}
 
 	@Get()
@@ -36,11 +43,18 @@ export class UserController {
 	}
 
 	@Get('current')
-	getAuthenticatedUser(@Req() request: Request): AuthenticatedUserObject {
-		if (!(request.user instanceof AuthenticatedUserObject))
-			throw new UnauthorizedException();
+	getAuthenticatedUser(): AuthenticatedUserObject {
+		return this.getAuthenticatedUserService.getAuthenticatedUser();
+	}
 
-		return request.user;
+	@Patch('current')
+	updateAuthenticatedUser(
+		@Body(new JoiValidationPipe(updateAuthenticatedUserBodySchema))
+		body: IUpdateAuthenticatedUserBody,
+	): Promise<AuthenticatedUserObject> {
+		return this.updateAuthenticatedUserService.updateAuthenticatedUser(
+			body,
+		);
 	}
 
 	@Get(':userId')

@@ -7,6 +7,7 @@ import {
 } from 'mobx';
 
 import { updateAuthenticatedUser } from '../../api/UserApi';
+import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
 
 export class ChangePasswordDialogStore {
 	@observable submitting = false;
@@ -39,14 +40,17 @@ export class ChangePasswordDialogStore {
 		this.confirmNewPassword = value;
 	};
 
-	@action submit = async (): Promise<void> => {
-		this.submitting = false;
-
+	@action submit = async (): Promise<IAuthenticatedUserObject> => {
 		try {
-			await updateAuthenticatedUser({
+			this.submitting = false;
+
+			// Await.
+			const user = await updateAuthenticatedUser({
 				password: this.currentPassword,
 				newPassword: this.newPassword,
 			});
+
+			return user;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

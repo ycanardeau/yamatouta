@@ -13,9 +13,13 @@ import { useTranslation } from 'react-i18next';
 import Layout from '../../components/layout/Layout';
 import ChangeEmailDialog from '../../components/settings/ChangeEmailDialog';
 import ChangePasswordDialog from '../../components/settings/ChangePasswordDialog';
+import { useAuth } from '../../components/useAuth';
+import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 
 const SettingsIndex = (): React.ReactElement => {
-	const { t } = useTranslation();
+	const { t, ready } = useTranslation();
+
+	useYamatoutaTitle(t('users.settings'), ready);
 
 	const [changeEmailDialogOpen, setChangeEmailDialogOpen] =
 		React.useState(false);
@@ -28,6 +32,8 @@ const SettingsIndex = (): React.ReactElement => {
 
 	const toggleChangePasswordDialogOpen = (): void =>
 		setChangePasswordDialogOpen(!changePasswordDialogOpen);
+
+	const auth = useAuth();
 
 	return (
 		<Layout
@@ -60,12 +66,24 @@ const SettingsIndex = (): React.ReactElement => {
 			</List>
 
 			{changeEmailDialogOpen && (
-				<ChangeEmailDialog onClose={toggleChangeEmailDialogOpen} />
+				<ChangeEmailDialog
+					onClose={toggleChangeEmailDialogOpen}
+					onChangeEmailComplete={(user): void => {
+						toggleChangeEmailDialogOpen();
+
+						auth.setUser(user);
+					}}
+				/>
 			)}
 
 			{changePasswordDialogOpen && (
 				<ChangePasswordDialog
 					onClose={toggleChangePasswordDialogOpen}
+					onChangePasswordComplete={(user): void => {
+						toggleChangePasswordDialogOpen();
+
+						auth.setUser(user);
+					}}
 				/>
 			)}
 		</Layout>

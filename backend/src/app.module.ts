@@ -31,9 +31,11 @@ import { CreateTranslationService } from './services/translations/CreateTranslat
 import { ListTranslationsService } from './services/translations/ListTranslationsService';
 import { AuthenticateUserService } from './services/users/AuthenticateUserService';
 import { CreateUserService } from './services/users/CreateUserService';
+import { GetAuthenticatedUserService } from './services/users/GetAuthenticatedUserService';
 import { GetUserService } from './services/users/GetUserService';
 import { ListUsersService } from './services/users/ListUsersService';
 import { NormalizeEmailService } from './services/users/NormalizeEmailService';
+import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthenticatedUserService';
 import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 
 @Module({
@@ -74,6 +76,8 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		CreateTranslationService,
 		ListTranslationsService,
 		NgramConverter,
+		GetAuthenticatedUserService,
+		UpdateAuthenticatedUserService,
 	],
 })
 export class AppModule {}

@@ -13,14 +13,19 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
 import { ChangeEmailDialogStore } from '../../stores/settings/ChangeEmailDialogStore';
 
 interface IChangeEmailDialogProps {
 	onClose: () => void;
+	onChangeEmailComplete: (user: IAuthenticatedUserObject) => void;
 }
 
 const ChangeEmailDialog = observer(
-	({ onClose }: IChangeEmailDialogProps): React.ReactElement => {
+	({
+		onClose,
+		onChangeEmailComplete,
+	}: IChangeEmailDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new ChangeEmailDialogStore());
@@ -31,7 +36,9 @@ const ChangeEmailDialog = observer(
 					onSubmit={async (e): Promise<void> => {
 						e.preventDefault();
 
-						await store.submit();
+						const user = await store.submit();
+
+						onChangeEmailComplete(user);
 					}}
 				>
 					<DialogTitle>
