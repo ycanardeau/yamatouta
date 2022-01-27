@@ -17,7 +17,12 @@ export class PermissionContext {
 	constructor(@Inject(REQUEST) request: Request) {
 		const { user } = request;
 
-		if (user instanceof AuthenticatedUserObject) this.user = user;
+		if (!user) return;
+
+		if (!(user instanceof AuthenticatedUserObject))
+			throw new Error('user must be of type AuthenticatedUserObject.');
+
+		this.user = user;
 	}
 
 	hasPermission(permission: Permission): boolean {
