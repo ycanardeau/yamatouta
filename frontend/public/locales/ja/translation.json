@@ -65,7 +65,8 @@
 	},
 	"users": {
 		"profile": "ひととなり",
-		"settings": "あつらえ"
+		"settings": "あつらえ",
+		"photo": "おもかげ"
 	},
 	"translationSortRuleNames": {
 		"headword-asc": "みだしことば (のぼり)",

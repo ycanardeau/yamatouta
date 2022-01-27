@@ -67,7 +67,8 @@
 	},
 	"users": {
 		"profile": "Profile",
-		"settings": "Settings"
+		"settings": "Settings",
+		"photo": "Photo"
 	},
 	"translationSortRuleNames": {
 		"headword-asc": "Headword (Ascending)",

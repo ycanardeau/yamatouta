@@ -1,6 +1,9 @@
 import EmailIcon from '@mui/icons-material/Email';
+import LaunchIcon from '@mui/icons-material/Launch';
 import LockIcon from '@mui/icons-material/Lock';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import {
+	IconButton,
 	List,
 	ListItem,
 	ListItemButton,
@@ -46,6 +49,27 @@ const SettingsIndex = (): React.ReactElement => {
 			]}
 		>
 			<List>
+				<ListItem
+					secondaryAction={
+						<IconButton edge="end">
+							<LaunchIcon />
+						</IconButton>
+					}
+					disablePadding
+				>
+					<ListItemButton
+						component="a"
+						href="http://gravatar.com/emails/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<ListItemIcon>
+							<PhotoCameraIcon />
+						</ListItemIcon>
+						<ListItemText primary={t('users.photo')} />
+					</ListItemButton>
+				</ListItem>
+
 				<ListItem disablePadding>
 					<ListItemButton onClick={toggleChangeEmailDialogOpen}>
 						<ListItemIcon>

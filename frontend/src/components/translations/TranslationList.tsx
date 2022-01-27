@@ -187,7 +187,7 @@ const TranslationListItem = React.memo(
 							component="a"
 							href={`https://inishienomanabi.net/translations/${translation.id}/view`}
 							target="_blank"
-							rel="noreferrer"
+							rel="noopener noreferrer"
 						>
 							<ListItemIcon>
 								<LaunchIcon fontSize="small" />
