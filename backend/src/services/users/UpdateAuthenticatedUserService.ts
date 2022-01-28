@@ -22,7 +22,7 @@ export class UpdateAuthenticatedUserService {
 		private readonly normalizeEmailService: NormalizeEmailService,
 	) {}
 
-	updateAuthenticatedUser(
+	async updateAuthenticatedUser(
 		params: IUpdateAuthenticatedUserBody,
 	): Promise<AuthenticatedUserObject> {
 		const { password, username, email, newPassword } = params;

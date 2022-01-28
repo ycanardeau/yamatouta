@@ -8,9 +8,9 @@ import { AuditLogService } from '../AuditLogService';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
 
 export enum LoginError {
-	None,
-	NotFound,
-	InvalidPassword,
+	None = 'None',
+	NotFound = 'NotFound',
+	InvalidPassword = 'InvalidPassword',
 }
 
 export type LoginResult =
