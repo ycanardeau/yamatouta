@@ -4,6 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
 import { User } from '../../entities/User';
+import { IUpdateAuthenticatedUserBody } from '../../requests/users/IUpdateAuthenticatedUserBody';
 import { PermissionContext } from '../PermissionContext';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
 import { UpdatePasswordService } from './UpdatePasswordService';
@@ -19,12 +20,10 @@ export class UpdateAuthenticatedUserService {
 		private readonly updatePasswordService: UpdatePasswordService,
 	) {}
 
-	updateAuthenticatedUser(params: {
-		password: string;
-		email?: string;
-		newPassword?: string;
-	}): Promise<AuthenticatedUserObject> {
-		const { password, email, newPassword } = params;
+	updateAuthenticatedUser(
+		params: IUpdateAuthenticatedUserBody,
+	): Promise<AuthenticatedUserObject> {
+		const { password, username, email, newPassword } = params;
 
 		return this.em.transactional(async () => {
 			if (!this.permissionContext.user) throw new BadRequestException();
@@ -50,14 +49,22 @@ export class UpdateAuthenticatedUserService {
 				throw new BadRequestException();
 			}
 
+			// TODO: Log.
+
+			if (username) {
+				// TODO: Validate.
+
+				user.name = username;
+			}
+
 			if (email) {
-				// TODO: Log.
+				// TODO: Validate.
 
 				user.email = email;
 			}
 
 			if (newPassword) {
-				// TODO: Log.
+				// TODO: Validate.
 
 				await this.updatePasswordService.updatePassword(
 					user,

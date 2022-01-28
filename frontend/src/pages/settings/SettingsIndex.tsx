@@ -1,3 +1,4 @@
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailIcon from '@mui/icons-material/Email';
 import LaunchIcon from '@mui/icons-material/Launch';
 import LockIcon from '@mui/icons-material/Lock';
@@ -12,10 +13,12 @@ import {
 } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import Layout from '../../components/layout/Layout';
 import ChangeEmailDialog from '../../components/settings/ChangeEmailDialog';
 import ChangePasswordDialog from '../../components/settings/ChangePasswordDialog';
+import ChangeUsernameDialog from '../../components/settings/ChangeUsernameDialog';
 import { useAuth } from '../../components/useAuth';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 
@@ -23,6 +26,12 @@ const SettingsIndex = (): React.ReactElement => {
 	const { t, ready } = useTranslation();
 
 	useYamatoutaTitle(t('users.settings'), ready);
+
+	const [changeUsernameDialogOpen, setChangeUsernameDialogOpen] =
+		React.useState(false);
+
+	const toggleChangeUsernameDialogOpen = (): void =>
+		setChangeUsernameDialogOpen(!changeUsernameDialogOpen);
 
 	const [changeEmailDialogOpen, setChangeEmailDialogOpen] =
 		React.useState(false);
@@ -38,7 +47,7 @@ const SettingsIndex = (): React.ReactElement => {
 
 	const auth = useAuth();
 
-	return (
+	return auth.user ? (
 		<Layout
 			breadcrumbItems={[
 				{
@@ -71,6 +80,15 @@ const SettingsIndex = (): React.ReactElement => {
 				</ListItem>
 
 				<ListItem disablePadding>
+					<ListItemButton onClick={toggleChangeUsernameDialogOpen}>
+						<ListItemIcon>
+							<AccountCircleIcon />
+						</ListItemIcon>
+						<ListItemText primary={t('auth.username')} />
+					</ListItemButton>
+				</ListItem>
+
+				<ListItem disablePadding>
 					<ListItemButton onClick={toggleChangeEmailDialogOpen}>
 						<ListItemIcon>
 							<EmailIcon />
@@ -88,6 +106,18 @@ const SettingsIndex = (): React.ReactElement => {
 					</ListItemButton>
 				</ListItem>
 			</List>
+
+			{changeUsernameDialogOpen && (
+				<ChangeUsernameDialog
+					user={auth.user}
+					onClose={toggleChangeUsernameDialogOpen}
+					onChangeUsernameComplete={(user): void => {
+						toggleChangeUsernameDialogOpen();
+
+						auth.setUser(user);
+					}}
+				/>
+			)}
 
 			{changeEmailDialogOpen && (
 				<ChangeEmailDialog
@@ -111,6 +141,8 @@ const SettingsIndex = (): React.ReactElement => {
 				/>
 			)}
 		</Layout>
+	) : (
+		<Navigate to="/" />
 	);
 };
 

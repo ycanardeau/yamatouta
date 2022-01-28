@@ -83,6 +83,8 @@
 		"changePasswordDialogTitle": "あいことばをかえる",
 		"changePasswordDialogSubtitle": "いまの あいことばと あたらしい あいことばを いれてください。",
 		"changeEmailDialogTitle": "くものたよりをかえる",
-		"changeEmailDialogSubtitle": "あたらしいくものたよりと いまのあいことばを いれてください。"
+		"changeEmailDialogSubtitle": "あたらしいくものたよりと いまのあいことばを いれてください。",
+		"changeUsernameDialogTitle": "なまえをかえる",
+		"changeUsernameDialogSubtitle": "あたらしいなまえと いまのあいことばを いれてください。"
 	}
 }

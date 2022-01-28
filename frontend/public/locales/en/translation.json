@@ -85,6 +85,8 @@
 		"changePasswordDialogTitle": "Change your password",
 		"changePasswordDialogSubtitle": "Enter your current password and a new password.",
 		"changeEmailDialogTitle": "Enter an email address",
-		"changeEmailDialogSubtitle": "Enter a new email address and your existing password."
+		"changeEmailDialogSubtitle": "Enter a new email address and your existing password.",
+		"changeUsernameDialogTitle": "Change your username",
+		"changeUsernameDialogSubtitle": "Enter a new username and your existing password."
 	}
 }
