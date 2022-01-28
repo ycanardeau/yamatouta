@@ -32,6 +32,8 @@ export class UpdateAuthenticatedUserService {
 
 			const user = await this.userRepo.findOneOrFail({
 				id: this.permissionContext.user.id,
+				deleted: false,
+				hidden: false,
 			});
 
 			const passwordHasher = this.passwordHasherFactory.create(
