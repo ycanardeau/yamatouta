@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 
 import { TranslationObject } from '../../dto/translations/TranslationObject';
 import { Translation } from '../../entities/Translation';
-import { TranslationSearchIndex } from '../../entities/TranslationSearchIndex';
 import { User } from '../../entities/User';
 import { NgramConverter } from '../../helpers/NgramConverter';
 import { Permission } from '../../models/Permission';
@@ -58,12 +57,9 @@ export class CreateTranslationService {
 
 			em.persist(translation);
 
-			const searchIndex = new TranslationSearchIndex({
-				translation: translation,
-				headword: this.ngramConverter.toFullText(headword, 2),
-				reading: this.ngramConverter.toFullText(reading ?? '', 2),
-				yamatokotoba: this.ngramConverter.toFullText(yamatokotoba, 2),
-			});
+			const searchIndex = translation.createSearchIndex(
+				this.ngramConverter,
+			);
 
 			em.persist(searchIndex);
 
