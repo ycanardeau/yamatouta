@@ -1,12 +1,11 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { ArtistObject } from '../../../src/dto/artists/ArtistObject';
-import { AuthenticatedUserObject } from '../../../src/dto/users/AuthenticatedUserObject';
 import { Artist } from '../../../src/entities/Artist';
 import { User } from '../../../src/entities/User';
 import { ArtistType } from '../../../src/models/ArtistType';
 import { PasswordHashAlgorithm } from '../../../src/models/PasswordHashAlgorithm';
-import { PermissionContext } from '../../../src/services/PermissionContext';
+import { FakePermissionContext } from '../../FakePermissionContext';
 
 test('ArtistObject', () => {
 	const artist = new Artist({
@@ -39,9 +38,7 @@ test('ArtistObject', () => {
 	});
 	viewer.id = 4;
 
-	const permissionContext = new PermissionContext({
-		user: new AuthenticatedUserObject(viewer),
-	} as any);
+	const permissionContext = new FakePermissionContext(viewer);
 
 	const artistObject = new ArtistObject(artist, permissionContext);
 	expect(artistObject.id).toBe(artist.id);

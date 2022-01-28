@@ -1,10 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { AuthenticatedUserObject } from '../../../src/dto/users/AuthenticatedUserObject';
 import { UserObject } from '../../../src/dto/users/UserObject';
 import { User } from '../../../src/entities/User';
 import { PasswordHashAlgorithm } from '../../../src/models/PasswordHashAlgorithm';
-import { PermissionContext } from '../../../src/services/PermissionContext';
+import { FakePermissionContext } from '../../FakePermissionContext';
 
 test('UserObject', () => {
 	const user = new User({
@@ -49,9 +48,7 @@ test('UserObject', () => {
 	});
 	viewer.id = 4;
 
-	const permissionContext = new PermissionContext({
-		user: new AuthenticatedUserObject(viewer),
-	} as any);
+	const permissionContext = new FakePermissionContext(viewer);
 
 	const userObject = new UserObject(user, permissionContext);
 	expect(userObject.id).toBe(user.id);

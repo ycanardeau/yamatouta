@@ -1,12 +1,11 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { TranslationObject } from '../../../src/dto/translations/TranslationObject';
-import { AuthenticatedUserObject } from '../../../src/dto/users/AuthenticatedUserObject';
 import { Translation } from '../../../src/entities/Translation';
 import { User } from '../../../src/entities/User';
 import { PasswordHashAlgorithm } from '../../../src/models/PasswordHashAlgorithm';
 import { WordCategory } from '../../../src/models/WordCategory';
-import { PermissionContext } from '../../../src/services/PermissionContext';
+import { FakePermissionContext } from '../../FakePermissionContext';
 
 test('TranslationObject', () => {
 	const user = new User({
@@ -65,9 +64,7 @@ test('TranslationObject', () => {
 	});
 	viewer.id = 5;
 
-	const permissionContext = new PermissionContext({
-		user: new AuthenticatedUserObject(viewer),
-	} as any);
+	const permissionContext = new FakePermissionContext(viewer);
 
 	const translationObject = new TranslationObject(
 		translation,
