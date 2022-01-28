@@ -1,6 +1,7 @@
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
+import SettingsIcon from '@mui/icons-material/Settings';
 import {
 	AppBar,
 	Avatar,
@@ -60,9 +61,9 @@ const AppHeader = (): React.ReactElement => {
 	>();
 
 	const handleOpenUserMenu = (
-		event: React.MouseEvent<HTMLButtonElement>,
+		e: React.MouseEvent<HTMLButtonElement>,
 	): void => {
-		setAnchorElUser(event.currentTarget);
+		setAnchorElUser(e.currentTarget);
 	};
 
 	const handleCloseUserMenu = (): void => {
@@ -153,6 +154,18 @@ const AppHeader = (): React.ReactElement => {
 											/>
 											<Typography textAlign="center">
 												{t('users.profile')}
+											</Typography>
+										</MenuItem>
+										<MenuItem
+											onClick={handleCloseUserMenu}
+											component={RouterLink}
+											to={`/settings`}
+										>
+											<ListItemIcon>
+												<SettingsIcon fontSize="small" />
+											</ListItemIcon>
+											<Typography textAlign="center">
+												{t('users.settings')}
 											</Typography>
 										</MenuItem>
 										<MenuItem

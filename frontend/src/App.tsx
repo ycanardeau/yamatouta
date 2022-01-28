@@ -41,6 +41,9 @@ const TranslationRoutes = lazyWithRetry(
 );
 const UserRoutes = lazyWithRetry(() => import('./pages/users/UserRoutes'));
 const HomeRoutes = lazyWithRetry(() => import('./pages/home/HomeRoutes'));
+const SettingsRoutes = lazyWithRetry(
+	() => import('./pages/settings/SettingsRoutes'),
+);
 
 const App = (): React.ReactElement => {
 	React.useEffect(() => {
@@ -67,6 +70,7 @@ const App = (): React.ReactElement => {
 							element={<TranslationRoutes />}
 						/>
 						<Route path="users/*" element={<UserRoutes />} />
+						<Route path="settings/*" element={<SettingsRoutes />} />
 						<Route path="*" element={<HomeRoutes />} />
 					</Routes>
 				</React.Suspense>

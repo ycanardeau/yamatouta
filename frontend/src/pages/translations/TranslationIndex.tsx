@@ -50,9 +50,7 @@ const TranslationIndexSidebar = observer(
 					fullWidth
 					placeholder={t(`translations.search`)}
 					value={store.query}
-					onChange={(event): void =>
-						store.setQuery(event.target.value)
-					}
+					onChange={(e): void => store.setQuery(e.target.value)}
 					InputProps={{
 						startAdornment: (
 							<InputAdornment position="start">
@@ -63,8 +61,8 @@ const TranslationIndexSidebar = observer(
 							<InputAdornment position="end">
 								<IconButton
 									onClick={store.clearQuery}
-									onMouseDown={(event): void =>
-										event.preventDefault()
+									onMouseDown={(e): void =>
+										e.preventDefault()
 									}
 								>
 									<ClearIcon />
@@ -82,10 +80,8 @@ const TranslationIndexSidebar = observer(
 						labelId="category"
 						id="category"
 						value={store.category ?? ''}
-						onChange={(event): void =>
-							store.setCategory(
-								event.target.value as WordCategory,
-							)
+						onChange={(e): void =>
+							store.setCategory(e.target.value as WordCategory)
 						}
 						displayEmpty
 					>
@@ -108,10 +104,8 @@ const TranslationIndexSidebar = observer(
 						labelId="sort"
 						id="sort"
 						value={store.sort ?? ''}
-						onChange={(event): void =>
-							store.setSort(
-								event.target.value as TranslationSortRule,
-							)
+						onChange={(e): void =>
+							store.setSort(e.target.value as TranslationSortRule)
 						}
 						displayEmpty
 					>

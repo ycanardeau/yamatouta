@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
-import { CreateArtistDialogStore } from '../../stores/CreateArtistDialogStore';
+import { CreateArtistDialogStore } from '../../stores/artists/CreateArtistDialogStore';
 
 interface ICreateArtistDialogProps {
 	onClose: () => void;
@@ -36,8 +36,8 @@ const CreateArtistDialog = observer(
 		return (
 			<Dialog open={true} onClose={onClose} fullWidth>
 				<form
-					onSubmit={async (event): Promise<void> => {
-						event.preventDefault();
+					onSubmit={async (e): Promise<void> => {
+						e.preventDefault();
 
 						const artist = await store.submit();
 
@@ -56,8 +56,8 @@ const CreateArtistDialog = observer(
 									type="text"
 									variant="standard"
 									value={store.name}
-									onChange={(event): void =>
-										store.setName(event.target.value)
+									onChange={(e): void =>
+										store.setName(e.target.value)
 									}
 								/>
 							</FormControl>
@@ -70,9 +70,9 @@ const CreateArtistDialog = observer(
 									labelId="artistType"
 									id="artistType"
 									value={store.artistType}
-									onChange={(event): void =>
+									onChange={(e): void =>
 										store.setArtistType(
-											event.target.value as ArtistType,
+											e.target.value as ArtistType,
 										)
 									}
 								>

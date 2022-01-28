@@ -1,5 +1,3 @@
-import EmailIcon from '@mui/icons-material/Email';
-import LockIcon from '@mui/icons-material/Lock';
 import {
 	Button,
 	Dialog,
@@ -8,7 +6,6 @@ import {
 	DialogContentText,
 	DialogTitle,
 	FormControl,
-	InputAdornment,
 	Stack,
 	TextField,
 } from '@mui/material';
@@ -17,18 +14,21 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
-import { LoginDialogStore } from '../../stores/auth/LoginDialogStore';
+import { ChangeEmailDialogStore } from '../../stores/settings/ChangeEmailDialogStore';
 
-interface ILoginDialogProps {
+interface IChangeEmailDialogProps {
 	onClose: () => void;
-	onLoginComplete: (user: IAuthenticatedUserObject) => void;
+	onChangeEmailComplete: (user: IAuthenticatedUserObject) => void;
 }
 
-const LoginDialog = observer(
-	({ onClose, onLoginComplete }: ILoginDialogProps): React.ReactElement => {
+const ChangeEmailDialog = observer(
+	({
+		onClose,
+		onChangeEmailComplete,
+	}: IChangeEmailDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(() => new LoginDialogStore());
+		const [store] = React.useState(() => new ChangeEmailDialogStore());
 
 		return (
 			<Dialog open={true} onClose={onClose} fullWidth>
@@ -38,21 +38,22 @@ const LoginDialog = observer(
 
 						const user = await store.submit();
 
-						onLoginComplete(user);
+						onChangeEmailComplete(user);
 					}}
 				>
-					<DialogTitle>{t('auth.loginDialogTitle')}</DialogTitle>
+					<DialogTitle>
+						{t('settings.changeEmailDialogTitle')}
+					</DialogTitle>
 					<DialogContent>
 						<Stack spacing={2}>
 							<DialogContentText>
-								{t('auth.loginDialogSubtitle')}
+								{t('settings.changeEmailDialogSubtitle')}
 							</DialogContentText>
 
 							<FormControl variant="standard" fullWidth>
 								<TextField
 									autoFocus
 									margin="dense"
-									id="email"
 									label={t('auth.email')}
 									type="email"
 									variant="standard"
@@ -60,45 +61,27 @@ const LoginDialog = observer(
 									onChange={(e): void =>
 										store.setEmail(e.target.value)
 									}
-									InputProps={{
-										startAdornment: (
-											<InputAdornment position="start">
-												<EmailIcon />
-											</InputAdornment>
-										),
-									}}
 								/>
 							</FormControl>
 
 							<FormControl variant="standard" fullWidth>
 								<TextField
 									margin="dense"
-									id="password"
-									label={t('auth.password')}
+									label={t('settings.currentPassword')}
 									type="password"
 									variant="standard"
-									value={store.password}
+									value={store.currentPassword}
 									onChange={(e): void =>
-										store.setPassword(e.target.value)
+										store.setCurrentPassword(e.target.value)
 									}
-									InputProps={{
-										startAdornment: (
-											<InputAdornment position="start">
-												<LockIcon />
-											</InputAdornment>
-										),
-									}}
 								/>
 							</FormControl>
 						</Stack>
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={onClose}>{t('shared.cancel')}</Button>
-						<Button
-							type="submit"
-							disabled={!store.isValid || store.submitting}
-						>
-							{t('auth.logIn')}
+						<Button type="submit" disabled={!store.isValid}>
+							{t('shared.done')}
 						</Button>
 					</DialogActions>
 				</form>
@@ -107,4 +90,4 @@ const LoginDialog = observer(
 	},
 );
 
-export default LoginDialog;
+export default ChangeEmailDialog;

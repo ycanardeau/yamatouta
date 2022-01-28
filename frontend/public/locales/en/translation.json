@@ -32,7 +32,9 @@
 		"source": "Source",
 		"words": "Words",
 		"works": "Works",
-		"users": "Users"
+		"users": "Users",
+		"change": "Change",
+		"done": "Done"
 	},
 	"translations": {
 		"addWord": "Add Word",
@@ -64,7 +66,9 @@
 		"pronoun": "Pronoun"
 	},
 	"users": {
-		"profile": "Profile"
+		"profile": "Profile",
+		"settings": "Settings",
+		"photo": "Photo"
 	},
 	"translationSortRuleNames": {
 		"headword-asc": "Headword (Ascending)",
@@ -73,5 +77,16 @@
 		"yamatokotoba-desc": "Yamato-kotoba (Descending)",
 		"created-asc": "Oldest",
 		"created-desc": "Newest"
+	},
+	"settings": {
+		"currentPassword": "Current password",
+		"newPassword": "New password",
+		"confirmNewPassword": "Confirm new password",
+		"changePasswordDialogTitle": "Change your password",
+		"changePasswordDialogSubtitle": "Enter your current password and a new password.",
+		"changeEmailDialogTitle": "Enter an email address",
+		"changeEmailDialogSubtitle": "Enter a new email address and your existing password.",
+		"changeUsernameDialogTitle": "Change your username",
+		"changeUsernameDialogSubtitle": "Enter a new username and your existing password."
 	}
 }

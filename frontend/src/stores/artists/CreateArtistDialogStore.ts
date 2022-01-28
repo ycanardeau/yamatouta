@@ -6,9 +6,9 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { createArtist } from '../api/ArtistApi';
-import { IArtistObject } from '../dto/artists/IArtistObject';
-import { ArtistType } from '../models/ArtistType';
+import { createArtist } from '../../api/ArtistApi';
+import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { ArtistType } from '../../models/ArtistType';
 
 export class CreateArtistDialogStore {
 	@observable submitting = false;

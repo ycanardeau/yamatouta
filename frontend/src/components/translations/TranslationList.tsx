@@ -52,7 +52,7 @@ const HighlightedText = React.memo(
 interface TranslationListItemProps {
 	translation: ITranslationObject;
 	searchWords: string[];
-	onWordClick?: (event: { locale?: string; value: string }) => void;
+	onWordClick?: (e: { locale?: string; value: string }) => void;
 }
 
 const TranslationListItem = React.memo(
@@ -68,9 +68,9 @@ const TranslationListItem = React.memo(
 		>();
 
 		const handleOpenTranslationMenu = (
-			event: React.MouseEvent<HTMLButtonElement>,
+			e: React.MouseEvent<HTMLButtonElement>,
 		): void => {
-			setAnchorElTranslation(event.currentTarget);
+			setAnchorElTranslation(e.currentTarget);
 		};
 
 		const handleCloseTranslationMenu = (): void => {
@@ -89,8 +89,8 @@ const TranslationListItem = React.memo(
 									part,
 								)}/yamato-kotoba`} */
 								href="#"
-								onClick={(event): void => {
-									event.preventDefault();
+								onClick={(e): void => {
+									e.preventDefault();
 
 									onWordClick?.({
 										locale: translation.locale,
@@ -144,8 +144,8 @@ const TranslationListItem = React.memo(
 									part,
 								)}/headwords`} */
 								href="#"
-								onClick={(event): void => {
-									event.preventDefault();
+								onClick={(e): void => {
+									e.preventDefault();
 
 									onWordClick?.({
 										locale: 'ojp',
@@ -187,7 +187,7 @@ const TranslationListItem = React.memo(
 							component="a"
 							href={`https://inishienomanabi.net/translations/${translation.id}/view`}
 							target="_blank"
-							rel="noreferrer"
+							rel="noopener noreferrer"
 						>
 							<ListItemIcon>
 								<LaunchIcon fontSize="small" />
@@ -208,7 +208,7 @@ interface TranslationListProps {
 	sort: TranslationSortRule;
 	onSortChange: (sort: TranslationSortRule) => void;
 	searchWords: string[];
-	onWordClick?: (event: { locale?: string; value: string }) => void;
+	onWordClick?: (e: { locale?: string; value: string }) => void;
 }
 
 const TranslationList = React.memo(

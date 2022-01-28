@@ -6,9 +6,9 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { createTranslation } from '../api/TranslationApi';
-import { ITranslationObject } from '../dto/translations/ITranslationObject';
-import { WordCategory } from '../models/WordCategory';
+import { createTranslation } from '../../api/TranslationApi';
+import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { WordCategory } from '../../models/WordCategory';
 
 export class CreateTranslationDialogStore {
 	@observable submitting = false;

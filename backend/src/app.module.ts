@@ -31,10 +31,11 @@ import { CreateTranslationService } from './services/translations/CreateTranslat
 import { ListTranslationsService } from './services/translations/ListTranslationsService';
 import { AuthenticateUserService } from './services/users/AuthenticateUserService';
 import { CreateUserService } from './services/users/CreateUserService';
+import { GetAuthenticatedUserService } from './services/users/GetAuthenticatedUserService';
 import { GetUserService } from './services/users/GetUserService';
 import { ListUsersService } from './services/users/ListUsersService';
 import { NormalizeEmailService } from './services/users/NormalizeEmailService';
-import { UpdatePasswordService } from './services/users/UpdatePasswordService';
+import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthenticatedUserService';
 
 @Module({
 	imports: [
@@ -66,7 +67,6 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		LogoutService,
 		NormalizeEmailService,
 		PasswordHasherFactory,
-		UpdatePasswordService,
 		ListArtistIdsService,
 		ListQuoteIdsService,
 		GenerateSitemapService,
@@ -74,6 +74,8 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		CreateTranslationService,
 		ListTranslationsService,
 		NgramConverter,
+		GetAuthenticatedUserService,
+		UpdateAuthenticatedUserService,
 	],
 })
 export class AppModule {}

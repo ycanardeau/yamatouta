@@ -17,7 +17,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IUserObject } from '../../dto/users/IUserObject';
-import { RegisterDialogStore } from '../../stores/RegisterDialogStore';
+import { RegisterDialogStore } from '../../stores/auth/RegisterDialogStore';
 
 interface IRegisterDialogProps {
 	onClose: () => void;
@@ -36,8 +36,8 @@ const RegisterDialog = observer(
 		return (
 			<Dialog open={true} onClose={onClose} fullWidth>
 				<form
-					onSubmit={async (event): Promise<void> => {
-						event.preventDefault();
+					onSubmit={async (e): Promise<void> => {
+						e.preventDefault();
 
 						const user = await store.submit();
 
@@ -56,8 +56,8 @@ const RegisterDialog = observer(
 									type="email"
 									variant="standard"
 									value={store.email}
-									onChange={(event): void =>
-										store.setEmail(event.target.value)
+									onChange={(e): void =>
+										store.setEmail(e.target.value)
 									}
 									InputProps={{
 										startAdornment: (
@@ -77,8 +77,8 @@ const RegisterDialog = observer(
 									type="text"
 									variant="standard"
 									value={store.username}
-									onChange={(event): void =>
-										store.setUsername(event.target.value)
+									onChange={(e): void =>
+										store.setUsername(e.target.value)
 									}
 									InputProps={{
 										startAdornment: (
@@ -98,8 +98,8 @@ const RegisterDialog = observer(
 									type="password"
 									variant="standard"
 									value={store.password}
-									onChange={(event): void =>
-										store.setPassword(event.target.value)
+									onChange={(e): void =>
+										store.setPassword(e.target.value)
 									}
 									InputProps={{
 										startAdornment: (

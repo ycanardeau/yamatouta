@@ -32,3 +32,24 @@ export const getAuthenticatedUser =
 
 		return response.data;
 	};
+
+export const updateAuthenticatedUser = async (params: {
+	password: string;
+	email?: string;
+	username?: string;
+	newPassword?: string;
+}): Promise<IAuthenticatedUserObject> => {
+	const { password, email, username, newPassword } = params;
+
+	const response = await axios.patch<IAuthenticatedUserObject>(
+		'/users/current',
+		{
+			password: password,
+			email: email,
+			username: username,
+			newPassword: newPassword,
+		},
+	);
+
+	return response.data;
+};

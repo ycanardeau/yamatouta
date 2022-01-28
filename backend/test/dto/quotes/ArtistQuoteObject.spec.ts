@@ -1,14 +1,13 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { QuoteObject } from '../../../src/dto/quotes/QuoteObject';
-import { AuthenticatedUserObject } from '../../../src/dto/users/AuthenticatedUserObject';
 import { Artist } from '../../../src/entities/Artist';
 import { ArtistQuote } from '../../../src/entities/ArtistQuote';
 import { User } from '../../../src/entities/User';
 import { ArtistType } from '../../../src/models/ArtistType';
 import { PasswordHashAlgorithm } from '../../../src/models/PasswordHashAlgorithm';
 import { QuoteType } from '../../../src/models/QuoteType';
-import { PermissionContext } from '../../../src/services/PermissionContext';
+import { FakePermissionContext } from '../../FakePermissionContext';
 
 test('ArtistQuoteObject', () => {
 	const artist = new Artist({
@@ -50,9 +49,7 @@ test('ArtistQuoteObject', () => {
 	});
 	viewer.id = 5;
 
-	const permissionContext = new PermissionContext({
-		user: new AuthenticatedUserObject(viewer),
-	} as any);
+	const permissionContext = new FakePermissionContext(viewer);
 
 	const quoteObject = new QuoteObject(artistQuote, permissionContext);
 	expect(quoteObject.id).toBe(artistQuote.id);
