@@ -7,7 +7,7 @@ import { User } from '../../entities/User';
 import { IUpdateAuthenticatedUserBody } from '../../requests/users/IUpdateAuthenticatedUserBody';
 import { PermissionContext } from '../PermissionContext';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
-import { UpdatePasswordService } from './UpdatePasswordService';
+import { NormalizeEmailService } from './NormalizeEmailService';
 
 @Injectable()
 export class UpdateAuthenticatedUserService {
@@ -17,7 +17,7 @@ export class UpdateAuthenticatedUserService {
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
-		private readonly updatePasswordService: UpdatePasswordService,
+		private readonly normalizeEmailService: NormalizeEmailService,
 	) {}
 
 	updateAuthenticatedUser(
@@ -63,13 +63,14 @@ export class UpdateAuthenticatedUserService {
 				// TODO: Validate.
 
 				user.email = email;
+				user.normalizedEmail =
+					await this.normalizeEmailService.normalizeEmail(email);
 			}
 
 			if (newPassword) {
 				// TODO: Validate.
 
-				await this.updatePasswordService.updatePassword(
-					user,
+				await user.updatePassword(
 					this.passwordHasherFactory.default,
 					newPassword,
 				);

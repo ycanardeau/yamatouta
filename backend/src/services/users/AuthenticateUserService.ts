@@ -6,7 +6,6 @@ import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject
 import { User } from '../../entities/User';
 import { AuditLogService } from '../AuditLogService';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
-import { UpdatePasswordService } from './UpdatePasswordService';
 
 export enum LoginError {
 	None,
@@ -44,7 +43,6 @@ export class AuthenticateUserService {
 		private readonly userRepo: EntityRepository<User>,
 		private readonly auditLogService: AuditLogService,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
-		private readonly updatePasswordService: UpdatePasswordService,
 	) {}
 
 	authenticateUser(params: {
@@ -86,11 +84,7 @@ export class AuthenticateUserService {
 					user.passwordHashAlgorithm !==
 					defaultPasswordHasher.algorithm
 				) {
-					await this.updatePasswordService.updatePassword(
-						user,
-						defaultPasswordHasher,
-						password,
-					);
+					await user.updatePassword(defaultPasswordHasher, password);
 				}
 
 				return createSuccess(new AuthenticatedUserObject(user));

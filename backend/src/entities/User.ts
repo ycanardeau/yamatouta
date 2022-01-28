@@ -4,6 +4,7 @@ import { PasswordHashAlgorithm } from '../models/PasswordHashAlgorithm';
 import { Permission } from '../models/Permission';
 import { UserGroup } from '../models/UserGroup';
 import { userGroupPermissions } from '../models/userGroupPermissions';
+import { IPasswordHasher } from '../services/passwordHashers/IPasswordHasher';
 
 @Entity({ tableName: 'users' })
 export class User {
@@ -100,5 +101,22 @@ export class User {
 			...userGroupPermissions[this.userGroup],
 			// TODO: Implement additional permissions.
 		];
+	}
+
+	async updatePassword(
+		passwordHasher: IPasswordHasher,
+		password: string,
+	): Promise<void> {
+		if (this.passwordHashAlgorithm !== passwordHasher.algorithm) {
+			// TODO: Log.
+
+			this.passwordHashAlgorithm = passwordHasher.algorithm;
+			this.salt = await passwordHasher.generateSalt();
+		}
+
+		this.passwordHash = await passwordHasher.hashPassword(
+			password,
+			this.salt,
+		);
 	}
 }

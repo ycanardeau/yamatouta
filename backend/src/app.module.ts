@@ -36,7 +36,6 @@ import { GetUserService } from './services/users/GetUserService';
 import { ListUsersService } from './services/users/ListUsersService';
 import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthenticatedUserService';
-import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 
 @Module({
 	imports: [
@@ -68,7 +67,6 @@ import { UpdatePasswordService } from './services/users/UpdatePasswordService';
 		LogoutService,
 		NormalizeEmailService,
 		PasswordHasherFactory,
-		UpdatePasswordService,
 		ListArtistIdsService,
 		ListQuoteIdsService,
 		GenerateSitemapService,
