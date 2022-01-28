@@ -4,6 +4,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
 import { User } from '../../entities/User';
+import { UserEmailAlreadyExistsException } from '../../exceptions/UserEmailAlreadyExistsException';
 import { IUpdateAuthenticatedUserBody } from '../../requests/users/IUpdateAuthenticatedUserBody';
 import { PermissionContext } from '../PermissionContext';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
@@ -62,9 +63,20 @@ export class UpdateAuthenticatedUserService {
 			if (email) {
 				// TODO: Validate.
 
-				user.email = email;
-				user.normalizedEmail =
+				const normalizedEmail =
 					await this.normalizeEmailService.normalizeEmail(email);
+
+				await this.userRepo
+					.findOne({
+						normalizedEmail: normalizedEmail,
+					})
+					.then((existing) => {
+						if (existing)
+							throw new UserEmailAlreadyExistsException();
+					});
+
+				user.email = email;
+				user.normalizedEmail = normalizedEmail;
 			}
 
 			if (newPassword) {
