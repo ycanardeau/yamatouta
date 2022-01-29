@@ -5,13 +5,13 @@ import { PermissionContext } from './PermissionContext';
 import { getAuthenticatedUser } from './api/UserApi';
 import { IAuthenticatedUserObject } from './dto/users/IAuthenticatedUserObject';
 
-interface AuthProviderProps {
+interface IAuthProviderProps {
 	children: React.ReactNode;
 }
 
 export const AuthProvider = ({
 	children,
-}: AuthProviderProps): React.ReactElement => {
+}: IAuthProviderProps): React.ReactElement => {
 	const [user, setUser] = React.useState<
 		IAuthenticatedUserObject | undefined
 	>();

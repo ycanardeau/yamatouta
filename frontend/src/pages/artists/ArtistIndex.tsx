@@ -40,12 +40,12 @@ const ArtistListItem = React.memo(
 	},
 );
 
-interface ArtistListProps {
+interface IArtistListProps {
 	artists: IArtistObject[];
 }
 
 const ArtistList = React.memo(
-	({ artists }: ArtistListProps): React.ReactElement | null => {
+	({ artists }: IArtistListProps): React.ReactElement | null => {
 		return artists.length > 0 ? (
 			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
 				{artists.map((artist) => (

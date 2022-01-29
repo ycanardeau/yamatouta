@@ -37,12 +37,12 @@ const UserListItem = React.memo(
 	},
 );
 
-interface UserListProps {
+interface IUserListProps {
 	users: IUserObject[];
 }
 
 const UserList = React.memo(
-	({ users }: UserListProps): React.ReactElement | null => {
+	({ users }: IUserListProps): React.ReactElement | null => {
 		return users.length > 0 ? (
 			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
 				{users.map((user) => (
