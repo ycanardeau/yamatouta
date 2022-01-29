@@ -13,21 +13,6 @@ import reportWebVitals from './reportWebVitals';
 axios.defaults.baseURL = config.apiEndpoint;
 axios.defaults.withCredentials = true;
 
-axios.interceptors.request.use((config) => {
-	if (!config.headers)
-		throw new Error("Expected 'config.headers' not to be undefined");
-
-	// Code from: https://docs.microsoft.com/en-us/aspnet/core/security/anti-request-forgery?view=aspnetcore-6.0#javascript.
-	const xsrfToken = document.cookie
-		.split('; ')
-		.find((row) => row.startsWith('XSRF-TOKEN='))
-		?.split('=')[1];
-
-	if (xsrfToken) config.headers['X-XSRF-TOKEN'] = xsrfToken;
-
-	return config;
-});
-
 ReactDOM.render(
 	<React.StrictMode>
 		<AuthProvider>
