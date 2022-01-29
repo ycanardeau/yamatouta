@@ -19,19 +19,19 @@ export class AuditLogEntry {
 	actor: User;
 
 	@Property()
-	actorName: string;
-
-	@Property()
 	actorIp: string;
 
 	@ManyToOne()
 	user?: User;
 
-	@Property()
-	userName?: string;
-
 	@ManyToOne()
 	translation?: Translation;
+
+	@Property({ columnType: 'text' })
+	oldValue?: string;
+
+	@Property({ columnType: 'text' })
+	newValue?: string;
 
 	constructor(params: {
 		action: AuditedAction;
@@ -39,15 +39,25 @@ export class AuditLogEntry {
 		actorIp: string;
 		user?: User;
 		translation?: Translation;
+		oldValue?: string;
+		newValue?: string;
 	}) {
-		const { action, actor, actorIp, user, translation } = params;
+		const {
+			action,
+			actor,
+			actorIp,
+			user,
+			translation,
+			oldValue,
+			newValue,
+		} = params;
 
 		this.action = action;
 		this.actor = actor;
-		this.actorName = actor.name;
 		this.actorIp = actorIp;
 		this.user = user;
-		this.userName = user?.name;
 		this.translation = translation;
+		this.oldValue = oldValue;
+		this.newValue = newValue;
 	}
 }

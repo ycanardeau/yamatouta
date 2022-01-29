@@ -7,6 +7,7 @@ import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject
 import { User } from '../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../exceptions/UserEmailAlreadyExistsException';
 import { IUpdateAuthenticatedUserBody } from '../../requests/users/IUpdateAuthenticatedUserBody';
+import { AuditLogService } from '../AuditLogService';
 import { PermissionContext } from '../PermissionContext';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
 import { NormalizeEmailService } from './NormalizeEmailService';
@@ -20,6 +21,7 @@ export class UpdateAuthenticatedUserService {
 		private readonly userRepo: EntityRepository<User>,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
 		private readonly normalizeEmailService: NormalizeEmailService,
+		private readonly auditLogService: AuditLogService,
 	) {}
 
 	async updateAuthenticatedUser(
@@ -67,13 +69,19 @@ export class UpdateAuthenticatedUserService {
 				throw new BadRequestException();
 			}
 
-			// TODO: Log.
+			if (username && username !== user.name) {
+				this.auditLogService.user_rename({
+					actor: user,
+					actorIp: this.permissionContext.remoteIpAddress,
+					user: user,
+					oldValue: user.name,
+					newValue: username,
+				});
 
-			if (username) {
 				user.name = username;
 			}
 
-			if (email) {
+			if (email && email !== user.email) {
 				const normalizedEmail =
 					await this.normalizeEmailService.normalizeEmail(email);
 
@@ -86,11 +94,25 @@ export class UpdateAuthenticatedUserService {
 							throw new UserEmailAlreadyExistsException();
 					});
 
+				this.auditLogService.user_changeEmail({
+					actor: user,
+					actorIp: this.permissionContext.remoteIpAddress,
+					user: user,
+					oldValue: user.email,
+					newValue: email,
+				});
+
 				user.email = email;
 				user.normalizedEmail = normalizedEmail;
 			}
 
 			if (newPassword) {
+				this.auditLogService.user_changePassword({
+					actor: user,
+					actorIp: this.permissionContext.remoteIpAddress,
+					user: user,
+				});
+
 				await user.updatePassword(
 					this.passwordHasherFactory.default,
 					newPassword,

@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 
 import { User } from '../../../src/entities/User';
+import { AuditLogService } from '../../../src/services/AuditLogService';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
 import { NormalizeEmailService } from '../../../src/services/users/NormalizeEmailService';
 import { UpdateAuthenticatedUserService } from '../../../src/services/users/UpdateAuthenticatedUserService';
@@ -48,6 +49,7 @@ describe('UpdateAuthenticatedUserService', () => {
 					(u) => u.normalizedEmail === where.normalizedEmail,
 				)[0],
 		};
+		const auditLogService = new AuditLogService(em as any);
 
 		updateAuthenticatedUserService = new UpdateAuthenticatedUserService(
 			permissionContext,
@@ -55,6 +57,7 @@ describe('UpdateAuthenticatedUserService', () => {
 			userRepo as any,
 			passwordHasherFactory,
 			normalizeEmailService,
+			auditLogService,
 		);
 	});
 
@@ -79,6 +82,23 @@ describe('UpdateAuthenticatedUserService', () => {
 			expect(userObject.name).toBe(newUsername);
 
 			expect(user.name).toBe(newUsername);
+			expect(user.email).toBe(email);
+			expect(user.normalizedEmail).toBe(normalizedEmail);
+			expect(user.salt).toBe(salt);
+			expect(user.passwordHash).toBe(passwordHash);
+		});
+
+		test('username is not changed', async () => {
+			const userObject =
+				await updateAuthenticatedUserService.updateAuthenticatedUser({
+					password: password,
+					username: username,
+				});
+
+			expect(userObject.id).toBe(user.id);
+			expect(userObject.name).toBe(username);
+
+			expect(user.name).toBe(username);
 			expect(user.email).toBe(email);
 			expect(user.normalizedEmail).toBe(normalizedEmail);
 			expect(user.salt).toBe(salt);
@@ -204,13 +224,21 @@ describe('UpdateAuthenticatedUserService', () => {
 			expect(user.passwordHash).toBe(passwordHash);
 		});
 
-		test('email is existing', async () => {
-			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+		test('email is not changed', async () => {
+			const userObject =
+				await updateAuthenticatedUserService.updateAuthenticatedUser({
 					password: password,
 					email: email,
-				}),
-			).rejects.toThrow(BadRequestException);
+				});
+
+			expect(userObject.id).toBe(user.id);
+			expect(userObject.name).toBe(username);
+
+			expect(user.name).toBe(username);
+			expect(user.email).toBe(email);
+			expect(user.normalizedEmail).toBe(normalizedEmail);
+			expect(user.salt).toBe(salt);
+			expect(user.passwordHash).toBe(passwordHash);
 		});
 
 		test('email is undefined', async () => {
