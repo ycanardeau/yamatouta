@@ -46,12 +46,15 @@ async function bootstrap(): Promise<void> {
 		csurf({
 			cookie: {
 				httpOnly: true,
+				domain: config.cookie.domain,
 			},
 		}),
 	);
 
 	app.use((request: Request, response: Response, next: NextFunction) => {
-		response.cookie('XSRF-TOKEN', request.csrfToken());
+		response.cookie('XSRF-TOKEN', request.csrfToken(), {
+			domain: config.cookie.domain,
+		});
 
 		next();
 	});

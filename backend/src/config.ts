@@ -17,6 +17,9 @@ interface IConfig {
 	session: {
 		secret: string;
 	};
+	cookie: {
+		domain: string;
+	};
 }
 
 const schema: Joi.ObjectSchema<IConfig> = Joi.object({
@@ -36,6 +39,9 @@ const schema: Joi.ObjectSchema<IConfig> = Joi.object({
 	},
 	session: {
 		secret: Joi.string().required().trim(),
+	},
+	cookie: {
+		domain: Joi.string().required().allow(''),
 	},
 });
 
