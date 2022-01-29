@@ -7,7 +7,7 @@ import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
 import { NgramConverter } from '../../helpers/NgramConverter';
 import { Permission } from '../../models/Permission';
-import { WordCategory } from '../../models/WordCategory';
+import { ICreateTranslationBody } from '../../requests/translations/ICreateTranslationBody';
 import { AuditLogService } from '../AuditLogService';
 import { PermissionContext } from '../PermissionContext';
 
@@ -22,20 +22,14 @@ export class CreateTranslationService {
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	async createTranslation(params: {
-		headword: string;
-		locale?: string;
-		reading?: string;
-		yamatokotoba: string;
-		category?: WordCategory;
-		ip: string;
-	}): Promise<TranslationObject> {
+	async createTranslation(
+		params: ICreateTranslationBody,
+	): Promise<TranslationObject> {
 		this.permissionContext.verifyPermission(Permission.CreateTranslations);
 
 		// TODO: Validate.
 
-		const { headword, locale, reading, yamatokotoba, category, ip } =
-			params;
+		const { headword, locale, reading, yamatokotoba, category } = params;
 
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
@@ -65,7 +59,7 @@ export class CreateTranslationService {
 
 			this.auditLogService.translation_create({
 				actor: user,
-				actorIp: ip,
+				actorIp: this.permissionContext.remoteIpAddress,
 				translation: translation,
 			});
 

@@ -6,6 +6,7 @@ import { AuditLogService } from '../../../src/services/AuditLogService';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
 import { CreateUserService } from '../../../src/services/users/CreateUserService';
 import { NormalizeEmailService } from '../../../src/services/users/NormalizeEmailService';
+import { FakePermissionContext } from '../../FakePermissionContext';
 
 describe('CreateUserService', () => {
 	const existingUsername = 'existing';
@@ -58,6 +59,7 @@ describe('CreateUserService', () => {
 			persist: (): void => {},
 		};
 		const auditLogService = new AuditLogService(em as any);
+		const permissionContext = new FakePermissionContext(user);
 
 		createUserService = new CreateUserService(
 			em as any,
@@ -65,6 +67,7 @@ describe('CreateUserService', () => {
 			auditLogService,
 			normalizeEmailService,
 			passwordHasherFactory,
+			permissionContext,
 		);
 	});
 
@@ -73,7 +76,6 @@ describe('CreateUserService', () => {
 			username: 'user',
 			email: 'user@example.com',
 			password: 'P@$$w0rd',
-			ip: '::1',
 		};
 
 		test('createUser', async () => {

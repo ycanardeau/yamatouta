@@ -1,14 +1,4 @@
-import {
-	BadRequestException,
-	Body,
-	Controller,
-	Get,
-	Post,
-	Query,
-	Req,
-} from '@nestjs/common';
-import { Request } from 'express';
-import requestIp from 'request-ip';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { TranslationObject } from '../dto/translations/TranslationObject';
@@ -35,16 +25,8 @@ export class TranslationController {
 	createTranslation(
 		@Body(new JoiValidationPipe(createTranslationBodySchema))
 		body: ICreateTranslationBody,
-		@Req() request: Request,
 	): Promise<TranslationObject> {
-		const ip = requestIp.getClientIp(request);
-
-		if (!ip) throw new BadRequestException('IP address cannot be found.');
-
-		return this.createTranslationService.createTranslation({
-			...body,
-			ip: ip,
-		});
+		return this.createTranslationService.createTranslation(body);
 	}
 
 	@Get()

@@ -11,7 +11,9 @@ import config from '../../config';
 import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
 import { User } from '../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../exceptions/UserEmailAlreadyExistsException';
+import { ICreateUserBody } from '../../requests/auth/ICreateUserBody';
 import { AuditLogService } from '../AuditLogService';
+import { PermissionContext } from '../PermissionContext';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
 import { NormalizeEmailService } from './NormalizeEmailService';
 
@@ -24,18 +26,13 @@ export class CreateUserService {
 		private readonly auditLogService: AuditLogService,
 		private readonly normalizeEmailService: NormalizeEmailService,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
+		private readonly permissionContext: PermissionContext,
 	) {}
 
 	// TODO: Use CAPTCHA.
-	async createUser({
-		ip,
-		...params
-	}: {
-		username: string;
-		email: string;
-		password: string;
-		ip: string;
-	}): Promise<AuthenticatedUserObject> {
+	async createUser(
+		params: ICreateUserBody,
+	): Promise<AuthenticatedUserObject> {
 		if (config.disableAccountCreation)
 			throw new ForbiddenException('Account creation is restricted.');
 
@@ -89,7 +86,7 @@ export class CreateUserService {
 
 			this.auditLogService.user_create({
 				actor: user,
-				actorIp: ip,
+				actorIp: this.permissionContext.remoteIpAddress,
 				user: user,
 			});
 

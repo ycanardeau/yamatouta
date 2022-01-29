@@ -1,5 +1,4 @@
 import {
-	BadRequestException,
 	Body,
 	Controller,
 	HttpCode,
@@ -9,7 +8,6 @@ import {
 	UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import requestIp from 'request-ip';
 
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
@@ -34,16 +32,8 @@ export class AuthController {
 	createUser(
 		@Body(new JoiValidationPipe(createUserBodySchema))
 		body: ICreateUserBody,
-		@Req() request: Request,
 	): Promise<AuthenticatedUserObject> {
-		const ip = requestIp.getClientIp(request);
-
-		if (!ip) throw new BadRequestException('IP address cannot be found.');
-
-		return this.createUserService.createUser({
-			...body,
-			ip: ip,
-		});
+		return this.createUserService.createUser(body);
 	}
 
 	@HttpCode(HttpStatus.OK)
