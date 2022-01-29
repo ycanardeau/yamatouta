@@ -1,10 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { AuthenticatedUserObject } from '../../../src/dto/users/AuthenticatedUserObject';
 import { User } from '../../../src/entities/User';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
 import { NormalizeEmailService } from '../../../src/services/users/NormalizeEmailService';
 import { UpdateAuthenticatedUserService } from '../../../src/services/users/UpdateAuthenticatedUserService';
+import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 
 describe('UpdateAuthenticatedUserService', () => {
@@ -40,13 +40,7 @@ describe('UpdateAuthenticatedUserService', () => {
 		user.id = 1;
 
 		const permissionContext = new FakePermissionContext(user);
-		const em = {
-			transactional: (
-				cb: () => Promise<AuthenticatedUserObject>,
-			): Promise<AuthenticatedUserObject> => {
-				return cb();
-			},
-		};
+		const em = new FakeEntityManager();
 		const userRepo = {
 			findOneOrFail: async (): Promise<User> => user,
 			findOne: async (where: any): Promise<User> =>

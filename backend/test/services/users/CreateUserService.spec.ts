@@ -1,11 +1,11 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { AuthenticatedUserObject } from '../../../src/dto/users/AuthenticatedUserObject';
 import { User } from '../../../src/entities/User';
 import { AuditLogService } from '../../../src/services/AuditLogService';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
 import { CreateUserService } from '../../../src/services/users/CreateUserService';
 import { NormalizeEmailService } from '../../../src/services/users/NormalizeEmailService';
+import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 
 describe('CreateUserService', () => {
@@ -41,15 +41,7 @@ describe('CreateUserService', () => {
 		});
 		user.id = 1;
 
-		const em = {
-			transactional: (
-				cb: () => Promise<AuthenticatedUserObject>,
-			): Promise<AuthenticatedUserObject> => {
-				return cb();
-			},
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			persist: (): void => {},
-		};
+		const em = new FakeEntityManager();
 		const userRepo = {
 			findOne: async (where: any): Promise<User> =>
 				[user].filter(
