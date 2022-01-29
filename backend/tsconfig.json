@@ -16,7 +16,6 @@
 		"strict": true,
 		"forceConsistentCasingInFileNames": false,
 		"noFallthroughCasesInSwitch": false,
-		"resolveJsonModule": true,
-		"lib": ["dom", "esnext"]
+		"resolveJsonModule": true
 	}
 }
