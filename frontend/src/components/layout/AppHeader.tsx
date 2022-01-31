@@ -214,19 +214,23 @@ const AppHeader = (): React.ReactElement => {
 				</Toolbar>
 
 				<Drawer open={drawerOpen} onClose={toggleDrawerOpen}>
-					<List>
-						{pages.map((page) => (
-							<React.Fragment key={page.path}>
-								<ListItemButton
-									component={RouterLink}
-									to={page.path}
-									onClick={toggleDrawerOpen}
-								>
-									<ListItemText>{page.title}</ListItemText>
-								</ListItemButton>
-							</React.Fragment>
-						))}
-					</List>
+					<Box sx={{ width: 250 }} role="presentation">
+						<List>
+							{pages.map((page) => (
+								<React.Fragment key={page.path}>
+									<ListItemButton
+										component={RouterLink}
+										to={page.path}
+										onClick={toggleDrawerOpen}
+									>
+										<ListItemText>
+											{page.title}
+										</ListItemText>
+									</ListItemButton>
+								</React.Fragment>
+							))}
+						</List>
+					</Box>
 				</Drawer>
 			</Container>
 
