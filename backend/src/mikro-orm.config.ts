@@ -18,7 +18,6 @@ const options: Options = {
 	migrations: {
 		path: './src/migrations',
 		disableForeignKeys: false,
-		pattern: /^[\w-]+\d+[\w-]*\.ts$/,
 	},
 	logger: logger.log.bind(logger),
 	metadataProvider: TsMorphMetadataProvider,

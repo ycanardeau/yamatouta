@@ -20,10 +20,10 @@
 		"migration:up": "mikro-orm migration:up"
 	},
 	"dependencies": {
-		"@mikro-orm/core": "^4.5.9",
-		"@mikro-orm/mariadb": "^4.5.9",
+		"@mikro-orm/core": "^5.0.0",
+		"@mikro-orm/mariadb": "^5.0.0",
 		"@mikro-orm/nestjs": "^4.3.1",
-		"@mikro-orm/reflection": "^4.5.9",
+		"@mikro-orm/reflection": "^5.0.0",
 		"@mikro-orm/sql-highlighter": "^1.0.1",
 		"@nestjs/common": "^8.0.0",
 		"@nestjs/core": "^8.0.0",
@@ -50,7 +50,8 @@
 		"sitemap": "^7.1.0"
 	},
 	"devDependencies": {
-		"@mikro-orm/cli": "^4.5.9",
+		"@mikro-orm/cli": "^5.0.0",
+		"@mikro-orm/migrations": "^5.0.0",
 		"@nestjs/cli": "^8.0.0",
 		"@nestjs/schematics": "^8.0.0",
 		"@nestjs/testing": "^8.0.0",

@@ -27,7 +27,7 @@ export class ListUsersService {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	private orderBy(sort?: UserSortRule): QueryOrderMap {
+	private orderBy(sort?: UserSortRule): QueryOrderMap<{ id: QueryOrder }> {
 		switch (sort) {
 			default:
 				return { id: QueryOrder.ASC };

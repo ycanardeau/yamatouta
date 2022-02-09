@@ -25,11 +25,11 @@ export class ListQuotesService {
 
 	constructor(
 		@InjectRepository(Quote)
-		private readonly quoteRepo: EntityRepository<Quote>,
+		private readonly quoteRepo: EntityRepository<ArtistQuote>,
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	private orderBy(sort?: QuoteSortRule): QueryOrderMap {
+	private orderBy(sort?: QuoteSortRule): QueryOrderMap<{ id: QueryOrder }> {
 		switch (sort) {
 			default:
 				return { id: QueryOrder.ASC };
@@ -57,7 +57,7 @@ export class ListQuotesService {
 			],
 		};
 
-		const options: FindOptions<Quote> = {
+		const options: FindOptions<ArtistQuote, 'artist'> = {
 			limit: limit
 				? Math.min(limit, ListQuotesService.maxLimit)
 				: ListQuotesService.defaultLimit,

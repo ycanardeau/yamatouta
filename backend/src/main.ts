@@ -1,3 +1,4 @@
+import { MikroORM, RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/mariadb';
 import { NestFactory } from '@nestjs/core';
 import connectSessionKnex from 'connect-session-knex';
@@ -24,6 +25,13 @@ async function bootstrap(): Promise<void> {
 	});
 
 	app.use(cookieParser());
+
+	// See https://mikro-orm.io/docs/identity-map#-requestcontext-helper-for-di-containers.
+	app.use((request: Request, response: Response, next: NextFunction) => {
+		const orm = app.get<MikroORM>(MikroORM);
+
+		RequestContext.create(orm.em, next);
+	});
 
 	// TODO: Replace with connect-redis.
 	app.use(

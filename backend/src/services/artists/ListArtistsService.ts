@@ -28,7 +28,7 @@ export class ListArtistsService {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	private orderBy(sort?: ArtistSortRule): QueryOrderMap {
+	private orderBy(sort?: ArtistSortRule): QueryOrderMap<{ id: QueryOrder }> {
 		switch (sort) {
 			default:
 				return { id: QueryOrder.ASC };
