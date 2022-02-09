@@ -16,7 +16,7 @@ export class EditTranslationDialogStore {
 	@observable locale = 'ja';
 	@observable reading = '';
 	@observable yamatokotoba = '';
-	@observable category?: WordCategory;
+	@observable category = WordCategory.Unspecified;
 
 	constructor() {
 		makeObservable(this);
@@ -50,7 +50,7 @@ export class EditTranslationDialogStore {
 		this.yamatokotoba = value;
 	};
 
-	@action public setCategory = (value?: WordCategory): void => {
+	@action public setCategory = (value: WordCategory): void => {
 		this.category = value;
 	};
 
@@ -64,7 +64,7 @@ export class EditTranslationDialogStore {
 				locale: this.locale,
 				reading: this.reading,
 				yamatokotoba: this.yamatokotoba,
-				category: this.category || undefined,
+				category: this.category,
 			});
 
 			return translation;

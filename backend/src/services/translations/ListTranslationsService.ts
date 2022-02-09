@@ -187,6 +187,16 @@ export class ListTranslationsService {
 				return knex
 					.orderBy('translations.created_at', 'desc')
 					.orderBy('translations.id', 'desc');
+
+			case TranslationSortRule.UpdatedAsc:
+				return knex
+					.orderBy('translations.updated_at', 'asc')
+					.orderBy('translations.id', 'asc');
+
+			case TranslationSortRule.UpdatedDesc:
+				return knex
+					.orderBy('translations.updated_at', 'desc')
+					.orderBy('translations.id', 'desc');
 		}
 	}
 

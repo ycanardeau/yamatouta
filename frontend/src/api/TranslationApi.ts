@@ -55,3 +55,40 @@ export const listTranslations = async ({
 
 	return response.data;
 };
+
+export const updateTranslation = async ({
+	translationId,
+	headword,
+	locale,
+	reading,
+	yamatokotoba,
+	category,
+}: {
+	translationId: number;
+	headword: string;
+	locale?: string;
+	reading?: string;
+	yamatokotoba: string;
+	category?: WordCategory;
+}): Promise<ITranslationObject> => {
+	const response = await axios.patch<ITranslationObject>(
+		`/translations/${translationId}`,
+		{
+			headword: headword,
+			locale: locale,
+			reading: reading,
+			yamatokotoba: yamatokotoba,
+			category: category,
+		},
+	);
+
+	return response.data;
+};
+
+export const deleteTranslation = async ({
+	translationId,
+}: {
+	translationId: number;
+}): Promise<void> => {
+	await axios.delete<void>(`/translations/${translationId}`);
+};

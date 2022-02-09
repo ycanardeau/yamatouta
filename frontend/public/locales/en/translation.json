@@ -80,7 +80,9 @@
 		"YamatokotobaAsc": "Yamato-kotoba (ascending)",
 		"YamatokotobaDesc": "Yamato-kotoba (descending)",
 		"CreatedAsc": "Oldest",
-		"CreatedDesc": "Newest"
+		"CreatedDesc": "Newest",
+		"updated-asc": "Least recently updated",
+		"updated-desc": "Recently updated"
 	},
 	"settings": {
 		"currentPassword": "Current password",

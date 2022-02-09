@@ -36,16 +36,16 @@ export abstract class Quote {
 	phraseCount = 0;
 
 	@Property()
-	transcription?: string;
+	transcription!: string;
 
 	@Property({ length: 85 })
-	locale?: string;
+	locale: string;
 
 	@Enum()
 	authorType!: AuthorType;
 
 	@Property()
-	sourceUrl?: string;
+	sourceUrl!: string;
 
 	@Embedded({ prefix: false })
 	date = new PartialDate();
@@ -57,7 +57,7 @@ export abstract class Quote {
 	}: {
 		quoteType: QuoteType;
 		text: string;
-		locale?: string;
+		locale: string;
 	}) {
 		this.quoteType = quoteType;
 		this.text = text;

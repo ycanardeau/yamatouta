@@ -17,6 +17,7 @@ test('ArtistQuoteObject', async () => {
 		id: 2,
 		quoteType: QuoteType.Tanka,
 		text: 'quote',
+		locale: '',
 		artist: artist,
 	});
 
@@ -24,6 +25,7 @@ test('ArtistQuoteObject', async () => {
 		id: 3,
 		quoteType: QuoteType.Tanka,
 		text: 'deleted',
+		locale: '',
 		artist: artist,
 		deleted: true,
 	});
@@ -32,6 +34,7 @@ test('ArtistQuoteObject', async () => {
 		id: 4,
 		quoteType: QuoteType.Tanka,
 		text: 'hidden',
+		locale: '',
 		artist: artist,
 		hidden: true,
 	});

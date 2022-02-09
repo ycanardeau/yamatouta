@@ -78,7 +78,9 @@
 		"YamatokotobaAsc": "やまとことば (のぼり)",
 		"YamatokotobaDesc": "やまとことば (くだり)",
 		"CreatedAsc": "ふるい",
-		"CreatedDesc": "あたらしい"
+		"CreatedDesc": "あたらしい",
+		"UpdatedAsc": "あらためられていない",
+		"UpdatedDesc": "あらためられた"
 	},
 	"settings": {
 		"currentPassword": "いまのあいことば",

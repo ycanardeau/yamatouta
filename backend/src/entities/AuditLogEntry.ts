@@ -30,10 +30,10 @@ export abstract class AuditLogEntry {
 	entryType!: EntryType;
 
 	@Property({ columnType: 'text' })
-	oldValue?: string;
+	oldValue: string;
 
 	@Property({ columnType: 'text' })
-	newValue?: string;
+	newValue: string;
 
 	protected constructor({
 		action,
@@ -45,8 +45,8 @@ export abstract class AuditLogEntry {
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
-		oldValue?: string;
-		newValue?: string;
+		oldValue: string;
+		newValue: string;
 	}) {
 		this.action = action;
 		this.actor = actor;
@@ -72,8 +72,8 @@ export class UserAuditLogEntry extends AuditLogEntry {
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
-		oldValue?: string;
-		newValue?: string;
+		oldValue: string;
+		newValue: string;
 		user: User;
 	}) {
 		super({
@@ -107,8 +107,8 @@ export class TranslationAuditLogEntry extends AuditLogEntry {
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
-		oldValue?: string;
-		newValue?: string;
+		oldValue: string;
+		newValue: string;
 		translation: Translation;
 	}) {
 		super({

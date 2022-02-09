@@ -86,8 +86,8 @@ describe('CreateUserService', () => {
 				action: AuditedAction.User_Create,
 				actor: newUser,
 				actorIp: permissionContext.remoteIpAddress,
-				oldValue: undefined,
-				newValue: undefined,
+				oldValue: '',
+				newValue: '',
 				user: newUser,
 			});
 		});
@@ -118,8 +118,8 @@ describe('CreateUserService', () => {
 				action: AuditedAction.User_Create,
 				actor: newUser,
 				actorIp: permissionContext.remoteIpAddress,
-				oldValue: undefined,
-				newValue: undefined,
+				oldValue: '',
+				newValue: '',
 				user: newUser,
 			});
 		});
@@ -151,8 +151,8 @@ describe('CreateUserService', () => {
 				action: AuditedAction.User_Create,
 				actor: newUser,
 				actorIp: permissionContext.remoteIpAddress,
-				oldValue: undefined,
-				newValue: undefined,
+				oldValue: '',
+				newValue: '',
 				user: newUser,
 			});
 		});

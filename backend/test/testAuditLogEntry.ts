@@ -19,8 +19,8 @@ export const testUserAuditLogEntry = (
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
-		oldValue: string | undefined;
-		newValue: string | undefined;
+		oldValue: string;
+		newValue: string;
 		user: User;
 	},
 ): void => {
@@ -46,8 +46,8 @@ export const testTranslationAuditLogEntry = (
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
-		oldValue: string | undefined;
-		newValue: string | undefined;
+		oldValue: string;
+		newValue: string;
 		translation: Translation;
 	},
 ): void => {

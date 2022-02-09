@@ -430,8 +430,8 @@ describe('UpdateAuthenticatedUserService', () => {
 				action: AuditedAction.User_ChangePassword,
 				actor: existingUser,
 				actorIp: permissionContext.remoteIpAddress,
-				oldValue: undefined,
-				newValue: undefined,
+				oldValue: '',
+				newValue: '',
 				user: existingUser,
 			});
 		});

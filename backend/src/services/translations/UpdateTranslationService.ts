@@ -7,7 +7,6 @@ import { Revision } from '../../entities/Revision';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
 import { NgramConverter } from '../../helpers/NgramConverter';
-import { ChangeLogChangeKey } from '../../models/ChangeLogChangeKey';
 import { ChangeLogEvent } from '../../models/ChangeLogEvent';
 import { Permission } from '../../models/Permission';
 import {
@@ -18,7 +17,7 @@ import { AuditLogService } from '../AuditLogService';
 import { PermissionContext } from '../PermissionContext';
 
 @Injectable()
-export class CreateTranslationService {
+export class UpdateTranslationService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly permissionContext: PermissionContext,
@@ -26,12 +25,15 @@ export class CreateTranslationService {
 		private readonly userRepo: EntityRepository<User>,
 		private readonly auditLogService: AuditLogService,
 		private readonly ngramConverter: NgramConverter,
+		@InjectRepository(Translation)
+		private readonly translationRepo: EntityRepository<Translation>,
 	) {}
 
-	async createTranslation(
+	async updateTranslation(
+		translationId: number,
 		params: IUpdateTranslationBody,
 	): Promise<TranslationObject> {
-		this.permissionContext.verifyPermission(Permission.CreateTranslations);
+		this.permissionContext.verifyPermission(Permission.EditTranslations);
 
 		const result = updateTranslationBodySchema.validate(params, {
 			convert: true,
@@ -50,18 +52,14 @@ export class CreateTranslationService {
 				hidden: false,
 			});
 
-			const translation = new Translation({
-				translatedString: {
-					headword: headword,
-					locale: locale,
-					reading: reading,
-					yamatokotoba: yamatokotoba,
+			const translation = await this.translationRepo.findOneOrFail(
+				{
+					id: translationId,
+					deleted: false,
+					hidden: false,
 				},
-				category: category,
-				user: user,
-			});
-
-			em.persist(translation);
+				{ populate: ['searchIndex'] },
+			);
 
 			const revision = new Revision();
 
@@ -71,37 +69,22 @@ export class CreateTranslationService {
 				.createChangeLogEntry({
 					revision: revision,
 					actor: user,
-					actionType: ChangeLogEvent.Created,
+					actionType: ChangeLogEvent.Updated,
 					text: '',
 				})
-				.addChanges(
-					{
-						key: ChangeLogChangeKey.Translation_Headword,
-						value: headword,
-					},
-					{
-						key: ChangeLogChangeKey.Translation_Locale,
-						value: locale,
-					},
-					{
-						key: ChangeLogChangeKey.Translation_Reading,
-						value: reading,
-					},
-					{
-						key: ChangeLogChangeKey.Translation_Yamatokotoba,
-						value: yamatokotoba,
-					},
-					{
-						key: ChangeLogChangeKey.Translation_Category,
-						value: category,
-					},
-				);
+				.addChanges(...translation.generateChanges(params));
 
 			revision.changeLogEntries.add(changeLogEntry);
 
+			translation.headword = headword;
+			translation.locale = locale;
+			translation.reading = reading;
+			translation.yamatokotoba = yamatokotoba;
+			translation.category = category;
+
 			translation.updateSearchIndex(this.ngramConverter);
 
-			this.auditLogService.translation_create({
+			this.auditLogService.translation_update({
 				actor: user,
 				actorIp: this.permissionContext.remoteIpAddress,
 				translation: translation,

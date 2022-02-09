@@ -6,10 +6,10 @@ export class TranslatedString {
 	headword!: string;
 
 	@Property({ length: 85 })
-	locale?: string;
+	locale!: string;
 
 	@Property()
-	reading?: string;
+	reading!: string;
 
 	@Property()
 	yamatokotoba!: string;

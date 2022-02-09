@@ -94,22 +94,12 @@ const EditTranslationDialog = observer(
 							<EuiSelect
 								compressed
 								name="category"
-								options={[
-									{
-										value: '',
-										text: t(
-											'wordCategoryNames.unspecified',
-										),
-									},
-									...Object.values(WordCategory).map(
-										(value) => ({
-											value: value,
-											text: t(
-												`wordCategoryNames.${value}`,
-											),
-										}),
-									),
-								]}
+								options={Object.values(WordCategory).map(
+									(value) => ({
+										value: value,
+										text: t(`wordCategoryNames.${value}`),
+									}),
+								)}
 								value={store.category ?? ''}
 								onChange={(e): void =>
 									store.setCategory(

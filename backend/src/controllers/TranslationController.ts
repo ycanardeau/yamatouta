@@ -1,30 +1,44 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	ParseIntPipe,
+	Patch,
+	Post,
+	Query,
+} from '@nestjs/common';
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { TranslationObject } from '../dto/translations/TranslationObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import {
-	createTranslationBodySchema,
-	ICreateTranslationBody,
-} from '../requests/translations/ICreateTranslationBody';
-import {
 	IListTranslationsQuery,
 	listTranslationsQuerySchema,
 } from '../requests/translations/IListTranslationsQuery';
+import {
+	updateTranslationBodySchema,
+	IUpdateTranslationBody,
+} from '../requests/translations/IUpdateTranslationBody';
 import { CreateTranslationService } from '../services/translations/CreateTranslationService';
+import { DeleteTranslationService } from '../services/translations/DeleteTranslationService';
 import { ListTranslationsService } from '../services/translations/ListTranslationsService';
+import { UpdateTranslationService } from '../services/translations/UpdateTranslationService';
 
 @Controller('translations')
 export class TranslationController {
 	constructor(
 		private readonly createTranslationService: CreateTranslationService,
 		private readonly listTranslationsService: ListTranslationsService,
+		private readonly updateTranslationService: UpdateTranslationService,
+		private readonly deleteTranslationService: DeleteTranslationService,
 	) {}
 
 	@Post()
 	createTranslation(
-		@Body(new JoiValidationPipe(createTranslationBodySchema))
-		body: ICreateTranslationBody,
+		@Body(new JoiValidationPipe(updateTranslationBodySchema))
+		body: IUpdateTranslationBody,
 	): Promise<TranslationObject> {
 		return this.createTranslationService.createTranslation(body);
 	}
@@ -35,5 +49,24 @@ export class TranslationController {
 		query: IListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
 		return this.listTranslationsService.listTranslations(query);
+	}
+
+	@Patch(':translationId')
+	updateTranslation(
+		@Param('translationId', ParseIntPipe) translationId: number,
+		@Body(new JoiValidationPipe(updateTranslationBodySchema))
+		body: IUpdateTranslationBody,
+	): Promise<TranslationObject> {
+		return this.updateTranslationService.updateTranslation(
+			translationId,
+			body,
+		);
+	}
+
+	@Delete(':translationId')
+	deleteTranslation(
+		@Param('translationId', ParseIntPipe) translationId: number,
+	): Promise<void> {
+		return this.deleteTranslationService.deleteTranslation(translationId);
 	}
 }

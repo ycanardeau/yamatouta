@@ -15,28 +15,15 @@ export class TranslationSearchIndex {
 	translation: Translation;
 
 	@Property({ columnType: 'text', lazy: true })
-	headword: string;
+	headword!: string;
 
 	@Property({ columnType: 'text', lazy: true })
-	reading: string;
+	reading!: string;
 
 	@Property({ columnType: 'text', lazy: true })
-	yamatokotoba: string;
+	yamatokotoba!: string;
 
-	constructor({
-		translation,
-		headword,
-		reading,
-		yamatokotoba,
-	}: {
-		translation: Translation;
-		headword: string;
-		reading: string;
-		yamatokotoba: string;
-	}) {
+	constructor({ translation }: { translation: Translation }) {
 		this.translation = translation;
-		this.headword = headword;
-		this.reading = reading;
-		this.yamatokotoba = yamatokotoba;
 	}
 }
