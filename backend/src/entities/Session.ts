@@ -6,8 +6,8 @@ export class Session {
 	@PrimaryKey()
 	sid!: string;
 
-	@Property()
-	sess!: any;
+	@Property({ type: 'json' })
+	sess!: string;
 
 	// TODO: Index using btree.
 	@Property()
