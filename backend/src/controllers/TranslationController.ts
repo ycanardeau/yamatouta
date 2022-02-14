@@ -10,6 +10,7 @@ import {
 	Query,
 } from '@nestjs/common';
 
+import { ChangeLogEntryObject } from '../dto/ChangeLogEntryObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { TranslationObject } from '../dto/translations/TranslationObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
@@ -23,6 +24,8 @@ import {
 } from '../requests/translations/IUpdateTranslationBody';
 import { CreateTranslationService } from '../services/translations/CreateTranslationService';
 import { DeleteTranslationService } from '../services/translations/DeleteTranslationService';
+import { GetTranslationService } from '../services/translations/GetTranslationService';
+import { ListTranslationRevisionsService } from '../services/translations/ListTranslationRevisionsService';
 import { ListTranslationsService } from '../services/translations/ListTranslationsService';
 import { UpdateTranslationService } from '../services/translations/UpdateTranslationService';
 
@@ -33,6 +36,8 @@ export class TranslationController {
 		private readonly listTranslationsService: ListTranslationsService,
 		private readonly updateTranslationService: UpdateTranslationService,
 		private readonly deleteTranslationService: DeleteTranslationService,
+		private readonly getTranslationService: GetTranslationService,
+		private readonly listTranslationRevisionsService: ListTranslationRevisionsService,
 	) {}
 
 	@Post()
@@ -68,5 +73,21 @@ export class TranslationController {
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<void> {
 		return this.deleteTranslationService.deleteTranslation(translationId);
+	}
+
+	@Get(':translationId')
+	getTranslation(
+		@Param('translationId', ParseIntPipe) translationId: number,
+	): Promise<TranslationObject> {
+		return this.getTranslationService.getTranslation(translationId);
+	}
+
+	@Get(':translationId/revisions')
+	listTranslationRevisions(
+		@Param('translationId', ParseIntPipe) translationId: number,
+	): Promise<SearchResultObject<ChangeLogEntryObject>> {
+		return this.listTranslationRevisionsService.listTranslationRevisions(
+			translationId,
+		);
 	}
 }
