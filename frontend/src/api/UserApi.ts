@@ -5,11 +5,11 @@ import { IAuthenticatedUserObject } from '../dto/users/IAuthenticatedUserObject'
 import { IUserObject } from '../dto/users/IUserObject';
 import { IPaginationParams } from '../stores/PaginationStore';
 
-export const listUsers = async (params: {
+export const listUsers = async ({
+	pagination,
+}: {
 	pagination: IPaginationParams;
 }): Promise<ISearchResultObject<IUserObject>> => {
-	const { pagination } = params;
-
 	const response = await axios.get<ISearchResultObject<IUserObject>>(
 		'/users',
 		{ params: { ...pagination } },
@@ -33,14 +33,17 @@ export const getAuthenticatedUser =
 		return response.data;
 	};
 
-export const updateAuthenticatedUser = async (params: {
+export const updateAuthenticatedUser = async ({
+	password,
+	email,
+	username,
+	newPassword,
+}: {
 	password: string;
 	email?: string;
 	username?: string;
 	newPassword?: string;
 }): Promise<IAuthenticatedUserObject> => {
-	const { password, email, username, newPassword } = params;
-
 	const response = await axios.patch<IAuthenticatedUserObject>(
 		'/users/current',
 		{

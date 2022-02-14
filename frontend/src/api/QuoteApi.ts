@@ -4,12 +4,13 @@ import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IQuoteObject } from '../dto/quotes/IQuoteObject';
 import { IPaginationParams } from '../stores/PaginationStore';
 
-export const listQuotes = async (params: {
+export const listQuotes = async ({
+	pagination,
+	artistId,
+}: {
 	pagination: IPaginationParams;
 	artistId?: number;
 }): Promise<ISearchResultObject<IQuoteObject>> => {
-	const { pagination, artistId } = params;
-
 	const response = await axios.get<ISearchResultObject<IQuoteObject>>(
 		'/quotes',
 		{ params: { ...pagination, artistId } },

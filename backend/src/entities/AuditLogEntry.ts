@@ -33,7 +33,15 @@ export class AuditLogEntry {
 	@Property({ columnType: 'text' })
 	newValue?: string;
 
-	constructor(params: {
+	constructor({
+		action,
+		actor,
+		actorIp,
+		user,
+		translation,
+		oldValue,
+		newValue,
+	}: {
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
@@ -42,16 +50,6 @@ export class AuditLogEntry {
 		oldValue?: string;
 		newValue?: string;
 	}) {
-		const {
-			action,
-			actor,
-			actorIp,
-			user,
-			translation,
-			oldValue,
-			newValue,
-		} = params;
-
 		this.action = action;
 		this.actor = actor;
 		this.actorIp = actorIp;

@@ -2,13 +2,15 @@ import axios from 'axios';
 
 import { IAuthenticatedUserObject } from '../dto/users/IAuthenticatedUserObject';
 
-export const register = async (params: {
+export const register = async ({
+	email,
+	username,
+	password,
+}: {
 	email: string;
 	username: string;
 	password: string;
 }): Promise<IAuthenticatedUserObject> => {
-	const { email, username, password } = params;
-
 	const response = await axios.post<IAuthenticatedUserObject>(
 		'/auth/register',
 		{
@@ -21,12 +23,13 @@ export const register = async (params: {
 	return response.data;
 };
 
-export const login = async (params: {
+export const login = async ({
+	email,
+	password,
+}: {
 	email: string;
 	password: string;
 }): Promise<IAuthenticatedUserObject> => {
-	const { email, password } = params;
-
 	const response = await axios.post<IAuthenticatedUserObject>('/auth/login', {
 		email,
 		password,

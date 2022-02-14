@@ -71,7 +71,14 @@ export class User {
 	@Enum()
 	userGroup = UserGroup.User;
 
-	constructor(params: {
+	constructor({
+		name,
+		email,
+		normalizedEmail,
+		passwordHashAlgorithm,
+		salt,
+		passwordHash,
+	}: {
 		name: string;
 		email: string;
 		normalizedEmail: string;
@@ -79,15 +86,6 @@ export class User {
 		salt: string;
 		passwordHash: string;
 	}) {
-		const {
-			name,
-			email,
-			normalizedEmail,
-			passwordHashAlgorithm,
-			salt,
-			passwordHash,
-		} = params;
-
 		this.name = name;
 		this.email = email;
 		this.normalizedEmail = normalizedEmail;

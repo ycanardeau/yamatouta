@@ -10,15 +10,19 @@ import { NormalizeEmailService } from '../../src/services/users/NormalizeEmailSe
 import { FakePermissionContext } from '../FakePermissionContext';
 
 describe('PermissionContext', () => {
-	const createUser = async (params: {
+	const createUser = async ({
+		id,
+		username,
+		email,
+		password,
+		userGroup,
+	}: {
 		id: number;
 		username: string;
 		email: string;
 		password: string;
 		userGroup: UserGroup;
 	}): Promise<User> => {
-		const { id, username, email, password, userGroup } = params;
-
 		const passwordHasherFactory = new PasswordHasherFactory();
 		const passwordHasher = passwordHasherFactory.default;
 

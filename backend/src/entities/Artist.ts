@@ -27,9 +27,13 @@ export class Artist implements IAuthor {
 	@Enum(() => ArtistType)
 	artistType!: ArtistType;
 
-	constructor(params: { name: string; artistType: ArtistType }) {
-		const { name, artistType } = params;
-
+	constructor({
+		name,
+		artistType,
+	}: {
+		name: string;
+		artistType: ArtistType;
+	}) {
 		this.name = name;
 		this.artistType = artistType;
 	}

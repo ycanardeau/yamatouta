@@ -5,11 +5,11 @@ import { IArtistObject } from '../dto/artists/IArtistObject';
 import { ArtistType } from '../models/ArtistType';
 import { IPaginationParams } from '../stores/PaginationStore';
 
-export const listArtists = async (params: {
+export const listArtists = async ({
+	pagination,
+}: {
 	pagination: IPaginationParams;
 }): Promise<ISearchResultObject<IArtistObject>> => {
-	const { pagination } = params;
-
 	const response = await axios.get<ISearchResultObject<IArtistObject>>(
 		'/artists',
 		{ params: { ...pagination } },
@@ -24,12 +24,13 @@ export const getArtist = async (artistId: number): Promise<IArtistObject> => {
 	return response.data;
 };
 
-export const createArtist = async (params: {
+export const createArtist = async ({
+	name,
+	artistType,
+}: {
 	name: string;
 	artistType: ArtistType;
 }): Promise<IArtistObject> => {
-	const { name, artistType } = params;
-
 	const response = await axios.post<IArtistObject>('/artists', {
 		name,
 		artistType,

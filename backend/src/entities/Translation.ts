@@ -39,13 +39,15 @@ export class Translation {
 	@ManyToOne()
 	user: User;
 
-	constructor(params: {
+	constructor({
+		translatedString,
+		category,
+		user,
+	}: {
 		translatedString: TranslatedString;
 		category?: WordCategory;
 		user: User;
 	}) {
-		const { translatedString, category, user } = params;
-
 		this.translatedString = translatedString;
 		this.category = category;
 		this.user = user;

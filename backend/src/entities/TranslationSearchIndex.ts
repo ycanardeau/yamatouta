@@ -23,14 +23,17 @@ export class TranslationSearchIndex {
 	@Property({ columnType: 'text', lazy: true })
 	yamatokotoba: string;
 
-	constructor(params: {
+	constructor({
+		translation,
+		headword,
+		reading,
+		yamatokotoba,
+	}: {
 		translation: Translation;
 		headword: string;
 		reading: string;
 		yamatokotoba: string;
 	}) {
-		const { translation, headword, reading, yamatokotoba } = params;
-
 		this.translation = translation;
 		this.headword = headword;
 		this.reading = reading;

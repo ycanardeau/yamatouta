@@ -11,14 +11,17 @@ export class ArtistQuote extends Quote {
 	@ManyToOne()
 	artist: Artist;
 
-	constructor(params: {
+	constructor({
+		quoteType,
+		text,
+		locale,
+		artist,
+	}: {
 		quoteType: QuoteType;
 		text: string;
 		locale?: string;
 		artist: Artist;
 	}) {
-		const { quoteType, text, locale, artist } = params;
-
 		super({ quoteType, text, locale });
 
 		this.artist = artist;

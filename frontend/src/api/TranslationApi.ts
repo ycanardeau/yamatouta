@@ -6,15 +6,19 @@ import { TranslationSortRule } from '../models/TranslationSortRule';
 import { WordCategory } from '../models/WordCategory';
 import { IPaginationParams } from '../stores/PaginationStore';
 
-export const createTranslation = async (params: {
+export const createTranslation = async ({
+	headword,
+	locale,
+	reading,
+	yamatokotoba,
+	category,
+}: {
 	headword: string;
 	locale?: string;
 	reading?: string;
 	yamatokotoba: string;
 	category?: WordCategory;
 }): Promise<ITranslationObject> => {
-	const { headword, locale, reading, yamatokotoba, category } = params;
-
 	const response = await axios.post<ITranslationObject>('/translations', {
 		headword: headword,
 		locale: locale,
@@ -26,14 +30,17 @@ export const createTranslation = async (params: {
 	return response.data;
 };
 
-export const listTranslations = async (params: {
+export const listTranslations = async ({
+	pagination,
+	sort,
+	query,
+	category,
+}: {
 	pagination: IPaginationParams;
 	sort?: TranslationSortRule;
 	query?: string;
 	category?: WordCategory;
 }): Promise<ISearchResultObject<ITranslationObject>> => {
-	const { pagination, sort, query, category } = params;
-
 	const response = await axios.get<ISearchResultObject<ITranslationObject>>(
 		'/translations',
 		{
