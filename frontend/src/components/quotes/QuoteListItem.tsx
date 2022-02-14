@@ -6,13 +6,13 @@ import { Link as RouterLink } from 'react-router-dom';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import AuthorLink from '../AuthorLink';
 
-interface IQuoteListItemProps {
+interface QuoteListItemProps {
 	quote: IQuoteObject;
 	showDetailsButton: boolean;
 }
 
 const QuoteListItem = React.memo(
-	({ quote, showDetailsButton }: IQuoteListItemProps): React.ReactElement => {
+	({ quote, showDetailsButton }: QuoteListItemProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (

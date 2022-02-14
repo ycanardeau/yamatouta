@@ -4,12 +4,12 @@ import React from 'react';
 
 import { PaginationStore } from '../stores/PaginationStore';
 
-interface IPaginationProps {
+interface PaginationProps {
 	store: PaginationStore;
 }
 
 const Pagination = observer(
-	({ store }: IPaginationProps): React.ReactElement => {
+	({ store }: PaginationProps): React.ReactElement => {
 		const handleChange = React.useCallback(
 			(_, number) => {
 				store.setPage(number);

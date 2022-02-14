@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import Breadcrumb from './Breadcrumb';
 
-interface ILayoutProps {
+interface LayoutProps {
 	breadcrumbItems: {
 		text: string;
 		to: string;
@@ -25,7 +25,7 @@ const Layout = ({
 	children,
 	meta,
 	sidebar,
-}: ILayoutProps): React.ReactElement => {
+}: LayoutProps): React.ReactElement => {
 	const { t, ready } = useTranslation();
 
 	return (

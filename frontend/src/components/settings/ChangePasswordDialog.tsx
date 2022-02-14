@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
 import { ChangePasswordDialogStore } from '../../stores/settings/ChangePasswordDialogStore';
 
-interface IChangePasswordDialogProps {
+interface ChangePasswordDialogProps {
 	onClose: () => void;
 	onChangePasswordComplete: (user: IAuthenticatedUserObject) => void;
 }
@@ -25,7 +25,7 @@ const ChangePasswordDialog = observer(
 	({
 		onClose,
 		onChangePasswordComplete,
-	}: IChangePasswordDialogProps): React.ReactElement => {
+	}: ChangePasswordDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new ChangePasswordDialogStore());

@@ -23,21 +23,21 @@ import { useTranslation } from 'react-i18next';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 
-interface IHighlightProps {
+interface HighlightProps {
 	children: React.ReactNode;
 }
 
-const Highlight = ({ children }: IHighlightProps): React.ReactElement => {
+const Highlight = ({ children }: HighlightProps): React.ReactElement => {
 	return <strong className="highlighted-text">{children}</strong>;
 };
 
-interface IHighlightedTextProps {
+interface HighlightedTextProps {
 	text: string;
 	searchWords: string[];
 }
 
 const HighlightedText = React.memo(
-	({ text, searchWords }: IHighlightedTextProps): React.ReactElement => {
+	({ text, searchWords }: HighlightedTextProps): React.ReactElement => {
 		return (
 			<Highlighter
 				searchWords={searchWords}
@@ -49,7 +49,7 @@ const HighlightedText = React.memo(
 	},
 );
 
-interface ITranslationListItemProps {
+interface TranslationListItemProps {
 	translation: ITranslationObject;
 	searchWords: string[];
 	onWordClick?: (e: { locale?: string; value: string }) => void;
@@ -60,7 +60,7 @@ const TranslationListItem = React.memo(
 		translation,
 		searchWords,
 		onWordClick,
-	}: ITranslationListItemProps): React.ReactElement => {
+	}: TranslationListItemProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [anchorElTranslation, setAnchorElTranslation] = React.useState<
@@ -203,7 +203,7 @@ const TranslationListItem = React.memo(
 	},
 );
 
-interface ITranslationListProps {
+interface TranslationListProps {
 	translations: ITranslationObject[];
 	sort: TranslationSortRule;
 	onSortChange: (sort: TranslationSortRule) => void;
@@ -218,7 +218,7 @@ const TranslationList = React.memo(
 		onSortChange,
 		searchWords,
 		onWordClick,
-	}: ITranslationListProps): React.ReactElement => {
+	}: TranslationListProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (

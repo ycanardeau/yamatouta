@@ -18,12 +18,12 @@ import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistIndexStore } from '../../stores/artists/ArtistIndexStore';
 
-interface IArtistListItemProps {
+interface ArtistListItemProps {
 	artist: IArtistObject;
 }
 
 const ArtistListItem = React.memo(
-	({ artist }: IArtistListItemProps): React.ReactElement => {
+	({ artist }: ArtistListItemProps): React.ReactElement => {
 		return (
 			<ListItem disablePadding>
 				<ListItemButton
@@ -40,12 +40,12 @@ const ArtistListItem = React.memo(
 	},
 );
 
-interface IArtistListProps {
+interface ArtistListProps {
 	artists: IArtistObject[];
 }
 
 const ArtistList = React.memo(
-	({ artists }: IArtistListProps): React.ReactElement | null => {
+	({ artists }: ArtistListProps): React.ReactElement | null => {
 		return artists.length > 0 ? (
 			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
 				{artists.map((artist) => (

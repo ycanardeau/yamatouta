@@ -10,13 +10,13 @@ import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 
-interface IArtistQuotesProps {
+interface ArtistQuotesProps {
 	artist: IArtistObject;
 	store: ArtistDetailsStore;
 }
 
 const ArtistQuotes = observer(
-	({ artist, store }: IArtistQuotesProps): React.ReactElement => {
+	({ artist, store }: ArtistQuotesProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		useYamatoutaTitle(artist.name, true);

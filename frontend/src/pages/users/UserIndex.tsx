@@ -18,12 +18,12 @@ import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IUserObject } from '../../dto/users/IUserObject';
 import { UserIndexStore } from '../../stores/users/UserIndexStore';
 
-interface IUserListItemProps {
+interface UserListItemProps {
 	user: IUserObject;
 }
 
 const UserListItem = React.memo(
-	({ user }: IUserListItemProps): React.ReactElement => {
+	({ user }: UserListItemProps): React.ReactElement => {
 		return (
 			<ListItem disablePadding>
 				<ListItemButton component={RouterLink} to={`/users/${user.id}`}>
@@ -37,12 +37,12 @@ const UserListItem = React.memo(
 	},
 );
 
-interface IUserListProps {
+interface UserListProps {
 	users: IUserObject[];
 }
 
 const UserList = React.memo(
-	({ users }: IUserListProps): React.ReactElement | null => {
+	({ users }: UserListProps): React.ReactElement | null => {
 		return users.length > 0 ? (
 			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
 				{users.map((user) => (

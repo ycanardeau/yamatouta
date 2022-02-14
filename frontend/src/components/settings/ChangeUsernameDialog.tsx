@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
 import { ChangeUsernameDialogStore } from '../../stores/settings/ChangeUsernameDialogStore';
 
-interface IChangeUsernameDialogProps {
+interface ChangeUsernameDialogProps {
 	user: IAuthenticatedUserObject;
 	onClose: () => void;
 	onChangeUsernameComplete: (user: IAuthenticatedUserObject) => void;
@@ -27,7 +27,7 @@ const ChangeUsernameDialog = observer(
 		user,
 		onClose,
 		onChangeUsernameComplete,
-	}: IChangeUsernameDialogProps): React.ReactElement => {
+	}: ChangeUsernameDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(

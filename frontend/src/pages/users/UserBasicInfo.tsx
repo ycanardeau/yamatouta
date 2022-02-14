@@ -5,11 +5,11 @@ import Layout from '../../components/layout/Layout';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IUserObject } from '../../dto/users/IUserObject';
 
-interface IUserBasicInfoProps {
+interface UserBasicInfoProps {
 	user: IUserObject;
 }
 
-const UserBasicInfo = ({ user }: IUserBasicInfoProps): React.ReactElement => {
+const UserBasicInfo = ({ user }: UserBasicInfoProps): React.ReactElement => {
 	const { t } = useTranslation();
 
 	useYamatoutaTitle(user.name, true);

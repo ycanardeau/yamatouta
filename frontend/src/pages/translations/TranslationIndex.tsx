@@ -31,12 +31,12 @@ import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';
 import { TranslationIndexStore } from '../../stores/translations/TranslationIndexStore';
 
-interface ITranslationIndexSidebarProps {
+interface TranslationIndexSidebarProps {
 	store: TranslationIndexStore;
 }
 
 const TranslationIndexSidebar = observer(
-	({ store }: ITranslationIndexSidebarProps): React.ReactElement => {
+	({ store }: TranslationIndexSidebarProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (

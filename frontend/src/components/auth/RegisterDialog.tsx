@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { IUserObject } from '../../dto/users/IUserObject';
 import { RegisterDialogStore } from '../../stores/auth/RegisterDialogStore';
 
-interface IRegisterDialogProps {
+interface RegisterDialogProps {
 	onClose: () => void;
 	onRegisterComplete: (user: IUserObject) => void;
 }
@@ -28,7 +28,7 @@ const RegisterDialog = observer(
 	({
 		onClose,
 		onRegisterComplete,
-	}: IRegisterDialogProps): React.ReactElement => {
+	}: RegisterDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new RegisterDialogStore());

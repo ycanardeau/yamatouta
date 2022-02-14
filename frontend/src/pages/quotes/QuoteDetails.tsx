@@ -9,13 +9,13 @@ import QuoteListItem from '../../components/quotes/QuoteListItem';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 
-interface IQuoteDetailsLayoutProps {
+interface QuoteDetailsLayoutProps {
 	quote: IQuoteObject;
 }
 
 const QuoteDetailsLayout = ({
 	quote,
-}: IQuoteDetailsLayoutProps): React.ReactElement => {
+}: QuoteDetailsLayoutProps): React.ReactElement => {
 	const { t } = useTranslation();
 
 	const quoteText = quote.phrases.join('');

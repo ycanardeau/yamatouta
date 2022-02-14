@@ -19,7 +19,7 @@ import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
 import { CreateArtistDialogStore } from '../../stores/artists/CreateArtistDialogStore';
 
-interface ICreateArtistDialogProps {
+interface CreateArtistDialogProps {
 	onClose: () => void;
 	onCreateArtistComplete: (artist: IArtistObject) => void;
 }
@@ -28,7 +28,7 @@ const CreateArtistDialog = observer(
 	({
 		onClose,
 		onCreateArtistComplete,
-	}: ICreateArtistDialogProps): React.ReactElement => {
+	}: CreateArtistDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new CreateArtistDialogStore());

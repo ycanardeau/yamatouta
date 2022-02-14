@@ -8,7 +8,7 @@ import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 
 const ArtistQuotes = lazyWithRetry(() => import('./ArtistQuotes'));
 
-interface IArtistDetailsLayoutProps {
+interface ArtistDetailsLayoutProps {
 	artist: IArtistObject;
 	store: ArtistDetailsStore;
 }
@@ -16,7 +16,7 @@ interface IArtistDetailsLayoutProps {
 const ArtistDetailsLayout = ({
 	artist,
 	store,
-}: IArtistDetailsLayoutProps): React.ReactElement => {
+}: ArtistDetailsLayoutProps): React.ReactElement => {
 	return (
 		<Routes>
 			<Route

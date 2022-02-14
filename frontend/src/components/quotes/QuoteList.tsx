@@ -3,12 +3,12 @@ import React from 'react';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import QuoteListItem from './QuoteListItem';
 
-interface IQuoteListProps {
+interface QuoteListProps {
 	quotes: IQuoteObject[];
 }
 
 const QuoteList = React.memo(
-	({ quotes }: IQuoteListProps): React.ReactElement | null => {
+	({ quotes }: QuoteListProps): React.ReactElement | null => {
 		return quotes.length > 0 ? (
 			<>
 				{quotes.map((quote) => (

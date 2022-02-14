@@ -19,7 +19,7 @@ import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
 import { CreateTranslationDialogStore } from '../../stores/translations/CreateTranslationDialogStore';
 
-interface ICreateTranslationDialogProps {
+interface CreateTranslationDialogProps {
 	onClose: () => void;
 	onCreateTranslationComplete: (translation: ITranslationObject) => void;
 }
@@ -28,7 +28,7 @@ const CreateTranslationDialog = observer(
 	({
 		onClose,
 		onCreateTranslationComplete,
-	}: ICreateTranslationDialogProps): React.ReactElement => {
+	}: CreateTranslationDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(

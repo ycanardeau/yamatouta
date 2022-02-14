@@ -3,7 +3,7 @@ import { Breadcrumbs, Link } from '@mui/material';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-interface IBreadcrumbProps {
+interface BreadcrumbProps {
 	items: {
 		text: string;
 		to: string;
@@ -11,7 +11,7 @@ interface IBreadcrumbProps {
 	}[];
 }
 
-const Breadcrumb = ({ items }: IBreadcrumbProps): React.ReactElement => {
+const Breadcrumb = ({ items }: BreadcrumbProps): React.ReactElement => {
 	return (
 		<Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
 			{items.map((item) => (

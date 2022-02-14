@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import { IAuthorObject } from '../dto/quotes/IQuoteObject';
 
-interface IAuthorLinkProps {
+interface AuthorLinkProps {
 	author: IAuthorObject;
 	children: React.ReactNode;
 }
@@ -12,7 +12,7 @@ interface IAuthorLinkProps {
 const AuthorLink = ({
 	author,
 	children,
-}: IAuthorLinkProps): React.ReactElement => {
+}: AuthorLinkProps): React.ReactElement => {
 	switch (author.authorType) {
 		case 'artist':
 			return (

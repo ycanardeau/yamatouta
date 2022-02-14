@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
 import { ChangeEmailDialogStore } from '../../stores/settings/ChangeEmailDialogStore';
 
-interface IChangeEmailDialogProps {
+interface ChangeEmailDialogProps {
 	onClose: () => void;
 	onChangeEmailComplete: (user: IAuthenticatedUserObject) => void;
 }
@@ -25,7 +25,7 @@ const ChangeEmailDialog = observer(
 	({
 		onClose,
 		onChangeEmailComplete,
-	}: IChangeEmailDialogProps): React.ReactElement => {
+	}: ChangeEmailDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new ChangeEmailDialogStore());

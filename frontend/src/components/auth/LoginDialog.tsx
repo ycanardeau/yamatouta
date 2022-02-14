@@ -19,13 +19,13 @@ import { useTranslation } from 'react-i18next';
 import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
 import { LoginDialogStore } from '../../stores/auth/LoginDialogStore';
 
-interface ILoginDialogProps {
+interface LoginDialogProps {
 	onClose: () => void;
 	onLoginComplete: (user: IAuthenticatedUserObject) => void;
 }
 
 const LoginDialog = observer(
-	({ onClose, onLoginComplete }: ILoginDialogProps): React.ReactElement => {
+	({ onClose, onLoginComplete }: LoginDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new LoginDialogStore());

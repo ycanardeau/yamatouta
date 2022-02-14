@@ -7,13 +7,13 @@ import { IUserObject } from '../../dto/users/IUserObject';
 
 const UserBasicInfo = lazyWithRetry(() => import('./UserBasicInfo'));
 
-interface IUserDetailsLayoutProps {
+interface UserDetailsLayoutProps {
 	user: IUserObject;
 }
 
 const UserDetailsLayout = ({
 	user,
-}: IUserDetailsLayoutProps): React.ReactElement => {
+}: UserDetailsLayoutProps): React.ReactElement => {
 	return (
 		<Routes>
 			<Route path="" element={<UserBasicInfo user={user} />} />
