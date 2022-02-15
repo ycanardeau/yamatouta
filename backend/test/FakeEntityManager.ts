@@ -1,8 +1,22 @@
+import { AnyEntity, Reference } from '@mikro-orm/core';
+
 export class FakeEntityManager {
-	transactional<T>(cb: () => Promise<T>): Promise<T> {
-		return cb();
+	readonly entities: (
+		| AnyEntity
+		| Reference<AnyEntity>
+		| (AnyEntity | Reference<AnyEntity>)
+	)[] = [];
+
+	transactional<T>(cb: (em: FakeEntityManager) => Promise<T>): Promise<T> {
+		return cb(this);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	persist(): void {}
+	persist(
+		entity:
+			| AnyEntity
+			| Reference<AnyEntity>
+			| (AnyEntity | Reference<AnyEntity>)[],
+	): void {
+		this.entities.push(entity);
+	}
 }

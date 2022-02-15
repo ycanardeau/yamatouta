@@ -1,52 +1,35 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { UserObject } from '../../../src/dto/users/UserObject';
-import { User } from '../../../src/entities/User';
-import { PasswordHashAlgorithm } from '../../../src/models/PasswordHashAlgorithm';
 import { FakePermissionContext } from '../../FakePermissionContext';
+import { createUser } from '../../createEntry';
 
-test('UserObject', () => {
-	const user = new User({
-		name: 'user',
+test('UserObject', async () => {
+	const user = await createUser({
+		id: 1,
+		username: 'user',
 		email: 'user@example.com',
-		normalizedEmail: '',
-		passwordHashAlgorithm: PasswordHashAlgorithm.Bcrypt,
-		salt: '',
-		passwordHash: '',
 	});
-	user.id = 1;
 
-	const deletedUser = new User({
-		name: 'deleted',
+	const deletedUser = await createUser({
+		id: 2,
+		username: 'deleted',
 		email: 'deleted@example.com',
-		normalizedEmail: '',
-		passwordHashAlgorithm: PasswordHashAlgorithm.Bcrypt,
-		salt: '',
-		passwordHash: '',
+		deleted: true,
 	});
-	deletedUser.id = 2;
-	deletedUser.deleted = true;
 
-	const hiddenUser = new User({
-		name: 'hidden',
+	const hiddenUser = await createUser({
+		id: 3,
+		username: 'hidden',
 		email: 'deleted@example.com',
-		normalizedEmail: '',
-		passwordHashAlgorithm: PasswordHashAlgorithm.Bcrypt,
-		salt: '',
-		passwordHash: '',
+		hidden: true,
 	});
-	hiddenUser.id = 3;
-	hiddenUser.hidden = true;
 
-	const viewer = new User({
-		name: 'viewer',
+	const viewer = await createUser({
+		id: 4,
+		username: 'viewer',
 		email: 'viewer@example.com',
-		normalizedEmail: '',
-		passwordHashAlgorithm: PasswordHashAlgorithm.Bcrypt,
-		salt: '',
-		passwordHash: '',
 	});
-	viewer.id = 4;
 
 	const permissionContext = new FakePermissionContext(viewer);
 

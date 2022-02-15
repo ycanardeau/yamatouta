@@ -1,42 +1,36 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { ArtistObject } from '../../../src/dto/artists/ArtistObject';
-import { Artist } from '../../../src/entities/Artist';
-import { User } from '../../../src/entities/User';
 import { ArtistType } from '../../../src/models/ArtistType';
-import { PasswordHashAlgorithm } from '../../../src/models/PasswordHashAlgorithm';
 import { FakePermissionContext } from '../../FakePermissionContext';
+import { createArtist, createUser } from '../../createEntry';
 
-test('ArtistObject', () => {
-	const artist = new Artist({
+test('ArtistObject', async () => {
+	const artist = createArtist({
+		id: 1,
 		name: 'artist',
 		artistType: ArtistType.Person,
 	});
-	artist.id = 1;
 
-	const deletedArtist = new Artist({
+	const deletedArtist = createArtist({
+		id: 2,
 		name: 'deleted',
 		artistType: ArtistType.Person,
+		deleted: true,
 	});
-	deletedArtist.id = 2;
-	deletedArtist.deleted = true;
 
-	const hiddenArtist = new Artist({
+	const hiddenArtist = createArtist({
+		id: 3,
 		name: 'hidden',
 		artistType: ArtistType.Person,
+		hidden: true,
 	});
-	hiddenArtist.id = 3;
-	hiddenArtist.hidden = true;
 
-	const viewer = new User({
-		name: 'viewer',
+	const viewer = await createUser({
+		id: 4,
+		username: 'viewer',
 		email: 'viewer@example.com',
-		normalizedEmail: '',
-		passwordHashAlgorithm: PasswordHashAlgorithm.Bcrypt,
-		salt: '',
-		passwordHash: '',
 	});
-	viewer.id = 4;
 
 	const permissionContext = new FakePermissionContext(viewer);
 

@@ -1,17 +1,12 @@
 import { AuthenticatedUserObject } from '../../../src/dto/users/AuthenticatedUserObject';
-import { User } from '../../../src/entities/User';
-import { PasswordHashAlgorithm } from '../../../src/models/PasswordHashAlgorithm';
+import { createUser } from '../../createEntry';
 
-test('AuthenticatedUserObject', () => {
-	const user = new User({
-		name: 'user',
+test('AuthenticatedUserObject', async () => {
+	const user = await createUser({
+		id: 1,
+		username: 'user',
 		email: 'user@example.com',
-		normalizedEmail: '',
-		passwordHashAlgorithm: PasswordHashAlgorithm.Bcrypt,
-		salt: '',
-		passwordHash: '',
 	});
-	user.id = 1;
 
 	const userObject = new AuthenticatedUserObject(user);
 	expect(userObject.id).toBe(user.id);

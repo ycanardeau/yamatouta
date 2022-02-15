@@ -1,23 +1,29 @@
 import { BadRequestException } from '@nestjs/common';
 
+import { UserAuditLogEntry } from '../../../src/entities/AuditLogEntry';
 import { User } from '../../../src/entities/User';
+import { AuditedAction } from '../../../src/models/AuditedAction';
 import { AuditLogService } from '../../../src/services/AuditLogService';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
 import { NormalizeEmailService } from '../../../src/services/users/NormalizeEmailService';
 import { UpdateAuthenticatedUserService } from '../../../src/services/users/UpdateAuthenticatedUserService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
+import { createUser } from '../../createEntry';
+import { testUserAuditLogEntry } from '../../testAuditLogEntry';
 
 describe('UpdateAuthenticatedUserService', () => {
-	const username = 'user';
-	const email = 'user@example.com';
-	const password = 'P@$$w0rd';
+	const existingUsername = 'user';
+	const existingEmail = 'user@example.com';
+	const existingPassword = 'P@$$w0rd';
 
 	let normalizeEmailService: NormalizeEmailService;
 	let normalizedEmail: string;
 	let salt: string;
 	let passwordHash: string;
-	let user: User;
+	let existingUser: User;
+	let permissionContext: FakePermissionContext;
+	let em: FakeEntityManager;
 	let updateAuthenticatedUserService: UpdateAuthenticatedUserService;
 
 	beforeEach(async () => {
@@ -26,26 +32,29 @@ describe('UpdateAuthenticatedUserService', () => {
 
 		normalizeEmailService = new NormalizeEmailService();
 
-		normalizedEmail = await normalizeEmailService.normalizeEmail(email);
+		normalizedEmail = await normalizeEmailService.normalizeEmail(
+			existingEmail,
+		);
 		salt = await passwordHasher.generateSalt();
-		passwordHash = await passwordHasher.hashPassword(password, salt);
+		passwordHash = await passwordHasher.hashPassword(
+			existingPassword,
+			salt,
+		);
 
-		user = new User({
-			name: username,
-			email: email,
-			normalizedEmail: normalizedEmail,
-			passwordHashAlgorithm: passwordHasher.algorithm,
-			salt: salt,
-			passwordHash: passwordHash,
+		existingUser = await createUser({
+			id: 1,
+			username: existingUsername,
+			email: existingEmail,
 		});
-		user.id = 1;
+		existingUser.salt = salt;
+		existingUser.passwordHash = passwordHash;
 
-		const permissionContext = new FakePermissionContext(user);
-		const em = new FakeEntityManager();
+		permissionContext = new FakePermissionContext(existingUser);
+		em = new FakeEntityManager();
 		const userRepo = {
-			findOneOrFail: async (): Promise<User> => user,
+			findOneOrFail: async (): Promise<User> => existingUser,
 			findOne: async (where: any): Promise<User> =>
-				[user].filter(
+				[existingUser].filter(
 					(u) => u.normalizedEmail === where.normalizedEmail,
 				)[0],
 		};
@@ -74,35 +83,54 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					username: newUsername,
 				});
 
-			expect(userObject.id).toBe(user.id);
+			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(newUsername);
 
-			expect(user.name).toBe(newUsername);
-			expect(user.email).toBe(email);
-			expect(user.normalizedEmail).toBe(normalizedEmail);
-			expect(user.salt).toBe(salt);
-			expect(user.passwordHash).toBe(passwordHash);
+			expect(existingUser.name).toBe(newUsername);
+			expect(existingUser.email).toBe(existingEmail);
+			expect(existingUser.normalizedEmail).toBe(normalizedEmail);
+			expect(existingUser.salt).toBe(salt);
+			expect(existingUser.passwordHash).toBe(passwordHash);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_Rename,
+				actor: existingUser,
+				actorIp: permissionContext.remoteIpAddress,
+				oldValue: existingUsername,
+				newValue: newUsername,
+				user: existingUser,
+			});
 		});
 
 		test('username is not changed', async () => {
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
-					username: username,
+					password: existingPassword,
+					username: existingUsername,
 				});
 
-			expect(userObject.id).toBe(user.id);
-			expect(userObject.name).toBe(username);
+			expect(userObject.id).toBe(existingUser.id);
+			expect(userObject.name).toBe(existingUsername);
 
-			expect(user.name).toBe(username);
-			expect(user.email).toBe(email);
-			expect(user.normalizedEmail).toBe(normalizedEmail);
-			expect(user.salt).toBe(salt);
-			expect(user.passwordHash).toBe(passwordHash);
+			expect(existingUser.name).toBe(existingUsername);
+			expect(existingUser.email).toBe(existingEmail);
+			expect(existingUser.normalizedEmail).toBe(normalizedEmail);
+			expect(existingUser.salt).toBe(salt);
+			expect(existingUser.passwordHash).toBe(passwordHash);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('minimum username length', async () => {
@@ -112,11 +140,24 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					username: newUsername,
 				});
 
 			expect(userObject.name).toBe(newUsername);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_Rename,
+				actor: existingUser,
+				actorIp: permissionContext.remoteIpAddress,
+				oldValue: existingUsername,
+				newValue: newUsername,
+				user: existingUser,
+			});
 		});
 
 		test('maximum username length', async () => {
@@ -127,46 +168,77 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					username: newUsername,
 				});
 
 			expect(userObject.name).toBe(newUsername);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_Rename,
+				actor: existingUser,
+				actorIp: permissionContext.remoteIpAddress,
+				oldValue: existingUsername,
+				newValue: newUsername,
+				user: existingUser,
+			});
 		});
 
 		test('username is undefined', async () => {
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					username: undefined,
 				});
 
-			expect(userObject.id).toBe(user.id);
-			expect(userObject.name).toBe(username);
+			expect(userObject.id).toBe(existingUser.id);
+			expect(userObject.name).toBe(existingUsername);
 
-			expect(user.name).toBe(username);
-			expect(user.email).toBe(email);
-			expect(user.normalizedEmail).toBe(normalizedEmail);
-			expect(user.salt).toBe(salt);
-			expect(user.passwordHash).toBe(passwordHash);
+			expect(existingUser.name).toBe(existingUsername);
+			expect(existingUser.email).toBe(existingEmail);
+			expect(existingUser.normalizedEmail).toBe(normalizedEmail);
+			expect(existingUser.salt).toBe(salt);
+			expect(existingUser.passwordHash).toBe(passwordHash);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('username is empty', async () => {
 			await expect(
 				updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					username: '',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('username is whitespace', async () => {
 			await expect(
 				updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					username: ' 　\t\t　 ',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('username is too short', async () => {
@@ -176,10 +248,16 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			await expect(
 				updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					username: newUsername,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('username is too long', async () => {
@@ -190,10 +268,16 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			await expect(
 				updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					username: newUsername,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email', async () => {
@@ -210,70 +294,107 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					email: newEmail,
 				});
 
-			expect(userObject.id).toBe(user.id);
-			expect(userObject.name).toBe(username);
+			expect(userObject.id).toBe(existingUser.id);
+			expect(userObject.name).toBe(existingUsername);
 
-			expect(user.name).toBe(username);
-			expect(user.email).toBe(newEmail);
-			expect(user.normalizedEmail).toBe(newNormalizedEmail);
-			expect(user.salt).toBe(salt);
-			expect(user.passwordHash).toBe(passwordHash);
+			expect(existingUser.name).toBe(existingUsername);
+			expect(existingUser.email).toBe(newEmail);
+			expect(existingUser.normalizedEmail).toBe(newNormalizedEmail);
+			expect(existingUser.salt).toBe(salt);
+			expect(existingUser.passwordHash).toBe(passwordHash);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_ChangeEmail,
+				actor: existingUser,
+				actorIp: permissionContext.remoteIpAddress,
+				oldValue: existingEmail,
+				newValue: newEmail,
+				user: existingUser,
+			});
 		});
 
 		test('email is not changed', async () => {
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
-					email: email,
+					password: existingPassword,
+					email: existingEmail,
 				});
 
-			expect(userObject.id).toBe(user.id);
-			expect(userObject.name).toBe(username);
+			expect(userObject.id).toBe(existingUser.id);
+			expect(userObject.name).toBe(existingUsername);
 
-			expect(user.name).toBe(username);
-			expect(user.email).toBe(email);
-			expect(user.normalizedEmail).toBe(normalizedEmail);
-			expect(user.salt).toBe(salt);
-			expect(user.passwordHash).toBe(passwordHash);
+			expect(existingUser.name).toBe(existingUsername);
+			expect(existingUser.email).toBe(existingEmail);
+			expect(existingUser.normalizedEmail).toBe(normalizedEmail);
+			expect(existingUser.salt).toBe(salt);
+			expect(existingUser.passwordHash).toBe(passwordHash);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is undefined', async () => {
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					email: undefined,
 				});
 
-			expect(userObject.id).toBe(user.id);
-			expect(userObject.name).toBe(username);
+			expect(userObject.id).toBe(existingUser.id);
+			expect(userObject.name).toBe(existingUsername);
 
-			expect(user.name).toBe(username);
-			expect(user.email).toBe(email);
-			expect(user.normalizedEmail).toBe(normalizedEmail);
-			expect(user.salt).toBe(salt);
-			expect(user.passwordHash).toBe(passwordHash);
+			expect(existingUser.name).toBe(existingUsername);
+			expect(existingUser.email).toBe(existingEmail);
+			expect(existingUser.normalizedEmail).toBe(normalizedEmail);
+			expect(existingUser.salt).toBe(salt);
+			expect(existingUser.passwordHash).toBe(passwordHash);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is empty', async () => {
 			await expect(
 				updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					email: '',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is invalid', async () => {
 			await expect(
 				updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					email: 'invalid_email',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('newPassword', async () => {
@@ -288,44 +409,69 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					newPassword: newPassword,
 				});
 
-			expect(userObject.id).toBe(user.id);
-			expect(userObject.name).toBe(username);
+			expect(userObject.id).toBe(existingUser.id);
+			expect(userObject.name).toBe(existingUsername);
 
-			expect(user.name).toBe(username);
-			expect(user.email).toBe(email);
-			expect(user.normalizedEmail).toBe(normalizedEmail);
-			expect(user.salt).toBe(salt);
-			expect(user.passwordHash).not.toBe(passwordHash);
+			expect(existingUser.name).toBe(existingUsername);
+			expect(existingUser.email).toBe(existingEmail);
+			expect(existingUser.normalizedEmail).toBe(normalizedEmail);
+			expect(existingUser.salt).toBe(salt);
+			expect(existingUser.passwordHash).not.toBe(passwordHash);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_ChangePassword,
+				actor: existingUser,
+				actorIp: permissionContext.remoteIpAddress,
+				oldValue: undefined,
+				newValue: undefined,
+				user: existingUser,
+			});
 		});
 
 		test('newPassword is undefined', async () => {
 			const userObject =
 				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					newPassword: undefined,
 				});
 
-			expect(userObject.id).toBe(user.id);
-			expect(userObject.name).toBe(username);
+			expect(userObject.id).toBe(existingUser.id);
+			expect(userObject.name).toBe(existingUsername);
 
-			expect(user.name).toBe(username);
-			expect(user.email).toBe(email);
-			expect(user.normalizedEmail).toBe(normalizedEmail);
-			expect(user.salt).toBe(salt);
-			expect(user.passwordHash).toBe(passwordHash);
+			expect(existingUser.name).toBe(existingUsername);
+			expect(existingUser.email).toBe(existingEmail);
+			expect(existingUser.normalizedEmail).toBe(normalizedEmail);
+			expect(existingUser.salt).toBe(salt);
+			expect(existingUser.passwordHash).toBe(passwordHash);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('newPassword is empty', async () => {
 			await expect(
 				updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					newPassword: '',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('newPassword is too short', async () => {
@@ -335,10 +481,16 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			await expect(
 				updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: password,
+					password: existingPassword,
 					newPassword: newPassword,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 	});
 });

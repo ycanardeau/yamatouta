@@ -1,68 +1,52 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { TranslationObject } from '../../../src/dto/translations/TranslationObject';
-import { Translation } from '../../../src/entities/Translation';
-import { User } from '../../../src/entities/User';
-import { PasswordHashAlgorithm } from '../../../src/models/PasswordHashAlgorithm';
 import { WordCategory } from '../../../src/models/WordCategory';
 import { FakePermissionContext } from '../../FakePermissionContext';
+import { createTranslation, createUser } from '../../createEntry';
 
-test('TranslationObject', () => {
-	const user = new User({
-		name: 'user',
+test('TranslationObject', async () => {
+	const user = await createUser({
+		id: 1,
+		username: 'user',
 		email: 'user@example.com',
-		normalizedEmail: '',
-		passwordHashAlgorithm: PasswordHashAlgorithm.Bcrypt,
-		salt: '',
-		passwordHash: '',
 	});
-	user.id = 1;
 
-	const translation = new Translation({
-		translatedString: {
-			headword: '翻訳',
-			locale: 'ja',
-			reading: 'ほんやく',
-			yamatokotoba: 'いいかえ',
-		},
+	const translation = createTranslation({
+		id: 2,
+		headword: '翻訳',
+		locale: 'ja',
+		reading: 'ほんやく',
+		yamatokotoba: 'いいかえ',
 		category: WordCategory.Noun,
 		user: user,
 	});
-	translation.id = 2;
 
-	const deletedTranslation = new Translation({
-		translatedString: {
-			headword: '消された',
-			locale: 'ja',
-			reading: 'けされた',
-			yamatokotoba: 'けされた',
-		},
+	const deletedTranslation = createTranslation({
+		id: 3,
+		headword: '消された',
+		locale: 'ja',
+		reading: 'けされた',
+		yamatokotoba: 'けされた',
 		user: user,
+		deleted: true,
 	});
-	deletedTranslation.id = 3;
-	deletedTranslation.deleted = true;
 
-	const hiddenTranslation = new Translation({
-		translatedString: {
-			headword: '隠された',
-			locale: 'ja',
-			reading: 'かくされた',
-			yamatokotoba: 'かくされた',
-		},
+	const hiddenTranslation = createTranslation({
+		id: 4,
+		headword: '隠された',
+		locale: 'ja',
+		reading: 'かくされた',
+		yamatokotoba: 'かくされた',
 		user: user,
+		hidden: true,
 	});
-	hiddenTranslation.id = 4;
-	hiddenTranslation.hidden = true;
 
-	const viewer = new User({
-		name: 'viewer',
+	const viewer = await createUser({
+		id: 5,
+		username: 'viewer',
 		email: 'viewer@example.com',
-		normalizedEmail: '',
-		passwordHashAlgorithm: PasswordHashAlgorithm.Bcrypt,
-		salt: '',
-		passwordHash: '',
 	});
-	viewer.id = 5;
 
 	const permissionContext = new FakePermissionContext(viewer);
 

@@ -1,53 +1,46 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { QuoteObject } from '../../../src/dto/quotes/QuoteObject';
-import { Artist } from '../../../src/entities/Artist';
-import { ArtistQuote } from '../../../src/entities/ArtistQuote';
-import { User } from '../../../src/entities/User';
 import { ArtistType } from '../../../src/models/ArtistType';
-import { PasswordHashAlgorithm } from '../../../src/models/PasswordHashAlgorithm';
 import { QuoteType } from '../../../src/models/QuoteType';
 import { FakePermissionContext } from '../../FakePermissionContext';
+import { createArtist, createArtistQuote, createUser } from '../../createEntry';
 
-test('ArtistQuoteObject', () => {
-	const artist = new Artist({
+test('ArtistQuoteObject', async () => {
+	const artist = createArtist({
+		id: 1,
 		name: 'artist',
 		artistType: ArtistType.Person,
 	});
-	artist.id = 1;
 
-	const artistQuote = new ArtistQuote({
+	const artistQuote = createArtistQuote({
+		id: 2,
 		quoteType: QuoteType.Tanka,
 		text: 'quote',
 		artist: artist,
 	});
-	artistQuote.id = 2;
 
-	const deletedArtistQuote = new ArtistQuote({
+	const deletedArtistQuote = createArtistQuote({
+		id: 3,
 		quoteType: QuoteType.Tanka,
 		text: 'deleted',
 		artist: artist,
+		deleted: true,
 	});
-	deletedArtistQuote.id = 3;
-	deletedArtistQuote.deleted = true;
 
-	const hiddenArtistQuote = new ArtistQuote({
+	const hiddenArtistQuote = createArtistQuote({
+		id: 4,
 		quoteType: QuoteType.Tanka,
 		text: 'hidden',
 		artist: artist,
+		hidden: true,
 	});
-	hiddenArtistQuote.id = 4;
-	hiddenArtistQuote.hidden = true;
 
-	const viewer = new User({
-		name: 'viewer',
+	const viewer = await createUser({
+		id: 5,
+		username: 'viewer',
 		email: 'viewer@example.com',
-		normalizedEmail: '',
-		passwordHashAlgorithm: PasswordHashAlgorithm.Bcrypt,
-		salt: '',
-		passwordHash: '',
 	});
-	viewer.id = 5;
 
 	const permissionContext = new FakePermissionContext(viewer);
 

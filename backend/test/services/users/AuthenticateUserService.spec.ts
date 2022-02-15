@@ -1,56 +1,40 @@
+import { UserAuditLogEntry } from '../../../src/entities/AuditLogEntry';
 import { User } from '../../../src/entities/User';
+import { AuditedAction } from '../../../src/models/AuditedAction';
 import { AuditLogService } from '../../../src/services/AuditLogService';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
 import {
 	AuthenticateUserService,
 	LoginError,
 } from '../../../src/services/users/AuthenticateUserService';
-import { NormalizeEmailService } from '../../../src/services/users/NormalizeEmailService';
 import { FakeEntityManager } from '../../FakeEntityManager';
+import { createUser } from '../../createEntry';
+import { testUserAuditLogEntry } from '../../testAuditLogEntry';
 
 describe('AuthenticateUserService', () => {
 	const existingUsername = 'existing';
 	const existingEmail = 'existing@example.com';
 	const existingPassword = 'P@$$w0rd';
 
-	let normalizeEmailService: NormalizeEmailService;
-	let normalizedExistingEmail: string;
-	let salt: string;
-	let passwordHash: string;
-	let user: User;
+	let existingUser: User;
+	let em: FakeEntityManager;
 	let authenticateUserService: AuthenticateUserService;
 
 	beforeEach(async () => {
-		const passwordHasherFactory = new PasswordHasherFactory();
-		const passwordHasher = passwordHasherFactory.default;
-
-		normalizeEmailService = new NormalizeEmailService();
-
-		normalizedExistingEmail = await normalizeEmailService.normalizeEmail(
-			existingEmail,
-		);
-		salt = await passwordHasher.generateSalt();
-		passwordHash = await passwordHasher.hashPassword(
-			existingPassword,
-			salt,
-		);
-
-		user = new User({
-			name: existingUsername,
+		existingUser = await createUser({
+			id: 1,
+			username: existingUsername,
 			email: existingEmail,
-			normalizedEmail: normalizedExistingEmail,
-			passwordHashAlgorithm: passwordHasher.algorithm,
-			salt: salt,
-			passwordHash: passwordHash,
+			password: existingPassword,
 		});
-		user.id = 1;
 
-		const em = new FakeEntityManager();
+		em = new FakeEntityManager();
 		const userRepo = {
 			findOne: async (where: any): Promise<User> =>
-				[user].filter((u) => u.email === where.email)[0],
+				[existingUser].filter((u) => u.email === where.email)[0],
 		};
 		const auditLogService = new AuditLogService(em as any);
+		const passwordHasherFactory = new PasswordHasherFactory();
 
 		authenticateUserService = new AuthenticateUserService(
 			em as any,
@@ -61,7 +45,7 @@ describe('AuthenticateUserService', () => {
 	});
 
 	describe('authenticateUser', () => {
-		const defaultParams = {
+		const defaults = {
 			email: existingEmail,
 			password: existingPassword,
 			ip: '::1',
@@ -69,7 +53,7 @@ describe('AuthenticateUserService', () => {
 
 		test('authenticateUser', async () => {
 			const result = await authenticateUserService.authenticateUser({
-				...defaultParams,
+				...defaults,
 			});
 
 			expect(result.error).toBe(LoginError.None);
@@ -79,99 +63,187 @@ describe('AuthenticateUserService', () => {
 
 			const userObject = result.user;
 
-			expect(userObject.id).toBe(user.id);
-			expect(userObject.name).toBe(user.name);
+			expect(userObject.id).toBe(existingUser.id);
+			expect(userObject.name).toBe(existingUser.name);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_Login,
+				actor: existingUser,
+				actorIp: defaults.ip,
+				oldValue: undefined,
+				newValue: undefined,
+				user: existingUser,
+			});
 		});
 
 		test('email is undefined', async () => {
 			const result = await authenticateUserService.authenticateUser({
-				...defaultParams,
+				...defaults,
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				email: undefined!,
 			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is empty', async () => {
 			const result = await authenticateUserService.authenticateUser({
-				...defaultParams,
+				...defaults,
 				email: '',
 			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is whitespace', async () => {
 			const result = await authenticateUserService.authenticateUser({
-				...defaultParams,
+				...defaults,
 				email: ' 　\t\t　 ',
 			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is invalid', async () => {
 			const result = await authenticateUserService.authenticateUser({
-				...defaultParams,
+				...defaults,
 				email: 'invalid_email',
 			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email does not exist', async () => {
 			const result = await authenticateUserService.authenticateUser({
-				...defaultParams,
+				...defaults,
 				email: 'not_found@example.com',
 			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('password is undefined', async () => {
 			await expect(
 				authenticateUserService.authenticateUser({
-					...defaultParams,
+					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					password: undefined!,
 				}),
 			).rejects.toThrowError('data and salt arguments required');
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('password is empty', async () => {
 			const result = await authenticateUserService.authenticateUser({
-				...defaultParams,
+				...defaults,
 				password: '',
 			});
 
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_FailedLogin,
+				actor: existingUser,
+				actorIp: defaults.ip,
+				oldValue: undefined,
+				newValue: undefined,
+				user: existingUser,
+			});
 		});
 
 		test('password is whitespace', async () => {
 			const result = await authenticateUserService.authenticateUser({
-				...defaultParams,
+				...defaults,
 				password: ' 　\t\t　 ',
 			});
 
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_FailedLogin,
+				actor: existingUser,
+				actorIp: defaults.ip,
+				oldValue: undefined,
+				newValue: undefined,
+				user: existingUser,
+			});
 		});
 
 		test('password is wrong', async () => {
 			const result = await authenticateUserService.authenticateUser({
-				...defaultParams,
+				...defaults,
 				password: 'wrong_password',
 			});
 
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_FailedLogin,
+				actor: existingUser,
+				actorIp: defaults.ip,
+				oldValue: undefined,
+				newValue: undefined,
+				user: existingUser,
+			});
 		});
 	});
 });

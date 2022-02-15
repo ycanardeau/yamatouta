@@ -1,53 +1,13 @@
 import { UnauthorizedException } from '@nestjs/common';
 import _ from 'lodash';
 
-import { User } from '../../src/entities/User';
 import { Permission } from '../../src/models/Permission';
 import { UserGroup } from '../../src/models/UserGroup';
 import { userGroupPermissions } from '../../src/models/userGroupPermissions';
-import { PasswordHasherFactory } from '../../src/services/passwordHashers/PasswordHasherFactory';
-import { NormalizeEmailService } from '../../src/services/users/NormalizeEmailService';
 import { FakePermissionContext } from '../FakePermissionContext';
+import { createUser } from '../createEntry';
 
 describe('PermissionContext', () => {
-	const createUser = async ({
-		id,
-		username,
-		email,
-		password,
-		userGroup,
-	}: {
-		id: number;
-		username: string;
-		email: string;
-		password: string;
-		userGroup: UserGroup;
-	}): Promise<User> => {
-		const passwordHasherFactory = new PasswordHasherFactory();
-		const passwordHasher = passwordHasherFactory.default;
-
-		const normalizeEmailService = new NormalizeEmailService();
-
-		const normalizedEmail = await normalizeEmailService.normalizeEmail(
-			email,
-		);
-		const salt = await passwordHasher.generateSalt();
-		const passwordHash = await passwordHasher.hashPassword(password, salt);
-
-		const user = new User({
-			name: username,
-			email: email,
-			normalizedEmail: normalizedEmail,
-			passwordHashAlgorithm: passwordHasher.algorithm,
-			salt: salt,
-			passwordHash: passwordHash,
-		});
-		user.id = id;
-		user.userGroup = userGroup;
-
-		return user;
-	};
-
 	test('hasPermission', async () => {
 		const users = await Promise.all([
 			createUser({

@@ -1,57 +1,52 @@
+import { AnyEntity, Reference } from '@mikro-orm/core';
 import { BadRequestException } from '@nestjs/common';
 
+import { UserAuditLogEntry } from '../../../src/entities/AuditLogEntry';
 import { User } from '../../../src/entities/User';
+import { AuditedAction } from '../../../src/models/AuditedAction';
 import { AuditLogService } from '../../../src/services/AuditLogService';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
 import { CreateUserService } from '../../../src/services/users/CreateUserService';
 import { NormalizeEmailService } from '../../../src/services/users/NormalizeEmailService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
+import { createUser } from '../../createEntry';
+import { testUserAuditLogEntry } from '../../testAuditLogEntry';
 
 describe('CreateUserService', () => {
 	const existingUsername = 'existing';
 	const existingEmail = 'existing@example.com';
 
-	let normalizeEmailService: NormalizeEmailService;
-	let normalizedExistingEmail: string;
-	let salt: string;
-	let passwordHash: string;
-	let user: User;
+	let existingUser: User;
+	let em: FakeEntityManager;
+	let permissionContext: FakePermissionContext;
 	let createUserService: CreateUserService;
 
 	beforeEach(async () => {
-		const passwordHasherFactory = new PasswordHasherFactory();
-		const passwordHasher = passwordHasherFactory.default;
-
-		normalizeEmailService = new NormalizeEmailService();
-
-		normalizedExistingEmail = await normalizeEmailService.normalizeEmail(
-			existingEmail,
-		);
-		salt = await passwordHasher.generateSalt();
-		passwordHash = await passwordHasher.hashPassword('P@$$w0rd', salt);
-
-		user = new User({
-			name: existingUsername,
+		existingUser = await createUser({
+			id: 1,
+			username: existingUsername,
 			email: existingEmail,
-			normalizedEmail: normalizedExistingEmail,
-			passwordHashAlgorithm: passwordHasher.algorithm,
-			salt: salt,
-			passwordHash: passwordHash,
+			password: 'P@$$w0rd',
 		});
-		user.id = 1;
 
-		const em = new FakeEntityManager();
+		em = new FakeEntityManager();
 		const userRepo = {
 			findOne: async (where: any): Promise<User> =>
-				[user].filter(
+				[existingUser].filter(
 					(u) => u.normalizedEmail === where.normalizedEmail,
 				)[0],
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			persist: (): void => {},
+			persist: (
+				entity:
+					| AnyEntity
+					| Reference<AnyEntity>
+					| (AnyEntity | Reference<AnyEntity>)[],
+			): void => em.persist(entity),
 		};
 		const auditLogService = new AuditLogService(em as any);
-		const permissionContext = new FakePermissionContext(user);
+		permissionContext = new FakePermissionContext();
+		const normalizeEmailService = new NormalizeEmailService();
+		const passwordHasherFactory = new PasswordHasherFactory();
 
 		createUserService = new CreateUserService(
 			em as any,
@@ -76,6 +71,25 @@ describe('CreateUserService', () => {
 			});
 
 			expect(userObject.name).toBe(defaultParams.username);
+
+			const newUser = em.entities.filter(
+				(entity) => entity instanceof User,
+			)[0] as User;
+
+			expect(newUser).toBeInstanceOf(User);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_Create,
+				actor: newUser,
+				actorIp: permissionContext.remoteIpAddress,
+				oldValue: undefined,
+				newValue: undefined,
+				user: newUser,
+			});
 		});
 
 		test('minimum username length', async () => {
@@ -89,6 +103,25 @@ describe('CreateUserService', () => {
 			});
 
 			expect(userObject.name).toBe(username);
+
+			const newUser = em.entities.filter(
+				(entity) => entity instanceof User,
+			)[0] as User;
+
+			expect(newUser).toBeInstanceOf(User);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_Create,
+				actor: newUser,
+				actorIp: permissionContext.remoteIpAddress,
+				oldValue: undefined,
+				newValue: undefined,
+				user: newUser,
+			});
 		});
 
 		test('maximum username length', async () => {
@@ -103,6 +136,25 @@ describe('CreateUserService', () => {
 			});
 
 			expect(userObject.name).toBe(username);
+
+			const newUser = em.entities.filter(
+				(entity) => entity instanceof User,
+			)[0] as User;
+
+			expect(newUser).toBeInstanceOf(User);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			testUserAuditLogEntry(auditLogEntry, {
+				action: AuditedAction.User_Create,
+				actor: newUser,
+				actorIp: permissionContext.remoteIpAddress,
+				oldValue: undefined,
+				newValue: undefined,
+				user: newUser,
+			});
 		});
 
 		test('username is undefined', async () => {
@@ -113,6 +165,12 @@ describe('CreateUserService', () => {
 					username: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('username is empty', async () => {
@@ -122,6 +180,12 @@ describe('CreateUserService', () => {
 					username: '',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('username is whitespace', async () => {
@@ -131,6 +195,12 @@ describe('CreateUserService', () => {
 					username: ' 　\t\t　 ',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('username is too short', async () => {
@@ -144,6 +214,12 @@ describe('CreateUserService', () => {
 					username: username,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('username is too long', async () => {
@@ -158,6 +234,12 @@ describe('CreateUserService', () => {
 					username: username,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is existing', async () => {
@@ -167,6 +249,12 @@ describe('CreateUserService', () => {
 					email: existingEmail,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is undefined', async () => {
@@ -177,6 +265,12 @@ describe('CreateUserService', () => {
 					email: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is empty', async () => {
@@ -186,6 +280,12 @@ describe('CreateUserService', () => {
 					email: '',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('email is invalid', async () => {
@@ -195,6 +295,12 @@ describe('CreateUserService', () => {
 					email: 'invalid_email',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('password is undefined', async () => {
@@ -205,6 +311,12 @@ describe('CreateUserService', () => {
 					password: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('password is empty', async () => {
@@ -214,6 +326,12 @@ describe('CreateUserService', () => {
 					password: '',
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 
 		test('password is too short', async () => {
@@ -227,6 +345,12 @@ describe('CreateUserService', () => {
 					password: password,
 				}),
 			).rejects.toThrow(BadRequestException);
+
+			const auditLogEntry = em.entities.filter(
+				(entity) => entity instanceof UserAuditLogEntry,
+			)[0] as UserAuditLogEntry;
+
+			expect(auditLogEntry).toBeUndefined();
 		});
 	});
 });
