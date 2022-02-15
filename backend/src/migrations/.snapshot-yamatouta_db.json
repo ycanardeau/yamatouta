@@ -1709,23 +1709,21 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "int",
-          "unsigned": true,
+        "entry_type": {
+          "name": "entry_type",
+          "type": "enum('user', 'translation', 'quote', 'artist', 'work')",
+          "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
-        },
-        "translation_id": {
-          "name": "translation_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
+          "nullable": false,
+          "enumItems": [
+            "user",
+            "translation",
+            "quote",
+            "artist",
+            "work"
+          ],
+          "mappedType": "enum"
         },
         "old_value": {
           "name": "old_value",
@@ -1744,6 +1742,24 @@
           "primary": false,
           "nullable": true,
           "mappedType": "text"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "translation_id": {
+          "name": "translation_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
         }
       },
       "name": "audit_log_entries",
@@ -1754,6 +1770,15 @@
           ],
           "composite": false,
           "keyName": "audit_log_entries_actor_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "entry_type"
+          ],
+          "composite": false,
+          "keyName": "audit_log_entries_entry_type_index",
           "primary": false,
           "unique": false
         },
