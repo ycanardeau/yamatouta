@@ -15,7 +15,7 @@ import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';
 import { PaginationStore } from '../PaginationStore';
 
-interface ITranslationIndexRouteParams {
+interface ITranslationSearchRouteParams {
 	page?: number;
 	pageSize?: number;
 	sort?: TranslationSortRule;
@@ -23,7 +23,7 @@ interface ITranslationIndexRouteParams {
 	category?: WordCategory;
 }
 
-const translationIndexRouteParamsSchema = {
+const translationSearchRouteParamsSchema = {
 	$schema: 'http://json-schema.org/draft-07/schema#',
 	properties: {
 		category: {
@@ -69,19 +69,18 @@ const translationIndexRouteParamsSchema = {
 	type: 'object',
 };
 
-const validate = ajv.compile<ITranslationIndexRouteParams>(
-	translationIndexRouteParamsSchema,
+const validate = ajv.compile<ITranslationSearchRouteParams>(
+	translationSearchRouteParamsSchema,
 );
 
-export class TranslationIndexStore
+export class TranslationSearchStore
 	implements
 		IStoreWithPagination<
-			ITranslationIndexRouteParams,
+			ITranslationSearchRouteParams,
 			ISearchResultObject<ITranslationObject>
 		>
 {
 	readonly paginationStore = new PaginationStore({ pageSize: 50 });
-
 	@observable translations: ITranslationObject[] = [];
 	@observable sort = TranslationSortRule.HeadwordAsc;
 	@observable query = '';
@@ -91,9 +90,23 @@ export class TranslationIndexStore
 		makeObservable(this);
 	}
 
+	@action setSort = (value: TranslationSortRule): void => {
+		this.sort = value;
+	};
+
+	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	clearQuery = (): void => this.setQuery('');
+
+	@action setCategory = (value?: WordCategory): void => {
+		this.category = value;
+	};
+
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof ITranslationIndexRouteParams)[] = [
+	clearResultsByQueryKeys: (keyof ITranslationSearchRouteParams)[] = [
 		'sort',
 		'query',
 		'category',
@@ -121,7 +134,7 @@ export class TranslationIndexStore
 		return result;
 	};
 
-	@computed.struct get routeParams(): ITranslationIndexRouteParams {
+	@computed.struct get routeParams(): ITranslationSearchRouteParams {
 		return {
 			page: this.paginationStore.page,
 			pageSize: this.paginationStore.pageSize,
@@ -130,7 +143,7 @@ export class TranslationIndexStore
 			category: this.category ? this.category : undefined,
 		};
 	}
-	set routeParams(value: ITranslationIndexRouteParams) {
+	set routeParams(value: ITranslationSearchRouteParams) {
 		this.paginationStore.page = value.page ?? 1;
 		this.paginationStore.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? TranslationSortRule.HeadwordAsc;
@@ -138,20 +151,9 @@ export class TranslationIndexStore
 		this.category = value.category;
 	}
 
-	validateRouteParams = (data: any): data is ITranslationIndexRouteParams =>
-		validate(data);
-
-	@action setSort = (value: TranslationSortRule): void => {
-		this.sort = value;
-	};
-
-	@action setQuery = (value: string): void => {
-		this.query = value;
-	};
-
-	clearQuery = (): void => this.setQuery('');
-
-	@action setCategory = (value?: WordCategory): void => {
-		this.category = value;
+	validateRouteParams = (
+		data: any,
+	): data is ITranslationSearchRouteParams => {
+		return validate(data);
 	};
 }

@@ -21,7 +21,7 @@ const ArtistQuotes = observer(
 
 		useYamatoutaTitle(artist.name, true);
 
-		useStoreWithPagination(store.quoteIndexStore);
+		useStoreWithPagination(store.quoteSearchStore);
 
 		return (
 			<Layout
@@ -38,11 +38,11 @@ const ArtistQuotes = observer(
 					},
 				]}
 			>
-				<Pagination store={store.quoteIndexStore.paginationStore} />
+				<Pagination store={store.quoteSearchStore.paginationStore} />
 
-				<QuoteList quotes={store.quoteIndexStore.quotes} />
+				<QuoteList quotes={store.quoteSearchStore.quotes} />
 
-				<Pagination store={store.quoteIndexStore.paginationStore} />
+				<Pagination store={store.quoteSearchStore.paginationStore} />
 			</Layout>
 		);
 	},

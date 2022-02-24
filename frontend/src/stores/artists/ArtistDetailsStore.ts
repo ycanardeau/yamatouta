@@ -1,10 +1,10 @@
-import { QuoteIndexStore } from '../quotes/QuoteIndexStore';
+import { QuoteSearchStore } from '../quotes/QuoteSearchStore';
 
 export class ArtistDetailsStore {
-	readonly quoteIndexStore: QuoteIndexStore;
+	readonly quoteSearchStore: QuoteSearchStore;
 
 	constructor(artistId: number) {
-		this.quoteIndexStore = new QuoteIndexStore();
-		this.quoteIndexStore.artistId = artistId;
+		this.quoteSearchStore = new QuoteSearchStore();
+		this.quoteSearchStore.artistId = artistId;
 	}
 }

@@ -16,7 +16,7 @@ import Layout from '../../components/layout/Layout';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IUserObject } from '../../dto/users/IUserObject';
-import { UserIndexStore } from '../../stores/users/UserIndexStore';
+import { UserSearchStore } from '../../stores/users/UserSearchStore';
 
 interface UserListItemProps {
 	user: IUserObject;
@@ -56,7 +56,7 @@ const UserList = React.memo(
 const UserIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
 
-	const [store] = React.useState(() => new UserIndexStore());
+	const [store] = React.useState(() => new UserSearchStore());
 
 	useYamatoutaTitle(t('shared.users'), ready);
 

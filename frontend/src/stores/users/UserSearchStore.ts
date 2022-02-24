@@ -1,18 +1,18 @@
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
-import { listArtists } from '../../api/ArtistApi';
+import { listUsers } from '../../api/UserApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
 import { ISearchResultObject } from '../../dto/ISearchResultObject';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { IUserObject } from '../../dto/users/IUserObject';
 import { PaginationStore } from '../PaginationStore';
 
-interface IArtistIndexRouteParams {
+interface IUserSearchRouteParams {
 	page?: number;
 	pageSize?: number;
 }
 
-const artistIndexRouteParamsSchema = {
+const userSearchRouteParamsSchema = {
 	$schema: 'http://json-schema.org/draft-07/schema#',
 	properties: {
 		page: {
@@ -25,20 +25,19 @@ const artistIndexRouteParamsSchema = {
 	type: 'object',
 };
 
-const validate = ajv.compile<IArtistIndexRouteParams>(
-	artistIndexRouteParamsSchema,
+const validate = ajv.compile<IUserSearchRouteParams>(
+	userSearchRouteParamsSchema,
 );
 
-export class ArtistIndexStore
+export class UserSearchStore
 	implements
 		IStoreWithPagination<
-			IArtistIndexRouteParams,
-			ISearchResultObject<IArtistObject>
+			IUserSearchRouteParams,
+			ISearchResultObject<IUserObject>
 		>
 {
 	readonly paginationStore = new PaginationStore();
-
-	@observable artists: IArtistObject[] = [];
+	@observable users: IUserObject[] = [];
 
 	constructor() {
 		makeObservable(this);
@@ -46,19 +45,19 @@ export class ArtistIndexStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IArtistIndexRouteParams)[] = [];
+	clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = [];
 
 	updateResults = async (
 		clearResults: boolean,
-	): Promise<ISearchResultObject<IArtistObject>> => {
+	): Promise<ISearchResultObject<IUserObject>> => {
 		const paginationParams = this.paginationStore.toParams(clearResults);
 
-		const result = await listArtists({
+		const result = await listUsers({
 			pagination: paginationParams,
 		});
 
 		runInAction(() => {
-			this.artists = result.items;
+			this.users = result.items;
 
 			if (paginationParams.getTotalCount)
 				this.paginationStore.totalItems = result.totalCount;
@@ -67,17 +66,18 @@ export class ArtistIndexStore
 		return result;
 	};
 
-	@computed.struct get routeParams(): IArtistIndexRouteParams {
+	@computed.struct get routeParams(): IUserSearchRouteParams {
 		return {
 			page: this.paginationStore.page,
 			pageSize: this.paginationStore.pageSize,
 		};
 	}
-	set routeParams(value: IArtistIndexRouteParams) {
+	set routeParams(value: IUserSearchRouteParams) {
 		this.paginationStore.page = value.page ?? 1;
 		this.paginationStore.pageSize = value.pageSize ?? 10;
 	}
 
-	validateRouteParams = (data: any): data is IArtistIndexRouteParams =>
-		validate(data);
+	validateRouteParams = (data: any): data is IUserSearchRouteParams => {
+		return validate(data);
+	};
 }

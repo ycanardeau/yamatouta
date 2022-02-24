@@ -7,12 +7,12 @@ import { ISearchResultObject } from '../../dto/ISearchResultObject';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { PaginationStore } from '../PaginationStore';
 
-interface IQuoteIndexRouteParams {
+interface IQuoteSearchRouteParams {
 	page?: number;
 	pageSize?: number;
 }
 
-const quoteIndexRouteParamsSchema = {
+const quoteSearchRouteParamsSchema = {
 	$schema: 'http://json-schema.org/draft-07/schema#',
 	properties: {
 		page: {
@@ -25,19 +25,18 @@ const quoteIndexRouteParamsSchema = {
 	type: 'object',
 };
 
-const validate = ajv.compile<IQuoteIndexRouteParams>(
-	quoteIndexRouteParamsSchema,
+const validate = ajv.compile<IQuoteSearchRouteParams>(
+	quoteSearchRouteParamsSchema,
 );
 
-export class QuoteIndexStore
+export class QuoteSearchStore
 	implements
 		IStoreWithPagination<
-			IQuoteIndexRouteParams,
+			IQuoteSearchRouteParams,
 			ISearchResultObject<IQuoteObject>
 		>
 {
 	readonly paginationStore = new PaginationStore();
-
 	@observable quotes: IQuoteObject[] = [];
 	@observable artistId?: number;
 
@@ -47,7 +46,7 @@ export class QuoteIndexStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IQuoteIndexRouteParams)[] = [];
+	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = [];
 
 	updateResults = async (
 		clearResults: boolean,
@@ -69,17 +68,18 @@ export class QuoteIndexStore
 		return result;
 	};
 
-	@computed.struct get routeParams(): IQuoteIndexRouteParams {
+	@computed.struct get routeParams(): IQuoteSearchRouteParams {
 		return {
 			page: this.paginationStore.page,
 			pageSize: this.paginationStore.pageSize,
 		};
 	}
-	set routeParams(value: IQuoteIndexRouteParams) {
+	set routeParams(value: IQuoteSearchRouteParams) {
 		this.paginationStore.page = value.page ?? 1;
 		this.paginationStore.pageSize = value.pageSize ?? 10;
 	}
 
-	validateRouteParams = (data: any): data is IQuoteIndexRouteParams =>
-		validate(data);
+	validateRouteParams = (data: any): data is IQuoteSearchRouteParams => {
+		return validate(data);
+	};
 }

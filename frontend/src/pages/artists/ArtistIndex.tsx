@@ -16,7 +16,7 @@ import Layout from '../../components/layout/Layout';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
-import { ArtistIndexStore } from '../../stores/artists/ArtistIndexStore';
+import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 
 interface ArtistListItemProps {
 	artist: IArtistObject;
@@ -59,7 +59,7 @@ const ArtistList = React.memo(
 const ArtistIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
 
-	const [store] = React.useState(() => new ArtistIndexStore());
+	const [store] = React.useState(() => new ArtistSearchStore());
 
 	useYamatoutaTitle(t('shared.artists'), ready);
 

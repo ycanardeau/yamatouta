@@ -29,10 +29,10 @@ import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';
-import { TranslationIndexStore } from '../../stores/translations/TranslationIndexStore';
+import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
 
 interface TranslationIndexSidebarProps {
-	store: TranslationIndexStore;
+	store: TranslationSearchStore;
 }
 
 const TranslationIndexSidebar = observer(
@@ -124,7 +124,7 @@ const TranslationIndexSidebar = observer(
 const TranslationIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
 
-	const [store] = React.useState(() => new TranslationIndexStore());
+	const [store] = React.useState(() => new TranslationSearchStore());
 
 	useYamatoutaTitle(t('shared.words'), ready);
 
