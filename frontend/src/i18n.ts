@@ -17,7 +17,10 @@ i18n.use(ChainedBackend)
 			useSuspense: false,
 		},
 		backend: {
-			backends: [LocalStorageBackend, HttpBackend],
+			backends:
+				process.env.NODE_ENV === 'development'
+					? [HttpBackend]
+					: [LocalStorageBackend, HttpBackend],
 			backendOptions: [
 				{
 					expirationTime: 7 * 24 * 60 * 60 * 1000, // 7 days
