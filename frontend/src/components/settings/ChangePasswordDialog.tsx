@@ -18,14 +18,11 @@ import { ChangePasswordDialogStore } from '../../stores/settings/ChangePasswordD
 
 interface ChangePasswordDialogProps {
 	onClose: () => void;
-	onChangePasswordComplete: (user: IAuthenticatedUserObject) => void;
+	onSuccess: (user: IAuthenticatedUserObject) => void;
 }
 
 const ChangePasswordDialog = observer(
-	({
-		onClose,
-		onChangePasswordComplete,
-	}: ChangePasswordDialogProps): React.ReactElement => {
+	({ onClose, onSuccess }: ChangePasswordDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new ChangePasswordDialogStore());
@@ -38,7 +35,7 @@ const ChangePasswordDialog = observer(
 
 						const user = await store.submit();
 
-						onChangePasswordComplete(user);
+						onSuccess(user);
 					}}
 				>
 					<DialogTitle>

@@ -111,7 +111,7 @@ const SettingsIndex = (): React.ReactElement => {
 				<ChangeUsernameDialog
 					user={auth.user}
 					onClose={toggleChangeUsernameDialogOpen}
-					onChangeUsernameComplete={(user): void => {
+					onSuccess={(user): void => {
 						toggleChangeUsernameDialogOpen();
 
 						auth.setUser(user);
@@ -122,7 +122,7 @@ const SettingsIndex = (): React.ReactElement => {
 			{changeEmailDialogOpen && (
 				<ChangeEmailDialog
 					onClose={toggleChangeEmailDialogOpen}
-					onChangeEmailComplete={(user): void => {
+					onSuccess={(user): void => {
 						toggleChangeEmailDialogOpen();
 
 						auth.setUser(user);
@@ -133,7 +133,7 @@ const SettingsIndex = (): React.ReactElement => {
 			{changePasswordDialogOpen && (
 				<ChangePasswordDialog
 					onClose={toggleChangePasswordDialogOpen}
-					onChangePasswordComplete={(user): void => {
+					onSuccess={(user): void => {
 						toggleChangePasswordDialogOpen();
 
 						auth.setUser(user);

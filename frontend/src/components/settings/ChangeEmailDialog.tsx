@@ -18,14 +18,11 @@ import { ChangeEmailDialogStore } from '../../stores/settings/ChangeEmailDialogS
 
 interface ChangeEmailDialogProps {
 	onClose: () => void;
-	onChangeEmailComplete: (user: IAuthenticatedUserObject) => void;
+	onSuccess: (user: IAuthenticatedUserObject) => void;
 }
 
 const ChangeEmailDialog = observer(
-	({
-		onClose,
-		onChangeEmailComplete,
-	}: ChangeEmailDialogProps): React.ReactElement => {
+	({ onClose, onSuccess }: ChangeEmailDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new ChangeEmailDialogStore());
@@ -38,7 +35,7 @@ const ChangeEmailDialog = observer(
 
 						const user = await store.submit();
 
-						onChangeEmailComplete(user);
+						onSuccess(user);
 					}}
 				>
 					<DialogTitle>

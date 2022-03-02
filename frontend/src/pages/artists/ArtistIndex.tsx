@@ -45,14 +45,18 @@ interface ArtistListProps {
 }
 
 const ArtistList = React.memo(
-	({ artists }: ArtistListProps): React.ReactElement | null => {
-		return artists.length > 0 ? (
-			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
+	({ artists }: ArtistListProps): React.ReactElement => {
+		return (
+			<List
+				dense
+				sx={{ width: '100%', bgcolor: 'background.paper' }}
+				disablePadding
+			>
 				{artists.map((artist) => (
 					<ArtistListItem key={artist.id} artist={artist} />
 				))}
 			</List>
-		) : null;
+		);
 	},
 );
 

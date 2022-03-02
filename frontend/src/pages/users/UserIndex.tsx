@@ -41,17 +41,19 @@ interface UserListProps {
 	users: IUserObject[];
 }
 
-const UserList = React.memo(
-	({ users }: UserListProps): React.ReactElement | null => {
-		return users.length > 0 ? (
-			<List dense sx={{ width: '100%', bgcolor: 'background.paper' }}>
-				{users.map((user) => (
-					<UserListItem key={user.id} user={user} />
-				))}
-			</List>
-		) : null;
-	},
-);
+const UserList = React.memo(({ users }: UserListProps): React.ReactElement => {
+	return (
+		<List
+			dense
+			sx={{ width: '100%', bgcolor: 'background.paper' }}
+			disablePadding
+		>
+			{users.map((user) => (
+				<UserListItem key={user.id} user={user} />
+			))}
+		</List>
+	);
+});
 
 const UserIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();

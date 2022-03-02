@@ -34,7 +34,7 @@ const QuoteDetailsLayout = ({
 			]}
 			meta={{ description: quoteText }}
 		>
-			<QuoteListItem quote={quote} showDetailsButton={false} />
+			<QuoteListItem quote={quote} />
 
 			{quote.sourceUrl && (
 				<>

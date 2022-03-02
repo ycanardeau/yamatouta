@@ -12,17 +12,15 @@ import {
 	Stack,
 	TextField,
 } from '@mui/material';
-import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import Pagination from '../../components/Pagination';
 import Layout from '../../components/layout/Layout';
 import CreateTranslationDialog from '../../components/translations/CreateTranslationDialog';
-import TranslationList from '../../components/translations/TranslationList';
+import TranslationSearchTable from '../../components/translations/TranslationSearchTable';
 import { useAuth } from '../../components/useAuth';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
@@ -163,30 +161,12 @@ const TranslationIndex = observer((): React.ReactElement => {
 			}
 			sidebar={<TranslationIndexSidebar store={store} />}
 		>
-			<Pagination store={store.paginationStore} />
-
-			<TranslationList
-				translations={store.translations}
-				sort={store.sort}
-				onSortChange={(sort): void => store.setSort(sort)}
-				searchWords={store.query.trim().split(/\s+/)}
-				onWordClick={({ locale, value }): void => {
-					runInAction(() => {
-						store.query = value;
-						store.sort =
-							locale === 'ojp'
-								? TranslationSortRule.YamatokotobaAsc
-								: TranslationSortRule.HeadwordAsc;
-					});
-				}}
-			/>
-
-			<Pagination store={store.paginationStore} />
+			<TranslationSearchTable store={store} />
 
 			{createTranslationDialogOpen && (
 				<CreateTranslationDialog
 					onClose={(): void => setCreateTranslationDialogOpen(false)}
-					onCreateTranslationComplete={(translation): void => {
+					onSuccess={(translation): void => {
 						setCreateTranslationDialogOpen(false);
 
 						navigate(`/translations/${translation.id}`);

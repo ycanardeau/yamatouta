@@ -21,13 +21,13 @@ import { CreateTranslationDialogStore } from '../../stores/translations/CreateTr
 
 interface CreateTranslationDialogProps {
 	onClose: () => void;
-	onCreateTranslationComplete: (translation: ITranslationObject) => void;
+	onSuccess: (translation: ITranslationObject) => void;
 }
 
 const CreateTranslationDialog = observer(
 	({
 		onClose,
-		onCreateTranslationComplete,
+		onSuccess,
 	}: CreateTranslationDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -43,7 +43,7 @@ const CreateTranslationDialog = observer(
 
 						const translation = await store.submit();
 
-						onCreateTranslationComplete(translation);
+						onSuccess(translation);
 					}}
 				>
 					<DialogTitle>{t('translations.addWord')}</DialogTitle>

@@ -21,14 +21,11 @@ import { RegisterDialogStore } from '../../stores/auth/RegisterDialogStore';
 
 interface RegisterDialogProps {
 	onClose: () => void;
-	onRegisterComplete: (user: IUserObject) => void;
+	onSuccess: (user: IUserObject) => void;
 }
 
 const RegisterDialog = observer(
-	({
-		onClose,
-		onRegisterComplete,
-	}: RegisterDialogProps): React.ReactElement => {
+	({ onClose, onSuccess }: RegisterDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new RegisterDialogStore());
@@ -41,7 +38,7 @@ const RegisterDialog = observer(
 
 						const user = await store.submit();
 
-						onRegisterComplete(user);
+						onSuccess(user);
 					}}
 				>
 					<DialogTitle>{t('auth.register')}</DialogTitle>

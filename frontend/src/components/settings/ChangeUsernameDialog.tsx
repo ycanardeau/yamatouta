@@ -19,14 +19,14 @@ import { ChangeUsernameDialogStore } from '../../stores/settings/ChangeUsernameD
 interface ChangeUsernameDialogProps {
 	user: IAuthenticatedUserObject;
 	onClose: () => void;
-	onChangeUsernameComplete: (user: IAuthenticatedUserObject) => void;
+	onSuccess: (user: IAuthenticatedUserObject) => void;
 }
 
 const ChangeUsernameDialog = observer(
 	({
 		user,
 		onClose,
-		onChangeUsernameComplete,
+		onSuccess,
 	}: ChangeUsernameDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -42,7 +42,7 @@ const ChangeUsernameDialog = observer(
 
 						const user = await store.submit();
 
-						onChangeUsernameComplete(user);
+						onSuccess(user);
 					}}
 				>
 					<DialogTitle>

@@ -8,18 +8,14 @@ interface QuoteListProps {
 }
 
 const QuoteList = React.memo(
-	({ quotes }: QuoteListProps): React.ReactElement | null => {
-		return quotes.length > 0 ? (
+	({ quotes }: QuoteListProps): React.ReactElement => {
+		return (
 			<>
 				{quotes.map((quote) => (
-					<QuoteListItem
-						key={quote.id}
-						quote={quote}
-						showDetailsButton={true}
-					/>
+					<QuoteListItem key={quote.id} quote={quote} />
 				))}
 			</>
-		) : null;
+		);
 	},
 );
 

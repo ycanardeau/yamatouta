@@ -21,14 +21,11 @@ import { CreateArtistDialogStore } from '../../stores/artists/CreateArtistDialog
 
 interface CreateArtistDialogProps {
 	onClose: () => void;
-	onCreateArtistComplete: (artist: IArtistObject) => void;
+	onSuccess: (artist: IArtistObject) => void;
 }
 
 const CreateArtistDialog = observer(
-	({
-		onClose,
-		onCreateArtistComplete,
-	}: CreateArtistDialogProps): React.ReactElement => {
+	({ onClose, onSuccess }: CreateArtistDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new CreateArtistDialogStore());
@@ -41,7 +38,7 @@ const CreateArtistDialog = observer(
 
 						const artist = await store.submit();
 
-						onCreateArtistComplete(artist);
+						onSuccess(artist);
 					}}
 				>
 					<DialogTitle>{t('artists.addArtist')}</DialogTitle>

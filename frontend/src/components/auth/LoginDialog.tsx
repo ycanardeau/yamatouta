@@ -21,11 +21,11 @@ import { LoginDialogStore } from '../../stores/auth/LoginDialogStore';
 
 interface LoginDialogProps {
 	onClose: () => void;
-	onLoginComplete: (user: IAuthenticatedUserObject) => void;
+	onSuccess: (user: IAuthenticatedUserObject) => void;
 }
 
 const LoginDialog = observer(
-	({ onClose, onLoginComplete }: LoginDialogProps): React.ReactElement => {
+	({ onClose, onSuccess }: LoginDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new LoginDialogStore());
@@ -38,7 +38,7 @@ const LoginDialog = observer(
 
 						const user = await store.submit();
 
-						onLoginComplete(user);
+						onSuccess(user);
 					}}
 				>
 					<DialogTitle>{t('auth.loginDialogTitle')}</DialogTitle>

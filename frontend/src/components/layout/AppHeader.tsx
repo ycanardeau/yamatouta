@@ -237,7 +237,7 @@ const AppHeader = (): React.ReactElement => {
 			{loginDialogOpen && (
 				<LoginDialog
 					onClose={toggleLoginDialogOpen}
-					onLoginComplete={(user): void => {
+					onSuccess={(user): void => {
 						toggleLoginDialogOpen();
 
 						auth.setUser(user);
@@ -251,7 +251,7 @@ const AppHeader = (): React.ReactElement => {
 			{registerDialogOpen && (
 				<RegisterDialog
 					onClose={toggleRegisterDialogOpen}
-					onRegisterComplete={(user): void => {
+					onSuccess={(user): void => {
 						toggleRegisterDialogOpen();
 
 						// TODO

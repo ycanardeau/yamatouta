@@ -1,11 +1,11 @@
 import React from 'react';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
 import { getUser } from '../../api/UserApi';
-import lazyWithRetry from '../../components/lazyWithRetry';
+import Layout from '../../components/layout/Layout';
+import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IUserObject } from '../../dto/users/IUserObject';
-
-const UserBasicInfo = lazyWithRetry(() => import('./UserBasicInfo'));
 
 interface UserDetailsLayoutProps {
 	user: IUserObject;
@@ -14,10 +14,21 @@ interface UserDetailsLayoutProps {
 const UserDetailsLayout = ({
 	user,
 }: UserDetailsLayoutProps): React.ReactElement => {
+	const { t } = useTranslation();
+
+	useYamatoutaTitle(user.name, true);
+
 	return (
-		<Routes>
-			<Route path="" element={<UserBasicInfo user={user} />} />
-		</Routes>
+		<Layout
+			breadcrumbItems={[
+				{ text: t('shared.users'), to: '/users' },
+				{
+					text: user.name,
+					to: `/users/${user.id}`,
+					isCurrentItem: true,
+				},
+			]}
+		></Layout>
 	);
 };
 
