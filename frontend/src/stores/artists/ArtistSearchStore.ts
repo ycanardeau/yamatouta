@@ -45,7 +45,7 @@ export class ArtistSearchStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = [];
+	clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = ['pageSize'];
 
 	updateResults = async (
 		clearResults: boolean,

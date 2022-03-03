@@ -1,16 +1,17 @@
 import {
-	Button,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
-	FormControl,
-	InputLabel,
-	MenuItem,
-	Select,
-	Stack,
-	TextField,
-} from '@mui/material';
+	EuiButton,
+	EuiButtonEmpty,
+	EuiFieldText,
+	EuiForm,
+	EuiFormRow,
+	EuiModal,
+	EuiModalBody,
+	EuiModalFooter,
+	EuiModalHeader,
+	EuiModalHeaderTitle,
+	EuiSelect,
+	useGeneratedHtmlId,
+} from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -35,107 +36,108 @@ const CreateTranslationDialog = observer(
 			() => new CreateTranslationDialogStore(),
 		);
 
+		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
+
 		return (
-			<Dialog open={true} onClose={onClose} fullWidth>
-				<form
-					onSubmit={async (e): Promise<void> => {
-						e.preventDefault();
+			<EuiModal onClose={onClose} initialFocus="[name=headword]">
+				<EuiModalHeader>
+					<EuiModalHeaderTitle>
+						<h1>{t('translations.addWord')}</h1>
+					</EuiModalHeaderTitle>
+				</EuiModalHeader>
 
-						const translation = await store.submit();
+				<EuiModalBody>
+					<EuiForm
+						id={modalFormId}
+						component="form"
+						onSubmit={async (e): Promise<void> => {
+							e.preventDefault();
 
-						onSuccess(translation);
-					}}
-				>
-					<DialogTitle>{t('translations.addWord')}</DialogTitle>
-					<DialogContent>
-						<Stack spacing={2}>
-							<FormControl variant="standard" fullWidth>
-								<TextField
-									autoFocus
-									margin="dense"
-									id="headword"
-									label={t('translations.headword')}
-									type="text"
-									variant="standard"
-									value={store.headword}
-									onChange={(e): void =>
-										store.setHeadword(e.target.value)
-									}
-								/>
-							</FormControl>
+							const translation = await store.submit();
 
-							{store.isJapanese && (
-								<FormControl variant="standard" fullWidth>
-									<TextField
-										margin="dense"
-										id="reading"
-										label={t('translations.reading')}
-										type="text"
-										variant="standard"
-										value={store.reading}
-										onChange={(e): void =>
-											store.setReading(e.target.value)
-										}
-									/>
-								</FormControl>
-							)}
+							onClose();
+							onSuccess(translation);
+						}}
+					>
+						<EuiFormRow label={t('translations.headword')}>
+							<EuiFieldText
+								compressed
+								name="headword"
+								value={store.headword}
+								onChange={(e): void =>
+									store.setHeadword(e.target.value)
+								}
+							/>
+						</EuiFormRow>
 
-							<FormControl variant="standard" fullWidth>
-								<TextField
-									margin="dense"
-									id="yamatokotoba"
-									label={t('translations.yamatokotoba')}
-									type="text"
-									variant="standard"
-									value={store.yamatokotoba}
-									onChange={(e): void =>
-										store.setYamatokotoba(e.target.value)
-									}
-								/>
-							</FormControl>
+						<EuiFormRow label={t('translations.reading')}>
+							<EuiFieldText
+								compressed
+								name="reading"
+								value={store.reading}
+								onChange={(e): void =>
+									store.setReading(e.target.value)
+								}
+							/>
+						</EuiFormRow>
 
-							<FormControl variant="standard" fullWidth>
-								<InputLabel id="category" shrink>
-									{t('translations.category')}
-								</InputLabel>
-								<Select
-									labelId="category"
-									id="category"
-									value={store.category ?? ''}
-									onChange={(e): void =>
-										store.setCategory(
-											e.target.value as WordCategory,
-										)
-									}
-									displayEmpty
-								>
-									<MenuItem value="">
-										{t('wordCategoryNames.unspecified')}
-									</MenuItem>
-									{Object.values(WordCategory).map(
-										(value) => (
-											<MenuItem key={value} value={value}>
-												{t(
-													`wordCategoryNames.${value}`,
-												)}
-											</MenuItem>
+						<EuiFormRow label={t('translations.yamatokotoba')}>
+							<EuiFieldText
+								compressed
+								name="yamatokotoba"
+								value={store.yamatokotoba}
+								onChange={(e): void =>
+									store.setYamatokotoba(e.target.value)
+								}
+							/>
+						</EuiFormRow>
+
+						<EuiFormRow label={t('translations.category')}>
+							<EuiSelect
+								compressed
+								name="category"
+								options={[
+									{
+										value: '',
+										text: t(
+											'wordCategoryNames.unspecified',
 										),
-									)}
-								</Select>
-							</FormControl>
-						</Stack>
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={onClose}>{t('shared.cancel')}</Button>
-						<Button
-							type="submit"
-							disabled={!store.isValid || store.submitting}
-						>
-							{t('translations.addWord')}
-						</Button>
-					</DialogActions>
-				</form>
-			</Dialog>
+									},
+									...Object.values(WordCategory).map(
+										(value) => ({
+											value: value,
+											text: t(
+												`wordCategoryNames.${value}`,
+											),
+										}),
+									),
+								]}
+								value={store.category ?? ''}
+								onChange={(e): void =>
+									store.setCategory(
+										e.target.value as WordCategory,
+									)
+								}
+							/>
+						</EuiFormRow>
+					</EuiForm>
+				</EuiModalBody>
+
+				<EuiModalFooter>
+					<EuiButtonEmpty size="s" onClick={onClose}>
+						{t('shared.cancel')}
+					</EuiButtonEmpty>
+
+					<EuiButton
+						size="s"
+						type="submit"
+						form={modalFormId}
+						disabled={!store.isValid || store.submitting}
+					>
+						{t('translations.addWord')}
+					</EuiButton>
+				</EuiModalFooter>
+			</EuiModal>
 		);
 	},
 );

@@ -34,7 +34,10 @@
 		"works": "しながき",
 		"users": "つかいて",
 		"change": "かえる",
-		"done": "きめる"
+		"done": "きめる",
+		"content": "なかみ",
+		"account": "てがた",
+		"community": "ふれあい"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -49,6 +52,7 @@
 		"viewOnInishienomanabi": "いにしえのまなびでみる"
 	},
 	"wordCategoryNames": {
+		"all": "すべて",
 		"unspecified": "(なし)",
 		"noun": "なことば",
 		"verb": "しわざことば",

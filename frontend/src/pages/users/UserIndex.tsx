@@ -1,59 +1,45 @@
 import {
-	Avatar,
-	List,
-	ListItem,
-	ListItemAvatar,
-	ListItemButton,
-	ListItemText,
-} from '@mui/material';
+	EuiBreadcrumb,
+	EuiBreadcrumbs,
+	EuiLink,
+	EuiPageHeader,
+	EuiSpacer,
+	EuiTable,
+	EuiTableBody,
+	EuiTableHeader,
+	EuiTableHeaderCell,
+	EuiTableRow,
+	EuiTableRowCell,
+} from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import Avatar from '../../components/Avatar';
 import Pagination from '../../components/Pagination';
-import Layout from '../../components/layout/Layout';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import { IUserObject } from '../../dto/users/IUserObject';
 import { UserSearchStore } from '../../stores/users/UserSearchStore';
 
-interface UserListItemProps {
-	user: IUserObject;
-}
+const Breadcrumbs = (): React.ReactElement => {
+	const { t } = useTranslation();
 
-const UserListItem = React.memo(
-	({ user }: UserListItemProps): React.ReactElement => {
-		return (
-			<ListItem disablePadding>
-				<ListItemButton component={RouterLink} to={`/users/${user.id}`}>
-					<ListItemAvatar>
-						<Avatar src={user.avatarUrl} />
-					</ListItemAvatar>
-					<ListItemText primary={user.name} />
-				</ListItemButton>
-			</ListItem>
-		);
-	},
-);
+	const navigate = useNavigate();
 
-interface UserListProps {
-	users: IUserObject[];
-}
+	const breadcrumbs: EuiBreadcrumb[] = [
+		{
+			text: t('shared.users'),
+			href: '/users',
+			onClick: (e): void => {
+				e.preventDefault();
+				navigate('/users');
+			},
+		},
+	];
 
-const UserList = React.memo(({ users }: UserListProps): React.ReactElement => {
-	return (
-		<List
-			dense
-			sx={{ width: '100%', bgcolor: 'background.paper' }}
-			disablePadding
-		>
-			{users.map((user) => (
-				<UserListItem key={user.id} user={user} />
-			))}
-		</List>
-	);
-});
+	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
+};
 
 const UserIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
@@ -64,22 +50,56 @@ const UserIndex = observer((): React.ReactElement => {
 
 	useStoreWithPagination(store);
 
+	const navigate = useNavigate();
+
 	return (
-		<Layout
-			breadcrumbItems={[
-				{
-					text: t('shared.users'),
-					to: '/users',
-					isCurrentItem: true,
-				},
-			]}
-		>
-			<Pagination store={store.paginationStore} />
+		<>
+			<Breadcrumbs />
+			<EuiSpacer size="xs" />
+			<EuiPageHeader pageTitle={t('shared.users')} />
 
-			<UserList users={store.users} />
+			<EuiTable>
+				<EuiTableHeader>
+					<EuiTableHeaderCell width={40} />
+					<EuiTableHeaderCell>
+						{t('auth.username')}
+					</EuiTableHeaderCell>
+				</EuiTableHeader>
+
+				<EuiTableBody>
+					{store.users.map((user) => (
+						<EuiTableRow key={user.id}>
+							<EuiTableRowCell>
+								<Avatar
+									size="m"
+									name={user.name}
+									imageUrl={user.avatarUrl}
+								/>
+							</EuiTableRowCell>
+							<EuiTableRowCell
+								mobileOptions={{
+									header: t('auth.username'),
+								}}
+							>
+								<EuiLink
+									href={`/users/${user.id}`}
+									onClick={(e: any): void => {
+										e.preventDefault();
+										navigate(`/users/${user.id}`);
+									}}
+								>
+									{user.name}
+								</EuiLink>
+							</EuiTableRowCell>
+						</EuiTableRow>
+					))}
+				</EuiTableBody>
+			</EuiTable>
+
+			<EuiSpacer size="m" />
 
 			<Pagination store={store.paginationStore} />
-		</Layout>
+		</>
 	);
 });
 

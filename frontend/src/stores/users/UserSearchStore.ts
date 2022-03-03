@@ -45,7 +45,7 @@ export class UserSearchStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = [];
+	clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = ['pageSize'];
 
 	updateResults = async (
 		clearResults: boolean,

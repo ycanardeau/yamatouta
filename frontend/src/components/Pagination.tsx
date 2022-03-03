@@ -1,4 +1,12 @@
-import { Grid, Pagination as MuiPagination } from '@mui/material';
+import {
+	EuiButtonEmpty,
+	EuiContextMenuItem,
+	EuiContextMenuPanel,
+	EuiFlexGroup,
+	EuiFlexItem,
+	EuiPagination,
+	EuiPopover,
+} from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 
@@ -8,27 +16,71 @@ interface PaginationProps {
 	store: PaginationStore;
 }
 
-const Pagination = observer(
-	({ store }: PaginationProps): React.ReactElement => {
-		const handleChange = React.useCallback(
-			(_, number) => {
-				store.setPage(number);
-			},
-			[store],
-		);
+const Pagination = observer(({ store }: PaginationProps) => {
+	const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
-		return (
-			<Grid container justifyContent="center" sx={{ py: 2 }}>
-				<MuiPagination
-					count={store.totalPages}
-					page={store.page}
-					onChange={handleChange}
-					color="primary"
-					siblingCount={2}
+	const onButtonClick = (): void =>
+		setIsPopoverOpen((isPopoverOpen) => !isPopoverOpen);
+	const closePopover = (): void => setIsPopoverOpen(false);
+
+	const getIconType = (size: number): 'check' | 'empty' => {
+		return size === store.pageSize ? 'check' : 'empty';
+	};
+
+	const button = (
+		<EuiButtonEmpty
+			size="xs"
+			color="text"
+			iconType="arrowDown"
+			iconSide="right"
+			onClick={onButtonClick}
+		>
+			Rows per page: {store.pageSize}
+		</EuiButtonEmpty>
+	);
+
+	const items = [10, 20, 50, 100].map((i) => (
+		<EuiContextMenuItem
+			key={i}
+			icon={getIconType(i)}
+			onClick={(): void => {
+				closePopover();
+				store.setPageSize(i);
+			}}
+		>
+			{i} items
+		</EuiContextMenuItem>
+	));
+
+	return (
+		<EuiFlexGroup
+			justifyContent="spaceBetween"
+			alignItems="center"
+			responsive={false}
+			wrap
+		>
+			<EuiFlexItem grow={false}>
+				<EuiPopover
+					button={button}
+					isOpen={isPopoverOpen}
+					closePopover={closePopover}
+					panelPaddingSize="none"
+				>
+					<EuiContextMenuPanel items={items} />
+				</EuiPopover>
+			</EuiFlexItem>
+
+			<EuiFlexItem grow={false}>
+				<EuiPagination
+					pageCount={store.totalPages}
+					activePage={store.page - 1}
+					onPageClick={(pageIndex): void =>
+						store.setPage(pageIndex + 1)
+					}
 				/>
-			</Grid>
-		);
-	},
-);
+			</EuiFlexItem>
+		</EuiFlexGroup>
+	);
+});
 
 export default Pagination;

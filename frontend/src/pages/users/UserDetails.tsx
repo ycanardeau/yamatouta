@@ -1,9 +1,14 @@
+import {
+	EuiBreadcrumb,
+	EuiBreadcrumbs,
+	EuiPageHeader,
+	EuiSpacer,
+} from '@elastic/eui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { getUser } from '../../api/UserApi';
-import Layout from '../../components/layout/Layout';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IUserObject } from '../../dto/users/IUserObject';
 
@@ -11,24 +16,48 @@ interface UserDetailsLayoutProps {
 	user: IUserObject;
 }
 
+interface BreadcrumbsProps {
+	user: IUserObject;
+}
+
+const Breadcrumbs = ({ user }: BreadcrumbsProps): React.ReactElement => {
+	const { t } = useTranslation();
+
+	const navigate = useNavigate();
+
+	const breadcrumbs: EuiBreadcrumb[] = [
+		{
+			text: t('shared.users'),
+			href: '/users',
+			onClick: (e): void => {
+				e.preventDefault();
+				navigate('/users');
+			},
+		},
+		{
+			text: user.name,
+			href: `/users/${user.id}`,
+			onClick: (e): void => {
+				e.preventDefault();
+				navigate(`/users/${user.id}`);
+			},
+		},
+	];
+
+	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
+};
+
 const UserDetailsLayout = ({
 	user,
 }: UserDetailsLayoutProps): React.ReactElement => {
-	const { t } = useTranslation();
-
 	useYamatoutaTitle(user.name, true);
 
 	return (
-		<Layout
-			breadcrumbItems={[
-				{ text: t('shared.users'), to: '/users' },
-				{
-					text: user.name,
-					to: `/users/${user.id}`,
-					isCurrentItem: true,
-				},
-			]}
-		></Layout>
+		<>
+			<Breadcrumbs user={user} />
+			<EuiSpacer size="xs" />
+			<EuiPageHeader pageTitle={user.name} />
+		</>
 	);
 };
 
