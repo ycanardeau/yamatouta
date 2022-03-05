@@ -1,13 +1,37 @@
+import {
+	EuiBreadcrumb,
+	EuiBreadcrumbs,
+	EuiPageHeader,
+	EuiSpacer,
+} from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-import Pagination from '../../components/Pagination';
-import Layout from '../../components/layout/Layout';
-import QuoteList from '../../components/quotes/QuoteList';
+import QuoteSearchList from '../../components/quotes/QuoteSearchList';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
+
+const Breadcrumbs = (): React.ReactElement => {
+	const { t } = useTranslation();
+
+	const navigate = useNavigate();
+
+	const breadcrumbs: EuiBreadcrumb[] = [
+		{
+			text: t('shared.quotes'),
+			href: '/quotes',
+			onClick: (e): void => {
+				e.preventDefault();
+				navigate('/quotes');
+			},
+		},
+	];
+
+	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
+};
 
 const QuoteIndex = observer((): React.ReactElement => {
 	const { t } = useTranslation();
@@ -19,21 +43,13 @@ const QuoteIndex = observer((): React.ReactElement => {
 	useStoreWithPagination(store);
 
 	return (
-		<Layout
-			breadcrumbItems={[
-				{
-					text: t('shared.quotes'),
-					to: '/quotes',
-					isCurrentItem: true,
-				},
-			]}
-		>
-			<Pagination store={store.paginationStore} />
+		<>
+			<Breadcrumbs />
+			<EuiSpacer size="xs" />
+			<EuiPageHeader pageTitle={t('shared.quotes')} />
 
-			<QuoteList quotes={store.quotes} />
-
-			<Pagination store={store.paginationStore} />
-		</Layout>
+			<QuoteSearchList store={store} />
+		</>
 	);
 });
 

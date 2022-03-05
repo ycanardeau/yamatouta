@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 // The call to usePageTracking must go after useTitle.
 // Set ready to false while translations are not yet loaded.
 // This prevents Google Analytics from using an incomplete page title (e.g. `Index.Discussions - Vocaloid Database`).
-const usePageTracking = (ready: boolean): void => {
+export const usePageTracking = (ready: boolean): void => {
 	const location = useLocation();
 
 	React.useEffect(() => {
@@ -19,5 +19,3 @@ const usePageTracking = (ready: boolean): void => {
 		}
 	}, [ready, location]);
 };
-
-export default usePageTracking;

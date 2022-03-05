@@ -38,7 +38,9 @@ export class PaginationStore {
 		this.page = value;
 	};
 
-	@action goToFirstPage = (): void => {
-		this.page = 1;
+	goToFirstPage = (): void => this.setPage(1);
+
+	@action setPageSize = (value: number): void => {
+		this.pageSize = value;
 	};
 }

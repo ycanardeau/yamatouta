@@ -1,49 +1,13 @@
-import { Container, CssBaseline } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { EuiPage, EuiPageBody, EuiPageSideBar } from '@elastic/eui';
 import React from 'react';
 import ReactGA from 'react-ga4';
-import { Route, Routes } from 'react-router-dom';
 
+import './App.scss';
+import AppRoutes from './AppRoutes';
+import Header from './Header';
 import ScrollToTop from './ScrollToTop';
-import AppFooter from './components/layout/AppFooter';
-import AppHeader from './components/layout/AppHeader';
-import lazyWithRetry from './components/lazyWithRetry';
+import SideNav from './SideNav';
 import config from './config';
-
-const theme = createTheme({
-	palette: {
-		mode: 'dark',
-	},
-
-	// Disable all transitions and animations effects.
-	// See https://mui.com/getting-started/faq/#how-can-i-disable-transitions-globally.
-	transitions: {
-		create: () => 'none',
-	},
-	components: {
-		MuiCssBaseline: {
-			styleOverrides: {
-				'*, *::before, *::after': {
-					transition: 'none !important',
-					animation: 'none !important',
-				},
-			},
-		},
-	},
-});
-
-const ArtistRoutes = lazyWithRetry(
-	() => import('./pages/artists/ArtistRoutes'),
-);
-const QuoteRoutes = lazyWithRetry(() => import('./pages/quotes/QuoteRoutes'));
-const TranslationRoutes = lazyWithRetry(
-	() => import('./pages/translations/TranslationRoutes'),
-);
-const UserRoutes = lazyWithRetry(() => import('./pages/users/UserRoutes'));
-const HomeRoutes = lazyWithRetry(() => import('./pages/home/HomeRoutes'));
-const SettingsRoutes = lazyWithRetry(
-	() => import('./pages/settings/SettingsRoutes'),
-);
 
 const App = (): React.ReactElement => {
 	React.useEffect(() => {
@@ -51,33 +15,23 @@ const App = (): React.ReactElement => {
 	}, []);
 
 	return (
-		<ThemeProvider theme={theme}>
+		<>
 			<ScrollToTop />
 
-			<CssBaseline />
-			<AppHeader />
+			<Header />
 
-			<Container
-				maxWidth="lg"
-				sx={{ paddingTop: '30px', paddingBottom: '20px' }}
-			>
-				<React.Suspense fallback={null /* TODO */}>
-					<Routes>
-						<Route path="artists/*" element={<ArtistRoutes />} />
-						<Route path="quotes/*" element={<QuoteRoutes />} />
-						<Route
-							path="translations/*"
-							element={<TranslationRoutes />}
-						/>
-						<Route path="users/*" element={<UserRoutes />} />
-						<Route path="settings/*" element={<SettingsRoutes />} />
-						<Route path="*" element={<HomeRoutes />} />
-					</Routes>
-				</React.Suspense>
-			</Container>
+			<EuiPage paddingSize="none">
+				<EuiPageSideBar paddingSize="l" sticky>
+					<SideNav />
+				</EuiPageSideBar>
 
-			<AppFooter />
-		</ThemeProvider>
+				<EuiPageBody panelled>
+					<React.Suspense fallback={null /* TODO */}>
+						<AppRoutes />
+					</React.Suspense>
+				</EuiPageBody>
+			</EuiPage>
+		</>
 	);
 };
 

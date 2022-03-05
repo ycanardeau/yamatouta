@@ -1,3 +1,6 @@
+import { EuiProvider } from '@elastic/eui';
+import '@elastic/eui/dist/eui_theme_dark.css';
+import createCache from '@emotion/cache';
 import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -13,12 +16,22 @@ import reportWebVitals from './reportWebVitals';
 axios.defaults.baseURL = config.apiEndpoint;
 axios.defaults.withCredentials = true;
 
+// See https://github.com/elastic/eui/issues/5436 and https://elastic.github.io/eui/#/utilities/provider.
+const emotionCache = createCache({
+	key: 'app',
+	container:
+		document.querySelector<HTMLElement>('meta[name="emotion-global"]') ??
+		undefined,
+});
+
 ReactDOM.render(
 	<React.StrictMode>
 		<AuthProvider>
 			<BrowserRouter>
 				<HelmetProvider>
-					<App />
+					<EuiProvider colorMode="dark" cache={emotionCache}>
+						<App />
+					</EuiProvider>
 				</HelmetProvider>
 			</BrowserRouter>
 		</AuthProvider>

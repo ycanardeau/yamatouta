@@ -46,7 +46,7 @@ export class QuoteSearchStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = [];
+	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = ['pageSize'];
 
 	updateResults = async (
 		clearResults: boolean,

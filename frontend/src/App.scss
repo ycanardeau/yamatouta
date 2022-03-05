@@ -1,0 +1,6 @@
+@import '@elastic/eui/src/themes/amsterdam/colors_dark';
+@import '@elastic/eui/src/themes/amsterdam/globals';
+
+body {
+	@include euiHeaderAffordForFixed;
+}

@@ -1,14 +1,18 @@
 import {
-	Button,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	FormControl,
-	Stack,
-	TextField,
-} from '@mui/material';
+	EuiButton,
+	EuiButtonEmpty,
+	EuiFieldPassword,
+	EuiFieldText,
+	EuiForm,
+	EuiFormRow,
+	EuiModal,
+	EuiModalBody,
+	EuiModalFooter,
+	EuiModalHeader,
+	EuiModalHeaderTitle,
+	EuiSpacer,
+	useGeneratedHtmlId,
+} from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -34,62 +38,73 @@ const ChangeUsernameDialog = observer(
 			() => new ChangeUsernameDialogStore(user),
 		);
 
+		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
+
 		return (
-			<Dialog open={true} onClose={onClose} fullWidth>
-				<form
-					onSubmit={async (e): Promise<void> => {
-						e.preventDefault();
+			<EuiModal onClose={onClose} initialFocus="[name=email]">
+				<EuiModalHeader>
+					<EuiModalHeaderTitle>
+						<h1>{t('settings.changeUsernameDialogTitle')}</h1>
+					</EuiModalHeaderTitle>
+				</EuiModalHeader>
 
-						const user = await store.submit();
+				<EuiModalBody>
+					{t('settings.changeUsernameDialogSubtitle')}
+					<EuiSpacer />
 
-						onSuccess(user);
-					}}
-				>
-					<DialogTitle>
-						{t('settings.changeUsernameDialogTitle')}
-					</DialogTitle>
-					<DialogContent>
-						<Stack spacing={2}>
-							<DialogContentText>
-								{t('settings.changeUsernameDialogSubtitle')}
-							</DialogContentText>
+					<EuiForm
+						id={modalFormId}
+						component="form"
+						onSubmit={async (e): Promise<void> => {
+							e.preventDefault();
 
-							<FormControl variant="standard" fullWidth>
-								<TextField
-									autoFocus
-									margin="dense"
-									label={t('auth.username')}
-									type="text"
-									variant="standard"
-									value={store.username}
-									onChange={(e): void =>
-										store.setUsername(e.target.value)
-									}
-								/>
-							</FormControl>
+							const translation = await store.submit();
 
-							<FormControl variant="standard" fullWidth>
-								<TextField
-									margin="dense"
-									label={t('settings.currentPassword')}
-									type="password"
-									variant="standard"
-									value={store.currentPassword}
-									onChange={(e): void =>
-										store.setCurrentPassword(e.target.value)
-									}
-								/>
-							</FormControl>
-						</Stack>
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={onClose}>{t('shared.cancel')}</Button>
-						<Button type="submit" disabled={!store.isValid}>
-							{t('shared.done')}
-						</Button>
-					</DialogActions>
-				</form>
-			</Dialog>
+							onClose();
+							onSuccess(translation);
+						}}
+					>
+						<EuiFormRow label={t('auth.username')}>
+							<EuiFieldText
+								compressed
+								name="username"
+								icon="user"
+								value={store.username}
+								onChange={(e): void =>
+									store.setUsername(e.target.value)
+								}
+							/>
+						</EuiFormRow>
+
+						<EuiFormRow label={t('settings.currentPassword')}>
+							<EuiFieldPassword
+								compressed
+								name="password"
+								type="dual"
+								value={store.currentPassword}
+								onChange={(e): void =>
+									store.setCurrentPassword(e.target.value)
+								}
+							/>
+						</EuiFormRow>
+					</EuiForm>
+				</EuiModalBody>
+
+				<EuiModalFooter>
+					<EuiButtonEmpty size="s" onClick={onClose}>
+						{t('shared.cancel')}
+					</EuiButtonEmpty>
+
+					<EuiButton
+						size="s"
+						type="submit"
+						form={modalFormId}
+						disabled={!store.isValid || store.submitting}
+					>
+						{t('shared.done')}
+					</EuiButton>
+				</EuiModalFooter>
+			</EuiModal>
 		);
 	},
 );

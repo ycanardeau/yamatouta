@@ -1,21 +1,19 @@
-import LaunchIcon from '@mui/icons-material/Launch';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {
-	IconButton,
-	Link,
-	ListItemIcon,
-	ListItemText,
-	Menu,
-	MenuItem,
-	Paper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-	TableSortLabel,
-} from '@mui/material';
+	EuiBadge,
+	EuiButtonIcon,
+	EuiContextMenuItem,
+	EuiContextMenuPanel,
+	EuiLink,
+	EuiPopover,
+	EuiSpacer,
+	EuiTable,
+	EuiTableBody,
+	EuiTableFooter,
+	EuiTableHeader,
+	EuiTableHeaderCell,
+	EuiTableRow,
+	EuiTableRowCell,
+} from '@elastic/eui';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -26,66 +24,6 @@ import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
 import Pagination from '../Pagination';
-
-interface TranslationMenuProps {
-	translation: ITranslationObject;
-}
-
-const TranslationMenu = React.memo(
-	({ translation }: TranslationMenuProps): React.ReactElement => {
-		const { t } = useTranslation();
-
-		const [anchorElTranslation, setAnchorElTranslation] = React.useState<
-			(EventTarget & HTMLButtonElement) | undefined
-		>();
-
-		const handleOpenTranslationMenu = (
-			e: React.MouseEvent<HTMLButtonElement>,
-		): void => {
-			setAnchorElTranslation(e.currentTarget);
-		};
-
-		const handleCloseTranslationMenu = (): void => {
-			setAnchorElTranslation(undefined);
-		};
-
-		return (
-			<>
-				<IconButton size="small" onClick={handleOpenTranslationMenu}>
-					<MoreHorizIcon fontSize="small" />
-				</IconButton>
-				<Menu
-					anchorEl={anchorElTranslation}
-					anchorOrigin={{
-						vertical: 'bottom',
-						horizontal: 'right',
-					}}
-					transformOrigin={{
-						vertical: 'top',
-						horizontal: 'right',
-					}}
-					open={Boolean(anchorElTranslation)}
-					onClose={handleCloseTranslationMenu}
-				>
-					<MenuItem
-						onClick={handleCloseTranslationMenu}
-						component="a"
-						href={`https://inishienomanabi.net/translations/${translation.id}/view`}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<ListItemIcon>
-							<LaunchIcon fontSize="small" />
-						</ListItemIcon>
-						<ListItemText>
-							{t('translations.viewOnInishienomanabi')}
-						</ListItemText>
-					</MenuItem>
-				</Menu>
-			</>
-		);
-	},
-);
 
 interface HighlightProps {
 	children: React.ReactNode;
@@ -113,114 +51,48 @@ const HighlightedText = React.memo(
 	},
 );
 
-interface TranslationSearchTableRowProps {
-	store: TranslationSearchStore;
+interface TranslationPopoverProps {
 	translation: ITranslationObject;
 }
 
-const TranslationSearchTableRow = observer(
-	({
-		store,
-		translation,
-	}: TranslationSearchTableRowProps): React.ReactElement => {
-		const { t } = useTranslation();
+const TranslationPopover = ({
+	translation,
+}: TranslationPopoverProps): React.ReactElement => {
+	const { t } = useTranslation();
 
-		const searchWords = store.query.trim().split(/\s+/);
+	const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+	const togglePopover = (): void => setIsPopoverOpen(!isPopoverOpen);
+	const closePopover = (): void => setIsPopoverOpen(false);
 
-		return (
-			<TableRow hover>
-				<TableCell>
-					{translation.headword.split(/\s/).map((part, index) => (
-						<React.Fragment key={index}>
-							{index > 0 && ' '}
-							<Link
-								/* TODO: component={RouterLink}
-								to={`/words/${encodeURIComponent(
-									part,
-								)}/yamato-kotoba`} */
-								href="#"
-								onClick={(e): void => {
-									e.preventDefault();
-
-									runInAction(() => {
-										store.query = part;
-										store.sort =
-											TranslationSortRule.HeadwordAsc;
-									});
-								}}
-								underline="hover"
-							>
-								<HighlightedText
-									text={part}
-									searchWords={searchWords}
-								/>
-							</Link>
-						</React.Fragment>
-					))}
-					{translation.reading && (
-						<small>
-							【
-							{translation.reading
-								.split(/\s/)
-								.map((part, index) => (
-									<React.Fragment key={index}>
-										{index > 0 && ' '}
-										<HighlightedText
-											text={part}
-											searchWords={searchWords}
-										/>
-									</React.Fragment>
-								))}
-							】
-						</small>
-					)}
-					{translation.category && (
-						<>
-							{' '}
-							<small>
-								{`{${t(
-									`wordCategoryNames.${translation.category}`,
-								)}}`}
-							</small>
-						</>
-					)}
-				</TableCell>
-				<TableCell>
-					{translation.yamatokotoba.split(/\s/).map((part, index) => (
-						<React.Fragment key={index}>
-							{index > 0 && ' '}
-							<Link
-								/* TODO: component={RouterLink}
-								to={`/words/${encodeURIComponent(
-									part,
-								)}/headwords`} */
-								href="#"
-								onClick={(e): void => {
-									e.preventDefault();
-
-									runInAction(() => {
-										store.query = part;
-										store.sort =
-											TranslationSortRule.YamatokotobaAsc;
-									});
-								}}
-								underline="hover"
-							>
-								<HighlightedText
-									text={part}
-									searchWords={searchWords}
-								/>
-							</Link>
-						</React.Fragment>
-					))}
-				</TableCell>
-				<TableCell padding="checkbox">
-					<TranslationMenu translation={translation} />
-				</TableCell>
-			</TableRow>
-		);
-	},
-);
+	return (
+		<EuiPopover
+			button={
+				<EuiButtonIcon
+					iconType="gear"
+					size="s"
+					color="text"
+					onClick={togglePopover}
+				/>
+			}
+			isOpen={isPopoverOpen}
+			closePopover={closePopover}
+			panelPaddingSize="none"
+			anchorPosition="leftCenter"
+		>
+			<EuiContextMenuPanel
+				items={[
+					<EuiContextMenuItem
+						icon="popout"
+						href={`https://inishienomanabi.net/translations/${translation.id}/view`}
+						target="_blank"
+					>
+						{t('translations.viewOnInishienomanabi')}
+					</EuiContextMenuItem>,
+				]}
+			/>
+		</EuiPopover>
+	);
+};
 
 interface TranslationSearchTableProps {
 	store: TranslationSearchStore;
@@ -230,81 +102,182 @@ const TranslationSearchTable = observer(
 	({ store }: TranslationSearchTableProps): React.ReactElement => {
 		const { t } = useTranslation();
 
+		const searchWords = store.query.trim().split(/\s+/);
+
 		return (
 			<>
-				<Pagination store={store.paginationStore} />
+				<EuiTable>
+					<EuiTableHeader>
+						<EuiTableHeaderCell
+							onSort={(): void =>
+								store.setSort(
+									store.sort ===
+										TranslationSortRule.HeadwordAsc
+										? TranslationSortRule.HeadwordDesc
+										: TranslationSortRule.HeadwordAsc,
+								)
+							}
+							isSorted={
+								store.sort ===
+									TranslationSortRule.HeadwordAsc ||
+								store.sort === TranslationSortRule.HeadwordDesc
+							}
+							isSortAscending={
+								store.sort === TranslationSortRule.HeadwordAsc
+							}
+						>
+							{t('translations.headword')}
+						</EuiTableHeaderCell>
+						<EuiTableHeaderCell
+							onSort={(): void =>
+								store.setSort(
+									store.sort ===
+										TranslationSortRule.YamatokotobaAsc
+										? TranslationSortRule.YamatokotobaDesc
+										: TranslationSortRule.YamatokotobaAsc,
+								)
+							}
+							isSorted={
+								store.sort ===
+									TranslationSortRule.YamatokotobaAsc ||
+								store.sort ===
+									TranslationSortRule.YamatokotobaDesc
+							}
+							isSortAscending={
+								store.sort ===
+								TranslationSortRule.YamatokotobaAsc
+							}
+						>
+							{t('translations.yamatokotoba')}
+						</EuiTableHeaderCell>
+						<EuiTableHeaderCell>
+							{t('translations.category')}
+						</EuiTableHeaderCell>
+						<EuiTableHeaderCell width={32} />
+					</EuiTableHeader>
 
-				<TableContainer component={Paper}>
-					<Table size="small">
-						<TableHead>
-							<TableRow>
-								<TableCell sx={{ width: '50%' }}>
-									<TableSortLabel
-										active={
-											store.sort ===
-												TranslationSortRule.HeadwordAsc ||
-											store.sort ===
-												TranslationSortRule.HeadwordDesc
-										}
-										direction={
-											store.sort ===
-											TranslationSortRule.HeadwordDesc
-												? 'desc'
-												: 'asc'
-										}
-										onClick={(): void =>
-											store.setSort(
-												store.sort ===
-													TranslationSortRule.HeadwordAsc
-													? TranslationSortRule.HeadwordDesc
-													: TranslationSortRule.HeadwordAsc,
-											)
-										}
-									>
-										{t('translations.headword')}
-									</TableSortLabel>
-								</TableCell>
-								<TableCell sx={{ width: '50%' }}>
-									<TableSortLabel
-										active={
-											store.sort ===
-												TranslationSortRule.YamatokotobaAsc ||
-											store.sort ===
-												TranslationSortRule.YamatokotobaDesc
-										}
-										direction={
-											store.sort ===
-											TranslationSortRule.YamatokotobaDesc
-												? 'desc'
-												: 'asc'
-										}
-										onClick={(): void =>
-											store.setSort(
-												store.sort ===
-													TranslationSortRule.YamatokotobaAsc
-													? TranslationSortRule.YamatokotobaDesc
-													: TranslationSortRule.YamatokotobaAsc,
-											)
-										}
-									>
-										{t('translations.yamatokotoba')}
-									</TableSortLabel>
-								</TableCell>
-								<TableCell />
-							</TableRow>
-						</TableHead>
+					<EuiTableBody>
+						{store.translations.map((translation) => (
+							<EuiTableRow key={translation.id} hasActions={true}>
+								<EuiTableRowCell
+									mobileOptions={{
+										header: t('translations.headword'),
+									}}
+								>
+									{translation.headword
+										.split(/\s/)
+										.map((part, index) => (
+											<React.Fragment key={index}>
+												{index > 0 && ' '}
+												<EuiLink
+													/* TODO: component={RouterLink}
+								to={`/words/${encodeURIComponent(
+									part,
+								)}/yamato-kotoba`} */
+													href="#"
+													onClick={(e): void => {
+														e.preventDefault();
+														runInAction(() => {
+															store.query = part;
+															store.sort =
+																TranslationSortRule.HeadwordAsc;
+														});
+													}}
+												>
+													<HighlightedText
+														text={part}
+														searchWords={
+															searchWords
+														}
+													/>
+												</EuiLink>
+											</React.Fragment>
+										))}
+									{translation.reading && (
+										<small>
+											【
+											{translation.reading
+												.split(/\s/)
+												.map((part, index) => (
+													<React.Fragment key={index}>
+														{index > 0 && ' '}
+														<HighlightedText
+															text={part}
+															searchWords={
+																searchWords
+															}
+														/>
+													</React.Fragment>
+												))}
+											】
+										</small>
+									)}
+								</EuiTableRowCell>
+								<EuiTableRowCell
+									mobileOptions={{
+										header: t('translations.yamatokotoba'),
+									}}
+								>
+									{translation.yamatokotoba
+										.split(/\s/)
+										.map((part, index) => (
+											<React.Fragment key={index}>
+												{index > 0 && ' '}
+												<EuiLink
+													/* TODO: component={RouterLink}
+								to={`/words/${encodeURIComponent(
+									part,
+								)}/headwords`} */
+													href="#"
+													onClick={(e): void => {
+														e.preventDefault();
+														runInAction(() => {
+															store.query = part;
+															store.sort =
+																TranslationSortRule.YamatokotobaAsc;
+														});
+													}}
+												>
+													<HighlightedText
+														text={part}
+														searchWords={
+															searchWords
+														}
+													/>
+												</EuiLink>
+											</React.Fragment>
+										))}
+								</EuiTableRowCell>
+								<EuiTableRowCell
+									mobileOptions={{
+										header: t('translations.category'),
+									}}
+								>
+									{translation.category && (
+										<EuiBadge color="default">
+											{t(
+												`wordCategoryNames.${translation.category}`,
+											)}
+										</EuiBadge>
+									)}
+								</EuiTableRowCell>
+								<EuiTableRowCell
+									textOnly={false}
+									hasActions={true}
+									align="right"
+								>
+									<TranslationPopover
+										translation={translation}
+									/>
+								</EuiTableRowCell>
+							</EuiTableRow>
+						))}
+					</EuiTableBody>
 
-						<TableBody>
-							{store.translations.map((translation) => (
-								<TranslationSearchTableRow
-									key={translation.id}
-									store={store}
-									translation={translation}
-								/>
-							))}
-						</TableBody>
-					</Table>
-				</TableContainer>
+					<EuiTableFooter></EuiTableFooter>
+				</EuiTable>
+
+				<EuiSpacer size="m" />
 
 				<Pagination store={store.paginationStore} />
 			</>

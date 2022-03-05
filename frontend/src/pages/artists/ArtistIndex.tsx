@@ -1,64 +1,45 @@
 import {
-	Avatar,
-	List,
-	ListItem,
-	ListItemAvatar,
-	ListItemButton,
-	ListItemText,
-} from '@mui/material';
+	EuiBreadcrumb,
+	EuiBreadcrumbs,
+	EuiLink,
+	EuiPageHeader,
+	EuiSpacer,
+	EuiTable,
+	EuiTableBody,
+	EuiTableHeader,
+	EuiTableHeaderCell,
+	EuiTableRow,
+	EuiTableRowCell,
+} from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import Avatar from '../../components/Avatar';
 import Pagination from '../../components/Pagination';
-import Layout from '../../components/layout/Layout';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 
-interface ArtistListItemProps {
-	artist: IArtistObject;
-}
+const Breadcrumbs = (): React.ReactElement => {
+	const { t } = useTranslation();
 
-const ArtistListItem = React.memo(
-	({ artist }: ArtistListItemProps): React.ReactElement => {
-		return (
-			<ListItem disablePadding>
-				<ListItemButton
-					component={RouterLink}
-					to={`/artists/${artist.id}/quotes`}
-				>
-					<ListItemAvatar>
-						<Avatar src={artist.avatarUrl} />
-					</ListItemAvatar>
-					<ListItemText primary={artist.name} />
-				</ListItemButton>
-			</ListItem>
-		);
-	},
-);
+	const navigate = useNavigate();
 
-interface ArtistListProps {
-	artists: IArtistObject[];
-}
+	const breadcrumbs: EuiBreadcrumb[] = [
+		{
+			text: t('shared.artists'),
+			href: '/artists',
+			onClick: (e): void => {
+				e.preventDefault();
+				navigate('/artists');
+			},
+		},
+	];
 
-const ArtistList = React.memo(
-	({ artists }: ArtistListProps): React.ReactElement => {
-		return (
-			<List
-				dense
-				sx={{ width: '100%', bgcolor: 'background.paper' }}
-				disablePadding
-			>
-				{artists.map((artist) => (
-					<ArtistListItem key={artist.id} artist={artist} />
-				))}
-			</List>
-		);
-	},
-);
+	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
+};
 
 const ArtistIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
@@ -69,22 +50,54 @@ const ArtistIndex = observer((): React.ReactElement => {
 
 	useStoreWithPagination(store);
 
+	const navigate = useNavigate();
+
 	return (
-		<Layout
-			breadcrumbItems={[
-				{
-					text: t('shared.artists'),
-					to: '/artists',
-					isCurrentItem: true,
-				},
-			]}
-		>
-			<Pagination store={store.paginationStore} />
+		<>
+			<Breadcrumbs />
+			<EuiSpacer size="xs" />
+			<EuiPageHeader pageTitle={t('shared.artists')} />
 
-			<ArtistList artists={store.artists} />
+			<EuiTable>
+				<EuiTableHeader>
+					<EuiTableHeaderCell width={40} />
+					<EuiTableHeaderCell>{t('artists.name')}</EuiTableHeaderCell>
+				</EuiTableHeader>
+
+				<EuiTableBody>
+					{store.artists.map((artist) => (
+						<EuiTableRow key={artist.id}>
+							<EuiTableRowCell>
+								<Avatar
+									size="m"
+									name={artist.name}
+									imageUrl={artist.avatarUrl ?? ''}
+								/>
+							</EuiTableRowCell>
+							<EuiTableRowCell
+								mobileOptions={{
+									header: t('artists.name'),
+								}}
+							>
+								<EuiLink
+									href={`/artists/${artist.id}`}
+									onClick={(e: any): void => {
+										e.preventDefault();
+										navigate(`/artists/${artist.id}`);
+									}}
+								>
+									{artist.name}
+								</EuiLink>
+							</EuiTableRowCell>
+						</EuiTableRow>
+					))}
+				</EuiTableBody>
+			</EuiTable>
+
+			<EuiSpacer size="m" />
 
 			<Pagination store={store.paginationStore} />
-		</Layout>
+		</>
 	);
 });
 

@@ -34,10 +34,13 @@
 		"works": "Works",
 		"users": "Users",
 		"change": "Change",
-		"done": "Done"
+		"done": "Done",
+		"content": "Content",
+		"account": "Account",
+		"community": "Community"
 	},
 	"translations": {
-		"addWord": "Add Word",
+		"addWord": "Add word",
 		"foreignLanguage": "Foreign language",
 		"headword": "Headword",
 		"japanese": "Japanese",
@@ -49,6 +52,7 @@
 		"viewOnInishienomanabi": "View on Inishienomanabi"
 	},
 	"wordCategoryNames": {
+		"all": "All",
 		"unspecified": "(Unspecified)",
 		"noun": "Noun",
 		"verb": "Verb",

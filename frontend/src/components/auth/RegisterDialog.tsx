@@ -1,17 +1,17 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import EmailIcon from '@mui/icons-material/Email';
-import LockIcon from '@mui/icons-material/Lock';
 import {
-	Button,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
-	FormControl,
-	InputAdornment,
-	Stack,
-	TextField,
-} from '@mui/material';
+	EuiButton,
+	EuiButtonEmpty,
+	EuiFieldPassword,
+	EuiFieldText,
+	EuiForm,
+	EuiFormRow,
+	EuiModal,
+	EuiModalBody,
+	EuiModalFooter,
+	EuiModalHeader,
+	EuiModalHeaderTitle,
+	useGeneratedHtmlId,
+} from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,96 +30,82 @@ const RegisterDialog = observer(
 
 		const [store] = React.useState(() => new RegisterDialogStore());
 
+		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
+
 		return (
-			<Dialog open={true} onClose={onClose} fullWidth>
-				<form
-					onSubmit={async (e): Promise<void> => {
-						e.preventDefault();
+			<EuiModal onClose={onClose} initialFocus="[name=email]">
+				<EuiModalHeader>
+					<EuiModalHeaderTitle>
+						<h1>{t('auth.register')}</h1>
+					</EuiModalHeaderTitle>
+				</EuiModalHeader>
 
-						const user = await store.submit();
+				<EuiModalBody>
+					<EuiForm
+						id={modalFormId}
+						component="form"
+						onSubmit={async (e): Promise<void> => {
+							e.preventDefault();
 
-						onSuccess(user);
-					}}
-				>
-					<DialogTitle>{t('auth.register')}</DialogTitle>
-					<DialogContent>
-						<Stack spacing={2}>
-							<FormControl variant="standard" fullWidth>
-								<TextField
-									autoFocus
-									margin="dense"
-									id="email"
-									label={t('auth.email')}
-									type="email"
-									variant="standard"
-									value={store.email}
-									onChange={(e): void =>
-										store.setEmail(e.target.value)
-									}
-									InputProps={{
-										startAdornment: (
-											<InputAdornment position="start">
-												<EmailIcon />
-											</InputAdornment>
-										),
-									}}
-								/>
-							</FormControl>
+							const translation = await store.submit();
 
-							<FormControl variant="standard" fullWidth>
-								<TextField
-									margin="dense"
-									id="username"
-									label={t('auth.username')}
-									type="text"
-									variant="standard"
-									value={store.username}
-									onChange={(e): void =>
-										store.setUsername(e.target.value)
-									}
-									InputProps={{
-										startAdornment: (
-											<InputAdornment position="start">
-												<AccountCircleIcon />
-											</InputAdornment>
-										),
-									}}
-								/>
-							</FormControl>
+							onClose();
+							onSuccess(translation);
+						}}
+					>
+						<EuiFormRow label={t('auth.email')}>
+							<EuiFieldText
+								compressed
+								name="email"
+								icon="email"
+								value={store.email}
+								onChange={(e): void =>
+									store.setEmail(e.target.value)
+								}
+							/>
+						</EuiFormRow>
 
-							<FormControl variant="standard" fullWidth>
-								<TextField
-									margin="dense"
-									id="password"
-									label={t('auth.password')}
-									type="password"
-									variant="standard"
-									value={store.password}
-									onChange={(e): void =>
-										store.setPassword(e.target.value)
-									}
-									InputProps={{
-										startAdornment: (
-											<InputAdornment position="start">
-												<LockIcon />
-											</InputAdornment>
-										),
-									}}
-								/>
-							</FormControl>
-						</Stack>
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={onClose}>{t('shared.cancel')}</Button>
-						<Button
-							type="submit"
-							disabled={!store.isValid || store.submitting}
-						>
-							{t('auth.register')}
-						</Button>
-					</DialogActions>
-				</form>
-			</Dialog>
+						<EuiFormRow label={t('auth.username')}>
+							<EuiFieldText
+								compressed
+								name="username"
+								icon="user"
+								value={store.username}
+								onChange={(e): void =>
+									store.setUsername(e.target.value)
+								}
+							/>
+						</EuiFormRow>
+
+						<EuiFormRow label={t('auth.password')}>
+							<EuiFieldPassword
+								compressed
+								name="password"
+								type="dual"
+								value={store.password}
+								onChange={(e): void =>
+									store.setPassword(e.target.value)
+								}
+							/>
+						</EuiFormRow>
+					</EuiForm>
+				</EuiModalBody>
+
+				<EuiModalFooter>
+					<EuiButtonEmpty size="s" onClick={onClose}>
+						{t('shared.cancel')}
+					</EuiButtonEmpty>
+
+					<EuiButton
+						size="s"
+						type="submit"
+						form={modalFormId}
+						disabled={!store.isValid || store.submitting}
+					>
+						{t('auth.register')}
+					</EuiButton>
+				</EuiModalFooter>
+			</EuiModal>
 		);
 	},
 );
