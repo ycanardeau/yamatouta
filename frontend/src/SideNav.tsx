@@ -22,6 +22,7 @@ import LoginDialog from './components/auth/LoginDialog';
 import RegisterDialog from './components/auth/RegisterDialog';
 import { useAuth } from './components/useAuth';
 import { useDialog } from './components/useDialog';
+import config from './config';
 import logoDiscord from './images/Discord-Logo-White.svg';
 import logoTwitter from './images/Twitter-Logo-White.svg';
 
@@ -144,6 +145,7 @@ const SideNav = (): React.ReactElement => {
 								name: t('auth.register'),
 								id: htmlIdGenerator()(),
 								onClick: registerDialog.show,
+								disabled: config.disableAccountCreation,
 							},
 					  ],
 			},
