@@ -38,7 +38,11 @@
 		"content": "Content",
 		"account": "Account",
 		"community": "Community",
-		"all": "All"
+		"all": "All",
+		"edit": "Edit",
+		"viewHistory": "View history",
+		"revisions": "Revisions",
+		"delete": "Delete"
 	},
 	"translations": {
 		"addWord": "Add word",
@@ -50,7 +54,10 @@
 		"category": "Part of Speech",
 		"search": "Search",
 		"sortBy": "Sort by",
-		"viewOnInishienomanabi": "View on Inishienomanabi"
+		"viewOnInishienomanabi": "View on Inishienomanabi",
+		"editWord": "Edit word",
+		"deleteWord": "Delete Word",
+		"deleteDialogSubtitle": "Are you sure you want to delete this word?"
 	},
 	"wordCategoryNames": {
 		"Unspecified": "Unspecified",

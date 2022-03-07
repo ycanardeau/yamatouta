@@ -3,6 +3,7 @@ import {
 	EuiButtonIcon,
 	EuiContextMenuItem,
 	EuiContextMenuPanel,
+	EuiHorizontalRule,
 	EuiIcon,
 	EuiLink,
 	EuiPopover,
@@ -15,17 +16,31 @@ import {
 	EuiTableRow,
 	EuiTableRowCell,
 } from '@elastic/eui';
-import { MoreHorizontalRegular, OpenRegular } from '@fluentui/react-icons';
+import {
+	DeleteRegular,
+	EditRegular,
+	HistoryRegular,
+	InfoRegular,
+	MoreHorizontalRegular,
+	OpenRegular,
+} from '@fluentui/react-icons';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { Permission } from '../../models/Permission';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
+import { WordCategory } from '../../models/WordCategory';
 import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
 import Pagination from '../Pagination';
+import { useAuth } from '../useAuth';
+import { useDialog } from '../useDialog';
+import DeleteTranslationDialog from './DeleteTranslationDialog';
+import EditTranslationDialog from './EditTranslationDialog';
 
 interface HighlightProps {
 	children: React.ReactNode;
@@ -54,10 +69,12 @@ const HighlightedText = React.memo(
 );
 
 interface TranslationPopoverProps {
+	store: TranslationSearchStore;
 	translation: ITranslationObject;
 }
 
 const TranslationPopover = ({
+	store,
 	translation,
 }: TranslationPopoverProps): React.ReactElement => {
 	const { t } = useTranslation();
@@ -65,6 +82,13 @@ const TranslationPopover = ({
 	const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 	const togglePopover = (): void => setIsPopoverOpen(!isPopoverOpen);
 	const closePopover = (): void => setIsPopoverOpen(false);
+
+	const navigate = useNavigate();
+
+	const editTranslationDialog = useDialog();
+	const deleteTranslationDialog = useDialog();
+
+	const auth = useAuth();
 
 	return (
 		<>
@@ -84,6 +108,64 @@ const TranslationPopover = ({
 			>
 				<EuiContextMenuPanel>
 					<EuiContextMenuItem
+						icon={<EuiIcon type={InfoRegular} />}
+						href={`/translations/${translation.id}`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(`/translations/${translation.id}`);
+						}}
+					>
+						{t('shared.details')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={HistoryRegular} />}
+						href={`/translations/${translation.id}/revisions`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(
+								`/translations/${translation.id}/revisions`,
+							);
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.ViewEditHistory,
+							)
+						}
+					>
+						{t('shared.viewHistory')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={EditRegular} />}
+						onClick={(): void => {
+							closePopover();
+							editTranslationDialog.show();
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.EditTranslations,
+							)
+						}
+					>
+						{t('shared.edit')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={DeleteRegular} color="danger" />}
+						onClick={(): void => {
+							closePopover();
+							deleteTranslationDialog.show();
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.DeleteTranslations,
+							)
+						}
+					>
+						{t('shared.delete')}
+					</EuiContextMenuItem>
+					<EuiHorizontalRule margin="none" />
+					<EuiContextMenuItem
 						icon={<EuiIcon type={OpenRegular} />}
 						href={`https://inishienomanabi.net/translations/${translation.id}/view`}
 						onClick={closePopover}
@@ -93,6 +175,26 @@ const TranslationPopover = ({
 					</EuiContextMenuItem>
 				</EuiContextMenuPanel>
 			</EuiPopover>
+
+			{editTranslationDialog.visible && (
+				<EditTranslationDialog
+					translation={translation}
+					onClose={editTranslationDialog.close}
+					onSuccess={(translation): void =>
+						navigate(`/translations/${translation.id}`)
+					}
+				/>
+			)}
+
+			{deleteTranslationDialog.visible && (
+				<DeleteTranslationDialog
+					translation={translation}
+					onClose={deleteTranslationDialog.close}
+					onSuccess={async (): Promise<void> => {
+						await store.updateResults(true);
+					}}
+				/>
+			)}
 		</>
 	);
 };
@@ -258,7 +360,8 @@ const TranslationSearchTable = observer(
 										header: t('translations.category'),
 									}}
 								>
-									{translation.category && (
+									{translation.category !==
+										WordCategory.Unspecified && (
 										<EuiBadge color="default">
 											{t(
 												`wordCategoryNames.${translation.category}`,
@@ -272,6 +375,7 @@ const TranslationSearchTable = observer(
 									align="right"
 								>
 									<TranslationPopover
+										store={store}
 										translation={translation}
 									/>
 								</EuiTableRowCell>

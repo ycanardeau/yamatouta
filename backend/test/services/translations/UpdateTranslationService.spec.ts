@@ -65,7 +65,6 @@ describe('UpdateTranslationService', () => {
 				[existingUser].filter(
 					(u) => u.normalizedEmail === where.normalizedEmail,
 				)[0],
-			// eslint-disable-next-line @typescript-eslint/no-empty-function
 			persist: (): void => {},
 		};
 		auditLogService = new AuditLogService(em as any);

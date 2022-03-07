@@ -6,11 +6,12 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { createTranslation } from '../../api/TranslationApi';
+import { createTranslation, updateTranslation } from '../../api/TranslationApi';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
 
 export class EditTranslationDialogStore {
+	private readonly translation?: ITranslationObject;
 	@observable submitting = false;
 	@observable headword = '';
 	@observable locale = 'ja';
@@ -18,8 +19,18 @@ export class EditTranslationDialogStore {
 	@observable yamatokotoba = '';
 	@observable category = WordCategory.Unspecified;
 
-	constructor() {
+	constructor({ translation }: { translation?: ITranslationObject }) {
 		makeObservable(this);
+
+		this.translation = translation;
+
+		if (translation) {
+			this.headword = translation.headword;
+			this.locale = translation.locale;
+			this.reading = translation.reading;
+			this.yamatokotoba = translation.yamatokotoba;
+			this.category = translation.category;
+		}
 	}
 
 	@computed get isJapanese(): boolean {
@@ -58,14 +69,21 @@ export class EditTranslationDialogStore {
 		try {
 			this.submitting = true;
 
-			// Await.
-			const translation = await createTranslation({
+			const params = {
 				headword: this.headword,
 				locale: this.locale,
 				reading: this.reading,
 				yamatokotoba: this.yamatokotoba,
 				category: this.category,
-			});
+			};
+
+			// Await.
+			const translation = await (this.translation
+				? updateTranslation({
+						...params,
+						translationId: this.translation.id,
+				  })
+				: createTranslation(params));
 
 			return translation;
 		} finally {

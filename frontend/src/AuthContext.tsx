@@ -13,7 +13,6 @@ export interface IAuthContext {
 
 export const AuthContext = React.createContext<IAuthContext>({
 	isAuthenticated: false,
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	setUser: () => {},
 	loading: true,
 	permissionContext: new PermissionContext(),
