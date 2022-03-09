@@ -79,7 +79,9 @@ const QuoteDetails = (): React.ReactElement | null => {
 	const { quoteId } = useParams();
 
 	React.useEffect(() => {
-		getQuote(Number(quoteId)).then((quote) => setModel({ quote: quote }));
+		getQuote({ quoteId: Number(quoteId) }).then((quote) =>
+			setModel({ quote: quote }),
+		);
 	}, [quoteId]);
 
 	return model ? <QuoteDetailsLayout quote={model.quote} /> : null;

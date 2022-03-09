@@ -10,7 +10,7 @@ import { createTranslation } from '../../api/TranslationApi';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
 
-export class CreateTranslationDialogStore {
+export class EditTranslationDialogStore {
 	@observable submitting = false;
 	@observable headword = '';
 	@observable locale = 'ja';
@@ -64,7 +64,7 @@ export class CreateTranslationDialogStore {
 				locale: this.locale,
 				reading: this.reading,
 				yamatokotoba: this.yamatokotoba,
-				category: this.category,
+				category: this.category || undefined,
 			});
 
 			return translation;

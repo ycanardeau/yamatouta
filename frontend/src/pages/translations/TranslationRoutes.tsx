@@ -6,7 +6,7 @@ const TranslationIndex = React.lazy(() => import('./TranslationIndex'));
 const TranslationRoutes = (): React.ReactElement => {
 	return (
 		<Routes>
-			<Route path="" element={<TranslationIndex />}></Route>
+			<Route path="" element={<TranslationIndex />} />
 		</Routes>
 	);
 };

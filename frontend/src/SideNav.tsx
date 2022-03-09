@@ -38,6 +38,8 @@ const SideNav = (): React.ReactElement => {
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 
+	const tab = pathname.split('/')[1];
+
 	const auth = useAuth();
 
 	const loginDialog = useDialog();
@@ -58,9 +60,7 @@ const SideNav = (): React.ReactElement => {
 							e.preventDefault();
 							navigate('/translations');
 						},
-						isSelected:
-							pathname.split('/')[1] ===
-							'translations' /* OPTIMIZE */,
+						isSelected: tab === 'translations',
 					},
 					{
 						icon: <EuiIcon type={MusicNote2Regular} />,
@@ -71,8 +71,7 @@ const SideNav = (): React.ReactElement => {
 							e.preventDefault();
 							navigate('/quotes');
 						},
-						isSelected:
-							pathname.split('/')[1] === 'quotes' /* OPTIMIZE */,
+						isSelected: tab === 'quotes',
 					},
 					{
 						icon: <EuiIcon type={CalligraphyPenRegular} />,
@@ -83,8 +82,7 @@ const SideNav = (): React.ReactElement => {
 							e.preventDefault();
 							navigate('/artists');
 						},
-						isSelected:
-							pathname.split('/')[1] === 'artists' /* OPTIMIZE */,
+						isSelected: tab === 'artists',
 					},
 					{
 						icon: <EuiIcon type={PersonRegular} />,
@@ -95,8 +93,7 @@ const SideNav = (): React.ReactElement => {
 							e.preventDefault();
 							navigate('/users');
 						},
-						isSelected:
-							pathname.split('/')[1] === 'users' /* OPTIMIZE */,
+						isSelected: tab === 'users',
 					},
 				],
 			},
@@ -114,9 +111,7 @@ const SideNav = (): React.ReactElement => {
 									e.preventDefault();
 									navigate('/settings');
 								},
-								isSelected:
-									pathname.split('/')[1] ===
-									'settings' /* OPTIMIZE */,
+								isSelected: tab === 'settings',
 							},
 							{
 								icon: <EuiIcon type={SignOutRegular} />,
@@ -177,7 +172,7 @@ const SideNav = (): React.ReactElement => {
 				],
 			},
 		],
-		[t, navigate, pathname, auth, loginDialog, registerDialog],
+		[t, navigate, tab, auth, loginDialog, registerDialog],
 	);
 
 	return (

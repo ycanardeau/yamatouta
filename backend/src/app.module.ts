@@ -37,6 +37,36 @@ import { ListUsersService } from './services/users/ListUsersService';
 import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthenticatedUserService';
 
+const artistServices = [
+	ListArtistsService,
+	GetArtistService,
+	ListArtistIdsService,
+];
+const quoteServices = [ListQuotesService, GetQuoteService, ListQuoteIdsService];
+const userServices = [
+	ListUsersService,
+	GetUserService,
+	CreateUserService,
+	AuthenticateUserService,
+	NormalizeEmailService,
+	GetAuthenticatedUserService,
+	UpdateAuthenticatedUserService,
+];
+const otherServices = [
+	AuditLogService,
+	PasswordHasherFactory,
+	GenerateSitemapService,
+	PermissionContext,
+	NgramConverter,
+];
+const authServices = [
+	LocalStrategy,
+	LocalSerializer,
+	LoginService,
+	LogoutService,
+];
+const translationServices = [CreateTranslationService, ListTranslationsService];
+
 @Module({
 	imports: [
 		MikroOrmModule.forRoot(),
@@ -52,30 +82,12 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		TranslationController,
 	],
 	providers: [
-		ListArtistsService,
-		GetArtistService,
-		ListQuotesService,
-		GetQuoteService,
-		ListUsersService,
-		GetUserService,
-		AuditLogService,
-		CreateUserService,
-		AuthenticateUserService,
-		LocalStrategy,
-		LocalSerializer,
-		LoginService,
-		LogoutService,
-		NormalizeEmailService,
-		PasswordHasherFactory,
-		ListArtistIdsService,
-		ListQuoteIdsService,
-		GenerateSitemapService,
-		PermissionContext,
-		CreateTranslationService,
-		ListTranslationsService,
-		NgramConverter,
-		GetAuthenticatedUserService,
-		UpdateAuthenticatedUserService,
+		...artistServices,
+		...quoteServices,
+		...userServices,
+		...otherServices,
+		...authServices,
+		...translationServices,
 	],
 })
 export class AppModule {}

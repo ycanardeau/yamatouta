@@ -69,7 +69,7 @@ const UserDetails = (): React.ReactElement | null => {
 	const { userId } = useParams();
 
 	React.useEffect(() => {
-		getUser(Number(userId)).then((user) =>
+		getUser({ userId: Number(userId) }).then((user) =>
 			setModel({
 				user: user,
 			}),

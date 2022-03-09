@@ -18,7 +18,11 @@ export const listArtists = async ({
 	return response.data;
 };
 
-export const getArtist = async (artistId: number): Promise<IArtistObject> => {
+export const getArtist = async ({
+	artistId,
+}: {
+	artistId: number;
+}): Promise<IArtistObject> => {
 	const response = await axios.get<IArtistObject>(`/artists/${artistId}`);
 
 	return response.data;

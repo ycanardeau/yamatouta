@@ -19,7 +19,11 @@ export const listQuotes = async ({
 	return response.data;
 };
 
-export const getQuote = async (quoteId: number): Promise<IQuoteObject> => {
+export const getQuote = async ({
+	quoteId,
+}: {
+	quoteId: number;
+}): Promise<IQuoteObject> => {
 	const response = await axios.get<IQuoteObject>(`/quotes/${quoteId}`);
 
 	return response.data;

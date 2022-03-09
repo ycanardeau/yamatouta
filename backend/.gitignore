@@ -39,3 +39,4 @@ lerna-debug.log*
 appsettings.development.json
 appsettings.production.json
 appsettings.test.json
+.env

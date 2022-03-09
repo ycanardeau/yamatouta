@@ -5,12 +5,13 @@ import {
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
+import { AddRegular } from '@fluentui/react-icons';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import CreateTranslationDialog from '../../components/translations/CreateTranslationDialog';
+import EditTranslationDialog from '../../components/translations/EditTranslationDialog';
 import TranslationSearchOptions from '../../components/translations/TranslationSearchOptions';
 import TranslationSearchTable from '../../components/translations/TranslationSearchTable';
 import { useAuth } from '../../components/useAuth';
@@ -69,6 +70,7 @@ const TranslationIndex = observer((): React.ReactElement => {
 								Permission.CreateTranslations,
 							)
 						}
+						iconType={AddRegular}
 					>
 						{t('translations.addWord')}
 					</EuiButton>,
@@ -82,7 +84,7 @@ const TranslationIndex = observer((): React.ReactElement => {
 			<TranslationSearchTable store={store} />
 
 			{createTranslationDialog.visible && (
-				<CreateTranslationDialog
+				<EditTranslationDialog
 					onClose={createTranslationDialog.close}
 					onSuccess={(translation): void =>
 						navigate(`/translations/${translation.id}`)

@@ -44,7 +44,7 @@ const ArtistDetails = (): React.ReactElement | null => {
 	const { artistId } = useParams();
 
 	React.useEffect(() => {
-		getArtist(Number(artistId)).then((artist) =>
+		getArtist({ artistId: Number(artistId) }).then((artist) =>
 			setModel({
 				artist: artist,
 				store: new ArtistDetailsStore(artist.id),

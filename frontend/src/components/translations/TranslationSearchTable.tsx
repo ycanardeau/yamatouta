@@ -3,6 +3,7 @@ import {
 	EuiButtonIcon,
 	EuiContextMenuItem,
 	EuiContextMenuPanel,
+	EuiIcon,
 	EuiLink,
 	EuiPopover,
 	EuiSpacer,
@@ -14,6 +15,7 @@ import {
 	EuiTableRow,
 	EuiTableRowCell,
 } from '@elastic/eui';
+import { MoreHorizontalRegular, OpenRegular } from '@fluentui/react-icons';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -65,32 +67,33 @@ const TranslationPopover = ({
 	const closePopover = (): void => setIsPopoverOpen(false);
 
 	return (
-		<EuiPopover
-			button={
-				<EuiButtonIcon
-					iconType="gear"
-					size="s"
-					color="text"
-					onClick={togglePopover}
-				/>
-			}
-			isOpen={isPopoverOpen}
-			closePopover={closePopover}
-			panelPaddingSize="none"
-			anchorPosition="leftCenter"
-		>
-			<EuiContextMenuPanel
-				items={[
+		<>
+			<EuiPopover
+				button={
+					<EuiButtonIcon
+						iconType={MoreHorizontalRegular}
+						size="xs"
+						color="text"
+						onClick={togglePopover}
+					/>
+				}
+				isOpen={isPopoverOpen}
+				closePopover={closePopover}
+				panelPaddingSize="none"
+				anchorPosition="leftCenter"
+			>
+				<EuiContextMenuPanel>
 					<EuiContextMenuItem
-						icon="popout"
+						icon={<EuiIcon type={OpenRegular} />}
 						href={`https://inishienomanabi.net/translations/${translation.id}/view`}
+						onClick={closePopover}
 						target="_blank"
 					>
 						{t('translations.viewOnInishienomanabi')}
-					</EuiContextMenuItem>,
-				]}
-			/>
-		</EuiPopover>
+					</EuiContextMenuItem>
+				</EuiContextMenuPanel>
+			</EuiPopover>
+		</>
 	);
 };
 
@@ -174,8 +177,9 @@ const TranslationSearchTable = observer(
 								to={`/words/${encodeURIComponent(
 									part,
 								)}/yamato-kotoba`} */
-													href="#"
-													onClick={(e): void => {
+													onClick={(
+														e: React.MouseEvent<HTMLAnchorElement>,
+													): void => {
 														e.preventDefault();
 														runInAction(() => {
 															store.query = part;
@@ -228,8 +232,9 @@ const TranslationSearchTable = observer(
 								to={`/words/${encodeURIComponent(
 									part,
 								)}/headwords`} */
-													href="#"
-													onClick={(e): void => {
+													onClick={(
+														e: React.MouseEvent<HTMLAnchorElement>,
+													): void => {
 														e.preventDefault();
 														runInAction(() => {
 															store.query = part;
