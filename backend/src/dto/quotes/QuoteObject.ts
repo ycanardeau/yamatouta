@@ -1,5 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
-
 import { Quote } from '../../entities/Quote';
 import { AuthorType } from '../../models/AuthorType';
 import { IAuthor } from '../../models/IAuthor';
@@ -31,11 +29,7 @@ export class QuoteObject {
 	readonly sourceUrl?: string;
 
 	constructor(quote: Quote, permissionContext: PermissionContext) {
-		if (quote.deleted && !permissionContext.canViewDeletedEntries)
-			throw new NotFoundException();
-
-		if (quote.hidden && !permissionContext.canViewHiddenEntries)
-			throw new NotFoundException();
+		permissionContext.verifyDeletedAndHidden(quote);
 
 		this.id = quote.id;
 		this.deleted = quote.deleted;

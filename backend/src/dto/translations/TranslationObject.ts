@@ -1,5 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
-
 import { Translation } from '../../entities/Translation';
 import { WordCategory } from '../../models/WordCategory';
 import { PermissionContext } from '../../services/PermissionContext';
@@ -16,11 +14,7 @@ export class TranslationObject {
 		translation: Translation,
 		permissionContext: PermissionContext,
 	) {
-		if (translation.deleted && !permissionContext.canViewDeletedEntries)
-			throw new NotFoundException();
-
-		if (translation.hidden && !permissionContext.canViewHiddenEntries)
-			throw new NotFoundException();
+		permissionContext.verifyDeletedAndHidden(translation);
 
 		this.id = translation.id;
 		this.headword = translation.translatedString.headword;

@@ -1,5 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
-
 import { Artist } from '../../entities/Artist';
 import { ArtistType } from '../../models/ArtistType';
 import { PermissionContext } from '../../services/PermissionContext';
@@ -13,11 +11,7 @@ export class ArtistObject {
 	readonly avatarUrl?: string;
 
 	constructor(artist: Artist, permissionContext: PermissionContext) {
-		if (artist.deleted && !permissionContext.canViewDeletedEntries)
-			throw new NotFoundException();
-
-		if (artist.hidden && !permissionContext.canViewHiddenEntries)
-			throw new NotFoundException();
+		permissionContext.verifyDeletedAndHidden(artist);
 
 		this.id = artist.id;
 		this.deleted = artist.deleted;

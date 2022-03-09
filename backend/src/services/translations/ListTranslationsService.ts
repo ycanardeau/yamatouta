@@ -1,5 +1,4 @@
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
-import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import _ from 'lodash';
 
@@ -19,7 +18,6 @@ export class ListTranslationsService {
 	private static readonly maxOffset = 5000;
 
 	constructor(
-		@InjectRepository(Translation)
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		private readonly ngramConverter: NgramConverter,

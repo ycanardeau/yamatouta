@@ -1,5 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
-
 import { User } from '../../entities/User';
 import { PermissionContext } from '../../services/PermissionContext';
 import { generateGravatarUrl } from '../../utils/generateGravatarUrl';
@@ -12,11 +10,7 @@ export class UserObject {
 	readonly avatarUrl: string;
 
 	constructor(user: User, permissionContext: PermissionContext) {
-		if (user.deleted && !permissionContext.canViewDeletedEntries)
-			throw new NotFoundException();
-
-		if (user.hidden && !permissionContext.canViewHiddenEntries)
-			throw new NotFoundException();
+		permissionContext.verifyDeletedAndHidden(user);
 
 		this.id = user.id;
 		this.deleted = user.deleted;

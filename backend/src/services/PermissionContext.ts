@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	Inject,
 	Injectable,
+	NotFoundException,
 	Scope,
 	UnauthorizedException,
 } from '@nestjs/common';
@@ -52,5 +53,13 @@ export class PermissionContext {
 
 	verifyPermission(permission: Permission): void {
 		if (!this.hasPermission(permission)) throw new UnauthorizedException();
+	}
+
+	verifyDeletedAndHidden(entry: { deleted: boolean; hidden: boolean }): void {
+		if (entry.deleted && !this.canViewDeletedEntries)
+			throw new NotFoundException();
+
+		if (entry.hidden && !this.canViewHiddenEntries)
+			throw new NotFoundException();
 	}
 }
