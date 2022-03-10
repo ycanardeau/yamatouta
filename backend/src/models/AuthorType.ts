@@ -1,4 +1,4 @@
 export enum AuthorType {
-	Artist = 'artist',
-	User = 'user',
+	Artist = 'Artist',
+	User = 'User',
 }

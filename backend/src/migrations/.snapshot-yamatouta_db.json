@@ -125,14 +125,14 @@
         },
         "password_hash_algorithm": {
           "name": "password_hash_algorithm",
-          "type": "enum('bcrypt', 'inishienomanabi')",
+          "type": "enum('Bcrypt', 'Inishienomanabi')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "bcrypt",
-            "inishienomanabi"
+            "Bcrypt",
+            "Inishienomanabi"
           ],
           "mappedType": "enum"
         },
@@ -229,18 +229,18 @@
         },
         "user_group": {
           "name": "user_group",
-          "type": "enum('limited_user', 'user', 'advanced_user', 'mod', 'senior_mod', 'admin')",
+          "type": "enum('LimitedUser', 'User', 'AdvancedUser', 'Mod', 'SeniorMod', 'Admin')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "limited_user",
-            "user",
-            "advanced_user",
-            "mod",
-            "senior_mod",
-            "admin"
+            "LimitedUser",
+            "User",
+            "AdvancedUser",
+            "Mod",
+            "SeniorMod",
+            "Admin"
           ],
           "mappedType": "enum"
         }
@@ -1384,26 +1384,26 @@
         },
         "category": {
           "name": "category",
-          "type": "enum('noun', 'verb', 'adjective', 'adjectival-noun', 'adverb', 'postpositional-particle', 'auxiliary-verb', 'attributive', 'conjunction', 'prefix', 'suffix', 'interjection', 'other', 'pronoun')",
+          "type": "enum('Noun', 'Verb', 'Adjective', 'AdjectivalNoun', 'Adverb', 'PostpositionalParticle', 'AuxiliaryVerb', 'Attributive', 'Conjunction', 'Prefix', 'Suffix', 'Interjection', 'Other', 'Pronoun')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
           "enumItems": [
-            "noun",
-            "verb",
-            "adjective",
-            "adjectival-noun",
-            "adverb",
-            "postpositional-particle",
-            "auxiliary-verb",
-            "attributive",
-            "conjunction",
-            "prefix",
-            "suffix",
-            "interjection",
-            "other",
-            "pronoun"
+            "Noun",
+            "Verb",
+            "Adjective",
+            "AdjectivalNoun",
+            "Adverb",
+            "PostpositionalParticle",
+            "AuxiliaryVerb",
+            "Attributive",
+            "Conjunction",
+            "Prefix",
+            "Suffix",
+            "Interjection",
+            "Other",
+            "Pronoun"
           ],
           "mappedType": "enum"
         },
@@ -1675,19 +1675,19 @@
         },
         "action": {
           "name": "action",
-          "type": "enum('user.create', 'user.failed_login', 'user.login', 'translation.create', 'user.rename', 'user.change_email', 'user.change_password')",
+          "type": "enum('User_Create', 'User_FailedLogin', 'User_Login', 'Translation_Create', 'User_Rename', 'User_ChangeEmail', 'User_ChangePassword')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "user.create",
-            "user.failed_login",
-            "user.login",
-            "translation.create",
-            "user.rename",
-            "user.change_email",
-            "user.change_password"
+            "User_Create",
+            "User_FailedLogin",
+            "User_Login",
+            "Translation_Create",
+            "User_Rename",
+            "User_ChangeEmail",
+            "User_ChangePassword"
           ],
           "mappedType": "enum"
         },
@@ -1711,17 +1711,17 @@
         },
         "entry_type": {
           "name": "entry_type",
-          "type": "enum('user', 'translation', 'quote', 'artist', 'work')",
+          "type": "enum('User', 'Translation', 'Quote', 'Artist', 'Work')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "user",
-            "translation",
-            "quote",
-            "artist",
-            "work"
+            "User",
+            "Translation",
+            "Quote",
+            "Artist",
+            "Work"
           ],
           "mappedType": "enum"
         },
@@ -1912,16 +1912,16 @@
         },
         "artist_type": {
           "name": "artist_type",
-          "type": "enum('person', 'group', 'other', 'character')",
+          "type": "enum('Person', 'Group', 'Other', 'Character')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "person",
-            "group",
-            "other",
-            "character"
+            "Person",
+            "Group",
+            "Other",
+            "Character"
           ],
           "mappedType": "enum"
         }
@@ -1992,17 +1992,17 @@
         },
         "quote_type": {
           "name": "quote_type",
-          "type": "enum('word', 'haiku', 'tanka', 'lyrics', 'other')",
+          "type": "enum('Word', 'Haiku', 'Tanka', 'Lyrics', 'Other')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "word",
-            "haiku",
-            "tanka",
-            "lyrics",
-            "other"
+            "Word",
+            "Haiku",
+            "Tanka",
+            "Lyrics",
+            "Other"
           ],
           "mappedType": "enum"
         },
@@ -2046,14 +2046,14 @@
         },
         "author_type": {
           "name": "author_type",
-          "type": "enum('artist', 'user')",
+          "type": "enum('Artist', 'User')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "artist",
-            "user"
+            "Artist",
+            "User"
           ],
           "mappedType": "enum"
         },

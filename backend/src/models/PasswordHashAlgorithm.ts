@@ -1,4 +1,4 @@
 export enum PasswordHashAlgorithm {
-	Bcrypt = 'bcrypt',
-	Inishienomanabi = 'inishienomanabi',
+	Bcrypt = 'Bcrypt',
+	Inishienomanabi = 'Inishienomanabi',
 }

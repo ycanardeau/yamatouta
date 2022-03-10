@@ -53,7 +53,7 @@ const TranslationSearchOptions = observer(
 							options={[
 								{
 									value: '',
-									text: t('wordCategoryNames.all'),
+									text: t('shared.all'),
 								},
 								...Object.values(WordCategory).map((value) => ({
 									value: value,

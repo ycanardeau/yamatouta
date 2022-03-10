@@ -1,8 +1,8 @@
 export enum TranslationSortRule {
-	HeadwordAsc = 'headword-asc',
-	HeadwordDesc = 'headword-desc',
-	YamatokotobaAsc = 'yamatokotoba-asc',
-	YamatokotobaDesc = 'yamatokotoba-desc',
-	CreatedAsc = 'created-asc',
-	CreatedDesc = 'created-desc',
+	HeadwordAsc = 'HeadwordAsc',
+	HeadwordDesc = 'HeadwordDesc',
+	YamatokotobaAsc = 'YamatokotobaAsc',
+	YamatokotobaDesc = 'YamatokotobaDesc',
+	CreatedAsc = 'CreatedAsc',
+	CreatedDesc = 'CreatedDesc',
 }

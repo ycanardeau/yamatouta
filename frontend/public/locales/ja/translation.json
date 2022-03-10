@@ -5,10 +5,10 @@
 		"name": "なまえ"
 	},
 	"artistTypeNames": {
-		"person": "ひと",
-		"group": "くみあい",
-		"other": "そのほか",
-		"character": "ものがたりのひと"
+		"Person": "ひと",
+		"Group": "くみあい",
+		"Other": "そのほか",
+		"Character": "ものがたりのひと"
 	},
 	"auth": {
 		"email": "くものたより",
@@ -37,7 +37,8 @@
 		"done": "きめる",
 		"content": "なかみ",
 		"account": "てがた",
-		"community": "ふれあい"
+		"community": "ふれあい",
+		"all": "すべて"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -52,20 +53,19 @@
 		"viewOnInishienomanabi": "いにしえのまなびでみる"
 	},
 	"wordCategoryNames": {
-		"all": "すべて",
-		"unspecified": "(なし)",
-		"noun": "なことば",
-		"verb": "しわざことば",
-		"adjective": "さまことば",
-		"adjectival-noun": "ありかたことば",
-		"adverb": "そえことば",
-		"postpositional-particle": "あとことば",
-		"auxiliary-verb": "たすけことば",
-		"attributive": "そいことば",
-		"conjunction": "つなぎことば",
-		"interjection": "なげきことば",
-		"other": "そのほか",
-		"pronoun": "かわりことば"
+		"Unspecified": "なし",
+		"Noun": "なことば",
+		"Verb": "しわざことば",
+		"Adjective": "さまことば",
+		"AdjectivalNoun": "ありかたことば",
+		"Adverb": "そえことば",
+		"PostpositionalParticle": "あとことば",
+		"AuxiliaryVerb": "たすけことば",
+		"Attributive": "そいことば",
+		"Conjunction": "つなぎことば",
+		"Interjection": "なげきことば",
+		"Other": "そのほか",
+		"Pronoun": "かわりことば"
 	},
 	"users": {
 		"profile": "ひととなり",
@@ -73,12 +73,12 @@
 		"photo": "おもかげ"
 	},
 	"translationSortRuleNames": {
-		"headword-asc": "みだしことば (のぼり)",
-		"headword-desc": "みだしことば (くだり)",
-		"yamatokotoba-asc": "やまとことば (のぼり)",
-		"yamatokotoba-desc": "やまとことば (くだり)",
-		"created-asc": "ふるい",
-		"created-desc": "あたらしい"
+		"HeadwordAsc": "みだしことば (のぼり)",
+		"HeadwordDesc": "みだしことば (くだり)",
+		"YamatokotobaAsc": "やまとことば (のぼり)",
+		"YamatokotobaDesc": "やまとことば (くだり)",
+		"CreatedAsc": "ふるい",
+		"CreatedDesc": "あたらしい"
 	},
 	"settings": {
 		"currentPassword": "いまのあいことば",

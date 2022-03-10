@@ -1,7 +1,7 @@
 export enum QuoteType {
-	Word = 'word',
-	Haiku = 'haiku',
-	Tanka = 'tanka',
-	Lyrics = 'lyrics',
-	Other = 'other',
+	Word = 'Word',
+	Haiku = 'Haiku',
+	Tanka = 'Tanka',
+	Lyrics = 'Lyrics',
+	Other = 'Other',
 }

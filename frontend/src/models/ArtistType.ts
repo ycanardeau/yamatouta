@@ -1,6 +1,6 @@
 export enum ArtistType {
-	Person = 'person',
-	Group = 'group',
-	Other = 'other',
-	Character = 'character',
+	Person = 'Person',
+	Group = 'Group',
+	Other = 'Other',
+	Character = 'Character',
 }

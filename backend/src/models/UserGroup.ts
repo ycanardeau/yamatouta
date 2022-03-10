@@ -1,8 +1,8 @@
 export enum UserGroup {
-	LimitedUser = 'limited_user',
-	User = 'user',
-	AdvancedUser = 'advanced_user',
-	Mod = 'mod',
-	SeniorMod = 'senior_mod',
-	Admin = 'admin',
+	LimitedUser = 'LimitedUser',
+	User = 'User',
+	AdvancedUser = 'AdvancedUser',
+	Mod = 'Mod',
+	SeniorMod = 'SeniorMod',
+	Admin = 'Admin',
 }

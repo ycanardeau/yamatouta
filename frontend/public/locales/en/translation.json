@@ -5,10 +5,10 @@
 		"name": "Name"
 	},
 	"artistTypeNames": {
-		"person": "Person",
-		"group": "Group",
-		"other": "Other",
-		"character": "Character"
+		"Person": "Person",
+		"Group": "Group",
+		"Other": "Other",
+		"Character": "Character"
 	},
 	"auth": {
 		"email": "Email",
@@ -37,7 +37,8 @@
 		"done": "Done",
 		"content": "Content",
 		"account": "Account",
-		"community": "Community"
+		"community": "Community",
+		"all": "All"
 	},
 	"translations": {
 		"addWord": "Add word",
@@ -52,22 +53,21 @@
 		"viewOnInishienomanabi": "View on Inishienomanabi"
 	},
 	"wordCategoryNames": {
-		"all": "All",
-		"unspecified": "(Unspecified)",
-		"noun": "Noun",
-		"verb": "Verb",
-		"adjective": "Adjective",
-		"adjectival-noun": "Adjectival Noun",
-		"adverb": "Adverb",
-		"postpositional-particle": "Postpositional Particle",
-		"auxiliary-verb": "Auxiliary Verb",
-		"attributive": "Attributive",
-		"conjunction": "Conjunction",
-		"prefix": "Prefix",
-		"suffix": "Suffix",
-		"interjection": "Interjection",
-		"other": "Other",
-		"pronoun": "Pronoun"
+		"Unspecified": "Unspecified",
+		"Noun": "Noun",
+		"Verb": "Verb",
+		"Adjective": "Adjective",
+		"AdjectivalNoun": "Adjectival noun",
+		"Adverb": "Adverb",
+		"PostpositionalParticle": "Postpositional particle",
+		"AuxiliaryVerb": "Auxiliary verb",
+		"Attributive": "Attributive",
+		"Conjunction": "Conjunction",
+		"Prefix": "Prefix",
+		"Suffix": "Suffix",
+		"Interjection": "Interjection",
+		"Other": "Other",
+		"Pronoun": "Pronoun"
 	},
 	"users": {
 		"profile": "Profile",
@@ -75,12 +75,12 @@
 		"photo": "Photo"
 	},
 	"translationSortRuleNames": {
-		"headword-asc": "Headword (Ascending)",
-		"headword-desc": "Headword (Descending)",
-		"yamatokotoba-asc": "Yamato-kotoba (Ascending)",
-		"yamatokotoba-desc": "Yamato-kotoba (Descending)",
-		"created-asc": "Oldest",
-		"created-desc": "Newest"
+		"HeadwordAsc": "Headword (ascending)",
+		"HeadwordDesc": "Headword (descending)",
+		"YamatokotobaAsc": "Yamato-kotoba (ascending)",
+		"YamatokotobaDesc": "Yamato-kotoba (descending)",
+		"CreatedAsc": "Oldest",
+		"CreatedDesc": "Newest"
 	},
 	"settings": {
 		"currentPassword": "Current password",
