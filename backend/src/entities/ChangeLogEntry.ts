@@ -12,6 +12,7 @@ import {
 
 import { ChangeLogChangeKey } from '../models/ChangeLogChangeKey';
 import { ChangeLogEvent } from '../models/ChangeLogEvent';
+import { EntryDiff, TranslationDiff } from '../models/EntryDiff';
 import { EntryType } from '../models/EntryType';
 import { ChangeLogChange } from './ChangeLogChange';
 import { Revision } from './Revision';
@@ -23,7 +24,7 @@ import { User } from './User';
 	abstract: true,
 	discriminatorColumn: 'entryType',
 })
-export abstract class ChangeLogEntry {
+export abstract class ChangeLogEntry<TEntryDiff extends EntryDiff> {
 	@PrimaryKey()
 	id!: number;
 
@@ -81,13 +82,17 @@ export abstract class ChangeLogEntry {
 		});
 	}
 
-	addChanges(
-		...items: {
-			key: ChangeLogChangeKey;
-			value: string;
-		}[]
-	): ChangeLogEntry {
-		this.changes.add(...items.map((item) => this.createChange(item)));
+	addChanges(diff: TEntryDiff): ChangeLogEntry<TEntryDiff> {
+		this.changes.add(
+			...Object.entries(diff)
+				.filter(([, value]) => value !== undefined)
+				.map(([key, value]) =>
+					this.createChange({
+						key: key as ChangeLogChangeKey,
+						value: value as string,
+					}),
+				),
+		);
 
 		return this;
 	}
@@ -97,7 +102,7 @@ export abstract class ChangeLogEntry {
 	tableName: 'change_log_entries',
 	discriminatorValue: EntryType.Translation,
 })
-export class TranslationChangeLogEntry extends ChangeLogEntry {
+export class TranslationChangeLogEntry extends ChangeLogEntry<TranslationDiff> {
 	@ManyToOne()
 	translation: Translation;
 

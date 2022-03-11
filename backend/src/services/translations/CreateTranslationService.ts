@@ -7,8 +7,8 @@ import { Revision } from '../../entities/Revision';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
 import { NgramConverter } from '../../helpers/NgramConverter';
-import { ChangeLogChangeKey } from '../../models/ChangeLogChangeKey';
 import { ChangeLogEvent } from '../../models/ChangeLogEvent';
+import { TranslationDiff } from '../../models/EntryDiff';
 import { Permission } from '../../models/Permission';
 import {
 	IUpdateTranslationBody,
@@ -67,6 +67,14 @@ export class CreateTranslationService {
 
 			em.persist(revision);
 
+			const diff: TranslationDiff = {
+				Translation_Headword: headword,
+				Translation_Locale: locale,
+				Translation_Reading: reading,
+				Translation_Yamatokotoba: yamatokotoba,
+				Translation_Category: category,
+			};
+
 			const changeLogEntry = translation
 				.createChangeLogEntry({
 					revision: revision,
@@ -74,28 +82,7 @@ export class CreateTranslationService {
 					actionType: ChangeLogEvent.Created,
 					text: '',
 				})
-				.addChanges(
-					{
-						key: ChangeLogChangeKey.Translation_Headword,
-						value: headword,
-					},
-					{
-						key: ChangeLogChangeKey.Translation_Locale,
-						value: locale,
-					},
-					{
-						key: ChangeLogChangeKey.Translation_Reading,
-						value: reading,
-					},
-					{
-						key: ChangeLogChangeKey.Translation_Yamatokotoba,
-						value: yamatokotoba,
-					},
-					{
-						key: ChangeLogChangeKey.Translation_Category,
-						value: category,
-					},
-				);
+				.addChanges(diff);
 
 			revision.changeLogEntries.add(changeLogEntry);
 

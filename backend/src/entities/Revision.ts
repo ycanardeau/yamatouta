@@ -1,5 +1,6 @@
 import { Collection, Entity, OneToMany, PrimaryKey } from '@mikro-orm/core';
 
+import { EntryDiff } from '../models/EntryDiff';
 import { ChangeLogEntry } from './ChangeLogEntry';
 
 @Entity({ tableName: 'revisions' })
@@ -11,5 +12,5 @@ export class Revision {
 		() => ChangeLogEntry,
 		(changeLogEntry) => changeLogEntry.revision,
 	)
-	changeLogEntries = new Collection<ChangeLogEntry>(this);
+	changeLogEntries = new Collection<ChangeLogEntry<EntryDiff>>(this);
 }

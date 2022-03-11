@@ -1,6 +1,7 @@
 import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { ChangeLogChangeKey } from '../models/ChangeLogChangeKey';
+import { EntryDiff } from '../models/EntryDiff';
 import { ChangeLogEntry } from './ChangeLogEntry';
 
 @Entity({ tableName: 'change_log_changes' })
@@ -8,8 +9,8 @@ export class ChangeLogChange {
 	@PrimaryKey()
 	id!: number;
 
-	@ManyToOne()
-	changeLogEntry: ChangeLogEntry;
+	@ManyToOne(() => ChangeLogEntry)
+	changeLogEntry: ChangeLogEntry<EntryDiff>;
 
 	@Enum()
 	key: ChangeLogChangeKey;
@@ -22,7 +23,7 @@ export class ChangeLogChange {
 		key,
 		value,
 	}: {
-		changeLogEntry: ChangeLogEntry;
+		changeLogEntry: ChangeLogEntry<EntryDiff>;
 		key: ChangeLogChangeKey;
 		value: string;
 	}) {

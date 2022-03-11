@@ -9,10 +9,8 @@ import {
 } from '@mikro-orm/core';
 
 import { NgramConverter } from '../helpers/NgramConverter';
-import { ChangeLogChangeKey } from '../models/ChangeLogChangeKey';
 import { ChangeLogEvent } from '../models/ChangeLogEvent';
 import { WordCategory } from '../models/WordCategory';
-import { IUpdateTranslationBody } from '../requests/translations/IUpdateTranslationBody';
 import { TranslationChangeLogEntry } from './ChangeLogEntry';
 import { Revision } from './Revision';
 import { TranslatedString } from './TranslatedString';
@@ -126,44 +124,5 @@ export class Translation {
 			text: text,
 			translation: this,
 		});
-	}
-
-	*generateChanges(
-		params: IUpdateTranslationBody,
-	): Generator<{ key: ChangeLogChangeKey; value: string }> {
-		if (this.headword !== params.headword) {
-			yield {
-				key: ChangeLogChangeKey.Translation_Headword,
-				value: params.headword,
-			};
-		}
-
-		if (this.locale !== params.locale) {
-			yield {
-				key: ChangeLogChangeKey.Translation_Locale,
-				value: params.locale,
-			};
-		}
-
-		if (this.reading !== params.reading) {
-			yield {
-				key: ChangeLogChangeKey.Translation_Reading,
-				value: params.reading,
-			};
-		}
-
-		if (this.yamatokotoba !== params.yamatokotoba) {
-			yield {
-				key: ChangeLogChangeKey.Translation_Yamatokotoba,
-				value: params.yamatokotoba,
-			};
-		}
-
-		if (this.category !== params.category) {
-			yield {
-				key: ChangeLogChangeKey.Translation_Category,
-				value: params.category,
-			};
-		}
 	}
 }

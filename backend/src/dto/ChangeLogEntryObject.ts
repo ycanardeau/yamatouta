@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 
 import { ChangeLogEntry } from '../entities/ChangeLogEntry';
 import { ChangeLogEvent } from '../models/ChangeLogEvent';
+import { EntryDiff } from '../models/EntryDiff';
 import { EntryType } from '../models/EntryType';
 import { Permission } from '../models/Permission';
 import { PermissionContext } from '../services/PermissionContext';
@@ -15,7 +16,7 @@ export class ChangeLogEntryObject {
 	readonly entryType: EntryType;
 
 	constructor(
-		changeLogEntry: ChangeLogEntry,
+		changeLogEntry: ChangeLogEntry<EntryDiff>,
 		permissionContext: PermissionContext,
 	) {
 		if (!permissionContext.hasPermission(Permission.ViewEditHistory))
