@@ -75,16 +75,13 @@ export class CreateTranslationService {
 				Translation_Category: category,
 			};
 
-			const changeLogEntry = translation
-				.createChangeLogEntry({
-					revision: revision,
-					actor: user,
-					actionType: ChangeLogEvent.Created,
-					text: '',
-				})
-				.addChanges(diff);
-
-			revision.changeLogEntries.add(changeLogEntry);
+			revision.addChangeLogEntry({
+				entry: translation,
+				actor: user,
+				actionType: ChangeLogEvent.Created,
+				text: '',
+				diff: diff,
+			});
 
 			translation.updateSearchIndex(this.ngramConverter);
 

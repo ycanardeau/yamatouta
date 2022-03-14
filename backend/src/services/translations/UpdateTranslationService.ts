@@ -81,16 +81,13 @@ export class UpdateTranslationService {
 					category !== translation.category ? category : undefined,
 			};
 
-			const changeLogEntry = translation
-				.createChangeLogEntry({
-					revision: revision,
-					actor: user,
-					actionType: ChangeLogEvent.Updated,
-					text: '',
-				})
-				.addChanges(diff);
-
-			revision.changeLogEntries.add(changeLogEntry);
+			revision.addChangeLogEntry({
+				entry: translation,
+				actor: user,
+				actionType: ChangeLogEvent.Updated,
+				text: '',
+				diff: diff,
+			});
 
 			translation.headword = headword;
 			translation.locale = locale;
