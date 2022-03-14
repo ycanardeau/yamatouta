@@ -23,7 +23,7 @@ export class Migration20220209032142 extends Migration {
 		);
 
 		this.addSql(
-			"create table `change_log_changes` (`id` int unsigned not null auto_increment primary key, `change_log_entry_id` int unsigned not null, `key` enum('Translation_Headword', 'Translation_Locale', 'Translation_Reading', 'Translation_Yamatokotoba', 'Translation_Category') not null, `value` text not null) default character set utf8mb4 engine = InnoDB;",
+			"create table `change_log_changes` (`id` int unsigned not null auto_increment primary key, `change_log_entry_id` int unsigned not null, `key` enum('Translation_Headword', 'Translation_Locale', 'Translation_Reading', 'Translation_Yamatokotoba', 'Translation_Category', 'Translation_Tags') not null, `value` text not null) default character set utf8mb4 engine = InnoDB;",
 		);
 		this.addSql(
 			'alter table `change_log_changes` add index `change_log_changes_change_log_entry_id_index`(`change_log_entry_id`);',

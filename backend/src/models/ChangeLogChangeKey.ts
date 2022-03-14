@@ -4,4 +4,5 @@ export enum ChangeLogChangeKey {
 	Translation_Reading = 'Translation_Reading',
 	Translation_Yamatokotoba = 'Translation_Yamatokotoba',
 	Translation_Category = 'Translation_Category',
+	Translation_Tags = 'Translation_Tags',
 }

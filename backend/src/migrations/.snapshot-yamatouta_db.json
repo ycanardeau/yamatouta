@@ -1879,7 +1879,7 @@
         },
         "key": {
           "name": "key",
-          "type": "enum('Translation_Headword', 'Translation_Locale', 'Translation_Reading', 'Translation_Yamatokotoba', 'Translation_Category')",
+          "type": "enum('Translation_Headword', 'Translation_Locale', 'Translation_Reading', 'Translation_Yamatokotoba', 'Translation_Category', 'Translation_Tags')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
@@ -1889,7 +1889,8 @@
             "Translation_Locale",
             "Translation_Reading",
             "Translation_Yamatokotoba",
-            "Translation_Category"
+            "Translation_Category",
+            "Translation_Tags"
           ],
           "mappedType": "enum"
         },
