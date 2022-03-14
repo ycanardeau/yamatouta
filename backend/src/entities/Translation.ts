@@ -1,8 +1,10 @@
 import {
+	Collection,
 	Embedded,
 	Entity,
 	Enum,
 	ManyToOne,
+	OneToMany,
 	OneToOne,
 	PrimaryKey,
 	Property,
@@ -13,7 +15,7 @@ import { ChangeLogEvent } from '../models/ChangeLogEvent';
 import { TranslationDiff } from '../models/EntryDiff';
 import { IEntryWithChangeLogEntries } from '../models/IEntryWithChangeLogEntries';
 import { WordCategory } from '../models/WordCategory';
-import { TranslationChangeLogEntry } from './ChangeLogEntry';
+import { ChangeLogEntry, TranslationChangeLogEntry } from './ChangeLogEntry';
 import { Revision } from './Revision';
 import { TranslatedString } from './TranslatedString';
 import { TranslationSearchIndex } from './TranslationSearchIndex';
@@ -52,6 +54,12 @@ export class Translation
 		(searchIndex) => searchIndex.translation,
 	)
 	searchIndex = new TranslationSearchIndex({ translation: this });
+
+	@OneToMany(
+		() => TranslationChangeLogEntry,
+		(changeLogEntry) => changeLogEntry.translation,
+	)
+	changeLogEntries = new Collection<ChangeLogEntry<TranslationDiff>>(this);
 
 	constructor({
 		translatedString,
