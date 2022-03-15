@@ -33,7 +33,9 @@ export class DeleteTranslationService {
 			this.permissionContext.verifyDeletedAndHidden(translation);
 
 			if (translation.deleted)
-				throw new BadRequestException('already deleted');
+				throw new BadRequestException(
+					'This translation has already been deleted.',
+				);
 
 			const user = await this.userRepo.findOneOrFail({
 				id: this.permissionContext.user?.id,
