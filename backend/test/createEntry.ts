@@ -57,14 +57,14 @@ export const createTranslation = ({
 	locale,
 	reading,
 	yamatokotoba,
-	category,
+	category = WordCategory.Unspecified,
 	user,
 	deleted = false,
 	hidden = false,
 }: {
 	id: number;
 	headword: string;
-	locale?: string;
+	locale: string;
 	reading: string;
 	yamatokotoba: string;
 	category?: WordCategory;
@@ -93,6 +93,7 @@ export const createArtistQuote = ({
 	id,
 	quoteType,
 	text,
+	locale,
 	artist,
 	deleted = false,
 	hidden = false,
@@ -100,6 +101,7 @@ export const createArtistQuote = ({
 	id: number;
 	quoteType: QuoteType;
 	text: string;
+	locale: string;
 	artist: Artist;
 	deleted?: boolean;
 	hidden?: boolean;
@@ -107,6 +109,7 @@ export const createArtistQuote = ({
 	const artistQuote = new ArtistQuote({
 		quoteType: quoteType,
 		text: text,
+		locale: locale,
 		artist: artist,
 	});
 	artistQuote.id = id;

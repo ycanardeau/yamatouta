@@ -38,7 +38,11 @@
 		"content": "なかみ",
 		"account": "てがた",
 		"community": "ふれあい",
-		"all": "すべて"
+		"all": "すべて",
+		"edit": "かきかえる",
+		"viewHistory": "あゆみをみる",
+		"revisions": "あゆみ",
+		"delete": "けす"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -50,7 +54,10 @@
 		"category": "くさわい",
 		"search": "やまとことばをさがす",
 		"sortBy": "ならべかえ",
-		"viewOnInishienomanabi": "いにしえのまなびでみる"
+		"viewOnInishienomanabi": "いにしえのまなびでみる",
+		"editWord": "やまとことばをかきかえる",
+		"deleteWord": "やまとことばをけす",
+		"deleteDialogSubtitle": "このやまとことばをけしてもよろしいですか?"
 	},
 	"wordCategoryNames": {
 		"Unspecified": "なし",
@@ -78,7 +85,9 @@
 		"YamatokotobaAsc": "やまとことば (のぼり)",
 		"YamatokotobaDesc": "やまとことば (くだり)",
 		"CreatedAsc": "ふるい",
-		"CreatedDesc": "あたらしい"
+		"CreatedDesc": "あたらしい",
+		"UpdatedAsc": "あらためられていない",
+		"UpdatedDesc": "あらためられた"
 	},
 	"settings": {
 		"currentPassword": "いまのあいことば",

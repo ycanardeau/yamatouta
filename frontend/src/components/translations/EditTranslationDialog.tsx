@@ -21,18 +21,22 @@ import { WordCategory } from '../../models/WordCategory';
 import { EditTranslationDialogStore } from '../../stores/translations/EditTranslationDialogStore';
 
 interface EditTranslationDialogProps {
+	translation?: ITranslationObject;
 	onClose: () => void;
 	onSuccess: (translation: ITranslationObject) => void;
 }
 
 const EditTranslationDialog = observer(
 	({
+		translation,
 		onClose,
 		onSuccess,
 	}: EditTranslationDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(() => new EditTranslationDialogStore());
+		const [store] = React.useState(
+			() => new EditTranslationDialogStore({ translation: translation }),
+		);
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 
@@ -40,7 +44,11 @@ const EditTranslationDialog = observer(
 			<EuiModal onClose={onClose} initialFocus="[name=headword]">
 				<EuiModalHeader>
 					<EuiModalHeaderTitle>
-						<h1>{t('translations.addWord')}</h1>
+						<h1>
+							{translation
+								? t('translations.editWord')
+								: t('translations.addWord')}
+						</h1>
 					</EuiModalHeaderTitle>
 				</EuiModalHeader>
 
@@ -94,22 +102,12 @@ const EditTranslationDialog = observer(
 							<EuiSelect
 								compressed
 								name="category"
-								options={[
-									{
-										value: '',
-										text: t(
-											'wordCategoryNames.unspecified',
-										),
-									},
-									...Object.values(WordCategory).map(
-										(value) => ({
-											value: value,
-											text: t(
-												`wordCategoryNames.${value}`,
-											),
-										}),
-									),
-								]}
+								options={Object.values(WordCategory).map(
+									(value) => ({
+										value: value,
+										text: t(`wordCategoryNames.${value}`),
+									}),
+								)}
 								value={store.category ?? ''}
 								onChange={(e): void =>
 									store.setCategory(
@@ -132,7 +130,9 @@ const EditTranslationDialog = observer(
 						form={modalFormId}
 						disabled={!store.isValid || store.submitting}
 					>
-						{t('translations.addWord')}
+						{translation
+							? t('translations.editWord')
+							: t('translations.addWord')}
 					</EuiButton>
 				</EuiModalFooter>
 			</EuiModal>

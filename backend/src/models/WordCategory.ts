@@ -1,4 +1,5 @@
 export enum WordCategory {
+	Unspecified = 'Unspecified',
 	Noun = 'Noun',
 	Verb = 'Verb',
 	Adjective = 'Adjective',

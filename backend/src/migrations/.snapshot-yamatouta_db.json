@@ -1360,7 +1360,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "length": 85,
           "mappedType": "string"
         },
@@ -1370,7 +1370,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "string"
         },
         "yamatokotoba": {
@@ -1384,12 +1384,13 @@
         },
         "category": {
           "name": "category",
-          "type": "enum('Noun', 'Verb', 'Adjective', 'AdjectivalNoun', 'Adverb', 'PostpositionalParticle', 'AuxiliaryVerb', 'Attributive', 'Conjunction', 'Prefix', 'Suffix', 'Interjection', 'Other', 'Pronoun')",
+          "type": "enum('Unspecified', 'Noun', 'Verb', 'Adjective', 'AdjectivalNoun', 'Adverb', 'PostpositionalParticle', 'AuxiliaryVerb', 'Attributive', 'Conjunction', 'Prefix', 'Suffix', 'Interjection', 'Other', 'Pronoun')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "enumItems": [
+            "Unspecified",
             "Noun",
             "Verb",
             "Adjective",
@@ -1608,6 +1609,33 @@
     },
     {
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "revisions",
+      "indexes": [
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
         "key": {
           "name": "key",
           "type": "varchar(255)",
@@ -1673,9 +1701,270 @@
           "length": 0,
           "mappedType": "datetime"
         },
+        "revision_id": {
+          "name": "revision_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "action_type": {
+          "name": "action_type",
+          "type": "enum('Created', 'Updated', 'Deleted')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Created",
+            "Updated",
+            "Deleted"
+          ],
+          "mappedType": "enum"
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "enum('User', 'Translation', 'Quote', 'Artist', 'Work')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "User",
+            "Translation",
+            "Quote",
+            "Artist",
+            "Work"
+          ],
+          "mappedType": "enum"
+        },
+        "translation_id": {
+          "name": "translation_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        }
+      },
+      "name": "change_log_entries",
+      "indexes": [
+        {
+          "columnNames": [
+            "revision_id"
+          ],
+          "composite": false,
+          "keyName": "change_log_entries_revision_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "actor_id"
+          ],
+          "composite": false,
+          "keyName": "change_log_entries_actor_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "entry_type"
+          ],
+          "composite": false,
+          "keyName": "change_log_entries_entry_type_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "translation_id"
+          ],
+          "composite": false,
+          "keyName": "change_log_entries_translation_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "change_log_entries_revision_id_foreign": {
+          "constraintName": "change_log_entries_revision_id_foreign",
+          "columnNames": [
+            "revision_id"
+          ],
+          "localTableName": "change_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "revisions",
+          "updateRule": "cascade"
+        },
+        "change_log_entries_actor_id_foreign": {
+          "constraintName": "change_log_entries_actor_id_foreign",
+          "columnNames": [
+            "actor_id"
+          ],
+          "localTableName": "change_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "updateRule": "cascade"
+        },
+        "change_log_entries_translation_id_foreign": {
+          "constraintName": "change_log_entries_translation_id_foreign",
+          "columnNames": [
+            "translation_id"
+          ],
+          "localTableName": "change_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "translations",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "change_log_entry_id": {
+          "name": "change_log_entry_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "key": {
+          "name": "key",
+          "type": "enum('Translation_Headword', 'Translation_Locale', 'Translation_Reading', 'Translation_Yamatokotoba', 'Translation_Category', 'Translation_Tags')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Translation_Headword",
+            "Translation_Locale",
+            "Translation_Reading",
+            "Translation_Yamatokotoba",
+            "Translation_Category",
+            "Translation_Tags"
+          ],
+          "mappedType": "enum"
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        }
+      },
+      "name": "change_log_changes",
+      "indexes": [
+        {
+          "columnNames": [
+            "change_log_entry_id"
+          ],
+          "composite": false,
+          "keyName": "change_log_changes_change_log_entry_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "change_log_changes_change_log_entry_id_foreign": {
+          "constraintName": "change_log_changes_change_log_entry_id_foreign",
+          "columnNames": [
+            "change_log_entry_id"
+          ],
+          "localTableName": "change_log_changes",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "change_log_entries",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
         "action": {
           "name": "action",
-          "type": "enum('User_Create', 'User_FailedLogin', 'User_Login', 'Translation_Create', 'User_Rename', 'User_ChangeEmail', 'User_ChangePassword')",
+          "type": "enum('User_Create', 'User_FailedLogin', 'User_Login', 'Translation_Create', 'User_Rename', 'User_ChangeEmail', 'User_ChangePassword', 'Translation_Update', 'Translation_Delete')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
@@ -1687,7 +1976,9 @@
             "Translation_Create",
             "User_Rename",
             "User_ChangeEmail",
-            "User_ChangePassword"
+            "User_ChangePassword",
+            "Translation_Update",
+            "Translation_Delete"
           ],
           "mappedType": "enum"
         },
@@ -1731,7 +2022,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "text"
         },
         "new_value": {
@@ -1740,7 +2031,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "text"
         },
         "user_id": {
@@ -2031,7 +2322,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "string"
         },
         "locale": {
@@ -2040,7 +2331,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "length": 85,
           "mappedType": "string"
         },
@@ -2063,7 +2354,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "string"
         },
         "artist_id": {

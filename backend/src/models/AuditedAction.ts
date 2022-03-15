@@ -6,4 +6,6 @@ export enum AuditedAction {
 	User_Rename = 'User_Rename',
 	User_ChangeEmail = 'User_ChangeEmail',
 	User_ChangePassword = 'User_ChangePassword',
+	Translation_Update = 'Translation_Update',
+	Translation_Delete = 'Translation_Delete',
 }

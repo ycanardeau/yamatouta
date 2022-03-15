@@ -19,7 +19,7 @@ export class ArtistQuote extends Quote {
 	}: {
 		quoteType: QuoteType;
 		text: string;
-		locale?: string;
+		locale: string;
 		artist: Artist;
 	}) {
 		super({ quoteType, text, locale });

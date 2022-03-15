@@ -1,13 +1,19 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { TranslationObject } from '../../dto/translations/TranslationObject';
+import { Revision } from '../../entities/Revision';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
 import { NgramConverter } from '../../helpers/NgramConverter';
+import { ChangeLogEvent } from '../../models/ChangeLogEvent';
+import { TranslationDiff } from '../../models/EntryDiff';
 import { Permission } from '../../models/Permission';
-import { ICreateTranslationBody } from '../../requests/translations/ICreateTranslationBody';
+import {
+	IUpdateTranslationBody,
+	updateTranslationBodySchema,
+} from '../../requests/translations/IUpdateTranslationBody';
 import { AuditLogService } from '../AuditLogService';
 import { PermissionContext } from '../PermissionContext';
 
@@ -23,13 +29,19 @@ export class CreateTranslationService {
 	) {}
 
 	async createTranslation(
-		params: ICreateTranslationBody,
+		params: IUpdateTranslationBody,
 	): Promise<TranslationObject> {
 		this.permissionContext.verifyPermission(Permission.CreateTranslations);
 
-		// TODO: Validate.
+		const result = updateTranslationBodySchema.validate(params, {
+			convert: true,
+		});
 
-		const { headword, locale, reading, yamatokotoba, category } = params;
+		if (result.error)
+			throw new BadRequestException(result.error.details[0].message);
+
+		const { headword, locale, reading, yamatokotoba, category } =
+			result.value;
 
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
@@ -51,11 +63,27 @@ export class CreateTranslationService {
 
 			em.persist(translation);
 
-			const searchIndex = translation.createSearchIndex(
-				this.ngramConverter,
-			);
+			const revision = new Revision();
 
-			em.persist(searchIndex);
+			em.persist(revision);
+
+			const diff: TranslationDiff = {
+				Translation_Headword: headword,
+				Translation_Locale: locale,
+				Translation_Reading: reading,
+				Translation_Yamatokotoba: yamatokotoba,
+				Translation_Category: category,
+			};
+
+			revision.addChangeLogEntry({
+				entry: translation,
+				actor: user,
+				actionType: ChangeLogEvent.Created,
+				text: '',
+				diff: diff,
+			});
+
+			translation.updateSearchIndex(this.ngramConverter);
 
 			this.auditLogService.translation_create({
 				actor: user,

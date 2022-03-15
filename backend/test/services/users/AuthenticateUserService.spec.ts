@@ -74,8 +74,8 @@ describe('AuthenticateUserService', () => {
 				action: AuditedAction.User_Login,
 				actor: existingUser,
 				actorIp: defaults.ip,
-				oldValue: undefined,
-				newValue: undefined,
+				oldValue: '',
+				newValue: '',
 				user: existingUser,
 			});
 		});
@@ -194,8 +194,8 @@ describe('AuthenticateUserService', () => {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
 				actorIp: defaults.ip,
-				oldValue: undefined,
-				newValue: undefined,
+				oldValue: '',
+				newValue: '',
 				user: existingUser,
 			});
 		});
@@ -217,8 +217,8 @@ describe('AuthenticateUserService', () => {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
 				actorIp: defaults.ip,
-				oldValue: undefined,
-				newValue: undefined,
+				oldValue: '',
+				newValue: '',
 				user: existingUser,
 			});
 		});
@@ -240,8 +240,8 @@ describe('AuthenticateUserService', () => {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
 				actorIp: defaults.ip,
-				oldValue: undefined,
-				newValue: undefined,
+				oldValue: '',
+				newValue: '',
 				user: existingUser,
 			});
 		});

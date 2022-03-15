@@ -61,6 +61,8 @@ const translationSearchRouteParamsSchema = {
 				'CreatedDesc',
 				'HeadwordAsc',
 				'HeadwordDesc',
+				'UpdatedAsc',
+				'UpdatedDesc',
 				'YamatokotobaAsc',
 				'YamatokotobaDesc',
 			],

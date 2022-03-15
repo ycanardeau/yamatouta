@@ -23,6 +23,8 @@ export class AuditLogService {
 			new UserAuditLogEntry({
 				...params,
 				action: AuditedAction.User_Create,
+				oldValue: '',
+				newValue: '',
 			}),
 		);
 	}
@@ -36,6 +38,8 @@ export class AuditLogService {
 			new UserAuditLogEntry({
 				...params,
 				action: AuditedAction.User_FailedLogin,
+				oldValue: '',
+				newValue: '',
 			}),
 		);
 	}
@@ -45,6 +49,8 @@ export class AuditLogService {
 			new UserAuditLogEntry({
 				...params,
 				action: AuditedAction.User_Login,
+				oldValue: '',
+				newValue: '',
 			}),
 		);
 	}
@@ -58,6 +64,8 @@ export class AuditLogService {
 			new TranslationAuditLogEntry({
 				...params,
 				action: AuditedAction.Translation_Create,
+				oldValue: '',
+				newValue: '',
 			}),
 		);
 	}
@@ -101,6 +109,38 @@ export class AuditLogService {
 			new UserAuditLogEntry({
 				...params,
 				action: AuditedAction.User_ChangePassword,
+				oldValue: '',
+				newValue: '',
+			}),
+		);
+	}
+
+	translation_update(params: {
+		actor: User;
+		actorIp: string;
+		translation: Translation;
+	}): void {
+		this.createAuditLogEntry(
+			new TranslationAuditLogEntry({
+				...params,
+				action: AuditedAction.Translation_Update,
+				oldValue: '',
+				newValue: '',
+			}),
+		);
+	}
+
+	translation_delete(params: {
+		actor: User;
+		actorIp: string;
+		translation: Translation;
+	}): void {
+		this.createAuditLogEntry(
+			new TranslationAuditLogEntry({
+				...params,
+				action: AuditedAction.Translation_Delete,
+				oldValue: '',
+				newValue: '',
 			}),
 		);
 	}
