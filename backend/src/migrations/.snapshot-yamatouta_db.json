@@ -1405,6 +1405,105 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "parsed_url_protocol": {
+          "name": "parsed_url_protocol",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "parsed_url_hostname": {
+          "name": "parsed_url_hostname",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "parsed_url_port": {
+          "name": "parsed_url_port",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "parsed_url_pathname": {
+          "name": "parsed_url_pathname",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "parsed_url_search": {
+          "name": "parsed_url_search",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "parsed_url_hash": {
+          "name": "parsed_url_hash",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        }
+      },
+      "name": "urls",
+      "indexes": [
+        {
+          "columnNames": [
+            "url"
+          ],
+          "composite": false,
+          "keyName": "urls_url_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
         "created_at": {
           "name": "created_at",
           "type": "datetime",
@@ -2689,6 +2788,228 @@
             "work_id"
           ],
           "localTableName": "revisions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "works",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "url_id": {
+          "name": "url_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "category": {
+          "name": "category",
+          "type": "enum('Unspecified', 'Official', 'Commercial', 'Reference', 'Other')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Unspecified",
+            "Official",
+            "Commercial",
+            "Reference",
+            "Other"
+          ],
+          "mappedType": "enum"
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "enum('Translation', 'Artist', 'Quote', 'Work')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Translation",
+            "Artist",
+            "Quote",
+            "Work"
+          ],
+          "mappedType": "enum"
+        },
+        "translation_id": {
+          "name": "translation_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "artist_id": {
+          "name": "artist_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "quote_id": {
+          "name": "quote_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "work_id": {
+          "name": "work_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        }
+      },
+      "name": "web_links",
+      "indexes": [
+        {
+          "columnNames": [
+            "url_id"
+          ],
+          "composite": false,
+          "keyName": "web_links_url_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "entry_type"
+          ],
+          "composite": false,
+          "keyName": "web_links_entry_type_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "translation_id"
+          ],
+          "composite": false,
+          "keyName": "web_links_translation_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "artist_id"
+          ],
+          "composite": false,
+          "keyName": "web_links_artist_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "quote_id"
+          ],
+          "composite": false,
+          "keyName": "web_links_quote_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "work_id"
+          ],
+          "composite": false,
+          "keyName": "web_links_work_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "web_links_url_id_foreign": {
+          "constraintName": "web_links_url_id_foreign",
+          "columnNames": [
+            "url_id"
+          ],
+          "localTableName": "web_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "urls",
+          "updateRule": "cascade"
+        },
+        "web_links_translation_id_foreign": {
+          "constraintName": "web_links_translation_id_foreign",
+          "columnNames": [
+            "translation_id"
+          ],
+          "localTableName": "web_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "translations",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "web_links_artist_id_foreign": {
+          "constraintName": "web_links_artist_id_foreign",
+          "columnNames": [
+            "artist_id"
+          ],
+          "localTableName": "web_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "artists",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "web_links_quote_id_foreign": {
+          "constraintName": "web_links_quote_id_foreign",
+          "columnNames": [
+            "quote_id"
+          ],
+          "localTableName": "web_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "quotes",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "web_links_work_id_foreign": {
+          "constraintName": "web_links_work_id_foreign",
+          "columnNames": [
+            "work_id"
+          ],
+          "localTableName": "web_links",
           "referencedColumnNames": [
             "id"
           ],

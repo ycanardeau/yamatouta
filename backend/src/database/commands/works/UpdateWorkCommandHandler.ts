@@ -70,11 +70,14 @@ export class UpdateWorkCommandHandler
 				hidden: false,
 			});
 
-			const work = await this.workRepo.findOneOrFail({
-				id: params.workId,
-				deleted: false,
-				hidden: false,
-			});
+			const work = await this.workRepo.findOneOrFail(
+				{
+					id: params.workId,
+					deleted: false,
+					hidden: false,
+				},
+				{ populate: ['webLinks'] },
+			);
 
 			work.name = params.name;
 			work.workType = params.workType;

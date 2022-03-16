@@ -10,6 +10,7 @@ import {
 } from '@mikro-orm/core';
 
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { QuoteType } from '../models/QuoteType';
 import { RevisionEvent } from '../models/RevisionEvent';
@@ -20,6 +21,7 @@ import { Commit } from './Commit';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
 import { User } from './User';
+import { QuoteWebLink } from './WebLink';
 
 @Entity({
 	tableName: 'quotes',
@@ -27,7 +29,8 @@ import { User } from './User';
 export class Quote
 	implements
 		IEntryWithRevisions<Quote, QuoteRevision, QuoteSnapshot>,
-		IRevisionFactory<Quote, QuoteRevision, QuoteSnapshot>
+		IRevisionFactory<Quote, QuoteRevision, QuoteSnapshot>,
+		IEntryWithWebLinks<QuoteWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -81,6 +84,9 @@ export class Quote
 	> {
 		return new RevisionManager(this);
 	}
+
+	@OneToMany(() => QuoteWebLink, (webLink) => webLink.quote)
+	webLinks = new Collection<QuoteWebLink>(this);
 
 	constructor({
 		quoteType,

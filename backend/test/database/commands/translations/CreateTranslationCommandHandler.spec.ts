@@ -164,6 +164,7 @@ describe('CreateTranslationCommandHandler', () => {
 					yamatokotoba: defaultParams.yamatokotoba,
 					category: defaultParams.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});

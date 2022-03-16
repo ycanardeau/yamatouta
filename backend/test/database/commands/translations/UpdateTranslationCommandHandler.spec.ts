@@ -187,6 +187,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -208,6 +209,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -228,6 +230,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -247,6 +250,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -265,6 +269,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: defaultParams.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -280,6 +285,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: defaultParams.yamatokotoba,
 					category: defaultParams.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});

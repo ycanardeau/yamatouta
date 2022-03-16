@@ -97,7 +97,7 @@ export class UpdateTranslationCommandHandler
 					deleted: false,
 					hidden: false,
 				},
-				{ populate: ['searchIndex'] },
+				{ populate: ['searchIndex', 'webLinks'] },
 			);
 
 			translation.headword = headword;

@@ -167,6 +167,7 @@ describe('UpdateArtistCommandHandler', () => {
 				snapshot: {
 					name: artist.name,
 					artistType: artist.artistType,
+					webLinks: [],
 				},
 			});
 		});
@@ -181,6 +182,7 @@ describe('UpdateArtistCommandHandler', () => {
 				snapshot: {
 					name: defaultParams.name,
 					artistType: artist.artistType,
+					webLinks: [],
 				},
 			});
 		});
@@ -192,6 +194,7 @@ describe('UpdateArtistCommandHandler', () => {
 				snapshot: {
 					name: defaultParams.name,
 					artistType: defaultParams.artistType,
+					webLinks: [],
 				},
 			});
 		});

@@ -70,11 +70,14 @@ export class UpdateArtistCommandHandler
 				hidden: false,
 			});
 
-			const artist = await this.artistRepo.findOneOrFail({
-				id: params.artistId,
-				deleted: false,
-				hidden: false,
-			});
+			const artist = await this.artistRepo.findOneOrFail(
+				{
+					id: params.artistId,
+					deleted: false,
+					hidden: false,
+				},
+				{ populate: ['webLinks'] },
+			);
 
 			artist.name = params.name;
 			artist.artistType = params.artistType;

@@ -167,6 +167,7 @@ describe('UpdateWorkCommandHandler', () => {
 				snapshot: {
 					name: work.name,
 					workType: work.workType,
+					webLinks: [],
 				},
 			});
 		});
@@ -181,6 +182,7 @@ describe('UpdateWorkCommandHandler', () => {
 				snapshot: {
 					name: defaultParams.name,
 					workType: work.workType,
+					webLinks: [],
 				},
 			});
 		});
@@ -192,6 +194,7 @@ describe('UpdateWorkCommandHandler', () => {
 				snapshot: {
 					name: defaultParams.name,
 					workType: defaultParams.workType,
+					webLinks: [],
 				},
 			});
 		});

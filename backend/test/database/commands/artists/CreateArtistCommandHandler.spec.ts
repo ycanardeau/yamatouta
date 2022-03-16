@@ -154,6 +154,7 @@ describe('CreateArtistCommandHandler', () => {
 				snapshot: {
 					name: defaultParams.name,
 					artistType: defaultParams.artistType,
+					webLinks: [],
 				},
 			});
 		});

@@ -15,6 +15,7 @@ import { WorkType } from '../models/WorkType';
 import { Commit } from './Commit';
 import { WorkRevision } from './Revision';
 import { User } from './User';
+import { WorkWebLink } from './WebLink';
 
 @Entity({ tableName: 'works' })
 export class Work
@@ -53,6 +54,9 @@ export class Work
 		this.name = name;
 		this.workType = workType;
 	}
+
+	@OneToMany(() => WorkWebLink, (webLink) => webLink.work)
+	webLinks = new Collection<WorkWebLink>(this);
 
 	createRevision({
 		commit,

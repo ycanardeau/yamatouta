@@ -154,6 +154,7 @@ describe('CreateWorkCommandHandler', () => {
 				snapshot: {
 					name: defaultParams.name,
 					workType: defaultParams.workType,
+					webLinks: [],
 				},
 			});
 		});

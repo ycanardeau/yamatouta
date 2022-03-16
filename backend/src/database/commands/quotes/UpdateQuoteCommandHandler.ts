@@ -83,11 +83,14 @@ export class UpdateQuoteCommandHandler
 				hidden: false,
 			});
 
-			const quote = await this.quoteRepo.findOneOrFail({
-				id: params.quoteId,
-				deleted: false,
-				hidden: false,
-			});
+			const quote = await this.quoteRepo.findOneOrFail(
+				{
+					id: params.quoteId,
+					deleted: false,
+					hidden: false,
+				},
+				{ populate: ['webLinks'] },
+			);
 
 			quote.text = params.text;
 			quote.quoteType = params.quoteType;

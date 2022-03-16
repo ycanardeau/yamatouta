@@ -12,6 +12,7 @@ import {
 
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
@@ -23,6 +24,7 @@ import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
 import { TranslationSearchIndex } from './TranslationSearchIndex';
 import { User } from './User';
+import { TranslationWebLink } from './WebLink';
 
 @Entity({ tableName: 'translations' })
 export class Translation
@@ -33,7 +35,8 @@ export class Translation
 			TranslationRevision,
 			TranslationSnapshot
 		>,
-		IRevisionFactory<Translation, TranslationRevision, TranslationSnapshot>
+		IRevisionFactory<Translation, TranslationRevision, TranslationSnapshot>,
+		IEntryWithWebLinks<TranslationWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -82,6 +85,9 @@ export class Translation
 	> {
 		return new RevisionManager(this);
 	}
+
+	@OneToMany(() => TranslationWebLink, (webLink) => webLink.translation)
+	webLinks = new Collection<TranslationWebLink>(this);
 
 	constructor({
 		translatedString,

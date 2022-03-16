@@ -9,6 +9,7 @@ import {
 
 import { ArtistType } from '../models/ArtistType';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
@@ -16,12 +17,14 @@ import { ArtistSnapshot } from '../models/Snapshot';
 import { Commit } from './Commit';
 import { ArtistRevision } from './Revision';
 import { User } from './User';
+import { ArtistWebLink } from './WebLink';
 
 @Entity({ tableName: 'artists' })
 export class Artist
 	implements
 		IEntryWithRevisions<Artist, ArtistRevision, ArtistSnapshot>,
-		IRevisionFactory<Artist, ArtistRevision, ArtistSnapshot>
+		IRevisionFactory<Artist, ArtistRevision, ArtistSnapshot>,
+		IEntryWithWebLinks<ArtistWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -57,6 +60,9 @@ export class Artist
 	> {
 		return new RevisionManager(this);
 	}
+
+	@OneToMany(() => ArtistWebLink, (webLink) => webLink.artist)
+	webLinks = new Collection<ArtistWebLink>(this);
 
 	constructor({
 		name,
