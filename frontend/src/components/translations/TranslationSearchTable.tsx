@@ -116,7 +116,7 @@ const TranslationPopover = ({
 							navigate(`/translations/${translation.id}`);
 						}}
 					>
-						{t('shared.details')}
+						{t('shared.basicInfo')}
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={HistoryRegular} />}

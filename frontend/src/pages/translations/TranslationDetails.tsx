@@ -111,7 +111,7 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 					prepend={<EuiIcon type={InfoRegular} />}
 					isSelected={!tab}
 				>
-					{t('shared.details')}
+					{t('shared.basicInfo')}
 				</EuiTab>
 				<EuiTab
 					href={`/translations/${translation.id}/revisions`}

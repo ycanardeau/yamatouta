@@ -42,7 +42,9 @@
 		"edit": "かきかえる",
 		"viewHistory": "あゆみをみる",
 		"revisions": "あゆみ",
-		"delete": "けす"
+		"delete": "けす",
+		"basicInfo": "あらまし",
+		"navigation": "みちしるべ"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",

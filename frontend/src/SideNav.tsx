@@ -178,6 +178,7 @@ const SideNav = (): React.ReactElement => {
 	return (
 		<>
 			<EuiSideNav
+				heading={t('shared.navigation')}
 				toggleOpenOnMobile={toggleOpenOnMobile}
 				isOpenOnMobile={isSideNavOpenOnMobile}
 				items={sideNav}

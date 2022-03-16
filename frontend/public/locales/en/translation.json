@@ -42,7 +42,9 @@
 		"edit": "Edit",
 		"viewHistory": "View history",
 		"revisions": "Revisions",
-		"delete": "Delete"
+		"delete": "Delete",
+		"basicInfo": "Basic info",
+		"navigation": "Navigation"
 	},
 	"translations": {
 		"addWord": "Add word",
@@ -51,7 +53,7 @@
 		"japanese": "Japanese",
 		"reading": "Reading",
 		"yamatokotoba": "Yamato-kotoba",
-		"category": "Part of Speech",
+		"category": "Part of speech",
 		"search": "Search",
 		"sortBy": "Sort by",
 		"viewOnInishienomanabi": "View on Inishienomanabi",
