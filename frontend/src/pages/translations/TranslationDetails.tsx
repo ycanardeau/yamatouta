@@ -4,8 +4,6 @@ import {
 	EuiIcon,
 	EuiPageHeader,
 	EuiSpacer,
-	EuiTab,
-	EuiTabs,
 } from '@elastic/eui';
 import { HistoryRegular, InfoRegular } from '@fluentui/react-icons';
 import React from 'react';
@@ -99,37 +97,38 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 						{t('translations.editWord')}
 					</EuiButton>,
 				]}*/
-			/>
-
-			<EuiTabs>
-				<EuiTab
-					href={`/translations/${translation.id}`}
-					onClick={(e: React.MouseEvent<HTMLAnchorElement>): void => {
-						e.preventDefault();
-						navigate(`/translations/${translation.id}`);
-					}}
-					prepend={<EuiIcon type={InfoRegular} />}
-					isSelected={!tab}
-				>
-					{t('shared.basicInfo')}
-				</EuiTab>
-				<EuiTab
-					href={`/translations/${translation.id}/revisions`}
-					onClick={(e: React.MouseEvent<HTMLAnchorElement>): void => {
-						e.preventDefault();
-						navigate(`/translations/${translation.id}/revisions`);
-					}}
-					prepend={<EuiIcon type={HistoryRegular} />}
-					isSelected={tab === 'revisions'}
-					disabled={
-						!auth.permissionContext.hasPermission(
+				tabs={[
+					{
+						href: `/translations/${translation.id}`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/translations/${translation.id}`);
+						},
+						prepend: <EuiIcon type={InfoRegular} />,
+						isSelected: !tab,
+						label: t('shared.basicInfo'),
+					},
+					{
+						href: `/translations/${translation.id}/revisions`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(
+								`/translations/${translation.id}/revisions`,
+							);
+						},
+						prepend: <EuiIcon type={HistoryRegular} />,
+						isSelected: tab === 'revisions',
+						disabled: !auth.permissionContext.hasPermission(
 							Permission.ViewEditHistory,
-						)
-					}
-				>
-					{t('shared.revisions')}
-				</EuiTab>
-			</EuiTabs>
+						),
+						label: t('shared.revisions'),
+					},
+				]}
+			/>
 
 			<EuiSpacer />
 
