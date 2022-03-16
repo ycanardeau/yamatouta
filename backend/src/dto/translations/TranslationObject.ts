@@ -4,6 +4,7 @@ import { PermissionContext } from '../../services/PermissionContext';
 
 export class TranslationObject {
 	readonly id: number;
+	readonly createdAt: Date;
 	readonly headword: string;
 	readonly locale?: string;
 	readonly reading?: string;
@@ -17,6 +18,7 @@ export class TranslationObject {
 		permissionContext.verifyDeletedAndHidden(translation);
 
 		this.id = translation.id;
+		this.createdAt = translation.createdAt;
 		this.headword = translation.translatedString.headword;
 		this.locale = translation.translatedString.locale;
 		this.reading = translation.translatedString.reading;

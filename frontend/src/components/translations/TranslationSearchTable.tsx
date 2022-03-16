@@ -164,15 +164,20 @@ const TranslationPopover = ({
 					>
 						{t('shared.delete')}
 					</EuiContextMenuItem>
-					<EuiHorizontalRule margin="none" />
-					<EuiContextMenuItem
-						icon={<EuiIcon type={OpenRegular} />}
-						href={`https://inishienomanabi.net/translations/${translation.id}/view`}
-						onClick={closePopover}
-						target="_blank"
-					>
-						{t('translations.viewOnInishienomanabi')}
-					</EuiContextMenuItem>
+					{new Date(translation.createdAt) <
+						new Date('2022-03-16') && (
+						<>
+							<EuiHorizontalRule margin="none" />
+							<EuiContextMenuItem
+								icon={<EuiIcon type={OpenRegular} />}
+								href={`https://inishienomanabi.net/translations/${translation.id}/view`}
+								onClick={closePopover}
+								target="_blank"
+							>
+								{t('translations.viewOnInishienomanabi')}
+							</EuiContextMenuItem>
+						</>
+					)}
 				</EuiContextMenuPanel>
 			</EuiPopover>
 
