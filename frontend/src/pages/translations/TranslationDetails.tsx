@@ -23,6 +23,7 @@ import { useAuth } from '../../components/useAuth';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { Permission } from '../../models/Permission';
+import TranslationBasicInfo from './TranslationBasicInfo';
 import TranslationHistory from './TranslationHistory';
 
 interface BreadcrumbsProps {
@@ -133,6 +134,10 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 			<EuiSpacer />
 
 			<Routes>
+				<Route
+					path=""
+					element={<TranslationBasicInfo translation={translation} />}
+				/>
 				<Route
 					path="revisions"
 					element={<TranslationHistory translation={translation} />}
