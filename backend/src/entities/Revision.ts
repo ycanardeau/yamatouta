@@ -2,7 +2,7 @@ import { Collection, Entity, OneToMany, PrimaryKey } from '@mikro-orm/core';
 
 import { ChangeLogEvent } from '../models/ChangeLogEvent';
 import { EntryDiff } from '../models/EntryDiff';
-import { IEntryWithChangeLogEntries } from '../models/IEntryWithChangeLogEntries';
+import { IChangeLogEntryFactory } from '../models/IChangeLogEntryFactory';
 import { ChangeLogEntry } from './ChangeLogEntry';
 import { User } from './User';
 
@@ -18,19 +18,19 @@ export class Revision {
 	changeLogEntries = new Collection<ChangeLogEntry<EntryDiff>>(this);
 
 	addChangeLogEntry<TEntryDiff extends EntryDiff>({
-		entry,
+		changeLogEntryFactory,
 		actor,
 		actionType,
 		text,
 		diff,
 	}: {
-		entry: IEntryWithChangeLogEntries<TEntryDiff>;
+		changeLogEntryFactory: IChangeLogEntryFactory<TEntryDiff>;
 		actor: User;
 		actionType: ChangeLogEvent;
 		text: string;
 		diff: TEntryDiff;
 	}): void {
-		const changeLogEntry = entry
+		const changeLogEntry = changeLogEntryFactory
 			.createChangeLogEntry({
 				revision: this,
 				actor: actor,

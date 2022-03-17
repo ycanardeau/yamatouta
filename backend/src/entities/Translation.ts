@@ -13,7 +13,7 @@ import {
 import { NgramConverter } from '../helpers/NgramConverter';
 import { ChangeLogEvent } from '../models/ChangeLogEvent';
 import { TranslationDiff } from '../models/EntryDiff';
-import { IEntryWithChangeLogEntries } from '../models/IEntryWithChangeLogEntries';
+import { IChangeLogEntryFactory } from '../models/IChangeLogEntryFactory';
 import { WordCategory } from '../models/WordCategory';
 import { ChangeLogEntry, TranslationChangeLogEntry } from './ChangeLogEntry';
 import { Revision } from './Revision';
@@ -22,9 +22,7 @@ import { TranslationSearchIndex } from './TranslationSearchIndex';
 import { User } from './User';
 
 @Entity({ tableName: 'translations' })
-export class Translation
-	implements IEntryWithChangeLogEntries<TranslationDiff>
-{
+export class Translation implements IChangeLogEntryFactory<TranslationDiff> {
 	@PrimaryKey()
 	id!: number;
 

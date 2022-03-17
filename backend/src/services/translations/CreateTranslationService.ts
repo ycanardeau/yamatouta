@@ -76,7 +76,7 @@ export class CreateTranslationService {
 			};
 
 			revision.addChangeLogEntry({
-				entry: translation,
+				changeLogEntryFactory: translation,
 				actor: user,
 				actionType: ChangeLogEvent.Created,
 				text: '',

@@ -82,7 +82,7 @@ export class UpdateTranslationService {
 			};
 
 			revision.addChangeLogEntry({
-				entry: translation,
+				changeLogEntryFactory: translation,
 				actor: user,
 				actionType: ChangeLogEvent.Updated,
 				text: '',
