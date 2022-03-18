@@ -44,7 +44,8 @@
 		"revisions": "Revisions",
 		"delete": "Delete",
 		"basicInfo": "Basic info",
-		"navigation": "Navigation"
+		"navigation": "Navigation",
+		"viewBasicInfo": "View basic info"
 	},
 	"translations": {
 		"addWord": "Add word",
