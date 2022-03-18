@@ -10,8 +10,8 @@ import {
 	Query,
 } from '@nestjs/common';
 
-import { ChangeLogEntryObject } from '../dto/ChangeLogEntryObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
+import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { TranslationObject } from '../dto/translations/TranslationObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import {
@@ -85,7 +85,7 @@ export class TranslationController {
 	@Get(':translationId/revisions')
 	listTranslationRevisions(
 		@Param('translationId', ParseIntPipe) translationId: number,
-	): Promise<SearchResultObject<ChangeLogEntryObject>> {
+	): Promise<SearchResultObject<RevisionObject>> {
 		return this.listTranslationRevisionsService.listTranslationRevisions(
 			translationId,
 		);

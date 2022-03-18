@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-import { IChangeLogEntryObject } from '../dto/IChangeLogEntryObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
+import { IRevisionObject } from '../dto/revisions/IRevisionObject';
 import { ITranslationObject } from '../dto/translations/ITranslationObject';
 import { TranslationSortRule } from '../models/TranslationSortRule';
 import { WordCategory } from '../models/WordCategory';
@@ -110,10 +110,10 @@ export const listTranslationRevisions = async ({
 	translationId,
 }: {
 	translationId: number;
-}): Promise<ISearchResultObject<IChangeLogEntryObject>> => {
-	const response = await axios.get<
-		ISearchResultObject<IChangeLogEntryObject>
-	>(`/translations/${translationId}/revisions`);
+}): Promise<ISearchResultObject<IRevisionObject>> => {
+	const response = await axios.get<ISearchResultObject<IRevisionObject>>(
+		`/translations/${translationId}/revisions`,
+	);
 
 	return response.data;
 };

@@ -3,13 +3,12 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { TranslationObject } from '../../dto/translations/TranslationObject';
-import { Revision } from '../../entities/Revision';
+import { Commit } from '../../entities/Commit';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
 import { NgramConverter } from '../../helpers/NgramConverter';
-import { ChangeLogEvent } from '../../models/ChangeLogEvent';
-import { TranslationDiff } from '../../models/EntryDiff';
 import { Permission } from '../../models/Permission';
+import { RevisionEvent } from '../../models/RevisionEvent';
 import {
 	IUpdateTranslationBody,
 	updateTranslationBodySchema,
@@ -63,27 +62,18 @@ export class CreateTranslationService {
 
 			em.persist(translation);
 
-			const revision = new Revision();
+			translation.updateSearchIndex(this.ngramConverter);
 
-			em.persist(revision);
+			const commit = new Commit();
 
-			const diff: TranslationDiff = {
-				Translation_Headword: headword,
-				Translation_Locale: locale,
-				Translation_Reading: reading,
-				Translation_Yamatokotoba: yamatokotoba,
-				Translation_Category: category,
-			};
-
-			revision.addChangeLogEntry({
-				changeLogEntryFactory: translation,
+			const revision = translation.createRevision({
+				commit: commit,
 				actor: user,
-				actionType: ChangeLogEvent.Created,
-				text: '',
-				diff: diff,
+				event: RevisionEvent.Created,
+				summary: '',
 			});
 
-			translation.updateSearchIndex(this.ngramConverter);
+			em.persist(revision);
 
 			this.auditLogService.translation_create({
 				actor: user,

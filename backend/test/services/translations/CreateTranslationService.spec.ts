@@ -2,14 +2,13 @@ import { MikroORM } from '@mikro-orm/core';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 import { TranslationAuditLogEntry } from '../../../src/entities/AuditLogEntry';
-import { TranslationChangeLogEntry } from '../../../src/entities/ChangeLogEntry';
-import { Revision } from '../../../src/entities/Revision';
+import { TranslationRevision } from '../../../src/entities/Revision';
 import { Translation } from '../../../src/entities/Translation';
 import { User } from '../../../src/entities/User';
 import { NgramConverter } from '../../../src/helpers/NgramConverter';
 import { AuditedAction } from '../../../src/models/AuditedAction';
-import { ChangeLogChangeKey } from '../../../src/models/ChangeLogChangeKey';
-import { ChangeLogEvent } from '../../../src/models/ChangeLogEvent';
+import { RevisionEvent } from '../../../src/models/RevisionEvent';
+import { TranslationSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { WordCategory } from '../../../src/models/WordCategory';
 import { IUpdateTranslationBody } from '../../../src/requests/translations/IUpdateTranslationBody';
@@ -19,7 +18,6 @@ import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createUser } from '../../createEntry';
 import { testTranslationAuditLogEntry } from '../../testAuditLogEntry';
-import { testChangeLogEntry } from '../../testChangeLogEntry';
 
 describe('CreateTranslationService', () => {
 	let em: FakeEntityManager;
@@ -71,10 +69,13 @@ describe('CreateTranslationService', () => {
 	});
 
 	describe('createTranslation', () => {
-		const testCreateTranslation = async (
-			params: IUpdateTranslationBody,
-			expectedChanges: Record<string, string>,
-		): Promise<void> => {
+		const testCreateTranslation = async ({
+			params,
+			snapshot,
+		}: {
+			params: IUpdateTranslationBody;
+			snapshot: TranslationSnapshot;
+		}): Promise<void> => {
 			const translationObject =
 				await createTranslationService.createTranslation(params);
 
@@ -89,23 +90,16 @@ describe('CreateTranslationService', () => {
 			)[0] as Translation;
 
 			const revision = em.entities.filter(
-				(entity) => entity instanceof Revision,
-			)[0] as Revision;
+				(entity) => entity instanceof TranslationRevision,
+			)[0] as TranslationRevision;
 
-			expect(revision).toBeInstanceOf(Revision);
-			expect(revision.changeLogEntries.length).toBe(1);
-
-			const changeLogEntry = revision
-				.changeLogEntries[0] as TranslationChangeLogEntry;
-			expect(changeLogEntry).toBeInstanceOf(TranslationChangeLogEntry);
-			expect(changeLogEntry.translation).toBe(translation);
-
-			testChangeLogEntry(changeLogEntry, {
-				revision: revision,
-				actor: existingUser,
-				actionType: ChangeLogEvent.Created,
-				changes: expectedChanges,
-			});
+			expect(revision).toBeInstanceOf(TranslationRevision);
+			expect(revision.translation).toBe(translation);
+			expect(revision.actor).toBe(existingUser);
+			expect(revision.event).toBe(RevisionEvent.Created);
+			expect(JSON.stringify(revision.snapshot)).toBe(
+				JSON.stringify(snapshot),
+			);
 
 			const auditLogEntry = em.entities.filter(
 				(entity) => entity instanceof TranslationAuditLogEntry,
@@ -156,13 +150,16 @@ describe('CreateTranslationService', () => {
 		});
 
 		test('5 changes', async () => {
-			await testCreateTranslation(defaults, {
-				[ChangeLogChangeKey.Translation_Headword]: defaults.headword,
-				[ChangeLogChangeKey.Translation_Locale]: defaults.locale,
-				[ChangeLogChangeKey.Translation_Reading]: defaults.reading,
-				[ChangeLogChangeKey.Translation_Yamatokotoba]:
-					defaults.yamatokotoba,
-				[ChangeLogChangeKey.Translation_Category]: defaults.category,
+			await testCreateTranslation({
+				params: defaults,
+				snapshot: {
+					headword: defaults.headword,
+					locale: defaults.locale,
+					reading: defaults.reading,
+					yamatokotoba: defaults.yamatokotoba,
+					category: defaults.category,
+					tags: [],
+				},
 			});
 		});
 

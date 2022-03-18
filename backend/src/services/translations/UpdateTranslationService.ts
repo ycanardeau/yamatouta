@@ -3,13 +3,12 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { TranslationObject } from '../../dto/translations/TranslationObject';
-import { Revision } from '../../entities/Revision';
+import { Commit } from '../../entities/Commit';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
 import { NgramConverter } from '../../helpers/NgramConverter';
-import { ChangeLogEvent } from '../../models/ChangeLogEvent';
-import { TranslationDiff } from '../../models/EntryDiff';
 import { Permission } from '../../models/Permission';
+import { RevisionEvent } from '../../models/RevisionEvent';
 import {
 	IUpdateTranslationBody,
 	updateTranslationBodySchema,
@@ -62,33 +61,6 @@ export class UpdateTranslationService {
 				{ populate: ['searchIndex'] },
 			);
 
-			const revision = new Revision();
-
-			em.persist(revision);
-
-			const diff: TranslationDiff = {
-				Translation_Headword:
-					headword !== translation.headword ? headword : undefined,
-				Translation_Locale:
-					locale !== translation.locale ? locale : undefined,
-				Translation_Reading:
-					reading !== translation.reading ? reading : undefined,
-				Translation_Yamatokotoba:
-					yamatokotoba !== translation.yamatokotoba
-						? yamatokotoba
-						: undefined,
-				Translation_Category:
-					category !== translation.category ? category : undefined,
-			};
-
-			revision.addChangeLogEntry({
-				changeLogEntryFactory: translation,
-				actor: user,
-				actionType: ChangeLogEvent.Updated,
-				text: '',
-				diff: diff,
-			});
-
 			translation.headword = headword;
 			translation.locale = locale;
 			translation.reading = reading;
@@ -96,6 +68,17 @@ export class UpdateTranslationService {
 			translation.category = category;
 
 			translation.updateSearchIndex(this.ngramConverter);
+
+			const commit = new Commit();
+
+			const revision = translation.createRevision({
+				commit: commit,
+				actor: user,
+				event: RevisionEvent.Updated,
+				summary: '',
+			});
+
+			em.persist(revision);
 
 			this.auditLogService.translation_update({
 				actor: user,

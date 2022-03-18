@@ -15,36 +15,34 @@ import React from 'react';
 
 import { listTranslationRevisions } from '../../api/TranslationApi';
 import Avatar from '../../components/Avatar';
-import { IChangeLogEntryObject } from '../../dto/IChangeLogEntryObject';
+import { IRevisionObject } from '../../dto/revisions/IRevisionObject';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
-import { ChangeLogEvent } from '../../models/ChangeLogEvent';
+import { RevisionEvent } from '../../models/RevisionEvent';
 
 interface TimelineIconProps {
-	actionType: ChangeLogEvent;
+	event: RevisionEvent;
 }
 
-const TimelineIcon = ({
-	actionType,
-}: TimelineIconProps): React.ReactElement => {
-	switch (actionType) {
-		case ChangeLogEvent.Created:
+const TimelineIcon = ({ event }: TimelineIconProps): React.ReactElement => {
+	switch (event) {
+		case RevisionEvent.Created:
 			return <EuiIcon type={AddCircleRegular} />;
 
-		case ChangeLogEvent.Updated:
+		case RevisionEvent.Updated:
 			return <EuiIcon type={EditRegular} />;
 
-		case ChangeLogEvent.Deleted:
+		case RevisionEvent.Deleted:
 			return <EuiIcon type={DeleteRegular} />;
 	}
 };
 
-interface ChangeLogEntryProps {
-	changeLogEntry: IChangeLogEntryObject;
+interface RevisionCommentProps {
+	revision: IRevisionObject;
 }
 
-const ChangeLogEntry = ({
-	changeLogEntry,
-}: ChangeLogEntryProps): React.ReactElement => {
+const RevisionComment = ({
+	revision,
+}: RevisionCommentProps): React.ReactElement => {
 	return (
 		<EuiComment
 			username={
@@ -56,12 +54,12 @@ const ChangeLogEntry = ({
 					<EuiFlexItem grow={false}>
 						<Avatar
 							size="s"
-							name={changeLogEntry.actor.name}
-							imageUrl={changeLogEntry.actor.avatarUrl}
+							name={revision.actor.name}
+							imageUrl={revision.actor.avatarUrl}
 						/>
 					</EuiFlexItem>
 					<EuiFlexItem grow={false}>
-						{changeLogEntry.actor.name}
+						{revision.actor.name}
 					</EuiFlexItem>
 				</EuiFlexGroup>
 			}
@@ -72,29 +70,25 @@ const ChangeLogEntry = ({
 					alignItems="center"
 					gutterSize="s"
 				>
-					<EuiFlexItem grow={false}>
-						{changeLogEntry.actionType}
-					</EuiFlexItem>
+					<EuiFlexItem grow={false}>{revision.event}</EuiFlexItem>
 				</EuiFlexGroup>
 			}
-			timestamp={moment(changeLogEntry.createdAt).fromNow()}
-			timelineIcon={
-				<TimelineIcon actionType={changeLogEntry.actionType} />
-			}
+			timestamp={moment(revision.createdAt).fromNow()}
+			timelineIcon={<TimelineIcon event={revision.event} />}
 		/>
 	);
 };
 
 interface LayoutProps {
 	translation: ITranslationObject;
-	changeLogEntries: IChangeLogEntryObject[];
+	revisions: IRevisionObject[];
 }
 
-const Layout = ({ changeLogEntries }: LayoutProps): React.ReactElement => {
+const Layout = ({ revisions }: LayoutProps): React.ReactElement => {
 	return (
 		<EuiCommentList>
-			{changeLogEntries.map((changeLogEntry, index) => (
-				<ChangeLogEntry key={index} changeLogEntry={changeLogEntry} />
+			{revisions.map((revision, index) => (
+				<RevisionComment key={index} revision={revision} />
 			))}
 		</EuiCommentList>
 	);
@@ -108,19 +102,16 @@ const TranslationHistory = ({
 	translation,
 }: TranslationHistoryProps): React.ReactElement | null => {
 	const [model, setModel] =
-		React.useState<{ changeLogEntries: IChangeLogEntryObject[] }>();
+		React.useState<{ revisions: IRevisionObject[] }>();
 
 	React.useEffect(() => {
 		listTranslationRevisions({ translationId: translation.id }).then(
-			(result) => setModel({ changeLogEntries: result.items }),
+			(result) => setModel({ revisions: result.items }),
 		);
 	}, [translation]);
 
 	return model ? (
-		<Layout
-			translation={translation}
-			changeLogEntries={model.changeLogEntries}
-		/>
+		<Layout translation={translation} revisions={model.revisions} />
 	) : null;
 };
 

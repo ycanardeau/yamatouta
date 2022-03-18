@@ -11,6 +11,7 @@ import { Request } from 'express';
 import requestIp from 'request-ip';
 
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
+import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { Permission } from '../models/Permission';
 
 @Injectable({ scope: Scope.REQUEST })
@@ -55,7 +56,7 @@ export class PermissionContext {
 		if (!this.hasPermission(permission)) throw new UnauthorizedException();
 	}
 
-	verifyDeletedAndHidden(entry: { deleted: boolean; hidden: boolean }): void {
+	verifyDeletedAndHidden(entry: IEntryWithDeletedAndHidden): void {
 		if (entry.deleted && !this.canViewDeletedEntries)
 			throw new NotFoundException();
 

@@ -2,12 +2,12 @@ import { MikroORM } from '@mikro-orm/core';
 import { UnauthorizedException } from '@nestjs/common';
 
 import { TranslationAuditLogEntry } from '../../../src/entities/AuditLogEntry';
-import { TranslationChangeLogEntry } from '../../../src/entities/ChangeLogEntry';
-import { Revision } from '../../../src/entities/Revision';
+import { TranslationRevision } from '../../../src/entities/Revision';
 import { Translation } from '../../../src/entities/Translation';
 import { User } from '../../../src/entities/User';
 import { AuditedAction } from '../../../src/models/AuditedAction';
-import { ChangeLogEvent } from '../../../src/models/ChangeLogEvent';
+import { RevisionEvent } from '../../../src/models/RevisionEvent';
+import { TranslationSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { AuditLogService } from '../../../src/services/AuditLogService';
 import { DeleteTranslationService } from '../../../src/services/translations/DeleteTranslationService';
@@ -15,7 +15,6 @@ import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createTranslation, createUser } from '../../createEntry';
 import { testTranslationAuditLogEntry } from '../../testAuditLogEntry';
-import { testChangeLogEntry } from '../../testChangeLogEntry';
 
 describe('DeleteTranslationService', () => {
 	let em: FakeEntityManager;
@@ -83,23 +82,20 @@ describe('DeleteTranslationService', () => {
 			await deleteTranslationService.deleteTranslation(translation.id);
 
 			const revision = em.entities.filter(
-				(entity) => entity instanceof Revision,
-			)[0] as Revision;
+				(entity) => entity instanceof TranslationRevision,
+			)[0] as TranslationRevision;
 
-			expect(revision).toBeInstanceOf(Revision);
-			expect(revision.changeLogEntries.length).toBe(1);
+			expect(revision).toBeInstanceOf(TranslationRevision);
+			expect(revision.translation).toBe(translation);
+			expect(revision.actor).toBe(existingUser);
+			expect(revision.event).toBe(RevisionEvent.Deleted);
+			expect(JSON.stringify(revision.snapshot)).toBe(
+				JSON.stringify(
+					new TranslationSnapshot({ translation: translation }),
+				),
+			);
 
-			const changeLogEntry = revision
-				.changeLogEntries[0] as TranslationChangeLogEntry;
-			expect(changeLogEntry).toBeInstanceOf(TranslationChangeLogEntry);
-			expect(changeLogEntry.translation).toBe(translation);
-
-			testChangeLogEntry(changeLogEntry, {
-				revision: revision,
-				actor: existingUser,
-				actionType: ChangeLogEvent.Deleted,
-				changes: {},
-			});
+			expect(translation.deleted).toBe(true);
 
 			const auditLogEntry = em.entities.filter(
 				(entity) => entity instanceof TranslationAuditLogEntry,
@@ -113,21 +109,6 @@ describe('DeleteTranslationService', () => {
 				newValue: '',
 				translation: translation,
 			});
-
-			expect(changeLogEntry.translation.headword).toBe(
-				translation.headword,
-			);
-			expect(changeLogEntry.translation.locale).toBe(translation.locale);
-			expect(changeLogEntry.translation.reading).toBe(
-				translation.reading,
-			);
-			expect(changeLogEntry.translation.yamatokotoba).toBe(
-				translation.yamatokotoba,
-			);
-			expect(changeLogEntry.translation.category).toBe(
-				translation.category,
-			);
-			expect(changeLogEntry.translation.deleted).toBe(true);
 		};
 
 		test('insufficient permission', async () => {

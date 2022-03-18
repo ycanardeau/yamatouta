@@ -1408,10 +1408,28 @@
           ],
           "mappedType": "enum"
         },
+        "tags": {
+          "name": "tags",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
         "user_id": {
           "name": "user_id",
           "type": "int",
           "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "version": {
+          "name": "version",
+          "type": "int",
+          "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
@@ -1609,33 +1627,6 @@
     },
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        }
-      },
-      "name": "revisions",
-      "indexes": [
-        {
-          "keyName": "PRIMARY",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {}
-    },
-    {
-      "columns": {
         "key": {
           "name": "key",
           "type": "varchar(255)",
@@ -1690,19 +1681,36 @@
           "primary": true,
           "nullable": false,
           "mappedType": "integer"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
+        }
+      },
+      "name": "commits",
+      "indexes": [
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
           "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
+          "mappedType": "integer"
         },
-        "revision_id": {
-          "name": "revision_id",
+        "commit_id": {
+          "name": "commit_id",
           "type": "int",
           "unsigned": true,
           "autoincrement": false,
@@ -1719,8 +1727,54 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "action_type": {
-          "name": "action_type",
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "snapshot": {
+          "name": "snapshot",
+          "type": "json",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "deleted": {
+          "name": "deleted",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "summary": {
+          "name": "summary",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "event": {
+          "name": "event",
           "type": "enum('Created', 'Updated', 'Deleted')",
           "unsigned": false,
           "autoincrement": false,
@@ -1733,28 +1787,24 @@
           ],
           "mappedType": "enum"
         },
-        "text": {
-          "name": "text",
-          "type": "text",
+        "version": {
+          "name": "version",
+          "type": "int",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "text"
+          "mappedType": "integer"
         },
         "entry_type": {
           "name": "entry_type",
-          "type": "enum('User', 'Translation', 'Quote', 'Artist', 'Work')",
+          "type": "enum('Translation')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "User",
-            "Translation",
-            "Quote",
-            "Artist",
-            "Work"
+            "Translation"
           ],
           "mappedType": "enum"
         },
@@ -1768,14 +1818,14 @@
           "mappedType": "integer"
         }
       },
-      "name": "change_log_entries",
+      "name": "revisions",
       "indexes": [
         {
           "columnNames": [
-            "revision_id"
+            "commit_id"
           ],
           "composite": false,
-          "keyName": "change_log_entries_revision_id_index",
+          "keyName": "revisions_commit_id_index",
           "primary": false,
           "unique": false
         },
@@ -1784,7 +1834,7 @@
             "actor_id"
           ],
           "composite": false,
-          "keyName": "change_log_entries_actor_id_index",
+          "keyName": "revisions_actor_id_index",
           "primary": false,
           "unique": false
         },
@@ -1793,7 +1843,7 @@
             "entry_type"
           ],
           "composite": false,
-          "keyName": "change_log_entries_entry_type_index",
+          "keyName": "revisions_entry_type_index",
           "primary": false,
           "unique": false
         },
@@ -1802,7 +1852,7 @@
             "translation_id"
           ],
           "composite": false,
-          "keyName": "change_log_entries_translation_id_index",
+          "keyName": "revisions_translation_id_index",
           "primary": false,
           "unique": false
         },
@@ -1818,125 +1868,41 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "change_log_entries_revision_id_foreign": {
-          "constraintName": "change_log_entries_revision_id_foreign",
+        "revisions_commit_id_foreign": {
+          "constraintName": "revisions_commit_id_foreign",
           "columnNames": [
-            "revision_id"
+            "commit_id"
           ],
-          "localTableName": "change_log_entries",
+          "localTableName": "revisions",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "revisions",
+          "referencedTableName": "commits",
           "updateRule": "cascade"
         },
-        "change_log_entries_actor_id_foreign": {
-          "constraintName": "change_log_entries_actor_id_foreign",
+        "revisions_actor_id_foreign": {
+          "constraintName": "revisions_actor_id_foreign",
           "columnNames": [
             "actor_id"
           ],
-          "localTableName": "change_log_entries",
+          "localTableName": "revisions",
           "referencedColumnNames": [
             "id"
           ],
           "referencedTableName": "users",
           "updateRule": "cascade"
         },
-        "change_log_entries_translation_id_foreign": {
-          "constraintName": "change_log_entries_translation_id_foreign",
+        "revisions_translation_id_foreign": {
+          "constraintName": "revisions_translation_id_foreign",
           "columnNames": [
             "translation_id"
           ],
-          "localTableName": "change_log_entries",
+          "localTableName": "revisions",
           "referencedColumnNames": [
             "id"
           ],
           "referencedTableName": "translations",
           "deleteRule": "set null",
-          "updateRule": "cascade"
-        }
-      }
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "change_log_entry_id": {
-          "name": "change_log_entry_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "key": {
-          "name": "key",
-          "type": "enum('Translation_Headword', 'Translation_Locale', 'Translation_Reading', 'Translation_Yamatokotoba', 'Translation_Category', 'Translation_Tags')",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "enumItems": [
-            "Translation_Headword",
-            "Translation_Locale",
-            "Translation_Reading",
-            "Translation_Yamatokotoba",
-            "Translation_Category",
-            "Translation_Tags"
-          ],
-          "mappedType": "enum"
-        },
-        "value": {
-          "name": "value",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        }
-      },
-      "name": "change_log_changes",
-      "indexes": [
-        {
-          "columnNames": [
-            "change_log_entry_id"
-          ],
-          "composite": false,
-          "keyName": "change_log_changes_change_log_entry_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "keyName": "PRIMARY",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {
-        "change_log_changes_change_log_entry_id_foreign": {
-          "constraintName": "change_log_changes_change_log_entry_id_foreign",
-          "columnNames": [
-            "change_log_entry_id"
-          ],
-          "localTableName": "change_log_changes",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "change_log_entries",
           "updateRule": "cascade"
         }
       }

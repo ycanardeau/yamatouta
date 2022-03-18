@@ -2,11 +2,11 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { Revision } from '../../entities/Revision';
+import { Commit } from '../../entities/Commit';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
-import { ChangeLogEvent } from '../../models/ChangeLogEvent';
 import { Permission } from '../../models/Permission';
+import { RevisionEvent } from '../../models/RevisionEvent';
 import { AuditLogService } from '../AuditLogService';
 import { PermissionContext } from '../PermissionContext';
 
@@ -43,20 +43,18 @@ export class DeleteTranslationService {
 				hidden: false,
 			});
 
-			const revision = new Revision();
+			translation.deleted = true;
 
-			em.persist(revision);
+			const commit = new Commit();
 
-			const changeLogEntry = translation.createChangeLogEntry({
-				revision: revision,
+			const revision = translation.createRevision({
+				commit: commit,
 				actor: user,
-				actionType: ChangeLogEvent.Deleted,
-				text: '',
+				event: RevisionEvent.Deleted,
+				summary: '',
 			});
 
-			revision.changeLogEntries.add(changeLogEntry);
-
-			translation.deleted = true;
+			em.persist(revision);
 
 			this.auditLogService.translation_delete({
 				actor: user,

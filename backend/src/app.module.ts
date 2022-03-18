@@ -9,8 +9,8 @@ import { SitemapController } from './controllers/SitemapController';
 import { TranslationController } from './controllers/TranslationController';
 import { UserController } from './controllers/UserController';
 import { Artist } from './entities/Artist';
-import { TranslationChangeLogEntry } from './entities/ChangeLogEntry';
 import { Quote } from './entities/Quote';
+import { TranslationRevision } from './entities/Revision';
 import { Translation } from './entities/Translation';
 import { User } from './entities/User';
 import { NgramConverter } from './helpers/NgramConverter';
@@ -42,43 +42,6 @@ import { ListUsersService } from './services/users/ListUsersService';
 import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthenticatedUserService';
 
-const artistServices = [
-	ListArtistsService,
-	GetArtistService,
-	ListArtistIdsService,
-];
-const quoteServices = [ListQuotesService, GetQuoteService, ListQuoteIdsService];
-const userServices = [
-	ListUsersService,
-	GetUserService,
-	CreateUserService,
-	AuthenticateUserService,
-	NormalizeEmailService,
-	GetAuthenticatedUserService,
-	UpdateAuthenticatedUserService,
-];
-const otherServices = [
-	AuditLogService,
-	PasswordHasherFactory,
-	GenerateSitemapService,
-	PermissionContext,
-	NgramConverter,
-];
-const authServices = [
-	LocalStrategy,
-	LocalSerializer,
-	LoginService,
-	LogoutService,
-];
-const translationServices = [
-	CreateTranslationService,
-	ListTranslationsService,
-	UpdateTranslationService,
-	DeleteTranslationService,
-	GetTranslationService,
-	ListTranslationRevisionsService,
-];
-
 @Module({
 	imports: [
 		MikroOrmModule.forRoot(),
@@ -86,26 +49,48 @@ const translationServices = [
 			Artist,
 			Quote,
 			Translation,
+			TranslationRevision,
 			User,
-			TranslationChangeLogEntry,
 		]),
 		PassportModule,
 	],
 	controllers: [
+		AuthController,
 		ArtistController,
 		QuoteController,
-		UserController,
-		AuthController,
 		SitemapController,
 		TranslationController,
+		UserController,
 	],
 	providers: [
-		...artistServices,
-		...quoteServices,
-		...userServices,
-		...otherServices,
-		...authServices,
-		...translationServices,
+		AuditLogService,
+		AuthenticateUserService,
+		CreateTranslationService,
+		CreateUserService,
+		DeleteTranslationService,
+		GenerateSitemapService,
+		GetArtistService,
+		GetAuthenticatedUserService,
+		GetQuoteService,
+		GetTranslationService,
+		GetUserService,
+		ListArtistIdsService,
+		ListArtistsService,
+		ListQuotesService,
+		ListQuoteIdsService,
+		ListTranslationRevisionsService,
+		ListTranslationsService,
+		ListUsersService,
+		LocalSerializer,
+		LocalStrategy,
+		LoginService,
+		LogoutService,
+		NgramConverter,
+		NormalizeEmailService,
+		PasswordHasherFactory,
+		PermissionContext,
+		UpdateAuthenticatedUserService,
+		UpdateTranslationService,
 	],
 })
 export class AppModule {}

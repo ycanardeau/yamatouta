@@ -11,20 +11,29 @@ import {
 } from '@mikro-orm/core';
 
 import { NgramConverter } from '../helpers/NgramConverter';
-import { ChangeLogEvent } from '../models/ChangeLogEvent';
-import { TranslationDiff } from '../models/EntryDiff';
-import { IChangeLogEntryFactory } from '../models/IChangeLogEntryFactory';
-import { IEntryWithId } from '../models/IEntryWithId';
+import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
+import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IRevisionFactory } from '../models/IRevisionFactory';
+import { RevisionEvent } from '../models/RevisionEvent';
+import { RevisionManager } from '../models/RevisionManager';
+import { TranslationSnapshot } from '../models/Snapshot';
 import { WordCategory } from '../models/WordCategory';
-import { ChangeLogEntry, TranslationChangeLogEntry } from './ChangeLogEntry';
-import { Revision } from './Revision';
+import { Commit } from './Commit';
+import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
 import { TranslationSearchIndex } from './TranslationSearchIndex';
 import { User } from './User';
 
 @Entity({ tableName: 'translations' })
 export class Translation
-	implements IEntryWithId, IChangeLogEntryFactory<TranslationDiff>
+	implements
+		IEntryWithDeletedAndHidden,
+		IEntryWithRevisions<
+			Translation,
+			TranslationRevision,
+			TranslationSnapshot
+		>,
+		IRevisionFactory<Translation, TranslationRevision, TranslationSnapshot>
 {
 	@PrimaryKey()
 	id!: number;
@@ -47,6 +56,9 @@ export class Translation
 	@Enum()
 	category: WordCategory;
 
+	@Property({ type: Array })
+	tags: string[] = [];
+
 	@ManyToOne()
 	user: User;
 
@@ -56,11 +68,19 @@ export class Translation
 	)
 	searchIndex = new TranslationSearchIndex({ translation: this });
 
-	@OneToMany(
-		() => TranslationChangeLogEntry,
-		(changeLogEntry) => changeLogEntry.translation,
-	)
-	changeLogEntries = new Collection<ChangeLogEntry<TranslationDiff>>(this);
+	@Property()
+	version = 0;
+
+	@OneToMany(() => TranslationRevision, (revision) => revision.translation)
+	revisions = new Collection<TranslationRevision>(this);
+
+	get revisionManager(): RevisionManager<
+		Translation,
+		TranslationRevision,
+		TranslationSnapshot
+	> {
+		return new RevisionManager(this);
+	}
 
 	constructor({
 		translatedString,
@@ -119,23 +139,25 @@ export class Translation
 		);
 	}
 
-	createChangeLogEntry({
-		revision,
+	createRevision({
+		commit,
 		actor,
-		actionType,
-		text,
+		event,
+		summary,
 	}: {
-		revision: Revision;
+		commit: Commit;
 		actor: User;
-		actionType: ChangeLogEvent;
-		text: string;
-	}): TranslationChangeLogEntry {
-		return new TranslationChangeLogEntry({
-			revision: revision,
-			actor: actor,
-			actionType: actionType,
-			text: text,
+		event: RevisionEvent;
+		summary: string;
+	}): TranslationRevision {
+		return new TranslationRevision({
 			translation: this,
+			commit: commit,
+			actor: actor,
+			snapshot: new TranslationSnapshot({ translation: this }),
+			summary: summary,
+			event: event,
+			version: ++this.version,
 		});
 	}
 }

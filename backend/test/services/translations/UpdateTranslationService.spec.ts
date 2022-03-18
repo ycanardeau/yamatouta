@@ -2,14 +2,13 @@ import { MikroORM } from '@mikro-orm/core';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 import { TranslationAuditLogEntry } from '../../../src/entities/AuditLogEntry';
-import { TranslationChangeLogEntry } from '../../../src/entities/ChangeLogEntry';
-import { Revision } from '../../../src/entities/Revision';
+import { TranslationRevision } from '../../../src/entities/Revision';
 import { Translation } from '../../../src/entities/Translation';
 import { User } from '../../../src/entities/User';
 import { NgramConverter } from '../../../src/helpers/NgramConverter';
 import { AuditedAction } from '../../../src/models/AuditedAction';
-import { ChangeLogChangeKey } from '../../../src/models/ChangeLogChangeKey';
-import { ChangeLogEvent } from '../../../src/models/ChangeLogEvent';
+import { RevisionEvent } from '../../../src/models/RevisionEvent';
+import { TranslationSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { WordCategory } from '../../../src/models/WordCategory';
 import { IUpdateTranslationBody } from '../../../src/requests/translations/IUpdateTranslationBody';
@@ -19,7 +18,6 @@ import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createTranslation, createUser } from '../../createEntry';
 import { testTranslationAuditLogEntry } from '../../testAuditLogEntry';
-import { testChangeLogEntry } from '../../testChangeLogEntry';
 
 describe('UpdateTranslationService', () => {
 	let em: FakeEntityManager;
@@ -86,10 +84,13 @@ describe('UpdateTranslationService', () => {
 	});
 
 	describe('updateTranslation', () => {
-		const testUpdateTranslation = async (
-			body: IUpdateTranslationBody,
-			expectedChanges: Record<string, string>,
-		): Promise<void> => {
+		const testUpdateTranslation = async ({
+			body,
+			snapshot,
+		}: {
+			body: IUpdateTranslationBody;
+			snapshot: TranslationSnapshot;
+		}): Promise<void> => {
 			const translationObject =
 				await updateTranslationService.updateTranslation(
 					translation.id,
@@ -103,23 +104,16 @@ describe('UpdateTranslationService', () => {
 			expect(translationObject.category).toBe(body.category);
 
 			const revision = em.entities.filter(
-				(entity) => entity instanceof Revision,
-			)[0] as Revision;
+				(entity) => entity instanceof TranslationRevision,
+			)[0] as TranslationRevision;
 
-			expect(revision).toBeInstanceOf(Revision);
-			expect(revision.changeLogEntries.length).toBe(1);
-
-			const changeLogEntry = revision
-				.changeLogEntries[0] as TranslationChangeLogEntry;
-			expect(changeLogEntry).toBeInstanceOf(TranslationChangeLogEntry);
-			expect(changeLogEntry.translation).toBe(translation);
-
-			testChangeLogEntry(changeLogEntry, {
-				revision: revision,
-				actor: existingUser,
-				actionType: ChangeLogEvent.Updated,
-				changes: expectedChanges,
-			});
+			expect(revision).toBeInstanceOf(TranslationRevision);
+			expect(revision.translation).toBe(translation);
+			expect(revision.actor).toBe(existingUser);
+			expect(revision.event).toBe(RevisionEvent.Updated);
+			expect(JSON.stringify(revision.snapshot)).toBe(
+				JSON.stringify(snapshot),
+			);
 
 			const auditLogEntry = em.entities.filter(
 				(entity) => entity instanceof TranslationAuditLogEntry,
@@ -174,88 +168,107 @@ describe('UpdateTranslationService', () => {
 		});
 
 		test('0 changes', async () => {
-			await testUpdateTranslation(
-				{
+			await testUpdateTranslation({
+				body: {
 					headword: translation.headword,
 					locale: translation.locale,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 				},
-				{},
-			);
+				snapshot: {
+					headword: translation.headword,
+					locale: translation.locale,
+					reading: translation.reading,
+					yamatokotoba: translation.yamatokotoba,
+					category: translation.category,
+					tags: [],
+				},
+			});
 		});
 
 		test('1 change', async () => {
-			await testUpdateTranslation(
-				{
+			await testUpdateTranslation({
+				body: {
 					...defaults,
 					locale: translation.locale,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 				},
-				{
-					[ChangeLogChangeKey.Translation_Headword]:
-						defaults.headword,
+				snapshot: {
+					headword: defaults.headword,
+					locale: translation.locale,
+					reading: translation.reading,
+					yamatokotoba: translation.yamatokotoba,
+					category: translation.category,
+					tags: [],
 				},
-			);
+			});
 		});
 
 		test('2 changes', async () => {
-			await testUpdateTranslation(
-				{
+			await testUpdateTranslation({
+				body: {
 					...defaults,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 				},
-				{
-					[ChangeLogChangeKey.Translation_Headword]:
-						defaults.headword,
-					[ChangeLogChangeKey.Translation_Locale]: defaults.locale,
+				snapshot: {
+					headword: defaults.headword,
+					locale: defaults.locale,
+					reading: translation.reading,
+					yamatokotoba: translation.yamatokotoba,
+					category: translation.category,
+					tags: [],
 				},
-			);
+			});
 		});
 
 		test('3 changes', async () => {
-			await testUpdateTranslation(
-				{
+			await testUpdateTranslation({
+				body: {
 					...defaults,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 				},
-				{
-					[ChangeLogChangeKey.Translation_Headword]:
-						defaults.headword,
-					[ChangeLogChangeKey.Translation_Locale]: defaults.locale,
-					[ChangeLogChangeKey.Translation_Reading]: defaults.reading,
+				snapshot: {
+					headword: defaults.headword,
+					locale: defaults.locale,
+					reading: defaults.reading,
+					yamatokotoba: translation.yamatokotoba,
+					category: translation.category,
+					tags: [],
 				},
-			);
+			});
 		});
 
 		test('4 changes', async () => {
-			await testUpdateTranslation(
-				{ ...defaults, category: translation.category },
-				{
-					[ChangeLogChangeKey.Translation_Headword]:
-						defaults.headword,
-					[ChangeLogChangeKey.Translation_Locale]: defaults.locale,
-					[ChangeLogChangeKey.Translation_Reading]: defaults.reading,
-					[ChangeLogChangeKey.Translation_Yamatokotoba]:
-						defaults.yamatokotoba,
+			await testUpdateTranslation({
+				body: { ...defaults, category: translation.category },
+				snapshot: {
+					headword: defaults.headword,
+					locale: defaults.locale,
+					reading: defaults.reading,
+					yamatokotoba: defaults.yamatokotoba,
+					category: translation.category,
+					tags: [],
 				},
-			);
+			});
 		});
 
 		test('5 changes', async () => {
-			await testUpdateTranslation(defaults, {
-				[ChangeLogChangeKey.Translation_Headword]: defaults.headword,
-				[ChangeLogChangeKey.Translation_Locale]: defaults.locale,
-				[ChangeLogChangeKey.Translation_Reading]: defaults.reading,
-				[ChangeLogChangeKey.Translation_Yamatokotoba]:
-					defaults.yamatokotoba,
-				[ChangeLogChangeKey.Translation_Category]: defaults.category,
+			await testUpdateTranslation({
+				body: defaults,
+				snapshot: {
+					headword: defaults.headword,
+					locale: defaults.locale,
+					reading: defaults.reading,
+					yamatokotoba: defaults.yamatokotoba,
+					category: defaults.category,
+					tags: [],
+				},
 			});
 		});
 
