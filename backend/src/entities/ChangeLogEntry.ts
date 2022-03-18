@@ -14,6 +14,7 @@ import { ChangeLogChangeKey } from '../models/ChangeLogChangeKey';
 import { ChangeLogEvent } from '../models/ChangeLogEvent';
 import { EntryDiff, TranslationDiff } from '../models/EntryDiff';
 import { EntryType } from '../models/EntryType';
+import { IEntryWithId } from '../models/IEntryWithId';
 import { ChangeLogChange } from './ChangeLogChange';
 import { Revision } from './Revision';
 import { Translation } from './Translation';
@@ -66,7 +67,7 @@ export abstract class ChangeLogEntry<TEntryDiff extends EntryDiff> {
 		this.text = text;
 	}
 
-	abstract get entry(): { id: number };
+	abstract get entry(): IEntryWithId;
 
 	createChange({
 		key,
@@ -124,7 +125,7 @@ export class TranslationChangeLogEntry extends ChangeLogEntry<TranslationDiff> {
 		this.translation = translation;
 	}
 
-	get entry(): { id: number } {
+	get entry(): IEntryWithId {
 		return this.translation;
 	}
 }

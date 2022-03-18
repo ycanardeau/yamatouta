@@ -14,6 +14,7 @@ import { NgramConverter } from '../helpers/NgramConverter';
 import { ChangeLogEvent } from '../models/ChangeLogEvent';
 import { TranslationDiff } from '../models/EntryDiff';
 import { IChangeLogEntryFactory } from '../models/IChangeLogEntryFactory';
+import { IEntryWithId } from '../models/IEntryWithId';
 import { WordCategory } from '../models/WordCategory';
 import { ChangeLogEntry, TranslationChangeLogEntry } from './ChangeLogEntry';
 import { Revision } from './Revision';
@@ -22,7 +23,9 @@ import { TranslationSearchIndex } from './TranslationSearchIndex';
 import { User } from './User';
 
 @Entity({ tableName: 'translations' })
-export class Translation implements IChangeLogEntryFactory<TranslationDiff> {
+export class Translation
+	implements IEntryWithId, IChangeLogEntryFactory<TranslationDiff>
+{
 	@PrimaryKey()
 	id!: number;
 
