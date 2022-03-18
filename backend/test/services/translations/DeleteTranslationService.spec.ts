@@ -15,6 +15,7 @@ import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createTranslation, createUser } from '../../createEntry';
 import { testTranslationAuditLogEntry } from '../../testAuditLogEntry';
+import { testChangeLogEntry } from '../../testChangeLogEntry';
 
 describe('DeleteTranslationService', () => {
 	let em: FakeEntityManager;
@@ -91,12 +92,14 @@ describe('DeleteTranslationService', () => {
 			const changeLogEntry = revision
 				.changeLogEntries[0] as TranslationChangeLogEntry;
 			expect(changeLogEntry).toBeInstanceOf(TranslationChangeLogEntry);
-
-			expect(changeLogEntry.revision.getEntity()).toBe(revision);
-			expect(changeLogEntry.changes.length).toBe(0);
-			expect(changeLogEntry.actor).toBe(existingUser);
-			expect(changeLogEntry.actionType).toBe(ChangeLogEvent.Deleted);
 			expect(changeLogEntry.translation).toBe(translation);
+
+			testChangeLogEntry(changeLogEntry, {
+				revision: revision,
+				actor: existingUser,
+				actionType: ChangeLogEvent.Deleted,
+				changes: {},
+			});
 
 			const auditLogEntry = em.entities.filter(
 				(entity) => entity instanceof TranslationAuditLogEntry,

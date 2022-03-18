@@ -2,7 +2,6 @@ import { MikroORM } from '@mikro-orm/core';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
 import { TranslationAuditLogEntry } from '../../../src/entities/AuditLogEntry';
-import { ChangeLogChange } from '../../../src/entities/ChangeLogChange';
 import { TranslationChangeLogEntry } from '../../../src/entities/ChangeLogEntry';
 import { Revision } from '../../../src/entities/Revision';
 import { Translation } from '../../../src/entities/Translation';
@@ -20,6 +19,7 @@ import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createUser } from '../../createEntry';
 import { testTranslationAuditLogEntry } from '../../testAuditLogEntry';
+import { testChangeLogEntry } from '../../testChangeLogEntry';
 
 describe('CreateTranslationService', () => {
 	let em: FakeEntityManager;
@@ -73,7 +73,7 @@ describe('CreateTranslationService', () => {
 	describe('createTranslation', () => {
 		const testCreateTranslation = async (
 			params: IUpdateTranslationBody,
-			expectedChanges: Pick<ChangeLogChange, 'key' | 'value'>[],
+			expectedChanges: Record<string, string>,
 		): Promise<void> => {
 			const translationObject =
 				await createTranslationService.createTranslation(params);
@@ -98,22 +98,14 @@ describe('CreateTranslationService', () => {
 			const changeLogEntry = revision
 				.changeLogEntries[0] as TranslationChangeLogEntry;
 			expect(changeLogEntry).toBeInstanceOf(TranslationChangeLogEntry);
-
-			expect(changeLogEntry.revision.getEntity()).toBe(revision);
-			expect(changeLogEntry.changes.length).toBe(expectedChanges.length);
-			expect(changeLogEntry.actor).toBe(existingUser);
-			expect(changeLogEntry.actionType).toBe(ChangeLogEvent.Created);
 			expect(changeLogEntry.translation).toBe(translation);
 
-			for (let i = 0; i < changeLogEntry.changes.length; i++) {
-				const changeLogChange = changeLogEntry.changes[i];
-				expect(changeLogChange).toBeInstanceOf(ChangeLogChange);
-				expect(changeLogChange.changeLogEntry).toBe(changeLogEntry);
-
-				const { key, value } = expectedChanges[i];
-				expect(changeLogChange.key).toBe(key);
-				expect(changeLogChange.value).toBe(value);
-			}
+			testChangeLogEntry(changeLogEntry, {
+				revision: revision,
+				actor: existingUser,
+				actionType: ChangeLogEvent.Created,
+				changes: expectedChanges,
+			});
 
 			const auditLogEntry = em.entities.filter(
 				(entity) => entity instanceof TranslationAuditLogEntry,
@@ -164,28 +156,14 @@ describe('CreateTranslationService', () => {
 		});
 
 		test('5 changes', async () => {
-			await testCreateTranslation(defaults, [
-				{
-					key: ChangeLogChangeKey.Translation_Headword,
-					value: defaults.headword,
-				},
-				{
-					key: ChangeLogChangeKey.Translation_Locale,
-					value: defaults.locale,
-				},
-				{
-					key: ChangeLogChangeKey.Translation_Reading,
-					value: defaults.reading,
-				},
-				{
-					key: ChangeLogChangeKey.Translation_Yamatokotoba,
-					value: defaults.yamatokotoba,
-				},
-				{
-					key: ChangeLogChangeKey.Translation_Category,
-					value: defaults.category,
-				},
-			]);
+			await testCreateTranslation(defaults, {
+				[ChangeLogChangeKey.Translation_Headword]: defaults.headword,
+				[ChangeLogChangeKey.Translation_Locale]: defaults.locale,
+				[ChangeLogChangeKey.Translation_Reading]: defaults.reading,
+				[ChangeLogChangeKey.Translation_Yamatokotoba]:
+					defaults.yamatokotoba,
+				[ChangeLogChangeKey.Translation_Category]: defaults.category,
+			});
 		});
 
 		test('headword is undefined', async () => {
