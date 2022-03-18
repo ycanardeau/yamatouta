@@ -50,22 +50,24 @@ async function bootstrap(): Promise<void> {
 	app.use(passport.initialize());
 	app.use(passport.session());
 
-	app.use(
-		csurf({
-			cookie: {
-				httpOnly: true,
+	if (process.env.NODE_ENV !== 'development') {
+		app.use(
+			csurf({
+				cookie: {
+					httpOnly: true,
+					domain: config.cookie.domain,
+				},
+			}),
+		);
+
+		app.use((request: Request, response: Response, next: NextFunction) => {
+			response.cookie('XSRF-TOKEN', request.csrfToken(), {
 				domain: config.cookie.domain,
-			},
-		}),
-	);
+			});
 
-	app.use((request: Request, response: Response, next: NextFunction) => {
-		response.cookie('XSRF-TOKEN', request.csrfToken(), {
-			domain: config.cookie.domain,
+			next();
 		});
-
-		next();
-	});
+	}
 
 	await app.listen(config.port);
 }
