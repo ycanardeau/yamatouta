@@ -130,8 +130,6 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 				]}
 			/>
 
-			<EuiSpacer />
-
 			<Routes>
 				<Route
 					path=""
