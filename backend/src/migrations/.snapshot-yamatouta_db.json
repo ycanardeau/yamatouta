@@ -1408,8 +1408,8 @@
           ],
           "mappedType": "enum"
         },
-        "tags": {
-          "name": "tags",
+        "inishienomanabi_tags": {
+          "name": "inishienomanabi_tags",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,

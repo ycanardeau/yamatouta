@@ -7,7 +7,7 @@ export class TranslationSnapshot {
 	readonly reading: string;
 	readonly yamatokotoba: string;
 	readonly category: WordCategory;
-	readonly tags: string[];
+	readonly inishienomanabi_tags: string[];
 
 	constructor({ translation }: { translation: Translation }) {
 		this.headword = translation.headword;
@@ -15,7 +15,7 @@ export class TranslationSnapshot {
 		this.reading = translation.reading;
 		this.yamatokotoba = translation.yamatokotoba;
 		this.category = translation.category;
-		this.tags = translation.tags;
+		this.inishienomanabi_tags = translation.inishienomanabi_tags;
 	}
 }
 

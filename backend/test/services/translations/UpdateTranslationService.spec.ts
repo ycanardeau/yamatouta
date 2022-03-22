@@ -182,7 +182,7 @@ describe('UpdateTranslationService', () => {
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
-					tags: [],
+					inishienomanabi_tags: [],
 				},
 			});
 		});
@@ -202,7 +202,7 @@ describe('UpdateTranslationService', () => {
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
-					tags: [],
+					inishienomanabi_tags: [],
 				},
 			});
 		});
@@ -221,7 +221,7 @@ describe('UpdateTranslationService', () => {
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
-					tags: [],
+					inishienomanabi_tags: [],
 				},
 			});
 		});
@@ -239,7 +239,7 @@ describe('UpdateTranslationService', () => {
 					reading: defaults.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
-					tags: [],
+					inishienomanabi_tags: [],
 				},
 			});
 		});
@@ -253,7 +253,7 @@ describe('UpdateTranslationService', () => {
 					reading: defaults.reading,
 					yamatokotoba: defaults.yamatokotoba,
 					category: translation.category,
-					tags: [],
+					inishienomanabi_tags: [],
 				},
 			});
 		});
@@ -267,7 +267,7 @@ describe('UpdateTranslationService', () => {
 					reading: defaults.reading,
 					yamatokotoba: defaults.yamatokotoba,
 					category: defaults.category,
-					tags: [],
+					inishienomanabi_tags: [],
 				},
 			});
 		});

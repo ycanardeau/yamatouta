@@ -158,7 +158,7 @@ describe('CreateTranslationService', () => {
 					reading: defaults.reading,
 					yamatokotoba: defaults.yamatokotoba,
 					category: defaults.category,
-					tags: [],
+					inishienomanabi_tags: [],
 				},
 			});
 		});

@@ -56,8 +56,9 @@ export class Translation
 	@Enum()
 	category: WordCategory;
 
+	// For backward compatibility.
 	@Property({ type: Array })
-	tags: string[] = [];
+	inishienomanabi_tags: string[] = [];
 
 	@ManyToOne()
 	user: User;
