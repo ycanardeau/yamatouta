@@ -102,5 +102,8 @@
 		"changeEmailDialogSubtitle": "あたらしいくものたよりと いまのあいことばを いれてください。",
 		"changeUsernameDialogTitle": "なまえをかえる",
 		"changeUsernameDialogSubtitle": "あたらしいなまえと いまのあいことばを いれてください。"
+	},
+	"quotes": {
+		"addQuote": "やまとうたをかきたす"
 	}
 }

@@ -104,5 +104,8 @@
 		"changeEmailDialogSubtitle": "Enter a new email address and your existing password.",
 		"changeUsernameDialogTitle": "Change your username",
 		"changeUsernameDialogSubtitle": "Enter a new username and your existing password."
+	},
+	"quotes": {
+		"addQuote": "Add quote"
 	}
 }

@@ -7,6 +7,10 @@ export enum Permission {
 	EditTranslations = 'EditTranslations',
 	ViewEditHistory = 'ViewEditHistory',
 	DeleteTranslations = 'DeleteTranslations',
+	CreateArtists = 'CreateArtists',
+	EditArtists = 'EditArtists',
+	CreateQuotes = 'CreateQuotes',
+	EditQuotes = 'EditQuotes',
 }
 
 const limitedUserPermissions: Permission[] = [];
@@ -27,6 +31,10 @@ const adminPermissions: Permission[] = [
 	Permission.EditTranslations,
 	Permission.ViewEditHistory,
 	Permission.DeleteTranslations,
+	Permission.CreateArtists,
+	Permission.EditArtists,
+	Permission.CreateQuotes,
+	Permission.EditQuotes,
 ];
 
 export const userGroupPermissions: Record<UserGroup, Permission[]> = {

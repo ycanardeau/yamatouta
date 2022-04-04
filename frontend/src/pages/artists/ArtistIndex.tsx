@@ -1,6 +1,7 @@
 import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
+	EuiButton,
 	EuiLink,
 	EuiPageHeader,
 	EuiSpacer,
@@ -11,6 +12,7 @@ import {
 	EuiTableRow,
 	EuiTableRowCell,
 } from '@elastic/eui';
+import { AddRegular } from '@fluentui/react-icons';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,8 +20,11 @@ import { useNavigate } from 'react-router-dom';
 
 import Avatar from '../../components/Avatar';
 import Pagination from '../../components/Pagination';
+import { useAuth } from '../../components/useAuth';
+import { useDialog } from '../../components/useDialog';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 
 const Breadcrumbs = (): React.ReactElement => {
@@ -52,11 +57,31 @@ const ArtistIndex = observer((): React.ReactElement => {
 
 	const navigate = useNavigate();
 
+	const auth = useAuth();
+
+	const createArtistDialog = useDialog();
+
 	return (
 		<>
 			<Breadcrumbs />
 			<EuiSpacer size="xs" />
-			<EuiPageHeader pageTitle={t('shared.artists')} />
+			<EuiPageHeader
+				pageTitle={t('shared.artists')}
+				rightSideItems={[
+					<EuiButton
+						size="s"
+						onClick={createArtistDialog.show}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.CreateArtists,
+							)
+						}
+						iconType={AddRegular}
+					>
+						{t('artists.addArtist')}
+					</EuiButton>,
+				]}
+			/>
 
 			<EuiTable>
 				<EuiTableHeader>
