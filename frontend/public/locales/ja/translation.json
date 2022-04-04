@@ -104,6 +104,13 @@
 		"changeUsernameDialogSubtitle": "あたらしいなまえと いまのあいことばを いれてください。"
 	},
 	"quotes": {
-		"addQuote": "やまとうたをかきたす"
+		"addQuote": "やまとうたをかきたす",
+		"quoteType": "くさわい"
+	},
+	"quoteTypeNames": {
+		"Word": "ことば",
+		"Tanka": "みじかうた",
+		"Lyrics": "うたことば",
+		"Other": "そのほか"
 	}
 }

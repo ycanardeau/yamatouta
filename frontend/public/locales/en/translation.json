@@ -106,6 +106,15 @@
 		"changeUsernameDialogSubtitle": "Enter a new username and your existing password."
 	},
 	"quotes": {
-		"addQuote": "Add quote"
+		"addQuote": "Add quote",
+		"text": "Text",
+		"quoteType": "Type"
+	},
+	"quoteTypeNames": {
+		"Word": "Word",
+		"Haiku": "Haiku",
+		"Tanka": "Tanka",
+		"Lyrics": "Lyrics",
+		"Other": "Other"
 	}
 }

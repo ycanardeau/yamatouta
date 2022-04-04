@@ -11,6 +11,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import EditQuoteDialog from '../../components/quotes/EditQuoteDialog';
 import QuoteSearchList from '../../components/quotes/QuoteSearchList';
 import { useAuth } from '../../components/useAuth';
 import { useDialog } from '../../components/useDialog';
@@ -51,6 +52,8 @@ const QuoteIndex = observer((): React.ReactElement => {
 
 	const createQuoteDialog = useDialog();
 
+	const navigate = useNavigate();
+
 	return (
 		<>
 			<Breadcrumbs />
@@ -74,6 +77,13 @@ const QuoteIndex = observer((): React.ReactElement => {
 			/>
 
 			<QuoteSearchList store={store} />
+
+			{createQuoteDialog.visible && (
+				<EditQuoteDialog
+					onClose={createQuoteDialog.close}
+					onSuccess={(quote): void => navigate(`/quotes/${quote.id}`)}
+				/>
+			)}
 		</>
 	);
 });

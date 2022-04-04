@@ -20,6 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Avatar from '../../components/Avatar';
 import Pagination from '../../components/Pagination';
+import EditArtistDialog from '../../components/artists/EditArtistDialog';
 import { useAuth } from '../../components/useAuth';
 import { useDialog } from '../../components/useDialog';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
@@ -122,6 +123,15 @@ const ArtistIndex = observer((): React.ReactElement => {
 			<EuiSpacer size="m" />
 
 			<Pagination store={store.paginationStore} />
+
+			{createArtistDialog.visible && (
+				<EditArtistDialog
+					onClose={createArtistDialog.close}
+					onSuccess={(artist): void =>
+						navigate(`/artists/${artist.id}`)
+					}
+				/>
+			)}
 		</>
 	);
 });
