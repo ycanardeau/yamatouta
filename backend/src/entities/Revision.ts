@@ -3,8 +3,15 @@ import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Entry } from '../models/Entry';
 import { EntryType } from '../models/EntryType';
 import { RevisionEvent } from '../models/RevisionEvent';
-import { Snapshot, TranslationSnapshot } from '../models/Snapshot';
+import {
+	ArtistSnapshot,
+	QuoteSnapshot,
+	Snapshot,
+	TranslationSnapshot,
+} from '../models/Snapshot';
+import { Artist } from './Artist';
 import { Commit } from './Commit';
+import { Quote } from './Quote';
 import { Translation } from './Translation';
 import { User } from './User';
 
@@ -105,5 +112,59 @@ export class TranslationRevision extends Revision<
 
 	get entry(): Translation {
 		return this.translation;
+	}
+}
+
+@Entity({ tableName: 'revisions', discriminatorValue: EntryType.Artist })
+export class ArtistRevision extends Revision<Artist, ArtistSnapshot> {
+	@ManyToOne()
+	artist: Artist;
+
+	constructor({
+		artist,
+		...params
+	}: {
+		artist: Artist;
+		commit: Commit;
+		actor: User;
+		snapshot: ArtistSnapshot;
+		summary: string;
+		event: RevisionEvent;
+		version: number;
+	}) {
+		super(params);
+
+		this.artist = artist;
+	}
+
+	get entry(): Artist {
+		return this.artist;
+	}
+}
+
+@Entity({ tableName: 'revisions', discriminatorValue: EntryType.Quote })
+export class QuoteRevision extends Revision<Quote, QuoteSnapshot> {
+	@ManyToOne()
+	quote: Quote;
+
+	constructor({
+		quote,
+		...params
+	}: {
+		quote: Quote;
+		commit: Commit;
+		actor: User;
+		snapshot: QuoteSnapshot;
+		summary: string;
+		event: RevisionEvent;
+		version: number;
+	}) {
+		super(params);
+
+		this.quote = quote;
+	}
+
+	get entry(): Quote {
+		return this.quote;
 	}
 }

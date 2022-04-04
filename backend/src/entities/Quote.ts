@@ -1,16 +1,36 @@
-import { Embedded, Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Collection,
+	Embedded,
+	Entity,
+	Enum,
+	OneToMany,
+	PrimaryKey,
+	Property,
+} from '@mikro-orm/core';
 
 import { AuthorType } from '../models/AuthorType';
 import { IAuthor } from '../models/IAuthor';
+import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IRevisionFactory } from '../models/IRevisionFactory';
 import { QuoteType } from '../models/QuoteType';
+import { RevisionEvent } from '../models/RevisionEvent';
+import { RevisionManager } from '../models/RevisionManager';
+import { QuoteSnapshot } from '../models/Snapshot';
+import { Commit } from './Commit';
 import { PartialDate } from './PartialDate';
+import { QuoteRevision } from './Revision';
+import { User } from './User';
 
 @Entity({
 	tableName: 'quotes',
 	abstract: true,
 	discriminatorColumn: 'authorType',
 })
-export abstract class Quote {
+export abstract class Quote
+	implements
+		IEntryWithRevisions<Quote, QuoteRevision, QuoteSnapshot>,
+		IRevisionFactory<Quote, QuoteRevision, QuoteSnapshot>
+{
 	@PrimaryKey()
 	id!: number;
 
@@ -50,6 +70,20 @@ export abstract class Quote {
 	@Embedded({ prefix: false })
 	date = new PartialDate();
 
+	@Property()
+	version = 0;
+
+	@OneToMany(() => QuoteRevision, (revision) => revision.quote)
+	revisions = new Collection<QuoteRevision>(this);
+
+	get revisionManager(): RevisionManager<
+		Quote,
+		QuoteRevision,
+		QuoteSnapshot
+	> {
+		return new RevisionManager(this);
+	}
+
 	protected constructor({
 		quoteType,
 		text,
@@ -65,4 +99,26 @@ export abstract class Quote {
 	}
 
 	abstract get author(): IAuthor;
+
+	createRevision({
+		commit,
+		actor,
+		event,
+		summary,
+	}: {
+		commit: Commit;
+		actor: User;
+		event: RevisionEvent;
+		summary: string;
+	}): QuoteRevision {
+		return new QuoteRevision({
+			quote: this,
+			commit: commit,
+			actor: actor,
+			snapshot: new QuoteSnapshot({ quote: this }),
+			summary: summary,
+			event: event,
+			version: ++this.version,
+		});
+	}
 }

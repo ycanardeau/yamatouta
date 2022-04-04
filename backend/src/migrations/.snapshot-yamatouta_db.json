@@ -1709,215 +1709,6 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "commit_id": {
-          "name": "commit_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "actor_id": {
-          "name": "actor_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
-        },
-        "snapshot": {
-          "name": "snapshot",
-          "type": "json",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "json"
-        },
-        "deleted": {
-          "name": "deleted",
-          "type": "tinyint(1)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "boolean"
-        },
-        "hidden": {
-          "name": "hidden",
-          "type": "tinyint(1)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "boolean"
-        },
-        "summary": {
-          "name": "summary",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "event": {
-          "name": "event",
-          "type": "enum('Created', 'Updated', 'Deleted')",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "enumItems": [
-            "Created",
-            "Updated",
-            "Deleted"
-          ],
-          "mappedType": "enum"
-        },
-        "version": {
-          "name": "version",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "entry_type": {
-          "name": "entry_type",
-          "type": "enum('Translation')",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "enumItems": [
-            "Translation"
-          ],
-          "mappedType": "enum"
-        },
-        "translation_id": {
-          "name": "translation_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
-        }
-      },
-      "name": "revisions",
-      "indexes": [
-        {
-          "columnNames": [
-            "commit_id"
-          ],
-          "composite": false,
-          "keyName": "revisions_commit_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "actor_id"
-          ],
-          "composite": false,
-          "keyName": "revisions_actor_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "entry_type"
-          ],
-          "composite": false,
-          "keyName": "revisions_entry_type_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "translation_id"
-          ],
-          "composite": false,
-          "keyName": "revisions_translation_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "keyName": "PRIMARY",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {
-        "revisions_commit_id_foreign": {
-          "constraintName": "revisions_commit_id_foreign",
-          "columnNames": [
-            "commit_id"
-          ],
-          "localTableName": "revisions",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "commits",
-          "updateRule": "cascade"
-        },
-        "revisions_actor_id_foreign": {
-          "constraintName": "revisions_actor_id_foreign",
-          "columnNames": [
-            "actor_id"
-          ],
-          "localTableName": "revisions",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "users",
-          "updateRule": "cascade"
-        },
-        "revisions_translation_id_foreign": {
-          "constraintName": "revisions_translation_id_foreign",
-          "columnNames": [
-            "translation_id"
-          ],
-          "localTableName": "revisions",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "translations",
-          "deleteRule": "set null",
-          "updateRule": "cascade"
-        }
-      }
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
         "created_at": {
           "name": "created_at",
           "type": "datetime",
@@ -2181,6 +1972,15 @@
             "Character"
           ],
           "mappedType": "enum"
+        },
+        "version": {
+          "name": "version",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
         }
       },
       "name": "artists",
@@ -2323,15 +2123,6 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "artist_id": {
-          "name": "artist_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
-        },
         "year": {
           "name": "year",
           "type": "int",
@@ -2354,6 +2145,24 @@
           "name": "day",
           "type": "int",
           "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "version": {
+          "name": "version",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "artist_id": {
+          "name": "artist_id",
+          "type": "int",
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
@@ -2402,6 +2211,279 @@
             "id"
           ],
           "referencedTableName": "artists",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "commit_id": {
+          "name": "commit_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "snapshot": {
+          "name": "snapshot",
+          "type": "json",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
+        },
+        "deleted": {
+          "name": "deleted",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "summary": {
+          "name": "summary",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "event": {
+          "name": "event",
+          "type": "enum('Created', 'Updated', 'Deleted')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Created",
+            "Updated",
+            "Deleted"
+          ],
+          "mappedType": "enum"
+        },
+        "version": {
+          "name": "version",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "enum('Translation', 'Artist', 'Quote')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Translation",
+            "Artist",
+            "Quote"
+          ],
+          "mappedType": "enum"
+        },
+        "translation_id": {
+          "name": "translation_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "artist_id": {
+          "name": "artist_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "quote_id": {
+          "name": "quote_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        }
+      },
+      "name": "revisions",
+      "indexes": [
+        {
+          "columnNames": [
+            "commit_id"
+          ],
+          "composite": false,
+          "keyName": "revisions_commit_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "actor_id"
+          ],
+          "composite": false,
+          "keyName": "revisions_actor_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "entry_type"
+          ],
+          "composite": false,
+          "keyName": "revisions_entry_type_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "translation_id"
+          ],
+          "composite": false,
+          "keyName": "revisions_translation_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "artist_id"
+          ],
+          "composite": false,
+          "keyName": "revisions_artist_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "quote_id"
+          ],
+          "composite": false,
+          "keyName": "revisions_quote_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "revisions_commit_id_foreign": {
+          "constraintName": "revisions_commit_id_foreign",
+          "columnNames": [
+            "commit_id"
+          ],
+          "localTableName": "revisions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "commits",
+          "updateRule": "cascade"
+        },
+        "revisions_actor_id_foreign": {
+          "constraintName": "revisions_actor_id_foreign",
+          "columnNames": [
+            "actor_id"
+          ],
+          "localTableName": "revisions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "updateRule": "cascade"
+        },
+        "revisions_translation_id_foreign": {
+          "constraintName": "revisions_translation_id_foreign",
+          "columnNames": [
+            "translation_id"
+          ],
+          "localTableName": "revisions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "translations",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "revisions_artist_id_foreign": {
+          "constraintName": "revisions_artist_id_foreign",
+          "columnNames": [
+            "artist_id"
+          ],
+          "localTableName": "revisions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "artists",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "revisions_quote_id_foreign": {
+          "constraintName": "revisions_quote_id_foreign",
+          "columnNames": [
+            "quote_id"
+          ],
+          "localTableName": "revisions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "quotes",
           "deleteRule": "set null",
           "updateRule": "cascade"
         }

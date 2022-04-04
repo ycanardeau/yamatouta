@@ -1,4 +1,8 @@
+import { Artist } from '../entities/Artist';
+import { Quote } from '../entities/Quote';
 import { Translation } from '../entities/Translation';
+import { ArtistType } from './ArtistType';
+import { QuoteType } from './QuoteType';
 import { WordCategory } from './WordCategory';
 
 export class TranslationSnapshot {
@@ -19,4 +23,26 @@ export class TranslationSnapshot {
 	}
 }
 
-export type Snapshot = TranslationSnapshot;
+export class ArtistSnapshot {
+	readonly name: string;
+	readonly artistType: ArtistType;
+
+	constructor({ artist }: { artist: Artist }) {
+		this.name = artist.name;
+		this.artistType = artist.artistType;
+	}
+}
+
+export class QuoteSnapshot {
+	readonly quoteType: QuoteType;
+	readonly text: string;
+	readonly locale: string;
+
+	constructor({ quote }: { quote: Quote }) {
+		this.quoteType = quote.quoteType;
+		this.text = quote.text;
+		this.locale = quote.locale;
+	}
+}
+
+export type Snapshot = TranslationSnapshot | ArtistSnapshot | QuoteSnapshot;
