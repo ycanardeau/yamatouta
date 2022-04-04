@@ -17,6 +17,7 @@ import { NgramConverter } from './helpers/NgramConverter';
 import { AuditLogService } from './services/AuditLogService';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { PermissionContext } from './services/PermissionContext';
+import { CreateArtistService } from './services/artists/CreateArtistService';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistIdsService } from './services/artists/ListArtistIdsService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
@@ -25,6 +26,7 @@ import { LocalStrategy } from './services/auth/LocalStrategy';
 import { LoginService } from './services/auth/LoginService';
 import { LogoutService } from './services/auth/LogoutService';
 import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasherFactory';
+import { CreateQuoteService } from './services/quotes/CreateQuoteService';
 import { GetQuoteService } from './services/quotes/GetQuoteService';
 import { ListQuoteIdsService } from './services/quotes/ListQuoteIdsService';
 import { ListQuotesService } from './services/quotes/ListQuotesService';
@@ -65,6 +67,8 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 	providers: [
 		AuditLogService,
 		AuthenticateUserService,
+		CreateArtistService,
+		CreateQuoteService,
 		CreateTranslationService,
 		CreateUserService,
 		DeleteTranslationService,

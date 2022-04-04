@@ -6,6 +6,7 @@ import {
 	runInAction,
 } from 'mobx';
 
+import { createArtist, updateArtist } from '../../api/ArtistApi';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
 
@@ -37,8 +38,14 @@ export class EditArtistDialogStore {
 		try {
 			this.submitting = true;
 
-			// TODO: Implement.
-			throw new Error();
+			const params = { name: this.name, artistType: this.artistType };
+
+			// Await.
+			const artist = await (this.artist
+				? updateArtist({ ...params, artistId: this.artist.id })
+				: createArtist(params));
+
+			return artist;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

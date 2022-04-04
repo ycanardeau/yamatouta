@@ -42,3 +42,20 @@ export const createArtist = async ({
 
 	return response.data;
 };
+
+export const updateArtist = async ({
+	artistId,
+	name,
+	artistType,
+}: {
+	artistId: number;
+	name: string;
+	artistType: ArtistType;
+}): Promise<IArtistObject> => {
+	const response = await axios.patch<IArtistObject>(`/artists/${artistId}`, {
+		name,
+		artistType,
+	});
+
+	return response.data;
+};

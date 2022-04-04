@@ -54,7 +54,7 @@ export class Quote
 	phraseCount = 0;
 
 	@Property()
-	transcription!: string;
+	transcription = '';
 
 	@Property({ length: 85 })
 	locale: string;
@@ -63,7 +63,7 @@ export class Quote
 	artist: Artist;
 
 	@Property()
-	sourceUrl!: string;
+	sourceUrl = '';
 
 	@Embedded({ prefix: false })
 	date = new PartialDate();
