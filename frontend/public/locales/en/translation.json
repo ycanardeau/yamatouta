@@ -107,8 +107,10 @@
 	},
 	"quotes": {
 		"addQuote": "Add quote",
-		"text": "Text",
-		"quoteType": "Type"
+		"quote": "Quote",
+		"quoteType": "Type",
+		"artist": "Artist",
+		"selectArtist": "Select an artist..."
 	},
 	"quoteTypeNames": {
 		"Word": "Word",

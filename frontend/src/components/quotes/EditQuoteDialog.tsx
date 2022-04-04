@@ -1,6 +1,8 @@
 import {
 	EuiButton,
 	EuiButtonEmpty,
+	EuiComboBox,
+	EuiComboBoxOptionOption,
 	EuiForm,
 	EuiFormRow,
 	EuiModal,
@@ -16,6 +18,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { listArtists } from '../../api/ArtistApi';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
 import { EditQuoteDialogStore } from '../../stores/quotes/EditQuoteDialogStore';
@@ -39,6 +42,37 @@ const EditQuoteDialog = observer(
 		);
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
+
+		const [options, setOptions] = React.useState<EuiComboBoxOptionOption[]>(
+			[],
+		);
+		const [selectedOptions, setSelected] =
+			React.useState<EuiComboBoxOptionOption[]>();
+
+		const handleSearchChange = React.useCallback(
+			async (searchValue: string): Promise<void> => {
+				const artists = await listArtists({
+					pagination: {
+						offset: 0,
+						limit: 20,
+						getTotalCount: false,
+					},
+					query: searchValue,
+				});
+
+				setOptions(
+					artists.items.map((artist) => ({
+						key: artist.id.toString(),
+						label: artist.name,
+					})),
+				);
+			},
+			[],
+		);
+
+		React.useEffect(() => {
+			handleSearchChange('');
+		}, [handleSearchChange]);
 
 		return (
 			<EuiModal onClose={onClose} initialFocus="[name=text]">
@@ -65,10 +99,10 @@ const EditQuoteDialog = observer(
 							onSuccess(quote);
 						}}
 					>
-						<EuiFormRow label={t('quotes.text')}>
+						<EuiFormRow label={t('quotes.quote')}>
 							<EuiTextArea
 								compressed
-								name="name"
+								name="text"
 								value={store.text}
 								onChange={(e): void =>
 									store.setText(e.target.value)
@@ -92,6 +126,26 @@ const EditQuoteDialog = observer(
 										e.target.value as QuoteType,
 									)
 								}
+							/>
+						</EuiFormRow>
+
+						<EuiFormRow label={t('quotes.artist')}>
+							<EuiComboBox
+								compressed
+								placeholder={t('quotes.selectArtist')}
+								singleSelection={{ asPlainText: true }}
+								options={options}
+								selectedOptions={selectedOptions}
+								onChange={async (
+									selectedOptions,
+								): Promise<void> => {
+									setSelected(selectedOptions);
+
+									await store.artist.loadEntryById(
+										Number(selectedOptions[0]?.key),
+									);
+								}}
+								onSearchChange={handleSearchChange}
 							/>
 						</EuiFormRow>
 					</EuiForm>

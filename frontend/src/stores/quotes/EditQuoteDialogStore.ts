@@ -6,14 +6,22 @@ import {
 	runInAction,
 } from 'mobx';
 
+import { getArtist } from '../../api/ArtistApi';
+import { createQuote, updateQuote } from '../../api/QuoteApi';
+import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
+import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
 
 export class EditQuoteDialogStore {
 	private readonly quote?: IQuoteObject;
 	@observable submitting = false;
 	@observable text = '';
 	@observable quoteType = QuoteType.Tanka;
+	@observable locale = 'ja';
+	readonly artist = new BasicEntryLinkStore<IArtistObject>((entryId) =>
+		getArtist({ artistId: entryId }),
+	);
 
 	constructor({ quote }: { quote?: IQuoteObject }) {
 		makeObservable(this);
@@ -37,8 +45,19 @@ export class EditQuoteDialogStore {
 		try {
 			this.submitting = true;
 
-			// TODO: Implement.
-			throw new Error();
+			const params = {
+				text: this.text,
+				quoteType: this.quoteType,
+				locale: this.locale,
+				artistId: this.artist.id ?? 0,
+			};
+
+			// Await.
+			const quote = await (this.quote
+				? updateQuote({ ...params, quoteId: this.quote.id })
+				: createQuote(params));
+
+			return quote;
 		} finally {
 			runInAction(() => {
 				this.submitting = false;
