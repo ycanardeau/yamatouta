@@ -1,9 +1,8 @@
 import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { PasswordHashAlgorithm } from '../models/PasswordHashAlgorithm';
-import { Permission } from '../models/Permission';
+import { Permission, userGroupPermissions } from '../models/Permission';
 import { UserGroup } from '../models/UserGroup';
-import { userGroupPermissions } from '../models/userGroupPermissions';
 import { IPasswordHasher } from '../services/passwordHashers/IPasswordHasher';
 
 @Entity({ tableName: 'users' })
