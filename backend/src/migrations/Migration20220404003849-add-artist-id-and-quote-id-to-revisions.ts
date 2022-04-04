@@ -39,9 +39,47 @@ export class Migration20220404003849 extends Migration {
 		this.addSql(
 			'alter table `quotes` add constraint `quotes_artist_id_foreign` foreign key (`artist_id`) references `artists` (`id`) on update cascade;',
 		);
+
+		this.addSql(
+			'alter table `audit_log_entries` add `artist_id` int unsigned null, add `quote_id` int unsigned null;',
+		);
+		this.addSql(
+			"alter table `audit_log_entries` modify `action` enum('Artist_Create', 'Artist_Delete', 'Artist_Update', 'Quote_Create', 'Quote_Delete', 'Quote_Update', 'Translation_Create', 'Translation_Delete', 'Translation_Update', 'User_ChangeEmail', 'User_ChangePassword', 'User_Create', 'User_FailedLogin', 'User_Login', 'User_Rename') not null;",
+		);
+		this.addSql(
+			'alter table `audit_log_entries` add constraint `audit_log_entries_artist_id_foreign` foreign key (`artist_id`) references `artists` (`id`) on update cascade on delete set null;',
+		);
+		this.addSql(
+			'alter table `audit_log_entries` add constraint `audit_log_entries_quote_id_foreign` foreign key (`quote_id`) references `quotes` (`id`) on update cascade on delete set null;',
+		);
+		this.addSql(
+			'alter table `audit_log_entries` add index `audit_log_entries_artist_id_index`(`artist_id`);',
+		);
+		this.addSql(
+			'alter table `audit_log_entries` add index `audit_log_entries_quote_id_index`(`quote_id`);',
+		);
 	}
 
 	async down(): Promise<void> {
+		this.addSql(
+			'alter table `audit_log_entries` drop foreign key `audit_log_entries_artist_id_foreign`;',
+		);
+		this.addSql(
+			'alter table `audit_log_entries` drop foreign key `audit_log_entries_quote_id_foreign`;',
+		);
+
+		this.addSql(
+			"alter table `audit_log_entries` modify `action` enum('User_Create', 'User_FailedLogin', 'User_Login', 'Translation_Create', 'User_Rename', 'User_ChangeEmail', 'User_ChangePassword', 'Translation_Update', 'Translation_Delete') not null;",
+		);
+		this.addSql(
+			'alter table `audit_log_entries` drop index `audit_log_entries_artist_id_index`;',
+		);
+		this.addSql(
+			'alter table `audit_log_entries` drop index `audit_log_entries_quote_id_index`;',
+		);
+		this.addSql('alter table `audit_log_entries` drop `artist_id`;');
+		this.addSql('alter table `audit_log_entries` drop `quote_id`;');
+
 		this.addSql(
 			'alter table `quotes` drop foreign key `quotes_artist_id_foreign`;',
 		);

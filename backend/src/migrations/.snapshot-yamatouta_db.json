@@ -1719,208 +1719,6 @@
           "length": 0,
           "mappedType": "datetime"
         },
-        "action": {
-          "name": "action",
-          "type": "enum('User_Create', 'User_FailedLogin', 'User_Login', 'Translation_Create', 'User_Rename', 'User_ChangeEmail', 'User_ChangePassword', 'Translation_Update', 'Translation_Delete')",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "enumItems": [
-            "User_Create",
-            "User_FailedLogin",
-            "User_Login",
-            "Translation_Create",
-            "User_Rename",
-            "User_ChangeEmail",
-            "User_ChangePassword",
-            "Translation_Update",
-            "Translation_Delete"
-          ],
-          "mappedType": "enum"
-        },
-        "actor_id": {
-          "name": "actor_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "actor_ip": {
-          "name": "actor_ip",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "entry_type": {
-          "name": "entry_type",
-          "type": "enum('User', 'Translation', 'Quote', 'Artist', 'Work')",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "enumItems": [
-            "User",
-            "Translation",
-            "Quote",
-            "Artist",
-            "Work"
-          ],
-          "mappedType": "enum"
-        },
-        "old_value": {
-          "name": "old_value",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        },
-        "new_value": {
-          "name": "new_value",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
-        },
-        "translation_id": {
-          "name": "translation_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
-        }
-      },
-      "name": "audit_log_entries",
-      "indexes": [
-        {
-          "columnNames": [
-            "actor_id"
-          ],
-          "composite": false,
-          "keyName": "audit_log_entries_actor_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "entry_type"
-          ],
-          "composite": false,
-          "keyName": "audit_log_entries_entry_type_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "user_id"
-          ],
-          "composite": false,
-          "keyName": "audit_log_entries_user_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "translation_id"
-          ],
-          "composite": false,
-          "keyName": "audit_log_entries_translation_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "keyName": "PRIMARY",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {
-        "audit_log_entries_actor_id_foreign": {
-          "constraintName": "audit_log_entries_actor_id_foreign",
-          "columnNames": [
-            "actor_id"
-          ],
-          "localTableName": "audit_log_entries",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "users",
-          "updateRule": "cascade"
-        },
-        "audit_log_entries_user_id_foreign": {
-          "constraintName": "audit_log_entries_user_id_foreign",
-          "columnNames": [
-            "user_id"
-          ],
-          "localTableName": "audit_log_entries",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "users",
-          "deleteRule": "set null",
-          "updateRule": "cascade"
-        },
-        "audit_log_entries_translation_id_foreign": {
-          "constraintName": "audit_log_entries_translation_id_foreign",
-          "columnNames": [
-            "translation_id"
-          ],
-          "localTableName": "audit_log_entries",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "translations",
-          "deleteRule": "set null",
-          "updateRule": "cascade"
-        }
-      }
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
-        },
         "updated_at": {
           "name": "updated_at",
           "type": "datetime",
@@ -2189,6 +1987,276 @@
             "id"
           ],
           "referencedTableName": "artists",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "action": {
+          "name": "action",
+          "type": "enum('Artist_Create', 'Artist_Delete', 'Artist_Update', 'Quote_Create', 'Quote_Delete', 'Quote_Update', 'Translation_Create', 'Translation_Delete', 'Translation_Update', 'User_ChangeEmail', 'User_ChangePassword', 'User_Create', 'User_FailedLogin', 'User_Login', 'User_Rename')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Artist_Create",
+            "Artist_Delete",
+            "Artist_Update",
+            "Quote_Create",
+            "Quote_Delete",
+            "Quote_Update",
+            "Translation_Create",
+            "Translation_Delete",
+            "Translation_Update",
+            "User_ChangeEmail",
+            "User_ChangePassword",
+            "User_Create",
+            "User_FailedLogin",
+            "User_Login",
+            "User_Rename"
+          ],
+          "mappedType": "enum"
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "actor_ip": {
+          "name": "actor_ip",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "enum('User', 'Translation', 'Quote', 'Artist', 'Work')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "User",
+            "Translation",
+            "Quote",
+            "Artist",
+            "Work"
+          ],
+          "mappedType": "enum"
+        },
+        "old_value": {
+          "name": "old_value",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "new_value": {
+          "name": "new_value",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "translation_id": {
+          "name": "translation_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "artist_id": {
+          "name": "artist_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "quote_id": {
+          "name": "quote_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        }
+      },
+      "name": "audit_log_entries",
+      "indexes": [
+        {
+          "columnNames": [
+            "actor_id"
+          ],
+          "composite": false,
+          "keyName": "audit_log_entries_actor_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "entry_type"
+          ],
+          "composite": false,
+          "keyName": "audit_log_entries_entry_type_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "user_id"
+          ],
+          "composite": false,
+          "keyName": "audit_log_entries_user_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "translation_id"
+          ],
+          "composite": false,
+          "keyName": "audit_log_entries_translation_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "artist_id"
+          ],
+          "composite": false,
+          "keyName": "audit_log_entries_artist_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "quote_id"
+          ],
+          "composite": false,
+          "keyName": "audit_log_entries_quote_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "audit_log_entries_actor_id_foreign": {
+          "constraintName": "audit_log_entries_actor_id_foreign",
+          "columnNames": [
+            "actor_id"
+          ],
+          "localTableName": "audit_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "updateRule": "cascade"
+        },
+        "audit_log_entries_user_id_foreign": {
+          "constraintName": "audit_log_entries_user_id_foreign",
+          "columnNames": [
+            "user_id"
+          ],
+          "localTableName": "audit_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "audit_log_entries_translation_id_foreign": {
+          "constraintName": "audit_log_entries_translation_id_foreign",
+          "columnNames": [
+            "translation_id"
+          ],
+          "localTableName": "audit_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "translations",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "audit_log_entries_artist_id_foreign": {
+          "constraintName": "audit_log_entries_artist_id_foreign",
+          "columnNames": [
+            "artist_id"
+          ],
+          "localTableName": "audit_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "artists",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "audit_log_entries_quote_id_foreign": {
+          "constraintName": "audit_log_entries_quote_id_foreign",
+          "columnNames": [
+            "quote_id"
+          ],
+          "localTableName": "audit_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "quotes",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }
