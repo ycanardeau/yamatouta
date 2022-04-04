@@ -2,6 +2,7 @@ import { Artist } from '../entities/Artist';
 import { Quote } from '../entities/Quote';
 import { Translation } from '../entities/Translation';
 import { ArtistType } from './ArtistType';
+import { IAuthor } from './IAuthor';
 import { QuoteType } from './QuoteType';
 import { WordCategory } from './WordCategory';
 
@@ -33,12 +34,22 @@ export class ArtistSnapshot {
 	}
 }
 
+export class ObjectRefSnapshot<TEntry extends { id: number }> {
+	readonly id: number;
+
+	constructor({ entry }: { entry: TEntry }) {
+		this.id = entry.id;
+	}
+}
+
 export class QuoteSnapshot {
+	readonly artist: ObjectRefSnapshot<Artist>;
 	readonly quoteType: QuoteType;
 	readonly text: string;
 	readonly locale: string;
 
 	constructor({ quote }: { quote: Quote }) {
+		this.artist = new ObjectRefSnapshot<IAuthor>({ entry: quote.author });
 		this.quoteType = quote.quoteType;
 		this.text = quote.text;
 		this.locale = quote.locale;
