@@ -8,8 +8,6 @@ import {
 } from '@mikro-orm/core';
 
 import { ArtistType } from '../models/ArtistType';
-import { AuthorType } from '../models/AuthorType';
-import { IAuthor } from '../models/IAuthor';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
@@ -22,7 +20,6 @@ import { User } from './User';
 @Entity({ tableName: 'artists' })
 export class Artist
 	implements
-		IAuthor,
 		IEntryWithRevisions<Artist, ArtistRevision, ArtistSnapshot>,
 		IRevisionFactory<Artist, ArtistRevision, ArtistSnapshot>
 {
@@ -70,10 +67,6 @@ export class Artist
 	}) {
 		this.name = name;
 		this.artistType = artistType;
-	}
-
-	get authorType(): AuthorType {
-		return AuthorType.Artist;
 	}
 
 	createRevision({

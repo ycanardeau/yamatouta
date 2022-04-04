@@ -3,19 +3,19 @@ import {
 	Embedded,
 	Entity,
 	Enum,
+	ManyToOne,
 	OneToMany,
 	PrimaryKey,
 	Property,
 } from '@mikro-orm/core';
 
-import { AuthorType } from '../models/AuthorType';
-import { IAuthor } from '../models/IAuthor';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { QuoteType } from '../models/QuoteType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { QuoteSnapshot } from '../models/Snapshot';
+import { Artist } from './Artist';
 import { Commit } from './Commit';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
@@ -23,10 +23,8 @@ import { User } from './User';
 
 @Entity({
 	tableName: 'quotes',
-	abstract: true,
-	discriminatorColumn: 'authorType',
 })
-export abstract class Quote
+export class Quote
 	implements
 		IEntryWithRevisions<Quote, QuoteRevision, QuoteSnapshot>,
 		IRevisionFactory<Quote, QuoteRevision, QuoteSnapshot>
@@ -61,8 +59,8 @@ export abstract class Quote
 	@Property({ length: 85 })
 	locale: string;
 
-	@Enum()
-	authorType!: AuthorType;
+	@ManyToOne()
+	artist: Artist;
 
 	@Property()
 	sourceUrl!: string;
@@ -84,21 +82,22 @@ export abstract class Quote
 		return new RevisionManager(this);
 	}
 
-	protected constructor({
+	constructor({
 		quoteType,
 		text,
 		locale,
+		artist,
 	}: {
 		quoteType: QuoteType;
 		text: string;
 		locale: string;
+		artist: Artist;
 	}) {
 		this.quoteType = quoteType;
 		this.text = text;
 		this.locale = locale;
+		this.artist = artist;
 	}
-
-	abstract get author(): IAuthor;
 
 	createRevision({
 		commit,

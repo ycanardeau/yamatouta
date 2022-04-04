@@ -1,5 +1,5 @@
 import { Artist } from '../src/entities/Artist';
-import { ArtistQuote } from '../src/entities/ArtistQuote';
+import { Quote } from '../src/entities/Quote';
 import { Translation } from '../src/entities/Translation';
 import { User } from '../src/entities/User';
 import { ArtistType } from '../src/models/ArtistType';
@@ -89,7 +89,7 @@ export const createTranslation = ({
 	return translation;
 };
 
-export const createArtistQuote = ({
+export const createQuote = ({
 	id,
 	quoteType,
 	text,
@@ -105,8 +105,8 @@ export const createArtistQuote = ({
 	artist: Artist;
 	deleted?: boolean;
 	hidden?: boolean;
-}): ArtistQuote => {
-	const artistQuote = new ArtistQuote({
+}): Quote => {
+	const artistQuote = new Quote({
 		quoteType: quoteType,
 		text: text,
 		locale: locale,

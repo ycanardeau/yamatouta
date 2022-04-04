@@ -63,7 +63,7 @@ const QuoteDetailsLayout = ({
 			<EuiPageHeader pageTitle={quoteText} />
 
 			<EuiCommentList>
-				<EuiComment username={quote.author.name}>
+				<EuiComment username={quote.artist.name}>
 					{quoteText}
 				</EuiComment>
 			</EuiCommentList>

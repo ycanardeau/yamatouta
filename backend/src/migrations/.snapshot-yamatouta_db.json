@@ -2101,18 +2101,14 @@
           "length": 85,
           "mappedType": "string"
         },
-        "author_type": {
-          "name": "author_type",
-          "type": "enum('Artist', 'User')",
-          "unsigned": false,
+        "artist_id": {
+          "name": "artist_id",
+          "type": "int",
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "enumItems": [
-            "Artist",
-            "User"
-          ],
-          "mappedType": "enum"
+          "mappedType": "integer"
         },
         "source_url": {
           "name": "source_url",
@@ -2158,28 +2154,10 @@
           "primary": false,
           "nullable": false,
           "mappedType": "integer"
-        },
-        "artist_id": {
-          "name": "artist_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
         }
       },
       "name": "quotes",
       "indexes": [
-        {
-          "columnNames": [
-            "author_type"
-          ],
-          "composite": false,
-          "keyName": "quotes_author_type_index",
-          "primary": false,
-          "unique": false
-        },
         {
           "columnNames": [
             "artist_id"
@@ -2211,7 +2189,6 @@
             "id"
           ],
           "referencedTableName": "artists",
-          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }

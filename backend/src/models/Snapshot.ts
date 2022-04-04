@@ -2,7 +2,6 @@ import { Artist } from '../entities/Artist';
 import { Quote } from '../entities/Quote';
 import { Translation } from '../entities/Translation';
 import { ArtistType } from './ArtistType';
-import { IAuthor } from './IAuthor';
 import { QuoteType } from './QuoteType';
 import { WordCategory } from './WordCategory';
 
@@ -49,7 +48,7 @@ export class QuoteSnapshot {
 	readonly locale: string;
 
 	constructor({ quote }: { quote: Quote }) {
-		this.artist = new ObjectRefSnapshot<IAuthor>({ entry: quote.author });
+		this.artist = new ObjectRefSnapshot<Artist>({ entry: quote.artist });
 		this.quoteType = quote.quoteType;
 		this.text = quote.text;
 		this.locale = quote.locale;

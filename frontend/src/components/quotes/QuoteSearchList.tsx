@@ -17,9 +17,9 @@ const QuoteSearchList = observer(
 				{store.quotes.map((quote) => (
 					<EuiCommentList key={quote.id}>
 						<EuiComment
-							username={quote.author.name}
+							username={quote.artist.name}
 							timelineIcon={
-								<Avatar size="l" name={quote.author.name} />
+								<Avatar size="l" name={quote.artist.name} />
 							}
 						>
 							{quote.phrases.join('')}
