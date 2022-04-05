@@ -1,7 +1,6 @@
 import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
-	EuiComment,
 	EuiCommentList,
 	EuiPageHeader,
 	EuiSpacer,
@@ -11,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { getQuote } from '../../api/QuoteApi';
+import QuoteComment from '../../components/quotes/QuoteComment';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 
@@ -63,9 +63,7 @@ const QuoteDetailsLayout = ({
 			<EuiPageHeader pageTitle={quoteText} />
 
 			<EuiCommentList>
-				<EuiComment username={quote.artist.name}>
-					{quoteText}
-				</EuiComment>
+				<QuoteComment quote={quote} />
 			</EuiCommentList>
 		</>
 	);

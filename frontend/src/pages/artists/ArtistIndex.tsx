@@ -107,7 +107,9 @@ const ArtistIndex = observer((): React.ReactElement => {
 							>
 								<EuiLink
 									href={`/artists/${artist.id}`}
-									onClick={(e: any): void => {
+									onClick={(
+										e: React.MouseEvent<HTMLAnchorElement>,
+									): void => {
 										e.preventDefault();
 										navigate(`/artists/${artist.id}`);
 									}}
