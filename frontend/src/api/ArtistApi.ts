@@ -7,12 +7,14 @@ import { IPaginationParams } from '../stores/PaginationStore';
 
 export const listArtists = async ({
 	pagination,
+	query,
 }: {
 	pagination: IPaginationParams;
+	query?: string;
 }): Promise<ISearchResultObject<IArtistObject>> => {
 	const response = await axios.get<ISearchResultObject<IArtistObject>>(
 		'/artists',
-		{ params: { ...pagination } },
+		{ params: { ...pagination, query } },
 	);
 
 	return response.data;

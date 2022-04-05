@@ -12,7 +12,7 @@ import { SearchResultObject } from '../../dto/SearchResultObject';
 import { ArtistObject } from '../../dto/artists/ArtistObject';
 import { Artist } from '../../entities/Artist';
 import { ArtistSortRule } from '../../models/ArtistSortRule';
-import { ArtistType } from '../../models/ArtistType';
+import { IListArtistsQuery } from '../../requests/artists/IListArtistsQuery';
 import { PermissionContext } from '../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../filters';
 
@@ -35,20 +35,18 @@ export class ListArtistsService {
 		}
 	}
 
-	async listArtists(params: {
-		artistType?: ArtistType;
-		sort?: ArtistSortRule;
-		offset?: number;
-		limit?: number;
-		getTotalCount?: boolean;
-	}): Promise<SearchResultObject<ArtistObject>> {
-		const { artistType, sort, offset, limit, getTotalCount } = params;
+	async listArtists(
+		params: IListArtistsQuery,
+	): Promise<SearchResultObject<ArtistObject>> {
+		const { artistType, sort, offset, limit, getTotalCount, query } =
+			params;
 
 		const where: FilterQuery<Artist> = {
 			$and: [
 				whereNotDeleted(this.permissionContext),
 				whereNotHidden(this.permissionContext),
 				artistType ? { artistType: artistType } : {},
+				query ? { name: { $like: `%${query}%` } } : {},
 			],
 		};
 
