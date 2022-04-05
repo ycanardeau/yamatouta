@@ -1,16 +1,18 @@
 import { UserGroup } from './UserGroup';
 
 export enum Permission {
-	ViewDeletedEntries = 'ViewDeletedEntries',
-	ViewHiddenEntries = 'ViewHiddenEntries',
-	CreateTranslations = 'CreateTranslations',
-	EditTranslations = 'EditTranslations',
-	ViewEditHistory = 'ViewEditHistory',
-	DeleteTranslations = 'DeleteTranslations',
 	CreateArtists = 'CreateArtists',
-	EditArtists = 'EditArtists',
 	CreateQuotes = 'CreateQuotes',
+	CreateTranslations = 'CreateTranslations',
+	DeleteArtists = 'DeleteArtists',
+	DeleteQuotes = 'DeleteQuotes',
+	DeleteTranslations = 'DeleteTranslations',
+	EditArtists = 'EditArtists',
 	EditQuotes = 'EditQuotes',
+	EditTranslations = 'EditTranslations',
+	ViewDeletedEntries = 'ViewDeletedEntries',
+	ViewEditHistory = 'ViewEditHistory',
+	ViewHiddenEntries = 'ViewHiddenEntries',
 }
 
 const limitedUserPermissions: Permission[] = [];
@@ -25,16 +27,18 @@ const seniorModPermissions: Permission[] = [...modPermissions];
 
 const adminPermissions: Permission[] = [
 	...seniorModPermissions,
+	Permission.CreateArtists,
+	Permission.CreateQuotes,
+	Permission.CreateTranslations,
+	Permission.DeleteArtists,
+	Permission.DeleteQuotes,
+	Permission.DeleteTranslations,
+	Permission.EditArtists,
+	Permission.EditQuotes,
+	Permission.EditTranslations,
 	Permission.ViewDeletedEntries,
 	Permission.ViewHiddenEntries,
-	Permission.CreateTranslations,
-	Permission.EditTranslations,
 	Permission.ViewEditHistory,
-	Permission.DeleteTranslations,
-	Permission.CreateArtists,
-	Permission.EditArtists,
-	Permission.CreateQuotes,
-	Permission.EditQuotes,
 ];
 
 export const userGroupPermissions: Record<UserGroup, Permission[]> = {
