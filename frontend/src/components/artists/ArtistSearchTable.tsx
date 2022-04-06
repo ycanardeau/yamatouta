@@ -1,5 +1,10 @@
 import {
+	EuiButtonIcon,
+	EuiContextMenuItem,
+	EuiContextMenuPanel,
+	EuiIcon,
 	EuiLink,
+	EuiPopover,
 	EuiSpacer,
 	EuiTable,
 	EuiTableBody,
@@ -8,6 +13,13 @@ import {
 	EuiTableRow,
 	EuiTableRowCell,
 } from '@elastic/eui';
+import {
+	DeleteRegular,
+	EditRegular,
+	HistoryRegular,
+	InfoRegular,
+	MoreHorizontalRegular,
+} from '@fluentui/react-icons';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +27,111 @@ import { useNavigate } from 'react-router-dom';
 
 import Avatar from '../../components/Avatar';
 import Pagination from '../../components/Pagination';
+import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
+import { useAuth } from '../useAuth';
+import { useDialog } from '../useDialog';
+
+interface ArtistPopoverProps {
+	store: ArtistSearchStore;
+	artist: IArtistObject;
+}
+
+const ArtistPopover = ({
+	store,
+	artist,
+}: ArtistPopoverProps): React.ReactElement => {
+	const { t } = useTranslation();
+
+	const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+	const togglePopover = (): void => setIsPopoverOpen(!isPopoverOpen);
+	const closePopover = (): void => setIsPopoverOpen(false);
+
+	const navigate = useNavigate();
+
+	const editArtistDialog = useDialog();
+	const deleteArtistDialog = useDialog();
+
+	const auth = useAuth();
+
+	return (
+		<>
+			<EuiPopover
+				button={
+					<EuiButtonIcon
+						iconType={MoreHorizontalRegular}
+						size="xs"
+						color="text"
+						onClick={togglePopover}
+					/>
+				}
+				isOpen={isPopoverOpen}
+				closePopover={closePopover}
+				panelPaddingSize="none"
+				anchorPosition="leftCenter"
+			>
+				<EuiContextMenuPanel>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={InfoRegular} />}
+						href={`/artists/${artist.id}`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(`/artists/${artist.id}`);
+						}}
+					>
+						{t('shared.viewBasicInfo')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={HistoryRegular} />}
+						href={`/artists/${artist.id}/revisions`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(`/artists/${artist.id}/revisions`);
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.ViewEditHistory,
+							)
+						}
+					>
+						{t('shared.viewHistory')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={EditRegular} />}
+						onClick={(): void => {
+							closePopover();
+							editArtistDialog.show();
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.EditArtists,
+							)
+						}
+					>
+						{t('shared.edit')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={DeleteRegular} color="danger" />}
+						onClick={(): void => {
+							closePopover();
+							deleteArtistDialog.show();
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.DeleteArtists,
+							)
+						}
+					>
+						{t('shared.delete')}
+					</EuiContextMenuItem>
+				</EuiContextMenuPanel>
+			</EuiPopover>
+		</>
+	);
+};
 
 interface ArtistSearchTableProps {
 	store: ArtistSearchStore;
@@ -35,6 +151,7 @@ const ArtistSearchTable = observer(
 						<EuiTableHeaderCell>
 							{t('artists.name')}
 						</EuiTableHeaderCell>
+						<EuiTableHeaderCell width={32} />
 					</EuiTableHeader>
 
 					<EuiTableBody>
@@ -63,6 +180,16 @@ const ArtistSearchTable = observer(
 									>
 										{artist.name}
 									</EuiLink>
+								</EuiTableRowCell>
+								<EuiTableRowCell
+									textOnly={false}
+									hasActions={true}
+									align="right"
+								>
+									<ArtistPopover
+										store={store}
+										artist={artist}
+									/>
 								</EuiTableRowCell>
 							</EuiTableRow>
 						))}
