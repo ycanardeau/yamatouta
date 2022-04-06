@@ -23,6 +23,7 @@ import { Permission } from '../../models/Permission';
 import Avatar from '../Avatar';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
+import DeleteQuoteDialog from './DeleteQuoteDialog';
 
 interface QuotePopoverProps {
 	quote: IQuoteObject;
@@ -43,78 +44,88 @@ const QuotePopover = ({ quote }: QuotePopoverProps): React.ReactElement => {
 	const auth = useAuth();
 
 	return (
-		<EuiPopover
-			button={
-				<EuiButtonIcon
-					iconType={MoreHorizontalRegular}
-					size="xs"
-					color="text"
-					onClick={togglePopover}
+		<>
+			<EuiPopover
+				button={
+					<EuiButtonIcon
+						iconType={MoreHorizontalRegular}
+						size="xs"
+						color="text"
+						onClick={togglePopover}
+					/>
+				}
+				isOpen={isPopoverOpen}
+				closePopover={closePopover}
+				panelPaddingSize="none"
+				anchorPosition="leftCenter"
+			>
+				<EuiContextMenuPanel>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={InfoRegular} />}
+						href={`/quotes/${quote.id}`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(`/quotes/${quote.id}`);
+						}}
+					>
+						{t('shared.viewBasicInfo')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={HistoryRegular} />}
+						href={`/quotes/${quote.id}/revisions`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(`/quotes/${quote.id}/revisions`);
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.ViewEditHistory,
+							)
+						}
+					>
+						{t('shared.viewHistory')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={EditRegular} />}
+						onClick={(): void => {
+							closePopover();
+							editQuoteDialog.show();
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.EditQuotes,
+							)
+						}
+					>
+						{t('shared.edit')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
+						icon={<EuiIcon type={DeleteRegular} color="danger" />}
+						onClick={(): void => {
+							closePopover();
+							deleteQuoteDialog.show();
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.DeleteQuotes,
+							)
+						}
+					>
+						{t('shared.delete')}
+					</EuiContextMenuItem>
+				</EuiContextMenuPanel>
+			</EuiPopover>
+
+			{deleteQuoteDialog.visible && (
+				<DeleteQuoteDialog
+					quote={quote}
+					onClose={deleteQuoteDialog.close}
+					onSuccess={async (): Promise<void> => {}}
 				/>
-			}
-			isOpen={isPopoverOpen}
-			closePopover={closePopover}
-			panelPaddingSize="none"
-			anchorPosition="leftCenter"
-		>
-			<EuiContextMenuPanel>
-				<EuiContextMenuItem
-					icon={<EuiIcon type={InfoRegular} />}
-					href={`/quotes/${quote.id}`}
-					onClick={(e): void => {
-						e.preventDefault();
-						closePopover();
-						navigate(`/quotes/${quote.id}`);
-					}}
-				>
-					{t('shared.viewBasicInfo')}
-				</EuiContextMenuItem>
-				<EuiContextMenuItem
-					icon={<EuiIcon type={HistoryRegular} />}
-					href={`/quotes/${quote.id}/revisions`}
-					onClick={(e): void => {
-						e.preventDefault();
-						closePopover();
-						navigate(`/quotes/${quote.id}/revisions`);
-					}}
-					disabled={
-						!auth.permissionContext.hasPermission(
-							Permission.ViewEditHistory,
-						)
-					}
-				>
-					{t('shared.viewHistory')}
-				</EuiContextMenuItem>
-				<EuiContextMenuItem
-					icon={<EuiIcon type={EditRegular} />}
-					onClick={(): void => {
-						closePopover();
-						editQuoteDialog.show();
-					}}
-					disabled={
-						!auth.permissionContext.hasPermission(
-							Permission.EditQuotes,
-						)
-					}
-				>
-					{t('shared.edit')}
-				</EuiContextMenuItem>
-				<EuiContextMenuItem
-					icon={<EuiIcon type={DeleteRegular} color="danger" />}
-					onClick={(): void => {
-						closePopover();
-						deleteQuoteDialog.show();
-					}}
-					disabled={
-						!auth.permissionContext.hasPermission(
-							Permission.DeleteQuotes,
-						)
-					}
-				>
-					{t('shared.delete')}
-				</EuiContextMenuItem>
-			</EuiContextMenuPanel>
-		</EuiPopover>
+			)}
+		</>
 	);
 };
 

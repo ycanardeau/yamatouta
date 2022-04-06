@@ -2,7 +2,9 @@
 	"artists": {
 		"addArtist": "Add Artist",
 		"artistType": "Type",
-		"name": "Name"
+		"name": "Name",
+		"deleteArtist": "Delete Artist",
+		"deleteDialogSubtitle": "Are you sure you want to delete this artist?"
 	},
 	"artistTypeNames": {
 		"Person": "Person",
@@ -110,7 +112,9 @@
 		"quote": "Quote",
 		"quoteType": "Type",
 		"artist": "Artist",
-		"selectArtist": "Select an artist..."
+		"selectArtist": "Select an artist...",
+		"deleteQuote": "Delete Quote",
+		"deleteDialogSubtitle": "Are you sure you want to delete this quote?"
 	},
 	"quoteTypeNames": {
 		"Word": "Word",

@@ -74,3 +74,11 @@ export const updateQuote = async ({
 
 	return response.data;
 };
+
+export const deleteQuote = async ({
+	quoteId,
+}: {
+	quoteId: number;
+}): Promise<void> => {
+	await axios.delete<void>(`/quotes/${quoteId}`);
+};

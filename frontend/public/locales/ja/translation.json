@@ -2,7 +2,9 @@
 	"artists": {
 		"addArtist": "うたよみをかきたす",
 		"artistType": "くさわい",
-		"name": "なまえ"
+		"name": "なまえ",
+		"deleteArtist": "うたよみをけす",
+		"deleteDialogSubtitle": "このうたよみをけしてもよろしいですか?"
 	},
 	"artistTypeNames": {
 		"Person": "ひと",
@@ -108,7 +110,9 @@
 		"quote": "やまとうた",
 		"quoteType": "くさわい",
 		"artist": "うたよみ",
-		"selectArtist": "うたよみをえらぶ..."
+		"selectArtist": "うたよみをえらぶ...",
+		"deleteQuote": "やまとうたをけす",
+		"deleteDialogSubtitle": "このやまとうたをけしてもよろしいですか?"
 	},
 	"quoteTypeNames": {
 		"Word": "ことば",

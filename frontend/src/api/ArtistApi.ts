@@ -61,3 +61,11 @@ export const updateArtist = async ({
 
 	return response.data;
 };
+
+export const deleteArtist = async ({
+	artistId,
+}: {
+	artistId: number;
+}): Promise<void> => {
+	await axios.delete<void>(`/artists/${artistId}`);
+};
