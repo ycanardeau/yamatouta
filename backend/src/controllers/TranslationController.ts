@@ -22,10 +22,10 @@ import {
 	updateTranslationBodySchema,
 	IUpdateTranslationBody,
 } from '../requests/translations/IUpdateTranslationBody';
+import { ListTranslationRevisionsService } from '../services/revisions/ListRevisionsService';
 import { CreateTranslationService } from '../services/translations/CreateTranslationService';
 import { DeleteTranslationService } from '../services/translations/DeleteTranslationService';
 import { GetTranslationService } from '../services/translations/GetTranslationService';
-import { ListTranslationRevisionsService } from '../services/translations/ListTranslationRevisionsService';
 import { ListTranslationsService } from '../services/translations/ListTranslationsService';
 import { UpdateTranslationService } from '../services/translations/UpdateTranslationService';
 
@@ -86,7 +86,7 @@ export class TranslationController {
 	listTranslationRevisions(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listTranslationRevisionsService.listTranslationRevisions(
+		return this.listTranslationRevisionsService.listRevisions(
 			translationId,
 		);
 	}

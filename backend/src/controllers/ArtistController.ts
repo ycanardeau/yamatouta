@@ -10,6 +10,7 @@ import {
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { ArtistObject } from '../dto/artists/ArtistObject';
+import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import {
 	IListArtistsQuery,
@@ -22,6 +23,7 @@ import {
 import { CreateArtistService } from '../services/artists/CreateArtistService';
 import { GetArtistService } from '../services/artists/GetArtistService';
 import { ListArtistsService } from '../services/artists/ListArtistsService';
+import { ListArtistRevisionsService } from '../services/revisions/ListRevisionsService';
 
 @Controller('artists')
 export class ArtistController {
@@ -29,6 +31,7 @@ export class ArtistController {
 		private readonly createArtistService: CreateArtistService,
 		private readonly listArtistsService: ListArtistsService,
 		private readonly getArtistService: GetArtistService,
+		private readonly listArtistRevisionsService: ListArtistRevisionsService,
 	) {}
 
 	@Post()
@@ -52,5 +55,12 @@ export class ArtistController {
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<ArtistObject> {
 		return this.getArtistService.getArtist(artistId);
+	}
+
+	@Get(':artistId/revisions')
+	listArtistRevisions(
+		@Param('artistId', ParseIntPipe) artistId: number,
+	): Promise<SearchResultObject<RevisionObject>> {
+		return this.listArtistRevisionsService.listRevisions(artistId);
 	}
 }

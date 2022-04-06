@@ -10,6 +10,7 @@ import {
 
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { QuoteObject } from '../dto/quotes/QuoteObject';
+import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import {
 	IListQuotesQuery,
@@ -22,6 +23,7 @@ import {
 import { CreateQuoteService } from '../services/quotes/CreateQuoteService';
 import { GetQuoteService } from '../services/quotes/GetQuoteService';
 import { ListQuotesService } from '../services/quotes/ListQuotesService';
+import { ListQuoteRevisionsService } from '../services/revisions/ListRevisionsService';
 
 @Controller('quotes')
 export class QuoteController {
@@ -29,6 +31,7 @@ export class QuoteController {
 		private readonly createQuoteService: CreateQuoteService,
 		private readonly listQuotesService: ListQuotesService,
 		private readonly getQuoteService: GetQuoteService,
+		private readonly listQuoteRevisionsService: ListQuoteRevisionsService,
 	) {}
 
 	@Post()
@@ -52,5 +55,12 @@ export class QuoteController {
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<QuoteObject> {
 		return this.getQuoteService.getQuote(quoteId);
+	}
+
+	@Get(':quoteId/revisions')
+	listQuoteRevisions(
+		@Param('quoteId', ParseIntPipe) quoteId: number,
+	): Promise<SearchResultObject<RevisionObject>> {
+		return this.listQuoteRevisionsService.listRevisions(quoteId);
 	}
 }

@@ -22,6 +22,7 @@ import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { Permission } from '../../models/Permission';
 import QuoteBasicInfo from './QuoteBasicInfo';
+import QuoteHistory from './QuoteHistory';
 
 interface BreadcrumbsProps {
 	quote: IQuoteObject;
@@ -111,6 +112,10 @@ const Layout = ({ quote }: LayoutProps): React.ReactElement => {
 
 			<Routes>
 				<Route path="" element={<QuoteBasicInfo quote={quote} />} />
+				<Route
+					path="revisions"
+					element={<QuoteHistory quote={quote} />}
+				/>
 			</Routes>
 		</>
 	);

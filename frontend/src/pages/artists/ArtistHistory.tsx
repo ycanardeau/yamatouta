@@ -1,10 +1,10 @@
 import { EuiCommentList } from '@elastic/eui';
 import React from 'react';
 
-import { listTranslationRevisions } from '../../api/RevisionApi';
+import { listArtistRevisions } from '../../api/RevisionApi';
 import RevisionComment from '../../components/revisions/RevisionComment';
+import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { IRevisionObject } from '../../dto/revisions/IRevisionObject';
-import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 
 interface LayoutProps {
 	revisions: IRevisionObject[];
@@ -20,23 +20,23 @@ const Layout = ({ revisions }: LayoutProps): React.ReactElement => {
 	);
 };
 
-interface TranslationHistoryProps {
-	translation: ITranslationObject;
+interface ArtistHistoryProps {
+	artist: IArtistObject;
 }
 
-const TranslationHistory = ({
-	translation,
-}: TranslationHistoryProps): React.ReactElement | null => {
+const ArtistHistory = ({
+	artist,
+}: ArtistHistoryProps): React.ReactElement | null => {
 	const [model, setModel] =
 		React.useState<{ revisions: IRevisionObject[] }>();
 
 	React.useEffect(() => {
-		listTranslationRevisions({ translationId: translation.id }).then(
-			(result) => setModel({ revisions: result.items }),
+		listArtistRevisions({ artistId: artist.id }).then((result) =>
+			setModel({ revisions: result.items }),
 		);
-	}, [translation]);
+	}, [artist]);
 
 	return model ? <Layout revisions={model.revisions} /> : null;
 };
 
-export default TranslationHistory;
+export default ArtistHistory;

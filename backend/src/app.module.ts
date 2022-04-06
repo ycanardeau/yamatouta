@@ -30,10 +30,14 @@ import { CreateQuoteService } from './services/quotes/CreateQuoteService';
 import { GetQuoteService } from './services/quotes/GetQuoteService';
 import { ListQuoteIdsService } from './services/quotes/ListQuoteIdsService';
 import { ListQuotesService } from './services/quotes/ListQuotesService';
+import {
+	ListArtistRevisionsService,
+	ListQuoteRevisionsService,
+	ListTranslationRevisionsService,
+} from './services/revisions/ListRevisionsService';
 import { CreateTranslationService } from './services/translations/CreateTranslationService';
 import { DeleteTranslationService } from './services/translations/DeleteTranslationService';
 import { GetTranslationService } from './services/translations/GetTranslationService';
-import { ListTranslationRevisionsService } from './services/translations/ListTranslationRevisionsService';
 import { ListTranslationsService } from './services/translations/ListTranslationsService';
 import { UpdateTranslationService } from './services/translations/UpdateTranslationService';
 import { AuthenticateUserService } from './services/users/AuthenticateUserService';
@@ -79,9 +83,11 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		GetTranslationService,
 		GetUserService,
 		ListArtistIdsService,
+		ListArtistRevisionsService,
 		ListArtistsService,
-		ListQuotesService,
 		ListQuoteIdsService,
+		ListQuoteRevisionsService,
+		ListQuotesService,
 		ListTranslationRevisionsService,
 		ListTranslationsService,
 		ListUsersService,

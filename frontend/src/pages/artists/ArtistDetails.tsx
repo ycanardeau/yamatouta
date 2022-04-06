@@ -26,6 +26,7 @@ import { useAuth } from '../../components/useAuth';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { Permission } from '../../models/Permission';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
+import ArtistHistory from './ArtistHistory';
 
 const ArtistQuotes = lazyWithRetry(() => import('./ArtistQuotes'));
 
@@ -129,6 +130,10 @@ const Layout = ({ artist, store }: LayoutProps): React.ReactElement => {
 				<Route
 					path="quotes"
 					element={<ArtistQuotes artist={artist} store={store} />}
+				/>
+				<Route
+					path="revisions"
+					element={<ArtistHistory artist={artist} />}
 				/>
 			</Routes>
 		</>
