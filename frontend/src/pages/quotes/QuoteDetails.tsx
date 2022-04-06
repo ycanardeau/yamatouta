@@ -1,18 +1,27 @@
 import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
-	EuiCommentList,
+	EuiIcon,
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
+import { HistoryRegular, InfoRegular } from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+	Route,
+	Routes,
+	useLocation,
+	useNavigate,
+	useParams,
+} from 'react-router-dom';
 
 import { getQuote } from '../../api/QuoteApi';
-import QuoteComment from '../../components/quotes/QuoteComment';
+import { useAuth } from '../../components/useAuth';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { Permission } from '../../models/Permission';
+import QuoteBasicInfo from './QuoteBasicInfo';
 
 interface BreadcrumbsProps {
 	quote: IQuoteObject;
@@ -45,26 +54,64 @@ const Breadcrumbs = ({ quote }: BreadcrumbsProps): React.ReactElement => {
 	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
 };
 
-interface QuoteDetailsLayoutProps {
+interface LayoutProps {
 	quote: IQuoteObject;
 }
 
-const QuoteDetailsLayout = ({
-	quote,
-}: QuoteDetailsLayoutProps): React.ReactElement => {
+const Layout = ({ quote }: LayoutProps): React.ReactElement => {
+	const { t } = useTranslation();
+
 	const quoteText = quote.phrases.join('');
 
 	useYamatoutaTitle(quoteText, true);
+
+	const navigate = useNavigate();
+	const { pathname } = useLocation();
+
+	const tab = pathname.split('/')[3];
+
+	const auth = useAuth();
 
 	return (
 		<>
 			<Breadcrumbs quote={quote} />
 			<EuiSpacer size="xs" />
-			<EuiPageHeader pageTitle={quoteText} />
+			<EuiPageHeader
+				pageTitle={quoteText}
+				tabs={[
+					{
+						href: `/quotes/${quote.id}`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/quotes/${quote.id}`);
+						},
+						prepend: <EuiIcon type={InfoRegular} />,
+						isSelected: !tab,
+						label: t('shared.basicInfo'),
+					},
+					{
+						href: `/quotes/${quote.id}/revisions`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/quotes/${quote.id}/revisions`);
+						},
+						prepend: <EuiIcon type={HistoryRegular} />,
+						isSelected: tab === 'revisions',
+						disabled: !auth.permissionContext.hasPermission(
+							Permission.ViewEditHistory,
+						),
+						label: t('shared.revisions'),
+					},
+				]}
+			/>
 
-			<EuiCommentList>
-				<QuoteComment quote={quote} />
-			</EuiCommentList>
+			<Routes>
+				<Route path="" element={<QuoteBasicInfo quote={quote} />} />
+			</Routes>
 		</>
 	);
 };
@@ -82,7 +129,7 @@ const QuoteDetails = (): React.ReactElement | null => {
 		);
 	}, [quoteId]);
 
-	return model ? <QuoteDetailsLayout quote={model.quote} /> : null;
+	return model ? <Layout quote={model.quote} /> : null;
 };
 
 export default QuoteDetails;

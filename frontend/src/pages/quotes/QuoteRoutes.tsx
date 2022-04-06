@@ -10,7 +10,7 @@ const QuoteRoutes = (): React.ReactElement => {
 	return (
 		<Routes>
 			<Route path="" element={<QuoteIndex />} />
-			<Route path=":quoteId" element={<QuoteDetails />} />
+			<Route path=":quoteId/*" element={<QuoteDetails />} />
 		</Routes>
 	);
 };
