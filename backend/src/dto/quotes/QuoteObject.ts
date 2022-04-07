@@ -8,10 +8,10 @@ export class QuoteObject {
 	readonly deleted: boolean;
 	readonly hidden: boolean;
 	readonly quoteType: QuoteType;
-	readonly phrases: string[];
-	readonly locale?: string;
+	readonly text: string;
+	readonly locale: string;
 	readonly artist: ArtistObject;
-	readonly sourceUrl?: string;
+	readonly sourceUrl: string;
 
 	constructor(quote: Quote, permissionContext: PermissionContext) {
 		permissionContext.verifyDeletedAndHidden(quote);
@@ -20,7 +20,7 @@ export class QuoteObject {
 		this.deleted = quote.deleted;
 		this.hidden = quote.hidden;
 		this.quoteType = quote.quoteType;
-		this.phrases = quote.text.split('\n');
+		this.text = quote.text;
 		this.locale = quote.locale;
 		this.artist = new ArtistObject(quote.artist, permissionContext);
 		this.sourceUrl = quote.sourceUrl;

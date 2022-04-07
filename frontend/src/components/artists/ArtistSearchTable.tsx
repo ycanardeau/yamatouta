@@ -33,6 +33,7 @@ import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import DeleteArtistDialog from './DeleteArtistDialog';
+import EditArtistDialog from './EditArtistDialog';
 
 interface ArtistPopoverProps {
 	store: ArtistSearchStore;
@@ -130,6 +131,16 @@ const ArtistPopover = ({
 					</EuiContextMenuItem>
 				</EuiContextMenuPanel>
 			</EuiPopover>
+
+			{editArtistDialog.visible && (
+				<EditArtistDialog
+					artist={artist}
+					onClose={editArtistDialog.close}
+					onSuccess={async (): Promise<void> => {
+						await store.updateResults(true);
+					}}
+				/>
+			)}
 
 			{deleteArtistDialog.visible && (
 				<DeleteArtistDialog

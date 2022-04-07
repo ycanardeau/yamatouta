@@ -5,6 +5,7 @@ import {
 	Get,
 	Param,
 	ParseIntPipe,
+	Patch,
 	Post,
 	Query,
 } from '@nestjs/common';
@@ -26,6 +27,7 @@ import { ListQuoteRevisionsService } from '../services/entries/ListEntryRevision
 import { CreateQuoteService } from '../services/quotes/CreateQuoteService';
 import { GetQuoteService } from '../services/quotes/GetQuoteService';
 import { ListQuotesService } from '../services/quotes/ListQuotesService';
+import { UpdateQuoteService } from '../services/quotes/UpdateQuoteService';
 
 @Controller('quotes')
 export class QuoteController {
@@ -33,6 +35,7 @@ export class QuoteController {
 		private readonly createQuoteService: CreateQuoteService,
 		private readonly listQuotesService: ListQuotesService,
 		private readonly getQuoteService: GetQuoteService,
+		private readonly updateQuoteService: UpdateQuoteService,
 		private readonly deleteQuoteService: DeleteQuoteService,
 		private readonly listQuoteRevisionsService: ListQuoteRevisionsService,
 	) {}
@@ -58,6 +61,15 @@ export class QuoteController {
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<QuoteObject> {
 		return this.getQuoteService.getQuote(quoteId);
+	}
+
+	@Patch(':quoteId')
+	updateQuote(
+		@Param('quoteId', ParseIntPipe) quoteId: number,
+		@Body(new JoiValidationPipe(updateQuoteBodySchema))
+		body: IUpdateQuoteBody,
+	): Promise<QuoteObject> {
+		return this.updateQuoteService.updateQuote(quoteId, body);
 	}
 
 	@Delete(':quoteId')

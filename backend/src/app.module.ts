@@ -21,6 +21,7 @@ import { CreateArtistService } from './services/artists/CreateArtistService';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistIdsService } from './services/artists/ListArtistIdsService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
+import { UpdateArtistService } from './services/artists/UpdateArtistService';
 import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
 import { LoginService } from './services/auth/LoginService';
@@ -40,6 +41,7 @@ import { CreateQuoteService } from './services/quotes/CreateQuoteService';
 import { GetQuoteService } from './services/quotes/GetQuoteService';
 import { ListQuoteIdsService } from './services/quotes/ListQuoteIdsService';
 import { ListQuotesService } from './services/quotes/ListQuotesService';
+import { UpdateQuoteService } from './services/quotes/UpdateQuoteService';
 import { CreateTranslationService } from './services/translations/CreateTranslationService';
 import { GetTranslationService } from './services/translations/GetTranslationService';
 import { ListTranslationsService } from './services/translations/ListTranslationsService';
@@ -106,6 +108,8 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		PasswordHasherFactory,
 		PermissionContext,
 		UpdateAuthenticatedUserService,
+		UpdateArtistService,
+		UpdateQuoteService,
 		UpdateTranslationService,
 	],
 })

@@ -20,6 +20,11 @@ export class EditArtistDialogStore {
 		makeObservable(this);
 
 		this.artist = artist;
+
+		if (artist) {
+			this.name = artist.name;
+			this.artistType = artist.artistType;
+		}
 	}
 
 	@computed get isValid(): boolean {

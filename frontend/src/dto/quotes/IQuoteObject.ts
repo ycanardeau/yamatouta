@@ -1,9 +1,12 @@
+import { QuoteType } from '../../models/QuoteType';
 import { IArtistObject } from '../artists/IArtistObject';
 
 export interface IQuoteObject {
 	id: number;
 	createdAt: Date;
-	phrases: string[];
+	text: string;
+	quoteType: QuoteType;
+	locale: string;
 	artist: IArtistObject;
-	sourceUrl?: string;
+	sourceUrl: string;
 }

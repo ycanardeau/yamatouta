@@ -46,8 +46,6 @@ const EditQuoteDialog = observer(
 		const [options, setOptions] = React.useState<EuiComboBoxOptionOption[]>(
 			[],
 		);
-		const [selectedOptions, setSelected] =
-			React.useState<EuiComboBoxOptionOption[]>();
 
 		const handleSearchChange = React.useCallback(
 			async (searchValue: string): Promise<void> => {
@@ -135,12 +133,20 @@ const EditQuoteDialog = observer(
 								placeholder={t('quotes.selectArtist')}
 								singleSelection={{ asPlainText: true }}
 								options={options}
-								selectedOptions={selectedOptions}
+								selectedOptions={
+									store.artist.entry
+										? [
+												{
+													key: store.artist.entry.id.toString(),
+													label: store.artist.entry
+														.name,
+												},
+										  ]
+										: []
+								}
 								onChange={async (
 									selectedOptions,
 								): Promise<void> => {
-									setSelected(selectedOptions);
-
 									await store.artist.loadEntryById(
 										Number(selectedOptions[0]?.key),
 									);

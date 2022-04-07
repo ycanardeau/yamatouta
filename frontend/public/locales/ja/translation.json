@@ -1,6 +1,7 @@
 {
 	"artists": {
 		"addArtist": "うたよみをかきたす",
+		"editArtist": "うたよみをかきかえる",
 		"artistType": "くさわい",
 		"name": "なまえ",
 		"deleteArtist": "うたよみをけす",
@@ -107,6 +108,7 @@
 	},
 	"quotes": {
 		"addQuote": "やまとうたをかきたす",
+		"editQuote": "やまとうたをかきかえる",
 		"quote": "やまとうた",
 		"quoteType": "くさわい",
 		"artist": "うたよみ",

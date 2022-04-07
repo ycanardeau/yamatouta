@@ -1,9 +1,10 @@
 {
 	"artists": {
-		"addArtist": "Add Artist",
+		"addArtist": "Add artist",
+		"editArtist": "Edit artist",
 		"artistType": "Type",
 		"name": "Name",
-		"deleteArtist": "Delete Artist",
+		"deleteArtist": "Delete artist",
 		"deleteDialogSubtitle": "Are you sure you want to delete this artist?"
 	},
 	"artistTypeNames": {
@@ -61,7 +62,7 @@
 		"sortBy": "Sort by",
 		"viewOnInishienomanabi": "View on Inishienomanabi",
 		"editWord": "Edit word",
-		"deleteWord": "Delete Word",
+		"deleteWord": "Delete word",
 		"deleteDialogSubtitle": "Are you sure you want to delete this word?"
 	},
 	"wordCategoryNames": {
@@ -109,11 +110,12 @@
 	},
 	"quotes": {
 		"addQuote": "Add quote",
+		"editQuote": "Edit quote",
 		"quote": "Quote",
 		"quoteType": "Type",
 		"artist": "Artist",
 		"selectArtist": "Select an artist...",
-		"deleteQuote": "Delete Quote",
+		"deleteQuote": "Delete quote",
 		"deleteDialogSubtitle": "Are you sure you want to delete this quote?"
 	},
 	"quoteTypeNames": {

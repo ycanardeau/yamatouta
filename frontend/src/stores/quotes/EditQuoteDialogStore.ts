@@ -27,6 +27,13 @@ export class EditQuoteDialogStore {
 		makeObservable(this);
 
 		this.quote = quote;
+
+		if (quote) {
+			this.text = quote.text;
+			this.quoteType = quote.quoteType;
+			this.locale = quote.locale;
+			this.artist.loadEntryById(quote.artist.id);
+		}
 	}
 
 	@computed get isValid(): boolean {
@@ -49,7 +56,7 @@ export class EditQuoteDialogStore {
 				text: this.text,
 				quoteType: this.quoteType,
 				locale: this.locale,
-				artistId: this.artist.id ?? 0,
+				artistId: this.artist.entry?.id ?? 0,
 			};
 
 			// Await.

@@ -25,6 +25,7 @@ import Avatar from '../Avatar';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import DeleteQuoteDialog from './DeleteQuoteDialog';
+import EditQuoteDialog from './EditQuoteDialog';
 
 interface QuotePopoverProps {
 	store?: QuoteSearchStore;
@@ -123,6 +124,16 @@ const QuotePopover = ({
 				</EuiContextMenuPanel>
 			</EuiPopover>
 
+			{editQuoteDialog.visible && (
+				<EditQuoteDialog
+					quote={quote}
+					onClose={editQuoteDialog.close}
+					onSuccess={async (): Promise<void> => {
+						await store?.updateResults(true);
+					}}
+				/>
+			)}
+
 			{deleteQuoteDialog.visible && (
 				<DeleteQuoteDialog
 					quote={quote}
@@ -145,8 +156,6 @@ const QuoteComment = ({
 	store,
 	quote,
 }: QuoteCommentProps): React.ReactElement => {
-	const quoteText = quote.phrases.join('');
-
 	const navigate = useNavigate();
 
 	return (
@@ -167,7 +176,7 @@ const QuoteComment = ({
 			timelineIcon={<Avatar size="l" name={quote.artist.name} />}
 			actions={<QuotePopover store={store} quote={quote} />}
 		>
-			{quoteText}
+			{quote.text}
 		</EuiComment>
 	);
 };

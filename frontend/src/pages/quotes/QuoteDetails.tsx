@@ -43,7 +43,7 @@ const Breadcrumbs = ({ quote }: BreadcrumbsProps): React.ReactElement => {
 			},
 		},
 		{
-			text: quote.phrases.join(''),
+			text: quote.text,
 			href: `/quotes/${quote.id}`,
 			onClick: (e): void => {
 				e.preventDefault();
@@ -62,9 +62,7 @@ interface LayoutProps {
 const Layout = ({ quote }: LayoutProps): React.ReactElement => {
 	const { t } = useTranslation();
 
-	const quoteText = quote.phrases.join('');
-
-	useYamatoutaTitle(quoteText, true);
+	useYamatoutaTitle(quote.text, true);
 
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
@@ -78,7 +76,7 @@ const Layout = ({ quote }: LayoutProps): React.ReactElement => {
 			<Breadcrumbs quote={quote} />
 			<EuiSpacer size="xs" />
 			<EuiPageHeader
-				pageTitle={quoteText}
+				pageTitle={quote.text}
 				tabs={[
 					{
 						href: `/quotes/${quote.id}`,

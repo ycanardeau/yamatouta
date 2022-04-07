@@ -65,7 +65,6 @@ export const updateQuote = async ({
 	artistId: number;
 }): Promise<IQuoteObject> => {
 	const response = await axios.patch<IQuoteObject>(`/quotes/${quoteId}`, {
-		quoteId,
 		text,
 		quoteType,
 		locale,

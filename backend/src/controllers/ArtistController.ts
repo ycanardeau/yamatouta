@@ -5,6 +5,7 @@ import {
 	Get,
 	Param,
 	ParseIntPipe,
+	Patch,
 	Post,
 	Query,
 } from '@nestjs/common';
@@ -24,6 +25,7 @@ import {
 import { CreateArtistService } from '../services/artists/CreateArtistService';
 import { GetArtistService } from '../services/artists/GetArtistService';
 import { ListArtistsService } from '../services/artists/ListArtistsService';
+import { UpdateArtistService } from '../services/artists/UpdateArtistService';
 import { DeleteArtistService } from '../services/entries/DeleteEntryService';
 import { ListArtistRevisionsService } from '../services/entries/ListEntryRevisionsService';
 
@@ -33,6 +35,7 @@ export class ArtistController {
 		private readonly createArtistService: CreateArtistService,
 		private readonly listArtistsService: ListArtistsService,
 		private readonly getArtistService: GetArtistService,
+		private readonly updateArtistService: UpdateArtistService,
 		private readonly deleteArtistService: DeleteArtistService,
 		private readonly listArtistRevisionsService: ListArtistRevisionsService,
 	) {}
@@ -58,6 +61,15 @@ export class ArtistController {
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<ArtistObject> {
 		return this.getArtistService.getArtist(artistId);
+	}
+
+	@Patch(':artistId')
+	updateArtist(
+		@Param('artistId', ParseIntPipe) artistId: number,
+		@Body(new JoiValidationPipe(updateArtistBodySchema))
+		body: IUpdateArtistBody,
+	): Promise<ArtistObject> {
+		return this.updateArtistService.updateArtist(artistId, body);
 	}
 
 	@Delete(':artistId')
