@@ -16,7 +16,7 @@ const QuoteSearchList = observer(
 			<>
 				{store.quotes.map((quote) => (
 					<EuiCommentList key={quote.id}>
-						<QuoteComment quote={quote} />
+						<QuoteComment store={store} quote={quote} />
 					</EuiCommentList>
 				))}
 

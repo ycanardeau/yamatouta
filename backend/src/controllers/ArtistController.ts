@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	Param,
 	ParseIntPipe,
@@ -23,7 +24,8 @@ import {
 import { CreateArtistService } from '../services/artists/CreateArtistService';
 import { GetArtistService } from '../services/artists/GetArtistService';
 import { ListArtistsService } from '../services/artists/ListArtistsService';
-import { ListArtistRevisionsService } from '../services/revisions/ListRevisionsService';
+import { DeleteArtistService } from '../services/entries/DeleteEntryService';
+import { ListArtistRevisionsService } from '../services/entries/ListEntryRevisionsService';
 
 @Controller('artists')
 export class ArtistController {
@@ -31,6 +33,7 @@ export class ArtistController {
 		private readonly createArtistService: CreateArtistService,
 		private readonly listArtistsService: ListArtistsService,
 		private readonly getArtistService: GetArtistService,
+		private readonly deleteArtistService: DeleteArtistService,
 		private readonly listArtistRevisionsService: ListArtistRevisionsService,
 	) {}
 
@@ -57,10 +60,17 @@ export class ArtistController {
 		return this.getArtistService.getArtist(artistId);
 	}
 
+	@Delete(':artistId')
+	deleteArtist(
+		@Param('artistId', ParseIntPipe) artistId: number,
+	): Promise<void> {
+		return this.deleteArtistService.deleteEntry(artistId);
+	}
+
 	@Get(':artistId/revisions')
 	listArtistRevisions(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listArtistRevisionsService.listRevisions(artistId);
+		return this.listArtistRevisionsService.listEntryRevisions(artistId);
 	}
 }

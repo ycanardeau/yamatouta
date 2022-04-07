@@ -20,16 +20,21 @@ import { useNavigate } from 'react-router-dom';
 
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { Permission } from '../../models/Permission';
+import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 import Avatar from '../Avatar';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import DeleteQuoteDialog from './DeleteQuoteDialog';
 
 interface QuotePopoverProps {
+	store?: QuoteSearchStore;
 	quote: IQuoteObject;
 }
 
-const QuotePopover = ({ quote }: QuotePopoverProps): React.ReactElement => {
+const QuotePopover = ({
+	store,
+	quote,
+}: QuotePopoverProps): React.ReactElement => {
 	const { t } = useTranslation();
 
 	const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
@@ -122,7 +127,9 @@ const QuotePopover = ({ quote }: QuotePopoverProps): React.ReactElement => {
 				<DeleteQuoteDialog
 					quote={quote}
 					onClose={deleteQuoteDialog.close}
-					onSuccess={async (): Promise<void> => {}}
+					onSuccess={async (): Promise<void> => {
+						await store?.updateResults(true);
+					}}
 				/>
 			)}
 		</>
@@ -130,10 +137,14 @@ const QuotePopover = ({ quote }: QuotePopoverProps): React.ReactElement => {
 };
 
 interface QuoteCommentProps {
+	store?: QuoteSearchStore;
 	quote: IQuoteObject;
 }
 
-const QuoteComment = ({ quote }: QuoteCommentProps): React.ReactElement => {
+const QuoteComment = ({
+	store,
+	quote,
+}: QuoteCommentProps): React.ReactElement => {
 	const quoteText = quote.phrases.join('');
 
 	const navigate = useNavigate();
@@ -154,7 +165,7 @@ const QuoteComment = ({ quote }: QuoteCommentProps): React.ReactElement => {
 				</EuiLink>
 			}
 			timelineIcon={<Avatar size="l" name={quote.artist.name} />}
-			actions={<QuotePopover quote={quote} />}
+			actions={<QuotePopover store={store} quote={quote} />}
 		>
 			{quoteText}
 		</EuiComment>

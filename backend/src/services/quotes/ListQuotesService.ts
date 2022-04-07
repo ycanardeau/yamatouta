@@ -14,7 +14,7 @@ import { Quote } from '../../entities/Quote';
 import { QuoteSortRule } from '../../models/QuoteSortRule';
 import { QuoteType } from '../../models/QuoteType';
 import { PermissionContext } from '../PermissionContext';
-import { whereNotDeleted, whereNotHidden } from '../filters';
+import { whereNotHidden } from '../filters';
 
 @Injectable()
 export class ListQuotesService {
@@ -48,7 +48,7 @@ export class ListQuotesService {
 
 		const where: FilterQuery<Quote> = {
 			$and: [
-				whereNotDeleted(this.permissionContext),
+				{ deleted: false },
 				whereNotHidden(this.permissionContext),
 				{ $not: { quoteType: QuoteType.Word } },
 				quoteType ? { quoteType: quoteType } : {},

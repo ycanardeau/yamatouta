@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	Param,
 	ParseIntPipe,
@@ -20,10 +21,11 @@ import {
 	IUpdateQuoteBody,
 	updateQuoteBodySchema,
 } from '../requests/quotes/IUpdateQuoteBody';
+import { DeleteQuoteService } from '../services/entries/DeleteEntryService';
+import { ListQuoteRevisionsService } from '../services/entries/ListEntryRevisionsService';
 import { CreateQuoteService } from '../services/quotes/CreateQuoteService';
 import { GetQuoteService } from '../services/quotes/GetQuoteService';
 import { ListQuotesService } from '../services/quotes/ListQuotesService';
-import { ListQuoteRevisionsService } from '../services/revisions/ListRevisionsService';
 
 @Controller('quotes')
 export class QuoteController {
@@ -31,6 +33,7 @@ export class QuoteController {
 		private readonly createQuoteService: CreateQuoteService,
 		private readonly listQuotesService: ListQuotesService,
 		private readonly getQuoteService: GetQuoteService,
+		private readonly deleteQuoteService: DeleteQuoteService,
 		private readonly listQuoteRevisionsService: ListQuoteRevisionsService,
 	) {}
 
@@ -57,10 +60,17 @@ export class QuoteController {
 		return this.getQuoteService.getQuote(quoteId);
 	}
 
+	@Delete(':quoteId')
+	deleteQuote(
+		@Param('quoteId', ParseIntPipe) quoteId: number,
+	): Promise<void> {
+		return this.deleteQuoteService.deleteEntry(quoteId);
+	}
+
 	@Get(':quoteId/revisions')
 	listQuoteRevisions(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listQuoteRevisionsService.listRevisions(quoteId);
+		return this.listQuoteRevisionsService.listEntryRevisions(quoteId);
 	}
 }

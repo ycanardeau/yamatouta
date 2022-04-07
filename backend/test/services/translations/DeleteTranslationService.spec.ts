@@ -10,7 +10,7 @@ import { RevisionEvent } from '../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { AuditLogService } from '../../../src/services/AuditLogService';
-import { DeleteTranslationService } from '../../../src/services/translations/DeleteTranslationService';
+import { DeleteTranslationService } from '../../../src/services/entries/DeleteEntryService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createTranslation, createUser } from '../../createEntry';
@@ -72,14 +72,14 @@ describe('DeleteTranslationService', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			translationRepo as any,
 			auditLogService,
+			translationRepo as any,
 		);
 	});
 
 	describe('deleteTranslation', () => {
 		const testDeleteTranslation = async (): Promise<void> => {
-			await deleteTranslationService.deleteTranslation(translation.id);
+			await deleteTranslationService.deleteEntry(translation.id);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof TranslationRevision,
@@ -127,12 +127,12 @@ describe('DeleteTranslationService', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					translationRepo as any,
 					auditLogService,
+					translationRepo as any,
 				);
 
 				await expect(
-					deleteTranslationService.deleteTranslation(translation.id),
+					deleteTranslationService.deleteEntry(translation.id),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

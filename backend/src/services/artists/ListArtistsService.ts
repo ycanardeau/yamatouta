@@ -14,7 +14,7 @@ import { Artist } from '../../entities/Artist';
 import { ArtistSortRule } from '../../models/ArtistSortRule';
 import { IListArtistsQuery } from '../../requests/artists/IListArtistsQuery';
 import { PermissionContext } from '../PermissionContext';
-import { whereNotDeleted, whereNotHidden } from '../filters';
+import { whereNotHidden } from '../filters';
 
 @Injectable()
 export class ListArtistsService {
@@ -43,7 +43,7 @@ export class ListArtistsService {
 
 		const where: FilterQuery<Artist> = {
 			$and: [
-				whereNotDeleted(this.permissionContext),
+				{ deleted: false },
 				whereNotHidden(this.permissionContext),
 				artistType ? { artistType: artistType } : {},
 				query ? { name: { $like: `%${query}%` } } : {},

@@ -12,14 +12,13 @@ import { Permission } from '../../models/Permission';
 import { PermissionContext } from '../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../filters';
 
-@Injectable()
-export abstract class ListRevisionsService<TEntry extends Entry> {
+abstract class ListEntryRevisionsService<TEntry extends Entry> {
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly entryFunc: (entryId: number) => Promise<TEntry>,
 	) {}
 
-	async listRevisions(
+	async listEntryRevisions(
 		entryId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
 		this.permissionContext.verifyPermission(Permission.ViewEditHistory);
@@ -50,39 +49,39 @@ export abstract class ListRevisionsService<TEntry extends Entry> {
 }
 
 @Injectable()
-export class ListTranslationRevisionsService extends ListRevisionsService<Translation> {
+export class ListTranslationRevisionsService extends ListEntryRevisionsService<Translation> {
 	constructor(
 		permissionContext: PermissionContext,
 		@InjectRepository(Translation)
 		translationRepo: EntityRepository<Translation>,
 	) {
-		super(permissionContext, async (entryId) =>
+		super(permissionContext, (entryId) =>
 			translationRepo.findOneOrFail({ id: entryId }),
 		);
 	}
 }
 
 @Injectable()
-export class ListArtistRevisionsService extends ListRevisionsService<Artist> {
+export class ListArtistRevisionsService extends ListEntryRevisionsService<Artist> {
 	constructor(
 		permissionContext: PermissionContext,
 		@InjectRepository(Artist)
 		artistRepo: EntityRepository<Artist>,
 	) {
-		super(permissionContext, async (entryId) =>
+		super(permissionContext, (entryId) =>
 			artistRepo.findOneOrFail({ id: entryId }),
 		);
 	}
 }
 
 @Injectable()
-export class ListQuoteRevisionsService extends ListRevisionsService<Quote> {
+export class ListQuoteRevisionsService extends ListEntryRevisionsService<Quote> {
 	constructor(
 		permissionContext: PermissionContext,
 		@InjectRepository(Quote)
 		quoteRepo: EntityRepository<Quote>,
 	) {
-		super(permissionContext, async (entryId) =>
+		super(permissionContext, (entryId) =>
 			quoteRepo.findOneOrFail({ id: entryId }),
 		);
 	}
