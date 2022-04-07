@@ -42,16 +42,16 @@ export class ObjectRefSnapshot<TEntry extends { id: number }> {
 }
 
 export class QuoteSnapshot {
-	readonly artist: ObjectRefSnapshot<Artist>;
-	readonly quoteType: QuoteType;
 	readonly text: string;
+	readonly quoteType: QuoteType;
 	readonly locale: string;
+	readonly artist: ObjectRefSnapshot<Artist>;
 
 	constructor({ quote }: { quote: Quote }) {
-		this.artist = new ObjectRefSnapshot<Artist>({ entry: quote.artist });
-		this.quoteType = quote.quoteType;
 		this.text = quote.text;
+		this.quoteType = quote.quoteType;
 		this.locale = quote.locale;
+		this.artist = new ObjectRefSnapshot<Artist>({ entry: quote.artist });
 	}
 }
 
