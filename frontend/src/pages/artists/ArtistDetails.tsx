@@ -5,14 +5,11 @@ import {
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
-import {
-	HistoryRegular,
-	InfoRegular,
-	MusicNote2Regular,
-} from '@fluentui/react-icons';
+import { HistoryRegular, MusicNote2Regular } from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+	Navigate,
 	Route,
 	Routes,
 	useLocation,
@@ -91,20 +88,8 @@ const Layout = ({ artist, store }: LayoutProps): React.ReactElement => {
 							e.preventDefault();
 							navigate(`/artists/${artist.id}`);
 						},
-						prepend: <EuiIcon type={InfoRegular} />,
-						isSelected: !tab,
-						label: t('shared.basicInfo'),
-					},
-					{
-						href: `/artists/${artist.id}/quotes`,
-						onClick: (
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/artists/${artist.id}/quotes`);
-						},
 						prepend: <EuiIcon type={MusicNote2Regular} />,
-						isSelected: tab === 'quotes',
+						isSelected: !tab,
 						label: t('shared.quotes'),
 					},
 					{
@@ -126,10 +111,13 @@ const Layout = ({ artist, store }: LayoutProps): React.ReactElement => {
 			/>
 
 			<Routes>
-				<Route path="" element={<></>} />
+				<Route
+					path=""
+					element={<ArtistQuotes artist={artist} store={store} />}
+				/>
 				<Route
 					path="quotes"
-					element={<ArtistQuotes artist={artist} store={store} />}
+					element={<Navigate to={`/artists/${artist.id}`} replace />}
 				/>
 				<Route
 					path="revisions"
