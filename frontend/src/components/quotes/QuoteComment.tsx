@@ -163,12 +163,12 @@ const QuoteComment = ({
 			username={
 				<EuiLink
 					color="text"
+					style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
 					href={`/artists/${quote.artist.id}`}
 					onClick={(e: React.MouseEvent<HTMLAnchorElement>): void => {
 						e.preventDefault();
 						navigate(`/artists/${quote.artist.id}`);
 					}}
-					style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
 				>
 					{quote.artist.name}
 				</EuiLink>

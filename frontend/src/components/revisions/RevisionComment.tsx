@@ -1,4 +1,10 @@
-import { EuiComment, EuiFlexGroup, EuiFlexItem, EuiIcon } from '@elastic/eui';
+import {
+	EuiComment,
+	EuiFlexGroup,
+	EuiFlexItem,
+	EuiIcon,
+	EuiLink,
+} from '@elastic/eui';
 import {
 	AddCircleRegular,
 	DeleteRegular,
@@ -6,6 +12,7 @@ import {
 } from '@fluentui/react-icons';
 import moment from 'moment';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Avatar from '../../components/Avatar';
 import { IRevisionObject } from '../../dto/revisions/IRevisionObject';
@@ -35,6 +42,8 @@ interface RevisionCommentProps {
 const RevisionComment = ({
 	revision,
 }: RevisionCommentProps): React.ReactElement => {
+	const navigate = useNavigate();
+
 	return (
 		<EuiComment
 			username={
@@ -51,7 +60,22 @@ const RevisionComment = ({
 						/>
 					</EuiFlexItem>
 					<EuiFlexItem grow={false}>
-						{revision.actor.name}
+						<EuiLink
+							color="text"
+							style={{
+								fontSize: 'inherit',
+								fontWeight: 'inherit',
+							}}
+							href={`/users/${revision.actor.id}`}
+							onClick={(
+								e: React.MouseEvent<HTMLAnchorElement>,
+							): void => {
+								e.preventDefault();
+								navigate(`/users/${revision.actor.id}`);
+							}}
+						>
+							{revision.actor.name}
+						</EuiLink>
 					</EuiFlexItem>
 				</EuiFlexGroup>
 			}
