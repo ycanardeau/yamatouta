@@ -3,6 +3,7 @@ import { UserGroup } from './UserGroup';
 export enum Permission {
 	CreateArtists = 'CreateArtists',
 	CreateQuotes = 'CreateQuotes',
+	CreateRevisions = 'CreateRevisions',
 	CreateTranslations = 'CreateTranslations',
 	DeleteArtists = 'DeleteArtists',
 	DeleteQuotes = 'DeleteQuotes',
@@ -29,6 +30,7 @@ const adminPermissions: Permission[] = [
 	...seniorModPermissions,
 	Permission.CreateArtists,
 	Permission.CreateQuotes,
+	Permission.CreateRevisions,
 	Permission.CreateTranslations,
 	Permission.DeleteArtists,
 	Permission.DeleteQuotes,

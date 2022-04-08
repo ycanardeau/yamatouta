@@ -2,6 +2,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 
+import { AdminController } from './controllers/AdminController';
 import { ArtistController } from './controllers/ArtistController';
 import { AuthController } from './controllers/AuthController';
 import { QuoteController } from './controllers/QuoteController';
@@ -17,6 +18,7 @@ import { NgramConverter } from './helpers/NgramConverter';
 import { AuditLogService } from './services/AuditLogService';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { PermissionContext } from './services/PermissionContext';
+import { CreateRevisionsService } from './services/admin/CreateRevisionsService';
 import { CreateArtistService } from './services/artists/CreateArtistService';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistIdsService } from './services/artists/ListArtistIdsService';
@@ -67,6 +69,7 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		PassportModule,
 	],
 	controllers: [
+		AdminController,
 		AuthController,
 		ArtistController,
 		QuoteController,
@@ -79,6 +82,7 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		AuthenticateUserService,
 		CreateArtistService,
 		CreateQuoteService,
+		CreateRevisionsService,
 		CreateTranslationService,
 		CreateUserService,
 		DeleteArtistService,
