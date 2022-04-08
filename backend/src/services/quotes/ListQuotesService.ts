@@ -10,12 +10,11 @@ import { Injectable } from '@nestjs/common';
 
 import { SearchResultObject } from '../../dto/SearchResultObject';
 import { QuoteObject } from '../../dto/quotes/QuoteObject';
-import { ArtistQuote } from '../../entities/ArtistQuote';
 import { Quote } from '../../entities/Quote';
 import { QuoteSortRule } from '../../models/QuoteSortRule';
 import { QuoteType } from '../../models/QuoteType';
 import { PermissionContext } from '../PermissionContext';
-import { whereNotDeleted, whereNotHidden } from '../filters';
+import { whereNotHidden } from '../filters';
 
 @Injectable()
 export class ListQuotesService {
@@ -25,7 +24,7 @@ export class ListQuotesService {
 
 	constructor(
 		@InjectRepository(Quote)
-		private readonly quoteRepo: EntityRepository<ArtistQuote>,
+		private readonly quoteRepo: EntityRepository<Quote>,
 		private readonly permissionContext: PermissionContext,
 	) {}
 
@@ -47,9 +46,9 @@ export class ListQuotesService {
 		const { quoteType, sort, offset, limit, getTotalCount, artistId } =
 			params;
 
-		const where: FilterQuery<ArtistQuote> = {
+		const where: FilterQuery<Quote> = {
 			$and: [
-				whereNotDeleted(this.permissionContext),
+				{ deleted: false },
 				whereNotHidden(this.permissionContext),
 				{ $not: { quoteType: QuoteType.Word } },
 				quoteType ? { quoteType: quoteType } : {},
@@ -57,7 +56,7 @@ export class ListQuotesService {
 			],
 		};
 
-		const options: FindOptions<ArtistQuote, 'artist'> = {
+		const options: FindOptions<Quote, 'artist'> = {
 			limit: limit
 				? Math.min(limit, ListQuotesService.maxLimit)
 				: ListQuotesService.defaultLimit,

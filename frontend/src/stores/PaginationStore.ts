@@ -1,4 +1,3 @@
-// Code from: https://github.com/VocaDB/vocadb/blob/7778877a5f0daafdfbd2f92b9387d6897fd5fa9c/VocaDbWeb/Scripts/Stores/ServerSidePagingStore.ts
 import { action, computed, makeObservable, observable } from 'mobx';
 
 export interface IPaginationParams {
@@ -7,6 +6,7 @@ export interface IPaginationParams {
 	getTotalCount: boolean;
 }
 
+// Code from: https://github.com/VocaDB/vocadb/blob/961d8bdb631321f3f9b2fd65c94d5b61b779663e/VocaDbWeb/Scripts/ViewModels/ServerSidePagingViewModel.ts.
 export class PaginationStore {
 	@observable page = 1;
 	@observable totalItems = 0;

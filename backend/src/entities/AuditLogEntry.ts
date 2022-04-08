@@ -2,6 +2,8 @@ import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { AuditedAction } from '../models/AuditedAction';
 import { EntryType } from '../models/EntryType';
+import { Artist } from './Artist';
+import { Quote } from './Quote';
 import { Translation } from './Translation';
 import { User } from './User';
 
@@ -120,5 +122,75 @@ export class TranslationAuditLogEntry extends AuditLogEntry {
 		});
 
 		this.translation = translation;
+	}
+}
+
+@Entity({
+	tableName: 'audit_log_entries',
+	discriminatorValue: EntryType.Artist,
+})
+export class ArtistAuditLogEntry extends AuditLogEntry {
+	@ManyToOne()
+	artist: Artist;
+
+	constructor({
+		action,
+		actor,
+		actorIp,
+		oldValue,
+		newValue,
+		artist,
+	}: {
+		action: AuditedAction;
+		actor: User;
+		actorIp: string;
+		oldValue: string;
+		newValue: string;
+		artist: Artist;
+	}) {
+		super({
+			action: action,
+			actor: actor,
+			actorIp: actorIp,
+			oldValue: oldValue,
+			newValue: newValue,
+		});
+
+		this.artist = artist;
+	}
+}
+
+@Entity({
+	tableName: 'audit_log_entries',
+	discriminatorValue: EntryType.Artist,
+})
+export class QuoteAuditLogEntry extends AuditLogEntry {
+	@ManyToOne()
+	quote: Quote;
+
+	constructor({
+		action,
+		actor,
+		actorIp,
+		oldValue,
+		newValue,
+		quote,
+	}: {
+		action: AuditedAction;
+		actor: User;
+		actorIp: string;
+		oldValue: string;
+		newValue: string;
+		quote: Quote;
+	}) {
+		super({
+			action: action,
+			actor: actor,
+			actorIp: actorIp,
+			oldValue: oldValue,
+			newValue: newValue,
+		});
+
+		this.quote = quote;
 	}
 }

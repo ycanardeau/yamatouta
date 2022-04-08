@@ -83,7 +83,9 @@ const UserIndex = observer((): React.ReactElement => {
 							>
 								<EuiLink
 									href={`/users/${user.id}`}
-									onClick={(e: any): void => {
+									onClick={(
+										e: React.MouseEvent<HTMLAnchorElement>,
+									): void => {
 										e.preventDefault();
 										navigate(`/users/${user.id}`);
 									}}

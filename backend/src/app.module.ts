@@ -2,6 +2,7 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 
+import { AdminController } from './controllers/AdminController';
 import { ArtistController } from './controllers/ArtistController';
 import { AuthController } from './controllers/AuthController';
 import { QuoteController } from './controllers/QuoteController';
@@ -17,21 +18,34 @@ import { NgramConverter } from './helpers/NgramConverter';
 import { AuditLogService } from './services/AuditLogService';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { PermissionContext } from './services/PermissionContext';
+import { CreateMissingRevisionsService } from './services/admin/CreateMissingRevisionsService';
+import { CreateArtistService } from './services/artists/CreateArtistService';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistIdsService } from './services/artists/ListArtistIdsService';
 import { ListArtistsService } from './services/artists/ListArtistsService';
+import { UpdateArtistService } from './services/artists/UpdateArtistService';
 import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
 import { LoginService } from './services/auth/LoginService';
 import { LogoutService } from './services/auth/LogoutService';
+import {
+	DeleteArtistService,
+	DeleteQuoteService,
+	DeleteTranslationService,
+} from './services/entries/DeleteEntryService';
+import {
+	ListArtistRevisionsService,
+	ListQuoteRevisionsService,
+	ListTranslationRevisionsService,
+} from './services/entries/ListEntryRevisionsService';
 import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasherFactory';
+import { CreateQuoteService } from './services/quotes/CreateQuoteService';
 import { GetQuoteService } from './services/quotes/GetQuoteService';
 import { ListQuoteIdsService } from './services/quotes/ListQuoteIdsService';
 import { ListQuotesService } from './services/quotes/ListQuotesService';
+import { UpdateQuoteService } from './services/quotes/UpdateQuoteService';
 import { CreateTranslationService } from './services/translations/CreateTranslationService';
-import { DeleteTranslationService } from './services/translations/DeleteTranslationService';
 import { GetTranslationService } from './services/translations/GetTranslationService';
-import { ListTranslationRevisionsService } from './services/translations/ListTranslationRevisionsService';
 import { ListTranslationsService } from './services/translations/ListTranslationsService';
 import { UpdateTranslationService } from './services/translations/UpdateTranslationService';
 import { AuthenticateUserService } from './services/users/AuthenticateUserService';
@@ -55,6 +69,7 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		PassportModule,
 	],
 	controllers: [
+		AdminController,
 		AuthController,
 		ArtistController,
 		QuoteController,
@@ -65,8 +80,13 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 	providers: [
 		AuditLogService,
 		AuthenticateUserService,
+		CreateArtistService,
+		CreateMissingRevisionsService,
+		CreateQuoteService,
 		CreateTranslationService,
 		CreateUserService,
+		DeleteArtistService,
+		DeleteQuoteService,
 		DeleteTranslationService,
 		GenerateSitemapService,
 		GetArtistService,
@@ -75,9 +95,11 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		GetTranslationService,
 		GetUserService,
 		ListArtistIdsService,
+		ListArtistRevisionsService,
 		ListArtistsService,
-		ListQuotesService,
 		ListQuoteIdsService,
+		ListQuoteRevisionsService,
+		ListQuotesService,
 		ListTranslationRevisionsService,
 		ListTranslationsService,
 		ListUsersService,
@@ -90,6 +112,8 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		PasswordHasherFactory,
 		PermissionContext,
 		UpdateAuthenticatedUserService,
+		UpdateArtistService,
+		UpdateQuoteService,
 		UpdateTranslationService,
 	],
 })

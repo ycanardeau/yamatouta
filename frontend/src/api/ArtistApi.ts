@@ -7,12 +7,14 @@ import { IPaginationParams } from '../stores/PaginationStore';
 
 export const listArtists = async ({
 	pagination,
+	query,
 }: {
 	pagination: IPaginationParams;
+	query?: string;
 }): Promise<ISearchResultObject<IArtistObject>> => {
 	const response = await axios.get<ISearchResultObject<IArtistObject>>(
 		'/artists',
-		{ params: { ...pagination } },
+		{ params: { ...pagination, query } },
 	);
 
 	return response.data;
@@ -41,4 +43,29 @@ export const createArtist = async ({
 	});
 
 	return response.data;
+};
+
+export const updateArtist = async ({
+	artistId,
+	name,
+	artistType,
+}: {
+	artistId: number;
+	name: string;
+	artistType: ArtistType;
+}): Promise<IArtistObject> => {
+	const response = await axios.patch<IArtistObject>(`/artists/${artistId}`, {
+		name,
+		artistType,
+	});
+
+	return response.data;
+};
+
+export const deleteArtist = async ({
+	artistId,
+}: {
+	artistId: number;
+}): Promise<void> => {
+	await axios.delete<void>(`/artists/${artistId}`);
 };

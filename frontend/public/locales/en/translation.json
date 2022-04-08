@@ -1,8 +1,11 @@
 {
 	"artists": {
-		"addArtist": "Add Artist",
+		"addArtist": "Add artist",
+		"editArtist": "Edit artist",
 		"artistType": "Type",
-		"name": "Name"
+		"name": "Name",
+		"deleteArtist": "Delete artist",
+		"deleteDialogSubtitle": "Are you sure you want to delete this artist?"
 	},
 	"artistTypeNames": {
 		"Person": "Person",
@@ -59,7 +62,7 @@
 		"sortBy": "Sort by",
 		"viewOnInishienomanabi": "View on Inishienomanabi",
 		"editWord": "Edit word",
-		"deleteWord": "Delete Word",
+		"deleteWord": "Delete word",
 		"deleteDialogSubtitle": "Are you sure you want to delete this word?"
 	},
 	"wordCategoryNames": {
@@ -104,5 +107,25 @@
 		"changeEmailDialogSubtitle": "Enter a new email address and your existing password.",
 		"changeUsernameDialogTitle": "Change your username",
 		"changeUsernameDialogSubtitle": "Enter a new username and your existing password."
+	},
+	"quotes": {
+		"addQuote": "Add quote",
+		"editQuote": "Edit quote",
+		"quote": "Quote",
+		"quoteType": "Type",
+		"artist": "Artist",
+		"selectArtist": "Select an artist...",
+		"deleteQuote": "Delete quote",
+		"deleteDialogSubtitle": "Are you sure you want to delete this quote?"
+	},
+	"quoteTypeNames": {
+		"Word": "Word",
+		"Haiku": "Haiku",
+		"Tanka": "Tanka",
+		"Lyrics": "Lyrics",
+		"Other": "Other"
+	},
+	"admin": {
+		"createMissingRevisions": "Create missing revisions"
 	}
 }

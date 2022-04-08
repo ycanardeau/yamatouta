@@ -4,16 +4,16 @@ import { QuoteObject } from '../../../src/dto/quotes/QuoteObject';
 import { ArtistType } from '../../../src/models/ArtistType';
 import { QuoteType } from '../../../src/models/QuoteType';
 import { FakePermissionContext } from '../../FakePermissionContext';
-import { createArtist, createArtistQuote, createUser } from '../../createEntry';
+import { createArtist, createQuote, createUser } from '../../createEntry';
 
-test('ArtistQuoteObject', async () => {
+test('QuoteObject', async () => {
 	const artist = createArtist({
 		id: 1,
 		name: 'artist',
 		artistType: ArtistType.Person,
 	});
 
-	const artistQuote = createArtistQuote({
+	const artistQuote = createQuote({
 		id: 2,
 		quoteType: QuoteType.Tanka,
 		text: 'quote',
@@ -21,7 +21,7 @@ test('ArtistQuoteObject', async () => {
 		artist: artist,
 	});
 
-	const deletedArtistQuote = createArtistQuote({
+	const deletedQuote = createQuote({
 		id: 3,
 		quoteType: QuoteType.Tanka,
 		text: 'deleted',
@@ -30,7 +30,7 @@ test('ArtistQuoteObject', async () => {
 		deleted: true,
 	});
 
-	const hiddenArtistQuote = createArtistQuote({
+	const hiddenQuote = createQuote({
 		id: 4,
 		quoteType: QuoteType.Tanka,
 		text: 'hidden',
@@ -50,14 +50,14 @@ test('ArtistQuoteObject', async () => {
 	const quoteObject = new QuoteObject(artistQuote, permissionContext);
 	expect(quoteObject.id).toBe(artistQuote.id);
 	expect(quoteObject.quoteType).toBe(artistQuote.quoteType);
-	expect(quoteObject.author.id).toBe(artist.id);
-	expect(quoteObject.author.name).toBe(artist.name);
+	expect(quoteObject.artist.id).toBe(artist.id);
+	expect(quoteObject.artist.name).toBe(artist.name);
 
-	expect(
-		() => new QuoteObject(deletedArtistQuote, permissionContext),
-	).toThrow(NotFoundException);
+	expect(() => new QuoteObject(deletedQuote, permissionContext)).toThrow(
+		NotFoundException,
+	);
 
-	expect(() => new QuoteObject(hiddenArtistQuote, permissionContext)).toThrow(
+	expect(() => new QuoteObject(hiddenQuote, permissionContext)).toThrow(
 		NotFoundException,
 	);
 });

@@ -36,7 +36,5 @@ lerna-debug.log*
 
 /temp
 /tmp
-appsettings.development.json
-appsettings.production.json
-appsettings.test.json
+appsettings.*.json
 .env

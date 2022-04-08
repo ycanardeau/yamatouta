@@ -1,8 +1,11 @@
 {
 	"artists": {
 		"addArtist": "うたよみをかきたす",
+		"editArtist": "うたよみをかきかえる",
 		"artistType": "くさわい",
-		"name": "なまえ"
+		"name": "なまえ",
+		"deleteArtist": "うたよみをけす",
+		"deleteDialogSubtitle": "このうたよみをけしてもよろしいですか?"
 	},
 	"artistTypeNames": {
 		"Person": "ひと",
@@ -102,5 +105,21 @@
 		"changeEmailDialogSubtitle": "あたらしいくものたよりと いまのあいことばを いれてください。",
 		"changeUsernameDialogTitle": "なまえをかえる",
 		"changeUsernameDialogSubtitle": "あたらしいなまえと いまのあいことばを いれてください。"
+	},
+	"quotes": {
+		"addQuote": "やまとうたをかきたす",
+		"editQuote": "やまとうたをかきかえる",
+		"quote": "やまとうた",
+		"quoteType": "くさわい",
+		"artist": "うたよみ",
+		"selectArtist": "うたよみをえらぶ...",
+		"deleteQuote": "やまとうたをけす",
+		"deleteDialogSubtitle": "このやまとうたをけしてもよろしいですか?"
+	},
+	"quoteTypeNames": {
+		"Word": "ことば",
+		"Tanka": "みじかうた",
+		"Lyrics": "うたことば",
+		"Other": "そのほか"
 	}
 }

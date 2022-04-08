@@ -1,14 +1,12 @@
-export interface IAuthorObject {
-	id: number;
-	authorType: 'artist' | 'user';
-	name: string;
-	avatarUrl?: string;
-}
+import { QuoteType } from '../../models/QuoteType';
+import { IArtistObject } from '../artists/IArtistObject';
 
 export interface IQuoteObject {
 	id: number;
 	createdAt: Date;
-	phrases: string[];
-	author: IAuthorObject;
-	sourceUrl?: string;
+	text: string;
+	quoteType: QuoteType;
+	locale: string;
+	artist: IArtistObject;
+	sourceUrl: string;
 }

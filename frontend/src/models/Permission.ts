@@ -1,8 +1,14 @@
 export enum Permission {
-	ViewDeletedEntries = 'ViewDeletedEntries',
-	ViewHiddenEntries = 'ViewHiddenEntries',
+	CreateArtists = 'CreateArtists',
+	CreateQuotes = 'CreateQuotes',
 	CreateTranslations = 'CreateTranslations',
-	EditTranslations = 'EditTranslations',
-	ViewEditHistory = 'ViewEditHistory',
+	DeleteArtists = 'DeleteArtists',
+	DeleteQuotes = 'DeleteQuotes',
 	DeleteTranslations = 'DeleteTranslations',
+	EditArtists = 'EditArtists',
+	EditQuotes = 'EditQuotes',
+	EditTranslations = 'EditTranslations',
+	ViewDeletedEntries = 'ViewDeletedEntries',
+	ViewEditHistory = 'ViewEditHistory',
+	ViewHiddenEntries = 'ViewHiddenEntries',
 }
