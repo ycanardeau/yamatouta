@@ -1,4 +1,4 @@
-import { Collection, QueryOrder } from '@mikro-orm/core';
+import { Collection } from '@mikro-orm/core';
 
 import { Revision } from '../entities/Revision';
 import { Entry } from './Entry';
@@ -21,13 +21,5 @@ export class RevisionManager<
 
 	get revisions(): Collection<TRevision> {
 		return this.entry.revisions;
-	}
-
-	async getLatestRevision(): Promise<TRevision | undefined> {
-		return (
-			await this.revisions.matching({
-				orderBy: { version: QueryOrder.DESC },
-			})
-		).at(0);
 	}
 }
