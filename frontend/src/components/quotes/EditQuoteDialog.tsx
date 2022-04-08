@@ -105,6 +105,7 @@ const EditQuoteDialog = observer(
 								onChange={(e): void =>
 									store.setText(e.target.value)
 								}
+								rows={5}
 							/>
 						</EuiFormRow>
 

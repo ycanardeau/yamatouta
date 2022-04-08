@@ -176,7 +176,7 @@ const QuoteComment = ({
 			timelineIcon={<Avatar size="l" name={quote.artist.name} />}
 			actions={<QuotePopover store={store} quote={quote} />}
 		>
-			{quote.text}
+			{quote.text.replaceAll('\n', '')}
 		</EuiComment>
 	);
 };
