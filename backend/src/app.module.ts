@@ -18,7 +18,7 @@ import { NgramConverter } from './helpers/NgramConverter';
 import { AuditLogService } from './services/AuditLogService';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { PermissionContext } from './services/PermissionContext';
-import { CreateRevisionsService } from './services/admin/CreateRevisionsService';
+import { CreateMissingRevisionsService } from './services/admin/CreateMissingRevisionsService';
 import { CreateArtistService } from './services/artists/CreateArtistService';
 import { GetArtistService } from './services/artists/GetArtistService';
 import { ListArtistIdsService } from './services/artists/ListArtistIdsService';
@@ -81,8 +81,8 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		AuditLogService,
 		AuthenticateUserService,
 		CreateArtistService,
+		CreateMissingRevisionsService,
 		CreateQuoteService,
-		CreateRevisionsService,
 		CreateTranslationService,
 		CreateUserService,
 		DeleteArtistService,

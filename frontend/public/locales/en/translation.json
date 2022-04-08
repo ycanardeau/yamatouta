@@ -126,6 +126,6 @@
 		"Other": "Other"
 	},
 	"admin": {
-		"createRevisions": "Create revisions"
+		"createMissingRevisions": "Create missing revisions"
 	}
 }

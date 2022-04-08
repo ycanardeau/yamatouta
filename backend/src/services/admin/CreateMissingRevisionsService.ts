@@ -12,14 +12,16 @@ import { RevisionEvent } from '../../models/RevisionEvent';
 import { PermissionContext } from '../PermissionContext';
 
 @Injectable()
-export class CreateRevisionsService {
+export class CreateMissingRevisionsService {
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 	) {}
 
-	createRevisions(): Promise<void> {
-		this.permissionContext.verifyPermission(Permission.CreateRevisions);
+	createMissingRevisions(): Promise<void> {
+		this.permissionContext.verifyPermission(
+			Permission.CreateMissingRevisions,
+		);
 
 		return this.em.transactional(async (em) => {
 			const user = await this.em.findOneOrFail(User, {

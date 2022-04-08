@@ -1,15 +1,15 @@
 import { Controller, Post } from '@nestjs/common';
 
-import { CreateRevisionsService } from '../services/admin/CreateRevisionsService';
+import { CreateMissingRevisionsService } from '../services/admin/CreateMissingRevisionsService';
 
 @Controller('admin')
 export class AdminController {
 	constructor(
-		private readonly createRevisionsService: CreateRevisionsService,
+		private readonly createMissingRevisionsService: CreateMissingRevisionsService,
 	) {}
 
-	@Post('create-revisions')
-	createRevisions(): Promise<void> {
-		return this.createRevisionsService.createRevisions();
+	@Post('create-missing-revisions')
+	createMissingRevisions(): Promise<void> {
+		return this.createMissingRevisionsService.createMissingRevisions();
 	}
 }
