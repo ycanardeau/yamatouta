@@ -2,6 +2,8 @@ import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
 	EuiButton,
+	EuiPageContent,
+	EuiPageContentBody,
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
@@ -77,20 +79,30 @@ const TranslationIndex = observer((): React.ReactElement => {
 				]}
 			/>
 
-			<TranslationSearchOptions store={store} />
+			<EuiPageContent
+				hasBorder={false}
+				hasShadow={false}
+				paddingSize="none"
+				color="transparent"
+				borderRadius="none"
+			>
+				<EuiPageContentBody>
+					<TranslationSearchOptions store={store} />
 
-			<EuiSpacer size="m" />
+					<EuiSpacer size="m" />
 
-			<TranslationSearchTable store={store} />
+					<TranslationSearchTable store={store} />
 
-			{createTranslationDialog.visible && (
-				<EditTranslationDialog
-					onClose={createTranslationDialog.close}
-					onSuccess={(translation): void =>
-						navigate(`/translations/${translation.id}`)
-					}
-				/>
-			)}
+					{createTranslationDialog.visible && (
+						<EditTranslationDialog
+							onClose={createTranslationDialog.close}
+							onSuccess={(translation): void =>
+								navigate(`/translations/${translation.id}`)
+							}
+						/>
+					)}
+				</EuiPageContentBody>
+			</EuiPageContent>
 		</>
 	);
 });

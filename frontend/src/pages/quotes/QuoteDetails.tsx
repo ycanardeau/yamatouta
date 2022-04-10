@@ -2,6 +2,8 @@ import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
 	EuiIcon,
+	EuiPageContent,
+	EuiPageContentBody,
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
@@ -108,13 +110,26 @@ const Layout = ({ quote }: LayoutProps): React.ReactElement => {
 				]}
 			/>
 
-			<Routes>
-				<Route path="" element={<QuoteBasicInfo quote={quote} />} />
-				<Route
-					path="revisions"
-					element={<QuoteHistory quote={quote} />}
-				/>
-			</Routes>
+			<EuiPageContent
+				hasBorder={false}
+				hasShadow={false}
+				paddingSize="none"
+				color="transparent"
+				borderRadius="none"
+			>
+				<EuiPageContentBody>
+					<Routes>
+						<Route
+							path=""
+							element={<QuoteBasicInfo quote={quote} />}
+						/>
+						<Route
+							path="revisions"
+							element={<QuoteHistory quote={quote} />}
+						/>
+					</Routes>
+				</EuiPageContentBody>
+			</EuiPageContent>
 		</>
 	);
 };

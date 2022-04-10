@@ -2,6 +2,8 @@ import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
 	EuiButton,
+	EuiPageContent,
+	EuiPageContentBody,
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
@@ -76,16 +78,26 @@ const ArtistIndex = observer((): React.ReactElement => {
 				]}
 			/>
 
-			<ArtistSearchTable store={store} />
+			<EuiPageContent
+				hasBorder={false}
+				hasShadow={false}
+				paddingSize="none"
+				color="transparent"
+				borderRadius="none"
+			>
+				<EuiPageContentBody>
+					<ArtistSearchTable store={store} />
 
-			{createArtistDialog.visible && (
-				<EditArtistDialog
-					onClose={createArtistDialog.close}
-					onSuccess={(artist): void =>
-						navigate(`/artists/${artist.id}`)
-					}
-				/>
-			)}
+					{createArtistDialog.visible && (
+						<EditArtistDialog
+							onClose={createArtistDialog.close}
+							onSuccess={(artist): void =>
+								navigate(`/artists/${artist.id}`)
+							}
+						/>
+					)}
+				</EuiPageContentBody>
+			</EuiPageContent>
 		</>
 	);
 });

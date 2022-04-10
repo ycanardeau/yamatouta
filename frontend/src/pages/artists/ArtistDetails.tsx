@@ -2,6 +2,8 @@ import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
 	EuiIcon,
+	EuiPageContent,
+	EuiPageContentBody,
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
@@ -110,20 +112,37 @@ const Layout = ({ artist, store }: LayoutProps): React.ReactElement => {
 				]}
 			/>
 
-			<Routes>
-				<Route
-					path=""
-					element={<ArtistQuotes artist={artist} store={store} />}
-				/>
-				<Route
-					path="quotes"
-					element={<Navigate to={`/artists/${artist.id}`} replace />}
-				/>
-				<Route
-					path="revisions"
-					element={<ArtistHistory artist={artist} />}
-				/>
-			</Routes>
+			<EuiPageContent
+				hasBorder={false}
+				hasShadow={false}
+				paddingSize="none"
+				color="transparent"
+				borderRadius="none"
+			>
+				<EuiPageContentBody>
+					<Routes>
+						<Route
+							path=""
+							element={
+								<ArtistQuotes artist={artist} store={store} />
+							}
+						/>
+						<Route
+							path="quotes"
+							element={
+								<Navigate
+									to={`/artists/${artist.id}`}
+									replace
+								/>
+							}
+						/>
+						<Route
+							path="revisions"
+							element={<ArtistHistory artist={artist} />}
+						/>
+					</Routes>
+				</EuiPageContentBody>
+			</EuiPageContent>
 		</>
 	);
 };

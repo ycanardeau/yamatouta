@@ -2,6 +2,8 @@ import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
 	EuiButton,
+	EuiPageContent,
+	EuiPageContentBody,
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
@@ -76,14 +78,26 @@ const QuoteIndex = observer((): React.ReactElement => {
 				]}
 			/>
 
-			<QuoteSearchList store={store} />
+			<EuiPageContent
+				hasBorder={false}
+				hasShadow={false}
+				paddingSize="none"
+				color="transparent"
+				borderRadius="none"
+			>
+				<EuiPageContentBody>
+					<QuoteSearchList store={store} />
 
-			{createQuoteDialog.visible && (
-				<EditQuoteDialog
-					onClose={createQuoteDialog.close}
-					onSuccess={(quote): void => navigate(`/quotes/${quote.id}`)}
-				/>
-			)}
+					{createQuoteDialog.visible && (
+						<EditQuoteDialog
+							onClose={createQuoteDialog.close}
+							onSuccess={(quote): void =>
+								navigate(`/quotes/${quote.id}`)
+							}
+						/>
+					)}
+				</EuiPageContentBody>
+			</EuiPageContent>
 		</>
 	);
 });

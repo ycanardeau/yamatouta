@@ -2,6 +2,8 @@ import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
 	EuiLink,
+	EuiPageContent,
+	EuiPageContentBody,
 	EuiPageHeader,
 	EuiSpacer,
 	EuiTable,
@@ -58,49 +60,59 @@ const UserIndex = observer((): React.ReactElement => {
 			<EuiSpacer size="xs" />
 			<EuiPageHeader pageTitle={t('shared.users')} />
 
-			<EuiTable>
-				<EuiTableHeader>
-					<EuiTableHeaderCell width={40} />
-					<EuiTableHeaderCell>
-						{t('auth.username')}
-					</EuiTableHeaderCell>
-				</EuiTableHeader>
+			<EuiPageContent
+				hasBorder={false}
+				hasShadow={false}
+				paddingSize="none"
+				color="transparent"
+				borderRadius="none"
+			>
+				<EuiPageContentBody>
+					<EuiTable>
+						<EuiTableHeader>
+							<EuiTableHeaderCell width={40} />
+							<EuiTableHeaderCell>
+								{t('auth.username')}
+							</EuiTableHeaderCell>
+						</EuiTableHeader>
 
-				<EuiTableBody>
-					{store.users.map((user) => (
-						<EuiTableRow key={user.id}>
-							<EuiTableRowCell>
-								<Avatar
-									size="m"
-									name={user.name}
-									imageUrl={user.avatarUrl}
-								/>
-							</EuiTableRowCell>
-							<EuiTableRowCell
-								mobileOptions={{
-									header: t('auth.username'),
-								}}
-							>
-								<EuiLink
-									href={`/users/${user.id}`}
-									onClick={(
-										e: React.MouseEvent<HTMLAnchorElement>,
-									): void => {
-										e.preventDefault();
-										navigate(`/users/${user.id}`);
-									}}
-								>
-									{user.name}
-								</EuiLink>
-							</EuiTableRowCell>
-						</EuiTableRow>
-					))}
-				</EuiTableBody>
-			</EuiTable>
+						<EuiTableBody>
+							{store.users.map((user) => (
+								<EuiTableRow key={user.id}>
+									<EuiTableRowCell>
+										<Avatar
+											size="m"
+											name={user.name}
+											imageUrl={user.avatarUrl}
+										/>
+									</EuiTableRowCell>
+									<EuiTableRowCell
+										mobileOptions={{
+											header: t('auth.username'),
+										}}
+									>
+										<EuiLink
+											href={`/users/${user.id}`}
+											onClick={(
+												e: React.MouseEvent<HTMLAnchorElement>,
+											): void => {
+												e.preventDefault();
+												navigate(`/users/${user.id}`);
+											}}
+										>
+											{user.name}
+										</EuiLink>
+									</EuiTableRowCell>
+								</EuiTableRow>
+							))}
+						</EuiTableBody>
+					</EuiTable>
 
-			<EuiSpacer size="m" />
+					<EuiSpacer size="m" />
 
-			<Pagination store={store.paginationStore} />
+					<Pagination store={store.paginationStore} />
+				</EuiPageContentBody>
+			</EuiPageContent>
 		</>
 	);
 });

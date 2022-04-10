@@ -12,10 +12,6 @@ import { getUser } from '../../api/UserApi';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IUserObject } from '../../dto/users/IUserObject';
 
-interface UserDetailsLayoutProps {
-	user: IUserObject;
-}
-
 interface BreadcrumbsProps {
 	user: IUserObject;
 }
@@ -47,9 +43,11 @@ const Breadcrumbs = ({ user }: BreadcrumbsProps): React.ReactElement => {
 	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
 };
 
-const UserDetailsLayout = ({
-	user,
-}: UserDetailsLayoutProps): React.ReactElement => {
+interface LayoutProps {
+	user: IUserObject;
+}
+
+const Layout = ({ user }: LayoutProps): React.ReactElement => {
 	useYamatoutaTitle(user.name, true);
 
 	return (
@@ -76,7 +74,7 @@ const UserDetails = (): React.ReactElement | null => {
 		);
 	}, [userId]);
 
-	return model ? <UserDetailsLayout user={model.user} /> : null;
+	return model ? <Layout user={model.user} /> : null;
 };
 
 export default UserDetails;

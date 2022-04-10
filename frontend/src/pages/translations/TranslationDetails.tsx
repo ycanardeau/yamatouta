@@ -2,6 +2,8 @@ import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
 	EuiIcon,
+	EuiPageContent,
+	EuiPageContentBody,
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
@@ -130,24 +132,40 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 				]}
 			/>
 
-			<Routes>
-				<Route
-					path=""
-					element={<TranslationBasicInfo translation={translation} />}
-				/>
-				<Route
-					path="revisions"
-					element={<TranslationHistory translation={translation} />}
-				/>
-			</Routes>
+			<EuiPageContent
+				hasBorder={false}
+				hasShadow={false}
+				paddingSize="none"
+				color="transparent"
+				borderRadius="none"
+			>
+				<EuiPageContentBody>
+					<Routes>
+						<Route
+							path=""
+							element={
+								<TranslationBasicInfo
+									translation={translation}
+								/>
+							}
+						/>
+						<Route
+							path="revisions"
+							element={
+								<TranslationHistory translation={translation} />
+							}
+						/>
+					</Routes>
 
-			{/* TODO: editTranslationDialog.visible && (
+					{/* TODO: editTranslationDialog.visible && (
 				<EditTranslationDialog
 					translation={translation}
 					onClose={editTranslationDialog.close}
 					onSuccess={(translation): void => {}}
 				/>
 			)*/}
+				</EuiPageContentBody>
+			</EuiPageContent>
 		</>
 	);
 };
