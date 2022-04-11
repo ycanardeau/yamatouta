@@ -8,12 +8,14 @@ import {
 	QuoteSnapshot,
 	Snapshot,
 	TranslationSnapshot,
+	WorkSnapshot,
 } from '../models/Snapshot';
 import { Artist } from './Artist';
 import { Commit } from './Commit';
 import { Quote } from './Quote';
 import { Translation } from './Translation';
 import { User } from './User';
+import { Work } from './Work';
 
 // Schema from https://github.com/VocaDB/vocadb/blob/f10ec20c2cbc576c1572b41419620469b7872000/VocaDbModel/Domain/Versioning/ArchivedObjectVersion.cs.
 // Thanks to @riipah (https://github.com/riipah).
@@ -166,5 +168,32 @@ export class QuoteRevision extends Revision<Quote, QuoteSnapshot> {
 
 	get entry(): Quote {
 		return this.quote;
+	}
+}
+
+@Entity({ tableName: 'revisions', discriminatorValue: EntryType.Work })
+export class WorkRevision extends Revision<Work, WorkSnapshot> {
+	@ManyToOne()
+	work: Work;
+
+	constructor({
+		work,
+		...params
+	}: {
+		work: Work;
+		commit: Commit;
+		actor: User;
+		snapshot: WorkSnapshot;
+		summary: string;
+		event: RevisionEvent;
+		version: number;
+	}) {
+		super(params);
+
+		this.work = work;
+	}
+
+	get entry(): Work {
+		return this.work;
 	}
 }

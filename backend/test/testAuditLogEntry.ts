@@ -4,10 +4,12 @@ import {
 	QuoteAuditLogEntry,
 	TranslationAuditLogEntry,
 	UserAuditLogEntry,
+	WorkAuditLogEntry,
 } from '../src/entities/AuditLogEntry';
 import { Quote } from '../src/entities/Quote';
 import { Translation } from '../src/entities/Translation';
 import { User } from '../src/entities/User';
+import { Work } from '../src/entities/Work';
 import { AuditedAction } from '../src/models/AuditedAction';
 
 export const testUserAuditLogEntry = (
@@ -116,4 +118,31 @@ export const testQuoteAuditLogEntry = (
 	expect(actual.oldValue).toBe(oldValue);
 	expect(actual.newValue).toBe(newValue);
 	expect(actual.quote).toBe(quote);
+};
+
+export const testWorkAuditLogEntry = (
+	actual: WorkAuditLogEntry,
+	{
+		action,
+		actor,
+		actorIp,
+		oldValue,
+		newValue,
+		work,
+	}: {
+		action: AuditedAction;
+		actor: User;
+		actorIp: string;
+		oldValue: string;
+		newValue: string;
+		work: Work;
+	},
+): void => {
+	expect(actual).toBeInstanceOf(WorkAuditLogEntry);
+	expect(actual.action).toBe(action);
+	expect(actual.actor).toBe(actor);
+	expect(actual.actorIp).toBe(actorIp);
+	expect(actual.oldValue).toBe(oldValue);
+	expect(actual.newValue).toBe(newValue);
+	expect(actual.work).toBe(work);
 };

@@ -2,10 +2,12 @@ import { Artist } from '../src/entities/Artist';
 import { Quote } from '../src/entities/Quote';
 import { Translation } from '../src/entities/Translation';
 import { User } from '../src/entities/User';
+import { Work } from '../src/entities/Work';
 import { ArtistType } from '../src/models/ArtistType';
 import { QuoteType } from '../src/models/QuoteType';
 import { UserGroup } from '../src/models/UserGroup';
 import { WordCategory } from '../src/models/WordCategory';
+import { WorkType } from '../src/models/WorkType';
 import { PasswordHasherFactory } from '../src/services/passwordHashers/PasswordHasherFactory';
 import { NormalizeEmailService } from '../src/services/users/NormalizeEmailService';
 
@@ -141,4 +143,28 @@ export const createArtist = ({
 	artist.hidden = hidden;
 
 	return artist;
+};
+
+export const createWork = ({
+	id,
+	name,
+	workType,
+	deleted = false,
+	hidden = false,
+}: {
+	id: number;
+	name: string;
+	workType: WorkType;
+	deleted?: boolean;
+	hidden?: boolean;
+}): Work => {
+	const work = new Work({
+		name: name,
+		workType: workType,
+	});
+	work.id = id;
+	work.deleted = deleted;
+	work.hidden = hidden;
+
+	return work;
 };

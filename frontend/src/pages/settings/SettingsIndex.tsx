@@ -84,7 +84,7 @@ const SettingsIndex = (): React.ReactElement => {
 			)}
 		</>
 	) : (
-		<Navigate to="/" />
+		<Navigate to="/" replace />
 	);
 };
 

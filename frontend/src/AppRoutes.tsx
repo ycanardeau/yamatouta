@@ -16,6 +16,7 @@ const SettingsRoutes = lazyWithRetry(
 	() => import('./pages/settings/SettingsRoutes'),
 );
 const AdminRoutes = lazyWithRetry(() => import('./pages/admin/AdminRoutes'));
+const WorkRoutes = lazyWithRetry(() => import('./pages/works/WorkRoutes'));
 
 const AppRoutes = (): React.ReactElement => {
 	return (
@@ -27,6 +28,7 @@ const AppRoutes = (): React.ReactElement => {
 			<Route path="settings/*" element={<SettingsRoutes />} />
 			<Route path="*" element={<HomeRoutes />} />
 			<Route path="admin/*" element={<AdminRoutes />} />
+			<Route path="works/*" element={<WorkRoutes />} />
 		</Routes>
 	);
 };

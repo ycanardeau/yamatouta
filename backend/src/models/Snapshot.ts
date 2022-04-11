@@ -1,9 +1,11 @@
 import { Artist } from '../entities/Artist';
 import { Quote } from '../entities/Quote';
 import { Translation } from '../entities/Translation';
+import { Work } from '../entities/Work';
 import { ArtistType } from './ArtistType';
 import { QuoteType } from './QuoteType';
 import { WordCategory } from './WordCategory';
+import { WorkType } from './WorkType';
 
 export class TranslationSnapshot {
 	readonly headword: string;
@@ -55,4 +57,18 @@ export class QuoteSnapshot {
 	}
 }
 
-export type Snapshot = TranslationSnapshot | ArtistSnapshot | QuoteSnapshot;
+export class WorkSnapshot {
+	readonly name: string;
+	readonly workType: WorkType;
+
+	constructor({ work }: { work: Work }) {
+		this.name = work.name;
+		this.workType = work.workType;
+	}
+}
+
+export type Snapshot =
+	| TranslationSnapshot
+	| ArtistSnapshot
+	| QuoteSnapshot
+	| WorkSnapshot;

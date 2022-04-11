@@ -8,10 +8,12 @@ import {
 	QuoteAuditLogEntry,
 	TranslationAuditLogEntry,
 	UserAuditLogEntry,
+	WorkAuditLogEntry,
 } from '../entities/AuditLogEntry';
 import { Quote } from '../entities/Quote';
 import { Translation } from '../entities/Translation';
 import { User } from '../entities/User';
+import { Work } from '../entities/Work';
 import { AuditedAction } from '../models/AuditedAction';
 
 @Injectable()
@@ -223,6 +225,39 @@ export class AuditLogService {
 			new UserAuditLogEntry({
 				...params,
 				action: AuditedAction.User_Rename,
+			}),
+		);
+	}
+
+	work_create(params: { actor: User; actorIp: string; work: Work }): void {
+		this.createAuditLogEntry(
+			new WorkAuditLogEntry({
+				...params,
+				action: AuditedAction.Work_Create,
+				oldValue: '',
+				newValue: '',
+			}),
+		);
+	}
+
+	work_delete(params: { actor: User; actorIp: string; work: Work }): void {
+		this.createAuditLogEntry(
+			new WorkAuditLogEntry({
+				...params,
+				action: AuditedAction.Work_Delete,
+				oldValue: '',
+				newValue: '',
+			}),
+		);
+	}
+
+	work_update(params: { actor: User; actorIp: string; work: Work }): void {
+		this.createAuditLogEntry(
+			new WorkAuditLogEntry({
+				...params,
+				action: AuditedAction.Work_Update,
+				oldValue: '',
+				newValue: '',
 			}),
 		);
 	}

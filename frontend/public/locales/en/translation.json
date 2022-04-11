@@ -127,5 +127,19 @@
 	},
 	"admin": {
 		"createMissingRevisions": "Create missing revisions"
+	},
+	"works": {
+		"addWork": "Add work",
+		"editWork": "Edit work",
+		"deleteWork": "Delete work",
+		"deleteDialogSubtitle": "Are you sure you want to delete this work?",
+		"name": "Name",
+		"workType": "Type"
+	},
+	"workTypeNames": {
+		"Unspecified": "Unspecified",
+		"Book": "Book",
+		"Song": "Song",
+		"Other": "Other"
 	}
 }
