@@ -2112,7 +2112,7 @@
         },
         "action": {
           "name": "action",
-          "type": "enum('Artist_Create', 'Artist_Delete', 'Artist_Update', 'Quote_Create', 'Quote_Delete', 'Quote_Update', 'Translation_Create', 'Translation_Delete', 'Translation_Update', 'User_ChangeEmail', 'User_ChangePassword', 'User_Create', 'User_FailedLogin', 'User_Login', 'User_Rename')",
+          "type": "enum('Artist_Create', 'Artist_Delete', 'Artist_Update', 'Quote_Create', 'Quote_Delete', 'Quote_Update', 'Translation_Create', 'Translation_Delete', 'Translation_Update', 'User_ChangeEmail', 'User_ChangePassword', 'User_Create', 'User_FailedLogin', 'User_Login', 'User_Rename', 'Work_Create', 'Work_Delete', 'Work_Update')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
@@ -2132,7 +2132,10 @@
             "User_Create",
             "User_FailedLogin",
             "User_Login",
-            "User_Rename"
+            "User_Rename",
+            "Work_Create",
+            "Work_Delete",
+            "Work_Update"
           ],
           "mappedType": "enum"
         },
@@ -2223,6 +2226,15 @@
           "primary": false,
           "nullable": true,
           "mappedType": "integer"
+        },
+        "work_id": {
+          "name": "work_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
         }
       },
       "name": "audit_log_entries",
@@ -2278,6 +2290,15 @@
           ],
           "composite": false,
           "keyName": "audit_log_entries_quote_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "work_id"
+          ],
+          "composite": false,
+          "keyName": "audit_log_entries_work_id_index",
           "primary": false,
           "unique": false
         },
@@ -2354,6 +2375,19 @@
             "id"
           ],
           "referencedTableName": "quotes",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "audit_log_entries_work_id_foreign": {
+          "constraintName": "audit_log_entries_work_id_foreign",
+          "columnNames": [
+            "work_id"
+          ],
+          "localTableName": "audit_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "works",
           "deleteRule": "set null",
           "updateRule": "cascade"
         }

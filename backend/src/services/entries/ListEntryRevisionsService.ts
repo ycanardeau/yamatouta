@@ -7,6 +7,7 @@ import { RevisionObject } from '../../dto/revisions/RevisionObject';
 import { Artist } from '../../entities/Artist';
 import { Quote } from '../../entities/Quote';
 import { Translation } from '../../entities/Translation';
+import { Work } from '../../entities/Work';
 import { Entry } from '../../models/Entry';
 import { Permission } from '../../models/Permission';
 import { PermissionContext } from '../PermissionContext';
@@ -83,6 +84,19 @@ export class ListQuoteRevisionsService extends ListEntryRevisionsService<Quote> 
 	) {
 		super(permissionContext, (entryId) =>
 			quoteRepo.findOneOrFail({ id: entryId }),
+		);
+	}
+}
+
+@Injectable()
+export class ListWorkRevisionsService extends ListEntryRevisionsService<Work> {
+	constructor(
+		permissionContext: PermissionContext,
+		@InjectRepository(Work)
+		workRepo: EntityRepository<Work>,
+	) {
+		super(permissionContext, (entryId) =>
+			workRepo.findOneOrFail({ id: entryId }),
 		);
 	}
 }

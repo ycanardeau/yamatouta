@@ -7,6 +7,7 @@ import { Commit } from '../../entities/Commit';
 import { Quote } from '../../entities/Quote';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
+import { Work } from '../../entities/Work';
 import { Entry } from '../../models/Entry';
 import { Permission } from '../../models/Permission';
 import { RevisionEvent } from '../../models/RevisionEvent';
@@ -142,6 +143,34 @@ export class DeleteQuoteService extends DeleteEntryService<Quote> {
 					actor: actor,
 					actorIp: this.permissionContext.remoteIpAddress,
 					quote: entry,
+				}),
+		);
+	}
+}
+
+@Injectable()
+export class DeleteWorkService extends DeleteEntryService<Work> {
+	constructor(
+		permissionContext: PermissionContext,
+		em: EntityManager,
+		@InjectRepository(User)
+		userRepo: EntityRepository<User>,
+		auditLogService: AuditLogService,
+		@InjectRepository(Work)
+		workRepo: EntityRepository<Work>,
+	) {
+		super(
+			permissionContext,
+			em,
+			userRepo,
+			auditLogService,
+			Permission.DeleteWorks,
+			(entryId) => workRepo.findOneOrFail({ id: entryId }),
+			(actor, entry) =>
+				this.auditLogService.work_delete({
+					actor: actor,
+					actorIp: this.permissionContext.remoteIpAddress,
+					work: entry,
 				}),
 		);
 	}

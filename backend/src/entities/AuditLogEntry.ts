@@ -6,6 +6,7 @@ import { Artist } from './Artist';
 import { Quote } from './Quote';
 import { Translation } from './Translation';
 import { User } from './User';
+import { Work } from './Work';
 
 @Entity({
 	tableName: 'audit_log_entries',
@@ -192,5 +193,40 @@ export class QuoteAuditLogEntry extends AuditLogEntry {
 		});
 
 		this.quote = quote;
+	}
+}
+
+@Entity({
+	tableName: 'audit_log_entries',
+	discriminatorValue: EntryType.Work,
+})
+export class WorkAuditLogEntry extends AuditLogEntry {
+	@ManyToOne()
+	work: Work;
+
+	constructor({
+		action,
+		actor,
+		actorIp,
+		oldValue,
+		newValue,
+		work,
+	}: {
+		action: AuditedAction;
+		actor: User;
+		actorIp: string;
+		oldValue: string;
+		newValue: string;
+		work: Work;
+	}) {
+		super({
+			action: action,
+			actor: actor,
+			actorIp: actorIp,
+			oldValue: oldValue,
+			newValue: newValue,
+		});
+
+		this.work = work;
 	}
 }

@@ -14,4 +14,7 @@ export enum AuditedAction {
 	User_FailedLogin = 'User_FailedLogin',
 	User_Login = 'User_Login',
 	User_Rename = 'User_Rename',
+	Work_Create = 'Work_Create',
+	Work_Delete = 'Work_Delete',
+	Work_Update = 'Work_Update',
 }

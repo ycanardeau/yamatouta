@@ -9,11 +9,13 @@ import { QuoteController } from './controllers/QuoteController';
 import { SitemapController } from './controllers/SitemapController';
 import { TranslationController } from './controllers/TranslationController';
 import { UserController } from './controllers/UserController';
+import { WorkController } from './controllers/WorkController';
 import { Artist } from './entities/Artist';
 import { Quote } from './entities/Quote';
 import { TranslationRevision } from './entities/Revision';
 import { Translation } from './entities/Translation';
 import { User } from './entities/User';
+import { Work } from './entities/Work';
 import { AuditLogService } from './services/AuditLogService';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { NgramConverter } from './services/NgramConverter';
@@ -32,11 +34,13 @@ import {
 	DeleteArtistService,
 	DeleteQuoteService,
 	DeleteTranslationService,
+	DeleteWorkService,
 } from './services/entries/DeleteEntryService';
 import {
 	ListArtistRevisionsService,
 	ListQuoteRevisionsService,
 	ListTranslationRevisionsService,
+	ListWorkRevisionsService,
 } from './services/entries/ListEntryRevisionsService';
 import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasherFactory';
 import { CreateQuoteService } from './services/quotes/CreateQuoteService';
@@ -55,6 +59,10 @@ import { GetUserService } from './services/users/GetUserService';
 import { ListUsersService } from './services/users/ListUsersService';
 import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthenticatedUserService';
+import { CreateWorkService } from './services/works/CreateWorkService';
+import { GetWorkService } from './services/works/GetWorkService';
+import { ListWorksService } from './services/works/ListWorksService';
+import { UpdateWorkService } from './services/works/UpdateWorkService';
 
 @Module({
 	imports: [
@@ -65,6 +73,7 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 			Translation,
 			TranslationRevision,
 			User,
+			Work,
 		]),
 		PassportModule,
 	],
@@ -76,6 +85,7 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		SitemapController,
 		TranslationController,
 		UserController,
+		WorkController,
 	],
 	providers: [
 		AuditLogService,
@@ -85,15 +95,18 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		CreateQuoteService,
 		CreateTranslationService,
 		CreateUserService,
+		CreateWorkService,
 		DeleteArtistService,
 		DeleteQuoteService,
 		DeleteTranslationService,
+		DeleteWorkService,
 		GenerateSitemapService,
 		GetArtistService,
 		GetAuthenticatedUserService,
 		GetQuoteService,
 		GetTranslationService,
 		GetUserService,
+		GetWorkService,
 		ListArtistIdsService,
 		ListArtistRevisionsService,
 		ListArtistsService,
@@ -103,6 +116,8 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		ListTranslationRevisionsService,
 		ListTranslationsService,
 		ListUsersService,
+		ListWorkRevisionsService,
+		ListWorksService,
 		LocalSerializer,
 		LocalStrategy,
 		LoginService,
@@ -115,6 +130,7 @@ import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthentic
 		UpdateArtistService,
 		UpdateQuoteService,
 		UpdateTranslationService,
+		UpdateWorkService,
 	],
 })
 export class AppModule {}
