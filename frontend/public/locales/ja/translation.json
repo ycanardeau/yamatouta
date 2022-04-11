@@ -123,6 +123,17 @@
 		"Other": "そのほか"
 	},
 	"works": {
-		"addWork": "しながきをかきたす"
+		"addWork": "しながきをかきたす",
+		"editWork": "しながきをかきかえる",
+		"deleteWork": "しながきをけす",
+		"deleteDialogSubtitle": "このしながきをけしてもよろしいですか?",
+		"name": "なまえ",
+		"workType": "くさわい"
+	},
+	"workTypeNames": {
+		"Unspecified": "なし",
+		"Book": "よみもの",
+		"Song": "うた",
+		"Other": "そのほか"
 	}
 }

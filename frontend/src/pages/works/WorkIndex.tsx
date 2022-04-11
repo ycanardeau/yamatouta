@@ -14,7 +14,12 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../components/useAuth';
 import { useDialog } from '../../components/useDialog';
+import { useStoreWithPagination } from '../../components/useStoreWithPagination';
+import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import EditWorkDialog from '../../components/works/EditWorkDialog';
+import WorkSearchTable from '../../components/works/WorkSearchTable';
 import { Permission } from '../../models/Permission';
+import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
 
 const Breadcrumbs = (): React.ReactElement => {
 	const { t } = useTranslation();
@@ -36,7 +41,15 @@ const Breadcrumbs = (): React.ReactElement => {
 };
 
 const WorkIndex = (): React.ReactElement => {
-	const { t } = useTranslation();
+	const { t, ready } = useTranslation();
+
+	const [store] = React.useState(() => new WorkSearchStore());
+
+	useYamatoutaTitle(t('shared.works'), ready);
+
+	useStoreWithPagination(store);
+
+	const navigate = useNavigate();
 
 	const auth = useAuth();
 
@@ -71,7 +84,18 @@ const WorkIndex = (): React.ReactElement => {
 				color="transparent"
 				borderRadius="none"
 			>
-				<EuiPageContentBody></EuiPageContentBody>
+				<EuiPageContentBody>
+					<WorkSearchTable store={store} />
+
+					{createWorkDialog.visible && (
+						<EditWorkDialog
+							onClose={createWorkDialog.close}
+							onSuccess={(work): void =>
+								navigate(`/works/${work.id}`)
+							}
+						/>
+					)}
+				</EuiPageContentBody>
 			</EuiPageContent>
 		</>
 	);

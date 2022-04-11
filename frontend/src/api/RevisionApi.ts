@@ -38,3 +38,15 @@ export const listQuoteRevisions = async ({
 
 	return response.data;
 };
+
+export const listWorkRevisions = async ({
+	workId,
+}: {
+	workId: number;
+}): Promise<ISearchResultObject<IRevisionObject>> => {
+	const response = await axios.get<ISearchResultObject<IRevisionObject>>(
+		`/works/${workId}/revisions`,
+	);
+
+	return response.data;
+};
