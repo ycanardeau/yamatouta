@@ -96,6 +96,104 @@
           "nullable": false,
           "mappedType": "string"
         },
+        "work_type": {
+          "name": "work_type",
+          "type": "enum('Unspecified', 'Book', 'Song', 'Other')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Unspecified",
+            "Book",
+            "Song",
+            "Other"
+          ],
+          "mappedType": "enum"
+        },
+        "version": {
+          "name": "version",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "works",
+      "indexes": [
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "deleted": {
+          "name": "deleted",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
         "email": {
           "name": "email",
           "type": "varchar(255)",
@@ -2361,7 +2459,7 @@
         },
         "entry_type": {
           "name": "entry_type",
-          "type": "enum('Translation', 'Artist', 'Quote')",
+          "type": "enum('Translation', 'Artist', 'Quote', 'Work')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
@@ -2369,7 +2467,8 @@
           "enumItems": [
             "Translation",
             "Artist",
-            "Quote"
+            "Quote",
+            "Work"
           ],
           "mappedType": "enum"
         },
@@ -2393,6 +2492,15 @@
         },
         "quote_id": {
           "name": "quote_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "work_id": {
+          "name": "work_id",
           "type": "int",
           "unsigned": true,
           "autoincrement": false,
@@ -2454,6 +2562,15 @@
           ],
           "composite": false,
           "keyName": "revisions_quote_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "work_id"
+          ],
+          "composite": false,
+          "keyName": "revisions_work_id_index",
           "primary": false,
           "unique": false
         },
@@ -2529,6 +2646,19 @@
             "id"
           ],
           "referencedTableName": "quotes",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "revisions_work_id_foreign": {
+          "constraintName": "revisions_work_id_foreign",
+          "columnNames": [
+            "work_id"
+          ],
+          "localTableName": "revisions",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "works",
           "deleteRule": "set null",
           "updateRule": "cascade"
         }
