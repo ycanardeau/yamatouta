@@ -5,6 +5,7 @@ import {
 	htmlIdGenerator,
 } from '@elastic/eui';
 import {
+	BookRegular,
 	CalligraphyPenRegular,
 	MusicNote2Regular,
 	PersonAddRegular,
@@ -83,6 +84,17 @@ const SideNav = (): React.ReactElement => {
 							navigate('/artists');
 						},
 						isSelected: tab === 'artists',
+					},
+					{
+						icon: <EuiIcon type={BookRegular} />,
+						name: t('shared.works'),
+						id: htmlIdGenerator()(),
+						href: '/works',
+						onClick: (e): void => {
+							e.preventDefault();
+							navigate('/works');
+						},
+						isSelected: tab === 'works',
 					},
 					{
 						icon: <EuiIcon type={PersonRegular} />,
