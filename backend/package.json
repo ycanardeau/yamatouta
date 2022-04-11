@@ -104,7 +104,8 @@
 			"**/*.(t|j)s"
 		],
 		"coverageDirectory": "../coverage",
-		"testEnvironment": "node"
+		"testEnvironment": "node",
+		"testTimeout": 20000
 	},
 	"mikro-orm": {
 		"useTsNode": true,
