@@ -20,7 +20,10 @@ const limitedUserPermissions: Permission[] = [];
 
 const userPermissions: Permission[] = [...limitedUserPermissions];
 
-const advancedUserPermissions: Permission[] = [...userPermissions];
+const advancedUserPermissions: Permission[] = [
+	...userPermissions,
+	Permission.CreateTranslations,
+];
 
 const modPermissions: Permission[] = [...advancedUserPermissions];
 
@@ -31,7 +34,6 @@ const adminPermissions: Permission[] = [
 	Permission.CreateArtists,
 	Permission.CreateMissingRevisions,
 	Permission.CreateQuotes,
-	Permission.CreateTranslations,
 	Permission.DeleteArtists,
 	Permission.DeleteQuotes,
 	Permission.DeleteTranslations,

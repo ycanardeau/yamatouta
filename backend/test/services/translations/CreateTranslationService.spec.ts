@@ -124,11 +124,7 @@ describe('CreateTranslationService', () => {
 		};
 
 		test('insufficient permission', async () => {
-			const userGroups = Object.values(UserGroup).filter(
-				(userGroup) => userGroup !== UserGroup.Admin,
-			);
-
-			for (const userGroup of userGroups) {
+			for (const userGroup of [UserGroup.LimitedUser, UserGroup.User]) {
 				existingUser.userGroup = userGroup;
 
 				const permissionContext = new FakePermissionContext(
