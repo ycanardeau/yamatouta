@@ -36,7 +36,7 @@ export class UserSearchStore
 			ISearchResultObject<IUserObject>
 		>
 {
-	readonly paginationStore = new PaginationStore();
+	readonly paginationStore = new PaginationStore({ pageSize: 50 });
 	@observable users: IUserObject[] = [];
 
 	constructor() {
@@ -74,7 +74,7 @@ export class UserSearchStore
 	}
 	set routeParams(value: IUserSearchRouteParams) {
 		this.paginationStore.page = value.page ?? 1;
-		this.paginationStore.pageSize = value.pageSize ?? 10;
+		this.paginationStore.pageSize = value.pageSize ?? 50;
 	}
 
 	validateRouteParams = (data: any): data is IUserSearchRouteParams => {

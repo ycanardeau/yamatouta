@@ -36,7 +36,7 @@ export class QuoteSearchStore
 			ISearchResultObject<IQuoteObject>
 		>
 {
-	readonly paginationStore = new PaginationStore();
+	readonly paginationStore = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteObject[] = [];
 	@observable artistId?: number;
 
@@ -76,7 +76,7 @@ export class QuoteSearchStore
 	}
 	set routeParams(value: IQuoteSearchRouteParams) {
 		this.paginationStore.page = value.page ?? 1;
-		this.paginationStore.pageSize = value.pageSize ?? 10;
+		this.paginationStore.pageSize = value.pageSize ?? 50;
 	}
 
 	validateRouteParams = (data: any): data is IQuoteSearchRouteParams => {
