@@ -10,7 +10,6 @@ import {
 	Property,
 } from '@mikro-orm/core';
 
-import { NgramConverter } from '../helpers/NgramConverter';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IRevisionFactory } from '../models/IRevisionFactory';
@@ -18,6 +17,7 @@ import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { TranslationSnapshot } from '../models/Snapshot';
 import { WordCategory } from '../models/WordCategory';
+import { NgramConverter } from '../services/NgramConverter';
 import { Commit } from './Commit';
 import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';

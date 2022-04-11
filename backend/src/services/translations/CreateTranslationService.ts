@@ -6,7 +6,6 @@ import { TranslationObject } from '../../dto/translations/TranslationObject';
 import { Commit } from '../../entities/Commit';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
-import { NgramConverter } from '../../helpers/NgramConverter';
 import { Permission } from '../../models/Permission';
 import { RevisionEvent } from '../../models/RevisionEvent';
 import {
@@ -14,6 +13,7 @@ import {
 	updateTranslationBodySchema,
 } from '../../requests/translations/IUpdateTranslationBody';
 import { AuditLogService } from '../AuditLogService';
+import { NgramConverter } from '../NgramConverter';
 import { PermissionContext } from '../PermissionContext';
 
 @Injectable()
