@@ -162,7 +162,7 @@ export class ArtistAuditLogEntry extends AuditLogEntry {
 
 @Entity({
 	tableName: 'audit_log_entries',
-	discriminatorValue: EntryType.Artist,
+	discriminatorValue: EntryType.Quote,
 })
 export class QuoteAuditLogEntry extends AuditLogEntry {
 	@ManyToOne()
