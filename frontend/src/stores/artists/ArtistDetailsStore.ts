@@ -1,10 +1,22 @@
+import { action, makeObservable, observable } from 'mobx';
+
+import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { QuoteSearchStore } from '../quotes/QuoteSearchStore';
 
 export class ArtistDetailsStore {
+	@observable artist: IArtistObject;
 	readonly quoteSearchStore: QuoteSearchStore;
 
-	constructor(artistId: number) {
+	constructor(artist: IArtistObject) {
+		makeObservable(this);
+
+		this.artist = artist;
+
 		this.quoteSearchStore = new QuoteSearchStore();
-		this.quoteSearchStore.artistId = artistId;
+		this.quoteSearchStore.artistId = artist.id;
 	}
+
+	@action setArtist = (value: IArtistObject): void => {
+		this.artist = value;
+	};
 }

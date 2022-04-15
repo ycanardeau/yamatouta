@@ -4,6 +4,7 @@ import {
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,6 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getUser } from '../../api/UserApi';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IUserObject } from '../../dto/users/IUserObject';
+import { UserDetailsStore } from '../../stores/users/UserDetailsStore';
 
 interface BreadcrumbsProps {
 	user: IUserObject;
@@ -44,10 +46,12 @@ const Breadcrumbs = ({ user }: BreadcrumbsProps): React.ReactElement => {
 };
 
 interface LayoutProps {
-	user: IUserObject;
+	store: UserDetailsStore;
 }
 
-const Layout = ({ user }: LayoutProps): React.ReactElement => {
+const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
+	const user = store.user;
+
 	useYamatoutaTitle(user.name, true);
 
 	return (
@@ -57,24 +61,20 @@ const Layout = ({ user }: LayoutProps): React.ReactElement => {
 			<EuiPageHeader pageTitle={user.name} />
 		</>
 	);
-};
+});
 
 const UserDetails = (): React.ReactElement | null => {
-	const [model, setModel] = React.useState<
-		{ user: IUserObject } | undefined
-	>();
+	const [store, setStore] = React.useState<UserDetailsStore>();
 
 	const { userId } = useParams();
 
 	React.useEffect(() => {
 		getUser({ userId: Number(userId) }).then((user) =>
-			setModel({
-				user: user,
-			}),
+			setStore(new UserDetailsStore(user)),
 		);
 	}, [userId]);
 
-	return model ? <Layout user={model.user} /> : null;
+	return store ? <Layout store={store} /> : null;
 };
 
 export default UserDetails;

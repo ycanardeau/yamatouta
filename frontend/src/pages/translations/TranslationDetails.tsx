@@ -12,6 +12,7 @@ import {
 	HistoryRegular,
 	InfoRegular,
 } from '@fluentui/react-icons';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -27,6 +28,7 @@ import { useAuth } from '../../components/useAuth';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { Permission } from '../../models/Permission';
+import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';
 import TranslationBasicInfo from './TranslationBasicInfo';
 import TranslationEdit from './TranslationEdit';
 import TranslationHistory from './TranslationHistory';
@@ -63,11 +65,13 @@ const Breadcrumbs = ({ translation }: BreadcrumbsProps): React.ReactElement => {
 };
 
 interface LayoutProps {
-	translation: ITranslationObject;
+	store: TranslationDetailsStore;
 }
 
-const Layout = ({ translation }: LayoutProps): React.ReactElement => {
+const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 	const { t } = useTranslation();
+
+	const translation = store.translation;
 
 	const title = `${translation.headword} ↔ ${translation.yamatokotoba}`;
 
@@ -90,20 +94,6 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 			<EuiSpacer size="xs" />
 			<EuiPageHeader
 				pageTitle={title}
-				/* TODO: rightSideItems={[
-					<EuiButton
-						size="s"
-						onClick={editTranslationDialog.show}
-						disabled={
-							!auth.permissionContext.hasPermission(
-								Permission.EditTranslations,
-							)
-						}
-						iconType={EditRegular}
-					>
-						{t('translations.editWord')}
-					</EuiButton>,
-				]}*/
 				tabs={[
 					{
 						href: `/translations/${translation.id}`,
@@ -127,6 +117,9 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 						},
 						prepend: <EuiIcon type={EditRegular} />,
 						isSelected: tab === 'edit',
+						disabled: !auth.permissionContext.hasPermission(
+							Permission.EditTranslations,
+						),
 						label: t('shared.edit'),
 					},
 					{
@@ -175,7 +168,9 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 						<Route
 							path="edit"
 							element={
-								<TranslationEdit translation={translation} />
+								<TranslationEdit
+									translationDetailsStore={store}
+								/>
 							}
 						/>
 					</Routes>
@@ -183,21 +178,20 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 			</EuiPageContent>
 		</>
 	);
-};
+});
 
 const TranslationDetails = (): React.ReactElement | null => {
 	const { translationId } = useParams();
 
-	const [model, setModel] =
-		React.useState<{ translation: ITranslationObject }>();
+	const [store, setStore] = React.useState<TranslationDetailsStore>();
 
 	React.useEffect(() => {
 		getTranslation({ translationId: Number(translationId) }).then(
-			(translation) => setModel({ translation: translation }),
+			(translation) => setStore(new TranslationDetailsStore(translation)),
 		);
 	}, [translationId]);
 
-	return model ? <Layout translation={model.translation} /> : null;
+	return store ? <Layout store={store} /> : null;
 };
 
 export default TranslationDetails;

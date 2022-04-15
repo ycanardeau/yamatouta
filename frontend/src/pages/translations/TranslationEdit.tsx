@@ -13,17 +13,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
 import { EditTranslationDialogStore } from '../../stores/translations/EditTranslationDialogStore';
+import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';
 
 interface TranslationEditProps {
-	translation: ITranslationObject;
+	translationDetailsStore: TranslationDetailsStore;
 }
 
 const TranslationEdit = observer(
-	({ translation }: TranslationEditProps): React.ReactElement => {
+	({ translationDetailsStore }: TranslationEditProps): React.ReactElement => {
 		const { t } = useTranslation();
+
+		const translation = translationDetailsStore.translation;
 
 		const [store] = React.useState(
 			() => new EditTranslationDialogStore(translation),
@@ -43,8 +45,8 @@ const TranslationEdit = observer(
 
 						const translation = await store.submit();
 
-						//onClose();
-						//onSuccess(translation);
+						translationDetailsStore.setTranslation(translation);
+						navigate(`/translations/${translation.id}`);
 					}}
 				>
 					<EuiFormRow label={t('translations.headword')}>

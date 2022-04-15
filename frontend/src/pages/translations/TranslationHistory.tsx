@@ -27,16 +27,15 @@ interface TranslationHistoryProps {
 const TranslationHistory = ({
 	translation,
 }: TranslationHistoryProps): React.ReactElement | null => {
-	const [model, setModel] =
-		React.useState<{ revisions: IRevisionObject[] }>();
+	const [revisions, setRevisions] = React.useState<IRevisionObject[]>();
 
 	React.useEffect(() => {
 		listTranslationRevisions({ translationId: translation.id }).then(
-			(result) => setModel({ revisions: result.items }),
+			(result) => setRevisions(result.items),
 		);
 	}, [translation]);
 
-	return model ? <Layout revisions={model.revisions} /> : null;
+	return revisions ? <Layout revisions={revisions} /> : null;
 };
 
 export default TranslationHistory;

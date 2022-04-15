@@ -27,16 +27,15 @@ interface QuoteHistoryProps {
 const QuoteHistory = ({
 	quote,
 }: QuoteHistoryProps): React.ReactElement | null => {
-	const [model, setModel] =
-		React.useState<{ revisions: IRevisionObject[] }>();
+	const [revisions, setRevisions] = React.useState<IRevisionObject[]>();
 
 	React.useEffect(() => {
 		listQuoteRevisions({ quoteId: quote.id }).then((result) =>
-			setModel({ revisions: result.items }),
+			setRevisions(result.items),
 		);
 	}, [quote]);
 
-	return model ? <Layout revisions={model.revisions} /> : null;
+	return revisions ? <Layout revisions={revisions} /> : null;
 };
 
 export default QuoteHistory;

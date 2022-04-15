@@ -12,6 +12,7 @@ import {
 	HistoryRegular,
 	InfoRegular,
 } from '@fluentui/react-icons';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -27,6 +28,7 @@ import { getWork } from '../../api/WorkApi';
 import { useAuth } from '../../components/useAuth';
 import { IWorkObject } from '../../dto/works/IWorkObject';
 import { Permission } from '../../models/Permission';
+import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
 import WorkEdit from './WorkEdit';
 import WorkHistory from './WorkHistory';
 
@@ -62,11 +64,13 @@ const Breadcrumbs = ({ work }: BreadcrumbsProps): React.ReactElement => {
 };
 
 interface LayoutProps {
-	work: IWorkObject;
+	store: WorkDetailsStore;
 }
 
-const Layout = ({ work }: LayoutProps): React.ReactElement => {
+const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 	const { t } = useTranslation();
+
+	const work = store.work;
 
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
@@ -146,30 +150,29 @@ const Layout = ({ work }: LayoutProps): React.ReactElement => {
 							path="revisions"
 							element={<WorkHistory work={work} />}
 						/>
-						<Route path="edit" element={<WorkEdit work={work} />} />
+						<Route
+							path="edit"
+							element={<WorkEdit workDetailsStore={store} />}
+						/>
 					</Routes>
 				</EuiPageContentBody>
 			</EuiPageContent>
 		</>
 	);
-};
+});
 
 const WorkDetails = (): React.ReactElement | null => {
-	const [model, setModel] = React.useState<
-		{ work: IWorkObject } | undefined
-	>();
+	const [store, setStore] = React.useState<WorkDetailsStore>();
 
 	const { workId } = useParams();
 
 	React.useEffect(() => {
 		getWork({ workId: Number(workId) }).then((work) =>
-			setModel({
-				work: work,
-			}),
+			setStore(new WorkDetailsStore(work)),
 		);
 	}, [workId]);
 
-	return model ? <Layout work={model.work} /> : null;
+	return store ? <Layout store={store} /> : null;
 };
 
 export default WorkDetails;

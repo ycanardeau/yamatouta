@@ -13,17 +13,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
+import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 import { EditArtistDialogStore } from '../../stores/artists/EditArtistDialogStore';
 
 interface ArtistEditProps {
-	artist: IArtistObject;
+	artistDetailsStore: ArtistDetailsStore;
 }
 
 const ArtistEdit = observer(
-	({ artist }: ArtistEditProps): React.ReactElement => {
+	({ artistDetailsStore }: ArtistEditProps): React.ReactElement => {
 		const { t } = useTranslation();
+
+		const artist = artistDetailsStore.artist;
 
 		const [store] = React.useState(() => new EditArtistDialogStore(artist));
 
@@ -41,8 +43,8 @@ const ArtistEdit = observer(
 
 						const artist = await store.submit();
 
-						//onClose();
-						//onSuccess(artist);
+						artistDetailsStore.setArtist(artist);
+						navigate(`/artists/${artist.id}`);
 					}}
 				>
 					<EuiFormRow label={t('artists.name')}>

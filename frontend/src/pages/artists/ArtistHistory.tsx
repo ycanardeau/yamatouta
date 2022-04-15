@@ -27,16 +27,15 @@ interface ArtistHistoryProps {
 const ArtistHistory = ({
 	artist,
 }: ArtistHistoryProps): React.ReactElement | null => {
-	const [model, setModel] =
-		React.useState<{ revisions: IRevisionObject[] }>();
+	const [revisions, setRevisions] = React.useState<IRevisionObject[]>();
 
 	React.useEffect(() => {
 		listArtistRevisions({ artistId: artist.id }).then((result) =>
-			setModel({ revisions: result.items }),
+			setRevisions(result.items),
 		);
 	}, [artist]);
 
-	return model ? <Layout revisions={model.revisions} /> : null;
+	return revisions ? <Layout revisions={revisions} /> : null;
 };
 
 export default ArtistHistory;

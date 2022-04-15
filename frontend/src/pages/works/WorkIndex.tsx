@@ -91,7 +91,7 @@ const WorkIndex = (): React.ReactElement => {
 						<CreateWorkDialog
 							onClose={createWorkDialog.close}
 							onSuccess={(work): void =>
-								navigate(`/works/${work.id}`)
+								navigate(`/works/${work.id}/edit`)
 							}
 						/>
 					)}

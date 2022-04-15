@@ -12,6 +12,7 @@ import {
 	HistoryRegular,
 	MusicNote2Regular,
 } from '@fluentui/react-icons';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -64,12 +65,13 @@ const Breadcrumbs = ({ artist }: BreadcrumbsProps): React.ReactElement => {
 };
 
 interface LayoutProps {
-	artist: IArtistObject;
 	store: ArtistDetailsStore;
 }
 
-const Layout = ({ artist, store }: LayoutProps): React.ReactElement => {
+const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 	const { t } = useTranslation();
+
+	const artist = store.artist;
 
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
@@ -142,7 +144,7 @@ const Layout = ({ artist, store }: LayoutProps): React.ReactElement => {
 						<Route
 							path=""
 							element={
-								<ArtistQuotes artist={artist} store={store} />
+								<ArtistQuotes artistDetailsStore={store} />
 							}
 						/>
 						<Route
@@ -160,32 +162,27 @@ const Layout = ({ artist, store }: LayoutProps): React.ReactElement => {
 						/>
 						<Route
 							path="edit"
-							element={<ArtistEdit artist={artist} />}
+							element={<ArtistEdit artistDetailsStore={store} />}
 						/>
 					</Routes>
 				</EuiPageContentBody>
 			</EuiPageContent>
 		</>
 	);
-};
+});
 
 const ArtistDetails = (): React.ReactElement | null => {
-	const [model, setModel] = React.useState<
-		{ artist: IArtistObject; store: ArtistDetailsStore } | undefined
-	>();
+	const [store, setStore] = React.useState<ArtistDetailsStore>();
 
 	const { artistId } = useParams();
 
 	React.useEffect(() => {
 		getArtist({ artistId: Number(artistId) }).then((artist) =>
-			setModel({
-				artist: artist,
-				store: new ArtistDetailsStore(artist.id),
-			}),
+			setStore(new ArtistDetailsStore(artist)),
 		);
 	}, [artistId]);
 
-	return model ? <Layout artist={model.artist} store={model.store} /> : null;
+	return store ? <Layout store={store} /> : null;
 };
 
 export default ArtistDetails;

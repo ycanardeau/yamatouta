@@ -12,6 +12,7 @@ import {
 	HistoryRegular,
 	InfoRegular,
 } from '@fluentui/react-icons';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -27,6 +28,7 @@ import { useAuth } from '../../components/useAuth';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { Permission } from '../../models/Permission';
+import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
 import QuoteBasicInfo from './QuoteBasicInfo';
 import QuoteEdit from './QuoteEdit';
 import QuoteHistory from './QuoteHistory';
@@ -63,11 +65,13 @@ const Breadcrumbs = ({ quote }: BreadcrumbsProps): React.ReactElement => {
 };
 
 interface LayoutProps {
-	quote: IQuoteObject;
+	store: QuoteDetailsStore;
 }
 
-const Layout = ({ quote }: LayoutProps): React.ReactElement => {
+const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 	const { t } = useTranslation();
+
+	const quote = store.quote;
 
 	useYamatoutaTitle(quote.text.replaceAll('\n', ''), true);
 
@@ -149,29 +153,27 @@ const Layout = ({ quote }: LayoutProps): React.ReactElement => {
 						/>
 						<Route
 							path="edit"
-							element={<QuoteEdit quote={quote} />}
+							element={<QuoteEdit quoteDetailsStore={store} />}
 						/>
 					</Routes>
 				</EuiPageContentBody>
 			</EuiPageContent>
 		</>
 	);
-};
+});
 
 const QuoteDetails = (): React.ReactElement | null => {
-	const [model, setModel] = React.useState<
-		{ quote: IQuoteObject } | undefined
-	>();
+	const [store, setStore] = React.useState<QuoteDetailsStore>();
 
 	const { quoteId } = useParams();
 
 	React.useEffect(() => {
 		getQuote({ quoteId: Number(quoteId) }).then((quote) =>
-			setModel({ quote: quote }),
+			setStore(new QuoteDetailsStore(quote)),
 		);
 	}, [quoteId]);
 
-	return model ? <Layout quote={model.quote} /> : null;
+	return store ? <Layout store={store} /> : null;
 };
 
 export default QuoteDetails;
