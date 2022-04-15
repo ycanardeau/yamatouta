@@ -16,7 +16,7 @@ export class EditArtistDialogStore {
 	@observable name = '';
 	@observable artistType = ArtistType.Person;
 
-	constructor({ artist }: { artist?: IArtistObject }) {
+	constructor(artist?: IArtistObject) {
 		makeObservable(this);
 
 		this.artist = artist;

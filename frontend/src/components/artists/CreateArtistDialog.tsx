@@ -20,23 +20,21 @@ import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
 import { EditArtistDialogStore } from '../../stores/artists/EditArtistDialogStore';
 
-interface EditArtistDialogProps {
+interface CreateArtistDialogProps {
 	artist?: IArtistObject;
 	onClose: () => void;
 	onSuccess: (artist: IArtistObject) => void;
 }
 
-const EditArtistDialog = observer(
+const CreateArtistDialog = observer(
 	({
 		artist,
 		onClose,
 		onSuccess,
-	}: EditArtistDialogProps): React.ReactElement => {
+	}: CreateArtistDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(
-			() => new EditArtistDialogStore({ artist: artist }),
-		);
+		const [store] = React.useState(() => new EditArtistDialogStore(artist));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 
@@ -118,4 +116,4 @@ const EditArtistDialog = observer(
 	},
 );
 
-export default EditArtistDialog;
+export default CreateArtistDialog;

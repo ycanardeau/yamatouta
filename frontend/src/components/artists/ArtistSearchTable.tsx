@@ -33,7 +33,6 @@ import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import DeleteArtistDialog from './DeleteArtistDialog';
-import EditArtistDialog from './EditArtistDialog';
 
 interface ArtistPopoverProps {
 	store: ArtistSearchStore;
@@ -52,7 +51,6 @@ const ArtistPopover = ({
 
 	const navigate = useNavigate();
 
-	const editArtistDialog = useDialog();
 	const deleteArtistDialog = useDialog();
 
 	const auth = useAuth();
@@ -86,6 +84,22 @@ const ArtistPopover = ({
 						{t('shared.viewBasicInfo')}
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
+						icon={<EuiIcon type={EditRegular} />}
+						href={`/artists/${artist.id}/edit`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(`/artists/${artist.id}/edit`);
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.EditArtists,
+							)
+						}
+					>
+						{t('shared.doEdit')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
 						icon={<EuiIcon type={HistoryRegular} />}
 						href={`/artists/${artist.id}/revisions`}
 						onClick={(e): void => {
@@ -100,20 +114,6 @@ const ArtistPopover = ({
 						}
 					>
 						{t('shared.viewHistory')}
-					</EuiContextMenuItem>
-					<EuiContextMenuItem
-						icon={<EuiIcon type={EditRegular} />}
-						onClick={(): void => {
-							closePopover();
-							editArtistDialog.show();
-						}}
-						disabled={
-							!auth.permissionContext.hasPermission(
-								Permission.EditArtists,
-							)
-						}
-					>
-						{t('shared.edit')}
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={DeleteRegular} color="danger" />}
@@ -131,16 +131,6 @@ const ArtistPopover = ({
 					</EuiContextMenuItem>
 				</EuiContextMenuPanel>
 			</EuiPopover>
-
-			{editArtistDialog.visible && (
-				<EditArtistDialog
-					artist={artist}
-					onClose={editArtistDialog.close}
-					onSuccess={async (): Promise<void> => {
-						await store.updateResults(true);
-					}}
-				/>
-			)}
 
 			{deleteArtistDialog.visible && (
 				<DeleteArtistDialog

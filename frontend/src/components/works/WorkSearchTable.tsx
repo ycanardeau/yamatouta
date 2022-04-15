@@ -33,7 +33,6 @@ import Pagination from '../Pagination';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import DeleteWorkDialog from './DeleteWorkDialog';
-import EditWorkDialog from './EditWorkDialog';
 
 interface WorkPopoverProps {
 	store: WorkSearchStore;
@@ -49,7 +48,6 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 
 	const navigate = useNavigate();
 
-	const editWorkDialog = useDialog();
 	const deleteWorkDialog = useDialog();
 
 	const auth = useAuth();
@@ -83,6 +81,22 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 						{t('shared.viewBasicInfo')}
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
+						icon={<EuiIcon type={EditRegular} />}
+						href={`/works/${work.id}/edit`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(`/works/${work.id}/edit`);
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.EditWorks,
+							)
+						}
+					>
+						{t('shared.doEdit')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
 						icon={<EuiIcon type={HistoryRegular} />}
 						href={`/works/${work.id}/revisions`}
 						onClick={(e): void => {
@@ -97,20 +111,6 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 						}
 					>
 						{t('shared.viewHistory')}
-					</EuiContextMenuItem>
-					<EuiContextMenuItem
-						icon={<EuiIcon type={EditRegular} />}
-						onClick={(): void => {
-							closePopover();
-							editWorkDialog.show();
-						}}
-						disabled={
-							!auth.permissionContext.hasPermission(
-								Permission.EditWorks,
-							)
-						}
-					>
-						{t('shared.edit')}
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={DeleteRegular} color="danger" />}
@@ -128,16 +128,6 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 					</EuiContextMenuItem>
 				</EuiContextMenuPanel>
 			</EuiPopover>
-
-			{editWorkDialog.visible && (
-				<EditWorkDialog
-					work={work}
-					onClose={editWorkDialog.close}
-					onSuccess={async (): Promise<void> => {
-						await store.updateResults(true);
-					}}
-				/>
-			)}
 
 			{deleteWorkDialog.visible && (
 				<DeleteWorkDialog

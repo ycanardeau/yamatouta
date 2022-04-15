@@ -7,7 +7,11 @@ import {
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
-import { HistoryRegular, InfoRegular } from '@fluentui/react-icons';
+import {
+	EditRegular,
+	HistoryRegular,
+	InfoRegular,
+} from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -24,6 +28,7 @@ import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { Permission } from '../../models/Permission';
 import QuoteBasicInfo from './QuoteBasicInfo';
+import QuoteEdit from './QuoteEdit';
 import QuoteHistory from './QuoteHistory';
 
 interface BreadcrumbsProps {
@@ -93,6 +98,21 @@ const Layout = ({ quote }: LayoutProps): React.ReactElement => {
 						label: t('shared.basicInfo'),
 					},
 					{
+						href: `/quotes/${quote.id}/edit`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/quotes/${quote.id}/edit`);
+						},
+						prepend: <EuiIcon type={EditRegular} />,
+						isSelected: tab === 'edit',
+						disabled: !auth.permissionContext.hasPermission(
+							Permission.EditQuotes,
+						),
+						label: t('shared.edit'),
+					},
+					{
 						href: `/quotes/${quote.id}/revisions`,
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
@@ -126,6 +146,10 @@ const Layout = ({ quote }: LayoutProps): React.ReactElement => {
 						<Route
 							path="revisions"
 							element={<QuoteHistory quote={quote} />}
+						/>
+						<Route
+							path="edit"
+							element={<QuoteEdit quote={quote} />}
 						/>
 					</Routes>
 				</EuiPageContentBody>

@@ -23,23 +23,21 @@ import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
 import { EditQuoteDialogStore } from '../../stores/quotes/EditQuoteDialogStore';
 
-interface EditQuoteDialogProps {
+interface CreateQuoteDialogProps {
 	quote?: IQuoteObject;
 	onClose: () => void;
 	onSuccess: (quote: IQuoteObject) => void;
 }
 
-const EditQuoteDialog = observer(
+const CreateQuoteDialog = observer(
 	({
 		quote,
 		onClose,
 		onSuccess,
-	}: EditQuoteDialogProps): React.ReactElement => {
+	}: CreateQuoteDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(
-			() => new EditQuoteDialogStore({ quote: quote }),
-		);
+		const [store] = React.useState(() => new EditQuoteDialogStore(quote));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 
@@ -177,4 +175,4 @@ const EditQuoteDialog = observer(
 	},
 );
 
-export default EditQuoteDialog;
+export default CreateQuoteDialog;

@@ -7,7 +7,11 @@ import {
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
-import { HistoryRegular, InfoRegular } from '@fluentui/react-icons';
+import {
+	EditRegular,
+	HistoryRegular,
+	InfoRegular,
+} from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -24,6 +28,7 @@ import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { Permission } from '../../models/Permission';
 import TranslationBasicInfo from './TranslationBasicInfo';
+import TranslationEdit from './TranslationEdit';
 import TranslationHistory from './TranslationHistory';
 
 interface BreadcrumbsProps {
@@ -113,6 +118,18 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 						label: t('shared.basicInfo'),
 					},
 					{
+						href: `/translations/${translation.id}/edit`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/translations/${translation.id}/edit`);
+						},
+						prepend: <EuiIcon type={EditRegular} />,
+						isSelected: tab === 'edit',
+						label: t('shared.edit'),
+					},
+					{
 						href: `/translations/${translation.id}/revisions`,
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
@@ -155,15 +172,13 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 								<TranslationHistory translation={translation} />
 							}
 						/>
+						<Route
+							path="edit"
+							element={
+								<TranslationEdit translation={translation} />
+							}
+						/>
 					</Routes>
-
-					{/* TODO: editTranslationDialog.visible && (
-				<EditTranslationDialog
-					translation={translation}
-					onClose={editTranslationDialog.close}
-					onSuccess={(translation): void => {}}
-				/>
-			)*/}
 				</EuiPageContentBody>
 			</EuiPageContent>
 		</>

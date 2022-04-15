@@ -20,19 +20,21 @@ import { IWorkObject } from '../../dto/works/IWorkObject';
 import { WorkType } from '../../models/WorkType';
 import { EditWorkDialogStore } from '../../stores/works/EditWorkDialogStore';
 
-interface EditWorkDialogProps {
+interface CreateWorkDialogProps {
 	work?: IWorkObject;
 	onClose: () => void;
 	onSuccess: (work: IWorkObject) => void;
 }
 
-const EditWorkDialog = observer(
-	({ work, onClose, onSuccess }: EditWorkDialogProps): React.ReactElement => {
+const CreateWorkDialog = observer(
+	({
+		work,
+		onClose,
+		onSuccess,
+	}: CreateWorkDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(
-			() => new EditWorkDialogStore({ work: work }),
-		);
+		const [store] = React.useState(() => new EditWorkDialogStore(work));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 
@@ -110,4 +112,4 @@ const EditWorkDialog = observer(
 	},
 );
 
-export default EditWorkDialog;
+export default CreateWorkDialog;

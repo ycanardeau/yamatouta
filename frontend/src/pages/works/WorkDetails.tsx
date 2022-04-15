@@ -7,7 +7,11 @@ import {
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
-import { HistoryRegular, InfoRegular } from '@fluentui/react-icons';
+import {
+	EditRegular,
+	HistoryRegular,
+	InfoRegular,
+} from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -23,6 +27,7 @@ import { getWork } from '../../api/WorkApi';
 import { useAuth } from '../../components/useAuth';
 import { IWorkObject } from '../../dto/works/IWorkObject';
 import { Permission } from '../../models/Permission';
+import WorkEdit from './WorkEdit';
 import WorkHistory from './WorkHistory';
 
 interface BreadcrumbsProps {
@@ -90,6 +95,21 @@ const Layout = ({ work }: LayoutProps): React.ReactElement => {
 						label: t('shared.basicInfo'),
 					},
 					{
+						href: `/works/${work.id}/edit`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/works/${work.id}/edit`);
+						},
+						prepend: <EuiIcon type={EditRegular} />,
+						isSelected: tab === 'edit',
+						disabled: !auth.permissionContext.hasPermission(
+							Permission.EditWorks,
+						),
+						label: t('shared.edit'),
+					},
+					{
 						href: `/works/${work.id}/revisions`,
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
@@ -126,6 +146,7 @@ const Layout = ({ work }: LayoutProps): React.ReactElement => {
 							path="revisions"
 							element={<WorkHistory work={work} />}
 						/>
+						<Route path="edit" element={<WorkEdit work={work} />} />
 					</Routes>
 				</EuiPageContentBody>
 			</EuiPageContent>

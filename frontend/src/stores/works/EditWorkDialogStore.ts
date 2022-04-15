@@ -16,7 +16,7 @@ export class EditWorkDialogStore {
 	@observable name = '';
 	@observable workType = WorkType.Book;
 
-	constructor({ work }: { work?: IWorkObject }) {
+	constructor(work?: IWorkObject) {
 		makeObservable(this);
 
 		this.work = work;

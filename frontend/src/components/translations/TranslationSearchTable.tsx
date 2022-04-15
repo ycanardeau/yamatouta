@@ -40,7 +40,6 @@ import Pagination from '../Pagination';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import DeleteTranslationDialog from './DeleteTranslationDialog';
-import EditTranslationDialog from './EditTranslationDialog';
 
 interface HighlightProps {
 	children: React.ReactNode;
@@ -85,7 +84,6 @@ const TranslationPopover = ({
 
 	const navigate = useNavigate();
 
-	const editTranslationDialog = useDialog();
 	const deleteTranslationDialog = useDialog();
 
 	const auth = useAuth();
@@ -119,6 +117,22 @@ const TranslationPopover = ({
 						{t('shared.viewBasicInfo')}
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
+						icon={<EuiIcon type={EditRegular} />}
+						href={`/translations/${translation.id}/edit`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(`/translations/${translation.id}/edit`);
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.EditTranslations,
+							)
+						}
+					>
+						{t('shared.doEdit')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
 						icon={<EuiIcon type={HistoryRegular} />}
 						href={`/translations/${translation.id}/revisions`}
 						onClick={(e): void => {
@@ -135,20 +149,6 @@ const TranslationPopover = ({
 						}
 					>
 						{t('shared.viewHistory')}
-					</EuiContextMenuItem>
-					<EuiContextMenuItem
-						icon={<EuiIcon type={EditRegular} />}
-						onClick={(): void => {
-							closePopover();
-							editTranslationDialog.show();
-						}}
-						disabled={
-							!auth.permissionContext.hasPermission(
-								Permission.EditTranslations,
-							)
-						}
-					>
-						{t('shared.edit')}
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={DeleteRegular} color="danger" />}
@@ -180,16 +180,6 @@ const TranslationPopover = ({
 					)}
 				</EuiContextMenuPanel>
 			</EuiPopover>
-
-			{editTranslationDialog.visible && (
-				<EditTranslationDialog
-					translation={translation}
-					onClose={editTranslationDialog.close}
-					onSuccess={(translation): void =>
-						navigate(`/translations/${translation.id}`)
-					}
-				/>
-			)}
 
 			{deleteTranslationDialog.visible && (
 				<DeleteTranslationDialog

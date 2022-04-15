@@ -72,7 +72,9 @@ const Pagination = observer(({ store }: PaginationProps) => {
 
 			<EuiFlexItem grow={false}>
 				<EuiPagination
-					pageCount={store.totalPages}
+					pageCount={
+						store.totalPages === 0 ? undefined : store.totalPages
+					}
 					activePage={store.page - 1}
 					onPageClick={(pageIndex): void =>
 						store.setPage(pageIndex + 1)

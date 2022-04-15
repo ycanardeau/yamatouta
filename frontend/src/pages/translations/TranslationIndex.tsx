@@ -13,7 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import EditTranslationDialog from '../../components/translations/EditTranslationDialog';
+import CreateTranslationDialog from '../../components/translations/CreateTranslationDialog';
 import TranslationSearchOptions from '../../components/translations/TranslationSearchOptions';
 import TranslationSearchTable from '../../components/translations/TranslationSearchTable';
 import { useAuth } from '../../components/useAuth';
@@ -94,10 +94,10 @@ const TranslationIndex = observer((): React.ReactElement => {
 					<TranslationSearchTable store={store} />
 
 					{createTranslationDialog.visible && (
-						<EditTranslationDialog
+						<CreateTranslationDialog
 							onClose={createTranslationDialog.close}
 							onSuccess={(translation): void =>
-								navigate(`/translations/${translation.id}`)
+								navigate(`/translations/${translation.id}/edit`)
 							}
 						/>
 					)}

@@ -7,7 +7,11 @@ import {
 	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
-import { HistoryRegular, MusicNote2Regular } from '@fluentui/react-icons';
+import {
+	EditRegular,
+	HistoryRegular,
+	MusicNote2Regular,
+} from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -20,14 +24,13 @@ import {
 } from 'react-router-dom';
 
 import { getArtist } from '../../api/ArtistApi';
-import lazyWithRetry from '../../components/lazyWithRetry';
 import { useAuth } from '../../components/useAuth';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { Permission } from '../../models/Permission';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
+import ArtistEdit from './ArtistEdit';
 import ArtistHistory from './ArtistHistory';
-
-const ArtistQuotes = lazyWithRetry(() => import('./ArtistQuotes'));
+import ArtistQuotes from './ArtistQuotes';
 
 interface BreadcrumbsProps {
 	artist: IArtistObject;
@@ -95,6 +98,21 @@ const Layout = ({ artist, store }: LayoutProps): React.ReactElement => {
 						label: t('shared.quotes'),
 					},
 					{
+						href: `/artists/${artist.id}/edit`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/artists/${artist.id}/edit`);
+						},
+						prepend: <EuiIcon type={EditRegular} />,
+						isSelected: tab === 'edit',
+						disabled: !auth.permissionContext.hasPermission(
+							Permission.EditArtists,
+						),
+						label: t('shared.edit'),
+					},
+					{
 						href: `/artists/${artist.id}/revisions`,
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
@@ -139,6 +157,10 @@ const Layout = ({ artist, store }: LayoutProps): React.ReactElement => {
 						<Route
 							path="revisions"
 							element={<ArtistHistory artist={artist} />}
+						/>
+						<Route
+							path="edit"
+							element={<ArtistEdit artist={artist} />}
 						/>
 					</Routes>
 				</EuiPageContentBody>

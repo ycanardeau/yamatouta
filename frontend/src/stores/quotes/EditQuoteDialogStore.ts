@@ -23,7 +23,7 @@ export class EditQuoteDialogStore {
 		getArtist({ artistId: entryId }),
 	);
 
-	constructor({ quote }: { quote?: IQuoteObject }) {
+	constructor(quote?: IQuoteObject) {
 		makeObservable(this);
 
 		this.quote = quote;

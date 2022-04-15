@@ -16,7 +16,7 @@ import { useAuth } from '../../components/useAuth';
 import { useDialog } from '../../components/useDialog';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import EditWorkDialog from '../../components/works/EditWorkDialog';
+import CreateWorkDialog from '../../components/works/CreateWorkDialog';
 import WorkSearchTable from '../../components/works/WorkSearchTable';
 import { Permission } from '../../models/Permission';
 import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
@@ -88,7 +88,7 @@ const WorkIndex = (): React.ReactElement => {
 					<WorkSearchTable store={store} />
 
 					{createWorkDialog.visible && (
-						<EditWorkDialog
+						<CreateWorkDialog
 							onClose={createWorkDialog.close}
 							onSuccess={(work): void =>
 								navigate(`/works/${work.id}`)

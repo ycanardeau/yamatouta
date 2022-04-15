@@ -20,22 +20,22 @@ import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
 import { EditTranslationDialogStore } from '../../stores/translations/EditTranslationDialogStore';
 
-interface EditTranslationDialogProps {
+interface CreateTranslationDialogProps {
 	translation?: ITranslationObject;
 	onClose: () => void;
 	onSuccess: (translation: ITranslationObject) => void;
 }
 
-const EditTranslationDialog = observer(
+const CreateTranslationDialog = observer(
 	({
 		translation,
 		onClose,
 		onSuccess,
-	}: EditTranslationDialogProps): React.ReactElement => {
+	}: CreateTranslationDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(
-			() => new EditTranslationDialogStore({ translation: translation }),
+			() => new EditTranslationDialogStore(translation),
 		);
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
@@ -140,4 +140,4 @@ const EditTranslationDialog = observer(
 	},
 );
 
-export default EditTranslationDialog;
+export default CreateTranslationDialog;

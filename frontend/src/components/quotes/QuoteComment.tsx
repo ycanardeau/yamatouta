@@ -25,7 +25,6 @@ import Avatar from '../Avatar';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import DeleteQuoteDialog from './DeleteQuoteDialog';
-import EditQuoteDialog from './EditQuoteDialog';
 
 interface QuotePopoverProps {
 	store?: QuoteSearchStore;
@@ -44,7 +43,6 @@ const QuotePopover = ({
 
 	const navigate = useNavigate();
 
-	const editQuoteDialog = useDialog();
 	const deleteQuoteDialog = useDialog();
 
 	const auth = useAuth();
@@ -78,6 +76,22 @@ const QuotePopover = ({
 						{t('shared.viewBasicInfo')}
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
+						icon={<EuiIcon type={EditRegular} />}
+						href={`/quotes/${quote.id}/edit`}
+						onClick={(e): void => {
+							e.preventDefault();
+							closePopover();
+							navigate(`/quotes/${quote.id}/edit`);
+						}}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.EditQuotes,
+							)
+						}
+					>
+						{t('shared.doEdit')}
+					</EuiContextMenuItem>
+					<EuiContextMenuItem
 						icon={<EuiIcon type={HistoryRegular} />}
 						href={`/quotes/${quote.id}/revisions`}
 						onClick={(e): void => {
@@ -92,20 +106,6 @@ const QuotePopover = ({
 						}
 					>
 						{t('shared.viewHistory')}
-					</EuiContextMenuItem>
-					<EuiContextMenuItem
-						icon={<EuiIcon type={EditRegular} />}
-						onClick={(): void => {
-							closePopover();
-							editQuoteDialog.show();
-						}}
-						disabled={
-							!auth.permissionContext.hasPermission(
-								Permission.EditQuotes,
-							)
-						}
-					>
-						{t('shared.edit')}
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={DeleteRegular} color="danger" />}
@@ -123,16 +123,6 @@ const QuotePopover = ({
 					</EuiContextMenuItem>
 				</EuiContextMenuPanel>
 			</EuiPopover>
-
-			{editQuoteDialog.visible && (
-				<EditQuoteDialog
-					quote={quote}
-					onClose={editQuoteDialog.close}
-					onSuccess={async (): Promise<void> => {
-						await store?.updateResults(true);
-					}}
-				/>
-			)}
 
 			{deleteQuoteDialog.visible && (
 				<DeleteQuoteDialog

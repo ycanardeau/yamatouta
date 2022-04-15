@@ -19,7 +19,7 @@ export class EditTranslationDialogStore {
 	@observable yamatokotoba = '';
 	@observable category = WordCategory.Unspecified;
 
-	constructor({ translation }: { translation?: ITranslationObject }) {
+	constructor(translation?: ITranslationObject) {
 		makeObservable(this);
 
 		this.translation = translation;
