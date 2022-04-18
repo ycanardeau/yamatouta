@@ -22,22 +22,22 @@ import {
 	IUpdateArtistBody,
 	updateArtistBodySchema,
 } from '../requests/artists/IUpdateArtistBody';
-import { CreateArtistService } from '../services/artists/CreateArtistService';
-import { GetArtistService } from '../services/artists/GetArtistService';
-import { ListArtistsService } from '../services/artists/ListArtistsService';
-import { UpdateArtistService } from '../services/artists/UpdateArtistService';
-import { DeleteArtistService } from '../services/entries/DeleteEntryService';
-import { ListArtistRevisionsService } from '../services/entries/ListEntryRevisionsService';
+import { CreateArtistCommandHandler } from '../services/commands/artists/CreateArtistCommandHandler';
+import { UpdateArtistCommandHandler } from '../services/commands/artists/UpdateArtistCommandHandler';
+import { DeleteArtistCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
+import { GetArtistQueryHandler } from '../services/queries/artists/GetArtistQueryHandler';
+import { ListArtistsQueryHandler } from '../services/queries/artists/ListArtistsQueryHandler';
+import { ListArtistRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
 
 @Controller('artists')
 export class ArtistController {
 	constructor(
-		private readonly createArtistService: CreateArtistService,
-		private readonly listArtistsService: ListArtistsService,
-		private readonly getArtistService: GetArtistService,
-		private readonly updateArtistService: UpdateArtistService,
-		private readonly deleteArtistService: DeleteArtistService,
-		private readonly listArtistRevisionsService: ListArtistRevisionsService,
+		private readonly createArtistCommandHandler: CreateArtistCommandHandler,
+		private readonly listArtistsQueryHandler: ListArtistsQueryHandler,
+		private readonly getArtistQueryHandler: GetArtistQueryHandler,
+		private readonly updateArtistCommandHandler: UpdateArtistCommandHandler,
+		private readonly deleteArtistCommandHandler: DeleteArtistCommandHandler,
+		private readonly listArtistRevisionsQueryHandler: ListArtistRevisionsQueryHandler,
 	) {}
 
 	@Post()
@@ -45,7 +45,7 @@ export class ArtistController {
 		@Body(new JoiValidationPipe(updateArtistBodySchema))
 		body: IUpdateArtistBody,
 	): Promise<ArtistObject> {
-		return this.createArtistService.execute(body);
+		return this.createArtistCommandHandler.execute(body);
 	}
 
 	@Get()
@@ -53,14 +53,14 @@ export class ArtistController {
 		@Query(new JoiValidationPipe(listArtistsQuerySchema))
 		query: IListArtistsQuery,
 	): Promise<SearchResultObject<ArtistObject>> {
-		return this.listArtistsService.execute(query);
+		return this.listArtistsQueryHandler.execute(query);
 	}
 
 	@Get(':artistId')
 	getArtist(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<ArtistObject> {
-		return this.getArtistService.execute(artistId);
+		return this.getArtistQueryHandler.execute(artistId);
 	}
 
 	@Patch(':artistId')
@@ -69,20 +69,20 @@ export class ArtistController {
 		@Body(new JoiValidationPipe(updateArtistBodySchema))
 		body: IUpdateArtistBody,
 	): Promise<ArtistObject> {
-		return this.updateArtistService.execute(artistId, body);
+		return this.updateArtistCommandHandler.execute(artistId, body);
 	}
 
 	@Delete(':artistId')
 	deleteArtist(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<void> {
-		return this.deleteArtistService.execute(artistId);
+		return this.deleteArtistCommandHandler.execute(artistId);
 	}
 
 	@Get(':artistId/revisions')
 	listArtistRevisions(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listArtistRevisionsService.execute(artistId);
+		return this.listArtistRevisionsQueryHandler.execute(artistId);
 	}
 }

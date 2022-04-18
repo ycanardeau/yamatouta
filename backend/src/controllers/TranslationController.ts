@@ -22,22 +22,22 @@ import {
 	updateTranslationBodySchema,
 	IUpdateTranslationBody,
 } from '../requests/translations/IUpdateTranslationBody';
-import { DeleteTranslationService } from '../services/entries/DeleteEntryService';
-import { ListTranslationRevisionsService } from '../services/entries/ListEntryRevisionsService';
-import { CreateTranslationService } from '../services/translations/CreateTranslationService';
-import { GetTranslationService } from '../services/translations/GetTranslationService';
-import { ListTranslationsService } from '../services/translations/ListTranslationsService';
-import { UpdateTranslationService } from '../services/translations/UpdateTranslationService';
+import { DeleteTranslationCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
+import { CreateTranslationCommandHandler } from '../services/commands/translations/CreateTranslationCommandHandler';
+import { UpdateTranslationCommandHandler } from '../services/commands/translations/UpdateTranslationCommandHandler';
+import { ListTranslationRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
+import { GetTranslationQueryHandler } from '../services/queries/translations/GetTranslationQueryHandler';
+import { ListTranslationsQueryHandler } from '../services/queries/translations/ListTranslationsQueryHandler';
 
 @Controller('translations')
 export class TranslationController {
 	constructor(
-		private readonly createTranslationService: CreateTranslationService,
-		private readonly listTranslationsService: ListTranslationsService,
-		private readonly updateTranslationService: UpdateTranslationService,
-		private readonly deleteTranslationService: DeleteTranslationService,
-		private readonly getTranslationService: GetTranslationService,
-		private readonly listTranslationRevisionsService: ListTranslationRevisionsService,
+		private readonly createTranslationCommandHandler: CreateTranslationCommandHandler,
+		private readonly listTranslationsQueryHandler: ListTranslationsQueryHandler,
+		private readonly updateTranslationCommandHandler: UpdateTranslationCommandHandler,
+		private readonly deleteTranslationCommandHandler: DeleteTranslationCommandHandler,
+		private readonly getTranslationQueryHandler: GetTranslationQueryHandler,
+		private readonly listTranslationRevisionsQueryHandler: ListTranslationRevisionsQueryHandler,
 	) {}
 
 	@Post()
@@ -45,7 +45,7 @@ export class TranslationController {
 		@Body(new JoiValidationPipe(updateTranslationBodySchema))
 		body: IUpdateTranslationBody,
 	): Promise<TranslationObject> {
-		return this.createTranslationService.execute(body);
+		return this.createTranslationCommandHandler.execute(body);
 	}
 
 	@Get()
@@ -53,7 +53,7 @@ export class TranslationController {
 		@Query(new JoiValidationPipe(listTranslationsQuerySchema))
 		query: IListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
-		return this.listTranslationsService.execute(query);
+		return this.listTranslationsQueryHandler.execute(query);
 	}
 
 	@Patch(':translationId')
@@ -62,27 +62,30 @@ export class TranslationController {
 		@Body(new JoiValidationPipe(updateTranslationBodySchema))
 		body: IUpdateTranslationBody,
 	): Promise<TranslationObject> {
-		return this.updateTranslationService.execute(translationId, body);
+		return this.updateTranslationCommandHandler.execute(
+			translationId,
+			body,
+		);
 	}
 
 	@Delete(':translationId')
 	deleteTranslation(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<void> {
-		return this.deleteTranslationService.execute(translationId);
+		return this.deleteTranslationCommandHandler.execute(translationId);
 	}
 
 	@Get(':translationId')
 	getTranslation(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<TranslationObject> {
-		return this.getTranslationService.execute(translationId);
+		return this.getTranslationQueryHandler.execute(translationId);
 	}
 
 	@Get(':translationId/revisions')
 	listTranslationRevisions(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listTranslationRevisionsService.execute(translationId);
+		return this.listTranslationRevisionsQueryHandler.execute(translationId);
 	}
 }

@@ -20,48 +20,87 @@ import { AuditLogger } from './services/AuditLogger';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { NgramConverter } from './services/NgramConverter';
 import { PermissionContext } from './services/PermissionContext';
-import { CreateMissingRevisionsService } from './services/admin/CreateMissingRevisionsService';
-import { CreateArtistService } from './services/artists/CreateArtistService';
-import { GetArtistService } from './services/artists/GetArtistService';
-import { ListArtistIdsService } from './services/artists/ListArtistIdsService';
-import { ListArtistsService } from './services/artists/ListArtistsService';
-import { UpdateArtistService } from './services/artists/UpdateArtistService';
 import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
 import { LoginService } from './services/auth/LoginService';
 import { LogoutService } from './services/auth/LogoutService';
+import { CreateMissingRevisionsCommandHandler } from './services/commands/admin/CreateMissingRevisionsCommandHandler';
+import { CreateArtistCommandHandler } from './services/commands/artists/CreateArtistCommandHandler';
+import { UpdateArtistCommandHandler } from './services/commands/artists/UpdateArtistCommandHandler';
 import {
-	DeleteArtistService,
-	DeleteQuoteService,
-	DeleteTranslationService,
-	DeleteWorkService,
-} from './services/entries/DeleteEntryService';
-import {
-	ListArtistRevisionsService,
-	ListQuoteRevisionsService,
-	ListTranslationRevisionsService,
-	ListWorkRevisionsService,
-} from './services/entries/ListEntryRevisionsService';
+	DeleteArtistCommandHandler,
+	DeleteQuoteCommandHandler,
+	DeleteTranslationCommandHandler,
+	DeleteWorkCommandHandler,
+} from './services/commands/entries/DeleteEntryCommandHandler';
+import { CreateQuoteCommandHandler } from './services/commands/quotes/CreateQuoteCommandHandler';
+import { UpdateQuoteCommandHandler } from './services/commands/quotes/UpdateQuoteCommandHandler';
+import { CreateTranslationCommandHandler } from './services/commands/translations/CreateTranslationCommandHandler';
+import { UpdateTranslationCommandHandler } from './services/commands/translations/UpdateTranslationCommandHandler';
+import { AuthenticateUserCommandHandler } from './services/commands/users/AuthenticateUserCommandHandler';
+import { CreateUserCommandHandler } from './services/commands/users/CreateUserCommandHandler';
+import { UpdateAuthenticatedUserCommandHandler } from './services/commands/users/UpdateAuthenticatedUserCommandHandler';
+import { CreateWorkCommandHandler } from './services/commands/works/CreateWorkCommandHandler';
+import { UpdateWorkCommandHandler } from './services/commands/works/UpdateWorkCommandHandler';
 import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasherFactory';
-import { CreateQuoteService } from './services/quotes/CreateQuoteService';
-import { GetQuoteService } from './services/quotes/GetQuoteService';
-import { ListQuoteIdsService } from './services/quotes/ListQuoteIdsService';
-import { ListQuotesService } from './services/quotes/ListQuotesService';
-import { UpdateQuoteService } from './services/quotes/UpdateQuoteService';
-import { CreateTranslationService } from './services/translations/CreateTranslationService';
-import { GetTranslationService } from './services/translations/GetTranslationService';
-import { ListTranslationsService } from './services/translations/ListTranslationsService';
-import { UpdateTranslationService } from './services/translations/UpdateTranslationService';
-import { AuthenticateUserService } from './services/users/AuthenticateUserService';
-import { CreateUserService } from './services/users/CreateUserService';
-import { GetAuthenticatedUserService } from './services/users/GetAuthenticatedUserService';
-import { GetUserService } from './services/users/GetUserService';
-import { ListUsersService } from './services/users/ListUsersService';
-import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthenticatedUserService';
-import { CreateWorkService } from './services/works/CreateWorkService';
-import { GetWorkService } from './services/works/GetWorkService';
-import { ListWorksService } from './services/works/ListWorksService';
-import { UpdateWorkService } from './services/works/UpdateWorkService';
+import { GetArtistQueryHandler } from './services/queries/artists/GetArtistQueryHandler';
+import { ListArtistIdsQueryHandler } from './services/queries/artists/ListArtistIdsQueryHandler';
+import { ListArtistsQueryHandler } from './services/queries/artists/ListArtistsQueryHandler';
+import {
+	ListArtistRevisionsQueryHandler,
+	ListQuoteRevisionsQueryHandler,
+	ListTranslationRevisionsQueryHandler,
+	ListWorkRevisionsQueryHandler,
+} from './services/queries/entries/ListEntryRevisionsQueryHandler';
+import { GetQuoteQueryHandler } from './services/queries/quotes/GetQuoteQueryHandler';
+import { ListQuoteIdsQueryHandler } from './services/queries/quotes/ListQuoteIdsQueryHandler';
+import { ListQuotesQueryHandler } from './services/queries/quotes/ListQuotesQueryHandler';
+import { GetTranslationQueryHandler } from './services/queries/translations/GetTranslationQueryHandler';
+import { ListTranslationsQueryHandler } from './services/queries/translations/ListTranslationsQueryHandler';
+import { GetAuthenticatedUserQueryHandler } from './services/queries/users/GetAuthenticatedUserQueryHandler';
+import { GetUserQueryHandler } from './services/queries/users/GetUserQueryHandler';
+import { ListUsersQueryHandler } from './services/queries/users/ListUsersQueryHandler';
+import { GetWorkQueryHandler } from './services/queries/works/GetWorkQueryHandler';
+import { ListWorksQueryHandler } from './services/queries/works/ListWorksQueryHandler';
+
+const queryHandlers = [
+	GetArtistQueryHandler,
+	GetAuthenticatedUserQueryHandler,
+	GetQuoteQueryHandler,
+	GetTranslationQueryHandler,
+	GetUserQueryHandler,
+	GetWorkQueryHandler,
+	ListArtistIdsQueryHandler,
+	ListArtistRevisionsQueryHandler,
+	ListArtistsQueryHandler,
+	ListQuoteIdsQueryHandler,
+	ListQuoteRevisionsQueryHandler,
+	ListQuotesQueryHandler,
+	ListTranslationRevisionsQueryHandler,
+	ListTranslationsQueryHandler,
+	ListUsersQueryHandler,
+	ListWorkRevisionsQueryHandler,
+	ListWorksQueryHandler,
+];
+
+const commandHandlers = [
+	AuthenticateUserCommandHandler,
+	CreateArtistCommandHandler,
+	CreateMissingRevisionsCommandHandler,
+	CreateQuoteCommandHandler,
+	CreateTranslationCommandHandler,
+	CreateUserCommandHandler,
+	CreateWorkCommandHandler,
+	DeleteArtistCommandHandler,
+	DeleteQuoteCommandHandler,
+	DeleteTranslationCommandHandler,
+	DeleteWorkCommandHandler,
+	UpdateArtistCommandHandler,
+	UpdateQuoteCommandHandler,
+	UpdateTranslationCommandHandler,
+	UpdateAuthenticatedUserCommandHandler,
+	UpdateWorkCommandHandler,
+];
 
 @Module({
 	imports: [
@@ -87,36 +126,10 @@ import { UpdateWorkService } from './services/works/UpdateWorkService';
 		WorkController,
 	],
 	providers: [
+		...queryHandlers,
+		...commandHandlers,
 		AuditLogger,
-		AuthenticateUserService,
-		CreateArtistService,
-		CreateMissingRevisionsService,
-		CreateQuoteService,
-		CreateTranslationService,
-		CreateUserService,
-		CreateWorkService,
-		DeleteArtistService,
-		DeleteQuoteService,
-		DeleteTranslationService,
-		DeleteWorkService,
 		GenerateSitemapService,
-		GetArtistService,
-		GetAuthenticatedUserService,
-		GetQuoteService,
-		GetTranslationService,
-		GetUserService,
-		GetWorkService,
-		ListArtistIdsService,
-		ListArtistRevisionsService,
-		ListArtistsService,
-		ListQuoteIdsService,
-		ListQuoteRevisionsService,
-		ListQuotesService,
-		ListTranslationRevisionsService,
-		ListTranslationsService,
-		ListUsersService,
-		ListWorkRevisionsService,
-		ListWorksService,
 		LocalSerializer,
 		LocalStrategy,
 		LoginService,
@@ -124,11 +137,6 @@ import { UpdateWorkService } from './services/works/UpdateWorkService';
 		NgramConverter,
 		PasswordHasherFactory,
 		PermissionContext,
-		UpdateAuthenticatedUserService,
-		UpdateArtistService,
-		UpdateQuoteService,
-		UpdateTranslationService,
-		UpdateWorkService,
 	],
 })
 export class AppModule {}

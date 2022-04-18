@@ -18,12 +18,12 @@ import {
 } from '../requests/auth/ICreateUserBody';
 import { LoginService } from '../services/auth/LoginService';
 import { LogoutService } from '../services/auth/LogoutService';
-import { CreateUserService } from '../services/users/CreateUserService';
+import { CreateUserCommandHandler } from '../services/commands/users/CreateUserCommandHandler';
 
 @Controller('auth')
 export class AuthController {
 	constructor(
-		private readonly createUserService: CreateUserService,
+		private readonly createUserCommandHandler: CreateUserCommandHandler,
 		private readonly loginService: LoginService,
 		private readonly logoutService: LogoutService,
 	) {}
@@ -33,7 +33,7 @@ export class AuthController {
 		@Body(new JoiValidationPipe(createUserBodySchema))
 		body: ICreateUserBody,
 	): Promise<AuthenticatedUserObject> {
-		return this.createUserService.execute(body);
+		return this.createUserCommandHandler.execute(body);
 	}
 
 	@HttpCode(HttpStatus.OK)

@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { SitemapStream, streamToPromise } from 'sitemap';
 
-import { ListArtistIdsService } from './artists/ListArtistIdsService';
-import { ListQuoteIdsService } from './quotes/ListQuoteIdsService';
+import { ListArtistIdsQueryHandler } from './queries/artists/ListArtistIdsQueryHandler';
+import { ListQuoteIdsQueryHandler } from './queries/quotes/ListQuoteIdsQueryHandler';
 
 @Injectable()
 export class GenerateSitemapService {
 	constructor(
-		private readonly listArtistIdsService: ListArtistIdsService,
-		private readonly listQuoteIdsService: ListQuoteIdsService,
+		private readonly listArtistIdsQueryHandler: ListArtistIdsQueryHandler,
+		private readonly listQuoteIdsQueryHandler: ListQuoteIdsQueryHandler,
 	) {}
 
 	async execute(): Promise<Buffer> {
 		const [artistIds, quoteIds] = await Promise.all([
-			this.listArtistIdsService.execute(),
-			this.listQuoteIdsService.execute(),
+			this.listArtistIdsQueryHandler.execute(),
+			this.listQuoteIdsQueryHandler.execute(),
 		]);
 
 		const sitemapStream = new SitemapStream({

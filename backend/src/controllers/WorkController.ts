@@ -22,22 +22,22 @@ import {
 	IUpdateWorkBody,
 	updateWorkBodySchema,
 } from '../requests/works/IUpdateWorkBody';
-import { DeleteWorkService } from '../services/entries/DeleteEntryService';
-import { ListWorkRevisionsService } from '../services/entries/ListEntryRevisionsService';
-import { CreateWorkService } from '../services/works/CreateWorkService';
-import { GetWorkService } from '../services/works/GetWorkService';
-import { ListWorksService } from '../services/works/ListWorksService';
-import { UpdateWorkService } from '../services/works/UpdateWorkService';
+import { DeleteWorkCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
+import { CreateWorkCommandHandler } from '../services/commands/works/CreateWorkCommandHandler';
+import { UpdateWorkCommandHandler } from '../services/commands/works/UpdateWorkCommandHandler';
+import { ListWorkRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
+import { GetWorkQueryHandler } from '../services/queries/works/GetWorkQueryHandler';
+import { ListWorksQueryHandler } from '../services/queries/works/ListWorksQueryHandler';
 
 @Controller('works')
 export class WorkController {
 	constructor(
-		private readonly createWorkService: CreateWorkService,
-		private readonly listWorksService: ListWorksService,
-		private readonly getWorkService: GetWorkService,
-		private readonly updateWorkService: UpdateWorkService,
-		private readonly deleteWorkService: DeleteWorkService,
-		private readonly listWorkRevisionsService: ListWorkRevisionsService,
+		private readonly createWorkCommandHandler: CreateWorkCommandHandler,
+		private readonly listWorksQueryHandler: ListWorksQueryHandler,
+		private readonly getWorkQueryHandler: GetWorkQueryHandler,
+		private readonly updateWorkCommandHandler: UpdateWorkCommandHandler,
+		private readonly deleteWorkCommandHandler: DeleteWorkCommandHandler,
+		private readonly listWorkRevisionsQueryHandler: ListWorkRevisionsQueryHandler,
 	) {}
 
 	@Post()
@@ -45,7 +45,7 @@ export class WorkController {
 		@Body(new JoiValidationPipe(updateWorkBodySchema))
 		body: IUpdateWorkBody,
 	): Promise<WorkObject> {
-		return this.createWorkService.execute(body);
+		return this.createWorkCommandHandler.execute(body);
 	}
 
 	@Get()
@@ -53,14 +53,14 @@ export class WorkController {
 		@Query(new JoiValidationPipe(listWorksQuerySchema))
 		query: IListWorksQuery,
 	): Promise<SearchResultObject<WorkObject>> {
-		return this.listWorksService.execute(query);
+		return this.listWorksQueryHandler.execute(query);
 	}
 
 	@Get(':workId')
 	getWork(
 		@Param('workId', ParseIntPipe) workId: number,
 	): Promise<WorkObject> {
-		return this.getWorkService.execute(workId);
+		return this.getWorkQueryHandler.execute(workId);
 	}
 
 	@Patch(':workId')
@@ -69,18 +69,18 @@ export class WorkController {
 		@Body(new JoiValidationPipe(updateWorkBodySchema))
 		body: IUpdateWorkBody,
 	): Promise<WorkObject> {
-		return this.updateWorkService.execute(workId, body);
+		return this.updateWorkCommandHandler.execute(workId, body);
 	}
 
 	@Delete(':workId')
 	deleteWork(@Param('workId', ParseIntPipe) workId: number): Promise<void> {
-		return this.deleteWorkService.execute(workId);
+		return this.deleteWorkCommandHandler.execute(workId);
 	}
 
 	@Get(':workId/revisions')
 	listWorkRevisions(
 		@Param('workId', ParseIntPipe) workId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listWorkRevisionsService.execute(workId);
+		return this.listWorkRevisionsQueryHandler.execute(workId);
 	}
 }

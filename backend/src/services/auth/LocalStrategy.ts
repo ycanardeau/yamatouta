@@ -13,9 +13,9 @@ import config from '../../config';
 import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
 import { TooManyRequestsException } from '../../exceptions/TooManyRequestsException';
 import {
-	AuthenticateUserService,
+	AuthenticateUserCommandHandler,
 	LoginError,
-} from '../users/AuthenticateUserService';
+} from '../commands/users/AuthenticateUserCommandHandler';
 import { RateLimiterMariaDb } from './RateLimiterMariaDb';
 
 // Code from: https://gist.github.com/animir/dc59b9da82494437f0a6009589e427f6.
@@ -29,7 +29,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 	private readonly limiterConsecutiveFailsByEmailAndIp: RateLimiterMariaDb;
 
 	constructor(
-		private readonly authenticateUserService: AuthenticateUserService,
+		private readonly authenticateUserCommandHandler: AuthenticateUserCommandHandler,
 		em: EntityManager,
 	) {
 		super({ usernameField: 'email', passReqToCallback: true });
@@ -94,7 +94,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 			throw new TooManyRequestsException();
 		}
 
-		const result = await this.authenticateUserService.execute({
+		const result = await this.authenticateUserCommandHandler.execute({
 			email: email,
 			password: password,
 			ip: ip,

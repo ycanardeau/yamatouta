@@ -20,18 +20,18 @@ import {
 	IUpdateAuthenticatedUserBody,
 	updateAuthenticatedUserBodySchema,
 } from '../requests/users/IUpdateAuthenticatedUserBody';
-import { GetAuthenticatedUserService } from '../services/users/GetAuthenticatedUserService';
-import { GetUserService } from '../services/users/GetUserService';
-import { ListUsersService } from '../services/users/ListUsersService';
-import { UpdateAuthenticatedUserService } from '../services/users/UpdateAuthenticatedUserService';
+import { UpdateAuthenticatedUserCommandHandler } from '../services/commands/users/UpdateAuthenticatedUserCommandHandler';
+import { GetAuthenticatedUserQueryHandler } from '../services/queries/users/GetAuthenticatedUserQueryHandler';
+import { GetUserQueryHandler } from '../services/queries/users/GetUserQueryHandler';
+import { ListUsersQueryHandler } from '../services/queries/users/ListUsersQueryHandler';
 
 @Controller('users')
 export class UserController {
 	constructor(
-		private readonly listUsersService: ListUsersService,
-		private readonly getUserService: GetUserService,
-		private readonly getAuthenticatedUserService: GetAuthenticatedUserService,
-		private readonly updateAuthenticatedUserService: UpdateAuthenticatedUserService,
+		private readonly listUsersQueryHandler: ListUsersQueryHandler,
+		private readonly getUserQueryHandler: GetUserQueryHandler,
+		private readonly getAuthenticatedUserQueryHandler: GetAuthenticatedUserQueryHandler,
+		private readonly updateAuthenticatedUserCommandHandler: UpdateAuthenticatedUserCommandHandler,
 	) {}
 
 	@Get()
@@ -39,12 +39,12 @@ export class UserController {
 		@Query(new JoiValidationPipe(listUsersQuerySchema))
 		query: IListUsersQuery,
 	): Promise<SearchResultObject<UserObject>> {
-		return this.listUsersService.execute(query);
+		return this.listUsersQueryHandler.execute(query);
 	}
 
 	@Get('current')
 	getAuthenticatedUser(): AuthenticatedUserObject {
-		return this.getAuthenticatedUserService.execute();
+		return this.getAuthenticatedUserQueryHandler.execute();
 	}
 
 	@Patch('current')
@@ -52,13 +52,13 @@ export class UserController {
 		@Body(new JoiValidationPipe(updateAuthenticatedUserBodySchema))
 		body: IUpdateAuthenticatedUserBody,
 	): Promise<AuthenticatedUserObject> {
-		return this.updateAuthenticatedUserService.execute(body);
+		return this.updateAuthenticatedUserCommandHandler.execute(body);
 	}
 
 	@Get(':userId')
 	getUser(
 		@Param('userId', ParseIntPipe) userId: number,
 	): Promise<UserObject> {
-		return this.getUserService.execute(userId);
+		return this.getUserQueryHandler.execute(userId);
 	}
 }
