@@ -7,6 +7,7 @@ import {
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
+import Joi, { ObjectSchema } from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { UserObject } from '../../../dto/users/UserObject';
@@ -14,6 +15,21 @@ import { User } from '../../../entities/User';
 import { UserSortRule } from '../../../models/UserSortRule';
 import { PermissionContext } from '../../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../filters';
+
+export class ListUsersQuery {
+	static readonly schema: ObjectSchema<ListUsersQuery> = Joi.object({
+		offset: Joi.number().optional(),
+		limit: Joi.number().optional(),
+		getTotalCount: Joi.boolean().optional(),
+	});
+
+	constructor(
+		readonly sort?: UserSortRule,
+		readonly offset?: number,
+		readonly limit?: number,
+		readonly getTotalCount?: boolean,
+	) {}
+}
 
 @Injectable()
 export class ListUsersQueryHandler {
@@ -34,14 +50,9 @@ export class ListUsersQueryHandler {
 		}
 	}
 
-	async execute(params: {
-		sort?: UserSortRule;
-		offset?: number;
-		limit?: number;
-		getTotalCount?: boolean;
-	}): Promise<SearchResultObject<UserObject>> {
-		const { sort, offset, limit, getTotalCount } = params;
-
+	async execute(
+		query: ListUsersQuery,
+	): Promise<SearchResultObject<UserObject>> {
 		const where: FilterQuery<User> = {
 			$and: [
 				whereNotDeleted(this.permissionContext),
@@ -50,20 +61,20 @@ export class ListUsersQueryHandler {
 		};
 
 		const options: FindOptions<User> = {
-			limit: limit
-				? Math.min(limit, ListUsersQueryHandler.maxLimit)
+			limit: query.limit
+				? Math.min(query.limit, ListUsersQueryHandler.maxLimit)
 				: ListUsersQueryHandler.defaultLimit,
-			offset: offset,
+			offset: query.offset,
 		};
 
 		const [users, count] = await Promise.all([
-			offset && offset > ListUsersQueryHandler.maxOffset
+			query.offset && query.offset > ListUsersQueryHandler.maxOffset
 				? Promise.resolve([])
 				: this.userRepo.find(where, {
 						...options,
-						orderBy: this.orderBy(sort),
+						orderBy: this.orderBy(query.sort),
 				  }),
-			getTotalCount
+			query.getTotalCount
 				? this.userRepo.count(where, options)
 				: Promise.resolve(0),
 		]);

@@ -14,10 +14,6 @@ import { SearchResultObject } from '../dto/SearchResultObject';
 import { ArtistObject } from '../dto/artists/ArtistObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import {
-	IListArtistsQuery,
-	listArtistsQuerySchema,
-} from '../requests/artists/IListArtistsQuery';
 import { CreateArtistCommandHandler } from '../services/commands/artists/CreateArtistCommandHandler';
 import {
 	UpdateArtistCommand,
@@ -25,7 +21,10 @@ import {
 } from '../services/commands/artists/UpdateArtistCommandHandler';
 import { DeleteArtistCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
 import { GetArtistQueryHandler } from '../services/queries/artists/GetArtistQueryHandler';
-import { ListArtistsQueryHandler } from '../services/queries/artists/ListArtistsQueryHandler';
+import {
+	ListArtistsQuery,
+	ListArtistsQueryHandler,
+} from '../services/queries/artists/ListArtistsQueryHandler';
 import { ListArtistRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
 
 @Controller('artists')
@@ -49,8 +48,8 @@ export class ArtistController {
 
 	@Get()
 	listArtists(
-		@Query(new JoiValidationPipe(listArtistsQuerySchema))
-		query: IListArtistsQuery,
+		@Query(new JoiValidationPipe(ListArtistsQuery.schema))
+		query: ListArtistsQuery,
 	): Promise<SearchResultObject<ArtistObject>> {
 		return this.listArtistsQueryHandler.execute(query);
 	}
@@ -59,7 +58,7 @@ export class ArtistController {
 	getArtist(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<ArtistObject> {
-		return this.getArtistQueryHandler.execute(artistId);
+		return this.getArtistQueryHandler.execute({ artistId: artistId });
 	}
 
 	@Patch(':artistId')
@@ -85,6 +84,8 @@ export class ArtistController {
 	listArtistRevisions(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listArtistRevisionsQueryHandler.execute(artistId);
+		return this.listArtistRevisionsQueryHandler.execute({
+			entryId: artistId,
+		});
 	}
 }

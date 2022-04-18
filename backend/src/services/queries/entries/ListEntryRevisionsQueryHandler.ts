@@ -13,6 +13,10 @@ import { Permission } from '../../../models/Permission';
 import { PermissionContext } from '../../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../filters';
 
+export class ListEntryRevisionsQuery {
+	constructor(readonly entryId: number) {}
+}
+
 abstract class ListEntryRevisionsQueryHandler<TEntry extends Entry> {
 	constructor(
 		private readonly permissionContext: PermissionContext,
@@ -20,11 +24,11 @@ abstract class ListEntryRevisionsQueryHandler<TEntry extends Entry> {
 	) {}
 
 	async execute(
-		entryId: number,
+		query: ListEntryRevisionsQuery,
 	): Promise<SearchResultObject<RevisionObject>> {
 		this.permissionContext.verifyPermission(Permission.ViewEditHistory);
 
-		const entry = await this.entryFunc(entryId);
+		const entry = await this.entryFunc(query.entryId);
 
 		this.permissionContext.verifyDeletedAndHidden(entry);
 

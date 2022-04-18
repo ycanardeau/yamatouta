@@ -1,15 +1,41 @@
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
 import { Injectable } from '@nestjs/common';
+import Joi from 'joi';
 import _ from 'lodash';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Translation } from '../../../entities/Translation';
 import { TranslationSortRule } from '../../../models/TranslationSortRule';
-import { IListTranslationsQuery } from '../../../requests/translations/IListTranslationsQuery';
+import { WordCategory } from '../../../models/WordCategory';
 import { escapeWildcardCharacters } from '../../../utils/escapeWildcardCharacters';
 import { NgramConverter } from '../../NgramConverter';
 import { PermissionContext } from '../../PermissionContext';
+
+export class ListTranslationsQuery {
+	static readonly schema = Joi.object({
+		sort: Joi.string()
+			.optional()
+			.valid(...Object.values(TranslationSortRule)),
+		offset: Joi.number().optional(),
+		limit: Joi.number().optional(),
+		getTotalCount: Joi.boolean().optional(),
+		query: Joi.string().optional().allow(''),
+		category: Joi.string()
+			.optional()
+			.allow('')
+			.valid(...Object.values(WordCategory)),
+	});
+
+	constructor(
+		readonly sort?: TranslationSortRule,
+		readonly offset?: number,
+		readonly limit?: number,
+		readonly getTotalCount?: boolean,
+		readonly query?: string,
+		readonly category?: WordCategory,
+	) {}
+}
 
 @Injectable()
 export class ListTranslationsQueryHandler {
@@ -23,9 +49,7 @@ export class ListTranslationsQueryHandler {
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	private createKnex(params: IListTranslationsQuery): Knex.QueryBuilder {
-		const { query, category } = params;
-
+	private createKnex(query: ListTranslationsQuery): Knex.QueryBuilder {
 		const knex = this.em
 			.createQueryBuilder(Translation)
 			.getKnex()
@@ -37,14 +61,15 @@ export class ListTranslationsQueryHandler {
 			.andWhere('translations.deleted', false)
 			.andWhere('translations.hidden', false);
 
-		if (query) {
+		if (query.query) {
 			knex.andWhereRaw(
 				'MATCH(translation_search_index.headword, translation_search_index.reading, translation_search_index.yamatokotoba) AGAINST(? IN BOOLEAN MODE)',
-				this.ngramConverter.toQuery(query, 2),
+				this.ngramConverter.toQuery(query.query, 2),
 			);
 		}
 
-		if (category) knex.andWhere('translations.category', category);
+		if (query.category)
+			knex.andWhere('translations.category', query.category);
 
 		return knex;
 	}
@@ -92,28 +117,26 @@ export class ListTranslationsQueryHandler {
 
 	private orderByQuery(
 		knex: Knex.QueryBuilder,
-		params: IListTranslationsQuery,
+		query: ListTranslationsQuery,
 	): Knex.QueryBuilder {
-		const { query, sort } = params;
+		if (!query.query) return knex;
 
-		if (!query) return knex;
-
-		switch (sort) {
+		switch (query.sort) {
 			case TranslationSortRule.HeadwordAsc:
 			case TranslationSortRule.HeadwordDesc:
 			default:
-				this.orderByHeadwordExact(knex, query);
-				this.orderByYamatokotobaExact(knex, query);
-				this.orderByHeadwordPrefix(knex, query);
-				this.orderByYamatokotobaPrefix(knex, query);
+				this.orderByHeadwordExact(knex, query.query);
+				this.orderByYamatokotobaExact(knex, query.query);
+				this.orderByHeadwordPrefix(knex, query.query);
+				this.orderByYamatokotobaPrefix(knex, query.query);
 				return knex;
 
 			case TranslationSortRule.YamatokotobaAsc:
 			case TranslationSortRule.YamatokotobaDesc:
-				this.orderByYamatokotobaExact(knex, query);
-				this.orderByHeadwordExact(knex, query);
-				this.orderByYamatokotobaPrefix(knex, query);
-				this.orderByHeadwordPrefix(knex, query);
+				this.orderByYamatokotobaExact(knex, query.query);
+				this.orderByHeadwordExact(knex, query.query);
+				this.orderByYamatokotobaPrefix(knex, query.query);
+				this.orderByHeadwordPrefix(knex, query.query);
 				return knex;
 		}
 	}
@@ -150,13 +173,11 @@ export class ListTranslationsQueryHandler {
 
 	private orderBy(
 		knex: Knex.QueryBuilder,
-		params: IListTranslationsQuery,
+		query: ListTranslationsQuery,
 	): Knex.QueryBuilder {
-		const { sort } = params;
+		this.orderByQuery(knex, query);
 
-		this.orderByQuery(knex, params);
-
-		switch (sort) {
+		switch (query.sort) {
 			case TranslationSortRule.HeadwordAsc:
 			default:
 				this.orderByHeadword(knex, 'asc');
@@ -212,20 +233,21 @@ export class ListTranslationsQueryHandler {
 		return knex.orderByRaw(sql, ids);
 	}
 
-	private async getIds(params: IListTranslationsQuery): Promise<number[]> {
-		const { offset, limit } = params;
-
-		const knex = this.createKnex(params)
+	private async getIds(query: ListTranslationsQuery): Promise<number[]> {
+		const knex = this.createKnex(query)
 			.select('translations.id')
 			.limit(
-				limit
-					? Math.min(limit, ListTranslationsQueryHandler.maxLimit)
+				query.limit
+					? Math.min(
+							query.limit,
+							ListTranslationsQueryHandler.maxLimit,
+					  )
 					: ListTranslationsQueryHandler.defaultLimit,
 			);
 
-		if (offset) knex.offset(offset);
+		if (query.offset) knex.offset(query.offset);
 
-		this.orderBy(knex, params);
+		this.orderBy(knex, query);
 
 		const ids = _.map(await this.em.execute(knex), 'id');
 
@@ -233,9 +255,9 @@ export class ListTranslationsQueryHandler {
 	}
 
 	private async getItems(
-		params: IListTranslationsQuery,
+		query: ListTranslationsQuery,
 	): Promise<Translation[]> {
-		const ids = await this.getIds(params);
+		const ids = await this.getIds(query);
 
 		const knex = this.em
 			.createQueryBuilder(Translation)
@@ -251,8 +273,8 @@ export class ListTranslationsQueryHandler {
 		);
 	}
 
-	private async getCount(params: IListTranslationsQuery): Promise<number> {
-		const knex = this.createKnex(params).countDistinct(
+	private async getCount(query: ListTranslationsQuery): Promise<number> {
+		const knex = this.createKnex(query).countDistinct(
 			'translations.id as count',
 		);
 
@@ -262,15 +284,13 @@ export class ListTranslationsQueryHandler {
 	}
 
 	async execute(
-		params: IListTranslationsQuery,
+		query: ListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
-		const { /*offset, */ getTotalCount } = params;
-
 		const [translations, count] = await Promise.all([
-			/*offset && offset > ListTranslationsService.maxOffset
+			/*query.offset && query.offset > ListTranslationsService.maxOffset
 				? Promise.resolve([])
-				: */ this.getItems(params),
-			getTotalCount ? this.getCount(params) : Promise.resolve(0),
+				: */ this.getItems(query),
+			query.getTotalCount ? this.getCount(query) : Promise.resolve(0),
 		]);
 
 		return new SearchResultObject(

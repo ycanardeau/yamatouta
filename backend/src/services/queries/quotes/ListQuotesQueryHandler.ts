@@ -7,6 +7,7 @@ import {
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
+import Joi, { ObjectSchema } from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
@@ -15,6 +16,27 @@ import { QuoteSortRule } from '../../../models/QuoteSortRule';
 import { QuoteType } from '../../../models/QuoteType';
 import { PermissionContext } from '../../PermissionContext';
 import { whereNotHidden } from '../../filters';
+
+export class ListQuotesQuery {
+	static readonly schema: ObjectSchema<ListQuotesQuery> = Joi.object({
+		quoteType: Joi.string()
+			.optional()
+			.valid(...Object.values(QuoteType)),
+		offset: Joi.number().optional(),
+		limit: Joi.number().optional(),
+		getTotalCount: Joi.boolean().optional(),
+		artistId: Joi.number().optional(),
+	});
+
+	constructor(
+		readonly quoteType?: QuoteType,
+		readonly sort?: QuoteSortRule,
+		readonly offset?: number,
+		readonly limit?: number,
+		readonly getTotalCount?: boolean,
+		readonly artistId?: number,
+	) {}
+}
 
 @Injectable()
 export class ListQuotesQueryHandler {
@@ -35,43 +57,35 @@ export class ListQuotesQueryHandler {
 		}
 	}
 
-	async execute(params: {
-		quoteType?: QuoteType;
-		sort?: QuoteSortRule;
-		offset?: number;
-		limit?: number;
-		getTotalCount?: boolean;
-		artistId?: number;
-	}): Promise<SearchResultObject<QuoteObject>> {
-		const { quoteType, sort, offset, limit, getTotalCount, artistId } =
-			params;
-
+	async execute(
+		query: ListQuotesQuery,
+	): Promise<SearchResultObject<QuoteObject>> {
 		const where: FilterQuery<Quote> = {
 			$and: [
 				{ deleted: false },
 				whereNotHidden(this.permissionContext),
 				{ $not: { quoteType: QuoteType.Word } },
-				quoteType ? { quoteType: quoteType } : {},
-				artistId ? { artist: artistId } : {},
+				query.quoteType ? { quoteType: query.quoteType } : {},
+				query.artistId ? { artist: query.artistId } : {},
 			],
 		};
 
 		const options: FindOptions<Quote, 'artist'> = {
-			limit: limit
-				? Math.min(limit, ListQuotesQueryHandler.maxLimit)
+			limit: query.limit
+				? Math.min(query.limit, ListQuotesQueryHandler.maxLimit)
 				: ListQuotesQueryHandler.defaultLimit,
-			offset: offset,
+			offset: query.offset,
 			populate: ['artist'],
 		};
 
 		const [quotes, count] = await Promise.all([
-			offset && offset > ListQuotesQueryHandler.maxOffset
+			query.offset && query.offset > ListQuotesQueryHandler.maxOffset
 				? Promise.resolve([])
 				: this.quoteRepo.find(where, {
 						...options,
-						orderBy: this.orderBy(sort),
+						orderBy: this.orderBy(query.sort),
 				  }),
-			getTotalCount
+			query.getTotalCount
 				? this.quoteRepo.count(where, options)
 				: Promise.resolve(0),
 		]);

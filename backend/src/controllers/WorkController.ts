@@ -14,10 +14,6 @@ import { SearchResultObject } from '../dto/SearchResultObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { WorkObject } from '../dto/works/WorkObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import {
-	IListWorksQuery,
-	listWorksQuerySchema,
-} from '../requests/works/IListWorksQuery';
 import { DeleteWorkCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
 import { CreateWorkCommandHandler } from '../services/commands/works/CreateWorkCommandHandler';
 import {
@@ -26,7 +22,10 @@ import {
 } from '../services/commands/works/UpdateWorkCommandHandler';
 import { ListWorkRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetWorkQueryHandler } from '../services/queries/works/GetWorkQueryHandler';
-import { ListWorksQueryHandler } from '../services/queries/works/ListWorksQueryHandler';
+import {
+	ListWorksQuery,
+	ListWorksQueryHandler,
+} from '../services/queries/works/ListWorksQueryHandler';
 
 @Controller('works')
 export class WorkController {
@@ -49,8 +48,8 @@ export class WorkController {
 
 	@Get()
 	listWorks(
-		@Query(new JoiValidationPipe(listWorksQuerySchema))
-		query: IListWorksQuery,
+		@Query(new JoiValidationPipe(ListWorksQuery.schema))
+		query: ListWorksQuery,
 	): Promise<SearchResultObject<WorkObject>> {
 		return this.listWorksQueryHandler.execute(query);
 	}
@@ -59,7 +58,7 @@ export class WorkController {
 	getWork(
 		@Param('workId', ParseIntPipe) workId: number,
 	): Promise<WorkObject> {
-		return this.getWorkQueryHandler.execute(workId);
+		return this.getWorkQueryHandler.execute({ workId: workId });
 	}
 
 	@Patch(':workId')
@@ -83,6 +82,6 @@ export class WorkController {
 	listWorkRevisions(
 		@Param('workId', ParseIntPipe) workId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listWorkRevisionsQueryHandler.execute(workId);
+		return this.listWorkRevisionsQueryHandler.execute({ entryId: workId });
 	}
 }

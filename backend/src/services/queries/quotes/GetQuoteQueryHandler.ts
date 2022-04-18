@@ -7,6 +7,10 @@ import { Quote } from '../../../entities/Quote';
 import { PermissionContext } from '../../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../filters';
 
+export class GetQuoteQuery {
+	constructor(readonly quoteId: number) {}
+}
+
 @Injectable()
 export class GetQuoteQueryHandler {
 	constructor(
@@ -15,10 +19,10 @@ export class GetQuoteQueryHandler {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async execute(quoteId: number): Promise<QuoteObject> {
+	async execute(query: GetQuoteQuery): Promise<QuoteObject> {
 		const quote = await this.quoteRepo.findOne(
 			{
-				id: quoteId,
+				id: query.quoteId,
 				$and: [
 					whereNotDeleted(this.permissionContext),
 					whereNotHidden(this.permissionContext),

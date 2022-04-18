@@ -7,6 +7,10 @@ import { Artist } from '../../../entities/Artist';
 import { PermissionContext } from '../../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../filters';
 
+export class GetArtistQuery {
+	constructor(readonly artistId: number) {}
+}
+
 @Injectable()
 export class GetArtistQueryHandler {
 	constructor(
@@ -15,9 +19,9 @@ export class GetArtistQueryHandler {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async execute(artistId: number): Promise<ArtistObject> {
+	async execute(query: GetArtistQuery): Promise<ArtistObject> {
 		const artist = await this.artistRepo.findOne({
-			id: artistId,
+			id: query.artistId,
 			$and: [
 				whereNotDeleted(this.permissionContext),
 				whereNotHidden(this.permissionContext),

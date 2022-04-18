@@ -7,6 +7,10 @@ import { User } from '../../../entities/User';
 import { PermissionContext } from '../../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../filters';
 
+export class GetUserQuery {
+	constructor(readonly userId: number) {}
+}
+
 @Injectable()
 export class GetUserQueryHandler {
 	constructor(
@@ -15,9 +19,9 @@ export class GetUserQueryHandler {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async execute(userId: number): Promise<UserObject> {
+	async execute(query: GetUserQuery): Promise<UserObject> {
 		const user = await this.userRepo.findOne({
-			id: userId,
+			id: query.userId,
 			$and: [
 				whereNotDeleted(this.permissionContext),
 				whereNotHidden(this.permissionContext),

@@ -7,6 +7,10 @@ import { Translation } from '../../../entities/Translation';
 import { PermissionContext } from '../../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../filters';
 
+export class GetTranslationQuery {
+	constructor(readonly translationId: number) {}
+}
+
 @Injectable()
 export class GetTranslationQueryHandler {
 	constructor(
@@ -15,9 +19,9 @@ export class GetTranslationQueryHandler {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async execute(translationId: number): Promise<TranslationObject> {
+	async execute(query: GetTranslationQuery): Promise<TranslationObject> {
 		const translation = await this.translationRepo.findOne({
-			id: translationId,
+			id: query.translationId,
 			$and: [
 				whereNotDeleted(this.permissionContext),
 				whereNotHidden(this.permissionContext),

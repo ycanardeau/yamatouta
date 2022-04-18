@@ -7,14 +7,36 @@ import {
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
+import Joi, { ObjectSchema } from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { WorkObject } from '../../../dto/works/WorkObject';
 import { Work } from '../../../entities/Work';
 import { WorkSortRule } from '../../../models/WorkSortRule';
-import { IListWorksQuery } from '../../../requests/works/IListWorksQuery';
+import { WorkType } from '../../../models/WorkType';
 import { PermissionContext } from '../../PermissionContext';
 import { whereNotHidden } from '../../filters';
+
+export class ListWorksQuery {
+	static readonly schema: ObjectSchema<ListWorksQuery> = Joi.object({
+		workType: Joi.string()
+			.optional()
+			.valid(...Object.values(WorkType)),
+		offset: Joi.number().optional(),
+		limit: Joi.number().optional(),
+		getTotalCount: Joi.boolean().optional(),
+		query: Joi.string().optional().allow(''),
+	});
+
+	constructor(
+		readonly workType?: WorkType,
+		readonly sort?: WorkSortRule,
+		readonly offset?: number,
+		readonly limit?: number,
+		readonly getTotalCount?: boolean,
+		readonly query?: string,
+	) {}
+}
 
 @Injectable()
 export class ListWorksQueryHandler {
@@ -36,34 +58,32 @@ export class ListWorksQueryHandler {
 	}
 
 	async execute(
-		params: IListWorksQuery,
+		query: ListWorksQuery,
 	): Promise<SearchResultObject<WorkObject>> {
-		const { workType, sort, offset, limit, getTotalCount, query } = params;
-
 		const where: FilterQuery<Work> = {
 			$and: [
 				{ deleted: false },
 				whereNotHidden(this.permissionContext),
-				workType ? { workType: workType } : {},
-				query ? { name: { $like: `%${query}%` } } : {},
+				query.workType ? { workType: query.workType } : {},
+				query.query ? { name: { $like: `%${query.query}%` } } : {},
 			],
 		};
 
 		const options: FindOptions<Work> = {
-			limit: limit
-				? Math.min(limit, ListWorksQueryHandler.maxLimit)
+			limit: query.limit
+				? Math.min(query.limit, ListWorksQueryHandler.maxLimit)
 				: ListWorksQueryHandler.defaultLimit,
-			offset: offset,
+			offset: query.offset,
 		};
 
 		const [works, count] = await Promise.all([
-			offset && offset > ListWorksQueryHandler.maxOffset
+			query.offset && query.offset > ListWorksQueryHandler.maxOffset
 				? Promise.resolve([])
 				: this.workRepo.find(where, {
 						...options,
-						orderBy: this.orderBy(sort),
+						orderBy: this.orderBy(query.sort),
 				  }),
-			getTotalCount
+			query.getTotalCount
 				? this.workRepo.count(where, options)
 				: Promise.resolve(0),
 		]);

@@ -14,10 +14,6 @@ import { SearchResultObject } from '../dto/SearchResultObject';
 import { QuoteObject } from '../dto/quotes/QuoteObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import {
-	IListQuotesQuery,
-	listQuotesQuerySchema,
-} from '../requests/quotes/IListQuotesQuery';
 import { DeleteQuoteCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
 import { CreateQuoteCommandHandler } from '../services/commands/quotes/CreateQuoteCommandHandler';
 import {
@@ -26,7 +22,10 @@ import {
 } from '../services/commands/quotes/UpdateQuoteCommandHandler';
 import { ListQuoteRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetQuoteQueryHandler } from '../services/queries/quotes/GetQuoteQueryHandler';
-import { ListQuotesQueryHandler } from '../services/queries/quotes/ListQuotesQueryHandler';
+import {
+	ListQuotesQuery,
+	ListQuotesQueryHandler,
+} from '../services/queries/quotes/ListQuotesQueryHandler';
 
 @Controller('quotes')
 export class QuoteController {
@@ -49,8 +48,8 @@ export class QuoteController {
 
 	@Get()
 	listQuotes(
-		@Query(new JoiValidationPipe(listQuotesQuerySchema))
-		query: IListQuotesQuery,
+		@Query(new JoiValidationPipe(ListQuotesQuery.schema))
+		query: ListQuotesQuery,
 	): Promise<SearchResultObject<QuoteObject>> {
 		return this.listQuotesQueryHandler.execute(query);
 	}
@@ -59,7 +58,7 @@ export class QuoteController {
 	getQuote(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<QuoteObject> {
-		return this.getQuoteQueryHandler.execute(quoteId);
+		return this.getQuoteQueryHandler.execute({ quoteId: quoteId });
 	}
 
 	@Patch(':quoteId')
@@ -85,6 +84,8 @@ export class QuoteController {
 	listQuoteRevisions(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listQuoteRevisionsQueryHandler.execute(quoteId);
+		return this.listQuoteRevisionsQueryHandler.execute({
+			entryId: quoteId,
+		});
 	}
 }

@@ -7,6 +7,10 @@ import { Work } from '../../../entities/Work';
 import { PermissionContext } from '../../PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../filters';
 
+export class GetWorkQuery {
+	constructor(readonly workId: number) {}
+}
+
 @Injectable()
 export class GetWorkQueryHandler {
 	constructor(
@@ -15,9 +19,9 @@ export class GetWorkQueryHandler {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async execute(workId: number): Promise<WorkObject> {
+	async execute(query: GetWorkQuery): Promise<WorkObject> {
 		const work = await this.workRepo.findOne({
-			id: workId,
+			id: query.workId,
 			$and: [
 				whereNotDeleted(this.permissionContext),
 				whereNotHidden(this.permissionContext),

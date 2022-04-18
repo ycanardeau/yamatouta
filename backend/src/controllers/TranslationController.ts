@@ -14,10 +14,6 @@ import { SearchResultObject } from '../dto/SearchResultObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { TranslationObject } from '../dto/translations/TranslationObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import {
-	IListTranslationsQuery,
-	listTranslationsQuerySchema,
-} from '../requests/translations/IListTranslationsQuery';
 import { DeleteTranslationCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
 import { CreateTranslationCommandHandler } from '../services/commands/translations/CreateTranslationCommandHandler';
 import {
@@ -26,7 +22,10 @@ import {
 } from '../services/commands/translations/UpdateTranslationCommandHandler';
 import { ListTranslationRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetTranslationQueryHandler } from '../services/queries/translations/GetTranslationQueryHandler';
-import { ListTranslationsQueryHandler } from '../services/queries/translations/ListTranslationsQueryHandler';
+import {
+	ListTranslationsQuery,
+	ListTranslationsQueryHandler,
+} from '../services/queries/translations/ListTranslationsQueryHandler';
 
 @Controller('translations')
 export class TranslationController {
@@ -49,8 +48,8 @@ export class TranslationController {
 
 	@Get()
 	listTranslations(
-		@Query(new JoiValidationPipe(listTranslationsQuerySchema))
-		query: IListTranslationsQuery,
+		@Query(new JoiValidationPipe(ListTranslationsQuery.schema))
+		query: ListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
 		return this.listTranslationsQueryHandler.execute(query);
 	}
@@ -80,13 +79,17 @@ export class TranslationController {
 	getTranslation(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<TranslationObject> {
-		return this.getTranslationQueryHandler.execute(translationId);
+		return this.getTranslationQueryHandler.execute({
+			translationId: translationId,
+		});
 	}
 
 	@Get(':translationId/revisions')
 	listTranslationRevisions(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listTranslationRevisionsQueryHandler.execute(translationId);
+		return this.listTranslationRevisionsQueryHandler.execute({
+			entryId: translationId,
+		});
 	}
 }
