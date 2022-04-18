@@ -11,7 +11,7 @@ import { TranslationSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { WordCategory } from '../../../src/models/WordCategory';
 import { IUpdateTranslationBody } from '../../../src/requests/translations/IUpdateTranslationBody';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { NgramConverter } from '../../../src/services/NgramConverter';
 import { UpdateTranslationService } from '../../../src/services/translations/UpdateTranslationService';
 import { FakeEntityManager } from '../../FakeEntityManager';
@@ -24,7 +24,7 @@ describe('UpdateTranslationService', () => {
 	let existingUser: User;
 	let translation: Translation;
 	let userRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let ngramConverter: NgramConverter;
 	let translationRepo: any;
 	let permissionContext: FakePermissionContext;
@@ -65,7 +65,7 @@ describe('UpdateTranslationService', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 		ngramConverter = new NgramConverter();
 		translationRepo = {
 			findOneOrFail: async (): Promise<Translation> => translation,
@@ -77,7 +77,7 @@ describe('UpdateTranslationService', () => {
 			em as any,
 			permissionContext,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 			ngramConverter,
 			translationRepo as any,
 		);
@@ -91,11 +91,10 @@ describe('UpdateTranslationService', () => {
 			body: IUpdateTranslationBody;
 			snapshot: TranslationSnapshot;
 		}): Promise<void> => {
-			const translationObject =
-				await updateTranslationService.updateTranslation(
-					translation.id,
-					body,
-				);
+			const translationObject = await updateTranslationService.execute(
+				translation.id,
+				body,
+			);
 
 			expect(translationObject.headword).toBe(body.headword);
 			expect(translationObject.locale).toBe(body.locale);
@@ -153,16 +152,13 @@ describe('UpdateTranslationService', () => {
 					em as any,
 					permissionContext,
 					userRepo as any,
-					auditLogService,
+					auditLogger,
 					ngramConverter,
 					translationRepo as any,
 				);
 
 				await expect(
-					updateTranslationService.updateTranslation(
-						translation.id,
-						defaults,
-					),
+					updateTranslationService.execute(translation.id, defaults),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -274,7 +270,7 @@ describe('UpdateTranslationService', () => {
 
 		test('headword is undefined', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					headword: undefined!,
@@ -284,7 +280,7 @@ describe('UpdateTranslationService', () => {
 
 		test('headword is empty', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					headword: '',
 				}),
@@ -293,7 +289,7 @@ describe('UpdateTranslationService', () => {
 
 		test('headword is too long', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					headword: 'い'.repeat(201),
 				}),
@@ -302,7 +298,7 @@ describe('UpdateTranslationService', () => {
 
 		test('reading is undefined', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					reading: undefined!,
@@ -312,7 +308,7 @@ describe('UpdateTranslationService', () => {
 
 		test('reading is empty', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					reading: '',
 				}),
@@ -321,7 +317,7 @@ describe('UpdateTranslationService', () => {
 
 		test('reading is too long', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					reading: 'い'.repeat(201),
 				}),
@@ -330,7 +326,7 @@ describe('UpdateTranslationService', () => {
 
 		test('reading contains alphabets', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					reading: 'Anglish',
 				}),
@@ -339,7 +335,7 @@ describe('UpdateTranslationService', () => {
 
 		test('reading contains kanji', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					reading: '大和言葉',
 				}),
@@ -348,7 +344,7 @@ describe('UpdateTranslationService', () => {
 
 		test('yamatokotoba is undefined', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					yamatokotoba: undefined!,
@@ -358,7 +354,7 @@ describe('UpdateTranslationService', () => {
 
 		test('yamatokotoba is empty', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					yamatokotoba: '',
 				}),
@@ -367,7 +363,7 @@ describe('UpdateTranslationService', () => {
 
 		test('yamatokotoba is too long', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					yamatokotoba: 'い'.repeat(201),
 				}),
@@ -376,7 +372,7 @@ describe('UpdateTranslationService', () => {
 
 		test('yamatokotoba contains alphabets', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					yamatokotoba: 'Anglish',
 				}),
@@ -385,7 +381,7 @@ describe('UpdateTranslationService', () => {
 
 		test('yamatokotoba contains kanji', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					yamatokotoba: '大和言葉',
 				}),
@@ -394,7 +390,7 @@ describe('UpdateTranslationService', () => {
 
 		test('category is empty', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					category: '' as WordCategory,
 				}),
@@ -403,7 +399,7 @@ describe('UpdateTranslationService', () => {
 
 		test('category is invalid', async () => {
 			await expect(
-				updateTranslationService.updateTranslation(translation.id, {
+				updateTranslationService.execute(translation.id, {
 					...defaults,
 					category: 'abcdef' as WordCategory,
 				}),

@@ -35,7 +35,7 @@ export class ListQuotesService {
 		}
 	}
 
-	async listQuotes(params: {
+	async execute(params: {
 		quoteType?: QuoteType;
 		sort?: QuoteSortRule;
 		offset?: number;

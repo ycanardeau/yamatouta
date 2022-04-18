@@ -13,7 +13,7 @@ import { RevisionEvent } from '../../../src/models/RevisionEvent';
 import { ObjectRefSnapshot, QuoteSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { IUpdateQuoteBody } from '../../../src/requests/quotes/IUpdateQuoteBody';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { UpdateQuoteService } from '../../../src/services/quotes/UpdateQuoteService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
@@ -27,7 +27,7 @@ describe('UpdateQuoteService', () => {
 	let quote: Quote;
 	let userRepo: any;
 	let artistRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let quoteRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateQuoteService: UpdateQuoteService;
@@ -75,7 +75,7 @@ describe('UpdateQuoteService', () => {
 		artistRepo = {
 			findOneOrFail: async (): Promise<Artist> => artist,
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 		quoteRepo = {
 			findOneOrFail: async (): Promise<Quote> => quote,
 		};
@@ -87,7 +87,7 @@ describe('UpdateQuoteService', () => {
 			em as any,
 			userRepo as any,
 			artistRepo as any,
-			auditLogService,
+			auditLogger,
 			quoteRepo as any,
 		);
 	});
@@ -100,7 +100,7 @@ describe('UpdateQuoteService', () => {
 			body: IUpdateQuoteBody;
 			snapshot: QuoteSnapshot;
 		}): Promise<void> => {
-			const quoteObject = await updateQuoteService.updateQuote(
+			const quoteObject = await updateQuoteService.execute(
 				quote.id,
 				body,
 			);
@@ -160,12 +160,12 @@ describe('UpdateQuoteService', () => {
 					em as any,
 					userRepo as any,
 					artistRepo as any,
-					auditLogService,
+					auditLogger,
 					quoteRepo as any,
 				);
 
 				await expect(
-					updateQuoteService.updateQuote(quote.id, defaults),
+					updateQuoteService.execute(quote.id, defaults),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -249,7 +249,7 @@ describe('UpdateQuoteService', () => {
 
 		test('text is undefined', async () => {
 			await expect(
-				updateQuoteService.updateQuote(quote.id, {
+				updateQuoteService.execute(quote.id, {
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					text: undefined!,
@@ -259,7 +259,7 @@ describe('UpdateQuoteService', () => {
 
 		test('text is empty', async () => {
 			await expect(
-				updateQuoteService.updateQuote(quote.id, {
+				updateQuoteService.execute(quote.id, {
 					...defaults,
 					text: '',
 				}),
@@ -268,7 +268,7 @@ describe('UpdateQuoteService', () => {
 
 		test('text is too long', async () => {
 			await expect(
-				updateQuoteService.updateQuote(quote.id, {
+				updateQuoteService.execute(quote.id, {
 					...defaults,
 					text: 'い'.repeat(201),
 				}),
@@ -277,7 +277,7 @@ describe('UpdateQuoteService', () => {
 
 		test('quoteType is empty', async () => {
 			await expect(
-				updateQuoteService.updateQuote(quote.id, {
+				updateQuoteService.execute(quote.id, {
 					...defaults,
 					quoteType: '' as QuoteType,
 				}),
@@ -286,7 +286,7 @@ describe('UpdateQuoteService', () => {
 
 		test('quoteType is invalid', async () => {
 			await expect(
-				updateQuoteService.updateQuote(quote.id, {
+				updateQuoteService.execute(quote.id, {
 					...defaults,
 					quoteType: 'abcdef' as QuoteType,
 				}),

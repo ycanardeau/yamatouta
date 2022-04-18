@@ -7,7 +7,7 @@ import { PermissionContext } from '../PermissionContext';
 export class GetAuthenticatedUserService {
 	constructor(private readonly permissionContext: PermissionContext) {}
 
-	getAuthenticatedUser(): AuthenticatedUserObject {
+	execute(): AuthenticatedUserObject {
 		if (!this.permissionContext.user) throw new UnauthorizedException();
 
 		return this.permissionContext.user;

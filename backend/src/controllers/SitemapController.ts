@@ -12,7 +12,7 @@ export class SitemapController {
 	@Get()
 	async sitemap(@Res() response: Response): Promise<void> {
 		// TODO: Cache.
-		const xml = await this.generateSitemapService.generateSitemap();
+		const xml = await this.generateSitemapService.execute();
 
 		response.set('Content-Type', 'text/xml');
 		response.send(xml);

@@ -9,7 +9,7 @@ import { AuditedAction } from '../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { DeleteTranslationService } from '../../../src/services/entries/DeleteEntryService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
@@ -21,7 +21,7 @@ describe('DeleteTranslationService', () => {
 	let existingUser: User;
 	let translation: Translation;
 	let userRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let translationRepo: any;
 	let permissionContext: FakePermissionContext;
 	let deleteTranslationService: DeleteTranslationService;
@@ -61,7 +61,7 @@ describe('DeleteTranslationService', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 		translationRepo = {
 			findOneOrFail: async (): Promise<Translation> => translation,
 		};
@@ -72,14 +72,14 @@ describe('DeleteTranslationService', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 			translationRepo as any,
 		);
 	});
 
 	describe('deleteTranslation', () => {
 		const testDeleteTranslation = async (): Promise<void> => {
-			await deleteTranslationService.deleteEntry(translation.id);
+			await deleteTranslationService.execute(translation.id);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof TranslationRevision,
@@ -127,12 +127,12 @@ describe('DeleteTranslationService', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogService,
+					auditLogger,
 					translationRepo as any,
 				);
 
 				await expect(
-					deleteTranslationService.deleteEntry(translation.id),
+					deleteTranslationService.execute(translation.id),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

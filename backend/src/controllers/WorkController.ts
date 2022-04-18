@@ -45,7 +45,7 @@ export class WorkController {
 		@Body(new JoiValidationPipe(updateWorkBodySchema))
 		body: IUpdateWorkBody,
 	): Promise<WorkObject> {
-		return this.createWorkService.createWork(body);
+		return this.createWorkService.execute(body);
 	}
 
 	@Get()
@@ -53,14 +53,14 @@ export class WorkController {
 		@Query(new JoiValidationPipe(listWorksQuerySchema))
 		query: IListWorksQuery,
 	): Promise<SearchResultObject<WorkObject>> {
-		return this.listWorksService.listWorks(query);
+		return this.listWorksService.execute(query);
 	}
 
 	@Get(':workId')
 	getWork(
 		@Param('workId', ParseIntPipe) workId: number,
 	): Promise<WorkObject> {
-		return this.getWorkService.getWork(workId);
+		return this.getWorkService.execute(workId);
 	}
 
 	@Patch(':workId')
@@ -69,18 +69,18 @@ export class WorkController {
 		@Body(new JoiValidationPipe(updateWorkBodySchema))
 		body: IUpdateWorkBody,
 	): Promise<WorkObject> {
-		return this.updateWorkService.updateWork(workId, body);
+		return this.updateWorkService.execute(workId, body);
 	}
 
 	@Delete(':workId')
 	deleteWork(@Param('workId', ParseIntPipe) workId: number): Promise<void> {
-		return this.deleteWorkService.deleteEntry(workId);
+		return this.deleteWorkService.execute(workId);
 	}
 
 	@Get(':workId/revisions')
 	listWorkRevisions(
 		@Param('workId', ParseIntPipe) workId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listWorkRevisionsService.listEntryRevisions(workId);
+		return this.listWorkRevisionsService.execute(workId);
 	}
 }

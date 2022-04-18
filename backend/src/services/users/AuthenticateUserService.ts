@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
 import { User } from '../../entities/User';
-import { AuditLogService } from '../AuditLogService';
+import { AuditLogger } from '../AuditLogger';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
 
 export enum LoginError {
@@ -41,11 +41,11 @@ export class AuthenticateUserService {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogService: AuditLogService,
+		private readonly auditLogger: AuditLogger,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
 	) {}
 
-	authenticateUser(params: {
+	execute(params: {
 		email: string;
 		password: string;
 		ip: string;
@@ -71,7 +71,7 @@ export class AuthenticateUserService {
 			);
 
 			if (user.passwordHash === passwordHash) {
-				this.auditLogService.user_login({
+				this.auditLogger.user_login({
 					actor: user,
 					actorIp: ip,
 					user: user,
@@ -90,7 +90,7 @@ export class AuthenticateUserService {
 				return createSuccess(new AuthenticatedUserObject(user));
 			}
 
-			this.auditLogService.user_failedLogin({
+			this.auditLogger.user_failedLogin({
 				actor: user,
 				actorIp: ip,
 				user: user,

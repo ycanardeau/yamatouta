@@ -11,7 +11,7 @@ export class ListArtistIdsService {
 		private readonly artistRepo: EntityRepository<Artist>,
 	) {}
 
-	async listArtistIds(): Promise<number[]> {
+	async execute(): Promise<number[]> {
 		const artists = await this.artistRepo.find({
 			deleted: false,
 			hidden: false,

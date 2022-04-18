@@ -10,7 +10,7 @@ import { AuditedAction } from '../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { DeleteArtistService } from '../../../src/services/entries/DeleteEntryService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
@@ -22,7 +22,7 @@ describe('DeleteArtistService', () => {
 	let existingUser: User;
 	let artist: Artist;
 	let userRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let artistRepo: any;
 	let permissionContext: FakePermissionContext;
 	let deleteArtistService: DeleteArtistService;
@@ -59,7 +59,7 @@ describe('DeleteArtistService', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 		artistRepo = {
 			findOneOrFail: async (): Promise<Artist> => artist,
 		};
@@ -70,14 +70,14 @@ describe('DeleteArtistService', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 			artistRepo as any,
 		);
 	});
 
 	describe('deleteArtist', () => {
 		const testDeleteArtist = async (): Promise<void> => {
-			await deleteArtistService.deleteEntry(artist.id);
+			await deleteArtistService.execute(artist.id);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof ArtistRevision,
@@ -123,12 +123,12 @@ describe('DeleteArtistService', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogService,
+					auditLogger,
 					artistRepo as any,
 				);
 
 				await expect(
-					deleteArtistService.deleteEntry(artist.id),
+					deleteArtistService.execute(artist.id),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

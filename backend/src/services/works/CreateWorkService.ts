@@ -12,7 +12,7 @@ import {
 	IUpdateWorkBody,
 	updateWorkBodySchema,
 } from '../../requests/works/IUpdateWorkBody';
-import { AuditLogService } from '../AuditLogService';
+import { AuditLogger } from '../AuditLogger';
 import { PermissionContext } from '../PermissionContext';
 
 @Injectable()
@@ -22,10 +22,10 @@ export class CreateWorkService {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogService: AuditLogService,
+		private readonly auditLogger: AuditLogger,
 	) {}
 
-	async createWork(params: IUpdateWorkBody): Promise<WorkObject> {
+	async execute(params: IUpdateWorkBody): Promise<WorkObject> {
 		this.permissionContext.verifyPermission(Permission.CreateWorks);
 
 		const result = updateWorkBodySchema.validate(params, {
@@ -60,7 +60,7 @@ export class CreateWorkService {
 
 			em.persist(revision);
 
-			this.auditLogService.work_create({
+			this.auditLogger.work_create({
 				actor: user,
 				actorIp: this.permissionContext.remoteIpAddress,
 				work: work,

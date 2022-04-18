@@ -1,7 +1,7 @@
 import { UserAuditLogEntry } from '../../../src/entities/AuditLogEntry';
 import { User } from '../../../src/entities/User';
 import { AuditedAction } from '../../../src/models/AuditedAction';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
 import {
 	AuthenticateUserService,
@@ -33,13 +33,13 @@ describe('AuthenticateUserService', () => {
 			findOne: async (where: any): Promise<User> =>
 				[existingUser].filter((u) => u.email === where.email)[0],
 		};
-		const auditLogService = new AuditLogService(em as any);
+		const auditLogger = new AuditLogger(em as any);
 		const passwordHasherFactory = new PasswordHasherFactory();
 
 		authenticateUserService = new AuthenticateUserService(
 			em as any,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 			passwordHasherFactory,
 		);
 	});
@@ -52,7 +52,7 @@ describe('AuthenticateUserService', () => {
 		};
 
 		test('authenticateUser', async () => {
-			const result = await authenticateUserService.authenticateUser({
+			const result = await authenticateUserService.execute({
 				...defaults,
 			});
 
@@ -81,7 +81,7 @@ describe('AuthenticateUserService', () => {
 		});
 
 		test('email is undefined', async () => {
-			const result = await authenticateUserService.authenticateUser({
+			const result = await authenticateUserService.execute({
 				...defaults,
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				email: undefined!,
@@ -98,7 +98,7 @@ describe('AuthenticateUserService', () => {
 		});
 
 		test('email is empty', async () => {
-			const result = await authenticateUserService.authenticateUser({
+			const result = await authenticateUserService.execute({
 				...defaults,
 				email: '',
 			});
@@ -114,7 +114,7 @@ describe('AuthenticateUserService', () => {
 		});
 
 		test('email is whitespace', async () => {
-			const result = await authenticateUserService.authenticateUser({
+			const result = await authenticateUserService.execute({
 				...defaults,
 				email: ' 　\t\t　 ',
 			});
@@ -130,7 +130,7 @@ describe('AuthenticateUserService', () => {
 		});
 
 		test('email is invalid', async () => {
-			const result = await authenticateUserService.authenticateUser({
+			const result = await authenticateUserService.execute({
 				...defaults,
 				email: 'invalid_email',
 			});
@@ -146,7 +146,7 @@ describe('AuthenticateUserService', () => {
 		});
 
 		test('email does not exist', async () => {
-			const result = await authenticateUserService.authenticateUser({
+			const result = await authenticateUserService.execute({
 				...defaults,
 				email: 'not_found@example.com',
 			});
@@ -163,7 +163,7 @@ describe('AuthenticateUserService', () => {
 
 		test('password is undefined', async () => {
 			await expect(
-				authenticateUserService.authenticateUser({
+				authenticateUserService.execute({
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					password: undefined!,
@@ -178,7 +178,7 @@ describe('AuthenticateUserService', () => {
 		});
 
 		test('password is empty', async () => {
-			const result = await authenticateUserService.authenticateUser({
+			const result = await authenticateUserService.execute({
 				...defaults,
 				password: '',
 			});
@@ -201,7 +201,7 @@ describe('AuthenticateUserService', () => {
 		});
 
 		test('password is whitespace', async () => {
-			const result = await authenticateUserService.authenticateUser({
+			const result = await authenticateUserService.execute({
 				...defaults,
 				password: ' 　\t\t　 ',
 			});
@@ -224,7 +224,7 @@ describe('AuthenticateUserService', () => {
 		});
 
 		test('password is wrong', async () => {
-			const result = await authenticateUserService.authenticateUser({
+			const result = await authenticateUserService.execute({
 				...defaults,
 				password: 'wrong_password',
 			});

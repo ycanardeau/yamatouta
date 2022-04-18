@@ -33,19 +33,19 @@ export class AuthController {
 		@Body(new JoiValidationPipe(createUserBodySchema))
 		body: ICreateUserBody,
 	): Promise<AuthenticatedUserObject> {
-		return this.createUserService.createUser(body);
+		return this.createUserService.execute(body);
 	}
 
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
 	login(@Req() request: Request): Promise<AuthenticatedUserObject> {
-		return this.loginService.login(request);
+		return this.loginService.execute(request);
 	}
 
 	@HttpCode(HttpStatus.OK)
 	@Post('logout')
 	logout(@Req() request: Request): void {
-		return this.logoutService.logout(request);
+		return this.logoutService.execute(request);
 	}
 }

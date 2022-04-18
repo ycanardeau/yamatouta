@@ -15,7 +15,7 @@ export class GetArtistService {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async getArtist(artistId: number): Promise<ArtistObject> {
+	async execute(artistId: number): Promise<ArtistObject> {
 		const artist = await this.artistRepo.findOne({
 			id: artistId,
 			$and: [

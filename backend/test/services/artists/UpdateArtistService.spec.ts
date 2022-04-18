@@ -11,7 +11,7 @@ import { RevisionEvent } from '../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { IUpdateArtistBody } from '../../../src/requests/artists/IUpdateArtistBody';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { UpdateArtistService } from '../../../src/services/artists/UpdateArtistService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
@@ -23,7 +23,7 @@ describe('UpdateArtistService', () => {
 	let existingUser: User;
 	let artist: Artist;
 	let userRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let artistRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateArtistService: UpdateArtistService;
@@ -60,7 +60,7 @@ describe('UpdateArtistService', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 		artistRepo = {
 			findOneOrFail: async (): Promise<Artist> => artist,
 		};
@@ -71,7 +71,7 @@ describe('UpdateArtistService', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 			artistRepo as any,
 		);
 	});
@@ -84,7 +84,7 @@ describe('UpdateArtistService', () => {
 			body: IUpdateArtistBody;
 			snapshot: ArtistSnapshot;
 		}): Promise<void> => {
-			const artistObject = await updateArtistService.updateArtist(
+			const artistObject = await updateArtistService.execute(
 				artist.id,
 				body,
 			);
@@ -139,12 +139,12 @@ describe('UpdateArtistService', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogService,
+					auditLogger,
 					artistRepo as any,
 				);
 
 				await expect(
-					updateArtistService.updateArtist(artist.id, defaults),
+					updateArtistService.execute(artist.id, defaults),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -187,7 +187,7 @@ describe('UpdateArtistService', () => {
 
 		test('name is undefined', async () => {
 			await expect(
-				updateArtistService.updateArtist(artist.id, {
+				updateArtistService.execute(artist.id, {
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					name: undefined!,
@@ -197,7 +197,7 @@ describe('UpdateArtistService', () => {
 
 		test('name is empty', async () => {
 			await expect(
-				updateArtistService.updateArtist(artist.id, {
+				updateArtistService.execute(artist.id, {
 					...defaults,
 					name: '',
 				}),
@@ -206,7 +206,7 @@ describe('UpdateArtistService', () => {
 
 		test('name is too long', async () => {
 			await expect(
-				updateArtistService.updateArtist(artist.id, {
+				updateArtistService.execute(artist.id, {
 					...defaults,
 					name: 'い'.repeat(201),
 				}),
@@ -215,7 +215,7 @@ describe('UpdateArtistService', () => {
 
 		test('artistType is empty', async () => {
 			await expect(
-				updateArtistService.updateArtist(artist.id, {
+				updateArtistService.execute(artist.id, {
 					...defaults,
 					artistType: '' as ArtistType,
 				}),
@@ -224,7 +224,7 @@ describe('UpdateArtistService', () => {
 
 		test('artistType is invalid', async () => {
 			await expect(
-				updateArtistService.updateArtist(artist.id, {
+				updateArtistService.execute(artist.id, {
 					...defaults,
 					artistType: 'abcdef' as ArtistType,
 				}),

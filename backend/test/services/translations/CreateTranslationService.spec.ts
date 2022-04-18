@@ -11,7 +11,7 @@ import { TranslationSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { WordCategory } from '../../../src/models/WordCategory';
 import { IUpdateTranslationBody } from '../../../src/requests/translations/IUpdateTranslationBody';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { NgramConverter } from '../../../src/services/NgramConverter';
 import { CreateTranslationService } from '../../../src/services/translations/CreateTranslationService';
 import { FakeEntityManager } from '../../FakeEntityManager';
@@ -23,7 +23,7 @@ describe('CreateTranslationService', () => {
 	let em: FakeEntityManager;
 	let existingUser: User;
 	let userRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let ngramConverter: NgramConverter;
 	let permissionContext: FakePermissionContext;
 	let createTranslationService: CreateTranslationService;
@@ -54,7 +54,7 @@ describe('CreateTranslationService', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 		ngramConverter = new NgramConverter();
 
 		permissionContext = new FakePermissionContext(existingUser);
@@ -63,7 +63,7 @@ describe('CreateTranslationService', () => {
 			em as any,
 			permissionContext,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 			ngramConverter,
 		);
 	});
@@ -76,8 +76,9 @@ describe('CreateTranslationService', () => {
 			params: IUpdateTranslationBody;
 			snapshot: TranslationSnapshot;
 		}): Promise<void> => {
-			const translationObject =
-				await createTranslationService.createTranslation(params);
+			const translationObject = await createTranslationService.execute(
+				params,
+			);
 
 			expect(translationObject.headword).toBe(params.headword);
 			expect(translationObject.locale).toBe(params.locale);
@@ -135,12 +136,12 @@ describe('CreateTranslationService', () => {
 					em as any,
 					permissionContext,
 					userRepo as any,
-					auditLogService,
+					auditLogger,
 					ngramConverter,
 				);
 
 				await expect(
-					createTranslationService.createTranslation(defaults),
+					createTranslationService.execute(defaults),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -161,7 +162,7 @@ describe('CreateTranslationService', () => {
 
 		test('headword is undefined', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					headword: undefined!,
@@ -171,7 +172,7 @@ describe('CreateTranslationService', () => {
 
 		test('headword is empty', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					headword: '',
 				}),
@@ -180,7 +181,7 @@ describe('CreateTranslationService', () => {
 
 		test('headword is too long', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					headword: 'い'.repeat(201),
 				}),
@@ -189,7 +190,7 @@ describe('CreateTranslationService', () => {
 
 		test('reading is undefined', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					reading: undefined!,
@@ -199,7 +200,7 @@ describe('CreateTranslationService', () => {
 
 		test('reading is empty', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					reading: '',
 				}),
@@ -208,7 +209,7 @@ describe('CreateTranslationService', () => {
 
 		test('reading is too long', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					reading: 'い'.repeat(201),
 				}),
@@ -217,7 +218,7 @@ describe('CreateTranslationService', () => {
 
 		test('reading contains alphabets', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					reading: 'Anglish',
 				}),
@@ -226,7 +227,7 @@ describe('CreateTranslationService', () => {
 
 		test('reading contains kanji', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					reading: '大和言葉',
 				}),
@@ -235,7 +236,7 @@ describe('CreateTranslationService', () => {
 
 		test('yamatokotoba is undefined', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					yamatokotoba: undefined!,
@@ -245,7 +246,7 @@ describe('CreateTranslationService', () => {
 
 		test('yamatokotoba is empty', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					yamatokotoba: '',
 				}),
@@ -254,7 +255,7 @@ describe('CreateTranslationService', () => {
 
 		test('yamatokotoba is too long', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					yamatokotoba: 'い'.repeat(201),
 				}),
@@ -263,7 +264,7 @@ describe('CreateTranslationService', () => {
 
 		test('yamatokotoba contains alphabets', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					yamatokotoba: 'Anglish',
 				}),
@@ -272,7 +273,7 @@ describe('CreateTranslationService', () => {
 
 		test('yamatokotoba contains kanji', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					yamatokotoba: '大和言葉',
 				}),
@@ -281,7 +282,7 @@ describe('CreateTranslationService', () => {
 
 		test('category is empty', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					category: '' as WordCategory,
 				}),
@@ -290,7 +291,7 @@ describe('CreateTranslationService', () => {
 
 		test('category is invalid', async () => {
 			await expect(
-				createTranslationService.createTranslation({
+				createTranslationService.execute({
 					...defaults,
 					category: 'abcdef' as WordCategory,
 				}),

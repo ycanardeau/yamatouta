@@ -7,10 +7,10 @@ import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject
 import { User } from '../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../exceptions/UserEmailAlreadyExistsException';
 import { IUpdateAuthenticatedUserBody } from '../../requests/users/IUpdateAuthenticatedUserBody';
-import { AuditLogService } from '../AuditLogService';
+import { normalizeEmail } from '../../utils/normalizeEmail';
+import { AuditLogger } from '../AuditLogger';
 import { PermissionContext } from '../PermissionContext';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
-import { NormalizeEmailService } from './NormalizeEmailService';
 
 @Injectable()
 export class UpdateAuthenticatedUserService {
@@ -20,11 +20,10 @@ export class UpdateAuthenticatedUserService {
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
-		private readonly normalizeEmailService: NormalizeEmailService,
-		private readonly auditLogService: AuditLogService,
+		private readonly auditLogger: AuditLogger,
 	) {}
 
-	async updateAuthenticatedUser(
+	async execute(
 		params: IUpdateAuthenticatedUserBody,
 	): Promise<AuthenticatedUserObject> {
 		const { password, username, email, newPassword } = params;
@@ -70,7 +69,7 @@ export class UpdateAuthenticatedUserService {
 			}
 
 			if (username && username !== user.name) {
-				this.auditLogService.user_rename({
+				this.auditLogger.user_rename({
 					actor: user,
 					actorIp: this.permissionContext.remoteIpAddress,
 					user: user,
@@ -82,8 +81,7 @@ export class UpdateAuthenticatedUserService {
 			}
 
 			if (email && email !== user.email) {
-				const normalizedEmail =
-					await this.normalizeEmailService.normalizeEmail(email);
+				const normalizedEmail = await normalizeEmail(email);
 
 				await this.userRepo
 					.findOne({
@@ -94,7 +92,7 @@ export class UpdateAuthenticatedUserService {
 							throw new UserEmailAlreadyExistsException();
 					});
 
-				this.auditLogService.user_changeEmail({
+				this.auditLogger.user_changeEmail({
 					actor: user,
 					actorIp: this.permissionContext.remoteIpAddress,
 					user: user,
@@ -107,7 +105,7 @@ export class UpdateAuthenticatedUserService {
 			}
 
 			if (newPassword) {
-				this.auditLogService.user_changePassword({
+				this.auditLogger.user_changePassword({
 					actor: user,
 					actorIp: this.permissionContext.remoteIpAddress,
 					user: user,

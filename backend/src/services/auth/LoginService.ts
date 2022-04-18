@@ -5,7 +5,7 @@ import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject
 
 @Injectable()
 export class LoginService {
-	async login(request: Request): Promise<AuthenticatedUserObject> {
+	async execute(request: Request): Promise<AuthenticatedUserObject> {
 		const { user } = request;
 
 		if (!(user instanceof AuthenticatedUserObject))

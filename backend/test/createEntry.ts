@@ -9,12 +9,10 @@ import { UserGroup } from '../src/models/UserGroup';
 import { WordCategory } from '../src/models/WordCategory';
 import { WorkType } from '../src/models/WorkType';
 import { PasswordHasherFactory } from '../src/services/passwordHashers/PasswordHasherFactory';
-import { NormalizeEmailService } from '../src/services/users/NormalizeEmailService';
+import { normalizeEmail } from '../src/utils/normalizeEmail';
 
 const passwordHasherFactory = new PasswordHasherFactory();
 const passwordHasher = passwordHasherFactory.default;
-
-const normalizeEmailService = new NormalizeEmailService();
 
 export const createUser = async ({
 	id,
@@ -33,7 +31,7 @@ export const createUser = async ({
 	deleted?: boolean;
 	hidden?: boolean;
 }): Promise<User> => {
-	const normalizedEmail = await normalizeEmailService.normalizeEmail(email);
+	const normalizedEmail = await normalizeEmail(email);
 	const salt = await passwordHasher.generateSalt();
 	const passwordHash = await passwordHasher.hashPassword(password, salt);
 

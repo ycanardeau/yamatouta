@@ -11,7 +11,7 @@ import { Work } from '../../entities/Work';
 import { Entry } from '../../models/Entry';
 import { Permission } from '../../models/Permission';
 import { RevisionEvent } from '../../models/RevisionEvent';
-import { AuditLogService } from '../AuditLogService';
+import { AuditLogger } from '../AuditLogger';
 import { PermissionContext } from '../PermissionContext';
 
 abstract class DeleteEntryService<TEntry extends Entry> {
@@ -20,13 +20,13 @@ abstract class DeleteEntryService<TEntry extends Entry> {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		protected readonly auditLogService: AuditLogService,
+		protected readonly auditLogger: AuditLogger,
 		private readonly permission: Permission,
 		private readonly entryFunc: (entryId: number) => Promise<TEntry>,
 		private readonly auditLogFunc: (actor: User, entry: TEntry) => void,
 	) {}
 
-	async deleteEntry(entryId: number): Promise<void> {
+	async execute(entryId: number): Promise<void> {
 		this.permissionContext.verifyPermission(this.permission);
 
 		await this.em.transactional(async (em) => {
@@ -71,7 +71,7 @@ export class DeleteTranslationService extends DeleteEntryService<Translation> {
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
-		auditLogService: AuditLogService,
+		auditLogger: AuditLogger,
 		@InjectRepository(Translation)
 		translationRepo: EntityRepository<Translation>,
 	) {
@@ -79,11 +79,11 @@ export class DeleteTranslationService extends DeleteEntryService<Translation> {
 			permissionContext,
 			em,
 			userRepo,
-			auditLogService,
+			auditLogger,
 			Permission.DeleteTranslations,
 			(entryId) => translationRepo.findOneOrFail({ id: entryId }),
 			(actor, entry) =>
-				this.auditLogService.translation_delete({
+				this.auditLogger.translation_delete({
 					actor: actor,
 					actorIp: this.permissionContext.remoteIpAddress,
 					translation: entry,
@@ -99,7 +99,7 @@ export class DeleteArtistService extends DeleteEntryService<Artist> {
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
-		auditLogService: AuditLogService,
+		auditLogger: AuditLogger,
 		@InjectRepository(Artist)
 		artistRepo: EntityRepository<Artist>,
 	) {
@@ -107,11 +107,11 @@ export class DeleteArtistService extends DeleteEntryService<Artist> {
 			permissionContext,
 			em,
 			userRepo,
-			auditLogService,
+			auditLogger,
 			Permission.DeleteArtists,
 			(entryId) => artistRepo.findOneOrFail({ id: entryId }),
 			(actor, entry) =>
-				this.auditLogService.artist_delete({
+				this.auditLogger.artist_delete({
 					actor: actor,
 					actorIp: this.permissionContext.remoteIpAddress,
 					artist: entry,
@@ -127,7 +127,7 @@ export class DeleteQuoteService extends DeleteEntryService<Quote> {
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
-		auditLogService: AuditLogService,
+		auditLogger: AuditLogger,
 		@InjectRepository(Quote)
 		quoteRepo: EntityRepository<Quote>,
 	) {
@@ -135,11 +135,11 @@ export class DeleteQuoteService extends DeleteEntryService<Quote> {
 			permissionContext,
 			em,
 			userRepo,
-			auditLogService,
+			auditLogger,
 			Permission.DeleteQuotes,
 			(entryId) => quoteRepo.findOneOrFail({ id: entryId }),
 			(actor, entry) =>
-				this.auditLogService.quote_delete({
+				this.auditLogger.quote_delete({
 					actor: actor,
 					actorIp: this.permissionContext.remoteIpAddress,
 					quote: entry,
@@ -155,7 +155,7 @@ export class DeleteWorkService extends DeleteEntryService<Work> {
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
-		auditLogService: AuditLogService,
+		auditLogger: AuditLogger,
 		@InjectRepository(Work)
 		workRepo: EntityRepository<Work>,
 	) {
@@ -163,11 +163,11 @@ export class DeleteWorkService extends DeleteEntryService<Work> {
 			permissionContext,
 			em,
 			userRepo,
-			auditLogService,
+			auditLogger,
 			Permission.DeleteWorks,
 			(entryId) => workRepo.findOneOrFail({ id: entryId }),
 			(actor, entry) =>
-				this.auditLogService.work_delete({
+				this.auditLogger.work_delete({
 					actor: actor,
 					actorIp: this.permissionContext.remoteIpAddress,
 					work: entry,

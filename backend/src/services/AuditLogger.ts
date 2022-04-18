@@ -17,7 +17,7 @@ import { Work } from '../entities/Work';
 import { AuditedAction } from '../models/AuditedAction';
 
 @Injectable()
-export class AuditLogService {
+export class AuditLogger {
 	constructor(private readonly em: EntityManager) {}
 
 	private createAuditLogEntry(auditLogEntry: AuditLogEntry): void {

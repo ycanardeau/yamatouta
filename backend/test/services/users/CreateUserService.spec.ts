@@ -4,10 +4,9 @@ import { BadRequestException } from '@nestjs/common';
 import { UserAuditLogEntry } from '../../../src/entities/AuditLogEntry';
 import { User } from '../../../src/entities/User';
 import { AuditedAction } from '../../../src/models/AuditedAction';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
 import { CreateUserService } from '../../../src/services/users/CreateUserService';
-import { NormalizeEmailService } from '../../../src/services/users/NormalizeEmailService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createUser } from '../../createEntry';
@@ -43,16 +42,14 @@ describe('CreateUserService', () => {
 					| (AnyEntity | Reference<AnyEntity>)[],
 			): void => em.persist(entity),
 		};
-		const auditLogService = new AuditLogService(em as any);
+		const auditLogger = new AuditLogger(em as any);
 		permissionContext = new FakePermissionContext();
-		const normalizeEmailService = new NormalizeEmailService();
 		const passwordHasherFactory = new PasswordHasherFactory();
 
 		createUserService = new CreateUserService(
 			em as any,
 			userRepo as any,
-			auditLogService,
-			normalizeEmailService,
+			auditLogger,
 			passwordHasherFactory,
 			permissionContext,
 		);
@@ -66,7 +63,7 @@ describe('CreateUserService', () => {
 		};
 
 		test('createUser', async () => {
-			const userObject = await createUserService.createUser({
+			const userObject = await createUserService.execute({
 				...defaultParams,
 			});
 
@@ -97,7 +94,7 @@ describe('CreateUserService', () => {
 
 			expect(username.length).toBe(2);
 
-			const userObject = await createUserService.createUser({
+			const userObject = await createUserService.execute({
 				...defaultParams,
 				username: username,
 			});
@@ -130,7 +127,7 @@ describe('CreateUserService', () => {
 
 			expect(username.length).toBe(32);
 
-			const userObject = await createUserService.createUser({
+			const userObject = await createUserService.execute({
 				...defaultParams,
 				username: username,
 			});
@@ -159,7 +156,7 @@ describe('CreateUserService', () => {
 
 		test('username is undefined', async () => {
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					username: undefined!,
@@ -175,7 +172,7 @@ describe('CreateUserService', () => {
 
 		test('username is empty', async () => {
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					username: '',
 				}),
@@ -190,7 +187,7 @@ describe('CreateUserService', () => {
 
 		test('username is whitespace', async () => {
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					username: ' 　\t\t　 ',
 				}),
@@ -209,7 +206,7 @@ describe('CreateUserService', () => {
 			expect(username.length).toBe(1);
 
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					username: username,
 				}),
@@ -229,7 +226,7 @@ describe('CreateUserService', () => {
 			expect(username.length).toBe(33);
 
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					username: username,
 				}),
@@ -244,7 +241,7 @@ describe('CreateUserService', () => {
 
 		test('email is existing', async () => {
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					email: existingEmail,
 				}),
@@ -259,7 +256,7 @@ describe('CreateUserService', () => {
 
 		test('email is undefined', async () => {
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					email: undefined!,
@@ -275,7 +272,7 @@ describe('CreateUserService', () => {
 
 		test('email is empty', async () => {
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					email: '',
 				}),
@@ -290,7 +287,7 @@ describe('CreateUserService', () => {
 
 		test('email is invalid', async () => {
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					email: 'invalid_email',
 				}),
@@ -305,7 +302,7 @@ describe('CreateUserService', () => {
 
 		test('password is undefined', async () => {
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					password: undefined!,
@@ -321,7 +318,7 @@ describe('CreateUserService', () => {
 
 		test('password is empty', async () => {
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					password: '',
 				}),
@@ -340,7 +337,7 @@ describe('CreateUserService', () => {
 			expect(password.length).toBe(7);
 
 			await expect(
-				createUserService.createUser({
+				createUserService.execute({
 					...defaultParams,
 					password: password,
 				}),

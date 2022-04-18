@@ -12,7 +12,7 @@ import {
 	IUpdateArtistBody,
 	updateArtistBodySchema,
 } from '../../requests/artists/IUpdateArtistBody';
-import { AuditLogService } from '../AuditLogService';
+import { AuditLogger } from '../AuditLogger';
 import { PermissionContext } from '../PermissionContext';
 
 @Injectable()
@@ -22,10 +22,10 @@ export class CreateArtistService {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogService: AuditLogService,
+		private readonly auditLogger: AuditLogger,
 	) {}
 
-	async createArtist(params: IUpdateArtistBody): Promise<ArtistObject> {
+	async execute(params: IUpdateArtistBody): Promise<ArtistObject> {
 		this.permissionContext.verifyPermission(Permission.CreateArtists);
 
 		const result = updateArtistBodySchema.validate(params, {
@@ -60,7 +60,7 @@ export class CreateArtistService {
 
 			em.persist(revision);
 
-			this.auditLogService.artist_create({
+			this.auditLogger.artist_create({
 				actor: user,
 				actorIp: this.permissionContext.remoteIpAddress,
 				artist: artist,

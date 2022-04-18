@@ -94,7 +94,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 			throw new TooManyRequestsException();
 		}
 
-		const result = await this.authenticateUserService.authenticateUser({
+		const result = await this.authenticateUserService.execute({
 			email: email,
 			password: password,
 			ip: ip,

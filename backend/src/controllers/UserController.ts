@@ -39,12 +39,12 @@ export class UserController {
 		@Query(new JoiValidationPipe(listUsersQuerySchema))
 		query: IListUsersQuery,
 	): Promise<SearchResultObject<UserObject>> {
-		return this.listUsersService.listUsers(query);
+		return this.listUsersService.execute(query);
 	}
 
 	@Get('current')
 	getAuthenticatedUser(): AuthenticatedUserObject {
-		return this.getAuthenticatedUserService.getAuthenticatedUser();
+		return this.getAuthenticatedUserService.execute();
 	}
 
 	@Patch('current')
@@ -52,15 +52,13 @@ export class UserController {
 		@Body(new JoiValidationPipe(updateAuthenticatedUserBodySchema))
 		body: IUpdateAuthenticatedUserBody,
 	): Promise<AuthenticatedUserObject> {
-		return this.updateAuthenticatedUserService.updateAuthenticatedUser(
-			body,
-		);
+		return this.updateAuthenticatedUserService.execute(body);
 	}
 
 	@Get(':userId')
 	getUser(
 		@Param('userId', ParseIntPipe) userId: number,
 	): Promise<UserObject> {
-		return this.getUserService.getUser(userId);
+		return this.getUserService.execute(userId);
 	}
 }

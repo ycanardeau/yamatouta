@@ -12,10 +12,10 @@ import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject
 import { User } from '../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../exceptions/UserEmailAlreadyExistsException';
 import { ICreateUserBody } from '../../requests/auth/ICreateUserBody';
-import { AuditLogService } from '../AuditLogService';
+import { normalizeEmail } from '../../utils/normalizeEmail';
+import { AuditLogger } from '../AuditLogger';
 import { PermissionContext } from '../PermissionContext';
 import { PasswordHasherFactory } from '../passwordHashers/PasswordHasherFactory';
-import { NormalizeEmailService } from './NormalizeEmailService';
 
 @Injectable()
 export class CreateUserService {
@@ -23,16 +23,13 @@ export class CreateUserService {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogService: AuditLogService,
-		private readonly normalizeEmailService: NormalizeEmailService,
+		private readonly auditLogger: AuditLogger,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
 		private readonly permissionContext: PermissionContext,
 	) {}
 
 	// TODO: Use CAPTCHA.
-	async createUser(
-		params: ICreateUserBody,
-	): Promise<AuthenticatedUserObject> {
+	async execute(params: ICreateUserBody): Promise<AuthenticatedUserObject> {
 		if (config.disableAccountCreation)
 			throw new ForbiddenException('Account creation is restricted.');
 
@@ -53,9 +50,7 @@ export class CreateUserService {
 
 		const { username, email, password } = result.value;
 
-		const normalizedEmail = await this.normalizeEmailService.normalizeEmail(
-			email,
-		);
+		const normalizedEmail = await normalizeEmail(email);
 
 		const user = await this.em.transactional(async () => {
 			await this.userRepo
@@ -84,7 +79,7 @@ export class CreateUserService {
 
 			this.userRepo.persist(user);
 
-			this.auditLogService.user_create({
+			this.auditLogger.user_create({
 				actor: user,
 				actorIp: this.permissionContext.remoteIpAddress,
 				user: user,

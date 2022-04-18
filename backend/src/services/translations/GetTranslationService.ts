@@ -15,7 +15,7 @@ export class GetTranslationService {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async getTranslation(translationId: number): Promise<TranslationObject> {
+	async execute(translationId: number): Promise<TranslationObject> {
 		const translation = await this.translationRepo.findOne({
 			id: translationId,
 			$and: [

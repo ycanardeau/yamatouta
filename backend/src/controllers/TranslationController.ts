@@ -45,7 +45,7 @@ export class TranslationController {
 		@Body(new JoiValidationPipe(updateTranslationBodySchema))
 		body: IUpdateTranslationBody,
 	): Promise<TranslationObject> {
-		return this.createTranslationService.createTranslation(body);
+		return this.createTranslationService.execute(body);
 	}
 
 	@Get()
@@ -53,7 +53,7 @@ export class TranslationController {
 		@Query(new JoiValidationPipe(listTranslationsQuerySchema))
 		query: IListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
-		return this.listTranslationsService.listTranslations(query);
+		return this.listTranslationsService.execute(query);
 	}
 
 	@Patch(':translationId')
@@ -62,32 +62,27 @@ export class TranslationController {
 		@Body(new JoiValidationPipe(updateTranslationBodySchema))
 		body: IUpdateTranslationBody,
 	): Promise<TranslationObject> {
-		return this.updateTranslationService.updateTranslation(
-			translationId,
-			body,
-		);
+		return this.updateTranslationService.execute(translationId, body);
 	}
 
 	@Delete(':translationId')
 	deleteTranslation(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<void> {
-		return this.deleteTranslationService.deleteEntry(translationId);
+		return this.deleteTranslationService.execute(translationId);
 	}
 
 	@Get(':translationId')
 	getTranslation(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<TranslationObject> {
-		return this.getTranslationService.getTranslation(translationId);
+		return this.getTranslationService.execute(translationId);
 	}
 
 	@Get(':translationId/revisions')
 	listTranslationRevisions(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listTranslationRevisionsService.listEntryRevisions(
-			translationId,
-		);
+		return this.listTranslationRevisionsService.execute(translationId);
 	}
 }

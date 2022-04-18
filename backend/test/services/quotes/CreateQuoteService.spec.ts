@@ -13,7 +13,7 @@ import { RevisionEvent } from '../../../src/models/RevisionEvent';
 import { ObjectRefSnapshot, QuoteSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { IUpdateQuoteBody } from '../../../src/requests/quotes/IUpdateQuoteBody';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { CreateQuoteService } from '../../../src/services/quotes/CreateQuoteService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
@@ -26,7 +26,7 @@ describe('CreateQuoteService', () => {
 	let userRepo: any;
 	let artist: Artist;
 	let artistRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let permissionContext: FakePermissionContext;
 	let createQuoteService: CreateQuoteService;
 
@@ -65,7 +65,7 @@ describe('CreateQuoteService', () => {
 		artistRepo = {
 			findOneOrFail: async (): Promise<Artist> => artist,
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 
 		permissionContext = new FakePermissionContext(existingUser);
 
@@ -74,7 +74,7 @@ describe('CreateQuoteService', () => {
 			em as any,
 			userRepo as any,
 			artistRepo as any,
-			auditLogService,
+			auditLogger,
 		);
 	});
 
@@ -86,7 +86,7 @@ describe('CreateQuoteService', () => {
 			params: IUpdateQuoteBody;
 			snapshot: QuoteSnapshot;
 		}): Promise<void> => {
-			const quoteObject = await createQuoteService.createQuote(params);
+			const quoteObject = await createQuoteService.execute(params);
 
 			expect(quoteObject.text).toBe(params.text);
 			expect(quoteObject.quoteType).toBe(params.quoteType);
@@ -147,11 +147,11 @@ describe('CreateQuoteService', () => {
 					em as any,
 					userRepo as any,
 					artistRepo as any,
-					auditLogService,
+					auditLogger,
 				);
 
 				await expect(
-					createQuoteService.createQuote(defaults),
+					createQuoteService.execute(defaults),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -170,7 +170,7 @@ describe('CreateQuoteService', () => {
 
 		test('text is undefined', async () => {
 			await expect(
-				createQuoteService.createQuote({
+				createQuoteService.execute({
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					text: undefined!,
@@ -180,7 +180,7 @@ describe('CreateQuoteService', () => {
 
 		test('text is empty', async () => {
 			await expect(
-				createQuoteService.createQuote({
+				createQuoteService.execute({
 					...defaults,
 					text: '',
 				}),
@@ -189,7 +189,7 @@ describe('CreateQuoteService', () => {
 
 		test('text is too long', async () => {
 			await expect(
-				createQuoteService.createQuote({
+				createQuoteService.execute({
 					...defaults,
 					text: 'い'.repeat(201),
 				}),
@@ -198,7 +198,7 @@ describe('CreateQuoteService', () => {
 
 		test('quoteType is empty', async () => {
 			await expect(
-				createQuoteService.createQuote({
+				createQuoteService.execute({
 					...defaults,
 					quoteType: '' as QuoteType,
 				}),
@@ -207,7 +207,7 @@ describe('CreateQuoteService', () => {
 
 		test('quoteType is invalid', async () => {
 			await expect(
-				createQuoteService.createQuote({
+				createQuoteService.execute({
 					...defaults,
 					quoteType: 'abcdef' as QuoteType,
 				}),
@@ -216,7 +216,7 @@ describe('CreateQuoteService', () => {
 
 		test('artistId is undefined', async () => {
 			await expect(
-				createQuoteService.createQuote({
+				createQuoteService.execute({
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					artistId: undefined!,
@@ -226,7 +226,7 @@ describe('CreateQuoteService', () => {
 
 		test('artistId is invalid', async () => {
 			await expect(
-				createQuoteService.createQuote({
+				createQuoteService.execute({
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					artistId: 'abcdef' as any,

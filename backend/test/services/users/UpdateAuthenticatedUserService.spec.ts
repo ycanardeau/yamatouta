@@ -3,10 +3,10 @@ import { BadRequestException } from '@nestjs/common';
 import { UserAuditLogEntry } from '../../../src/entities/AuditLogEntry';
 import { User } from '../../../src/entities/User';
 import { AuditedAction } from '../../../src/models/AuditedAction';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { PasswordHasherFactory } from '../../../src/services/passwordHashers/PasswordHasherFactory';
-import { NormalizeEmailService } from '../../../src/services/users/NormalizeEmailService';
 import { UpdateAuthenticatedUserService } from '../../../src/services/users/UpdateAuthenticatedUserService';
+import { normalizeEmail } from '../../../src/utils/normalizeEmail';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createUser } from '../../createEntry';
@@ -17,7 +17,6 @@ describe('UpdateAuthenticatedUserService', () => {
 	const existingEmail = 'user@example.com';
 	const existingPassword = 'P@$$w0rd';
 
-	let normalizeEmailService: NormalizeEmailService;
 	let normalizedEmail: string;
 	let salt: string;
 	let passwordHash: string;
@@ -30,11 +29,7 @@ describe('UpdateAuthenticatedUserService', () => {
 		const passwordHasherFactory = new PasswordHasherFactory();
 		const passwordHasher = passwordHasherFactory.default;
 
-		normalizeEmailService = new NormalizeEmailService();
-
-		normalizedEmail = await normalizeEmailService.normalizeEmail(
-			existingEmail,
-		);
+		normalizedEmail = await normalizeEmail(existingEmail);
 		salt = await passwordHasher.generateSalt();
 		passwordHash = await passwordHasher.hashPassword(
 			existingPassword,
@@ -58,15 +53,14 @@ describe('UpdateAuthenticatedUserService', () => {
 					(u) => u.normalizedEmail === where.normalizedEmail,
 				)[0],
 		};
-		const auditLogService = new AuditLogService(em as any);
+		const auditLogger = new AuditLogger(em as any);
 
 		updateAuthenticatedUserService = new UpdateAuthenticatedUserService(
 			permissionContext,
 			em as any,
 			userRepo as any,
 			passwordHasherFactory,
-			normalizeEmailService,
-			auditLogService,
+			auditLogger,
 		);
 	});
 
@@ -75,17 +69,16 @@ describe('UpdateAuthenticatedUserService', () => {
 			const newUsername = 'new username';
 
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: 'wrong password',
 					username: newUsername,
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					username: newUsername,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				username: newUsername,
+			});
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(newUsername);
@@ -111,11 +104,10 @@ describe('UpdateAuthenticatedUserService', () => {
 		});
 
 		test('username is not changed', async () => {
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					username: existingUsername,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				username: existingUsername,
+			});
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -138,11 +130,10 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			expect(newUsername.length).toBe(2);
 
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					username: newUsername,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				username: newUsername,
+			});
 
 			expect(userObject.name).toBe(newUsername);
 
@@ -166,11 +157,10 @@ describe('UpdateAuthenticatedUserService', () => {
 
 			expect(newUsername.length).toBe(32);
 
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					username: newUsername,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				username: newUsername,
+			});
 
 			expect(userObject.name).toBe(newUsername);
 
@@ -189,11 +179,10 @@ describe('UpdateAuthenticatedUserService', () => {
 		});
 
 		test('username is undefined', async () => {
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					username: undefined,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				username: undefined,
+			});
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -213,7 +202,7 @@ describe('UpdateAuthenticatedUserService', () => {
 
 		test('username is empty', async () => {
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: existingPassword,
 					username: '',
 				}),
@@ -228,7 +217,7 @@ describe('UpdateAuthenticatedUserService', () => {
 
 		test('username is whitespace', async () => {
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: existingPassword,
 					username: ' 　\t\t　 ',
 				}),
@@ -247,7 +236,7 @@ describe('UpdateAuthenticatedUserService', () => {
 			expect(newUsername.length).toBe(1);
 
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: existingPassword,
 					username: newUsername,
 				}),
@@ -267,7 +256,7 @@ describe('UpdateAuthenticatedUserService', () => {
 			expect(newUsername.length).toBe(33);
 
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: existingPassword,
 					username: newUsername,
 				}),
@@ -282,21 +271,19 @@ describe('UpdateAuthenticatedUserService', () => {
 
 		test('email', async () => {
 			const newEmail = 'new_email@example.com';
-			const newNormalizedEmail =
-				await normalizeEmailService.normalizeEmail(newEmail);
+			const newNormalizedEmail = await normalizeEmail(newEmail);
 
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: 'wrong password',
 					email: newEmail,
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					email: newEmail,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				email: newEmail,
+			});
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -322,11 +309,10 @@ describe('UpdateAuthenticatedUserService', () => {
 		});
 
 		test('email is not changed', async () => {
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					email: existingEmail,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				email: existingEmail,
+			});
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -345,11 +331,10 @@ describe('UpdateAuthenticatedUserService', () => {
 		});
 
 		test('email is undefined', async () => {
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					email: undefined,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				email: undefined,
+			});
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -369,7 +354,7 @@ describe('UpdateAuthenticatedUserService', () => {
 
 		test('email is empty', async () => {
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: existingPassword,
 					email: '',
 				}),
@@ -384,7 +369,7 @@ describe('UpdateAuthenticatedUserService', () => {
 
 		test('email is invalid', async () => {
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: existingPassword,
 					email: 'invalid_email',
 				}),
@@ -401,17 +386,16 @@ describe('UpdateAuthenticatedUserService', () => {
 			const newPassword = 'N3wP@$$w0rd';
 
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: 'wrong password',
 					newPassword: newPassword,
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					newPassword: newPassword,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				newPassword: newPassword,
+			});
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -437,11 +421,10 @@ describe('UpdateAuthenticatedUserService', () => {
 		});
 
 		test('newPassword is undefined', async () => {
-			const userObject =
-				await updateAuthenticatedUserService.updateAuthenticatedUser({
-					password: existingPassword,
-					newPassword: undefined,
-				});
+			const userObject = await updateAuthenticatedUserService.execute({
+				password: existingPassword,
+				newPassword: undefined,
+			});
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -461,7 +444,7 @@ describe('UpdateAuthenticatedUserService', () => {
 
 		test('newPassword is empty', async () => {
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: existingPassword,
 					newPassword: '',
 				}),
@@ -480,7 +463,7 @@ describe('UpdateAuthenticatedUserService', () => {
 			expect(newPassword.length).toBe(7);
 
 			await expect(
-				updateAuthenticatedUserService.updateAuthenticatedUser({
+				updateAuthenticatedUserService.execute({
 					password: existingPassword,
 					newPassword: newPassword,
 				}),

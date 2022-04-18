@@ -18,7 +18,7 @@ export class CreateMissingRevisionsService {
 		private readonly em: EntityManager,
 	) {}
 
-	createMissingRevisions(): Promise<void> {
+	execute(): Promise<void> {
 		this.permissionContext.verifyPermission(
 			Permission.CreateMissingRevisions,
 		);

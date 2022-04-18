@@ -261,7 +261,7 @@ export class ListTranslationsService {
 		return count;
 	}
 
-	async listTranslations(
+	async execute(
 		params: IListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
 		const { /*offset, */ getTotalCount } = params;

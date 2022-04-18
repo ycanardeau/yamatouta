@@ -45,7 +45,7 @@ export class QuoteController {
 		@Body(new JoiValidationPipe(updateQuoteBodySchema))
 		body: IUpdateQuoteBody,
 	): Promise<QuoteObject> {
-		return this.createQuoteService.createQuote(body);
+		return this.createQuoteService.execute(body);
 	}
 
 	@Get()
@@ -53,14 +53,14 @@ export class QuoteController {
 		@Query(new JoiValidationPipe(listQuotesQuerySchema))
 		query: IListQuotesQuery,
 	): Promise<SearchResultObject<QuoteObject>> {
-		return this.listQuotesService.listQuotes(query);
+		return this.listQuotesService.execute(query);
 	}
 
 	@Get(':quoteId')
 	getQuote(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<QuoteObject> {
-		return this.getQuoteService.getQuote(quoteId);
+		return this.getQuoteService.execute(quoteId);
 	}
 
 	@Patch(':quoteId')
@@ -69,20 +69,20 @@ export class QuoteController {
 		@Body(new JoiValidationPipe(updateQuoteBodySchema))
 		body: IUpdateQuoteBody,
 	): Promise<QuoteObject> {
-		return this.updateQuoteService.updateQuote(quoteId, body);
+		return this.updateQuoteService.execute(quoteId, body);
 	}
 
 	@Delete(':quoteId')
 	deleteQuote(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<void> {
-		return this.deleteQuoteService.deleteEntry(quoteId);
+		return this.deleteQuoteService.execute(quoteId);
 	}
 
 	@Get(':quoteId/revisions')
 	listQuoteRevisions(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listQuoteRevisionsService.listEntryRevisions(quoteId);
+		return this.listQuoteRevisionsService.execute(quoteId);
 	}
 }

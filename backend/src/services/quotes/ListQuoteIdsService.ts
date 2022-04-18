@@ -11,7 +11,7 @@ export class ListQuoteIdsService {
 		private readonly quoteRepo: EntityRepository<Quote>,
 	) {}
 
-	async listQuoteIds(): Promise<number[]> {
+	async execute(): Promise<number[]> {
 		const quotes = await this.quoteRepo.find({
 			deleted: false,
 			hidden: false,

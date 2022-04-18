@@ -12,7 +12,7 @@ import {
 	IUpdateWorkBody,
 	updateWorkBodySchema,
 } from '../../requests/works/IUpdateWorkBody';
-import { AuditLogService } from '../AuditLogService';
+import { AuditLogger } from '../AuditLogger';
 import { PermissionContext } from '../PermissionContext';
 
 @Injectable()
@@ -22,12 +22,12 @@ export class UpdateWorkService {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogService: AuditLogService,
+		private readonly auditLogger: AuditLogger,
 		@InjectRepository(Work)
 		private readonly workRepo: EntityRepository<Work>,
 	) {}
 
-	async updateWork(
+	async execute(
 		workId: number,
 		params: IUpdateWorkBody,
 	): Promise<WorkObject> {
@@ -67,7 +67,7 @@ export class UpdateWorkService {
 
 			em.persist(revision);
 
-			this.auditLogService.work_update({
+			this.auditLogger.work_update({
 				actor: user,
 				actorIp: this.permissionContext.remoteIpAddress,
 				work: work,

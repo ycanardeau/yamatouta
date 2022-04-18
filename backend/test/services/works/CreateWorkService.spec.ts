@@ -11,7 +11,7 @@ import { WorkSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { WorkType } from '../../../src/models/WorkType';
 import { IUpdateWorkBody } from '../../../src/requests/works/IUpdateWorkBody';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { CreateWorkService } from '../../../src/services/works/CreateWorkService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
@@ -22,7 +22,7 @@ describe('CreateWorkService', () => {
 	let em: FakeEntityManager;
 	let existingUser: User;
 	let userRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let permissionContext: FakePermissionContext;
 	let createWorkService: CreateWorkService;
 
@@ -52,7 +52,7 @@ describe('CreateWorkService', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 
 		permissionContext = new FakePermissionContext(existingUser);
 
@@ -60,7 +60,7 @@ describe('CreateWorkService', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 		);
 	});
 
@@ -72,7 +72,7 @@ describe('CreateWorkService', () => {
 			params: IUpdateWorkBody;
 			snapshot: WorkSnapshot;
 		}): Promise<void> => {
-			const workObject = await createWorkService.createWork(params);
+			const workObject = await createWorkService.execute(params);
 
 			expect(workObject.name).toBe(params.name);
 			expect(workObject.workType).toBe(params.workType);
@@ -128,11 +128,11 @@ describe('CreateWorkService', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogService,
+					auditLogger,
 				);
 
 				await expect(
-					createWorkService.createWork(defaults),
+					createWorkService.execute(defaults),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -149,7 +149,7 @@ describe('CreateWorkService', () => {
 
 		test('name is undefined', async () => {
 			await expect(
-				createWorkService.createWork({
+				createWorkService.execute({
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					name: undefined!,
@@ -159,7 +159,7 @@ describe('CreateWorkService', () => {
 
 		test('name is empty', async () => {
 			await expect(
-				createWorkService.createWork({
+				createWorkService.execute({
 					...defaults,
 					name: '',
 				}),
@@ -168,7 +168,7 @@ describe('CreateWorkService', () => {
 
 		test('name is too long', async () => {
 			await expect(
-				createWorkService.createWork({
+				createWorkService.execute({
 					...defaults,
 					name: 'い'.repeat(201),
 				}),
@@ -177,7 +177,7 @@ describe('CreateWorkService', () => {
 
 		test('workType is undefined', async () => {
 			await expect(
-				createWorkService.createWork({
+				createWorkService.execute({
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					workType: undefined!,
@@ -187,7 +187,7 @@ describe('CreateWorkService', () => {
 
 		test('workType is empty', async () => {
 			await expect(
-				createWorkService.createWork({
+				createWorkService.execute({
 					...defaults,
 					workType: '' as WorkType,
 				}),
@@ -196,7 +196,7 @@ describe('CreateWorkService', () => {
 
 		test('workType is invalid', async () => {
 			await expect(
-				createWorkService.createWork({
+				createWorkService.execute({
 					...defaults,
 					workType: 'abcdef' as WorkType,
 				}),

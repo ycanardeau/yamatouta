@@ -15,7 +15,7 @@ export class GetUserService {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async getUser(userId: number): Promise<UserObject> {
+	async execute(userId: number): Promise<UserObject> {
 		const user = await this.userRepo.findOne({
 			id: userId,
 			$and: [

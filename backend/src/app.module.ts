@@ -16,7 +16,7 @@ import { TranslationRevision } from './entities/Revision';
 import { Translation } from './entities/Translation';
 import { User } from './entities/User';
 import { Work } from './entities/Work';
-import { AuditLogService } from './services/AuditLogService';
+import { AuditLogger } from './services/AuditLogger';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { NgramConverter } from './services/NgramConverter';
 import { PermissionContext } from './services/PermissionContext';
@@ -57,7 +57,6 @@ import { CreateUserService } from './services/users/CreateUserService';
 import { GetAuthenticatedUserService } from './services/users/GetAuthenticatedUserService';
 import { GetUserService } from './services/users/GetUserService';
 import { ListUsersService } from './services/users/ListUsersService';
-import { NormalizeEmailService } from './services/users/NormalizeEmailService';
 import { UpdateAuthenticatedUserService } from './services/users/UpdateAuthenticatedUserService';
 import { CreateWorkService } from './services/works/CreateWorkService';
 import { GetWorkService } from './services/works/GetWorkService';
@@ -88,7 +87,7 @@ import { UpdateWorkService } from './services/works/UpdateWorkService';
 		WorkController,
 	],
 	providers: [
-		AuditLogService,
+		AuditLogger,
 		AuthenticateUserService,
 		CreateArtistService,
 		CreateMissingRevisionsService,
@@ -123,7 +122,6 @@ import { UpdateWorkService } from './services/works/UpdateWorkService';
 		LoginService,
 		LogoutService,
 		NgramConverter,
-		NormalizeEmailService,
 		PasswordHasherFactory,
 		PermissionContext,
 		UpdateAuthenticatedUserService,

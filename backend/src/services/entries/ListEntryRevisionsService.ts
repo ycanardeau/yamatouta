@@ -19,7 +19,7 @@ abstract class ListEntryRevisionsService<TEntry extends Entry> {
 		private readonly entryFunc: (entryId: number) => Promise<TEntry>,
 	) {}
 
-	async listEntryRevisions(
+	async execute(
 		entryId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
 		this.permissionContext.verifyPermission(Permission.ViewEditHistory);

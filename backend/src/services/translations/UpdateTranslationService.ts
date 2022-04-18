@@ -12,7 +12,7 @@ import {
 	IUpdateTranslationBody,
 	updateTranslationBodySchema,
 } from '../../requests/translations/IUpdateTranslationBody';
-import { AuditLogService } from '../AuditLogService';
+import { AuditLogger } from '../AuditLogger';
 import { NgramConverter } from '../NgramConverter';
 import { PermissionContext } from '../PermissionContext';
 
@@ -23,13 +23,13 @@ export class UpdateTranslationService {
 		private readonly permissionContext: PermissionContext,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogService: AuditLogService,
+		private readonly auditLogger: AuditLogger,
 		private readonly ngramConverter: NgramConverter,
 		@InjectRepository(Translation)
 		private readonly translationRepo: EntityRepository<Translation>,
 	) {}
 
-	async updateTranslation(
+	async execute(
 		translationId: number,
 		params: IUpdateTranslationBody,
 	): Promise<TranslationObject> {
@@ -80,7 +80,7 @@ export class UpdateTranslationService {
 
 			em.persist(revision);
 
-			this.auditLogService.translation_update({
+			this.auditLogger.translation_update({
 				actor: user,
 				actorIp: this.permissionContext.remoteIpAddress,
 				translation: translation,

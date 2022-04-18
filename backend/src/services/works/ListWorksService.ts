@@ -35,7 +35,7 @@ export class ListWorksService {
 		}
 	}
 
-	async listWorks(
+	async execute(
 		params: IListWorksQuery,
 	): Promise<SearchResultObject<WorkObject>> {
 		const { workType, sort, offset, limit, getTotalCount, query } = params;

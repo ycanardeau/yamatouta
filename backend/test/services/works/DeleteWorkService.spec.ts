@@ -10,7 +10,7 @@ import { RevisionEvent } from '../../../src/models/RevisionEvent';
 import { WorkSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { WorkType } from '../../../src/models/WorkType';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { DeleteWorkService } from '../../../src/services/entries/DeleteEntryService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
@@ -22,7 +22,7 @@ describe('DeleteWorkService', () => {
 	let existingUser: User;
 	let work: Work;
 	let userRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let workRepo: any;
 	let permissionContext: FakePermissionContext;
 	let deleteWorkService: DeleteWorkService;
@@ -59,7 +59,7 @@ describe('DeleteWorkService', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 		workRepo = {
 			findOneOrFail: async (): Promise<Work> => work,
 		};
@@ -70,14 +70,14 @@ describe('DeleteWorkService', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 			workRepo as any,
 		);
 	});
 
 	describe('deleteWork', () => {
 		const testDeleteWork = async (): Promise<void> => {
-			await deleteWorkService.deleteEntry(work.id);
+			await deleteWorkService.execute(work.id);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof WorkRevision,
@@ -123,12 +123,12 @@ describe('DeleteWorkService', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogService,
+					auditLogger,
 					workRepo as any,
 				);
 
 				await expect(
-					deleteWorkService.deleteEntry(work.id),
+					deleteWorkService.execute(work.id),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

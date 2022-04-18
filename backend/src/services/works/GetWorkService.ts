@@ -15,7 +15,7 @@ export class GetWorkService {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async getWork(workId: number): Promise<WorkObject> {
+	async execute(workId: number): Promise<WorkObject> {
 		const work = await this.workRepo.findOne({
 			id: workId,
 			$and: [

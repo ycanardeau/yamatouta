@@ -35,7 +35,7 @@ export class ListArtistsService {
 		}
 	}
 
-	async listArtists(
+	async execute(
 		params: IListArtistsQuery,
 	): Promise<SearchResultObject<ArtistObject>> {
 		const { artistType, sort, offset, limit, getTotalCount, query } =

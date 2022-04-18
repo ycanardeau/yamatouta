@@ -11,7 +11,7 @@ import { WorkSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
 import { WorkType } from '../../../src/models/WorkType';
 import { IUpdateWorkBody } from '../../../src/requests/works/IUpdateWorkBody';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { UpdateWorkService } from '../../../src/services/works/UpdateWorkService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
@@ -23,7 +23,7 @@ describe('UpdateWorkService', () => {
 	let existingUser: User;
 	let work: Work;
 	let userRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let workRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateWorkService: UpdateWorkService;
@@ -60,7 +60,7 @@ describe('UpdateWorkService', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 		workRepo = {
 			findOneOrFail: async (): Promise<Work> => work,
 		};
@@ -71,7 +71,7 @@ describe('UpdateWorkService', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 			workRepo as any,
 		);
 	});
@@ -84,10 +84,7 @@ describe('UpdateWorkService', () => {
 			body: IUpdateWorkBody;
 			snapshot: WorkSnapshot;
 		}): Promise<void> => {
-			const workObject = await updateWorkService.updateWork(
-				work.id,
-				body,
-			);
+			const workObject = await updateWorkService.execute(work.id, body);
 
 			expect(workObject.name).toBe(body.name);
 			expect(workObject.workType).toBe(body.workType);
@@ -139,12 +136,12 @@ describe('UpdateWorkService', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogService,
+					auditLogger,
 					workRepo as any,
 				);
 
 				await expect(
-					updateWorkService.updateWork(work.id, defaults),
+					updateWorkService.execute(work.id, defaults),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -187,7 +184,7 @@ describe('UpdateWorkService', () => {
 
 		test('name is undefined', async () => {
 			await expect(
-				updateWorkService.updateWork(work.id, {
+				updateWorkService.execute(work.id, {
 					...defaults,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					name: undefined!,
@@ -197,7 +194,7 @@ describe('UpdateWorkService', () => {
 
 		test('name is empty', async () => {
 			await expect(
-				updateWorkService.updateWork(work.id, {
+				updateWorkService.execute(work.id, {
 					...defaults,
 					name: '',
 				}),
@@ -206,7 +203,7 @@ describe('UpdateWorkService', () => {
 
 		test('name is too long', async () => {
 			await expect(
-				updateWorkService.updateWork(work.id, {
+				updateWorkService.execute(work.id, {
 					...defaults,
 					name: 'い'.repeat(201),
 				}),
@@ -215,7 +212,7 @@ describe('UpdateWorkService', () => {
 
 		test('workType is empty', async () => {
 			await expect(
-				updateWorkService.updateWork(work.id, {
+				updateWorkService.execute(work.id, {
 					...defaults,
 					workType: '' as WorkType,
 				}),
@@ -224,7 +221,7 @@ describe('UpdateWorkService', () => {
 
 		test('workType is invalid', async () => {
 			await expect(
-				updateWorkService.updateWork(work.id, {
+				updateWorkService.execute(work.id, {
 					...defaults,
 					workType: 'abcdef' as WorkType,
 				}),

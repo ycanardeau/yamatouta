@@ -13,7 +13,7 @@ import {
 	IUpdateQuoteBody,
 	updateQuoteBodySchema,
 } from '../../requests/quotes/IUpdateQuoteBody';
-import { AuditLogService } from '../AuditLogService';
+import { AuditLogger } from '../AuditLogger';
 import { PermissionContext } from '../PermissionContext';
 
 @Injectable()
@@ -25,12 +25,12 @@ export class UpdateQuoteService {
 		private readonly userRepo: EntityRepository<User>,
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
-		private readonly auditLogService: AuditLogService,
+		private readonly auditLogger: AuditLogger,
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
 	) {}
 
-	async updateQuote(
+	async execute(
 		quoteId: number,
 		params: IUpdateQuoteBody,
 	): Promise<QuoteObject> {
@@ -78,7 +78,7 @@ export class UpdateQuoteService {
 
 			em.persist(revision);
 
-			this.auditLogService.quote_update({
+			this.auditLogger.quote_update({
 				actor: user,
 				actorIp: this.permissionContext.remoteIpAddress,
 				quote: quote,

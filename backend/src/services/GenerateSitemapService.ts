@@ -11,10 +11,10 @@ export class GenerateSitemapService {
 		private readonly listQuoteIdsService: ListQuoteIdsService,
 	) {}
 
-	async generateSitemap(): Promise<Buffer> {
+	async execute(): Promise<Buffer> {
 		const [artistIds, quoteIds] = await Promise.all([
-			this.listArtistIdsService.listArtistIds(),
-			this.listQuoteIdsService.listQuoteIds(),
+			this.listArtistIdsService.execute(),
+			this.listQuoteIdsService.execute(),
 		]);
 
 		const sitemapStream = new SitemapStream({

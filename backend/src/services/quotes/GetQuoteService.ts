@@ -15,7 +15,7 @@ export class GetQuoteService {
 		private readonly permissionContext: PermissionContext,
 	) {}
 
-	async getQuote(quoteId: number): Promise<QuoteObject> {
+	async execute(quoteId: number): Promise<QuoteObject> {
 		const quote = await this.quoteRepo.findOne(
 			{
 				id: quoteId,

@@ -45,7 +45,7 @@ export class ArtistController {
 		@Body(new JoiValidationPipe(updateArtistBodySchema))
 		body: IUpdateArtistBody,
 	): Promise<ArtistObject> {
-		return this.createArtistService.createArtist(body);
+		return this.createArtistService.execute(body);
 	}
 
 	@Get()
@@ -53,14 +53,14 @@ export class ArtistController {
 		@Query(new JoiValidationPipe(listArtistsQuerySchema))
 		query: IListArtistsQuery,
 	): Promise<SearchResultObject<ArtistObject>> {
-		return this.listArtistsService.listArtists(query);
+		return this.listArtistsService.execute(query);
 	}
 
 	@Get(':artistId')
 	getArtist(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<ArtistObject> {
-		return this.getArtistService.getArtist(artistId);
+		return this.getArtistService.execute(artistId);
 	}
 
 	@Patch(':artistId')
@@ -69,20 +69,20 @@ export class ArtistController {
 		@Body(new JoiValidationPipe(updateArtistBodySchema))
 		body: IUpdateArtistBody,
 	): Promise<ArtistObject> {
-		return this.updateArtistService.updateArtist(artistId, body);
+		return this.updateArtistService.execute(artistId, body);
 	}
 
 	@Delete(':artistId')
 	deleteArtist(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<void> {
-		return this.deleteArtistService.deleteEntry(artistId);
+		return this.deleteArtistService.execute(artistId);
 	}
 
 	@Get(':artistId/revisions')
 	listArtistRevisions(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listArtistRevisionsService.listEntryRevisions(artistId);
+		return this.listArtistRevisionsService.execute(artistId);
 	}
 }

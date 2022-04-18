@@ -11,7 +11,7 @@ import { QuoteType } from '../../../src/models/QuoteType';
 import { RevisionEvent } from '../../../src/models/RevisionEvent';
 import { QuoteSnapshot } from '../../../src/models/Snapshot';
 import { UserGroup } from '../../../src/models/UserGroup';
-import { AuditLogService } from '../../../src/services/AuditLogService';
+import { AuditLogger } from '../../../src/services/AuditLogger';
 import { DeleteQuoteService } from '../../../src/services/entries/DeleteEntryService';
 import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
@@ -23,7 +23,7 @@ describe('DeleteQuoteService', () => {
 	let existingUser: User;
 	let quote: Quote;
 	let userRepo: any;
-	let auditLogService: AuditLogService;
+	let auditLogger: AuditLogger;
 	let quoteRepo: any;
 	let permissionContext: FakePermissionContext;
 	let deleteQuoteService: DeleteQuoteService;
@@ -68,7 +68,7 @@ describe('DeleteQuoteService', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogService = new AuditLogService(em as any);
+		auditLogger = new AuditLogger(em as any);
 		quoteRepo = {
 			findOneOrFail: async (): Promise<Quote> => quote,
 		};
@@ -79,14 +79,14 @@ describe('DeleteQuoteService', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogService,
+			auditLogger,
 			quoteRepo as any,
 		);
 	});
 
 	describe('deleteQuote', () => {
 		const testDeleteQuote = async (): Promise<void> => {
-			await deleteQuoteService.deleteEntry(quote.id);
+			await deleteQuoteService.execute(quote.id);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof QuoteRevision,
@@ -132,12 +132,12 @@ describe('DeleteQuoteService', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogService,
+					auditLogger,
 					quoteRepo as any,
 				);
 
 				await expect(
-					deleteQuoteService.deleteEntry(quote.id),
+					deleteQuoteService.execute(quote.id),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

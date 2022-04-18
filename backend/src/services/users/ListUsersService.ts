@@ -34,7 +34,7 @@ export class ListUsersService {
 		}
 	}
 
-	async listUsers(params: {
+	async execute(params: {
 		sort?: UserSortRule;
 		offset?: number;
 		limit?: number;

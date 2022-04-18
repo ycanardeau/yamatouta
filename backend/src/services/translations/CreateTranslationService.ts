@@ -12,7 +12,7 @@ import {
 	IUpdateTranslationBody,
 	updateTranslationBodySchema,
 } from '../../requests/translations/IUpdateTranslationBody';
-import { AuditLogService } from '../AuditLogService';
+import { AuditLogger } from '../AuditLogger';
 import { NgramConverter } from '../NgramConverter';
 import { PermissionContext } from '../PermissionContext';
 
@@ -23,13 +23,11 @@ export class CreateTranslationService {
 		private readonly permissionContext: PermissionContext,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogService: AuditLogService,
+		private readonly auditLogger: AuditLogger,
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	async createTranslation(
-		params: IUpdateTranslationBody,
-	): Promise<TranslationObject> {
+	async execute(params: IUpdateTranslationBody): Promise<TranslationObject> {
 		this.permissionContext.verifyPermission(Permission.CreateTranslations);
 
 		const result = updateTranslationBodySchema.validate(params, {
@@ -75,7 +73,7 @@ export class CreateTranslationService {
 
 			em.persist(revision);
 
-			this.auditLogService.translation_create({
+			this.auditLogger.translation_create({
 				actor: user,
 				actorIp: this.permissionContext.remoteIpAddress,
 				translation: translation,

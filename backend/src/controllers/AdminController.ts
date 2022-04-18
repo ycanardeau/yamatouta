@@ -10,6 +10,6 @@ export class AdminController {
 
 	@Post('create-missing-revisions')
 	createMissingRevisions(): Promise<void> {
-		return this.createMissingRevisionsService.createMissingRevisions();
+		return this.createMissingRevisionsService.execute();
 	}
 }
