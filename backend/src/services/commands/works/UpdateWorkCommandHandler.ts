@@ -1,6 +1,7 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import Joi, { ObjectSchema } from 'joi';
 
 import { WorkObject } from '../../../dto/works/WorkObject';
 import { Commit } from '../../../entities/Commit';
@@ -8,12 +9,21 @@ import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import {
-	IUpdateWorkBody,
-	updateWorkBodySchema,
-} from '../../../requests/works/IUpdateWorkBody';
+import { WorkType } from '../../../models/WorkType';
 import { AuditLogger } from '../../AuditLogger';
 import { PermissionContext } from '../../PermissionContext';
+
+export class UpdateWorkCommand {
+	static readonly schema: ObjectSchema<UpdateWorkCommand> = Joi.object({
+		name: Joi.string().required().trim().max(200),
+		workType: Joi.string()
+			.required()
+			.trim()
+			.valid(...Object.values(WorkType)),
+	});
+
+	constructor(readonly name: string, readonly workType: WorkType) {}
+}
 
 @Injectable()
 export class UpdateWorkCommandHandler {
@@ -29,11 +39,11 @@ export class UpdateWorkCommandHandler {
 
 	async execute(
 		workId: number,
-		params: IUpdateWorkBody,
+		command: UpdateWorkCommand,
 	): Promise<WorkObject> {
 		this.permissionContext.verifyPermission(Permission.EditWorks);
 
-		const result = updateWorkBodySchema.validate(params, {
+		const result = UpdateWorkCommand.schema.validate(command, {
 			convert: true,
 		});
 
@@ -53,8 +63,8 @@ export class UpdateWorkCommandHandler {
 				hidden: false,
 			});
 
-			work.name = params.name;
-			work.workType = params.workType;
+			work.name = command.name;
+			work.workType = command.workType;
 
 			const commit = new Commit();
 

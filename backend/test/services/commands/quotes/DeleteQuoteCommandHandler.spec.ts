@@ -86,7 +86,7 @@ describe('DeleteQuoteCommandHandler', () => {
 
 	describe('deleteQuote', () => {
 		const testDeleteQuote = async (): Promise<void> => {
-			await deleteQuoteCommandHandler.execute(quote.id);
+			await deleteQuoteCommandHandler.execute({ entryId: quote.id });
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof QuoteRevision,
@@ -137,7 +137,7 @@ describe('DeleteQuoteCommandHandler', () => {
 				);
 
 				await expect(
-					deleteQuoteCommandHandler.execute(quote.id),
+					deleteQuoteCommandHandler.execute({ entryId: quote.id }),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

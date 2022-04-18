@@ -1,6 +1,7 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import Joi, { ObjectSchema } from 'joi';
 
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Artist } from '../../../entities/Artist';
@@ -8,13 +9,29 @@ import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
+import { QuoteType } from '../../../models/QuoteType';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import {
-	IUpdateQuoteBody,
-	updateQuoteBodySchema,
-} from '../../../requests/quotes/IUpdateQuoteBody';
 import { AuditLogger } from '../../AuditLogger';
 import { PermissionContext } from '../../PermissionContext';
+
+export class UpdateQuoteCommand {
+	static readonly schema: ObjectSchema<UpdateQuoteCommand> = Joi.object({
+		text: Joi.string().required().trim().max(200),
+		quoteType: Joi.string()
+			.required()
+			.trim()
+			.valid(...Object.values(QuoteType)),
+		locale: Joi.string().required().trim(),
+		artistId: Joi.number().required(),
+	});
+
+	constructor(
+		readonly text: string,
+		readonly quoteType: QuoteType,
+		readonly locale: string,
+		readonly artistId: number,
+	) {}
+}
 
 @Injectable()
 export class UpdateQuoteCommandHandler {
@@ -32,11 +49,11 @@ export class UpdateQuoteCommandHandler {
 
 	async execute(
 		quoteId: number,
-		params: IUpdateQuoteBody,
+		command: UpdateQuoteCommand,
 	): Promise<QuoteObject> {
 		this.permissionContext.verifyPermission(Permission.EditQuotes);
 
-		const result = updateQuoteBodySchema.validate(params, {
+		const result = UpdateQuoteCommand.schema.validate(command, {
 			convert: true,
 		});
 
@@ -51,7 +68,7 @@ export class UpdateQuoteCommandHandler {
 			});
 
 			const artist = await this.artistRepo.findOneOrFail({
-				id: params.artistId,
+				id: command.artistId,
 				deleted: false,
 				hidden: false,
 			});
@@ -62,9 +79,9 @@ export class UpdateQuoteCommandHandler {
 				hidden: false,
 			});
 
-			quote.text = params.text;
-			quote.quoteType = params.quoteType;
-			quote.locale = params.locale;
+			quote.text = command.text;
+			quote.quoteType = command.quoteType;
+			quote.locale = command.locale;
 			quote.artist = artist;
 
 			const commit = new Commit();

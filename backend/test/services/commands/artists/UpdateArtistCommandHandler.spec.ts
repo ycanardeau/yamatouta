@@ -10,9 +10,11 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { IUpdateArtistBody } from '../../../../src/requests/artists/IUpdateArtistBody';
 import { AuditLogger } from '../../../../src/services/AuditLogger';
-import { UpdateArtistCommandHandler } from '../../../../src/services/commands/artists/UpdateArtistCommandHandler';
+import {
+	UpdateArtistCommand,
+	UpdateArtistCommandHandler,
+} from '../../../../src/services/commands/artists/UpdateArtistCommandHandler';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createUser } from '../../../createEntry';
@@ -78,19 +80,19 @@ describe('UpdateArtistCommandHandler', () => {
 
 	describe('updateArtist', () => {
 		const testUpdateArtist = async ({
-			body,
+			command,
 			snapshot,
 		}: {
-			body: IUpdateArtistBody;
+			command: UpdateArtistCommand;
 			snapshot: ArtistSnapshot;
 		}): Promise<void> => {
 			const artistObject = await updateArtistCommandHandler.execute(
 				artist.id,
-				body,
+				command,
 			);
 
-			expect(artistObject.name).toBe(body.name);
-			expect(artistObject.artistType).toBe(body.artistType);
+			expect(artistObject.name).toBe(command.name);
+			expect(artistObject.artistType).toBe(command.artistType);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof ArtistRevision,
@@ -151,7 +153,7 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('0 changes', async () => {
 			await testUpdateArtist({
-				body: {
+				command: {
 					name: artist.name,
 					artistType: artist.artistType,
 				},
@@ -164,7 +166,7 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('1 change', async () => {
 			await testUpdateArtist({
-				body: {
+				command: {
 					...defaults,
 					artistType: artist.artistType,
 				},
@@ -177,7 +179,7 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateArtist({
-				body: defaults,
+				command: defaults,
 				snapshot: {
 					name: defaults.name,
 					artistType: defaults.artistType,

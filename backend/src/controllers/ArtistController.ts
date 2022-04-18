@@ -18,12 +18,11 @@ import {
 	IListArtistsQuery,
 	listArtistsQuerySchema,
 } from '../requests/artists/IListArtistsQuery';
-import {
-	IUpdateArtistBody,
-	updateArtistBodySchema,
-} from '../requests/artists/IUpdateArtistBody';
 import { CreateArtistCommandHandler } from '../services/commands/artists/CreateArtistCommandHandler';
-import { UpdateArtistCommandHandler } from '../services/commands/artists/UpdateArtistCommandHandler';
+import {
+	UpdateArtistCommand,
+	UpdateArtistCommandHandler,
+} from '../services/commands/artists/UpdateArtistCommandHandler';
 import { DeleteArtistCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
 import { GetArtistQueryHandler } from '../services/queries/artists/GetArtistQueryHandler';
 import { ListArtistsQueryHandler } from '../services/queries/artists/ListArtistsQueryHandler';
@@ -42,10 +41,10 @@ export class ArtistController {
 
 	@Post()
 	createArtist(
-		@Body(new JoiValidationPipe(updateArtistBodySchema))
-		body: IUpdateArtistBody,
+		@Body(new JoiValidationPipe(UpdateArtistCommand.schema))
+		command: UpdateArtistCommand,
 	): Promise<ArtistObject> {
-		return this.createArtistCommandHandler.execute(body);
+		return this.createArtistCommandHandler.execute(command);
 	}
 
 	@Get()
@@ -66,17 +65,17 @@ export class ArtistController {
 	@Patch(':artistId')
 	updateArtist(
 		@Param('artistId', ParseIntPipe) artistId: number,
-		@Body(new JoiValidationPipe(updateArtistBodySchema))
-		body: IUpdateArtistBody,
+		@Body(new JoiValidationPipe(UpdateArtistCommand.schema))
+		command: UpdateArtistCommand,
 	): Promise<ArtistObject> {
-		return this.updateArtistCommandHandler.execute(artistId, body);
+		return this.updateArtistCommandHandler.execute(artistId, command);
 	}
 
 	@Delete(':artistId')
 	deleteArtist(
 		@Param('artistId', ParseIntPipe) artistId: number,
 	): Promise<void> {
-		return this.deleteArtistCommandHandler.execute(artistId);
+		return this.deleteArtistCommandHandler.execute({ entryId: artistId });
 	}
 
 	@Get(':artistId/revisions')

@@ -1,6 +1,7 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import Joi, { ObjectSchema } from 'joi';
 
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Commit } from '../../../entities/Commit';
@@ -8,13 +9,41 @@ import { Translation } from '../../../entities/Translation';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import {
-	IUpdateTranslationBody,
-	updateTranslationBodySchema,
-} from '../../../requests/translations/IUpdateTranslationBody';
+import { WordCategory } from '../../../models/WordCategory';
 import { AuditLogger } from '../../AuditLogger';
 import { NgramConverter } from '../../NgramConverter';
 import { PermissionContext } from '../../PermissionContext';
+
+export class UpdateTranslationCommand {
+	static readonly schema: ObjectSchema<UpdateTranslationCommand> = Joi.object(
+		{
+			headword: Joi.string().required().trim().max(200),
+			locale: Joi.string().required().trim(),
+			reading: Joi.string()
+				.required()
+				.trim()
+				.max(200)
+				.regex(/[あ-ん]/u),
+			yamatokotoba: Joi.string()
+				.required()
+				.trim()
+				.max(200)
+				.regex(/[あ-ん]/u),
+			category: Joi.string()
+				.required()
+				.trim()
+				.valid(...Object.values(WordCategory)),
+		},
+	);
+
+	constructor(
+		readonly headword: string,
+		readonly locale: string,
+		readonly reading: string,
+		readonly yamatokotoba: string,
+		readonly category: WordCategory,
+	) {}
+}
 
 @Injectable()
 export class UpdateTranslationCommandHandler {
@@ -31,11 +60,11 @@ export class UpdateTranslationCommandHandler {
 
 	async execute(
 		translationId: number,
-		params: IUpdateTranslationBody,
+		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
 		this.permissionContext.verifyPermission(Permission.EditTranslations);
 
-		const result = updateTranslationBodySchema.validate(params, {
+		const result = UpdateTranslationCommand.schema.validate(command, {
 			convert: true,
 		});
 

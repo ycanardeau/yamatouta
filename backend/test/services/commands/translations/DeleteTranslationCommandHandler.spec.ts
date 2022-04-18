@@ -79,7 +79,9 @@ describe('DeleteTranslationCommandHandler', () => {
 
 	describe('deleteTranslation', () => {
 		const testDeleteTranslation = async (): Promise<void> => {
-			await deleteTranslationCommandHandler.execute(translation.id);
+			await deleteTranslationCommandHandler.execute({
+				entryId: translation.id,
+			});
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof TranslationRevision,
@@ -133,7 +135,9 @@ describe('DeleteTranslationCommandHandler', () => {
 					);
 
 				await expect(
-					deleteTranslationCommandHandler.execute(translation.id),
+					deleteTranslationCommandHandler.execute({
+						entryId: translation.id,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

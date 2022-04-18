@@ -10,10 +10,12 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WordCategory } from '../../../../src/models/WordCategory';
-import { IUpdateTranslationBody } from '../../../../src/requests/translations/IUpdateTranslationBody';
 import { AuditLogger } from '../../../../src/services/AuditLogger';
 import { NgramConverter } from '../../../../src/services/NgramConverter';
-import { UpdateTranslationCommandHandler } from '../../../../src/services/commands/translations/UpdateTranslationCommandHandler';
+import {
+	UpdateTranslationCommand,
+	UpdateTranslationCommandHandler,
+} from '../../../../src/services/commands/translations/UpdateTranslationCommandHandler';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createTranslation, createUser } from '../../../createEntry';
@@ -85,23 +87,23 @@ describe('UpdateTranslationCommandHandler', () => {
 
 	describe('updateTranslation', () => {
 		const testUpdateTranslation = async ({
-			body,
+			command,
 			snapshot,
 		}: {
-			body: IUpdateTranslationBody;
+			command: UpdateTranslationCommand;
 			snapshot: TranslationSnapshot;
 		}): Promise<void> => {
 			const translationObject =
 				await updateTranslationCommandHandler.execute(
 					translation.id,
-					body,
+					command,
 				);
 
-			expect(translationObject.headword).toBe(body.headword);
-			expect(translationObject.locale).toBe(body.locale);
-			expect(translationObject.reading).toBe(body.reading);
-			expect(translationObject.yamatokotoba).toBe(body.yamatokotoba);
-			expect(translationObject.category).toBe(body.category);
+			expect(translationObject.headword).toBe(command.headword);
+			expect(translationObject.locale).toBe(command.locale);
+			expect(translationObject.reading).toBe(command.reading);
+			expect(translationObject.yamatokotoba).toBe(command.yamatokotoba);
+			expect(translationObject.category).toBe(command.category);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof TranslationRevision,
@@ -170,7 +172,7 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('0 changes', async () => {
 			await testUpdateTranslation({
-				body: {
+				command: {
 					headword: translation.headword,
 					locale: translation.locale,
 					reading: translation.reading,
@@ -190,7 +192,7 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('1 change', async () => {
 			await testUpdateTranslation({
-				body: {
+				command: {
 					...defaults,
 					locale: translation.locale,
 					reading: translation.reading,
@@ -210,7 +212,7 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateTranslation({
-				body: {
+				command: {
 					...defaults,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
@@ -229,7 +231,7 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('3 changes', async () => {
 			await testUpdateTranslation({
-				body: {
+				command: {
 					...defaults,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
@@ -247,7 +249,7 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('4 changes', async () => {
 			await testUpdateTranslation({
-				body: { ...defaults, category: translation.category },
+				command: { ...defaults, category: translation.category },
 				snapshot: {
 					headword: defaults.headword,
 					locale: defaults.locale,
@@ -261,7 +263,7 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('5 changes', async () => {
 			await testUpdateTranslation({
-				body: defaults,
+				command: defaults,
 				snapshot: {
 					headword: defaults.headword,
 					locale: defaults.locale,

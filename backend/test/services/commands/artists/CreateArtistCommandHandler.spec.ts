@@ -10,9 +10,9 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { IUpdateArtistBody } from '../../../../src/requests/artists/IUpdateArtistBody';
 import { AuditLogger } from '../../../../src/services/AuditLogger';
 import { CreateArtistCommandHandler } from '../../../../src/services/commands/artists/CreateArtistCommandHandler';
+import { UpdateArtistCommand } from '../../../../src/services/commands/artists/UpdateArtistCommandHandler';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createUser } from '../../../createEntry';
@@ -66,18 +66,18 @@ describe('CreateArtistCommandHandler', () => {
 
 	describe('createArtist', () => {
 		const testCreateArtist = async ({
-			params,
+			command,
 			snapshot,
 		}: {
-			params: IUpdateArtistBody;
+			command: UpdateArtistCommand;
 			snapshot: ArtistSnapshot;
 		}): Promise<void> => {
 			const artistObject = await createArtistCommandHandler.execute(
-				params,
+				command,
 			);
 
-			expect(artistObject.name).toBe(params.name);
-			expect(artistObject.artistType).toBe(params.artistType);
+			expect(artistObject.name).toBe(command.name);
+			expect(artistObject.artistType).toBe(command.artistType);
 
 			const artist = em.entities.filter(
 				(entity) => entity instanceof Artist,
@@ -141,7 +141,7 @@ describe('CreateArtistCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testCreateArtist({
-				params: defaults,
+				command: defaults,
 				snapshot: {
 					name: defaults.name,
 					artistType: defaults.artistType,

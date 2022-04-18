@@ -8,12 +8,9 @@ import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import {
-	IUpdateArtistBody,
-	updateArtistBodySchema,
-} from '../../../requests/artists/IUpdateArtistBody';
 import { AuditLogger } from '../../AuditLogger';
 import { PermissionContext } from '../../PermissionContext';
+import { UpdateArtistCommand } from './UpdateArtistCommandHandler';
 
 @Injectable()
 export class CreateArtistCommandHandler {
@@ -25,10 +22,10 @@ export class CreateArtistCommandHandler {
 		private readonly auditLogger: AuditLogger,
 	) {}
 
-	async execute(params: IUpdateArtistBody): Promise<ArtistObject> {
+	async execute(command: UpdateArtistCommand): Promise<ArtistObject> {
 		this.permissionContext.verifyPermission(Permission.CreateArtists);
 
-		const result = updateArtistBodySchema.validate(params, {
+		const result = UpdateArtistCommand.schema.validate(command, {
 			convert: true,
 		});
 
@@ -43,8 +40,8 @@ export class CreateArtistCommandHandler {
 			});
 
 			const artist = new Artist({
-				name: params.name,
-				artistType: params.artistType,
+				name: command.name,
+				artistType: command.artistType,
 			});
 
 			em.persist(artist);

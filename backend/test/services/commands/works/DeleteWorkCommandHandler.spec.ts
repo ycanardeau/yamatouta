@@ -77,7 +77,7 @@ describe('DeleteWorkCommandHandler', () => {
 
 	describe('deleteWork', () => {
 		const testDeleteWork = async (): Promise<void> => {
-			await deleteWorkCommandHandler.execute(work.id);
+			await deleteWorkCommandHandler.execute({ entryId: work.id });
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof WorkRevision,
@@ -128,7 +128,7 @@ describe('DeleteWorkCommandHandler', () => {
 				);
 
 				await expect(
-					deleteWorkCommandHandler.execute(work.id),
+					deleteWorkCommandHandler.execute({ entryId: work.id }),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

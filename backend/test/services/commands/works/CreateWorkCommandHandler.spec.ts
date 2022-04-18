@@ -10,9 +10,9 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { WorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
-import { IUpdateWorkBody } from '../../../../src/requests/works/IUpdateWorkBody';
 import { AuditLogger } from '../../../../src/services/AuditLogger';
 import { CreateWorkCommandHandler } from '../../../../src/services/commands/works/CreateWorkCommandHandler';
+import { UpdateWorkCommand } from '../../../../src/services/commands/works/UpdateWorkCommandHandler';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createUser } from '../../../createEntry';
@@ -66,16 +66,16 @@ describe('CreateWorkCommandHandler', () => {
 
 	describe('createWork', () => {
 		const testCreateWork = async ({
-			params,
+			command,
 			snapshot,
 		}: {
-			params: IUpdateWorkBody;
+			command: UpdateWorkCommand;
 			snapshot: WorkSnapshot;
 		}): Promise<void> => {
-			const workObject = await createWorkCommandHandler.execute(params);
+			const workObject = await createWorkCommandHandler.execute(command);
 
-			expect(workObject.name).toBe(params.name);
-			expect(workObject.workType).toBe(params.workType);
+			expect(workObject.name).toBe(command.name);
+			expect(workObject.workType).toBe(command.workType);
 
 			const work = em.entities.filter(
 				(entity) => entity instanceof Work,
@@ -139,7 +139,7 @@ describe('CreateWorkCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testCreateWork({
-				params: defaults,
+				command: defaults,
 				snapshot: {
 					name: defaults.name,
 					workType: defaults.workType,

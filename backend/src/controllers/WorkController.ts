@@ -18,13 +18,12 @@ import {
 	IListWorksQuery,
 	listWorksQuerySchema,
 } from '../requests/works/IListWorksQuery';
-import {
-	IUpdateWorkBody,
-	updateWorkBodySchema,
-} from '../requests/works/IUpdateWorkBody';
 import { DeleteWorkCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
 import { CreateWorkCommandHandler } from '../services/commands/works/CreateWorkCommandHandler';
-import { UpdateWorkCommandHandler } from '../services/commands/works/UpdateWorkCommandHandler';
+import {
+	UpdateWorkCommand,
+	UpdateWorkCommandHandler,
+} from '../services/commands/works/UpdateWorkCommandHandler';
 import { ListWorkRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetWorkQueryHandler } from '../services/queries/works/GetWorkQueryHandler';
 import { ListWorksQueryHandler } from '../services/queries/works/ListWorksQueryHandler';
@@ -42,10 +41,10 @@ export class WorkController {
 
 	@Post()
 	createWork(
-		@Body(new JoiValidationPipe(updateWorkBodySchema))
-		body: IUpdateWorkBody,
+		@Body(new JoiValidationPipe(UpdateWorkCommand.schema))
+		command: UpdateWorkCommand,
 	): Promise<WorkObject> {
-		return this.createWorkCommandHandler.execute(body);
+		return this.createWorkCommandHandler.execute(command);
 	}
 
 	@Get()
@@ -66,15 +65,15 @@ export class WorkController {
 	@Patch(':workId')
 	updateWork(
 		@Param('workId', ParseIntPipe) workId: number,
-		@Body(new JoiValidationPipe(updateWorkBodySchema))
-		body: IUpdateWorkBody,
+		@Body(new JoiValidationPipe(UpdateWorkCommand.schema))
+		command: UpdateWorkCommand,
 	): Promise<WorkObject> {
-		return this.updateWorkCommandHandler.execute(workId, body);
+		return this.updateWorkCommandHandler.execute(workId, command);
 	}
 
 	@Delete(':workId')
 	deleteWork(@Param('workId', ParseIntPipe) workId: number): Promise<void> {
-		return this.deleteWorkCommandHandler.execute(workId);
+		return this.deleteWorkCommandHandler.execute({ entryId: workId });
 	}
 
 	@Get(':workId/revisions')

@@ -14,6 +14,10 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogger } from '../../AuditLogger';
 import { PermissionContext } from '../../PermissionContext';
 
+export class DeleteEntryCommand {
+	constructor(readonly entryId: number) {}
+}
+
 abstract class DeleteEntryCommandHandler<TEntry extends Entry> {
 	constructor(
 		protected readonly permissionContext: PermissionContext,
@@ -26,11 +30,11 @@ abstract class DeleteEntryCommandHandler<TEntry extends Entry> {
 		private readonly auditLogFunc: (actor: User, entry: TEntry) => void,
 	) {}
 
-	async execute(entryId: number): Promise<void> {
+	async execute(command: DeleteEntryCommand): Promise<void> {
 		this.permissionContext.verifyPermission(this.permission);
 
 		await this.em.transactional(async (em) => {
-			const entry = await this.entryFunc(entryId);
+			const entry = await this.entryFunc(command.entryId);
 
 			this.permissionContext.verifyDeletedAndHidden(entry);
 

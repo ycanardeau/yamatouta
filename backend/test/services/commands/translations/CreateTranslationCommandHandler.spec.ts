@@ -10,10 +10,10 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WordCategory } from '../../../../src/models/WordCategory';
-import { IUpdateTranslationBody } from '../../../../src/requests/translations/IUpdateTranslationBody';
 import { AuditLogger } from '../../../../src/services/AuditLogger';
 import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { CreateTranslationCommandHandler } from '../../../../src/services/commands/translations/CreateTranslationCommandHandler';
+import { UpdateTranslationCommand } from '../../../../src/services/commands/translations/UpdateTranslationCommandHandler';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createUser } from '../../../createEntry';
@@ -70,20 +70,20 @@ describe('CreateTranslationCommandHandler', () => {
 
 	describe('createTranslation', () => {
 		const testCreateTranslation = async ({
-			params,
+			command,
 			snapshot,
 		}: {
-			params: IUpdateTranslationBody;
+			command: UpdateTranslationCommand;
 			snapshot: TranslationSnapshot;
 		}): Promise<void> => {
 			const translationObject =
-				await createTranslationCommandHandler.execute(params);
+				await createTranslationCommandHandler.execute(command);
 
-			expect(translationObject.headword).toBe(params.headword);
-			expect(translationObject.locale).toBe(params.locale);
-			expect(translationObject.reading).toBe(params.reading);
-			expect(translationObject.yamatokotoba).toBe(params.yamatokotoba);
-			expect(translationObject.category).toBe(params.category);
+			expect(translationObject.headword).toBe(command.headword);
+			expect(translationObject.locale).toBe(command.locale);
+			expect(translationObject.reading).toBe(command.reading);
+			expect(translationObject.yamatokotoba).toBe(command.yamatokotoba);
+			expect(translationObject.category).toBe(command.category);
 
 			const translation = em.entities.filter(
 				(entity) => entity instanceof Translation,
@@ -148,7 +148,7 @@ describe('CreateTranslationCommandHandler', () => {
 
 		test('5 changes', async () => {
 			await testCreateTranslation({
-				params: defaults,
+				command: defaults,
 				snapshot: {
 					headword: defaults.headword,
 					locale: defaults.locale,

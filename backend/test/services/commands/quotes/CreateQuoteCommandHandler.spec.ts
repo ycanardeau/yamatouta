@@ -15,9 +15,9 @@ import {
 	QuoteSnapshot,
 } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { IUpdateQuoteBody } from '../../../../src/requests/quotes/IUpdateQuoteBody';
 import { AuditLogger } from '../../../../src/services/AuditLogger';
 import { CreateQuoteCommandHandler } from '../../../../src/services/commands/quotes/CreateQuoteCommandHandler';
+import { UpdateQuoteCommand } from '../../../../src/services/commands/quotes/UpdateQuoteCommandHandler';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createUser } from '../../../createEntry';
@@ -83,18 +83,20 @@ describe('CreateQuoteCommandHandler', () => {
 
 	describe('createQuote', () => {
 		const testCreateQuote = async ({
-			params,
+			command,
 			snapshot,
 		}: {
-			params: IUpdateQuoteBody;
+			command: UpdateQuoteCommand;
 			snapshot: QuoteSnapshot;
 		}): Promise<void> => {
-			const quoteObject = await createQuoteCommandHandler.execute(params);
+			const quoteObject = await createQuoteCommandHandler.execute(
+				command,
+			);
 
-			expect(quoteObject.text).toBe(params.text);
-			expect(quoteObject.quoteType).toBe(params.quoteType);
-			expect(quoteObject.locale).toBe(params.locale);
-			expect(quoteObject.artist.id).toBe(params.artistId);
+			expect(quoteObject.text).toBe(command.text);
+			expect(quoteObject.quoteType).toBe(command.quoteType);
+			expect(quoteObject.locale).toBe(command.locale);
+			expect(quoteObject.artist.id).toBe(command.artistId);
 
 			const quote = em.entities.filter(
 				(entity) => entity instanceof Quote,
@@ -161,7 +163,7 @@ describe('CreateQuoteCommandHandler', () => {
 
 		test('4 changes', async () => {
 			await testCreateQuote({
-				params: defaults,
+				command: defaults,
 				snapshot: {
 					text: defaults.text,
 					quoteType: defaults.quoteType,

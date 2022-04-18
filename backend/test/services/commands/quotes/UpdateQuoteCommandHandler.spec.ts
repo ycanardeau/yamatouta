@@ -15,9 +15,11 @@ import {
 	QuoteSnapshot,
 } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { IUpdateQuoteBody } from '../../../../src/requests/quotes/IUpdateQuoteBody';
 import { AuditLogger } from '../../../../src/services/AuditLogger';
-import { UpdateQuoteCommandHandler } from '../../../../src/services/commands/quotes/UpdateQuoteCommandHandler';
+import {
+	UpdateQuoteCommand,
+	UpdateQuoteCommandHandler,
+} from '../../../../src/services/commands/quotes/UpdateQuoteCommandHandler';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createQuote, createUser } from '../../../createEntry';
@@ -97,21 +99,21 @@ describe('UpdateQuoteCommandHandler', () => {
 
 	describe('updateQuote', () => {
 		const testUpdateQuote = async ({
-			body,
+			command,
 			snapshot,
 		}: {
-			body: IUpdateQuoteBody;
+			command: UpdateQuoteCommand;
 			snapshot: QuoteSnapshot;
 		}): Promise<void> => {
 			const quoteObject = await updateQuoteCommandHandler.execute(
 				quote.id,
-				body,
+				command,
 			);
 
-			expect(quoteObject.text).toBe(body.text);
-			expect(quoteObject.quoteType).toBe(body.quoteType);
-			expect(quoteObject.locale).toBe(body.locale);
-			expect(quoteObject.artist.id).toBe(body.artistId);
+			expect(quoteObject.text).toBe(command.text);
+			expect(quoteObject.quoteType).toBe(command.quoteType);
+			expect(quoteObject.locale).toBe(command.locale);
+			expect(quoteObject.artist.id).toBe(command.artistId);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof QuoteRevision,
@@ -175,7 +177,7 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('0 changes', async () => {
 			await testUpdateQuote({
-				body: {
+				command: {
 					text: quote.text,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
@@ -192,7 +194,7 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('1 change', async () => {
 			await testUpdateQuote({
-				body: {
+				command: {
 					...defaults,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
@@ -209,7 +211,7 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateQuote({
-				body: {
+				command: {
 					...defaults,
 					locale: quote.locale,
 					artistId: quote.artist.id,
@@ -225,7 +227,7 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('3 changes', async () => {
 			await testUpdateQuote({
-				body: {
+				command: {
 					...defaults,
 					artistId: quote.artist.id,
 				},
@@ -240,7 +242,7 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('4 changes', async () => {
 			await testUpdateQuote({
-				body: defaults,
+				command: defaults,
 				snapshot: {
 					text: defaults.text,
 					quoteType: defaults.quoteType,

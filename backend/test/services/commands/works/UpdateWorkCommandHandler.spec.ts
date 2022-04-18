@@ -10,9 +10,11 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { WorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
-import { IUpdateWorkBody } from '../../../../src/requests/works/IUpdateWorkBody';
 import { AuditLogger } from '../../../../src/services/AuditLogger';
-import { UpdateWorkCommandHandler } from '../../../../src/services/commands/works/UpdateWorkCommandHandler';
+import {
+	UpdateWorkCommand,
+	UpdateWorkCommandHandler,
+} from '../../../../src/services/commands/works/UpdateWorkCommandHandler';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createWork, createUser } from '../../../createEntry';
@@ -78,19 +80,19 @@ describe('UpdateWorkCommandHandler', () => {
 
 	describe('updateWork', () => {
 		const testUpdateWork = async ({
-			body,
+			command,
 			snapshot,
 		}: {
-			body: IUpdateWorkBody;
+			command: UpdateWorkCommand;
 			snapshot: WorkSnapshot;
 		}): Promise<void> => {
 			const workObject = await updateWorkCommandHandler.execute(
 				work.id,
-				body,
+				command,
 			);
 
-			expect(workObject.name).toBe(body.name);
-			expect(workObject.workType).toBe(body.workType);
+			expect(workObject.name).toBe(command.name);
+			expect(workObject.workType).toBe(command.workType);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof WorkRevision,
@@ -151,7 +153,7 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('0 changes', async () => {
 			await testUpdateWork({
-				body: {
+				command: {
 					name: work.name,
 					workType: work.workType,
 				},
@@ -164,7 +166,7 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('1 change', async () => {
 			await testUpdateWork({
-				body: {
+				command: {
 					...defaults,
 					workType: work.workType,
 				},
@@ -177,7 +179,7 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateWork({
-				body: defaults,
+				command: defaults,
 				snapshot: {
 					name: defaults.name,
 					workType: defaults.workType,

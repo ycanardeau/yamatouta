@@ -9,12 +9,9 @@ import { Quote } from '../../../entities/Quote';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import {
-	IUpdateQuoteBody,
-	updateQuoteBodySchema,
-} from '../../../requests/quotes/IUpdateQuoteBody';
 import { AuditLogger } from '../../AuditLogger';
 import { PermissionContext } from '../../PermissionContext';
+import { UpdateQuoteCommand } from './UpdateQuoteCommandHandler';
 
 @Injectable()
 export class CreateQuoteCommandHandler {
@@ -28,10 +25,10 @@ export class CreateQuoteCommandHandler {
 		private readonly auditLogger: AuditLogger,
 	) {}
 
-	async execute(params: IUpdateQuoteBody): Promise<QuoteObject> {
+	async execute(params: UpdateQuoteCommand): Promise<QuoteObject> {
 		this.permissionContext.verifyPermission(Permission.CreateQuotes);
 
-		const result = updateQuoteBodySchema.validate(params, {
+		const result = UpdateQuoteCommand.schema.validate(params, {
 			convert: true,
 		});
 

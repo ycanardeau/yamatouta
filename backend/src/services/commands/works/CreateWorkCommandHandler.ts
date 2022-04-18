@@ -8,12 +8,9 @@ import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import {
-	IUpdateWorkBody,
-	updateWorkBodySchema,
-} from '../../../requests/works/IUpdateWorkBody';
 import { AuditLogger } from '../../AuditLogger';
 import { PermissionContext } from '../../PermissionContext';
+import { UpdateWorkCommand } from './UpdateWorkCommandHandler';
 
 @Injectable()
 export class CreateWorkCommandHandler {
@@ -25,10 +22,10 @@ export class CreateWorkCommandHandler {
 		private readonly auditLogger: AuditLogger,
 	) {}
 
-	async execute(params: IUpdateWorkBody): Promise<WorkObject> {
+	async execute(command: UpdateWorkCommand): Promise<WorkObject> {
 		this.permissionContext.verifyPermission(Permission.CreateWorks);
 
-		const result = updateWorkBodySchema.validate(params, {
+		const result = UpdateWorkCommand.schema.validate(command, {
 			convert: true,
 		});
 
@@ -43,8 +40,8 @@ export class CreateWorkCommandHandler {
 			});
 
 			const work = new Work({
-				name: params.name,
-				workType: params.workType,
+				name: command.name,
+				workType: command.workType,
 			});
 
 			em.persist(work);

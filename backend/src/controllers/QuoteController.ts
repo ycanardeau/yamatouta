@@ -18,13 +18,12 @@ import {
 	IListQuotesQuery,
 	listQuotesQuerySchema,
 } from '../requests/quotes/IListQuotesQuery';
-import {
-	IUpdateQuoteBody,
-	updateQuoteBodySchema,
-} from '../requests/quotes/IUpdateQuoteBody';
 import { DeleteQuoteCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
 import { CreateQuoteCommandHandler } from '../services/commands/quotes/CreateQuoteCommandHandler';
-import { UpdateQuoteCommandHandler } from '../services/commands/quotes/UpdateQuoteCommandHandler';
+import {
+	UpdateQuoteCommand,
+	UpdateQuoteCommandHandler,
+} from '../services/commands/quotes/UpdateQuoteCommandHandler';
 import { ListQuoteRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetQuoteQueryHandler } from '../services/queries/quotes/GetQuoteQueryHandler';
 import { ListQuotesQueryHandler } from '../services/queries/quotes/ListQuotesQueryHandler';
@@ -42,10 +41,10 @@ export class QuoteController {
 
 	@Post()
 	createQuote(
-		@Body(new JoiValidationPipe(updateQuoteBodySchema))
-		body: IUpdateQuoteBody,
+		@Body(new JoiValidationPipe(UpdateQuoteCommand.schema))
+		command: UpdateQuoteCommand,
 	): Promise<QuoteObject> {
-		return this.createQuoteCommandHandler.execute(body);
+		return this.createQuoteCommandHandler.execute(command);
 	}
 
 	@Get()
@@ -66,17 +65,17 @@ export class QuoteController {
 	@Patch(':quoteId')
 	updateQuote(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
-		@Body(new JoiValidationPipe(updateQuoteBodySchema))
-		body: IUpdateQuoteBody,
+		@Body(new JoiValidationPipe(UpdateQuoteCommand.schema))
+		command: UpdateQuoteCommand,
 	): Promise<QuoteObject> {
-		return this.updateQuoteCommandHandler.execute(quoteId, body);
+		return this.updateQuoteCommandHandler.execute(quoteId, command);
 	}
 
 	@Delete(':quoteId')
 	deleteQuote(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<void> {
-		return this.deleteQuoteCommandHandler.execute(quoteId);
+		return this.deleteQuoteCommandHandler.execute({ entryId: quoteId });
 	}
 
 	@Get(':quoteId/revisions')

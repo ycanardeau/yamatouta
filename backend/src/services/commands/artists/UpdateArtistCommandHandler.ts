@@ -1,19 +1,29 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import Joi, { ObjectSchema } from 'joi';
 
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
+import { ArtistType } from '../../../models/ArtistType';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import {
-	IUpdateArtistBody,
-	updateArtistBodySchema,
-} from '../../../requests/artists/IUpdateArtistBody';
 import { AuditLogger } from '../../AuditLogger';
 import { PermissionContext } from '../../PermissionContext';
+
+export class UpdateArtistCommand {
+	static readonly schema: ObjectSchema<UpdateArtistCommand> = Joi.object({
+		name: Joi.string().required().trim().max(200),
+		artistType: Joi.string()
+			.required()
+			.trim()
+			.valid(...Object.values(ArtistType)),
+	});
+
+	constructor(readonly name: string, readonly artistType: ArtistType) {}
+}
 
 @Injectable()
 export class UpdateArtistCommandHandler {
@@ -29,11 +39,11 @@ export class UpdateArtistCommandHandler {
 
 	async execute(
 		artistId: number,
-		params: IUpdateArtistBody,
+		command: UpdateArtistCommand,
 	): Promise<ArtistObject> {
 		this.permissionContext.verifyPermission(Permission.EditArtists);
 
-		const result = updateArtistBodySchema.validate(params, {
+		const result = UpdateArtistCommand.schema.validate(command, {
 			convert: true,
 		});
 
@@ -53,8 +63,8 @@ export class UpdateArtistCommandHandler {
 				hidden: false,
 			});
 
-			artist.name = params.name;
-			artist.artistType = params.artistType;
+			artist.name = command.name;
+			artist.artistType = command.artistType;
 
 			const commit = new Commit();
 

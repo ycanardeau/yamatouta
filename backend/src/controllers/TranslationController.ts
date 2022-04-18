@@ -18,13 +18,12 @@ import {
 	IListTranslationsQuery,
 	listTranslationsQuerySchema,
 } from '../requests/translations/IListTranslationsQuery';
-import {
-	updateTranslationBodySchema,
-	IUpdateTranslationBody,
-} from '../requests/translations/IUpdateTranslationBody';
 import { DeleteTranslationCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
 import { CreateTranslationCommandHandler } from '../services/commands/translations/CreateTranslationCommandHandler';
-import { UpdateTranslationCommandHandler } from '../services/commands/translations/UpdateTranslationCommandHandler';
+import {
+	UpdateTranslationCommand,
+	UpdateTranslationCommandHandler,
+} from '../services/commands/translations/UpdateTranslationCommandHandler';
 import { ListTranslationRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetTranslationQueryHandler } from '../services/queries/translations/GetTranslationQueryHandler';
 import { ListTranslationsQueryHandler } from '../services/queries/translations/ListTranslationsQueryHandler';
@@ -42,10 +41,10 @@ export class TranslationController {
 
 	@Post()
 	createTranslation(
-		@Body(new JoiValidationPipe(updateTranslationBodySchema))
-		body: IUpdateTranslationBody,
+		@Body(new JoiValidationPipe(UpdateTranslationCommand.schema))
+		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
-		return this.createTranslationCommandHandler.execute(body);
+		return this.createTranslationCommandHandler.execute(command);
 	}
 
 	@Get()
@@ -59,12 +58,12 @@ export class TranslationController {
 	@Patch(':translationId')
 	updateTranslation(
 		@Param('translationId', ParseIntPipe) translationId: number,
-		@Body(new JoiValidationPipe(updateTranslationBodySchema))
-		body: IUpdateTranslationBody,
+		@Body(new JoiValidationPipe(UpdateTranslationCommand.schema))
+		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
 		return this.updateTranslationCommandHandler.execute(
 			translationId,
-			body,
+			command,
 		);
 	}
 
@@ -72,7 +71,9 @@ export class TranslationController {
 	deleteTranslation(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<void> {
-		return this.deleteTranslationCommandHandler.execute(translationId);
+		return this.deleteTranslationCommandHandler.execute({
+			entryId: translationId,
+		});
 	}
 
 	@Get(':translationId')

@@ -8,13 +8,10 @@ import { Translation } from '../../../entities/Translation';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import {
-	IUpdateTranslationBody,
-	updateTranslationBodySchema,
-} from '../../../requests/translations/IUpdateTranslationBody';
 import { AuditLogger } from '../../AuditLogger';
 import { NgramConverter } from '../../NgramConverter';
 import { PermissionContext } from '../../PermissionContext';
+import { UpdateTranslationCommand } from './UpdateTranslationCommandHandler';
 
 @Injectable()
 export class CreateTranslationCommandHandler {
@@ -27,10 +24,12 @@ export class CreateTranslationCommandHandler {
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	async execute(params: IUpdateTranslationBody): Promise<TranslationObject> {
+	async execute(
+		command: UpdateTranslationCommand,
+	): Promise<TranslationObject> {
 		this.permissionContext.verifyPermission(Permission.CreateTranslations);
 
-		const result = updateTranslationBodySchema.validate(params, {
+		const result = UpdateTranslationCommand.schema.validate(command, {
 			convert: true,
 		});
 
