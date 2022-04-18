@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IArtistObject } from '../../dto/artists/IArtistObject';
-import { DeleteArtistDialogStore } from '../../stores/artists/DeleteArtistDialogStore';
+import { ArtistDeleteStore } from '../../stores/artists/ArtistDeleteStore';
 
 interface DeleteArtistDialogProps {
 	artist: IArtistObject;
@@ -21,7 +21,7 @@ const DeleteArtistDialog = observer(
 		const { t } = useTranslation();
 
 		const [store] = React.useState(
-			() => new DeleteArtistDialogStore({ artist: artist }),
+			() => new ArtistDeleteStore({ artist: artist }),
 		);
 
 		return (

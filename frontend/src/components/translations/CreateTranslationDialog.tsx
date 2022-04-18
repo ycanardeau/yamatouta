@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
-import { EditTranslationDialogStore } from '../../stores/translations/EditTranslationDialogStore';
+import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
 
 interface CreateTranslationDialogProps {
 	translation?: ITranslationObject;
@@ -35,7 +35,7 @@ const CreateTranslationDialog = observer(
 		const { t } = useTranslation();
 
 		const [store] = React.useState(
-			() => new EditTranslationDialogStore(translation),
+			() => new TranslationEditStore(translation),
 		);
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });

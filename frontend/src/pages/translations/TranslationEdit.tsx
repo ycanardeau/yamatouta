@@ -14,8 +14,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { WordCategory } from '../../models/WordCategory';
-import { EditTranslationDialogStore } from '../../stores/translations/EditTranslationDialogStore';
 import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';
+import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
 
 interface TranslationEditProps {
 	translationDetailsStore: TranslationDetailsStore;
@@ -28,7 +28,7 @@ const TranslationEdit = observer(
 		const translation = translationDetailsStore.translation;
 
 		const [store] = React.useState(
-			() => new EditTranslationDialogStore(translation),
+			() => new TranslationEditStore(translation),
 		);
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });

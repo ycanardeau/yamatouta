@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { ArtistType } from '../../models/ArtistType';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
-import { EditArtistDialogStore } from '../../stores/artists/EditArtistDialogStore';
+import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
 
 interface ArtistEditProps {
 	artistDetailsStore: ArtistDetailsStore;
@@ -27,7 +27,7 @@ const ArtistEdit = observer(
 
 		const artist = artistDetailsStore.artist;
 
-		const [store] = React.useState(() => new EditArtistDialogStore(artist));
+		const [store] = React.useState(() => new ArtistEditStore(artist));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 

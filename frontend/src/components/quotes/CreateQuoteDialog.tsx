@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { listArtists } from '../../api/ArtistApi';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
-import { EditQuoteDialogStore } from '../../stores/quotes/EditQuoteDialogStore';
+import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
 
 interface CreateQuoteDialogProps {
 	quote?: IQuoteObject;
@@ -37,7 +37,7 @@ const CreateQuoteDialog = observer(
 	}: CreateQuoteDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(() => new EditQuoteDialogStore(quote));
+		const [store] = React.useState(() => new QuoteEditStore(quote));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 

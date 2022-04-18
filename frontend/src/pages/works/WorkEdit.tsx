@@ -14,8 +14,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { WorkType } from '../../models/WorkType';
-import { EditWorkDialogStore } from '../../stores/works/EditWorkDialogStore';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
+import { WorkEditStore } from '../../stores/works/WorkEditStore';
 
 interface WorkEditProps {
 	workDetailsStore: WorkDetailsStore;
@@ -27,7 +27,7 @@ const WorkEdit = observer(
 
 		const work = workDetailsStore.work;
 
-		const [store] = React.useState(() => new EditWorkDialogStore(work));
+		const [store] = React.useState(() => new WorkEditStore(work));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 

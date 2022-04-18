@@ -17,8 +17,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { listArtists } from '../../api/ArtistApi';
 import { QuoteType } from '../../models/QuoteType';
-import { EditQuoteDialogStore } from '../../stores/quotes/EditQuoteDialogStore';
 import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
+import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
 
 interface QuoteEditProps {
 	quoteDetailsStore: QuoteDetailsStore;
@@ -30,7 +30,7 @@ const QuoteEdit = observer(
 
 		const quote = quoteDetailsStore.quote;
 
-		const [store] = React.useState(() => new EditQuoteDialogStore(quote));
+		const [store] = React.useState(() => new QuoteEditStore(quote));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 

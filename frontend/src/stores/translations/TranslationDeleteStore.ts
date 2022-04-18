@@ -9,7 +9,7 @@ import {
 import { deleteTranslation } from '../../api/TranslationApi';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 
-export class DeleteTranslationDialogStore {
+export class TranslationDeleteStore {
 	private readonly translation: ITranslationObject;
 	@observable submitting = false;
 

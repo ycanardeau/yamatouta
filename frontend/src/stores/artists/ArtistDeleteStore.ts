@@ -9,7 +9,7 @@ import {
 import { deleteArtist } from '../../api/ArtistApi';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 
-export class DeleteArtistDialogStore {
+export class ArtistDeleteStore {
 	private readonly artist: IArtistObject;
 	@observable submitting = false;
 

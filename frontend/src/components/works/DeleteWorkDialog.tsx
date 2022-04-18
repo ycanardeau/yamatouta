@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IWorkObject } from '../../dto/works/IWorkObject';
-import { DeleteWorkDialogStore } from '../../stores/works/DeleteWorkDialogStore';
+import { WorkDeleteStore } from '../../stores/works/WorkDeleteStore';
 
 interface DeleteWorkDialogProps {
 	work: IWorkObject;
@@ -21,7 +21,7 @@ const DeleteWorkDialog = observer(
 		const { t } = useTranslation();
 
 		const [store] = React.useState(
-			() => new DeleteWorkDialogStore({ work: work }),
+			() => new WorkDeleteStore({ work: work }),
 		);
 
 		return (

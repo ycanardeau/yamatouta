@@ -6,17 +6,17 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { deleteWork } from '../../api/WorkApi';
-import { IWorkObject } from '../../dto/works/IWorkObject';
+import { deleteQuote } from '../../api/QuoteApi';
+import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 
-export class DeleteWorkDialogStore {
-	private readonly work: IWorkObject;
+export class QuoteDeleteStore {
+	private readonly quote: IQuoteObject;
 	@observable submitting = false;
 
-	constructor({ work }: { work: IWorkObject }) {
+	constructor({ quote }: { quote: IQuoteObject }) {
 		makeObservable(this);
 
-		this.work = work;
+		this.quote = quote;
 	}
 
 	@computed get isValid(): boolean {
@@ -27,7 +27,7 @@ export class DeleteWorkDialogStore {
 		try {
 			this.submitting = true;
 
-			await deleteWork({ workId: this.work.id });
+			await deleteQuote({ quoteId: this.quote.id });
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

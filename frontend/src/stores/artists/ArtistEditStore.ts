@@ -10,7 +10,7 @@ import { createArtist, updateArtist } from '../../api/ArtistApi';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
 
-export class EditArtistDialogStore {
+export class ArtistEditStore {
 	private readonly artist?: IArtistObject;
 	@observable submitting = false;
 	@observable name = '';

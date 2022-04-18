@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IWorkObject } from '../../dto/works/IWorkObject';
 import { WorkType } from '../../models/WorkType';
-import { EditWorkDialogStore } from '../../stores/works/EditWorkDialogStore';
+import { WorkEditStore } from '../../stores/works/WorkEditStore';
 
 interface CreateWorkDialogProps {
 	work?: IWorkObject;
@@ -34,7 +34,7 @@ const CreateWorkDialog = observer(
 	}: CreateWorkDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(() => new EditWorkDialogStore(work));
+		const [store] = React.useState(() => new WorkEditStore(work));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 

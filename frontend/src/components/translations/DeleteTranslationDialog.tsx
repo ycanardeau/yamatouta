@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
-import { DeleteTranslationDialogStore } from '../../stores/translations/DeleteTranslationDialogStore';
+import { TranslationDeleteStore } from '../../stores/translations/TranslationDeleteStore';
 
 interface DeleteTranslationDialogProps {
 	translation: ITranslationObject;
@@ -21,8 +21,7 @@ const DeleteTranslationDialog = observer(
 		const { t } = useTranslation();
 
 		const [store] = React.useState(
-			() =>
-				new DeleteTranslationDialogStore({ translation: translation }),
+			() => new TranslationDeleteStore({ translation: translation }),
 		);
 
 		return (

@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
-import { DeleteQuoteDialogStore } from '../../stores/quotes/DeleteQuoteDialogStore';
+import { QuoteDeleteStore } from '../../stores/quotes/QuoteDeleteStore';
 
 interface DeleteQuoteDialogProps {
 	quote: IQuoteObject;
@@ -21,7 +21,7 @@ const DeleteQuoteDialog = observer(
 		const { t } = useTranslation();
 
 		const [store] = React.useState(
-			() => new DeleteQuoteDialogStore({ quote: quote }),
+			() => new QuoteDeleteStore({ quote: quote }),
 		);
 
 		return (

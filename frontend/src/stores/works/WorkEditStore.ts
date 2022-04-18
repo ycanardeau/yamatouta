@@ -10,7 +10,7 @@ import { createWork, updateWork } from '../../api/WorkApi';
 import { IWorkObject } from '../../dto/works/IWorkObject';
 import { WorkType } from '../../models/WorkType';
 
-export class EditWorkDialogStore {
+export class WorkEditStore {
 	private readonly work?: IWorkObject;
 	@observable submitting = false;
 	@observable name = '';

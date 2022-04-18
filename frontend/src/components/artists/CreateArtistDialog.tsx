@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
-import { EditArtistDialogStore } from '../../stores/artists/EditArtistDialogStore';
+import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
 
 interface CreateArtistDialogProps {
 	artist?: IArtistObject;
@@ -34,7 +34,7 @@ const CreateArtistDialog = observer(
 	}: CreateArtistDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(() => new EditArtistDialogStore(artist));
+		const [store] = React.useState(() => new ArtistEditStore(artist));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 

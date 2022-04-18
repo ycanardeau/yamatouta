@@ -10,7 +10,7 @@ import { createTranslation, updateTranslation } from '../../api/TranslationApi';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
 
-export class EditTranslationDialogStore {
+export class TranslationEditStore {
 	private readonly translation?: ITranslationObject;
 	@observable submitting = false;
 	@observable headword = '';

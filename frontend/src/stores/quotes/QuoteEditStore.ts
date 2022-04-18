@@ -13,7 +13,7 @@ import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
 import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
 
-export class EditQuoteDialogStore {
+export class QuoteEditStore {
 	private readonly quote?: IQuoteObject;
 	@observable submitting = false;
 	@observable text = '';
