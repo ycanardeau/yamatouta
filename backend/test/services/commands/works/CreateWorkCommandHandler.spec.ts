@@ -25,6 +25,7 @@ describe('CreateWorkCommandHandler', () => {
 	let auditLogger: AuditLogger;
 	let permissionContext: FakePermissionContext;
 	let createWorkCommandHandler: CreateWorkCommandHandler;
+	let defaultCommand: UpdateWorkCommand;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -62,6 +63,12 @@ describe('CreateWorkCommandHandler', () => {
 			userRepo as any,
 			auditLogger,
 		);
+
+		defaultCommand = {
+			workId: undefined,
+			name: 'よみもの',
+			workType: WorkType.Book,
+		};
 	});
 
 	describe('createWork', () => {
@@ -107,11 +114,6 @@ describe('CreateWorkCommandHandler', () => {
 			});
 		};
 
-		const defaults = {
-			name: 'よみもの',
-			workType: WorkType.Book,
-		};
-
 		test('insufficient permission', async () => {
 			const userGroups = Object.values(UserGroup).filter(
 				(userGroup) => userGroup !== UserGroup.Admin,
@@ -132,17 +134,17 @@ describe('CreateWorkCommandHandler', () => {
 				);
 
 				await expect(
-					createWorkCommandHandler.execute(defaults),
+					createWorkCommandHandler.execute(defaultCommand),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('2 changes', async () => {
 			await testCreateWork({
-				command: defaults,
+				command: defaultCommand,
 				snapshot: {
-					name: defaults.name,
-					workType: defaults.workType,
+					name: defaultCommand.name,
+					workType: defaultCommand.workType,
 				},
 			});
 		});
@@ -150,7 +152,7 @@ describe('CreateWorkCommandHandler', () => {
 		test('name is undefined', async () => {
 			await expect(
 				createWorkCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					name: undefined!,
 				}),
@@ -160,7 +162,7 @@ describe('CreateWorkCommandHandler', () => {
 		test('name is empty', async () => {
 			await expect(
 				createWorkCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					name: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -169,7 +171,7 @@ describe('CreateWorkCommandHandler', () => {
 		test('name is too long', async () => {
 			await expect(
 				createWorkCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					name: 'い'.repeat(201),
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -178,7 +180,7 @@ describe('CreateWorkCommandHandler', () => {
 		test('workType is undefined', async () => {
 			await expect(
 				createWorkCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					workType: undefined!,
 				}),
@@ -188,7 +190,7 @@ describe('CreateWorkCommandHandler', () => {
 		test('workType is empty', async () => {
 			await expect(
 				createWorkCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					workType: '' as WorkType,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -197,7 +199,7 @@ describe('CreateWorkCommandHandler', () => {
 		test('workType is invalid', async () => {
 			await expect(
 				createWorkCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					workType: 'abcdef' as WorkType,
 				}),
 			).rejects.toThrow(BadRequestException);

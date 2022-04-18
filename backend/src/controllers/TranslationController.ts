@@ -61,10 +61,10 @@ export class TranslationController {
 		@Body(new JoiValidationPipe(UpdateTranslationCommand.schema))
 		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
-		return this.updateTranslationCommandHandler.execute(
-			translationId,
-			command,
-		);
+		return this.updateTranslationCommandHandler.execute({
+			...command,
+			translationId: translationId,
+		});
 	}
 
 	@Delete(':translationId')

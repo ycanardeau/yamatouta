@@ -68,7 +68,10 @@ export class ArtistController {
 		@Body(new JoiValidationPipe(UpdateArtistCommand.schema))
 		command: UpdateArtistCommand,
 	): Promise<ArtistObject> {
-		return this.updateArtistCommandHandler.execute(artistId, command);
+		return this.updateArtistCommandHandler.execute({
+			...command,
+			artistId: artistId,
+		});
 	}
 
 	@Delete(':artistId')

@@ -32,6 +32,7 @@ describe('CreateQuoteCommandHandler', () => {
 	let auditLogger: AuditLogger;
 	let permissionContext: FakePermissionContext;
 	let createQuoteCommandHandler: CreateQuoteCommandHandler;
+	let defaultCommand: UpdateQuoteCommand;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -79,6 +80,14 @@ describe('CreateQuoteCommandHandler', () => {
 			artistRepo as any,
 			auditLogger,
 		);
+
+		defaultCommand = {
+			quoteId: undefined,
+			text: 'やまとうた',
+			quoteType: QuoteType.Tanka,
+			locale: 'ja',
+			artistId: 2,
+		};
 	});
 
 	describe('createQuote', () => {
@@ -128,13 +137,6 @@ describe('CreateQuoteCommandHandler', () => {
 			});
 		};
 
-		const defaults = {
-			text: 'やまとうた',
-			quoteType: QuoteType.Tanka,
-			locale: 'ja',
-			artistId: 2,
-		};
-
 		test('insufficient permission', async () => {
 			const userGroups = Object.values(UserGroup).filter(
 				(userGroup) => userGroup !== UserGroup.Admin,
@@ -156,18 +158,18 @@ describe('CreateQuoteCommandHandler', () => {
 				);
 
 				await expect(
-					createQuoteCommandHandler.execute(defaults),
+					createQuoteCommandHandler.execute(defaultCommand),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('4 changes', async () => {
 			await testCreateQuote({
-				command: defaults,
+				command: defaultCommand,
 				snapshot: {
-					text: defaults.text,
-					quoteType: defaults.quoteType,
-					locale: defaults.locale,
+					text: defaultCommand.text,
+					quoteType: defaultCommand.quoteType,
+					locale: defaultCommand.locale,
 					artist: new ObjectRefSnapshot({ entry: artist }),
 				},
 			});
@@ -176,7 +178,7 @@ describe('CreateQuoteCommandHandler', () => {
 		test('text is undefined', async () => {
 			await expect(
 				createQuoteCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					text: undefined!,
 				}),
@@ -186,7 +188,7 @@ describe('CreateQuoteCommandHandler', () => {
 		test('text is empty', async () => {
 			await expect(
 				createQuoteCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					text: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -195,7 +197,7 @@ describe('CreateQuoteCommandHandler', () => {
 		test('text is too long', async () => {
 			await expect(
 				createQuoteCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					text: 'い'.repeat(201),
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -204,7 +206,7 @@ describe('CreateQuoteCommandHandler', () => {
 		test('quoteType is empty', async () => {
 			await expect(
 				createQuoteCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					quoteType: '' as QuoteType,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -213,7 +215,7 @@ describe('CreateQuoteCommandHandler', () => {
 		test('quoteType is invalid', async () => {
 			await expect(
 				createQuoteCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					quoteType: 'abcdef' as QuoteType,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -222,7 +224,7 @@ describe('CreateQuoteCommandHandler', () => {
 		test('artistId is undefined', async () => {
 			await expect(
 				createQuoteCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					artistId: undefined!,
 				}),
@@ -232,7 +234,7 @@ describe('CreateQuoteCommandHandler', () => {
 		test('artistId is invalid', async () => {
 			await expect(
 				createQuoteCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					artistId: 'abcdef' as any,
 				}),

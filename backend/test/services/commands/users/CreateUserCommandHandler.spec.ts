@@ -56,7 +56,7 @@ describe('CreateUserCommandHandler', () => {
 	});
 
 	describe('createUser', () => {
-		const defaultParams = {
+		const defaultCommand = {
 			username: 'user',
 			email: 'user@example.com',
 			password: 'P@$$w0rd',
@@ -64,10 +64,10 @@ describe('CreateUserCommandHandler', () => {
 
 		test('createUser', async () => {
 			const userObject = await createUserCommandHandler.execute({
-				...defaultParams,
+				...defaultCommand,
 			});
 
-			expect(userObject.name).toBe(defaultParams.username);
+			expect(userObject.name).toBe(defaultCommand.username);
 
 			const newUser = em.entities.filter(
 				(entity) => entity instanceof User,
@@ -95,7 +95,7 @@ describe('CreateUserCommandHandler', () => {
 			expect(username.length).toBe(2);
 
 			const userObject = await createUserCommandHandler.execute({
-				...defaultParams,
+				...defaultCommand,
 				username: username,
 			});
 
@@ -128,7 +128,7 @@ describe('CreateUserCommandHandler', () => {
 			expect(username.length).toBe(32);
 
 			const userObject = await createUserCommandHandler.execute({
-				...defaultParams,
+				...defaultCommand,
 				username: username,
 			});
 
@@ -157,7 +157,7 @@ describe('CreateUserCommandHandler', () => {
 		test('username is undefined', async () => {
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					username: undefined!,
 				}),
@@ -173,7 +173,7 @@ describe('CreateUserCommandHandler', () => {
 		test('username is empty', async () => {
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					username: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -188,7 +188,7 @@ describe('CreateUserCommandHandler', () => {
 		test('username is whitespace', async () => {
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					username: ' 　\t\t　 ',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -207,7 +207,7 @@ describe('CreateUserCommandHandler', () => {
 
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					username: username,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -227,7 +227,7 @@ describe('CreateUserCommandHandler', () => {
 
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					username: username,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -242,7 +242,7 @@ describe('CreateUserCommandHandler', () => {
 		test('email is existing', async () => {
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					email: existingEmail,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -257,7 +257,7 @@ describe('CreateUserCommandHandler', () => {
 		test('email is undefined', async () => {
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					email: undefined!,
 				}),
@@ -273,7 +273,7 @@ describe('CreateUserCommandHandler', () => {
 		test('email is empty', async () => {
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					email: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -288,7 +288,7 @@ describe('CreateUserCommandHandler', () => {
 		test('email is invalid', async () => {
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					email: 'invalid_email',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -303,7 +303,7 @@ describe('CreateUserCommandHandler', () => {
 		test('password is undefined', async () => {
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					password: undefined!,
 				}),
@@ -319,7 +319,7 @@ describe('CreateUserCommandHandler', () => {
 		test('password is empty', async () => {
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					password: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -338,7 +338,7 @@ describe('CreateUserCommandHandler', () => {
 
 			await expect(
 				createUserCommandHandler.execute({
-					...defaultParams,
+					...defaultCommand,
 					password: password,
 				}),
 			).rejects.toThrow(BadRequestException);

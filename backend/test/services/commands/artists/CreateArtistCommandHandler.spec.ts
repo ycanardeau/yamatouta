@@ -25,6 +25,7 @@ describe('CreateArtistCommandHandler', () => {
 	let auditLogger: AuditLogger;
 	let permissionContext: FakePermissionContext;
 	let createArtistCommandHandler: CreateArtistCommandHandler;
+	let defaultCommand: UpdateArtistCommand;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -62,6 +63,12 @@ describe('CreateArtistCommandHandler', () => {
 			userRepo as any,
 			auditLogger,
 		);
+
+		defaultCommand = {
+			artistId: undefined,
+			name: 'うたよみ',
+			artistType: ArtistType.Person,
+		};
 	});
 
 	describe('createArtist', () => {
@@ -109,11 +116,6 @@ describe('CreateArtistCommandHandler', () => {
 			});
 		};
 
-		const defaults = {
-			name: 'うたよみ',
-			artistType: ArtistType.Person,
-		};
-
 		test('insufficient permission', async () => {
 			const userGroups = Object.values(UserGroup).filter(
 				(userGroup) => userGroup !== UserGroup.Admin,
@@ -134,17 +136,17 @@ describe('CreateArtistCommandHandler', () => {
 				);
 
 				await expect(
-					createArtistCommandHandler.execute(defaults),
+					createArtistCommandHandler.execute(defaultCommand),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('2 changes', async () => {
 			await testCreateArtist({
-				command: defaults,
+				command: defaultCommand,
 				snapshot: {
-					name: defaults.name,
-					artistType: defaults.artistType,
+					name: defaultCommand.name,
+					artistType: defaultCommand.artistType,
 				},
 			});
 		});
@@ -152,7 +154,7 @@ describe('CreateArtistCommandHandler', () => {
 		test('name is undefined', async () => {
 			await expect(
 				createArtistCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					name: undefined!,
 				}),
@@ -162,7 +164,7 @@ describe('CreateArtistCommandHandler', () => {
 		test('name is empty', async () => {
 			await expect(
 				createArtistCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					name: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -171,7 +173,7 @@ describe('CreateArtistCommandHandler', () => {
 		test('name is too long', async () => {
 			await expect(
 				createArtistCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					name: 'い'.repeat(201),
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -180,7 +182,7 @@ describe('CreateArtistCommandHandler', () => {
 		test('artistType is undefined', async () => {
 			await expect(
 				createArtistCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					artistType: undefined!,
 				}),
@@ -190,7 +192,7 @@ describe('CreateArtistCommandHandler', () => {
 		test('artistType is empty', async () => {
 			await expect(
 				createArtistCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					artistType: '' as ArtistType,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -199,7 +201,7 @@ describe('CreateArtistCommandHandler', () => {
 		test('artistType is invalid', async () => {
 			await expect(
 				createArtistCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					artistType: 'abcdef' as ArtistType,
 				}),
 			).rejects.toThrow(BadRequestException);

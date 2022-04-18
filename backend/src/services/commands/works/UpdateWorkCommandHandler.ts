@@ -15,6 +15,7 @@ import { PermissionContext } from '../../PermissionContext';
 
 export class UpdateWorkCommand {
 	static readonly schema: ObjectSchema<UpdateWorkCommand> = Joi.object({
+		workId: Joi.number().optional(),
 		name: Joi.string().required().trim().max(200),
 		workType: Joi.string()
 			.required()
@@ -22,7 +23,11 @@ export class UpdateWorkCommand {
 			.valid(...Object.values(WorkType)),
 	});
 
-	constructor(readonly name: string, readonly workType: WorkType) {}
+	constructor(
+		readonly workId: number | undefined,
+		readonly name: string,
+		readonly workType: WorkType,
+	) {}
 }
 
 @Injectable()
@@ -37,10 +42,7 @@ export class UpdateWorkCommandHandler {
 		private readonly workRepo: EntityRepository<Work>,
 	) {}
 
-	async execute(
-		workId: number,
-		command: UpdateWorkCommand,
-	): Promise<WorkObject> {
+	async execute(command: UpdateWorkCommand): Promise<WorkObject> {
 		this.permissionContext.verifyPermission(Permission.EditWorks);
 
 		const result = UpdateWorkCommand.schema.validate(command, {
@@ -58,7 +60,7 @@ export class UpdateWorkCommandHandler {
 			});
 
 			const work = await this.workRepo.findOneOrFail({
-				id: workId,
+				id: command.workId,
 				deleted: false,
 				hidden: false,
 			});

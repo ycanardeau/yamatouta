@@ -29,6 +29,7 @@ describe('UpdateArtistCommandHandler', () => {
 	let artistRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateArtistCommandHandler: UpdateArtistCommandHandler;
+	let defaultCommand: UpdateArtistCommand;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -64,7 +65,8 @@ describe('UpdateArtistCommandHandler', () => {
 		};
 		auditLogger = new AuditLogger(em as any);
 		artistRepo = {
-			findOneOrFail: async (): Promise<Artist> => artist,
+			findOneOrFail: async (where: any): Promise<Artist> =>
+				[artist].filter((a) => a.id === where.id)[0],
 		};
 
 		permissionContext = new FakePermissionContext(existingUser);
@@ -76,6 +78,12 @@ describe('UpdateArtistCommandHandler', () => {
 			auditLogger,
 			artistRepo as any,
 		);
+
+		defaultCommand = {
+			artistId: artist.id,
+			name: 'くみあい',
+			artistType: ArtistType.Group,
+		};
 	});
 
 	describe('updateArtist', () => {
@@ -87,7 +95,6 @@ describe('UpdateArtistCommandHandler', () => {
 			snapshot: ArtistSnapshot;
 		}): Promise<void> => {
 			const artistObject = await updateArtistCommandHandler.execute(
-				artist.id,
 				command,
 			);
 
@@ -120,11 +127,6 @@ describe('UpdateArtistCommandHandler', () => {
 			});
 		};
 
-		const defaults = {
-			name: 'くみあい',
-			artistType: ArtistType.Group,
-		};
-
 		test('insufficient permission', async () => {
 			const userGroups = Object.values(UserGroup).filter(
 				(userGroup) => userGroup !== UserGroup.Admin,
@@ -146,7 +148,7 @@ describe('UpdateArtistCommandHandler', () => {
 				);
 
 				await expect(
-					updateArtistCommandHandler.execute(artist.id, defaults),
+					updateArtistCommandHandler.execute(defaultCommand),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -154,6 +156,7 @@ describe('UpdateArtistCommandHandler', () => {
 		test('0 changes', async () => {
 			await testUpdateArtist({
 				command: {
+					...defaultCommand,
 					name: artist.name,
 					artistType: artist.artistType,
 				},
@@ -167,11 +170,11 @@ describe('UpdateArtistCommandHandler', () => {
 		test('1 change', async () => {
 			await testUpdateArtist({
 				command: {
-					...defaults,
+					...defaultCommand,
 					artistType: artist.artistType,
 				},
 				snapshot: {
-					name: defaults.name,
+					name: defaultCommand.name,
 					artistType: artist.artistType,
 				},
 			});
@@ -179,18 +182,18 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateArtist({
-				command: defaults,
+				command: defaultCommand,
 				snapshot: {
-					name: defaults.name,
-					artistType: defaults.artistType,
+					name: defaultCommand.name,
+					artistType: defaultCommand.artistType,
 				},
 			});
 		});
 
 		test('name is undefined', async () => {
 			await expect(
-				updateArtistCommandHandler.execute(artist.id, {
-					...defaults,
+				updateArtistCommandHandler.execute({
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					name: undefined!,
 				}),
@@ -199,8 +202,8 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('name is empty', async () => {
 			await expect(
-				updateArtistCommandHandler.execute(artist.id, {
-					...defaults,
+				updateArtistCommandHandler.execute({
+					...defaultCommand,
 					name: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -208,8 +211,8 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('name is too long', async () => {
 			await expect(
-				updateArtistCommandHandler.execute(artist.id, {
-					...defaults,
+				updateArtistCommandHandler.execute({
+					...defaultCommand,
 					name: 'い'.repeat(201),
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -217,8 +220,8 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('artistType is empty', async () => {
 			await expect(
-				updateArtistCommandHandler.execute(artist.id, {
-					...defaults,
+				updateArtistCommandHandler.execute({
+					...defaultCommand,
 					artistType: '' as ArtistType,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -226,8 +229,8 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('artistType is invalid', async () => {
 			await expect(
-				updateArtistCommandHandler.execute(artist.id, {
-					...defaults,
+				updateArtistCommandHandler.execute({
+					...defaultCommand,
 					artistType: 'abcdef' as ArtistType,
 				}),
 			).rejects.toThrow(BadRequestException);

@@ -68,7 +68,10 @@ export class WorkController {
 		@Body(new JoiValidationPipe(UpdateWorkCommand.schema))
 		command: UpdateWorkCommand,
 	): Promise<WorkObject> {
-		return this.updateWorkCommandHandler.execute(workId, command);
+		return this.updateWorkCommandHandler.execute({
+			...command,
+			workId: workId,
+		});
 	}
 
 	@Delete(':workId')

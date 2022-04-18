@@ -12,13 +12,12 @@ import { Request } from 'express';
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import {
-	createUserBodySchema,
-	ICreateUserBody,
-} from '../requests/auth/ICreateUserBody';
 import { LoginService } from '../services/auth/LoginService';
 import { LogoutService } from '../services/auth/LogoutService';
-import { CreateUserCommandHandler } from '../services/commands/users/CreateUserCommandHandler';
+import {
+	CreateUserCommand,
+	CreateUserCommandHandler,
+} from '../services/commands/users/CreateUserCommandHandler';
 
 @Controller('auth')
 export class AuthController {
@@ -30,10 +29,10 @@ export class AuthController {
 
 	@Post('register')
 	createUser(
-		@Body(new JoiValidationPipe(createUserBodySchema))
-		body: ICreateUserBody,
+		@Body(new JoiValidationPipe(CreateUserCommand.schema))
+		command: CreateUserCommand,
 	): Promise<AuthenticatedUserObject> {
-		return this.createUserCommandHandler.execute(body);
+		return this.createUserCommandHandler.execute(command);
 	}
 
 	@HttpCode(HttpStatus.OK)

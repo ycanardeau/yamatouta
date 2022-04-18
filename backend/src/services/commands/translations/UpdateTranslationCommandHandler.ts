@@ -17,6 +17,7 @@ import { PermissionContext } from '../../PermissionContext';
 export class UpdateTranslationCommand {
 	static readonly schema: ObjectSchema<UpdateTranslationCommand> = Joi.object(
 		{
+			translationId: Joi.number().optional(),
 			headword: Joi.string().required().trim().max(200),
 			locale: Joi.string().required().trim(),
 			reading: Joi.string()
@@ -37,6 +38,7 @@ export class UpdateTranslationCommand {
 	);
 
 	constructor(
+		readonly translationId: number | undefined,
 		readonly headword: string,
 		readonly locale: string,
 		readonly reading: string,
@@ -59,7 +61,6 @@ export class UpdateTranslationCommandHandler {
 	) {}
 
 	async execute(
-		translationId: number,
 		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
 		this.permissionContext.verifyPermission(Permission.EditTranslations);
@@ -83,7 +84,7 @@ export class UpdateTranslationCommandHandler {
 
 			const translation = await this.translationRepo.findOneOrFail(
 				{
-					id: translationId,
+					id: command.translationId,
 					deleted: false,
 					hidden: false,
 				},

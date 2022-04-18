@@ -27,6 +27,7 @@ describe('CreateTranslationCommandHandler', () => {
 	let ngramConverter: NgramConverter;
 	let permissionContext: FakePermissionContext;
 	let createTranslationCommandHandler: CreateTranslationCommandHandler;
+	let defaultCommand: UpdateTranslationCommand;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -66,6 +67,15 @@ describe('CreateTranslationCommandHandler', () => {
 			auditLogger,
 			ngramConverter,
 		);
+
+		defaultCommand = {
+			translationId: undefined,
+			headword: '大和言葉',
+			locale: 'ja',
+			reading: 'やまとことば',
+			yamatokotoba: 'やまとことのは',
+			category: WordCategory.Noun,
+		};
 	});
 
 	describe('createTranslation', () => {
@@ -115,14 +125,6 @@ describe('CreateTranslationCommandHandler', () => {
 			});
 		};
 
-		const defaults = {
-			headword: '大和言葉',
-			locale: 'ja',
-			reading: 'やまとことば',
-			yamatokotoba: 'やまとことのは',
-			category: WordCategory.Noun,
-		};
-
 		test('insufficient permission', async () => {
 			for (const userGroup of [UserGroup.LimitedUser, UserGroup.User]) {
 				existingUser.userGroup = userGroup;
@@ -141,20 +143,20 @@ describe('CreateTranslationCommandHandler', () => {
 					);
 
 				await expect(
-					createTranslationCommandHandler.execute(defaults),
+					createTranslationCommandHandler.execute(defaultCommand),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('5 changes', async () => {
 			await testCreateTranslation({
-				command: defaults,
+				command: defaultCommand,
 				snapshot: {
-					headword: defaults.headword,
-					locale: defaults.locale,
-					reading: defaults.reading,
-					yamatokotoba: defaults.yamatokotoba,
-					category: defaults.category,
+					headword: defaultCommand.headword,
+					locale: defaultCommand.locale,
+					reading: defaultCommand.reading,
+					yamatokotoba: defaultCommand.yamatokotoba,
+					category: defaultCommand.category,
 					inishienomanabi_tags: [],
 				},
 			});
@@ -163,7 +165,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('headword is undefined', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					headword: undefined!,
 				}),
@@ -173,7 +175,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('headword is empty', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					headword: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -182,7 +184,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('headword is too long', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					headword: 'い'.repeat(201),
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -191,7 +193,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('reading is undefined', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					reading: undefined!,
 				}),
@@ -201,7 +203,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('reading is empty', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					reading: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -210,7 +212,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('reading is too long', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					reading: 'い'.repeat(201),
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -219,7 +221,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('reading contains alphabets', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					reading: 'Anglish',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -228,7 +230,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('reading contains kanji', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					reading: '大和言葉',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -237,7 +239,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('yamatokotoba is undefined', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					yamatokotoba: undefined!,
 				}),
@@ -247,7 +249,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('yamatokotoba is empty', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					yamatokotoba: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -256,7 +258,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('yamatokotoba is too long', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					yamatokotoba: 'い'.repeat(201),
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -265,7 +267,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('yamatokotoba contains alphabets', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					yamatokotoba: 'Anglish',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -274,7 +276,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('yamatokotoba contains kanji', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					yamatokotoba: '大和言葉',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -283,7 +285,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('category is empty', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					category: '' as WordCategory,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -292,7 +294,7 @@ describe('CreateTranslationCommandHandler', () => {
 		test('category is invalid', async () => {
 			await expect(
 				createTranslationCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					category: 'abcdef' as WordCategory,
 				}),
 			).rejects.toThrow(BadRequestException);

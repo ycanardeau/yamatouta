@@ -35,6 +35,14 @@ const createError = (
 	user: undefined,
 });
 
+export class AuthenticateUserCommand {
+	constructor(
+		readonly email: string,
+		readonly password: string,
+		readonly ip: string,
+	) {}
+}
+
 @Injectable()
 export class AuthenticateUserCommandHandler {
 	constructor(
@@ -45,16 +53,10 @@ export class AuthenticateUserCommandHandler {
 		private readonly passwordHasherFactory: PasswordHasherFactory,
 	) {}
 
-	execute(params: {
-		email: string;
-		password: string;
-		ip: string;
-	}): Promise<LoginResult> {
-		const { email, password, ip } = params;
-
+	execute(command: AuthenticateUserCommand): Promise<LoginResult> {
 		return this.em.transactional(async () => {
 			const user = await this.userRepo.findOne({
-				email: email,
+				email: command.email,
 				deleted: false,
 				hidden: false,
 			});
@@ -66,14 +68,14 @@ export class AuthenticateUserCommandHandler {
 			);
 
 			const passwordHash = await passwordHasher.hashPassword(
-				password,
+				command.password,
 				user.salt,
 			);
 
 			if (user.passwordHash === passwordHash) {
 				this.auditLogger.user_login({
 					actor: user,
-					actorIp: ip,
+					actorIp: command.ip,
 					user: user,
 				});
 
@@ -84,7 +86,10 @@ export class AuthenticateUserCommandHandler {
 					user.passwordHashAlgorithm !==
 					defaultPasswordHasher.algorithm
 				) {
-					await user.updatePassword(defaultPasswordHasher, password);
+					await user.updatePassword(
+						defaultPasswordHasher,
+						command.password,
+					);
 				}
 
 				return createSuccess(new AuthenticatedUserObject(user));
@@ -92,7 +97,7 @@ export class AuthenticateUserCommandHandler {
 
 			this.auditLogger.user_failedLogin({
 				actor: user,
-				actorIp: ip,
+				actorIp: command.ip,
 				user: user,
 			});
 

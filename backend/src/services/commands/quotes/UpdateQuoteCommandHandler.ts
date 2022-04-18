@@ -16,6 +16,7 @@ import { PermissionContext } from '../../PermissionContext';
 
 export class UpdateQuoteCommand {
 	static readonly schema: ObjectSchema<UpdateQuoteCommand> = Joi.object({
+		quoteId: Joi.number().optional(),
 		text: Joi.string().required().trim().max(200),
 		quoteType: Joi.string()
 			.required()
@@ -26,6 +27,7 @@ export class UpdateQuoteCommand {
 	});
 
 	constructor(
+		readonly quoteId: number | undefined,
 		readonly text: string,
 		readonly quoteType: QuoteType,
 		readonly locale: string,
@@ -47,10 +49,7 @@ export class UpdateQuoteCommandHandler {
 		private readonly quoteRepo: EntityRepository<Quote>,
 	) {}
 
-	async execute(
-		quoteId: number,
-		command: UpdateQuoteCommand,
-	): Promise<QuoteObject> {
+	async execute(command: UpdateQuoteCommand): Promise<QuoteObject> {
 		this.permissionContext.verifyPermission(Permission.EditQuotes);
 
 		const result = UpdateQuoteCommand.schema.validate(command, {
@@ -74,7 +73,7 @@ export class UpdateQuoteCommandHandler {
 			});
 
 			const quote = await this.quoteRepo.findOneOrFail({
-				id: quoteId,
+				id: command.quoteId,
 				deleted: false,
 				hidden: false,
 			});

@@ -36,6 +36,7 @@ describe('UpdateQuoteCommandHandler', () => {
 	let quoteRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateQuoteCommandHandler: UpdateQuoteCommandHandler;
+	let defaultCommand: UpdateQuoteCommand;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -82,7 +83,8 @@ describe('UpdateQuoteCommandHandler', () => {
 		};
 		auditLogger = new AuditLogger(em as any);
 		quoteRepo = {
-			findOneOrFail: async (): Promise<Quote> => quote,
+			findOneOrFail: async (where: any): Promise<Quote> =>
+				[quote].filter((q) => q.id === where.id)[0],
 		};
 
 		permissionContext = new FakePermissionContext(existingUser);
@@ -95,6 +97,14 @@ describe('UpdateQuoteCommandHandler', () => {
 			auditLogger,
 			quoteRepo as any,
 		);
+
+		defaultCommand = {
+			quoteId: quote.id,
+			text: 'やまとうた',
+			quoteType: QuoteType.Tanka,
+			locale: 'ja',
+			artistId: 2,
+		};
 	});
 
 	describe('updateQuote', () => {
@@ -106,7 +116,6 @@ describe('UpdateQuoteCommandHandler', () => {
 			snapshot: QuoteSnapshot;
 		}): Promise<void> => {
 			const quoteObject = await updateQuoteCommandHandler.execute(
-				quote.id,
 				command,
 			);
 
@@ -141,13 +150,6 @@ describe('UpdateQuoteCommandHandler', () => {
 			});
 		};
 
-		const defaults = {
-			text: 'やまとうた',
-			quoteType: QuoteType.Tanka,
-			locale: 'ja',
-			artistId: 2,
-		};
-
 		test('insufficient permission', async () => {
 			const userGroups = Object.values(UserGroup).filter(
 				(userGroup) => userGroup !== UserGroup.Admin,
@@ -170,7 +172,7 @@ describe('UpdateQuoteCommandHandler', () => {
 				);
 
 				await expect(
-					updateQuoteCommandHandler.execute(quote.id, defaults),
+					updateQuoteCommandHandler.execute(defaultCommand),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -178,6 +180,7 @@ describe('UpdateQuoteCommandHandler', () => {
 		test('0 changes', async () => {
 			await testUpdateQuote({
 				command: {
+					...defaultCommand,
 					text: quote.text,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
@@ -195,13 +198,13 @@ describe('UpdateQuoteCommandHandler', () => {
 		test('1 change', async () => {
 			await testUpdateQuote({
 				command: {
-					...defaults,
+					...defaultCommand,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
 					artistId: quote.artist.id,
 				},
 				snapshot: {
-					text: defaults.text,
+					text: defaultCommand.text,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
 					artist: new ObjectRefSnapshot({ entry: artist }),
@@ -212,13 +215,13 @@ describe('UpdateQuoteCommandHandler', () => {
 		test('2 changes', async () => {
 			await testUpdateQuote({
 				command: {
-					...defaults,
+					...defaultCommand,
 					locale: quote.locale,
 					artistId: quote.artist.id,
 				},
 				snapshot: {
-					text: defaults.text,
-					quoteType: defaults.quoteType,
+					text: defaultCommand.text,
+					quoteType: defaultCommand.quoteType,
 					locale: quote.locale,
 					artist: new ObjectRefSnapshot({ entry: artist }),
 				},
@@ -228,13 +231,13 @@ describe('UpdateQuoteCommandHandler', () => {
 		test('3 changes', async () => {
 			await testUpdateQuote({
 				command: {
-					...defaults,
+					...defaultCommand,
 					artistId: quote.artist.id,
 				},
 				snapshot: {
-					text: defaults.text,
-					quoteType: defaults.quoteType,
-					locale: defaults.locale,
+					text: defaultCommand.text,
+					quoteType: defaultCommand.quoteType,
+					locale: defaultCommand.locale,
 					artist: new ObjectRefSnapshot({ entry: artist }),
 				},
 			});
@@ -242,11 +245,11 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('4 changes', async () => {
 			await testUpdateQuote({
-				command: defaults,
+				command: defaultCommand,
 				snapshot: {
-					text: defaults.text,
-					quoteType: defaults.quoteType,
-					locale: defaults.locale,
+					text: defaultCommand.text,
+					quoteType: defaultCommand.quoteType,
+					locale: defaultCommand.locale,
 					artist: new ObjectRefSnapshot({ entry: artist }),
 				},
 			});
@@ -254,8 +257,8 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('text is undefined', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(quote.id, {
-					...defaults,
+				updateQuoteCommandHandler.execute({
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					text: undefined!,
 				}),
@@ -264,8 +267,8 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('text is empty', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(quote.id, {
-					...defaults,
+				updateQuoteCommandHandler.execute({
+					...defaultCommand,
 					text: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -273,8 +276,8 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('text is too long', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(quote.id, {
-					...defaults,
+				updateQuoteCommandHandler.execute({
+					...defaultCommand,
 					text: 'い'.repeat(201),
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -282,8 +285,8 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('quoteType is empty', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(quote.id, {
-					...defaults,
+				updateQuoteCommandHandler.execute({
+					...defaultCommand,
 					quoteType: '' as QuoteType,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -291,8 +294,8 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('quoteType is invalid', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(quote.id, {
-					...defaults,
+				updateQuoteCommandHandler.execute({
+					...defaultCommand,
 					quoteType: 'abcdef' as QuoteType,
 				}),
 			).rejects.toThrow(BadRequestException);

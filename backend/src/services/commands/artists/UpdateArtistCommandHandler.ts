@@ -15,6 +15,7 @@ import { PermissionContext } from '../../PermissionContext';
 
 export class UpdateArtistCommand {
 	static readonly schema: ObjectSchema<UpdateArtistCommand> = Joi.object({
+		artistId: Joi.number().optional(),
 		name: Joi.string().required().trim().max(200),
 		artistType: Joi.string()
 			.required()
@@ -22,7 +23,11 @@ export class UpdateArtistCommand {
 			.valid(...Object.values(ArtistType)),
 	});
 
-	constructor(readonly name: string, readonly artistType: ArtistType) {}
+	constructor(
+		readonly artistId: number | undefined,
+		readonly name: string,
+		readonly artistType: ArtistType,
+	) {}
 }
 
 @Injectable()
@@ -37,10 +42,7 @@ export class UpdateArtistCommandHandler {
 		private readonly artistRepo: EntityRepository<Artist>,
 	) {}
 
-	async execute(
-		artistId: number,
-		command: UpdateArtistCommand,
-	): Promise<ArtistObject> {
+	async execute(command: UpdateArtistCommand): Promise<ArtistObject> {
 		this.permissionContext.verifyPermission(Permission.EditArtists);
 
 		const result = UpdateArtistCommand.schema.validate(command, {
@@ -58,7 +60,7 @@ export class UpdateArtistCommandHandler {
 			});
 
 			const artist = await this.artistRepo.findOneOrFail({
-				id: artistId,
+				id: command.artistId,
 				deleted: false,
 				hidden: false,
 			});

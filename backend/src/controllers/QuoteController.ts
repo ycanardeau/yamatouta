@@ -68,7 +68,10 @@ export class QuoteController {
 		@Body(new JoiValidationPipe(UpdateQuoteCommand.schema))
 		command: UpdateQuoteCommand,
 	): Promise<QuoteObject> {
-		return this.updateQuoteCommandHandler.execute(quoteId, command);
+		return this.updateQuoteCommandHandler.execute({
+			...command,
+			quoteId: quoteId,
+		});
 	}
 
 	@Delete(':quoteId')

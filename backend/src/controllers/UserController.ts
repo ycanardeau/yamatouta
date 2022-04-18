@@ -17,10 +17,9 @@ import {
 	listUsersQuerySchema,
 } from '../requests/users/IListUsersQuery';
 import {
-	IUpdateAuthenticatedUserBody,
-	updateAuthenticatedUserBodySchema,
-} from '../requests/users/IUpdateAuthenticatedUserBody';
-import { UpdateAuthenticatedUserCommandHandler } from '../services/commands/users/UpdateAuthenticatedUserCommandHandler';
+	UpdateAuthenticatedUserCommand,
+	UpdateAuthenticatedUserCommandHandler,
+} from '../services/commands/users/UpdateAuthenticatedUserCommandHandler';
 import { GetAuthenticatedUserQueryHandler } from '../services/queries/users/GetAuthenticatedUserQueryHandler';
 import { GetUserQueryHandler } from '../services/queries/users/GetUserQueryHandler';
 import { ListUsersQueryHandler } from '../services/queries/users/ListUsersQueryHandler';
@@ -49,10 +48,10 @@ export class UserController {
 
 	@Patch('current')
 	updateAuthenticatedUser(
-		@Body(new JoiValidationPipe(updateAuthenticatedUserBodySchema))
-		body: IUpdateAuthenticatedUserBody,
+		@Body(new JoiValidationPipe(UpdateAuthenticatedUserCommand.schema))
+		command: UpdateAuthenticatedUserCommand,
 	): Promise<AuthenticatedUserObject> {
-		return this.updateAuthenticatedUserCommandHandler.execute(body);
+		return this.updateAuthenticatedUserCommandHandler.execute(command);
 	}
 
 	@Get(':userId')

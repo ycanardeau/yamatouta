@@ -11,11 +11,24 @@ import config from '../../../config';
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
 import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
-import { ICreateUserBody } from '../../../requests/auth/ICreateUserBody';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
 import { AuditLogger } from '../../AuditLogger';
 import { PermissionContext } from '../../PermissionContext';
 import { PasswordHasherFactory } from '../../passwordHashers/PasswordHasherFactory';
+
+export class CreateUserCommand {
+	static readonly schema: ObjectSchema<CreateUserCommand> = Joi.object({
+		username: Joi.string().required().trim().min(2).max(32),
+		email: Joi.string().required().email().max(50),
+		password: Joi.string().required().min(8),
+	});
+
+	constructor(
+		readonly username: string,
+		readonly email: string,
+		readonly password: string,
+	) {}
+}
 
 @Injectable()
 export class CreateUserCommandHandler {
@@ -29,21 +42,15 @@ export class CreateUserCommandHandler {
 	) {}
 
 	// TODO: Use CAPTCHA.
-	async execute(params: ICreateUserBody): Promise<AuthenticatedUserObject> {
+	async execute(
+		command: CreateUserCommand,
+	): Promise<AuthenticatedUserObject> {
 		if (config.disableAccountCreation)
 			throw new ForbiddenException('Account creation is restricted.');
 
-		const schema: ObjectSchema<{
-			username: string;
-			email: string;
-			password: string;
-		}> = Joi.object({
-			username: Joi.string().required().trim().min(2).max(32),
-			email: Joi.string().required().email().max(50),
-			password: Joi.string().required().min(8),
+		const result = CreateUserCommand.schema.validate(command, {
+			convert: true,
 		});
-
-		const result = schema.validate(params, { convert: true });
 
 		if (result.error)
 			throw new BadRequestException(result.error.details[0].message);

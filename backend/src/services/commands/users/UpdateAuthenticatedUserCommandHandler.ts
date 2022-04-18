@@ -6,11 +6,34 @@ import Joi, { ObjectSchema } from 'joi';
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
 import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
-import { IUpdateAuthenticatedUserBody } from '../../../requests/users/IUpdateAuthenticatedUserBody';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
 import { AuditLogger } from '../../AuditLogger';
 import { PermissionContext } from '../../PermissionContext';
 import { PasswordHasherFactory } from '../../passwordHashers/PasswordHasherFactory';
+
+export class UpdateAuthenticatedUserCommand {
+	static readonly schema: ObjectSchema<UpdateAuthenticatedUserCommand> =
+		Joi.object({
+			password: Joi.string().required(),
+			username: Joi.string().optional().trim().min(2).max(32),
+			email: Joi.string().optional().email().max(50),
+			newPassword: Joi.string().optional().min(8),
+		});
+
+	constructor(
+		readonly password: string,
+		readonly username?: string,
+		readonly email?: string,
+		readonly newPassword?: string,
+	) {}
+}
+
+export const updateAuthenticatedUserBodySchema = Joi.object({
+	password: Joi.string().required(),
+	username: Joi.string().optional(),
+	email: Joi.string().optional(),
+	newPassword: Joi.string().optional(),
+});
 
 @Injectable()
 export class UpdateAuthenticatedUserCommandHandler {
@@ -24,22 +47,11 @@ export class UpdateAuthenticatedUserCommandHandler {
 	) {}
 
 	async execute(
-		params: IUpdateAuthenticatedUserBody,
+		command: UpdateAuthenticatedUserCommand,
 	): Promise<AuthenticatedUserObject> {
-		const { password, username, email, newPassword } = params;
-
-		const schema: ObjectSchema<{
-			username: string;
-			email: string;
-			password: string;
-		}> = Joi.object({
-			password: Joi.string().required(),
-			username: Joi.string().optional().trim().min(2).max(32),
-			email: Joi.string().optional().email().max(50),
-			newPassword: Joi.string().optional().min(8),
+		const result = UpdateAuthenticatedUserCommand.schema.validate(command, {
+			convert: true,
 		});
-
-		const result = schema.validate(params, { convert: true });
 
 		if (result.error)
 			throw new BadRequestException(result.error.details[0].message);
@@ -58,7 +70,7 @@ export class UpdateAuthenticatedUserCommandHandler {
 			);
 
 			const passwordHash = await passwordHasher.hashPassword(
-				password,
+				command.password,
 				user.salt,
 			);
 
@@ -68,20 +80,20 @@ export class UpdateAuthenticatedUserCommandHandler {
 				throw new BadRequestException();
 			}
 
-			if (username && username !== user.name) {
+			if (command.username && command.username !== user.name) {
 				this.auditLogger.user_rename({
 					actor: user,
 					actorIp: this.permissionContext.remoteIpAddress,
 					user: user,
 					oldValue: user.name,
-					newValue: username,
+					newValue: command.username,
 				});
 
-				user.name = username;
+				user.name = command.username;
 			}
 
-			if (email && email !== user.email) {
-				const normalizedEmail = await normalizeEmail(email);
+			if (command.email && command.email !== user.email) {
+				const normalizedEmail = await normalizeEmail(command.email);
 
 				await this.userRepo
 					.findOne({
@@ -97,14 +109,14 @@ export class UpdateAuthenticatedUserCommandHandler {
 					actorIp: this.permissionContext.remoteIpAddress,
 					user: user,
 					oldValue: user.email,
-					newValue: email,
+					newValue: command.email,
 				});
 
-				user.email = email;
+				user.email = command.email;
 				user.normalizedEmail = normalizedEmail;
 			}
 
-			if (newPassword) {
+			if (command.newPassword) {
 				this.auditLogger.user_changePassword({
 					actor: user,
 					actorIp: this.permissionContext.remoteIpAddress,
@@ -113,7 +125,7 @@ export class UpdateAuthenticatedUserCommandHandler {
 
 				await user.updatePassword(
 					this.passwordHasherFactory.default,
-					newPassword,
+					command.newPassword,
 				);
 			}
 

@@ -29,6 +29,7 @@ describe('UpdateWorkCommandHandler', () => {
 	let workRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateWorkCommandHandler: UpdateWorkCommandHandler;
+	let defaultCommand: UpdateWorkCommand;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -64,7 +65,8 @@ describe('UpdateWorkCommandHandler', () => {
 		};
 		auditLogger = new AuditLogger(em as any);
 		workRepo = {
-			findOneOrFail: async (): Promise<Work> => work,
+			findOneOrFail: async (where: any): Promise<Work> =>
+				[work].filter((w) => w.id === where.id)[0],
 		};
 
 		permissionContext = new FakePermissionContext(existingUser);
@@ -76,6 +78,12 @@ describe('UpdateWorkCommandHandler', () => {
 			auditLogger,
 			workRepo as any,
 		);
+
+		defaultCommand = {
+			workId: work.id,
+			name: 'うた',
+			workType: WorkType.Song,
+		};
 	});
 
 	describe('updateWork', () => {
@@ -86,10 +94,7 @@ describe('UpdateWorkCommandHandler', () => {
 			command: UpdateWorkCommand;
 			snapshot: WorkSnapshot;
 		}): Promise<void> => {
-			const workObject = await updateWorkCommandHandler.execute(
-				work.id,
-				command,
-			);
+			const workObject = await updateWorkCommandHandler.execute(command);
 
 			expect(workObject.name).toBe(command.name);
 			expect(workObject.workType).toBe(command.workType);
@@ -120,11 +125,6 @@ describe('UpdateWorkCommandHandler', () => {
 			});
 		};
 
-		const defaults = {
-			name: 'うた',
-			workType: WorkType.Song,
-		};
-
 		test('insufficient permission', async () => {
 			const userGroups = Object.values(UserGroup).filter(
 				(userGroup) => userGroup !== UserGroup.Admin,
@@ -146,7 +146,7 @@ describe('UpdateWorkCommandHandler', () => {
 				);
 
 				await expect(
-					updateWorkCommandHandler.execute(work.id, defaults),
+					updateWorkCommandHandler.execute(defaultCommand),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
@@ -154,6 +154,7 @@ describe('UpdateWorkCommandHandler', () => {
 		test('0 changes', async () => {
 			await testUpdateWork({
 				command: {
+					...defaultCommand,
 					name: work.name,
 					workType: work.workType,
 				},
@@ -167,11 +168,11 @@ describe('UpdateWorkCommandHandler', () => {
 		test('1 change', async () => {
 			await testUpdateWork({
 				command: {
-					...defaults,
+					...defaultCommand,
 					workType: work.workType,
 				},
 				snapshot: {
-					name: defaults.name,
+					name: defaultCommand.name,
 					workType: work.workType,
 				},
 			});
@@ -179,18 +180,18 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateWork({
-				command: defaults,
+				command: defaultCommand,
 				snapshot: {
-					name: defaults.name,
-					workType: defaults.workType,
+					name: defaultCommand.name,
+					workType: defaultCommand.workType,
 				},
 			});
 		});
 
 		test('name is undefined', async () => {
 			await expect(
-				updateWorkCommandHandler.execute(work.id, {
-					...defaults,
+				updateWorkCommandHandler.execute({
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					name: undefined!,
 				}),
@@ -199,8 +200,8 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('name is empty', async () => {
 			await expect(
-				updateWorkCommandHandler.execute(work.id, {
-					...defaults,
+				updateWorkCommandHandler.execute({
+					...defaultCommand,
 					name: '',
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -208,8 +209,8 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('name is too long', async () => {
 			await expect(
-				updateWorkCommandHandler.execute(work.id, {
-					...defaults,
+				updateWorkCommandHandler.execute({
+					...defaultCommand,
 					name: 'い'.repeat(201),
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -217,8 +218,8 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('workType is empty', async () => {
 			await expect(
-				updateWorkCommandHandler.execute(work.id, {
-					...defaults,
+				updateWorkCommandHandler.execute({
+					...defaultCommand,
 					workType: '' as WorkType,
 				}),
 			).rejects.toThrow(BadRequestException);
@@ -226,8 +227,8 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('workType is invalid', async () => {
 			await expect(
-				updateWorkCommandHandler.execute(work.id, {
-					...defaults,
+				updateWorkCommandHandler.execute({
+					...defaultCommand,
 					workType: 'abcdef' as WorkType,
 				}),
 			).rejects.toThrow(BadRequestException);
