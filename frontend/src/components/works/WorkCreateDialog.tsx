@@ -16,25 +16,25 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IArtistObject } from '../../dto/artists/IArtistObject';
-import { ArtistType } from '../../models/ArtistType';
-import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
+import { IWorkObject } from '../../dto/works/IWorkObject';
+import { WorkType } from '../../models/WorkType';
+import { WorkEditStore } from '../../stores/works/WorkEditStore';
 
-interface CreateArtistDialogProps {
-	artist?: IArtistObject;
+interface WorkCreateDialogProps {
+	work?: IWorkObject;
 	onClose: () => void;
-	onSuccess: (artist: IArtistObject) => void;
+	onSuccess: (work: IWorkObject) => void;
 }
 
-const CreateArtistDialog = observer(
+const WorkCreateDialog = observer(
 	({
-		artist,
+		work,
 		onClose,
 		onSuccess,
-	}: CreateArtistDialogProps): React.ReactElement => {
+	}: WorkCreateDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(() => new ArtistEditStore(artist));
+		const [store] = React.useState(() => new WorkEditStore(work));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
 
@@ -43,9 +43,7 @@ const CreateArtistDialog = observer(
 				<EuiModalHeader>
 					<EuiModalHeaderTitle>
 						<h1>
-							{artist
-								? t('artists.editArtist')
-								: t('artists.addArtist')}
+							{work ? t('works.editWork') : t('works.addWork')}
 						</h1>
 					</EuiModalHeaderTitle>
 				</EuiModalHeader>
@@ -57,13 +55,13 @@ const CreateArtistDialog = observer(
 						onSubmit={async (e): Promise<void> => {
 							e.preventDefault();
 
-							const artist = await store.submit();
+							const work = await store.submit();
 
 							onClose();
-							onSuccess(artist);
+							onSuccess(work);
 						}}
 					>
-						<EuiFormRow label={t('artists.name')}>
+						<EuiFormRow label={t('works.name')}>
 							<EuiFieldText
 								compressed
 								name="name"
@@ -74,20 +72,20 @@ const CreateArtistDialog = observer(
 							/>
 						</EuiFormRow>
 
-						<EuiFormRow label={t('artists.artistType')}>
+						<EuiFormRow label={t('works.workType')}>
 							<EuiSelect
 								compressed
-								name="artistType"
-								options={Object.values(ArtistType).map(
+								name="workType"
+								options={Object.values(WorkType).map(
 									(value) => ({
 										value: value,
-										text: t(`artistTypeNames.${value}`),
+										text: t(`workTypeNames.${value}`),
 									}),
 								)}
-								value={store.artistType ?? ''}
+								value={store.workType ?? ''}
 								onChange={(e): void =>
-									store.setArtistType(
-										e.target.value as ArtistType,
+									store.setWorkType(
+										e.target.value as WorkType,
 									)
 								}
 							/>
@@ -106,9 +104,7 @@ const CreateArtistDialog = observer(
 						form={modalFormId}
 						disabled={!store.isValid || store.submitting}
 					>
-						{artist
-							? t('artists.editArtist')
-							: t('artists.addArtist')}
+						{work ? t('works.editWork') : t('works.addWork')}
 					</EuiButton>
 				</EuiModalFooter>
 			</EuiModal>
@@ -116,4 +112,4 @@ const CreateArtistDialog = observer(
 	},
 );
 
-export default CreateArtistDialog;
+export default WorkCreateDialog;

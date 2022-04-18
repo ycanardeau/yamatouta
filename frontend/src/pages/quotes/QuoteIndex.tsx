@@ -13,7 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import CreateQuoteDialog from '../../components/quotes/CreateQuoteDialog';
+import QuoteCreateDialog from '../../components/quotes/QuoteCreateDialog';
 import QuoteSearchList from '../../components/quotes/QuoteSearchList';
 import { useAuth } from '../../components/useAuth';
 import { useDialog } from '../../components/useDialog';
@@ -89,7 +89,7 @@ const QuoteIndex = observer((): React.ReactElement => {
 					<QuoteSearchList store={store} />
 
 					{createQuoteDialog.visible && (
-						<CreateQuoteDialog
+						<QuoteCreateDialog
 							onClose={createQuoteDialog.close}
 							onSuccess={(quote): void =>
 								navigate(`/quotes/${quote.id}/edit`)

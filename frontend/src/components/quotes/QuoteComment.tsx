@@ -24,7 +24,7 @@ import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 import Avatar from '../Avatar';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
-import DeleteQuoteDialog from './DeleteQuoteDialog';
+import QuoteDeleteDialog from './QuoteDeleteDialog';
 
 interface QuotePopoverProps {
 	store?: QuoteSearchStore;
@@ -125,7 +125,7 @@ const QuotePopover = ({
 			</EuiPopover>
 
 			{deleteQuoteDialog.visible && (
-				<DeleteQuoteDialog
+				<QuoteDeleteDialog
 					quote={quote}
 					onClose={deleteQuoteDialog.close}
 					onSuccess={async (): Promise<void> => {

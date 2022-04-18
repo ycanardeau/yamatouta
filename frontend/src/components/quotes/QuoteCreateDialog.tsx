@@ -23,18 +23,18 @@ import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
 
-interface CreateQuoteDialogProps {
+interface QuoteCreateDialogProps {
 	quote?: IQuoteObject;
 	onClose: () => void;
 	onSuccess: (quote: IQuoteObject) => void;
 }
 
-const CreateQuoteDialog = observer(
+const QuoteCreateDialog = observer(
 	({
 		quote,
 		onClose,
 		onSuccess,
-	}: CreateQuoteDialogProps): React.ReactElement => {
+	}: QuoteCreateDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(() => new QuoteEditStore(quote));
@@ -175,4 +175,4 @@ const CreateQuoteDialog = observer(
 	},
 );
 
-export default CreateQuoteDialog;
+export default QuoteCreateDialog;

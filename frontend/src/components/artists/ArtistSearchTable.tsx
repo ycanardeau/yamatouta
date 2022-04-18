@@ -32,7 +32,7 @@ import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
-import DeleteArtistDialog from './DeleteArtistDialog';
+import ArtistDeleteDialog from './ArtistDeleteDialog';
 
 interface ArtistPopoverProps {
 	store: ArtistSearchStore;
@@ -133,7 +133,7 @@ const ArtistPopover = ({
 			</EuiPopover>
 
 			{deleteArtistDialog.visible && (
-				<DeleteArtistDialog
+				<ArtistDeleteDialog
 					artist={artist}
 					onClose={deleteArtistDialog.close}
 					onSuccess={async (): Promise<void> => {

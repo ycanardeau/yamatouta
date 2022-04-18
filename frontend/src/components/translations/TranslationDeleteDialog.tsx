@@ -3,30 +3,30 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
-import { QuoteDeleteStore } from '../../stores/quotes/QuoteDeleteStore';
+import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { TranslationDeleteStore } from '../../stores/translations/TranslationDeleteStore';
 
-interface DeleteQuoteDialogProps {
-	quote: IQuoteObject;
+interface TranslationDeleteDialogProps {
+	translation: ITranslationObject;
 	onClose: () => void;
 	onSuccess: () => void;
 }
 
-const DeleteQuoteDialog = observer(
+const TranslationDeleteDialog = observer(
 	({
-		quote,
+		translation,
 		onClose,
 		onSuccess,
-	}: DeleteQuoteDialogProps): React.ReactElement => {
+	}: TranslationDeleteDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(
-			() => new QuoteDeleteStore({ quote: quote }),
+			() => new TranslationDeleteStore({ translation: translation }),
 		);
 
 		return (
 			<EuiConfirmModal
-				title={t('quotes.deleteQuote')}
+				title={t('translations.deleteWord')}
 				onCancel={onClose}
 				onConfirm={async (): Promise<void> => {
 					await store.submit();
@@ -35,15 +35,15 @@ const DeleteQuoteDialog = observer(
 					onSuccess();
 				}}
 				cancelButtonText={t('shared.cancel')}
-				confirmButtonText={t('quotes.deleteQuote')}
+				confirmButtonText={t('translations.deleteWord')}
 				buttonColor="danger"
 				defaultFocusedButton="confirm"
 				confirmButtonDisabled={!store.isValid || store.submitting}
 			>
-				{t('quotes.deleteDialogSubtitle')}
+				{t('translations.deleteDialogSubtitle')}
 			</EuiConfirmModal>
 		);
 	},
 );
 
-export default DeleteQuoteDialog;
+export default TranslationDeleteDialog;

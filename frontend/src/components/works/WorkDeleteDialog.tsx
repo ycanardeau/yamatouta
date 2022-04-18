@@ -6,18 +6,18 @@ import { useTranslation } from 'react-i18next';
 import { IWorkObject } from '../../dto/works/IWorkObject';
 import { WorkDeleteStore } from '../../stores/works/WorkDeleteStore';
 
-interface DeleteWorkDialogProps {
+interface WorkDeleteDialogProps {
 	work: IWorkObject;
 	onClose: () => void;
 	onSuccess: () => void;
 }
 
-const DeleteWorkDialog = observer(
+const WorkDeleteDialog = observer(
 	({
 		work,
 		onClose,
 		onSuccess,
-	}: DeleteWorkDialogProps): React.ReactElement => {
+	}: WorkDeleteDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		const [store] = React.useState(
@@ -46,4 +46,4 @@ const DeleteWorkDialog = observer(
 	},
 );
 
-export default DeleteWorkDialog;
+export default WorkDeleteDialog;

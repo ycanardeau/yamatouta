@@ -39,7 +39,7 @@ import { TranslationSearchStore } from '../../stores/translations/TranslationSea
 import Pagination from '../Pagination';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
-import DeleteTranslationDialog from './DeleteTranslationDialog';
+import TranslationDeleteDialog from './TranslationDeleteDialog';
 
 interface HighlightProps {
 	children: React.ReactNode;
@@ -182,7 +182,7 @@ const TranslationPopover = ({
 			</EuiPopover>
 
 			{deleteTranslationDialog.visible && (
-				<DeleteTranslationDialog
+				<TranslationDeleteDialog
 					translation={translation}
 					onClose={deleteTranslationDialog.close}
 					onSuccess={async (): Promise<void> => {

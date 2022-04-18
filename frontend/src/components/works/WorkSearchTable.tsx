@@ -32,7 +32,7 @@ import Avatar from '../Avatar';
 import Pagination from '../Pagination';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
-import DeleteWorkDialog from './DeleteWorkDialog';
+import WorkDeleteDialog from './WorkDeleteDialog';
 
 interface WorkPopoverProps {
 	store: WorkSearchStore;
@@ -130,7 +130,7 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 			</EuiPopover>
 
 			{deleteWorkDialog.visible && (
-				<DeleteWorkDialog
+				<WorkDeleteDialog
 					work={work}
 					onClose={deleteWorkDialog.close}
 					onSuccess={async (): Promise<void> => {
