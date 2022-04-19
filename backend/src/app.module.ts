@@ -57,10 +57,9 @@ import { AuditLogEntryFactory } from './services/AuditLogEntryFactory';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { NgramConverter } from './services/NgramConverter';
 import { PermissionContext } from './services/PermissionContext';
+import { AuthService } from './services/auth/AuthService';
 import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
-import { LoginService } from './services/auth/LoginService';
-import { LogoutService } from './services/auth/LogoutService';
 import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasherFactory';
 
 const queryHandlers = [
@@ -129,11 +128,10 @@ const commandHandlers = [
 		...queryHandlers,
 		...commandHandlers,
 		AuditLogEntryFactory,
+		AuthService,
 		GenerateSitemapService,
 		LocalSerializer,
 		LocalStrategy,
-		LoginService,
-		LogoutService,
 		NgramConverter,
 		PasswordHasherFactory,
 		PermissionContext,

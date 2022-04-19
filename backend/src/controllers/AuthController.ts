@@ -16,15 +16,13 @@ import {
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import { LoginService } from '../services/auth/LoginService';
-import { LogoutService } from '../services/auth/LogoutService';
+import { AuthService } from '../services/auth/AuthService';
 
 @Controller('auth')
 export class AuthController {
 	constructor(
 		private readonly createUserCommandHandler: CreateUserCommandHandler,
-		private readonly loginService: LoginService,
-		private readonly logoutService: LogoutService,
+		private readonly authService: AuthService,
 	) {}
 
 	@Post('register')
@@ -39,12 +37,12 @@ export class AuthController {
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
 	login(@Req() request: Request): Promise<AuthenticatedUserObject> {
-		return this.loginService.execute(request);
+		return this.authService.login(request);
 	}
 
 	@HttpCode(HttpStatus.OK)
 	@Post('logout')
 	logout(@Req() request: Request): void {
-		return this.logoutService.execute(request);
+		return this.authService.logout(request);
 	}
 }
