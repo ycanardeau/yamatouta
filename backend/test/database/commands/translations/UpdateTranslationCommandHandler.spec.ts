@@ -68,7 +68,7 @@ describe('UpdateTranslationCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory();
 		ngramConverter = new NgramConverter();
 		translationRepo = {
 			findOneOrFail: async (where: any): Promise<Translation> =>

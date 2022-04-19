@@ -53,7 +53,7 @@ describe('CreateWorkCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory();
 
 		permissionContext = new FakePermissionContext(existingUser);
 

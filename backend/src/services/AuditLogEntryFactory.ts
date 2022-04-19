@@ -8,12 +8,9 @@ import {
 	WorkAuditLogEntry,
 } from '../entities/AuditLogEntry';
 import { AuditedAction } from '../models/AuditedAction';
-import { PermissionContext } from './PermissionContext';
 
 @Injectable()
 export class AuditLogEntryFactory {
-	constructor(private readonly permissionContext: PermissionContext) {}
-
 	private createArtistAuditLogEntry(
 		params: Pick<
 			ArtistAuditLogEntry,

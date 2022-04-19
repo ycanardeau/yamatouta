@@ -81,7 +81,7 @@ describe('UpdateQuoteCommandHandler', () => {
 		artistRepo = {
 			findOneOrFail: async (): Promise<Artist> => artist,
 		};
-		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory();
 		quoteRepo = {
 			findOneOrFail: async (where: any): Promise<Quote> =>
 				[quote].filter((q) => q.id === where.id)[0],

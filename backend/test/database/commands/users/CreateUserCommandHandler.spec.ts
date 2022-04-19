@@ -42,7 +42,7 @@ describe('CreateUserCommandHandler', () => {
 					| (AnyEntity | Reference<AnyEntity>)[],
 			): void => em.persist(entity),
 		};
-		const auditLogEntryFactory = new AuditLogEntryFactory(em as any);
+		const auditLogEntryFactory = new AuditLogEntryFactory();
 		permissionContext = new FakePermissionContext();
 		const passwordHasherFactory = new PasswordHasherFactory();
 

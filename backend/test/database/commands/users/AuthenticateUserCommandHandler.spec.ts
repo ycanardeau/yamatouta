@@ -35,7 +35,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			findOne: async (where: any): Promise<User> =>
 				[existingUser].filter((u) => u.email === where.email)[0],
 		};
-		const auditLogEntryFactory = new AuditLogEntryFactory(em as any);
+		const auditLogEntryFactory = new AuditLogEntryFactory();
 		const passwordHasherFactory = new PasswordHasherFactory();
 
 		authenticateUserCommandHandler = new AuthenticateUserCommandHandler(

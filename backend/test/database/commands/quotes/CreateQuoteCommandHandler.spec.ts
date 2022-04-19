@@ -69,7 +69,7 @@ describe('CreateQuoteCommandHandler', () => {
 		artistRepo = {
 			findOneOrFail: async (): Promise<Artist> => artist,
 		};
-		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory();
 
 		permissionContext = new FakePermissionContext(existingUser);
 

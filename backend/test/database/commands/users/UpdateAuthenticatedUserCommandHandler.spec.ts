@@ -53,7 +53,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 					(u) => u.normalizedEmail === where.normalizedEmail,
 				)[0],
 		};
-		const auditLogEntryFactory = new AuditLogEntryFactory(em as any);
+		const auditLogEntryFactory = new AuditLogEntryFactory();
 
 		updateAuthenticatedUserCommandHandler =
 			new UpdateAuthenticatedUserCommandHandler(

@@ -55,7 +55,7 @@ describe('CreateTranslationCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory();
 		ngramConverter = new NgramConverter();
 
 		permissionContext = new FakePermissionContext(existingUser);

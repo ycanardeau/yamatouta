@@ -63,7 +63,7 @@ describe('UpdateArtistCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory();
 		artistRepo = {
 			findOneOrFail: async (where: any): Promise<Artist> =>
 				[artist].filter((a) => a.id === where.id)[0],
