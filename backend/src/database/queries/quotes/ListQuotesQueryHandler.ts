@@ -29,6 +29,7 @@ export class ListQuotesQuery {
 	});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly quoteType?: QuoteType,
 		readonly sort?: QuoteSortRule,
 		readonly offset?: number,
@@ -47,7 +48,6 @@ export class ListQuotesQueryHandler implements IQueryHandler<ListQuotesQuery> {
 	constructor(
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
-		private readonly permissionContext: PermissionContext,
 	) {}
 
 	private orderBy(sort?: QuoteSortRule): QueryOrderMap<{ id: QueryOrder }> {
@@ -63,7 +63,7 @@ export class ListQuotesQueryHandler implements IQueryHandler<ListQuotesQuery> {
 		const where: FilterQuery<Quote> = {
 			$and: [
 				{ deleted: false },
-				whereNotHidden(this.permissionContext),
+				whereNotHidden(query.permissionContext),
 				{ $not: { quoteType: QuoteType.Word } },
 				query.quoteType ? { quoteType: query.quoteType } : {},
 				query.artistId ? { artist: query.artistId } : {},
@@ -92,7 +92,7 @@ export class ListQuotesQueryHandler implements IQueryHandler<ListQuotesQuery> {
 
 		return new SearchResultObject<QuoteObject>(
 			quotes.map(
-				(quote) => new QuoteObject(quote, this.permissionContext),
+				(quote) => new QuoteObject(quote, query.permissionContext),
 			),
 			count,
 		);

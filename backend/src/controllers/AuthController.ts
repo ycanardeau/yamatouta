@@ -14,6 +14,7 @@ import { CreateUserCommand } from '../database/commands/users/CreateUserCommandH
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
+import { PermissionContext } from '../services/PermissionContext';
 import { AuthService } from '../services/auth/AuthService';
 
 @Controller('auth')
@@ -25,11 +26,13 @@ export class AuthController {
 
 	@Post('register')
 	createUser(
+		@Req() request: Request,
 		@Body(new JoiValidationPipe(CreateUserCommand.schema))
 		command: CreateUserCommand,
 	): Promise<AuthenticatedUserObject> {
 		return this.commandBus.execute(
 			new CreateUserCommand(
+				new PermissionContext(request),
 				command.username,
 				command.email,
 				command.password,

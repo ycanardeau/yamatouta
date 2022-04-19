@@ -39,6 +39,7 @@ export class UpdateTranslationCommand {
 	);
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly translationId: number | undefined,
 		readonly headword: string,
 		readonly locale: string,
@@ -54,7 +55,6 @@ export class UpdateTranslationCommandHandler
 {
 	constructor(
 		private readonly em: EntityManager,
-		private readonly permissionContext: PermissionContext,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
@@ -66,7 +66,7 @@ export class UpdateTranslationCommandHandler
 	async execute(
 		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
-		this.permissionContext.verifyPermission(Permission.EditTranslations);
+		command.permissionContext.verifyPermission(Permission.EditTranslations);
 
 		const result = UpdateTranslationCommand.schema.validate(command, {
 			convert: true,
@@ -80,7 +80,7 @@ export class UpdateTranslationCommandHandler
 
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: this.permissionContext.user?.id,
+				id: command.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -116,7 +116,7 @@ export class UpdateTranslationCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.translation_update({
 				translation: translation,
 				actor: user,
-				actorIp: this.permissionContext.clientIp,
+				actorIp: command.permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -124,6 +124,6 @@ export class UpdateTranslationCommandHandler
 			return translation;
 		});
 
-		return new TranslationObject(translation, this.permissionContext);
+		return new TranslationObject(translation, command.permissionContext);
 	}
 }

@@ -17,7 +17,10 @@ import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
 abstract class DeleteEntryCommand {
-	constructor(readonly entryId: number) {}
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly entryId: number,
+	) {}
 }
 
 abstract class DeleteEntryCommandHandler<
@@ -25,7 +28,6 @@ abstract class DeleteEntryCommandHandler<
 	TCommand extends DeleteEntryCommand,
 > {
 	constructor(
-		protected readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
@@ -33,18 +35,19 @@ abstract class DeleteEntryCommandHandler<
 		private readonly permission: Permission,
 		private readonly entryFunc: (entryId: number) => Promise<TEntry>,
 		private readonly auditLogFunc: (
-			actor: User,
 			entry: TEntry,
+			actor: User,
+			actorIp: string,
 		) => AuditLogEntry,
 	) {}
 
 	async execute(command: TCommand): Promise<void> {
-		this.permissionContext.verifyPermission(this.permission);
+		command.permissionContext.verifyPermission(this.permission);
 
 		await this.em.transactional(async (em) => {
 			const entry = await this.entryFunc(command.entryId);
 
-			this.permissionContext.verifyDeletedAndHidden(entry);
+			command.permissionContext.verifyDeletedAndHidden(entry);
 
 			if (entry.deleted) {
 				throw new BadRequestException(
@@ -53,7 +56,7 @@ abstract class DeleteEntryCommandHandler<
 			}
 
 			const user = await this.userRepo.findOneOrFail({
-				id: this.permissionContext.user?.id,
+				id: command.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -71,7 +74,11 @@ abstract class DeleteEntryCommandHandler<
 
 			em.persist(revision);
 
-			const auditLogEntry = this.auditLogFunc(user, entry);
+			const auditLogEntry = this.auditLogFunc(
+				entry,
+				user,
+				command.permissionContext.clientIp,
+			);
 
 			em.persist(auditLogEntry);
 		});
@@ -86,7 +93,6 @@ export class DeleteTranslationCommandHandler
 	implements ICommandHandler<DeleteTranslationCommand>
 {
 	constructor(
-		permissionContext: PermissionContext,
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
@@ -95,17 +101,16 @@ export class DeleteTranslationCommandHandler
 		translationRepo: EntityRepository<Translation>,
 	) {
 		super(
-			permissionContext,
 			em,
 			userRepo,
 			auditLogEntryFactory,
 			Permission.DeleteTranslations,
 			(entryId) => translationRepo.findOneOrFail({ id: entryId }),
-			(actor, entry) =>
+			(entry, actor, actorIp) =>
 				this.auditLogEntryFactory.translation_delete({
 					translation: entry,
 					actor: actor,
-					actorIp: this.permissionContext.clientIp,
+					actorIp: actorIp,
 				}),
 		);
 	}
@@ -119,7 +124,6 @@ export class DeleteArtistCommandHandler
 	implements ICommandHandler<DeleteArtistCommand>
 {
 	constructor(
-		permissionContext: PermissionContext,
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
@@ -128,17 +132,16 @@ export class DeleteArtistCommandHandler
 		artistRepo: EntityRepository<Artist>,
 	) {
 		super(
-			permissionContext,
 			em,
 			userRepo,
 			auditLogEntryFactory,
 			Permission.DeleteArtists,
 			(entryId) => artistRepo.findOneOrFail({ id: entryId }),
-			(actor, entry) =>
+			(entry, actor, actorIp) =>
 				this.auditLogEntryFactory.artist_delete({
 					artist: entry,
 					actor: actor,
-					actorIp: this.permissionContext.clientIp,
+					actorIp: actorIp,
 				}),
 		);
 	}
@@ -152,7 +155,6 @@ export class DeleteQuoteCommandHandler
 	implements ICommandHandler<DeleteQuoteCommand>
 {
 	constructor(
-		permissionContext: PermissionContext,
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
@@ -161,17 +163,16 @@ export class DeleteQuoteCommandHandler
 		quoteRepo: EntityRepository<Quote>,
 	) {
 		super(
-			permissionContext,
 			em,
 			userRepo,
 			auditLogEntryFactory,
 			Permission.DeleteQuotes,
 			(entryId) => quoteRepo.findOneOrFail({ id: entryId }),
-			(actor, entry) =>
+			(entry, actor, actorIp) =>
 				this.auditLogEntryFactory.quote_delete({
 					quote: entry,
 					actor: actor,
-					actorIp: this.permissionContext.clientIp,
+					actorIp: actorIp,
 				}),
 		);
 	}
@@ -185,7 +186,6 @@ export class DeleteWorkCommandHandler
 	implements ICommandHandler<DeleteWorkCommand>
 {
 	constructor(
-		permissionContext: PermissionContext,
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
@@ -194,17 +194,16 @@ export class DeleteWorkCommandHandler
 		workRepo: EntityRepository<Work>,
 	) {
 		super(
-			permissionContext,
 			em,
 			userRepo,
 			auditLogEntryFactory,
 			Permission.DeleteWorks,
 			(entryId) => workRepo.findOneOrFail({ id: entryId }),
-			(actor, entry) =>
+			(entry, actor, actorIp) =>
 				this.auditLogEntryFactory.work_delete({
 					work: entry,
 					actor: actor,
-					actorIp: this.permissionContext.clientIp,
+					actorIp: actorIp,
 				}),
 		);
 	}

@@ -29,6 +29,7 @@ export class ListArtistsQuery {
 	});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly artistType?: ArtistType,
 		readonly sort?: ArtistSortRule,
 		readonly offset?: number,
@@ -49,7 +50,6 @@ export class ListArtistsQueryHandler
 	constructor(
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
-		private readonly permissionContext: PermissionContext,
 	) {}
 
 	private orderBy(sort?: ArtistSortRule): QueryOrderMap<{ id: QueryOrder }> {
@@ -65,7 +65,7 @@ export class ListArtistsQueryHandler
 		const where: FilterQuery<Artist> = {
 			$and: [
 				{ deleted: false },
-				whereNotHidden(this.permissionContext),
+				whereNotHidden(query.permissionContext),
 				query.artistType ? { artistType: query.artistType } : {},
 				query.query ? { name: { $like: `%${query.query}%` } } : {},
 			],
@@ -92,7 +92,7 @@ export class ListArtistsQueryHandler
 
 		return new SearchResultObject<ArtistObject>(
 			artists.map(
-				(artist) => new ArtistObject(artist, this.permissionContext),
+				(artist) => new ArtistObject(artist, query.permissionContext),
 			),
 			count,
 		);

@@ -10,7 +10,6 @@ import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
-import { PermissionContext } from '../../../services/PermissionContext';
 import { UpdateWorkCommand } from './UpdateWorkCommandHandler';
 
 export class CreateWorkCommand extends UpdateWorkCommand {}
@@ -20,7 +19,6 @@ export class CreateWorkCommandHandler
 	implements ICommandHandler<CreateWorkCommand>
 {
 	constructor(
-		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
@@ -28,7 +26,7 @@ export class CreateWorkCommandHandler
 	) {}
 
 	async execute(command: CreateWorkCommand): Promise<WorkObject> {
-		this.permissionContext.verifyPermission(Permission.CreateWorks);
+		command.permissionContext.verifyPermission(Permission.CreateWorks);
 
 		const result = CreateWorkCommand.schema.validate(command, {
 			convert: true,
@@ -39,7 +37,7 @@ export class CreateWorkCommandHandler
 
 		const work = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: this.permissionContext.user?.id,
+				id: command.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -65,7 +63,7 @@ export class CreateWorkCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.work_create({
 				work: work,
 				actor: user,
-				actorIp: this.permissionContext.clientIp,
+				actorIp: command.permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -73,6 +71,6 @@ export class CreateWorkCommandHandler
 			return work;
 		});
 
-		return new WorkObject(work, this.permissionContext);
+		return new WorkObject(work, command.permissionContext);
 	}
 }

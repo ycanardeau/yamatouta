@@ -29,6 +29,7 @@ export class ListWorksQuery {
 	});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly workType?: WorkType,
 		readonly sort?: WorkSortRule,
 		readonly offset?: number,
@@ -47,7 +48,6 @@ export class ListWorksQueryHandler implements IQueryHandler<ListWorksQuery> {
 	constructor(
 		@InjectRepository(Work)
 		private readonly workRepo: EntityRepository<Work>,
-		private readonly permissionContext: PermissionContext,
 	) {}
 
 	private orderBy(sort?: WorkSortRule): QueryOrderMap<{ id: QueryOrder }> {
@@ -63,7 +63,7 @@ export class ListWorksQueryHandler implements IQueryHandler<ListWorksQuery> {
 		const where: FilterQuery<Work> = {
 			$and: [
 				{ deleted: false },
-				whereNotHidden(this.permissionContext),
+				whereNotHidden(query.permissionContext),
 				query.workType ? { workType: query.workType } : {},
 				query.query ? { name: { $like: `%${query.query}%` } } : {},
 			],
@@ -89,7 +89,7 @@ export class ListWorksQueryHandler implements IQueryHandler<ListWorksQuery> {
 		]);
 
 		return new SearchResultObject<WorkObject>(
-			works.map((work) => new WorkObject(work, this.permissionContext)),
+			works.map((work) => new WorkObject(work, query.permissionContext)),
 			count,
 		);
 	}

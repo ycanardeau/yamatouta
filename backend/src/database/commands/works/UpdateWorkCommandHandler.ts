@@ -25,6 +25,7 @@ export class UpdateWorkCommand {
 	});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly workId: number | undefined,
 		readonly name: string,
 		readonly workType: WorkType,
@@ -36,7 +37,6 @@ export class UpdateWorkCommandHandler
 	implements ICommandHandler<UpdateWorkCommand>
 {
 	constructor(
-		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
@@ -46,7 +46,7 @@ export class UpdateWorkCommandHandler
 	) {}
 
 	async execute(command: UpdateWorkCommand): Promise<WorkObject> {
-		this.permissionContext.verifyPermission(Permission.EditWorks);
+		command.permissionContext.verifyPermission(Permission.EditWorks);
 
 		const result = UpdateWorkCommand.schema.validate(command, {
 			convert: true,
@@ -57,7 +57,7 @@ export class UpdateWorkCommandHandler
 
 		const work = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: this.permissionContext.user?.id,
+				id: command.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -85,7 +85,7 @@ export class UpdateWorkCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.work_update({
 				work: work,
 				actor: user,
-				actorIp: this.permissionContext.clientIp,
+				actorIp: command.permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -93,6 +93,6 @@ export class UpdateWorkCommandHandler
 			return work;
 		});
 
-		return new WorkObject(work, this.permissionContext);
+		return new WorkObject(work, command.permissionContext);
 	}
 }

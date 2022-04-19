@@ -11,7 +11,6 @@ import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
-import { PermissionContext } from '../../../services/PermissionContext';
 import { UpdateQuoteCommand } from './UpdateQuoteCommandHandler';
 
 export class CreateQuoteCommand extends UpdateQuoteCommand {}
@@ -21,7 +20,6 @@ export class CreateQuoteCommandHandler
 	implements ICommandHandler<CreateQuoteCommand>
 {
 	constructor(
-		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
@@ -31,7 +29,7 @@ export class CreateQuoteCommandHandler
 	) {}
 
 	async execute(command: CreateQuoteCommand): Promise<QuoteObject> {
-		this.permissionContext.verifyPermission(Permission.CreateQuotes);
+		command.permissionContext.verifyPermission(Permission.CreateQuotes);
 
 		const result = CreateQuoteCommand.schema.validate(command, {
 			convert: true,
@@ -42,7 +40,7 @@ export class CreateQuoteCommandHandler
 
 		const quote = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: this.permissionContext.user?.id,
+				id: command.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -76,7 +74,7 @@ export class CreateQuoteCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.quote_create({
 				quote: quote,
 				actor: user,
-				actorIp: this.permissionContext.clientIp,
+				actorIp: command.permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -84,6 +82,6 @@ export class CreateQuoteCommandHandler
 			return quote;
 		});
 
-		return new QuoteObject(quote, this.permissionContext);
+		return new QuoteObject(quote, command.permissionContext);
 	}
 }

@@ -28,6 +28,7 @@ export class ListTranslationsQuery {
 	});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly sort?: TranslationSortRule,
 		readonly offset?: number,
 		readonly limit?: number,
@@ -46,7 +47,6 @@ export class ListTranslationsQueryHandler
 	private static readonly maxOffset = 5000;
 
 	constructor(
-		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		private readonly ngramConverter: NgramConverter,
 	) {}
@@ -298,7 +298,7 @@ export class ListTranslationsQueryHandler
 		return new SearchResultObject(
 			translations.map(
 				(translation) =>
-					new TranslationObject(translation, this.permissionContext),
+					new TranslationObject(translation, query.permissionContext),
 			),
 			count,
 		);

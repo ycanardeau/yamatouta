@@ -21,6 +21,7 @@ export class CreateUserCommand {
 	});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly username: string,
 		readonly email: string,
 		readonly password: string,
@@ -37,7 +38,6 @@ export class CreateUserCommandHandler
 		private readonly userRepo: EntityRepository<User>,
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
-		private readonly permissionContext: PermissionContext,
 	) {}
 
 	// TODO: Use CAPTCHA.
@@ -88,7 +88,7 @@ export class CreateUserCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.user_create({
 				user: user,
 				actor: user,
-				actorIp: this.permissionContext.clientIp,
+				actorIp: command.permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);

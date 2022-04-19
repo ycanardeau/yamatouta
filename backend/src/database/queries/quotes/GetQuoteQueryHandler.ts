@@ -9,7 +9,10 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class GetQuoteQuery {
-	constructor(readonly quoteId: number) {}
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly quoteId: number,
+	) {}
 }
 
 @QueryHandler(GetQuoteQuery)
@@ -17,7 +20,6 @@ export class GetQuoteQueryHandler implements IQueryHandler<GetQuoteQuery> {
 	constructor(
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
-		private readonly permissionContext: PermissionContext,
 	) {}
 
 	async execute(query: GetQuoteQuery): Promise<QuoteObject> {
@@ -25,8 +27,8 @@ export class GetQuoteQueryHandler implements IQueryHandler<GetQuoteQuery> {
 			{
 				id: query.quoteId,
 				$and: [
-					whereNotDeleted(this.permissionContext),
-					whereNotHidden(this.permissionContext),
+					whereNotDeleted(query.permissionContext),
+					whereNotHidden(query.permissionContext),
 				],
 			},
 			{ populate: ['artist'] },
@@ -34,6 +36,6 @@ export class GetQuoteQueryHandler implements IQueryHandler<GetQuoteQuery> {
 
 		if (!quote) throw new NotFoundException();
 
-		return new QuoteObject(quote, this.permissionContext);
+		return new QuoteObject(quote, query.permissionContext);
 	}
 }

@@ -57,7 +57,6 @@ import { User } from './entities/User';
 import { Work } from './entities/Work';
 import { AuditLogEntryFactory } from './services/AuditLogEntryFactory';
 import { NgramConverter } from './services/NgramConverter';
-import { PermissionContext } from './services/PermissionContext';
 import { AuthService } from './services/auth/AuthService';
 import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
@@ -136,7 +135,6 @@ const commandHandlers = [
 		LocalStrategy,
 		NgramConverter,
 		PasswordHasherFactory,
-		PermissionContext,
 	],
 })
 export class AppModule {}

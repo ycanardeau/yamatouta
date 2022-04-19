@@ -11,25 +11,24 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
 
-export class CreateMissingRevisionsCommand {}
+export class CreateMissingRevisionsCommand {
+	constructor(readonly permissionContext: PermissionContext) {}
+}
 
 @CommandHandler(CreateMissingRevisionsCommand)
 export class CreateMissingRevisionsCommandHandler
 	implements ICommandHandler<CreateMissingRevisionsCommand>
 {
-	constructor(
-		private readonly permissionContext: PermissionContext,
-		private readonly em: EntityManager,
-	) {}
+	constructor(private readonly em: EntityManager) {}
 
-	execute(): Promise<void> {
-		this.permissionContext.verifyPermission(
+	execute(command: CreateMissingRevisionsCommand): Promise<void> {
+		command.permissionContext.verifyPermission(
 			Permission.CreateMissingRevisions,
 		);
 
 		return this.em.transactional(async (em) => {
 			const user = await em.findOneOrFail(User, {
-				id: this.permissionContext.user?.id,
+				id: command.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});

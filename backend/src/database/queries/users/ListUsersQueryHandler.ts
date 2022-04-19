@@ -24,6 +24,7 @@ export class ListUsersQuery {
 	});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly sort?: UserSortRule,
 		readonly offset?: number,
 		readonly limit?: number,
@@ -40,7 +41,6 @@ export class ListUsersQueryHandler implements IQueryHandler<ListUsersQuery> {
 	constructor(
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly permissionContext: PermissionContext,
 	) {}
 
 	private orderBy(sort?: UserSortRule): QueryOrderMap<{ id: QueryOrder }> {
@@ -55,8 +55,8 @@ export class ListUsersQueryHandler implements IQueryHandler<ListUsersQuery> {
 	): Promise<SearchResultObject<UserObject>> {
 		const where: FilterQuery<User> = {
 			$and: [
-				whereNotDeleted(this.permissionContext),
-				whereNotHidden(this.permissionContext),
+				whereNotDeleted(query.permissionContext),
+				whereNotHidden(query.permissionContext),
 			],
 		};
 
@@ -80,7 +80,7 @@ export class ListUsersQueryHandler implements IQueryHandler<ListUsersQuery> {
 		]);
 
 		return new SearchResultObject<UserObject>(
-			users.map((user) => new UserObject(user, this.permissionContext)),
+			users.map((user) => new UserObject(user, query.permissionContext)),
 			count,
 		);
 	}

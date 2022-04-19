@@ -25,6 +25,7 @@ export class UpdateArtistCommand {
 	});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly artistId: number | undefined,
 		readonly name: string,
 		readonly artistType: ArtistType,
@@ -36,7 +37,6 @@ export class UpdateArtistCommandHandler
 	implements ICommandHandler<UpdateArtistCommand>
 {
 	constructor(
-		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
@@ -46,7 +46,7 @@ export class UpdateArtistCommandHandler
 	) {}
 
 	async execute(command: UpdateArtistCommand): Promise<ArtistObject> {
-		this.permissionContext.verifyPermission(Permission.EditArtists);
+		command.permissionContext.verifyPermission(Permission.EditArtists);
 
 		const result = UpdateArtistCommand.schema.validate(command, {
 			convert: true,
@@ -57,7 +57,7 @@ export class UpdateArtistCommandHandler
 
 		const artist = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: this.permissionContext.user?.id,
+				id: command.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -85,7 +85,7 @@ export class UpdateArtistCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.artist_update({
 				artist: artist,
 				actor: user,
-				actorIp: this.permissionContext.clientIp,
+				actorIp: command.permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -93,6 +93,6 @@ export class UpdateArtistCommandHandler
 			return artist;
 		});
 
-		return new ArtistObject(artist, this.permissionContext);
+		return new ArtistObject(artist, command.permissionContext);
 	}
 }

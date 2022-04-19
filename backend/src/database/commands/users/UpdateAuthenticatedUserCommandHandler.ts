@@ -22,6 +22,7 @@ export class UpdateAuthenticatedUserCommand {
 		});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly password: string,
 		readonly username?: string,
 		readonly email?: string,
@@ -41,7 +42,6 @@ export class UpdateAuthenticatedUserCommandHandler
 	implements ICommandHandler<UpdateAuthenticatedUserCommand>
 {
 	constructor(
-		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
@@ -60,10 +60,11 @@ export class UpdateAuthenticatedUserCommandHandler
 			throw new BadRequestException(result.error.details[0].message);
 
 		return this.em.transactional(async (em) => {
-			if (!this.permissionContext.user) throw new BadRequestException();
+			if (!command.permissionContext.user)
+				throw new BadRequestException();
 
 			const user = await this.userRepo.findOneOrFail({
-				id: this.permissionContext.user.id,
+				id: command.permissionContext.user.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -87,7 +88,7 @@ export class UpdateAuthenticatedUserCommandHandler
 				const auditLogEntry = this.auditLogEntryFactory.user_rename({
 					user: user,
 					actor: user,
-					actorIp: this.permissionContext.clientIp,
+					actorIp: command.permissionContext.clientIp,
 					oldValue: user.name,
 					newValue: command.username,
 				});
@@ -113,7 +114,7 @@ export class UpdateAuthenticatedUserCommandHandler
 					this.auditLogEntryFactory.user_changeEmail({
 						user: user,
 						actor: user,
-						actorIp: this.permissionContext.clientIp,
+						actorIp: command.permissionContext.clientIp,
 						oldValue: user.email,
 						newValue: command.email,
 					});
@@ -129,7 +130,7 @@ export class UpdateAuthenticatedUserCommandHandler
 					this.auditLogEntryFactory.user_changePassword({
 						user: user,
 						actor: user,
-						actorIp: this.permissionContext.clientIp,
+						actorIp: command.permissionContext.clientIp,
 					});
 
 				em.persist(auditLogEntry);

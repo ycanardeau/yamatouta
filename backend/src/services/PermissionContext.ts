@@ -1,11 +1,4 @@
-import {
-	Inject,
-	Injectable,
-	NotFoundException,
-	Scope,
-	UnauthorizedException,
-} from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
@@ -14,12 +7,11 @@ import { Permission } from '../models/Permission';
 import { getClientIp } from '../utils/getClientIp';
 import { getUser } from '../utils/getUser';
 
-@Injectable({ scope: Scope.REQUEST })
 export class PermissionContext {
 	readonly clientIp: string;
 	readonly user?: AuthenticatedUserObject;
 
-	constructor(@Inject(REQUEST) request: Request) {
+	constructor(request: Request) {
 		this.clientIp = getClientIp(request);
 		this.user = getUser(request);
 	}

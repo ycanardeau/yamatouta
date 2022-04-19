@@ -11,7 +11,6 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
 import { UpdateTranslationCommand } from './UpdateTranslationCommandHandler';
 
 export class CreateTranslationCommand extends UpdateTranslationCommand {}
@@ -22,7 +21,6 @@ export class CreateTranslationCommandHandler
 {
 	constructor(
 		private readonly em: EntityManager,
-		private readonly permissionContext: PermissionContext,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
@@ -32,7 +30,9 @@ export class CreateTranslationCommandHandler
 	async execute(
 		command: CreateTranslationCommand,
 	): Promise<TranslationObject> {
-		this.permissionContext.verifyPermission(Permission.CreateTranslations);
+		command.permissionContext.verifyPermission(
+			Permission.CreateTranslations,
+		);
 
 		const result = CreateTranslationCommand.schema.validate(command, {
 			convert: true,
@@ -46,7 +46,7 @@ export class CreateTranslationCommandHandler
 
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: this.permissionContext.user?.id,
+				id: command.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -80,7 +80,7 @@ export class CreateTranslationCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.translation_create({
 				translation: translation,
 				actor: user,
-				actorIp: this.permissionContext.clientIp,
+				actorIp: command.permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -88,6 +88,6 @@ export class CreateTranslationCommandHandler
 			return translation;
 		});
 
-		return new TranslationObject(translation, this.permissionContext);
+		return new TranslationObject(translation, command.permissionContext);
 	}
 }

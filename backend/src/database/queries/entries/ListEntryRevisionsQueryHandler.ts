@@ -14,7 +14,10 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export abstract class ListEntryRevisionsQuery {
-	constructor(readonly entryId: number) {}
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly entryId: number,
+	) {}
 }
 
 abstract class ListEntryRevisionsQueryHandler<
@@ -22,22 +25,21 @@ abstract class ListEntryRevisionsQueryHandler<
 	TQuery extends ListEntryRevisionsQuery,
 > {
 	constructor(
-		private readonly permissionContext: PermissionContext,
 		private readonly entryFunc: (entryId: number) => Promise<TEntry>,
 	) {}
 
 	async execute(query: TQuery): Promise<SearchResultObject<RevisionObject>> {
-		this.permissionContext.verifyPermission(Permission.ViewEditHistory);
+		query.permissionContext.verifyPermission(Permission.ViewEditHistory);
 
 		const entry = await this.entryFunc(query.entryId);
 
-		this.permissionContext.verifyDeletedAndHidden(entry);
+		query.permissionContext.verifyDeletedAndHidden(entry);
 
 		const revisions = await entry.revisions.matching({
 			where: {
 				$and: [
-					whereNotDeleted(this.permissionContext),
-					whereNotHidden(this.permissionContext),
+					whereNotDeleted(query.permissionContext),
+					whereNotHidden(query.permissionContext),
 				],
 			},
 			orderBy: { version: QueryOrder.DESC },
@@ -47,7 +49,7 @@ abstract class ListEntryRevisionsQueryHandler<
 		return new SearchResultObject(
 			revisions.map(
 				(revision) =>
-					new RevisionObject(revision, this.permissionContext),
+					new RevisionObject(revision, query.permissionContext),
 			),
 			revisions.length,
 		);
@@ -65,13 +67,10 @@ export class ListTranslationRevisionsQueryHandler
 	implements IQueryHandler<ListTranslationRevisionsQuery>
 {
 	constructor(
-		permissionContext: PermissionContext,
 		@InjectRepository(Translation)
 		translationRepo: EntityRepository<Translation>,
 	) {
-		super(permissionContext, (entryId) =>
-			translationRepo.findOneOrFail({ id: entryId }),
-		);
+		super((entryId) => translationRepo.findOneOrFail({ id: entryId }));
 	}
 }
 
@@ -83,13 +82,10 @@ export class ListArtistRevisionsQueryHandler
 	implements IQueryHandler<ListArtistRevisionsQuery>
 {
 	constructor(
-		permissionContext: PermissionContext,
 		@InjectRepository(Artist)
 		artistRepo: EntityRepository<Artist>,
 	) {
-		super(permissionContext, (entryId) =>
-			artistRepo.findOneOrFail({ id: entryId }),
-		);
+		super((entryId) => artistRepo.findOneOrFail({ id: entryId }));
 	}
 }
 
@@ -101,13 +97,10 @@ export class ListQuoteRevisionsQueryHandler
 	implements IQueryHandler<ListQuoteRevisionsQuery>
 {
 	constructor(
-		permissionContext: PermissionContext,
 		@InjectRepository(Quote)
 		quoteRepo: EntityRepository<Quote>,
 	) {
-		super(permissionContext, (entryId) =>
-			quoteRepo.findOneOrFail({ id: entryId }),
-		);
+		super((entryId) => quoteRepo.findOneOrFail({ id: entryId }));
 	}
 }
 
@@ -119,12 +112,9 @@ export class ListWorkRevisionsQueryHandler
 	implements IQueryHandler<ListWorkRevisionsQuery>
 {
 	constructor(
-		permissionContext: PermissionContext,
 		@InjectRepository(Work)
 		workRepo: EntityRepository<Work>,
 	) {
-		super(permissionContext, (entryId) =>
-			workRepo.findOneOrFail({ id: entryId }),
-		);
+		super((entryId) => workRepo.findOneOrFail({ id: entryId }));
 	}
 }

@@ -28,6 +28,7 @@ export class UpdateQuoteCommand {
 	});
 
 	constructor(
+		readonly permissionContext: PermissionContext,
 		readonly quoteId: number | undefined,
 		readonly text: string,
 		readonly quoteType: QuoteType,
@@ -41,7 +42,6 @@ export class UpdateQuoteCommandHandler
 	implements ICommandHandler<UpdateQuoteCommand>
 {
 	constructor(
-		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
@@ -53,7 +53,7 @@ export class UpdateQuoteCommandHandler
 	) {}
 
 	async execute(command: UpdateQuoteCommand): Promise<QuoteObject> {
-		this.permissionContext.verifyPermission(Permission.EditQuotes);
+		command.permissionContext.verifyPermission(Permission.EditQuotes);
 
 		const result = UpdateQuoteCommand.schema.validate(command, {
 			convert: true,
@@ -64,7 +64,7 @@ export class UpdateQuoteCommandHandler
 
 		const quote = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: this.permissionContext.user?.id,
+				id: command.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -100,7 +100,7 @@ export class UpdateQuoteCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.quote_update({
 				quote: quote,
 				actor: user,
-				actorIp: this.permissionContext.clientIp,
+				actorIp: command.permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -108,6 +108,6 @@ export class UpdateQuoteCommandHandler
 			return quote;
 		});
 
-		return new QuoteObject(quote, this.permissionContext);
+		return new QuoteObject(quote, command.permissionContext);
 	}
 }

@@ -4,17 +4,21 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
 import { PermissionContext } from '../../../services/PermissionContext';
 
-export class GetAuthenticatedUserQuery {}
+export class GetAuthenticatedUserQuery {
+	constructor(readonly permissionContext: PermissionContext) {}
+}
 
 @QueryHandler(GetAuthenticatedUserQuery)
 export class GetAuthenticatedUserQueryHandler
 	implements IQueryHandler<GetAuthenticatedUserQuery>
 {
-	constructor(private readonly permissionContext: PermissionContext) {}
+	constructor() {}
 
-	async execute(): Promise<AuthenticatedUserObject> {
-		if (!this.permissionContext.user) throw new UnauthorizedException();
+	async execute(
+		query: GetAuthenticatedUserQuery,
+	): Promise<AuthenticatedUserObject> {
+		if (!query.permissionContext.user) throw new UnauthorizedException();
 
-		return this.permissionContext.user;
+		return query.permissionContext.user;
 	}
 }
