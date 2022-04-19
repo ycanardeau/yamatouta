@@ -89,7 +89,7 @@ export class DeleteTranslationCommandHandler extends DeleteEntryCommandHandler<T
 			(actor, entry) =>
 				this.auditLogger.translation_delete({
 					actor: actor,
-					actorIp: this.permissionContext.remoteIpAddress,
+					actorIp: this.permissionContext.clientIp,
 					translation: entry,
 				}),
 		);
@@ -117,7 +117,7 @@ export class DeleteArtistCommandHandler extends DeleteEntryCommandHandler<Artist
 			(actor, entry) =>
 				this.auditLogger.artist_delete({
 					actor: actor,
-					actorIp: this.permissionContext.remoteIpAddress,
+					actorIp: this.permissionContext.clientIp,
 					artist: entry,
 				}),
 		);
@@ -145,7 +145,7 @@ export class DeleteQuoteCommandHandler extends DeleteEntryCommandHandler<Quote> 
 			(actor, entry) =>
 				this.auditLogger.quote_delete({
 					actor: actor,
-					actorIp: this.permissionContext.remoteIpAddress,
+					actorIp: this.permissionContext.clientIp,
 					quote: entry,
 				}),
 		);
@@ -173,7 +173,7 @@ export class DeleteWorkCommandHandler extends DeleteEntryCommandHandler<Work> {
 			(actor, entry) =>
 				this.auditLogger.work_delete({
 					actor: actor,
-					actorIp: this.permissionContext.remoteIpAddress,
+					actorIp: this.permissionContext.clientIp,
 					work: entry,
 				}),
 		);

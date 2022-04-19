@@ -112,7 +112,7 @@ export class UpdateTranslationCommandHandler {
 
 			this.auditLogger.translation_update({
 				actor: user,
-				actorIp: this.permissionContext.remoteIpAddress,
+				actorIp: this.permissionContext.clientIp,
 				translation: translation,
 			});
 

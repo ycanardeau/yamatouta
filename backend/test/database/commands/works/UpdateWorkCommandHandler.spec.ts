@@ -118,7 +118,7 @@ describe('UpdateWorkCommandHandler', () => {
 			testWorkAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Work_Update,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				work: work,

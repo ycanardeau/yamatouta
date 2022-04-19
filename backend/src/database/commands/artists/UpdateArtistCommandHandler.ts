@@ -81,7 +81,7 @@ export class UpdateArtistCommandHandler {
 
 			this.auditLogger.artist_update({
 				actor: user,
-				actorIp: this.permissionContext.remoteIpAddress,
+				actorIp: this.permissionContext.clientIp,
 				artist: artist,
 			});
 

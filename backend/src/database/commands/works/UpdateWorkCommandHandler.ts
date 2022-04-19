@@ -81,7 +81,7 @@ export class UpdateWorkCommandHandler {
 
 			this.auditLogger.work_update({
 				actor: user,
-				actorIp: this.permissionContext.remoteIpAddress,
+				actorIp: this.permissionContext.clientIp,
 				work: work,
 			});
 

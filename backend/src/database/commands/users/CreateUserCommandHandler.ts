@@ -88,7 +88,7 @@ export class CreateUserCommandHandler {
 
 			this.auditLogger.user_create({
 				actor: user,
-				actorIp: this.permissionContext.remoteIpAddress,
+				actorIp: this.permissionContext.clientIp,
 				user: user,
 			});
 

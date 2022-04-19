@@ -59,7 +59,7 @@ export class CreateWorkCommandHandler {
 
 			this.auditLogger.work_create({
 				actor: user,
-				actorIp: this.permissionContext.remoteIpAddress,
+				actorIp: this.permissionContext.clientIp,
 				work: work,
 			});
 

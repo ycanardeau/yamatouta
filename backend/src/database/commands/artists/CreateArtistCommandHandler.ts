@@ -59,7 +59,7 @@ export class CreateArtistCommandHandler {
 
 			this.auditLogger.artist_create({
 				actor: user,
-				actorIp: this.permissionContext.remoteIpAddress,
+				actorIp: this.permissionContext.clientIp,
 				artist: artist,
 			});
 

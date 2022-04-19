@@ -109,7 +109,7 @@ describe('CreateArtistCommandHandler', () => {
 			testArtistAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Artist_Create,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				artist: artist,

@@ -106,7 +106,7 @@ describe('DeleteTranslationCommandHandler', () => {
 			testTranslationAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Translation_Delete,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				translation: translation,

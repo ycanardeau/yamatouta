@@ -120,7 +120,7 @@ describe('UpdateArtistCommandHandler', () => {
 			testArtistAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Artist_Update,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				artist: artist,

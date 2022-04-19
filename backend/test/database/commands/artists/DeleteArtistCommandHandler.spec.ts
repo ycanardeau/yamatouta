@@ -100,7 +100,7 @@ describe('DeleteArtistCommandHandler', () => {
 			testArtistAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Artist_Delete,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				artist: artist,

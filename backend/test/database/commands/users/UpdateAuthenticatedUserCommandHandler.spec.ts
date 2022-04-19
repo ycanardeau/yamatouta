@@ -98,7 +98,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Rename,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: existingUsername,
 				newValue: newUsername,
 				user: existingUser,
@@ -148,7 +148,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Rename,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: existingUsername,
 				newValue: newUsername,
 				user: existingUser,
@@ -176,7 +176,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Rename,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: existingUsername,
 				newValue: newUsername,
 				user: existingUser,
@@ -308,7 +308,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_ChangeEmail,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: existingEmail,
 				newValue: newEmail,
 				user: existingUser,
@@ -423,7 +423,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_ChangePassword,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: existingUser,

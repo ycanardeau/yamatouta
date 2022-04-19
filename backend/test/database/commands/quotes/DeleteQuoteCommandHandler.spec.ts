@@ -109,7 +109,7 @@ describe('DeleteQuoteCommandHandler', () => {
 			testQuoteAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Quote_Delete,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				quote: quote,

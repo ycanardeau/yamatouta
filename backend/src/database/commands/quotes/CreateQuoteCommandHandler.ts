@@ -70,7 +70,7 @@ export class CreateQuoteCommandHandler {
 
 			this.auditLogger.quote_create({
 				actor: user,
-				actorIp: this.permissionContext.remoteIpAddress,
+				actorIp: this.permissionContext.clientIp,
 				quote: quote,
 			});
 

@@ -143,7 +143,7 @@ describe('UpdateQuoteCommandHandler', () => {
 			testQuoteAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Quote_Update,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				quote: quote,

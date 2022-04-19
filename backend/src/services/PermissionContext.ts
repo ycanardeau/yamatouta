@@ -15,11 +15,11 @@ import { getClientIp } from '../utils/getClientIp';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PermissionContext {
-	readonly remoteIpAddress: string;
+	readonly clientIp: string;
 	readonly user?: AuthenticatedUserObject;
 
 	constructor(@Inject(REQUEST) request: Request) {
-		this.remoteIpAddress = getClientIp(request);
+		this.clientIp = getClientIp(request);
 
 		const { user } = request;
 

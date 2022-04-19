@@ -100,7 +100,7 @@ describe('DeleteWorkCommandHandler', () => {
 			testWorkAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Work_Delete,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				work: work,

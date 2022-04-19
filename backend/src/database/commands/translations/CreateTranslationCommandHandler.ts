@@ -74,7 +74,7 @@ export class CreateTranslationCommandHandler {
 
 			this.auditLogger.translation_create({
 				actor: user,
-				actorIp: this.permissionContext.remoteIpAddress,
+				actorIp: this.permissionContext.clientIp,
 				translation: translation,
 			});
 

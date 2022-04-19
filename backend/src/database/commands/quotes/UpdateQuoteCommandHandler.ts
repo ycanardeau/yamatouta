@@ -96,7 +96,7 @@ export class UpdateQuoteCommandHandler {
 
 			this.auditLogger.quote_update({
 				actor: user,
-				actorIp: this.permissionContext.remoteIpAddress,
+				actorIp: this.permissionContext.clientIp,
 				quote: quote,
 			});
 

@@ -118,7 +118,7 @@ describe('CreateTranslationCommandHandler', () => {
 			testTranslationAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Translation_Create,
 				actor: existingUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				translation: translation,

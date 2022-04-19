@@ -1,4 +1,5 @@
 import {
+	AuthenticateUserCommand,
 	AuthenticateUserCommandHandler,
 	LoginError,
 } from '../../../../src/database/commands/users/AuthenticateUserCommandHandler';
@@ -19,6 +20,7 @@ describe('AuthenticateUserCommandHandler', () => {
 	let existingUser: User;
 	let em: FakeEntityManager;
 	let authenticateUserCommandHandler: AuthenticateUserCommandHandler;
+	let defaultCommand: AuthenticateUserCommand;
 
 	beforeEach(async () => {
 		existingUser = await createUser({
@@ -42,18 +44,18 @@ describe('AuthenticateUserCommandHandler', () => {
 			auditLogger,
 			passwordHasherFactory,
 		);
+
+		defaultCommand = {
+			email: existingEmail,
+			password: existingPassword,
+			clientIp: '::1',
+		};
 	});
 
 	describe('authenticateUser', () => {
-		const defaults = {
-			email: existingEmail,
-			password: existingPassword,
-			ip: '::1',
-		};
-
 		test('authenticateUser', async () => {
 			const result = await authenticateUserCommandHandler.execute({
-				...defaults,
+				...defaultCommand,
 			});
 
 			expect(result.error).toBe(LoginError.None);
@@ -73,7 +75,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Login,
 				actor: existingUser,
-				actorIp: defaults.ip,
+				actorIp: defaultCommand.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: existingUser,
@@ -82,7 +84,7 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('email is undefined', async () => {
 			const result = await authenticateUserCommandHandler.execute({
-				...defaults,
+				...defaultCommand,
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				email: undefined!,
 			});
@@ -99,7 +101,7 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('email is empty', async () => {
 			const result = await authenticateUserCommandHandler.execute({
-				...defaults,
+				...defaultCommand,
 				email: '',
 			});
 
@@ -115,7 +117,7 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('email is whitespace', async () => {
 			const result = await authenticateUserCommandHandler.execute({
-				...defaults,
+				...defaultCommand,
 				email: ' 　\t\t　 ',
 			});
 
@@ -131,7 +133,7 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('email is invalid', async () => {
 			const result = await authenticateUserCommandHandler.execute({
-				...defaults,
+				...defaultCommand,
 				email: 'invalid_email',
 			});
 
@@ -147,7 +149,7 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('email does not exist', async () => {
 			const result = await authenticateUserCommandHandler.execute({
-				...defaults,
+				...defaultCommand,
 				email: 'not_found@example.com',
 			});
 
@@ -164,7 +166,7 @@ describe('AuthenticateUserCommandHandler', () => {
 		test('password is undefined', async () => {
 			await expect(
 				authenticateUserCommandHandler.execute({
-					...defaults,
+					...defaultCommand,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					password: undefined!,
 				}),
@@ -179,7 +181,7 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('password is empty', async () => {
 			const result = await authenticateUserCommandHandler.execute({
-				...defaults,
+				...defaultCommand,
 				password: '',
 			});
 
@@ -193,7 +195,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
-				actorIp: defaults.ip,
+				actorIp: defaultCommand.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: existingUser,
@@ -202,7 +204,7 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('password is whitespace', async () => {
 			const result = await authenticateUserCommandHandler.execute({
-				...defaults,
+				...defaultCommand,
 				password: ' 　\t\t　 ',
 			});
 
@@ -216,7 +218,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
-				actorIp: defaults.ip,
+				actorIp: defaultCommand.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: existingUser,
@@ -225,7 +227,7 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('password is wrong', async () => {
 			const result = await authenticateUserCommandHandler.execute({
-				...defaults,
+				...defaultCommand,
 				password: 'wrong_password',
 			});
 
@@ -239,7 +241,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
-				actorIp: defaults.ip,
+				actorIp: defaultCommand.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: existingUser,

@@ -82,7 +82,7 @@ describe('CreateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Create,
 				actor: newUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: newUser,
@@ -114,7 +114,7 @@ describe('CreateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Create,
 				actor: newUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: newUser,
@@ -147,7 +147,7 @@ describe('CreateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Create,
 				actor: newUser,
-				actorIp: permissionContext.remoteIpAddress,
+				actorIp: permissionContext.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: newUser,
