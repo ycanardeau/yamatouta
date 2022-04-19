@@ -6,6 +6,7 @@ import {
 	QueryOrderMap,
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi, { ObjectSchema } from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
@@ -15,7 +16,6 @@ import { WorkSortRule } from '../../../models/WorkSortRule';
 import { WorkType } from '../../../models/WorkType';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
-import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class ListWorksQuery {
 	static readonly schema: ObjectSchema<ListWorksQuery> = Joi.object({

@@ -9,19 +9,14 @@ import {
 	Post,
 	Query,
 } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { DeleteTranslationCommandHandler } from '../database/commands/entries/DeleteEntryCommandHandler';
-import { CreateTranslationCommandHandler } from '../database/commands/translations/CreateTranslationCommandHandler';
-import {
-	UpdateTranslationCommand,
-	UpdateTranslationCommandHandler,
-} from '../database/commands/translations/UpdateTranslationCommandHandler';
-import { ListTranslationRevisionsQueryHandler } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
-import { GetTranslationQueryHandler } from '../database/queries/translations/GetTranslationQueryHandler';
-import {
-	ListTranslationsQuery,
-	ListTranslationsQueryHandler,
-} from '../database/queries/translations/ListTranslationsQueryHandler';
+import { DeleteTranslationCommand } from '../database/commands/entries/DeleteEntryCommandHandler';
+import { CreateTranslationCommand } from '../database/commands/translations/CreateTranslationCommandHandler';
+import { UpdateTranslationCommand } from '../database/commands/translations/UpdateTranslationCommandHandler';
+import { ListTranslationRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
+import { GetTranslationQuery } from '../database/queries/translations/GetTranslationQueryHandler';
+import { ListTranslationsQuery } from '../database/queries/translations/ListTranslationsQueryHandler';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { TranslationObject } from '../dto/translations/TranslationObject';
@@ -30,12 +25,8 @@ import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 @Controller('translations')
 export class TranslationController {
 	constructor(
-		private readonly createTranslationCommandHandler: CreateTranslationCommandHandler,
-		private readonly listTranslationsQueryHandler: ListTranslationsQueryHandler,
-		private readonly updateTranslationCommandHandler: UpdateTranslationCommandHandler,
-		private readonly deleteTranslationCommandHandler: DeleteTranslationCommandHandler,
-		private readonly getTranslationQueryHandler: GetTranslationQueryHandler,
-		private readonly listTranslationRevisionsQueryHandler: ListTranslationRevisionsQueryHandler,
+		private readonly queryBus: QueryBus,
+		private readonly commandBus: CommandBus,
 	) {}
 
 	@Post()
@@ -43,7 +34,16 @@ export class TranslationController {
 		@Body(new JoiValidationPipe(UpdateTranslationCommand.schema))
 		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
-		return this.createTranslationCommandHandler.execute(command);
+		return this.commandBus.execute(
+			new CreateTranslationCommand(
+				command.translationId,
+				command.headword,
+				command.locale,
+				command.reading,
+				command.yamatokotoba,
+				command.category,
+			),
+		);
 	}
 
 	@Get()
@@ -51,7 +51,16 @@ export class TranslationController {
 		@Query(new JoiValidationPipe(ListTranslationsQuery.schema))
 		query: ListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
-		return this.listTranslationsQueryHandler.execute(query);
+		return this.queryBus.execute(
+			new ListTranslationsQuery(
+				query.sort,
+				query.offset,
+				query.limit,
+				query.getTotalCount,
+				query.query,
+				query.category,
+			),
+		);
 	}
 
 	@Patch(':translationId')
@@ -60,36 +69,40 @@ export class TranslationController {
 		@Body(new JoiValidationPipe(UpdateTranslationCommand.schema))
 		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
-		return this.updateTranslationCommandHandler.execute({
-			...command,
-			translationId: translationId,
-		});
+		return this.commandBus.execute(
+			new UpdateTranslationCommand(
+				translationId,
+				command.headword,
+				command.locale,
+				command.reading,
+				command.yamatokotoba,
+				command.category,
+			),
+		);
 	}
 
 	@Delete(':translationId')
 	deleteTranslation(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<void> {
-		return this.deleteTranslationCommandHandler.execute({
-			entryId: translationId,
-		});
+		return this.commandBus.execute(
+			new DeleteTranslationCommand(translationId),
+		);
 	}
 
 	@Get(':translationId')
 	getTranslation(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<TranslationObject> {
-		return this.getTranslationQueryHandler.execute({
-			translationId: translationId,
-		});
+		return this.queryBus.execute(new GetTranslationQuery(translationId));
 	}
 
 	@Get(':translationId/revisions')
 	listTranslationRevisions(
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listTranslationRevisionsQueryHandler.execute({
-			entryId: translationId,
-		});
+		return this.queryBus.execute(
+			new ListTranslationRevisionsQuery(translationId),
+		);
 	}
 }

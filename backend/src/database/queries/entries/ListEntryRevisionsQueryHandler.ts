@@ -1,5 +1,6 @@
 import { EntityRepository, QueryOrder } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { RevisionObject } from '../../../dto/revisions/RevisionObject';
@@ -11,7 +12,6 @@ import { Entry } from '../../../models/Entry';
 import { Permission } from '../../../models/Permission';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
-import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export abstract class ListEntryRevisionsQuery {
 	constructor(readonly entryId: number) {}

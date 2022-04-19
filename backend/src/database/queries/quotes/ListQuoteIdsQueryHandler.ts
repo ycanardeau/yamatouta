@@ -1,8 +1,8 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { Quote } from '../../../entities/Quote';
-import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class ListQuoteIdsQuery {}
 

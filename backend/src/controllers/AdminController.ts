@@ -1,15 +1,14 @@
 import { Controller, Post } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 
-import { CreateMissingRevisionsCommandHandler } from '../database/commands/admin/CreateMissingRevisionsCommandHandler';
+import { CreateMissingRevisionsCommand } from '../database/commands/admin/CreateMissingRevisionsCommandHandler';
 
 @Controller('admin')
 export class AdminController {
-	constructor(
-		private readonly createMissingRevisionsCommandHandler: CreateMissingRevisionsCommandHandler,
-	) {}
+	constructor(private readonly commandBus: CommandBus) {}
 
 	@Post('create-missing-revisions')
 	createMissingRevisions(): Promise<void> {
-		return this.createMissingRevisionsCommandHandler.execute();
+		return this.commandBus.execute(new CreateMissingRevisionsCommand());
 	}
 }

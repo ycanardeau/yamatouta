@@ -7,17 +7,12 @@ import {
 	Patch,
 	Query,
 } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import {
-	UpdateAuthenticatedUserCommand,
-	UpdateAuthenticatedUserCommandHandler,
-} from '../database/commands/users/UpdateAuthenticatedUserCommandHandler';
-import { GetAuthenticatedUserQueryHandler } from '../database/queries/users/GetAuthenticatedUserQueryHandler';
-import { GetUserQueryHandler } from '../database/queries/users/GetUserQueryHandler';
-import {
-	ListUsersQuery,
-	ListUsersQueryHandler,
-} from '../database/queries/users/ListUsersQueryHandler';
+import { UpdateAuthenticatedUserCommand } from '../database/commands/users/UpdateAuthenticatedUserCommandHandler';
+import { GetAuthenticatedUserQuery } from '../database/queries/users/GetAuthenticatedUserQueryHandler';
+import { GetUserQuery } from '../database/queries/users/GetUserQueryHandler';
+import { ListUsersQuery } from '../database/queries/users/ListUsersQueryHandler';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { UserObject } from '../dto/users/UserObject';
@@ -26,10 +21,8 @@ import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 @Controller('users')
 export class UserController {
 	constructor(
-		private readonly listUsersQueryHandler: ListUsersQueryHandler,
-		private readonly getUserQueryHandler: GetUserQueryHandler,
-		private readonly getAuthenticatedUserQueryHandler: GetAuthenticatedUserQueryHandler,
-		private readonly updateAuthenticatedUserCommandHandler: UpdateAuthenticatedUserCommandHandler,
+		private readonly queryBus: QueryBus,
+		private readonly commandBus: CommandBus,
 	) {}
 
 	@Get()
@@ -37,12 +30,19 @@ export class UserController {
 		@Query(new JoiValidationPipe(ListUsersQuery.schema))
 		query: ListUsersQuery,
 	): Promise<SearchResultObject<UserObject>> {
-		return this.listUsersQueryHandler.execute(query);
+		return this.queryBus.execute(
+			new ListUsersQuery(
+				query.sort,
+				query.offset,
+				query.limit,
+				query.getTotalCount,
+			),
+		);
 	}
 
 	@Get('current')
 	getAuthenticatedUser(): Promise<AuthenticatedUserObject> {
-		return this.getAuthenticatedUserQueryHandler.execute();
+		return this.queryBus.execute(new GetAuthenticatedUserQuery());
 	}
 
 	@Patch('current')
@@ -50,13 +50,20 @@ export class UserController {
 		@Body(new JoiValidationPipe(UpdateAuthenticatedUserCommand.schema))
 		command: UpdateAuthenticatedUserCommand,
 	): Promise<AuthenticatedUserObject> {
-		return this.updateAuthenticatedUserCommandHandler.execute(command);
+		return this.commandBus.execute(
+			new UpdateAuthenticatedUserCommand(
+				command.password,
+				command.username,
+				command.email,
+				command.newPassword,
+			),
+		);
 	}
 
 	@Get(':userId')
 	getUser(
 		@Param('userId', ParseIntPipe) userId: number,
 	): Promise<UserObject> {
-		return this.getUserQueryHandler.execute({ userId: userId });
+		return this.queryBus.execute(new GetUserQuery(userId));
 	}
 }

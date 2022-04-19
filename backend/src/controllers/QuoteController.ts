@@ -9,19 +9,14 @@ import {
 	Post,
 	Query,
 } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { DeleteQuoteCommandHandler } from '../database/commands/entries/DeleteEntryCommandHandler';
-import { CreateQuoteCommandHandler } from '../database/commands/quotes/CreateQuoteCommandHandler';
-import {
-	UpdateQuoteCommand,
-	UpdateQuoteCommandHandler,
-} from '../database/commands/quotes/UpdateQuoteCommandHandler';
-import { ListQuoteRevisionsQueryHandler } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
-import { GetQuoteQueryHandler } from '../database/queries/quotes/GetQuoteQueryHandler';
-import {
-	ListQuotesQuery,
-	ListQuotesQueryHandler,
-} from '../database/queries/quotes/ListQuotesQueryHandler';
+import { DeleteQuoteCommand } from '../database/commands/entries/DeleteEntryCommandHandler';
+import { CreateQuoteCommand } from '../database/commands/quotes/CreateQuoteCommandHandler';
+import { UpdateQuoteCommand } from '../database/commands/quotes/UpdateQuoteCommandHandler';
+import { ListQuoteRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
+import { GetQuoteQuery } from '../database/queries/quotes/GetQuoteQueryHandler';
+import { ListQuotesQuery } from '../database/queries/quotes/ListQuotesQueryHandler';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { QuoteObject } from '../dto/quotes/QuoteObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
@@ -30,12 +25,8 @@ import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 @Controller('quotes')
 export class QuoteController {
 	constructor(
-		private readonly createQuoteCommandHandler: CreateQuoteCommandHandler,
-		private readonly listQuotesQueryHandler: ListQuotesQueryHandler,
-		private readonly getQuoteQueryHandler: GetQuoteQueryHandler,
-		private readonly updateQuoteCommandHandler: UpdateQuoteCommandHandler,
-		private readonly deleteQuoteCommandHandler: DeleteQuoteCommandHandler,
-		private readonly listQuoteRevisionsQueryHandler: ListQuoteRevisionsQueryHandler,
+		private readonly queryBus: QueryBus,
+		private readonly commandBus: CommandBus,
 	) {}
 
 	@Post()
@@ -43,7 +34,15 @@ export class QuoteController {
 		@Body(new JoiValidationPipe(UpdateQuoteCommand.schema))
 		command: UpdateQuoteCommand,
 	): Promise<QuoteObject> {
-		return this.createQuoteCommandHandler.execute(command);
+		return this.commandBus.execute(
+			new CreateQuoteCommand(
+				command.quoteId,
+				command.text,
+				command.quoteType,
+				command.locale,
+				command.artistId,
+			),
+		);
 	}
 
 	@Get()
@@ -51,14 +50,23 @@ export class QuoteController {
 		@Query(new JoiValidationPipe(ListQuotesQuery.schema))
 		query: ListQuotesQuery,
 	): Promise<SearchResultObject<QuoteObject>> {
-		return this.listQuotesQueryHandler.execute(query);
+		return this.queryBus.execute(
+			new ListQuotesQuery(
+				query.quoteType,
+				query.sort,
+				query.offset,
+				query.limit,
+				query.getTotalCount,
+				query.artistId,
+			),
+		);
 	}
 
 	@Get(':quoteId')
 	getQuote(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<QuoteObject> {
-		return this.getQuoteQueryHandler.execute({ quoteId: quoteId });
+		return this.queryBus.execute(new GetQuoteQuery(quoteId));
 	}
 
 	@Patch(':quoteId')
@@ -67,25 +75,28 @@ export class QuoteController {
 		@Body(new JoiValidationPipe(UpdateQuoteCommand.schema))
 		command: UpdateQuoteCommand,
 	): Promise<QuoteObject> {
-		return this.updateQuoteCommandHandler.execute({
-			...command,
-			quoteId: quoteId,
-		});
+		return this.commandBus.execute(
+			new UpdateQuoteCommand(
+				quoteId,
+				command.text,
+				command.quoteType,
+				command.locale,
+				command.artistId,
+			),
+		);
 	}
 
 	@Delete(':quoteId')
 	deleteQuote(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<void> {
-		return this.deleteQuoteCommandHandler.execute({ entryId: quoteId });
+		return this.commandBus.execute(new DeleteQuoteCommand(quoteId));
 	}
 
 	@Get(':quoteId/revisions')
 	listQuoteRevisions(
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
-		return this.listQuoteRevisionsQueryHandler.execute({
-			entryId: quoteId,
-		});
+		return this.queryBus.execute(new ListQuoteRevisionsQuery(quoteId));
 	}
 }

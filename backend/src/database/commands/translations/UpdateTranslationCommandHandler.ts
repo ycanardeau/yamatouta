@@ -1,6 +1,7 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi, { ObjectSchema } from 'joi';
 
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
@@ -13,7 +14,6 @@ import { WordCategory } from '../../../models/WordCategory';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
-import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 
 export class UpdateTranslationCommand {
 	static readonly schema: ObjectSchema<UpdateTranslationCommand> = Joi.object(

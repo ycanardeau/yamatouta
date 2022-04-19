@@ -7,12 +7,10 @@ import {
 	Req,
 	UseGuards,
 } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import { Request } from 'express';
 
-import {
-	CreateUserCommand,
-	CreateUserCommandHandler,
-} from '../database/commands/users/CreateUserCommandHandler';
+import { CreateUserCommand } from '../database/commands/users/CreateUserCommandHandler';
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
@@ -21,7 +19,7 @@ import { AuthService } from '../services/auth/AuthService';
 @Controller('auth')
 export class AuthController {
 	constructor(
-		private readonly createUserCommandHandler: CreateUserCommandHandler,
+		private readonly commandBus: CommandBus,
 		private readonly authService: AuthService,
 	) {}
 
@@ -30,7 +28,13 @@ export class AuthController {
 		@Body(new JoiValidationPipe(CreateUserCommand.schema))
 		command: CreateUserCommand,
 	): Promise<AuthenticatedUserObject> {
-		return this.createUserCommandHandler.execute(command);
+		return this.commandBus.execute(
+			new CreateUserCommand(
+				command.username,
+				command.email,
+				command.password,
+			),
+		);
 	}
 
 	@HttpCode(HttpStatus.OK)

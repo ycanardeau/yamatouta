@@ -1,8 +1,8 @@
 import { UnauthorizedException } from '@nestjs/common';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
 import { PermissionContext } from '../../../services/PermissionContext';
-import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class GetAuthenticatedUserQuery {}
 

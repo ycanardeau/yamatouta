@@ -1,12 +1,12 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
-import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class GetArtistQuery {
 	constructor(readonly artistId: number) {}

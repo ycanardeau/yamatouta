@@ -6,6 +6,7 @@ import {
 } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi, { ObjectSchema } from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
@@ -15,7 +16,6 @@ import { QuoteSortRule } from '../../../models/QuoteSortRule';
 import { QuoteType } from '../../../models/QuoteType';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
-import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class ListQuotesQuery {
 	static readonly schema: ObjectSchema<ListQuotesQuery> = Joi.object({

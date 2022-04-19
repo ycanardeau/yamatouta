@@ -1,6 +1,7 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi, { ObjectSchema } from 'joi';
 
 import config from '../../../config';
@@ -11,7 +12,6 @@ import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
-import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 
 export class CreateUserCommand {
 	static readonly schema: ObjectSchema<CreateUserCommand> = Joi.object({

@@ -1,4 +1,5 @@
 import { EntityManager } from '@mikro-orm/core';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
@@ -9,7 +10,6 @@ import { Entry } from '../../../models/Entry';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
-import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 
 export class CreateMissingRevisionsCommand {}
 

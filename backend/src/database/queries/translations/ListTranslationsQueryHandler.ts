@@ -1,4 +1,5 @@
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 import _ from 'lodash';
 
@@ -10,7 +11,6 @@ import { WordCategory } from '../../../models/WordCategory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { escapeWildcardCharacters } from '../../../utils/escapeWildcardCharacters';
-import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class ListTranslationsQuery {
 	static readonly schema = Joi.object({

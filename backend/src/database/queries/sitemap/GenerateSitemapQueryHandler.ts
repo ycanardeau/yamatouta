@@ -1,6 +1,6 @@
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { SitemapStream, streamToPromise } from 'sitemap';
 
-import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 import { ListArtistIdsQueryHandler } from '../artists/ListArtistIdsQueryHandler';
 import { ListQuoteIdsQueryHandler } from '../quotes/ListQuoteIdsQueryHandler';
 

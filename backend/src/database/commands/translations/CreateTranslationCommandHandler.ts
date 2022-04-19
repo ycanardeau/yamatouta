@@ -1,6 +1,7 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Commit } from '../../../entities/Commit';
@@ -11,7 +12,6 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
-import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 import { UpdateTranslationCommand } from './UpdateTranslationCommandHandler';
 
 export class CreateTranslationCommand extends UpdateTranslationCommand {}

@@ -1,5 +1,6 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 import { PassportModule } from '@nestjs/passport';
 
 import { AdminController } from './controllers/AdminController';
@@ -114,6 +115,7 @@ const commandHandlers = [
 			Work,
 		]),
 		PassportModule,
+		CqrsModule,
 	],
 	controllers: [
 		AdminController,
