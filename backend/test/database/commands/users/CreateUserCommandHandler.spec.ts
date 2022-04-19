@@ -5,7 +5,7 @@ import { CreateUserCommandHandler } from '../../../../src/database/commands/user
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PasswordHasherFactory } from '../../../../src/services/passwordHashers/PasswordHasherFactory';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
@@ -42,14 +42,14 @@ describe('CreateUserCommandHandler', () => {
 					| (AnyEntity | Reference<AnyEntity>)[],
 			): void => em.persist(entity),
 		};
-		const auditLogger = new AuditLogger(em as any);
+		const auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 		permissionContext = new FakePermissionContext();
 		const passwordHasherFactory = new PasswordHasherFactory();
 
 		createUserCommandHandler = new CreateUserCommandHandler(
 			em as any,
 			userRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 			passwordHasherFactory,
 			permissionContext,
 		);

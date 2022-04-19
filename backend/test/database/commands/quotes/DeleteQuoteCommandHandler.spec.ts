@@ -12,7 +12,7 @@ import { QuoteType } from '../../../../src/models/QuoteType';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { QuoteSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createQuote, createUser } from '../../../createEntry';
@@ -23,7 +23,7 @@ describe('DeleteQuoteCommandHandler', () => {
 	let existingUser: User;
 	let quote: Quote;
 	let userRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let quoteRepo: any;
 	let permissionContext: FakePermissionContext;
 	let deleteQuoteCommandHandler: DeleteQuoteCommandHandler;
@@ -68,7 +68,7 @@ describe('DeleteQuoteCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 		quoteRepo = {
 			findOneOrFail: async (): Promise<Quote> => quote,
 		};
@@ -79,7 +79,7 @@ describe('DeleteQuoteCommandHandler', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 			quoteRepo as any,
 		);
 	});
@@ -132,7 +132,7 @@ describe('DeleteQuoteCommandHandler', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogger,
+					auditLogEntryFactory,
 					quoteRepo as any,
 				);
 

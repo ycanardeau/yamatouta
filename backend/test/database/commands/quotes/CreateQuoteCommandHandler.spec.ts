@@ -17,7 +17,7 @@ import {
 	QuoteSnapshot,
 } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createUser } from '../../../createEntry';
@@ -29,7 +29,7 @@ describe('CreateQuoteCommandHandler', () => {
 	let userRepo: any;
 	let artist: Artist;
 	let artistRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let permissionContext: FakePermissionContext;
 	let createQuoteCommandHandler: CreateQuoteCommandHandler;
 	let defaultCommand: UpdateQuoteCommand;
@@ -69,7 +69,7 @@ describe('CreateQuoteCommandHandler', () => {
 		artistRepo = {
 			findOneOrFail: async (): Promise<Artist> => artist,
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 
 		permissionContext = new FakePermissionContext(existingUser);
 
@@ -78,7 +78,7 @@ describe('CreateQuoteCommandHandler', () => {
 			em as any,
 			userRepo as any,
 			artistRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 		);
 
 		defaultCommand = {
@@ -154,7 +154,7 @@ describe('CreateQuoteCommandHandler', () => {
 					em as any,
 					userRepo as any,
 					artistRepo as any,
-					auditLogger,
+					auditLogEntryFactory,
 				);
 
 				await expect(

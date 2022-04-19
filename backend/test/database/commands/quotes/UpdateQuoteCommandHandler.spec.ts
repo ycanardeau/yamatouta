@@ -19,7 +19,7 @@ import {
 	QuoteSnapshot,
 } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createQuote, createUser } from '../../../createEntry';
@@ -32,7 +32,7 @@ describe('UpdateQuoteCommandHandler', () => {
 	let quote: Quote;
 	let userRepo: any;
 	let artistRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let quoteRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateQuoteCommandHandler: UpdateQuoteCommandHandler;
@@ -81,7 +81,7 @@ describe('UpdateQuoteCommandHandler', () => {
 		artistRepo = {
 			findOneOrFail: async (): Promise<Artist> => artist,
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 		quoteRepo = {
 			findOneOrFail: async (where: any): Promise<Quote> =>
 				[quote].filter((q) => q.id === where.id)[0],
@@ -94,7 +94,7 @@ describe('UpdateQuoteCommandHandler', () => {
 			em as any,
 			userRepo as any,
 			artistRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 			quoteRepo as any,
 		);
 
@@ -167,7 +167,7 @@ describe('UpdateQuoteCommandHandler', () => {
 					em as any,
 					userRepo as any,
 					artistRepo as any,
-					auditLogger,
+					auditLogEntryFactory,
 					quoteRepo as any,
 				);
 

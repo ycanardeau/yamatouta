@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
 import { User } from '../../../entities/User';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 
 export enum LoginError {
@@ -49,12 +49,12 @@ export class AuthenticateUserCommandHandler {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogger: AuditLogger,
+		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
 	) {}
 
 	execute(command: AuthenticateUserCommand): Promise<LoginResult> {
-		return this.em.transactional(async () => {
+		return this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOne({
 				email: command.email,
 				deleted: false,
@@ -73,11 +73,13 @@ export class AuthenticateUserCommandHandler {
 			);
 
 			if (user.passwordHash === passwordHash) {
-				this.auditLogger.user_login({
+				const auditLogEntry = this.auditLogEntryFactory.user_login({
+					user: user,
 					actor: user,
 					actorIp: command.clientIp,
-					user: user,
 				});
+
+				em.persist(auditLogEntry);
 
 				const defaultPasswordHasher =
 					this.passwordHasherFactory.default;
@@ -95,11 +97,13 @@ export class AuthenticateUserCommandHandler {
 				return createSuccess(new AuthenticatedUserObject(user));
 			}
 
-			this.auditLogger.user_failedLogin({
+			const auditLogEntry = this.auditLogEntryFactory.user_failedLogin({
+				user: user,
 				actor: user,
 				actorIp: command.clientIp,
-				user: user,
 			});
+
+			em.persist(auditLogEntry);
 
 			return createError(LoginError.InvalidPassword);
 		});

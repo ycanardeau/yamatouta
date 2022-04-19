@@ -6,7 +6,7 @@ import Joi, { ObjectSchema } from 'joi';
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
 import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
@@ -43,7 +43,7 @@ export class UpdateAuthenticatedUserCommandHandler {
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
-		private readonly auditLogger: AuditLogger,
+		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 	) {}
 
 	async execute(
@@ -56,7 +56,7 @@ export class UpdateAuthenticatedUserCommandHandler {
 		if (result.error)
 			throw new BadRequestException(result.error.details[0].message);
 
-		return this.em.transactional(async () => {
+		return this.em.transactional(async (em) => {
 			if (!this.permissionContext.user) throw new BadRequestException();
 
 			const user = await this.userRepo.findOneOrFail({
@@ -81,13 +81,15 @@ export class UpdateAuthenticatedUserCommandHandler {
 			}
 
 			if (command.username && command.username !== user.name) {
-				this.auditLogger.user_rename({
+				const auditLogEntry = this.auditLogEntryFactory.user_rename({
+					user: user,
 					actor: user,
 					actorIp: this.permissionContext.clientIp,
-					user: user,
 					oldValue: user.name,
 					newValue: command.username,
 				});
+
+				em.persist(auditLogEntry);
 
 				user.name = command.username;
 			}
@@ -104,24 +106,30 @@ export class UpdateAuthenticatedUserCommandHandler {
 							throw new UserEmailAlreadyExistsException();
 					});
 
-				this.auditLogger.user_changeEmail({
-					actor: user,
-					actorIp: this.permissionContext.clientIp,
-					user: user,
-					oldValue: user.email,
-					newValue: command.email,
-				});
+				const auditLogEntry =
+					this.auditLogEntryFactory.user_changeEmail({
+						user: user,
+						actor: user,
+						actorIp: this.permissionContext.clientIp,
+						oldValue: user.email,
+						newValue: command.email,
+					});
+
+				em.persist(auditLogEntry);
 
 				user.email = command.email;
 				user.normalizedEmail = normalizedEmail;
 			}
 
 			if (command.newPassword) {
-				this.auditLogger.user_changePassword({
-					actor: user,
-					actorIp: this.permissionContext.clientIp,
-					user: user,
-				});
+				const auditLogEntry =
+					this.auditLogEntryFactory.user_changePassword({
+						user: user,
+						actor: user,
+						actorIp: this.permissionContext.clientIp,
+					});
+
+				em.persist(auditLogEntry);
 
 				await user.updatePassword(
 					this.passwordHasherFactory.default,

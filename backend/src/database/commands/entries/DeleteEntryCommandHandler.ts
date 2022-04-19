@@ -3,6 +3,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { Artist } from '../../../entities/Artist';
+import { AuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
 import { Translation } from '../../../entities/Translation';
@@ -11,7 +12,7 @@ import { Work } from '../../../entities/Work';
 import { Entry } from '../../../models/Entry';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
 export class DeleteEntryCommand {
@@ -24,10 +25,13 @@ abstract class DeleteEntryCommandHandler<TEntry extends Entry> {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		protected readonly auditLogger: AuditLogger,
+		protected readonly auditLogEntryFactory: AuditLogEntryFactory,
 		private readonly permission: Permission,
 		private readonly entryFunc: (entryId: number) => Promise<TEntry>,
-		private readonly auditLogFunc: (actor: User, entry: TEntry) => void,
+		private readonly auditLogFunc: (
+			actor: User,
+			entry: TEntry,
+		) => AuditLogEntry,
 	) {}
 
 	async execute(command: DeleteEntryCommand): Promise<void> {
@@ -63,7 +67,9 @@ abstract class DeleteEntryCommandHandler<TEntry extends Entry> {
 
 			em.persist(revision);
 
-			this.auditLogFunc(user, entry);
+			const auditLogEntry = this.auditLogFunc(user, entry);
+
+			em.persist(auditLogEntry);
 		});
 	}
 }
@@ -75,7 +81,7 @@ export class DeleteTranslationCommandHandler extends DeleteEntryCommandHandler<T
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
-		auditLogger: AuditLogger,
+		auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Translation)
 		translationRepo: EntityRepository<Translation>,
 	) {
@@ -83,14 +89,14 @@ export class DeleteTranslationCommandHandler extends DeleteEntryCommandHandler<T
 			permissionContext,
 			em,
 			userRepo,
-			auditLogger,
+			auditLogEntryFactory,
 			Permission.DeleteTranslations,
 			(entryId) => translationRepo.findOneOrFail({ id: entryId }),
 			(actor, entry) =>
-				this.auditLogger.translation_delete({
+				this.auditLogEntryFactory.translation_delete({
+					translation: entry,
 					actor: actor,
 					actorIp: this.permissionContext.clientIp,
-					translation: entry,
 				}),
 		);
 	}
@@ -103,7 +109,7 @@ export class DeleteArtistCommandHandler extends DeleteEntryCommandHandler<Artist
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
-		auditLogger: AuditLogger,
+		auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Artist)
 		artistRepo: EntityRepository<Artist>,
 	) {
@@ -111,14 +117,14 @@ export class DeleteArtistCommandHandler extends DeleteEntryCommandHandler<Artist
 			permissionContext,
 			em,
 			userRepo,
-			auditLogger,
+			auditLogEntryFactory,
 			Permission.DeleteArtists,
 			(entryId) => artistRepo.findOneOrFail({ id: entryId }),
 			(actor, entry) =>
-				this.auditLogger.artist_delete({
+				this.auditLogEntryFactory.artist_delete({
+					artist: entry,
 					actor: actor,
 					actorIp: this.permissionContext.clientIp,
-					artist: entry,
 				}),
 		);
 	}
@@ -131,7 +137,7 @@ export class DeleteQuoteCommandHandler extends DeleteEntryCommandHandler<Quote> 
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
-		auditLogger: AuditLogger,
+		auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Quote)
 		quoteRepo: EntityRepository<Quote>,
 	) {
@@ -139,14 +145,14 @@ export class DeleteQuoteCommandHandler extends DeleteEntryCommandHandler<Quote> 
 			permissionContext,
 			em,
 			userRepo,
-			auditLogger,
+			auditLogEntryFactory,
 			Permission.DeleteQuotes,
 			(entryId) => quoteRepo.findOneOrFail({ id: entryId }),
 			(actor, entry) =>
-				this.auditLogger.quote_delete({
+				this.auditLogEntryFactory.quote_delete({
+					quote: entry,
 					actor: actor,
 					actorIp: this.permissionContext.clientIp,
-					quote: entry,
 				}),
 		);
 	}
@@ -159,7 +165,7 @@ export class DeleteWorkCommandHandler extends DeleteEntryCommandHandler<Work> {
 		em: EntityManager,
 		@InjectRepository(User)
 		userRepo: EntityRepository<User>,
-		auditLogger: AuditLogger,
+		auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Work)
 		workRepo: EntityRepository<Work>,
 	) {
@@ -167,14 +173,14 @@ export class DeleteWorkCommandHandler extends DeleteEntryCommandHandler<Work> {
 			permissionContext,
 			em,
 			userRepo,
-			auditLogger,
+			auditLogEntryFactory,
 			Permission.DeleteWorks,
 			(entryId) => workRepo.findOneOrFail({ id: entryId }),
 			(actor, entry) =>
-				this.auditLogger.work_delete({
+				this.auditLogEntryFactory.work_delete({
+					work: entry,
 					actor: actor,
 					actorIp: this.permissionContext.clientIp,
-					work: entry,
 				}),
 		);
 	}

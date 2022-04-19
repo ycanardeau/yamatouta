@@ -24,7 +24,7 @@ export class CreateMissingRevisionsCommandHandler {
 		);
 
 		return this.em.transactional(async (em) => {
-			const user = await this.em.findOneOrFail(User, {
+			const user = await em.findOneOrFail(User, {
 				id: this.permissionContext.user?.id,
 				deleted: false,
 				hidden: false,

@@ -14,7 +14,7 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { WorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createWork, createUser } from '../../../createEntry';
@@ -25,7 +25,7 @@ describe('UpdateWorkCommandHandler', () => {
 	let existingUser: User;
 	let work: Work;
 	let userRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let workRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateWorkCommandHandler: UpdateWorkCommandHandler;
@@ -63,7 +63,7 @@ describe('UpdateWorkCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 		workRepo = {
 			findOneOrFail: async (where: any): Promise<Work> =>
 				[work].filter((w) => w.id === where.id)[0],
@@ -75,7 +75,7 @@ describe('UpdateWorkCommandHandler', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 			workRepo as any,
 		);
 
@@ -141,7 +141,7 @@ describe('UpdateWorkCommandHandler', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogger,
+					auditLogEntryFactory,
 					workRepo as any,
 				);
 

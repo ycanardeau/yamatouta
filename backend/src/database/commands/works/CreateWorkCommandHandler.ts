@@ -8,7 +8,7 @@ import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { UpdateWorkCommand } from './UpdateWorkCommandHandler';
 
@@ -19,7 +19,7 @@ export class CreateWorkCommandHandler {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogger: AuditLogger,
+		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 	) {}
 
 	async execute(command: UpdateWorkCommand): Promise<WorkObject> {
@@ -57,11 +57,13 @@ export class CreateWorkCommandHandler {
 
 			em.persist(revision);
 
-			this.auditLogger.work_create({
+			const auditLogEntry = this.auditLogEntryFactory.work_create({
+				work: work,
 				actor: user,
 				actorIp: this.permissionContext.clientIp,
-				work: work,
 			});
+
+			em.persist(auditLogEntry);
 
 			return work;
 		});

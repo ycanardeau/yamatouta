@@ -12,7 +12,7 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { WorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createUser } from '../../../createEntry';
@@ -22,7 +22,7 @@ describe('CreateWorkCommandHandler', () => {
 	let em: FakeEntityManager;
 	let existingUser: User;
 	let userRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let permissionContext: FakePermissionContext;
 	let createWorkCommandHandler: CreateWorkCommandHandler;
 	let defaultCommand: UpdateWorkCommand;
@@ -53,7 +53,7 @@ describe('CreateWorkCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 
 		permissionContext = new FakePermissionContext(existingUser);
 
@@ -61,7 +61,7 @@ describe('CreateWorkCommandHandler', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 		);
 
 		defaultCommand = {
@@ -130,7 +130,7 @@ describe('CreateWorkCommandHandler', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogger,
+					auditLogEntryFactory,
 				);
 
 				await expect(

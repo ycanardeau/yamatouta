@@ -4,7 +4,7 @@ import { UpdateAuthenticatedUserCommandHandler } from '../../../../src/database/
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PasswordHasherFactory } from '../../../../src/services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../../src/utils/normalizeEmail';
 import { FakeEntityManager } from '../../../FakeEntityManager';
@@ -53,7 +53,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 					(u) => u.normalizedEmail === where.normalizedEmail,
 				)[0],
 		};
-		const auditLogger = new AuditLogger(em as any);
+		const auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 
 		updateAuthenticatedUserCommandHandler =
 			new UpdateAuthenticatedUserCommandHandler(
@@ -61,7 +61,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 				em as any,
 				userRepo as any,
 				passwordHasherFactory,
-				auditLogger,
+				auditLogEntryFactory,
 			);
 	});
 

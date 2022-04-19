@@ -12,7 +12,7 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WordCategory } from '../../../../src/models/WordCategory';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
@@ -23,7 +23,7 @@ describe('CreateTranslationCommandHandler', () => {
 	let em: FakeEntityManager;
 	let existingUser: User;
 	let userRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let ngramConverter: NgramConverter;
 	let permissionContext: FakePermissionContext;
 	let createTranslationCommandHandler: CreateTranslationCommandHandler;
@@ -55,7 +55,7 @@ describe('CreateTranslationCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 		ngramConverter = new NgramConverter();
 
 		permissionContext = new FakePermissionContext(existingUser);
@@ -64,7 +64,7 @@ describe('CreateTranslationCommandHandler', () => {
 			em as any,
 			permissionContext,
 			userRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 			ngramConverter,
 		);
 
@@ -138,7 +138,7 @@ describe('CreateTranslationCommandHandler', () => {
 						em as any,
 						permissionContext,
 						userRepo as any,
-						auditLogger,
+						auditLogEntryFactory,
 						ngramConverter,
 					);
 

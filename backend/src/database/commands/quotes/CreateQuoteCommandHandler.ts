@@ -9,7 +9,7 @@ import { Quote } from '../../../entities/Quote';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { UpdateQuoteCommand } from './UpdateQuoteCommandHandler';
 
@@ -22,7 +22,7 @@ export class CreateQuoteCommandHandler {
 		private readonly userRepo: EntityRepository<User>,
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
-		private readonly auditLogger: AuditLogger,
+		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 	) {}
 
 	async execute(params: UpdateQuoteCommand): Promise<QuoteObject> {
@@ -68,11 +68,13 @@ export class CreateQuoteCommandHandler {
 
 			em.persist(revision);
 
-			this.auditLogger.quote_create({
+			const auditLogEntry = this.auditLogEntryFactory.quote_create({
+				quote: quote,
 				actor: user,
 				actorIp: this.permissionContext.clientIp,
-				quote: quote,
 			});
+
+			em.persist(auditLogEntry);
 
 			return quote;
 		});

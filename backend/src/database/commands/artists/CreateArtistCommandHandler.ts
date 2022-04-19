@@ -8,7 +8,7 @@ import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { UpdateArtistCommand } from './UpdateArtistCommandHandler';
 
@@ -19,7 +19,7 @@ export class CreateArtistCommandHandler {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogger: AuditLogger,
+		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 	) {}
 
 	async execute(command: UpdateArtistCommand): Promise<ArtistObject> {
@@ -57,11 +57,13 @@ export class CreateArtistCommandHandler {
 
 			em.persist(revision);
 
-			this.auditLogger.artist_create({
+			const auditLogEntry = this.auditLogEntryFactory.artist_create({
+				artist: artist,
 				actor: user,
 				actorIp: this.permissionContext.clientIp,
-				artist: artist,
 			});
+
+			em.persist(auditLogEntry);
 
 			return artist;
 		});

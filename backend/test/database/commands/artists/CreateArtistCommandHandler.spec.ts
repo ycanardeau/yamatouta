@@ -12,7 +12,7 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createUser } from '../../../createEntry';
@@ -22,7 +22,7 @@ describe('CreateArtistCommandHandler', () => {
 	let em: FakeEntityManager;
 	let existingUser: User;
 	let userRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let permissionContext: FakePermissionContext;
 	let createArtistCommandHandler: CreateArtistCommandHandler;
 	let defaultCommand: UpdateArtistCommand;
@@ -53,7 +53,7 @@ describe('CreateArtistCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 
 		permissionContext = new FakePermissionContext(existingUser);
 
@@ -61,7 +61,7 @@ describe('CreateArtistCommandHandler', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 		);
 
 		defaultCommand = {
@@ -132,7 +132,7 @@ describe('CreateArtistCommandHandler', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogger,
+					auditLogEntryFactory,
 				);
 
 				await expect(

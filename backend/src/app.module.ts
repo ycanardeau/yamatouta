@@ -53,7 +53,7 @@ import { TranslationRevision } from './entities/Revision';
 import { Translation } from './entities/Translation';
 import { User } from './entities/User';
 import { Work } from './entities/Work';
-import { AuditLogger } from './services/AuditLogger';
+import { AuditLogEntryFactory } from './services/AuditLogEntryFactory';
 import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { NgramConverter } from './services/NgramConverter';
 import { PermissionContext } from './services/PermissionContext';
@@ -128,7 +128,7 @@ const commandHandlers = [
 	providers: [
 		...queryHandlers,
 		...commandHandlers,
-		AuditLogger,
+		AuditLogEntryFactory,
 		GenerateSitemapService,
 		LocalSerializer,
 		LocalStrategy,

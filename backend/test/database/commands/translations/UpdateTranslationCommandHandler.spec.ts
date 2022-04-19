@@ -14,7 +14,7 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WordCategory } from '../../../../src/models/WordCategory';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
@@ -26,7 +26,7 @@ describe('UpdateTranslationCommandHandler', () => {
 	let existingUser: User;
 	let translation: Translation;
 	let userRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let ngramConverter: NgramConverter;
 	let translationRepo: any;
 	let permissionContext: FakePermissionContext;
@@ -68,7 +68,7 @@ describe('UpdateTranslationCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 		ngramConverter = new NgramConverter();
 		translationRepo = {
 			findOneOrFail: async (where: any): Promise<Translation> =>
@@ -81,7 +81,7 @@ describe('UpdateTranslationCommandHandler', () => {
 			em as any,
 			permissionContext,
 			userRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 			ngramConverter,
 			translationRepo as any,
 		);
@@ -156,7 +156,7 @@ describe('UpdateTranslationCommandHandler', () => {
 						em as any,
 						permissionContext,
 						userRepo as any,
-						auditLogger,
+						auditLogEntryFactory,
 						ngramConverter,
 						translationRepo as any,
 					);

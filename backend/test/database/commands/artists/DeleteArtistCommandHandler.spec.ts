@@ -11,7 +11,7 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createUser } from '../../../createEntry';
@@ -22,7 +22,7 @@ describe('DeleteArtistCommandHandler', () => {
 	let existingUser: User;
 	let artist: Artist;
 	let userRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let artistRepo: any;
 	let permissionContext: FakePermissionContext;
 	let deleteArtistCommandHandler: DeleteArtistCommandHandler;
@@ -59,7 +59,7 @@ describe('DeleteArtistCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 		artistRepo = {
 			findOneOrFail: async (): Promise<Artist> => artist,
 		};
@@ -70,7 +70,7 @@ describe('DeleteArtistCommandHandler', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 			artistRepo as any,
 		);
 	});
@@ -123,7 +123,7 @@ describe('DeleteArtistCommandHandler', () => {
 					permissionContext,
 					em as any,
 					userRepo as any,
-					auditLogger,
+					auditLogEntryFactory,
 					artistRepo as any,
 				);
 

@@ -11,7 +11,7 @@ import config from '../../../config';
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
 import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
@@ -36,7 +36,7 @@ export class CreateUserCommandHandler {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogger: AuditLogger,
+		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
 		private readonly permissionContext: PermissionContext,
 	) {}
@@ -59,7 +59,7 @@ export class CreateUserCommandHandler {
 
 		const normalizedEmail = await normalizeEmail(email);
 
-		const user = await this.em.transactional(async () => {
+		const user = await this.em.transactional(async (em) => {
 			await this.userRepo
 				.findOne({ normalizedEmail: normalizedEmail })
 				.then((existing) => {
@@ -86,11 +86,13 @@ export class CreateUserCommandHandler {
 
 			this.userRepo.persist(user);
 
-			this.auditLogger.user_create({
+			const auditLogEntry = this.auditLogEntryFactory.user_create({
+				user: user,
 				actor: user,
 				actorIp: this.permissionContext.clientIp,
-				user: user,
 			});
+
+			em.persist(auditLogEntry);
 
 			return user;
 		});

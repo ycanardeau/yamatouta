@@ -100,19 +100,19 @@ export class TranslationAuditLogEntry extends AuditLogEntry {
 	translation: Translation;
 
 	constructor({
+		translation,
 		action,
 		actor,
 		actorIp,
 		oldValue,
 		newValue,
-		translation,
 	}: {
+		translation: Translation;
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
 		oldValue: string;
 		newValue: string;
-		translation: Translation;
 	}) {
 		super({
 			action: action,
@@ -135,19 +135,19 @@ export class ArtistAuditLogEntry extends AuditLogEntry {
 	artist: Artist;
 
 	constructor({
+		artist,
 		action,
 		actor,
 		actorIp,
 		oldValue,
 		newValue,
-		artist,
 	}: {
+		artist: Artist;
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
 		oldValue: string;
 		newValue: string;
-		artist: Artist;
 	}) {
 		super({
 			action: action,
@@ -170,19 +170,19 @@ export class QuoteAuditLogEntry extends AuditLogEntry {
 	quote: Quote;
 
 	constructor({
+		quote,
 		action,
 		actor,
 		actorIp,
 		oldValue,
 		newValue,
-		quote,
 	}: {
+		quote: Quote;
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
 		oldValue: string;
 		newValue: string;
-		quote: Quote;
 	}) {
 		super({
 			action: action,
@@ -205,19 +205,19 @@ export class WorkAuditLogEntry extends AuditLogEntry {
 	work: Work;
 
 	constructor({
+		work,
 		action,
 		actor,
 		actorIp,
 		oldValue,
 		newValue,
-		work,
 	}: {
+		work: Work;
 		action: AuditedAction;
 		actor: User;
 		actorIp: string;
 		oldValue: string;
 		newValue: string;
-		work: Work;
 	}) {
 		super({
 			action: action,

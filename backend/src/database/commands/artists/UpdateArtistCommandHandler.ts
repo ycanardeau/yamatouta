@@ -10,7 +10,7 @@ import { User } from '../../../entities/User';
 import { ArtistType } from '../../../models/ArtistType';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
 export class UpdateArtistCommand {
@@ -37,7 +37,7 @@ export class UpdateArtistCommandHandler {
 		private readonly em: EntityManager,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogger: AuditLogger,
+		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
 	) {}
@@ -79,11 +79,13 @@ export class UpdateArtistCommandHandler {
 
 			em.persist(revision);
 
-			this.auditLogger.artist_update({
+			const auditLogEntry = this.auditLogEntryFactory.artist_update({
+				artist: artist,
 				actor: user,
 				actorIp: this.permissionContext.clientIp,
-				artist: artist,
 			});
+
+			em.persist(auditLogEntry);
 
 			return artist;
 		});

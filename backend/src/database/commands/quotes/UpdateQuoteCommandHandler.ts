@@ -11,7 +11,7 @@ import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { QuoteType } from '../../../models/QuoteType';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
 export class UpdateQuoteCommand {
@@ -44,7 +44,7 @@ export class UpdateQuoteCommandHandler {
 		private readonly userRepo: EntityRepository<User>,
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
-		private readonly auditLogger: AuditLogger,
+		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
 	) {}
@@ -94,11 +94,13 @@ export class UpdateQuoteCommandHandler {
 
 			em.persist(revision);
 
-			this.auditLogger.quote_update({
+			const auditLogEntry = this.auditLogEntryFactory.quote_update({
+				quote: quote,
 				actor: user,
 				actorIp: this.permissionContext.clientIp,
-				quote: quote,
 			});
+
+			em.persist(auditLogEntry);
 
 			return quote;
 		});

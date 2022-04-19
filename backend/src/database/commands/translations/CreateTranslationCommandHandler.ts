@@ -8,7 +8,7 @@ import { Translation } from '../../../entities/Translation';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { AuditLogger } from '../../../services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { UpdateTranslationCommand } from './UpdateTranslationCommandHandler';
@@ -20,7 +20,7 @@ export class CreateTranslationCommandHandler {
 		private readonly permissionContext: PermissionContext,
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
-		private readonly auditLogger: AuditLogger,
+		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
@@ -72,11 +72,13 @@ export class CreateTranslationCommandHandler {
 
 			em.persist(revision);
 
-			this.auditLogger.translation_create({
+			const auditLogEntry = this.auditLogEntryFactory.translation_create({
+				translation: translation,
 				actor: user,
 				actorIp: this.permissionContext.clientIp,
-				translation: translation,
 			});
+
+			em.persist(auditLogEntry);
 
 			return translation;
 		});

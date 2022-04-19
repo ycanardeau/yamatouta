@@ -10,7 +10,7 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogger } from '../../../../src/services/AuditLogger';
+import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createTranslation, createUser } from '../../../createEntry';
@@ -21,7 +21,7 @@ describe('DeleteTranslationCommandHandler', () => {
 	let existingUser: User;
 	let translation: Translation;
 	let userRepo: any;
-	let auditLogger: AuditLogger;
+	let auditLogEntryFactory: AuditLogEntryFactory;
 	let translationRepo: any;
 	let permissionContext: FakePermissionContext;
 	let deleteTranslationCommandHandler: DeleteTranslationCommandHandler;
@@ -61,7 +61,7 @@ describe('DeleteTranslationCommandHandler', () => {
 				)[0],
 			persist: (): void => {},
 		};
-		auditLogger = new AuditLogger(em as any);
+		auditLogEntryFactory = new AuditLogEntryFactory(em as any);
 		translationRepo = {
 			findOneOrFail: async (): Promise<Translation> => translation,
 		};
@@ -72,7 +72,7 @@ describe('DeleteTranslationCommandHandler', () => {
 			permissionContext,
 			em as any,
 			userRepo as any,
-			auditLogger,
+			auditLogEntryFactory,
 			translationRepo as any,
 		);
 	});
@@ -130,7 +130,7 @@ describe('DeleteTranslationCommandHandler', () => {
 						permissionContext,
 						em as any,
 						userRepo as any,
-						auditLogger,
+						auditLogEntryFactory,
 						translationRepo as any,
 					);
 
