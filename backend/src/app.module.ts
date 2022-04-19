@@ -40,6 +40,7 @@ import {
 import { GetQuoteQueryHandler } from './database/queries/quotes/GetQuoteQueryHandler';
 import { ListQuoteIdsQueryHandler } from './database/queries/quotes/ListQuoteIdsQueryHandler';
 import { ListQuotesQueryHandler } from './database/queries/quotes/ListQuotesQueryHandler';
+import { GenerateSitemapQueryHandler } from './database/queries/sitemap/GenerateSitemapQueryHandler';
 import { GetTranslationQueryHandler } from './database/queries/translations/GetTranslationQueryHandler';
 import { ListTranslationsQueryHandler } from './database/queries/translations/ListTranslationsQueryHandler';
 import { GetAuthenticatedUserQueryHandler } from './database/queries/users/GetAuthenticatedUserQueryHandler';
@@ -54,7 +55,6 @@ import { Translation } from './entities/Translation';
 import { User } from './entities/User';
 import { Work } from './entities/Work';
 import { AuditLogEntryFactory } from './services/AuditLogEntryFactory';
-import { GenerateSitemapService } from './services/GenerateSitemapService';
 import { NgramConverter } from './services/NgramConverter';
 import { PermissionContext } from './services/PermissionContext';
 import { AuthService } from './services/auth/AuthService';
@@ -63,6 +63,7 @@ import { LocalStrategy } from './services/auth/LocalStrategy';
 import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasherFactory';
 
 const queryHandlers = [
+	GenerateSitemapQueryHandler,
 	GetArtistQueryHandler,
 	GetAuthenticatedUserQueryHandler,
 	GetQuoteQueryHandler,
@@ -129,7 +130,6 @@ const commandHandlers = [
 		...commandHandlers,
 		AuditLogEntryFactory,
 		AuthService,
-		GenerateSitemapService,
 		LocalSerializer,
 		LocalStrategy,
 		NgramConverter,

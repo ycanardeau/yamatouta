@@ -1,18 +1,18 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
 
-import { GenerateSitemapService } from '../services/GenerateSitemapService';
+import { GenerateSitemapQueryHandler } from '../database/queries/sitemap/GenerateSitemapQueryHandler';
 
 @Controller('sitemap')
 export class SitemapController {
 	constructor(
-		private readonly generateSitemapService: GenerateSitemapService,
+		private readonly generateSitemapQueryHandler: GenerateSitemapQueryHandler,
 	) {}
 
 	@Get()
 	async sitemap(@Res() response: Response): Promise<void> {
 		// TODO: Cache.
-		const xml = await this.generateSitemapService.execute();
+		const xml = await this.generateSitemapQueryHandler.execute();
 
 		response.set('Content-Type', 'text/xml');
 		response.send(xml);
