@@ -8,10 +8,8 @@ import {
 	Patch,
 	Post,
 	Query,
-	Req,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Request } from 'express';
 
 import { DeleteQuoteCommand } from '../database/commands/entries/DeleteEntryCommandHandler';
 import { CreateQuoteCommand } from '../database/commands/quotes/CreateQuoteCommandHandler';
@@ -19,6 +17,7 @@ import { UpdateQuoteCommand } from '../database/commands/quotes/UpdateQuoteComma
 import { ListQuoteRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetQuoteQuery } from '../database/queries/quotes/GetQuoteQueryHandler';
 import { ListQuotesQuery } from '../database/queries/quotes/ListQuotesQueryHandler';
+import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { QuoteObject } from '../dto/quotes/QuoteObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
@@ -34,13 +33,13 @@ export class QuoteController {
 
 	@Post()
 	createQuote(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(UpdateQuoteCommand.schema))
 		command: UpdateQuoteCommand,
 	): Promise<QuoteObject> {
 		return this.commandBus.execute(
 			new CreateQuoteCommand(
-				new PermissionContext(request),
+				permissionContext,
 				command.quoteId,
 				command.text,
 				command.quoteType,
@@ -52,13 +51,13 @@ export class QuoteController {
 
 	@Get()
 	listQuotes(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(ListQuotesQuery.schema))
 		query: ListQuotesQuery,
 	): Promise<SearchResultObject<QuoteObject>> {
 		return this.queryBus.execute(
 			new ListQuotesQuery(
-				new PermissionContext(request),
+				permissionContext,
 				query.quoteType,
 				query.sort,
 				query.offset,
@@ -71,24 +70,24 @@ export class QuoteController {
 
 	@Get(':quoteId')
 	getQuote(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<QuoteObject> {
 		return this.queryBus.execute(
-			new GetQuoteQuery(new PermissionContext(request), quoteId),
+			new GetQuoteQuery(permissionContext, quoteId),
 		);
 	}
 
 	@Patch(':quoteId')
 	updateQuote(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 		@Body(new JoiValidationPipe(UpdateQuoteCommand.schema))
 		command: UpdateQuoteCommand,
 	): Promise<QuoteObject> {
 		return this.commandBus.execute(
 			new UpdateQuoteCommand(
-				new PermissionContext(request),
+				permissionContext,
 				quoteId,
 				command.text,
 				command.quoteType,
@@ -100,24 +99,21 @@ export class QuoteController {
 
 	@Delete(':quoteId')
 	deleteQuote(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<void> {
 		return this.commandBus.execute(
-			new DeleteQuoteCommand(new PermissionContext(request), quoteId),
+			new DeleteQuoteCommand(permissionContext, quoteId),
 		);
 	}
 
 	@Get(':quoteId/revisions')
 	listQuoteRevisions(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('quoteId', ParseIntPipe) quoteId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
 		return this.queryBus.execute(
-			new ListQuoteRevisionsQuery(
-				new PermissionContext(request),
-				quoteId,
-			),
+			new ListQuoteRevisionsQuery(permissionContext, quoteId),
 		);
 	}
 }

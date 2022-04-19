@@ -8,10 +8,8 @@ import {
 	Patch,
 	Post,
 	Query,
-	Req,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Request } from 'express';
 
 import { DeleteWorkCommand } from '../database/commands/entries/DeleteEntryCommandHandler';
 import { CreateWorkCommand } from '../database/commands/works/CreateWorkCommandHandler';
@@ -19,6 +17,7 @@ import { UpdateWorkCommand } from '../database/commands/works/UpdateWorkCommandH
 import { ListWorkRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetWorkQuery } from '../database/queries/works/GetWorkQueryHandler';
 import { ListWorksQuery } from '../database/queries/works/ListWorksQueryHandler';
+import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { WorkObject } from '../dto/works/WorkObject';
@@ -34,13 +33,13 @@ export class WorkController {
 
 	@Post()
 	createWork(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(UpdateWorkCommand.schema))
 		command: UpdateWorkCommand,
 	): Promise<WorkObject> {
 		return this.commandBus.execute(
 			new CreateWorkCommand(
-				new PermissionContext(request),
+				permissionContext,
 				command.workId,
 				command.name,
 				command.workType,
@@ -50,13 +49,13 @@ export class WorkController {
 
 	@Get()
 	listWorks(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(ListWorksQuery.schema))
 		query: ListWorksQuery,
 	): Promise<SearchResultObject<WorkObject>> {
 		return this.queryBus.execute(
 			new ListWorksQuery(
-				new PermissionContext(request),
+				permissionContext,
 				query.workType,
 				query.sort,
 				query.offset,
@@ -69,24 +68,24 @@ export class WorkController {
 
 	@Get(':workId')
 	getWork(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('workId', ParseIntPipe) workId: number,
 	): Promise<WorkObject> {
 		return this.queryBus.execute(
-			new GetWorkQuery(new PermissionContext(request), workId),
+			new GetWorkQuery(permissionContext, workId),
 		);
 	}
 
 	@Patch(':workId')
 	updateWork(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('workId', ParseIntPipe) workId: number,
 		@Body(new JoiValidationPipe(UpdateWorkCommand.schema))
 		command: UpdateWorkCommand,
 	): Promise<WorkObject> {
 		return this.commandBus.execute(
 			new UpdateWorkCommand(
-				new PermissionContext(request),
+				permissionContext,
 				workId,
 				command.name,
 				command.workType,
@@ -96,21 +95,21 @@ export class WorkController {
 
 	@Delete(':workId')
 	deleteWork(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('workId', ParseIntPipe) workId: number,
 	): Promise<void> {
 		return this.commandBus.execute(
-			new DeleteWorkCommand(new PermissionContext(request), workId),
+			new DeleteWorkCommand(permissionContext, workId),
 		);
 	}
 
 	@Get(':workId/revisions')
 	listWorkRevisions(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('workId', ParseIntPipe) workId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
 		return this.queryBus.execute(
-			new ListWorkRevisionsQuery(new PermissionContext(request), workId),
+			new ListWorkRevisionsQuery(permissionContext, workId),
 		);
 	}
 }

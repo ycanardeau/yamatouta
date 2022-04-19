@@ -11,6 +11,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { Request } from 'express';
 
 import { CreateUserCommand } from '../database/commands/users/CreateUserCommandHandler';
+import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
@@ -26,13 +27,13 @@ export class AuthController {
 
 	@Post('register')
 	createUser(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(CreateUserCommand.schema))
 		command: CreateUserCommand,
 	): Promise<AuthenticatedUserObject> {
 		return this.commandBus.execute(
 			new CreateUserCommand(
-				new PermissionContext(request),
+				permissionContext,
 				command.username,
 				command.email,
 				command.password,

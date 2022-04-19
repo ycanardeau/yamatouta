@@ -8,10 +8,8 @@ import {
 	Patch,
 	Post,
 	Query,
-	Req,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { Request } from 'express';
 
 import { DeleteTranslationCommand } from '../database/commands/entries/DeleteEntryCommandHandler';
 import { CreateTranslationCommand } from '../database/commands/translations/CreateTranslationCommandHandler';
@@ -19,6 +17,7 @@ import { UpdateTranslationCommand } from '../database/commands/translations/Upda
 import { ListTranslationRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetTranslationQuery } from '../database/queries/translations/GetTranslationQueryHandler';
 import { ListTranslationsQuery } from '../database/queries/translations/ListTranslationsQueryHandler';
+import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { TranslationObject } from '../dto/translations/TranslationObject';
@@ -34,13 +33,13 @@ export class TranslationController {
 
 	@Post()
 	createTranslation(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(UpdateTranslationCommand.schema))
 		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
 		return this.commandBus.execute(
 			new CreateTranslationCommand(
-				new PermissionContext(request),
+				permissionContext,
 				command.translationId,
 				command.headword,
 				command.locale,
@@ -53,13 +52,13 @@ export class TranslationController {
 
 	@Get()
 	listTranslations(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(ListTranslationsQuery.schema))
 		query: ListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
 		return this.queryBus.execute(
 			new ListTranslationsQuery(
-				new PermissionContext(request),
+				permissionContext,
 				query.sort,
 				query.offset,
 				query.limit,
@@ -72,14 +71,14 @@ export class TranslationController {
 
 	@Patch(':translationId')
 	updateTranslation(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('translationId', ParseIntPipe) translationId: number,
 		@Body(new JoiValidationPipe(UpdateTranslationCommand.schema))
 		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
 		return this.commandBus.execute(
 			new UpdateTranslationCommand(
-				new PermissionContext(request),
+				permissionContext,
 				translationId,
 				command.headword,
 				command.locale,
@@ -92,40 +91,31 @@ export class TranslationController {
 
 	@Delete(':translationId')
 	deleteTranslation(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<void> {
 		return this.commandBus.execute(
-			new DeleteTranslationCommand(
-				new PermissionContext(request),
-				translationId,
-			),
+			new DeleteTranslationCommand(permissionContext, translationId),
 		);
 	}
 
 	@Get(':translationId')
 	getTranslation(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<TranslationObject> {
 		return this.queryBus.execute(
-			new GetTranslationQuery(
-				new PermissionContext(request),
-				translationId,
-			),
+			new GetTranslationQuery(permissionContext, translationId),
 		);
 	}
 
 	@Get(':translationId/revisions')
 	listTranslationRevisions(
-		@Req() request: Request,
+		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
 		return this.queryBus.execute(
-			new ListTranslationRevisionsQuery(
-				new PermissionContext(request),
-				translationId,
-			),
+			new ListTranslationRevisionsQuery(permissionContext, translationId),
 		);
 	}
 }
