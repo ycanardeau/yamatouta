@@ -36,7 +36,9 @@ export class AuthController {
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	login(@Req() request: Request): Promise<AuthenticatedUserObject> {
+	login(
+		@Req() request: Request,
+	): Promise<AuthenticatedUserObject | undefined> {
 		return this.authService.login(request);
 	}
 

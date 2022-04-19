@@ -2,16 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 
 import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
+import { getUser } from '../../utils/getUser';
 
 @Injectable()
 export class AuthService {
-	async login(request: Request): Promise<AuthenticatedUserObject> {
-		const { user } = request;
-
-		if (!(user instanceof AuthenticatedUserObject))
-			throw new Error('user must be of type AuthenticatedUserObject.');
-
-		return user;
+	async login(
+		request: Request,
+	): Promise<AuthenticatedUserObject | undefined> {
+		return getUser(request);
 	}
 
 	logout(request: Request): void {

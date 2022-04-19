@@ -12,6 +12,7 @@ import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { Permission } from '../models/Permission';
 import { getClientIp } from '../utils/getClientIp';
+import { getUser } from '../utils/getUser';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PermissionContext {
@@ -20,15 +21,7 @@ export class PermissionContext {
 
 	constructor(@Inject(REQUEST) request: Request) {
 		this.clientIp = getClientIp(request);
-
-		const { user } = request;
-
-		if (!user) return;
-
-		if (!(user instanceof AuthenticatedUserObject))
-			throw new Error('user must be of type AuthenticatedUserObject.');
-
-		this.user = user;
+		this.user = getUser(request);
 	}
 
 	hasPermission(permission: Permission): boolean {
