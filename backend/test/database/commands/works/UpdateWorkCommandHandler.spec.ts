@@ -72,7 +72,6 @@ describe('UpdateWorkCommandHandler', () => {
 		permissionContext = new FakePermissionContext(existingUser);
 
 		updateWorkCommandHandler = new UpdateWorkCommandHandler(
-			permissionContext,
 			em as any,
 			userRepo as any,
 			auditLogEntryFactory,
@@ -80,6 +79,7 @@ describe('UpdateWorkCommandHandler', () => {
 		);
 
 		defaultCommand = {
+			permissionContext,
 			workId: work.id,
 			name: 'うた',
 			workType: WorkType.Song,
@@ -137,16 +137,11 @@ describe('UpdateWorkCommandHandler', () => {
 					existingUser,
 				);
 
-				updateWorkCommandHandler = new UpdateWorkCommandHandler(
-					permissionContext,
-					em as any,
-					userRepo as any,
-					auditLogEntryFactory,
-					workRepo as any,
-				);
-
 				await expect(
-					updateWorkCommandHandler.execute(defaultCommand),
+					updateWorkCommandHandler.execute({
+						...defaultCommand,
+						permissionContext,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

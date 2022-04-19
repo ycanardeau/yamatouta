@@ -57,7 +57,6 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		updateAuthenticatedUserCommandHandler =
 			new UpdateAuthenticatedUserCommandHandler(
-				permissionContext,
 				em as any,
 				userRepo as any,
 				passwordHasherFactory,
@@ -71,6 +70,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: 'wrong password',
 					username: newUsername,
 				}),
@@ -78,6 +78,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					username: newUsername,
 				});
@@ -108,6 +109,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('username is not changed', async () => {
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					username: existingUsername,
 				});
@@ -135,6 +137,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					username: newUsername,
 				});
@@ -163,6 +166,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					username: newUsername,
 				});
@@ -186,6 +190,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('username is undefined', async () => {
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					username: undefined,
 				});
@@ -209,6 +214,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('username is empty', async () => {
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					username: '',
 				}),
@@ -224,6 +230,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('username is whitespace', async () => {
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					username: ' 　\t\t　 ',
 				}),
@@ -243,6 +250,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					username: newUsername,
 				}),
@@ -263,6 +271,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					username: newUsername,
 				}),
@@ -281,6 +290,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: 'wrong password',
 					email: newEmail,
 				}),
@@ -288,6 +298,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					email: newEmail,
 				});
@@ -318,6 +329,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('email is not changed', async () => {
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					email: existingEmail,
 				});
@@ -341,6 +353,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('email is undefined', async () => {
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					email: undefined,
 				});
@@ -364,6 +377,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('email is empty', async () => {
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					email: '',
 				}),
@@ -379,6 +393,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('email is invalid', async () => {
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					email: 'invalid_email',
 				}),
@@ -396,6 +411,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: 'wrong password',
 					newPassword: newPassword,
 				}),
@@ -403,6 +419,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					newPassword: newPassword,
 				});
@@ -433,6 +450,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('newPassword is undefined', async () => {
 			const userObject =
 				await updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					newPassword: undefined,
 				});
@@ -456,6 +474,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		test('newPassword is empty', async () => {
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					newPassword: '',
 				}),
@@ -475,6 +494,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 			await expect(
 				updateAuthenticatedUserCommandHandler.execute({
+					permissionContext,
 					password: existingPassword,
 					newPassword: newPassword,
 				}),

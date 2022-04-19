@@ -69,7 +69,6 @@ describe('DeleteTranslationCommandHandler', () => {
 		permissionContext = new FakePermissionContext(existingUser);
 
 		deleteTranslationCommandHandler = new DeleteTranslationCommandHandler(
-			permissionContext,
 			em as any,
 			userRepo as any,
 			auditLogEntryFactory,
@@ -80,6 +79,7 @@ describe('DeleteTranslationCommandHandler', () => {
 	describe('deleteTranslation', () => {
 		const testDeleteTranslation = async (): Promise<void> => {
 			await deleteTranslationCommandHandler.execute({
+				permissionContext,
 				entryId: translation.id,
 			});
 
@@ -125,17 +125,9 @@ describe('DeleteTranslationCommandHandler', () => {
 					existingUser,
 				);
 
-				deleteTranslationCommandHandler =
-					new DeleteTranslationCommandHandler(
-						permissionContext,
-						em as any,
-						userRepo as any,
-						auditLogEntryFactory,
-						translationRepo as any,
-					);
-
 				await expect(
 					deleteTranslationCommandHandler.execute({
+						permissionContext,
 						entryId: translation.id,
 					}),
 				).rejects.toThrow(UnauthorizedException);

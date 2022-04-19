@@ -58,13 +58,13 @@ describe('CreateWorkCommandHandler', () => {
 		permissionContext = new FakePermissionContext(existingUser);
 
 		createWorkCommandHandler = new CreateWorkCommandHandler(
-			permissionContext,
 			em as any,
 			userRepo as any,
 			auditLogEntryFactory,
 		);
 
 		defaultCommand = {
+			permissionContext,
 			workId: undefined,
 			name: 'よみもの',
 			workType: WorkType.Book,
@@ -126,15 +126,11 @@ describe('CreateWorkCommandHandler', () => {
 					existingUser,
 				);
 
-				createWorkCommandHandler = new CreateWorkCommandHandler(
-					permissionContext,
-					em as any,
-					userRepo as any,
-					auditLogEntryFactory,
-				);
-
 				await expect(
-					createWorkCommandHandler.execute(defaultCommand),
+					createWorkCommandHandler.execute({
+						...defaultCommand,
+						permissionContext,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

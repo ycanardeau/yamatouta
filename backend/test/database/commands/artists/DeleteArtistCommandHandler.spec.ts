@@ -67,7 +67,6 @@ describe('DeleteArtistCommandHandler', () => {
 		permissionContext = new FakePermissionContext(existingUser);
 
 		deleteArtistCommandHandler = new DeleteArtistCommandHandler(
-			permissionContext,
 			em as any,
 			userRepo as any,
 			auditLogEntryFactory,
@@ -77,7 +76,10 @@ describe('DeleteArtistCommandHandler', () => {
 
 	describe('deleteArtist', () => {
 		const testDeleteArtist = async (): Promise<void> => {
-			await deleteArtistCommandHandler.execute({ entryId: artist.id });
+			await deleteArtistCommandHandler.execute({
+				permissionContext,
+				entryId: artist.id,
+			});
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof ArtistRevision,
@@ -119,16 +121,11 @@ describe('DeleteArtistCommandHandler', () => {
 					existingUser,
 				);
 
-				deleteArtistCommandHandler = new DeleteArtistCommandHandler(
-					permissionContext,
-					em as any,
-					userRepo as any,
-					auditLogEntryFactory,
-					artistRepo as any,
-				);
-
 				await expect(
-					deleteArtistCommandHandler.execute({ entryId: artist.id }),
+					deleteArtistCommandHandler.execute({
+						permissionContext,
+						entryId: artist.id,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

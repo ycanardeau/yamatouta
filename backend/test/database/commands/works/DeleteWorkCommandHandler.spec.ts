@@ -67,7 +67,6 @@ describe('DeleteWorkCommandHandler', () => {
 		permissionContext = new FakePermissionContext(existingUser);
 
 		deleteWorkCommandHandler = new DeleteWorkCommandHandler(
-			permissionContext,
 			em as any,
 			userRepo as any,
 			auditLogEntryFactory,
@@ -77,7 +76,10 @@ describe('DeleteWorkCommandHandler', () => {
 
 	describe('deleteWork', () => {
 		const testDeleteWork = async (): Promise<void> => {
-			await deleteWorkCommandHandler.execute({ entryId: work.id });
+			await deleteWorkCommandHandler.execute({
+				permissionContext,
+				entryId: work.id,
+			});
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof WorkRevision,
@@ -119,16 +121,11 @@ describe('DeleteWorkCommandHandler', () => {
 					existingUser,
 				);
 
-				deleteWorkCommandHandler = new DeleteWorkCommandHandler(
-					permissionContext,
-					em as any,
-					userRepo as any,
-					auditLogEntryFactory,
-					workRepo as any,
-				);
-
 				await expect(
-					deleteWorkCommandHandler.execute({ entryId: work.id }),
+					deleteWorkCommandHandler.execute({
+						permissionContext,
+						entryId: work.id,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

@@ -51,21 +51,21 @@ describe('CreateUserCommandHandler', () => {
 			userRepo as any,
 			auditLogEntryFactory,
 			passwordHasherFactory,
-			permissionContext,
 		);
 	});
 
 	describe('createUser', () => {
 		const defaultCommand = {
+			permissionContext,
 			username: 'user',
 			email: 'user@example.com',
 			password: 'P@$$w0rd',
 		};
 
 		test('createUser', async () => {
-			const userObject = await createUserCommandHandler.execute({
-				...defaultCommand,
-			});
+			const userObject = await createUserCommandHandler.execute(
+				defaultCommand,
+			);
 
 			expect(userObject.name).toBe(defaultCommand.username);
 

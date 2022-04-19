@@ -79,7 +79,6 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		updateTranslationCommandHandler = new UpdateTranslationCommandHandler(
 			em as any,
-			permissionContext,
 			userRepo as any,
 			auditLogEntryFactory,
 			ngramConverter,
@@ -87,6 +86,7 @@ describe('UpdateTranslationCommandHandler', () => {
 		);
 
 		defaultCommand = {
+			permissionContext,
 			translationId: translation.id,
 			headword: '和語',
 			locale: 'ja',
@@ -151,18 +151,11 @@ describe('UpdateTranslationCommandHandler', () => {
 					existingUser,
 				);
 
-				updateTranslationCommandHandler =
-					new UpdateTranslationCommandHandler(
-						em as any,
-						permissionContext,
-						userRepo as any,
-						auditLogEntryFactory,
-						ngramConverter,
-						translationRepo as any,
-					);
-
 				await expect(
-					updateTranslationCommandHandler.execute(defaultCommand),
+					updateTranslationCommandHandler.execute({
+						...defaultCommand,
+						permissionContext,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

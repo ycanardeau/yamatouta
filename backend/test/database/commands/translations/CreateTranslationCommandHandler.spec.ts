@@ -62,13 +62,13 @@ describe('CreateTranslationCommandHandler', () => {
 
 		createTranslationCommandHandler = new CreateTranslationCommandHandler(
 			em as any,
-			permissionContext,
 			userRepo as any,
 			auditLogEntryFactory,
 			ngramConverter,
 		);
 
 		defaultCommand = {
+			permissionContext,
 			translationId: undefined,
 			headword: '大和言葉',
 			locale: 'ja',
@@ -133,17 +133,11 @@ describe('CreateTranslationCommandHandler', () => {
 					existingUser,
 				);
 
-				createTranslationCommandHandler =
-					new CreateTranslationCommandHandler(
-						em as any,
-						permissionContext,
-						userRepo as any,
-						auditLogEntryFactory,
-						ngramConverter,
-					);
-
 				await expect(
-					createTranslationCommandHandler.execute(defaultCommand),
+					createTranslationCommandHandler.execute({
+						...defaultCommand,
+						permissionContext,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

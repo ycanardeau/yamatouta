@@ -72,7 +72,6 @@ describe('UpdateArtistCommandHandler', () => {
 		permissionContext = new FakePermissionContext(existingUser);
 
 		updateArtistCommandHandler = new UpdateArtistCommandHandler(
-			permissionContext,
 			em as any,
 			userRepo as any,
 			auditLogEntryFactory,
@@ -80,6 +79,7 @@ describe('UpdateArtistCommandHandler', () => {
 		);
 
 		defaultCommand = {
+			permissionContext,
 			artistId: artist.id,
 			name: 'くみあい',
 			artistType: ArtistType.Group,
@@ -139,16 +139,11 @@ describe('UpdateArtistCommandHandler', () => {
 					existingUser,
 				);
 
-				updateArtistCommandHandler = new UpdateArtistCommandHandler(
-					permissionContext,
-					em as any,
-					userRepo as any,
-					auditLogEntryFactory,
-					artistRepo as any,
-				);
-
 				await expect(
-					updateArtistCommandHandler.execute(defaultCommand),
+					updateArtistCommandHandler.execute({
+						...defaultCommand,
+						permissionContext,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

@@ -76,7 +76,6 @@ describe('DeleteQuoteCommandHandler', () => {
 		permissionContext = new FakePermissionContext(existingUser);
 
 		deleteQuoteCommandHandler = new DeleteQuoteCommandHandler(
-			permissionContext,
 			em as any,
 			userRepo as any,
 			auditLogEntryFactory,
@@ -86,7 +85,10 @@ describe('DeleteQuoteCommandHandler', () => {
 
 	describe('deleteQuote', () => {
 		const testDeleteQuote = async (): Promise<void> => {
-			await deleteQuoteCommandHandler.execute({ entryId: quote.id });
+			await deleteQuoteCommandHandler.execute({
+				permissionContext,
+				entryId: quote.id,
+			});
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof QuoteRevision,
@@ -128,16 +130,11 @@ describe('DeleteQuoteCommandHandler', () => {
 					existingUser,
 				);
 
-				deleteQuoteCommandHandler = new DeleteQuoteCommandHandler(
-					permissionContext,
-					em as any,
-					userRepo as any,
-					auditLogEntryFactory,
-					quoteRepo as any,
-				);
-
 				await expect(
-					deleteQuoteCommandHandler.execute({ entryId: quote.id }),
+					deleteQuoteCommandHandler.execute({
+						permissionContext,
+						entryId: quote.id,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

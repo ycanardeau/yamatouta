@@ -74,7 +74,6 @@ describe('CreateQuoteCommandHandler', () => {
 		permissionContext = new FakePermissionContext(existingUser);
 
 		createQuoteCommandHandler = new CreateQuoteCommandHandler(
-			permissionContext,
 			em as any,
 			userRepo as any,
 			artistRepo as any,
@@ -82,6 +81,7 @@ describe('CreateQuoteCommandHandler', () => {
 		);
 
 		defaultCommand = {
+			permissionContext,
 			quoteId: undefined,
 			text: 'やまとうた',
 			quoteType: QuoteType.Tanka,
@@ -149,16 +149,11 @@ describe('CreateQuoteCommandHandler', () => {
 					existingUser,
 				);
 
-				createQuoteCommandHandler = new CreateQuoteCommandHandler(
-					permissionContext,
-					em as any,
-					userRepo as any,
-					artistRepo as any,
-					auditLogEntryFactory,
-				);
-
 				await expect(
-					createQuoteCommandHandler.execute(defaultCommand),
+					createQuoteCommandHandler.execute({
+						...defaultCommand,
+						permissionContext,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
