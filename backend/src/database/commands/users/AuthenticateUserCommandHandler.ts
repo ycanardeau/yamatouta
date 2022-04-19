@@ -39,7 +39,7 @@ export class AuthenticateUserCommand {
 	constructor(
 		readonly email: string,
 		readonly password: string,
-		readonly ip: string,
+		readonly clientIp: string,
 	) {}
 }
 
@@ -75,7 +75,7 @@ export class AuthenticateUserCommandHandler {
 			if (user.passwordHash === passwordHash) {
 				this.auditLogger.user_login({
 					actor: user,
-					actorIp: command.ip,
+					actorIp: command.clientIp,
 					user: user,
 				});
 
@@ -97,7 +97,7 @@ export class AuthenticateUserCommandHandler {
 
 			this.auditLogger.user_failedLogin({
 				actor: user,
-				actorIp: command.ip,
+				actorIp: command.clientIp,
 				user: user,
 			});
 

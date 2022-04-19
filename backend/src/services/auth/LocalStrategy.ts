@@ -1,13 +1,8 @@
 import { EntityManager } from '@mikro-orm/mariadb';
-import {
-	BadRequestException,
-	Injectable,
-	UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-local';
-import requestIp from 'request-ip';
 
 import config from '../../config';
 import {
@@ -16,6 +11,7 @@ import {
 } from '../../database/commands/users/AuthenticateUserCommandHandler';
 import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
 import { TooManyRequestsException } from '../../exceptions/TooManyRequestsException';
+import { getClientIp } from '../../utils/getClientIp';
 import { RateLimiterMariaDb } from './RateLimiterMariaDb';
 
 // Code from: https://gist.github.com/animir/dc59b9da82494437f0a6009589e427f6.
@@ -67,15 +63,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		email: string,
 		password: string,
 	): Promise<AuthenticatedUserObject> {
-		const ip = requestIp.getClientIp(request);
+		const clientIp = getClientIp(request);
 
-		if (!ip) throw new BadRequestException('IP address cannot be found.');
-
-		const cacheKey = `${email}_${ip}`;
+		const cacheKey = `${email}_${clientIp}`;
 
 		const [resEmailAndIp, resSlowByIp] = await Promise.all([
 			this.limiterConsecutiveFailsByEmailAndIp.get(cacheKey),
-			this.limiterSlowBruteByIp.get(ip),
+			this.limiterSlowBruteByIp.get(clientIp),
 		]);
 
 		if (
@@ -97,7 +91,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		const result = await this.authenticateUserCommandHandler.execute({
 			email: email,
 			password: password,
-			ip: ip,
+			clientIp: clientIp,
 		});
 
 		if (result.error === LoginError.None) {
@@ -110,7 +104,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		// Consume 1 point from limiters on wrong attempt and block if limits reached.
 		try {
 			await Promise.all([
-				this.limiterSlowBruteByIp.consume(ip),
+				this.limiterSlowBruteByIp.consume(clientIp),
 
 				// Count failed attempts by Email + IP only for registered users.
 				result.error !== LoginError.NotFound

@@ -1,5 +1,4 @@
 import {
-	BadRequestException,
 	Inject,
 	Injectable,
 	NotFoundException,
@@ -8,11 +7,11 @@ import {
 } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
-import requestIp from 'request-ip';
 
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { Permission } from '../models/Permission';
+import { getClientIp } from '../utils/getClientIp';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PermissionContext {
@@ -20,11 +19,7 @@ export class PermissionContext {
 	readonly user?: AuthenticatedUserObject;
 
 	constructor(@Inject(REQUEST) request: Request) {
-		const ip = requestIp.getClientIp(request);
-
-		if (!ip) throw new BadRequestException('IP address cannot be found.');
-
-		this.remoteIpAddress = ip;
+		this.remoteIpAddress = getClientIp(request);
 
 		const { user } = request;
 
