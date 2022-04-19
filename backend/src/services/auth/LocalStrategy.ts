@@ -10,12 +10,12 @@ import { Strategy } from 'passport-local';
 import requestIp from 'request-ip';
 
 import config from '../../config';
-import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
-import { TooManyRequestsException } from '../../exceptions/TooManyRequestsException';
 import {
 	AuthenticateUserCommandHandler,
 	LoginError,
-} from '../commands/users/AuthenticateUserCommandHandler';
+} from '../../database/commands/users/AuthenticateUserCommandHandler';
+import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
+import { TooManyRequestsException } from '../../exceptions/TooManyRequestsException';
 import { RateLimiterMariaDb } from './RateLimiterMariaDb';
 
 // Code from: https://gist.github.com/animir/dc59b9da82494437f0a6009589e427f6.

@@ -9,15 +9,15 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
+import {
+	CreateUserCommand,
+	CreateUserCommandHandler,
+} from '../database/commands/users/CreateUserCommandHandler';
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { LoginService } from '../services/auth/LoginService';
 import { LogoutService } from '../services/auth/LogoutService';
-import {
-	CreateUserCommand,
-	CreateUserCommandHandler,
-} from '../services/commands/users/CreateUserCommandHandler';
 
 @Controller('auth')
 export class AuthController {

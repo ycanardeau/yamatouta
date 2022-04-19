@@ -1,6 +1,6 @@
 import { Controller, Post } from '@nestjs/common';
 
-import { CreateMissingRevisionsCommandHandler } from '../services/commands/admin/CreateMissingRevisionsCommandHandler';
+import { CreateMissingRevisionsCommandHandler } from '../database/commands/admin/CreateMissingRevisionsCommandHandler';
 
 @Controller('admin')
 export class AdminController {

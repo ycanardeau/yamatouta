@@ -10,6 +10,43 @@ import { SitemapController } from './controllers/SitemapController';
 import { TranslationController } from './controllers/TranslationController';
 import { UserController } from './controllers/UserController';
 import { WorkController } from './controllers/WorkController';
+import { CreateMissingRevisionsCommandHandler } from './database/commands/admin/CreateMissingRevisionsCommandHandler';
+import { CreateArtistCommandHandler } from './database/commands/artists/CreateArtistCommandHandler';
+import { UpdateArtistCommandHandler } from './database/commands/artists/UpdateArtistCommandHandler';
+import {
+	DeleteArtistCommandHandler,
+	DeleteQuoteCommandHandler,
+	DeleteTranslationCommandHandler,
+	DeleteWorkCommandHandler,
+} from './database/commands/entries/DeleteEntryCommandHandler';
+import { CreateQuoteCommandHandler } from './database/commands/quotes/CreateQuoteCommandHandler';
+import { UpdateQuoteCommandHandler } from './database/commands/quotes/UpdateQuoteCommandHandler';
+import { CreateTranslationCommandHandler } from './database/commands/translations/CreateTranslationCommandHandler';
+import { UpdateTranslationCommandHandler } from './database/commands/translations/UpdateTranslationCommandHandler';
+import { AuthenticateUserCommandHandler } from './database/commands/users/AuthenticateUserCommandHandler';
+import { CreateUserCommandHandler } from './database/commands/users/CreateUserCommandHandler';
+import { UpdateAuthenticatedUserCommandHandler } from './database/commands/users/UpdateAuthenticatedUserCommandHandler';
+import { CreateWorkCommandHandler } from './database/commands/works/CreateWorkCommandHandler';
+import { UpdateWorkCommandHandler } from './database/commands/works/UpdateWorkCommandHandler';
+import { GetArtistQueryHandler } from './database/queries/artists/GetArtistQueryHandler';
+import { ListArtistIdsQueryHandler } from './database/queries/artists/ListArtistIdsQueryHandler';
+import { ListArtistsQueryHandler } from './database/queries/artists/ListArtistsQueryHandler';
+import {
+	ListArtistRevisionsQueryHandler,
+	ListQuoteRevisionsQueryHandler,
+	ListTranslationRevisionsQueryHandler,
+	ListWorkRevisionsQueryHandler,
+} from './database/queries/entries/ListEntryRevisionsQueryHandler';
+import { GetQuoteQueryHandler } from './database/queries/quotes/GetQuoteQueryHandler';
+import { ListQuoteIdsQueryHandler } from './database/queries/quotes/ListQuoteIdsQueryHandler';
+import { ListQuotesQueryHandler } from './database/queries/quotes/ListQuotesQueryHandler';
+import { GetTranslationQueryHandler } from './database/queries/translations/GetTranslationQueryHandler';
+import { ListTranslationsQueryHandler } from './database/queries/translations/ListTranslationsQueryHandler';
+import { GetAuthenticatedUserQueryHandler } from './database/queries/users/GetAuthenticatedUserQueryHandler';
+import { GetUserQueryHandler } from './database/queries/users/GetUserQueryHandler';
+import { ListUsersQueryHandler } from './database/queries/users/ListUsersQueryHandler';
+import { GetWorkQueryHandler } from './database/queries/works/GetWorkQueryHandler';
+import { ListWorksQueryHandler } from './database/queries/works/ListWorksQueryHandler';
 import { Artist } from './entities/Artist';
 import { Quote } from './entities/Quote';
 import { TranslationRevision } from './entities/Revision';
@@ -24,44 +61,7 @@ import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
 import { LoginService } from './services/auth/LoginService';
 import { LogoutService } from './services/auth/LogoutService';
-import { CreateMissingRevisionsCommandHandler } from './services/commands/admin/CreateMissingRevisionsCommandHandler';
-import { CreateArtistCommandHandler } from './services/commands/artists/CreateArtistCommandHandler';
-import { UpdateArtistCommandHandler } from './services/commands/artists/UpdateArtistCommandHandler';
-import {
-	DeleteArtistCommandHandler,
-	DeleteQuoteCommandHandler,
-	DeleteTranslationCommandHandler,
-	DeleteWorkCommandHandler,
-} from './services/commands/entries/DeleteEntryCommandHandler';
-import { CreateQuoteCommandHandler } from './services/commands/quotes/CreateQuoteCommandHandler';
-import { UpdateQuoteCommandHandler } from './services/commands/quotes/UpdateQuoteCommandHandler';
-import { CreateTranslationCommandHandler } from './services/commands/translations/CreateTranslationCommandHandler';
-import { UpdateTranslationCommandHandler } from './services/commands/translations/UpdateTranslationCommandHandler';
-import { AuthenticateUserCommandHandler } from './services/commands/users/AuthenticateUserCommandHandler';
-import { CreateUserCommandHandler } from './services/commands/users/CreateUserCommandHandler';
-import { UpdateAuthenticatedUserCommandHandler } from './services/commands/users/UpdateAuthenticatedUserCommandHandler';
-import { CreateWorkCommandHandler } from './services/commands/works/CreateWorkCommandHandler';
-import { UpdateWorkCommandHandler } from './services/commands/works/UpdateWorkCommandHandler';
 import { PasswordHasherFactory } from './services/passwordHashers/PasswordHasherFactory';
-import { GetArtistQueryHandler } from './services/queries/artists/GetArtistQueryHandler';
-import { ListArtistIdsQueryHandler } from './services/queries/artists/ListArtistIdsQueryHandler';
-import { ListArtistsQueryHandler } from './services/queries/artists/ListArtistsQueryHandler';
-import {
-	ListArtistRevisionsQueryHandler,
-	ListQuoteRevisionsQueryHandler,
-	ListTranslationRevisionsQueryHandler,
-	ListWorkRevisionsQueryHandler,
-} from './services/queries/entries/ListEntryRevisionsQueryHandler';
-import { GetQuoteQueryHandler } from './services/queries/quotes/GetQuoteQueryHandler';
-import { ListQuoteIdsQueryHandler } from './services/queries/quotes/ListQuoteIdsQueryHandler';
-import { ListQuotesQueryHandler } from './services/queries/quotes/ListQuotesQueryHandler';
-import { GetTranslationQueryHandler } from './services/queries/translations/GetTranslationQueryHandler';
-import { ListTranslationsQueryHandler } from './services/queries/translations/ListTranslationsQueryHandler';
-import { GetAuthenticatedUserQueryHandler } from './services/queries/users/GetAuthenticatedUserQueryHandler';
-import { GetUserQueryHandler } from './services/queries/users/GetUserQueryHandler';
-import { ListUsersQueryHandler } from './services/queries/users/ListUsersQueryHandler';
-import { GetWorkQueryHandler } from './services/queries/works/GetWorkQueryHandler';
-import { ListWorksQueryHandler } from './services/queries/works/ListWorksQueryHandler';
 
 const queryHandlers = [
 	GetArtistQueryHandler,

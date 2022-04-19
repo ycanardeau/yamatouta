@@ -10,22 +10,22 @@ import {
 	Query,
 } from '@nestjs/common';
 
+import { DeleteWorkCommandHandler } from '../database/commands/entries/DeleteEntryCommandHandler';
+import { CreateWorkCommandHandler } from '../database/commands/works/CreateWorkCommandHandler';
+import {
+	UpdateWorkCommand,
+	UpdateWorkCommandHandler,
+} from '../database/commands/works/UpdateWorkCommandHandler';
+import { ListWorkRevisionsQueryHandler } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
+import { GetWorkQueryHandler } from '../database/queries/works/GetWorkQueryHandler';
+import {
+	ListWorksQuery,
+	ListWorksQueryHandler,
+} from '../database/queries/works/ListWorksQueryHandler';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { WorkObject } from '../dto/works/WorkObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import { DeleteWorkCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
-import { CreateWorkCommandHandler } from '../services/commands/works/CreateWorkCommandHandler';
-import {
-	UpdateWorkCommand,
-	UpdateWorkCommandHandler,
-} from '../services/commands/works/UpdateWorkCommandHandler';
-import { ListWorkRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
-import { GetWorkQueryHandler } from '../services/queries/works/GetWorkQueryHandler';
-import {
-	ListWorksQuery,
-	ListWorksQueryHandler,
-} from '../services/queries/works/ListWorksQueryHandler';
 
 @Controller('works')
 export class WorkController {

@@ -10,22 +10,22 @@ import {
 	Query,
 } from '@nestjs/common';
 
+import { CreateArtistCommandHandler } from '../database/commands/artists/CreateArtistCommandHandler';
+import {
+	UpdateArtistCommand,
+	UpdateArtistCommandHandler,
+} from '../database/commands/artists/UpdateArtistCommandHandler';
+import { DeleteArtistCommandHandler } from '../database/commands/entries/DeleteEntryCommandHandler';
+import { GetArtistQueryHandler } from '../database/queries/artists/GetArtistQueryHandler';
+import {
+	ListArtistsQuery,
+	ListArtistsQueryHandler,
+} from '../database/queries/artists/ListArtistsQueryHandler';
+import { ListArtistRevisionsQueryHandler } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { ArtistObject } from '../dto/artists/ArtistObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import { CreateArtistCommandHandler } from '../services/commands/artists/CreateArtistCommandHandler';
-import {
-	UpdateArtistCommand,
-	UpdateArtistCommandHandler,
-} from '../services/commands/artists/UpdateArtistCommandHandler';
-import { DeleteArtistCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
-import { GetArtistQueryHandler } from '../services/queries/artists/GetArtistQueryHandler';
-import {
-	ListArtistsQuery,
-	ListArtistsQueryHandler,
-} from '../services/queries/artists/ListArtistsQueryHandler';
-import { ListArtistRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
 
 @Controller('artists')
 export class ArtistController {

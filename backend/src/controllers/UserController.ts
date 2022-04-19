@@ -8,20 +8,20 @@ import {
 	Query,
 } from '@nestjs/common';
 
+import {
+	UpdateAuthenticatedUserCommand,
+	UpdateAuthenticatedUserCommandHandler,
+} from '../database/commands/users/UpdateAuthenticatedUserCommandHandler';
+import { GetAuthenticatedUserQueryHandler } from '../database/queries/users/GetAuthenticatedUserQueryHandler';
+import { GetUserQueryHandler } from '../database/queries/users/GetUserQueryHandler';
+import {
+	ListUsersQuery,
+	ListUsersQueryHandler,
+} from '../database/queries/users/ListUsersQueryHandler';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
 import { UserObject } from '../dto/users/UserObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import {
-	UpdateAuthenticatedUserCommand,
-	UpdateAuthenticatedUserCommandHandler,
-} from '../services/commands/users/UpdateAuthenticatedUserCommandHandler';
-import { GetAuthenticatedUserQueryHandler } from '../services/queries/users/GetAuthenticatedUserQueryHandler';
-import { GetUserQueryHandler } from '../services/queries/users/GetUserQueryHandler';
-import {
-	ListUsersQuery,
-	ListUsersQueryHandler,
-} from '../services/queries/users/ListUsersQueryHandler';
 
 @Controller('users')
 export class UserController {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { SitemapStream, streamToPromise } from 'sitemap';
 
-import { ListArtistIdsQueryHandler } from './queries/artists/ListArtistIdsQueryHandler';
-import { ListQuoteIdsQueryHandler } from './queries/quotes/ListQuoteIdsQueryHandler';
+import { ListArtistIdsQueryHandler } from './../database/queries/artists/ListArtistIdsQueryHandler';
+import { ListQuoteIdsQueryHandler } from './../database/queries/quotes/ListQuoteIdsQueryHandler';
 
 @Injectable()
 export class GenerateSitemapService {

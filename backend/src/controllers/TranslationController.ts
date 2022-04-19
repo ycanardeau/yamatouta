@@ -10,22 +10,22 @@ import {
 	Query,
 } from '@nestjs/common';
 
+import { DeleteTranslationCommandHandler } from '../database/commands/entries/DeleteEntryCommandHandler';
+import { CreateTranslationCommandHandler } from '../database/commands/translations/CreateTranslationCommandHandler';
+import {
+	UpdateTranslationCommand,
+	UpdateTranslationCommandHandler,
+} from '../database/commands/translations/UpdateTranslationCommandHandler';
+import { ListTranslationRevisionsQueryHandler } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
+import { GetTranslationQueryHandler } from '../database/queries/translations/GetTranslationQueryHandler';
+import {
+	ListTranslationsQuery,
+	ListTranslationsQueryHandler,
+} from '../database/queries/translations/ListTranslationsQueryHandler';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { TranslationObject } from '../dto/translations/TranslationObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import { DeleteTranslationCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
-import { CreateTranslationCommandHandler } from '../services/commands/translations/CreateTranslationCommandHandler';
-import {
-	UpdateTranslationCommand,
-	UpdateTranslationCommandHandler,
-} from '../services/commands/translations/UpdateTranslationCommandHandler';
-import { ListTranslationRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
-import { GetTranslationQueryHandler } from '../services/queries/translations/GetTranslationQueryHandler';
-import {
-	ListTranslationsQuery,
-	ListTranslationsQueryHandler,
-} from '../services/queries/translations/ListTranslationsQueryHandler';
 
 @Controller('translations')
 export class TranslationController {

@@ -10,22 +10,22 @@ import {
 	Query,
 } from '@nestjs/common';
 
+import { DeleteQuoteCommandHandler } from '../database/commands/entries/DeleteEntryCommandHandler';
+import { CreateQuoteCommandHandler } from '../database/commands/quotes/CreateQuoteCommandHandler';
+import {
+	UpdateQuoteCommand,
+	UpdateQuoteCommandHandler,
+} from '../database/commands/quotes/UpdateQuoteCommandHandler';
+import { ListQuoteRevisionsQueryHandler } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
+import { GetQuoteQueryHandler } from '../database/queries/quotes/GetQuoteQueryHandler';
+import {
+	ListQuotesQuery,
+	ListQuotesQueryHandler,
+} from '../database/queries/quotes/ListQuotesQueryHandler';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { QuoteObject } from '../dto/quotes/QuoteObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
-import { DeleteQuoteCommandHandler } from '../services/commands/entries/DeleteEntryCommandHandler';
-import { CreateQuoteCommandHandler } from '../services/commands/quotes/CreateQuoteCommandHandler';
-import {
-	UpdateQuoteCommand,
-	UpdateQuoteCommandHandler,
-} from '../services/commands/quotes/UpdateQuoteCommandHandler';
-import { ListQuoteRevisionsQueryHandler } from '../services/queries/entries/ListEntryRevisionsQueryHandler';
-import { GetQuoteQueryHandler } from '../services/queries/quotes/GetQuoteQueryHandler';
-import {
-	ListQuotesQuery,
-	ListQuotesQueryHandler,
-} from '../services/queries/quotes/ListQuotesQueryHandler';
 
 @Controller('quotes')
 export class QuoteController {
