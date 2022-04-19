@@ -1,5 +1,4 @@
 import { EntityManager } from '@mikro-orm/core';
-import { Injectable } from '@nestjs/common';
 
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
@@ -10,9 +9,14 @@ import { Entry } from '../../../models/Entry';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 
-@Injectable()
-export class CreateMissingRevisionsCommandHandler {
+export class CreateMissingRevisionsCommand {}
+
+@CommandHandler(CreateMissingRevisionsCommand)
+export class CreateMissingRevisionsCommandHandler
+	implements ICommandHandler<CreateMissingRevisionsCommand>
+{
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,

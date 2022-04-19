@@ -1,6 +1,6 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 import { Artist } from '../../../entities/Artist';
 import { AuditLogEntry } from '../../../entities/AuditLogEntry';
@@ -14,12 +14,16 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 
-export class DeleteEntryCommand {
+abstract class DeleteEntryCommand {
 	constructor(readonly entryId: number) {}
 }
 
-abstract class DeleteEntryCommandHandler<TEntry extends Entry> {
+abstract class DeleteEntryCommandHandler<
+	TEntry extends Entry,
+	TCommand extends DeleteEntryCommand,
+> {
 	constructor(
 		protected readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
@@ -34,7 +38,7 @@ abstract class DeleteEntryCommandHandler<TEntry extends Entry> {
 		) => AuditLogEntry,
 	) {}
 
-	async execute(command: DeleteEntryCommand): Promise<void> {
+	async execute(command: TCommand): Promise<void> {
 		this.permissionContext.verifyPermission(this.permission);
 
 		await this.em.transactional(async (em) => {
@@ -74,8 +78,13 @@ abstract class DeleteEntryCommandHandler<TEntry extends Entry> {
 	}
 }
 
-@Injectable()
-export class DeleteTranslationCommandHandler extends DeleteEntryCommandHandler<Translation> {
+export class DeleteTranslationCommand extends DeleteEntryCommand {}
+
+@CommandHandler(DeleteTranslationCommand)
+export class DeleteTranslationCommandHandler
+	extends DeleteEntryCommandHandler<Translation, DeleteTranslationCommand>
+	implements ICommandHandler<DeleteTranslationCommand>
+{
 	constructor(
 		permissionContext: PermissionContext,
 		em: EntityManager,
@@ -102,8 +111,13 @@ export class DeleteTranslationCommandHandler extends DeleteEntryCommandHandler<T
 	}
 }
 
-@Injectable()
-export class DeleteArtistCommandHandler extends DeleteEntryCommandHandler<Artist> {
+export class DeleteArtistCommand extends DeleteEntryCommand {}
+
+@CommandHandler(DeleteArtistCommand)
+export class DeleteArtistCommandHandler
+	extends DeleteEntryCommandHandler<Artist, DeleteArtistCommand>
+	implements ICommandHandler<DeleteArtistCommand>
+{
 	constructor(
 		permissionContext: PermissionContext,
 		em: EntityManager,
@@ -130,8 +144,13 @@ export class DeleteArtistCommandHandler extends DeleteEntryCommandHandler<Artist
 	}
 }
 
-@Injectable()
-export class DeleteQuoteCommandHandler extends DeleteEntryCommandHandler<Quote> {
+export class DeleteQuoteCommand extends DeleteEntryCommand {}
+
+@CommandHandler(DeleteQuoteCommand)
+export class DeleteQuoteCommandHandler
+	extends DeleteEntryCommandHandler<Quote, DeleteQuoteCommand>
+	implements ICommandHandler<DeleteQuoteCommand>
+{
 	constructor(
 		permissionContext: PermissionContext,
 		em: EntityManager,
@@ -158,8 +177,13 @@ export class DeleteQuoteCommandHandler extends DeleteEntryCommandHandler<Quote> 
 	}
 }
 
-@Injectable()
-export class DeleteWorkCommandHandler extends DeleteEntryCommandHandler<Work> {
+export class DeleteWorkCommand extends DeleteEntryCommand {}
+
+@CommandHandler(DeleteWorkCommand)
+export class DeleteWorkCommandHandler
+	extends DeleteEntryCommandHandler<Work, DeleteWorkCommand>
+	implements ICommandHandler<DeleteWorkCommand>
+{
 	constructor(
 		permissionContext: PermissionContext,
 		em: EntityManager,

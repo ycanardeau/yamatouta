@@ -41,7 +41,7 @@ export class UserController {
 	}
 
 	@Get('current')
-	getAuthenticatedUser(): AuthenticatedUserObject {
+	getAuthenticatedUser(): Promise<AuthenticatedUserObject> {
 		return this.getAuthenticatedUserQueryHandler.execute();
 	}
 

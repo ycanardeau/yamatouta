@@ -1,13 +1,18 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UnauthorizedException } from '@nestjs/common';
 
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
-@Injectable()
-export class GetAuthenticatedUserQueryHandler {
+export class GetAuthenticatedUserQuery {}
+
+@QueryHandler(GetAuthenticatedUserQuery)
+export class GetAuthenticatedUserQueryHandler
+	implements IQueryHandler<GetAuthenticatedUserQuery>
+{
 	constructor(private readonly permissionContext: PermissionContext) {}
 
-	execute(): AuthenticatedUserObject {
+	async execute(): Promise<AuthenticatedUserObject> {
 		if (!this.permissionContext.user) throw new UnauthorizedException();
 
 		return this.permissionContext.user;

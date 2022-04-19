@@ -1,6 +1,6 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 import { WorkObject } from '../../../dto/works/WorkObject';
 import { Commit } from '../../../entities/Commit';
@@ -10,10 +10,15 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 import { UpdateWorkCommand } from './UpdateWorkCommandHandler';
 
-@Injectable()
-export class CreateWorkCommandHandler {
+export class CreateWorkCommand extends UpdateWorkCommand {}
+
+@CommandHandler(CreateWorkCommand)
+export class CreateWorkCommandHandler
+	implements ICommandHandler<CreateWorkCommand>
+{
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
@@ -22,10 +27,10 @@ export class CreateWorkCommandHandler {
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 	) {}
 
-	async execute(command: UpdateWorkCommand): Promise<WorkObject> {
+	async execute(command: CreateWorkCommand): Promise<WorkObject> {
 		this.permissionContext.verifyPermission(Permission.CreateWorks);
 
-		const result = UpdateWorkCommand.schema.validate(command, {
+		const result = CreateWorkCommand.schema.validate(command, {
 			convert: true,
 		});
 

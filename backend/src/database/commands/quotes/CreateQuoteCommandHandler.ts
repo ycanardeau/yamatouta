@@ -1,6 +1,6 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Artist } from '../../../entities/Artist';
@@ -11,10 +11,15 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 import { UpdateQuoteCommand } from './UpdateQuoteCommandHandler';
 
-@Injectable()
-export class CreateQuoteCommandHandler {
+export class CreateQuoteCommand extends UpdateQuoteCommand {}
+
+@CommandHandler(CreateQuoteCommand)
+export class CreateQuoteCommandHandler
+	implements ICommandHandler<CreateQuoteCommand>
+{
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
@@ -25,10 +30,10 @@ export class CreateQuoteCommandHandler {
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 	) {}
 
-	async execute(params: UpdateQuoteCommand): Promise<QuoteObject> {
+	async execute(command: CreateQuoteCommand): Promise<QuoteObject> {
 		this.permissionContext.verifyPermission(Permission.CreateQuotes);
 
-		const result = UpdateQuoteCommand.schema.validate(params, {
+		const result = CreateQuoteCommand.schema.validate(command, {
 			convert: true,
 		});
 
@@ -43,15 +48,15 @@ export class CreateQuoteCommandHandler {
 			});
 
 			const artist = await this.artistRepo.findOneOrFail({
-				id: params.artistId,
+				id: command.artistId,
 				deleted: false,
 				hidden: false,
 			});
 
 			const quote = new Quote({
-				text: params.text,
-				quoteType: params.quoteType,
-				locale: params.locale,
+				text: command.text,
+				quoteType: command.quoteType,
+				locale: command.locale,
 				artist: artist,
 			});
 

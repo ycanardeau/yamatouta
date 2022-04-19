@@ -1,6 +1,6 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Commit } from '../../../entities/Commit';
@@ -11,10 +11,15 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 import { UpdateTranslationCommand } from './UpdateTranslationCommandHandler';
 
-@Injectable()
-export class CreateTranslationCommandHandler {
+export class CreateTranslationCommand extends UpdateTranslationCommand {}
+
+@CommandHandler(CreateTranslationCommand)
+export class CreateTranslationCommandHandler
+	implements ICommandHandler<CreateTranslationCommand>
+{
 	constructor(
 		private readonly em: EntityManager,
 		private readonly permissionContext: PermissionContext,
@@ -25,11 +30,11 @@ export class CreateTranslationCommandHandler {
 	) {}
 
 	async execute(
-		command: UpdateTranslationCommand,
+		command: CreateTranslationCommand,
 	): Promise<TranslationObject> {
 		this.permissionContext.verifyPermission(Permission.CreateTranslations);
 
-		const result = UpdateTranslationCommand.schema.validate(command, {
+		const result = CreateTranslationCommand.schema.validate(command, {
 			convert: true,
 		});
 

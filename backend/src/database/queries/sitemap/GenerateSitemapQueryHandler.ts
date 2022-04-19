@@ -1,11 +1,15 @@
-import { Injectable } from '@nestjs/common';
 import { SitemapStream, streamToPromise } from 'sitemap';
 
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 import { ListArtistIdsQueryHandler } from '../artists/ListArtistIdsQueryHandler';
 import { ListQuoteIdsQueryHandler } from '../quotes/ListQuoteIdsQueryHandler';
 
-@Injectable()
-export class GenerateSitemapQueryHandler {
+export class GenerateSitemapQuery {}
+
+@QueryHandler(GenerateSitemapQuery)
+export class GenerateSitemapQueryHandler
+	implements IQueryHandler<GenerateSitemapQuery>
+{
 	constructor(
 		private readonly listArtistIdsQueryHandler: ListArtistIdsQueryHandler,
 		private readonly listQuoteIdsQueryHandler: ListQuoteIdsQueryHandler,

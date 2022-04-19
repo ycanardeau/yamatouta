@@ -1,6 +1,6 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import Joi, { ObjectSchema } from 'joi';
 
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
@@ -12,6 +12,7 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 
 export class UpdateArtistCommand {
 	static readonly schema: ObjectSchema<UpdateArtistCommand> = Joi.object({
@@ -30,8 +31,10 @@ export class UpdateArtistCommand {
 	) {}
 }
 
-@Injectable()
-export class UpdateArtistCommandHandler {
+@CommandHandler(UpdateArtistCommand)
+export class UpdateArtistCommandHandler
+	implements ICommandHandler<UpdateArtistCommand>
+{
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,

@@ -6,7 +6,6 @@ import {
 } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
 import Joi, { ObjectSchema } from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
@@ -16,6 +15,7 @@ import { ArtistSortRule } from '../../../models/ArtistSortRule';
 import { ArtistType } from '../../../models/ArtistType';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class ListArtistsQuery {
 	static readonly schema: ObjectSchema<ListArtistsQuery> = Joi.object({
@@ -38,8 +38,10 @@ export class ListArtistsQuery {
 	) {}
 }
 
-@Injectable()
-export class ListArtistsQueryHandler {
+@QueryHandler(ListArtistsQuery)
+export class ListArtistsQueryHandler
+	implements IQueryHandler<ListArtistsQuery>
+{
 	private static readonly defaultLimit = 10;
 	private static readonly maxLimit = 100;
 	private static readonly maxOffset = 5000;

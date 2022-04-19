@@ -1,6 +1,6 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import Joi, { ObjectSchema } from 'joi';
 
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
@@ -10,6 +10,7 @@ import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
+import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 
 export class UpdateAuthenticatedUserCommand {
 	static readonly schema: ObjectSchema<UpdateAuthenticatedUserCommand> =
@@ -35,8 +36,10 @@ export const updateAuthenticatedUserBodySchema = Joi.object({
 	newPassword: Joi.string().optional(),
 });
 
-@Injectable()
-export class UpdateAuthenticatedUserCommandHandler {
+@CommandHandler(UpdateAuthenticatedUserCommand)
+export class UpdateAuthenticatedUserCommandHandler
+	implements ICommandHandler<UpdateAuthenticatedUserCommand>
+{
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,

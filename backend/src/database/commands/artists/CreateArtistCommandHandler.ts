@@ -1,6 +1,6 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
@@ -10,10 +10,15 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 import { UpdateArtistCommand } from './UpdateArtistCommandHandler';
 
-@Injectable()
-export class CreateArtistCommandHandler {
+export class CreateArtistCommand extends UpdateArtistCommand {}
+
+@CommandHandler(CreateArtistCommand)
+export class CreateArtistCommandHandler
+	implements ICommandHandler<CreateArtistCommand>
+{
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,
@@ -22,10 +27,10 @@ export class CreateArtistCommandHandler {
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 	) {}
 
-	async execute(command: UpdateArtistCommand): Promise<ArtistObject> {
+	async execute(command: CreateArtistCommand): Promise<ArtistObject> {
 		this.permissionContext.verifyPermission(Permission.CreateArtists);
 
-		const result = UpdateArtistCommand.schema.validate(command, {
+		const result = CreateArtistCommand.schema.validate(command, {
 			convert: true,
 		});
 

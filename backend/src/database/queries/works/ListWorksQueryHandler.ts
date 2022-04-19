@@ -6,7 +6,6 @@ import {
 	QueryOrderMap,
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
 import Joi, { ObjectSchema } from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
@@ -16,6 +15,7 @@ import { WorkSortRule } from '../../../models/WorkSortRule';
 import { WorkType } from '../../../models/WorkType';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class ListWorksQuery {
 	static readonly schema: ObjectSchema<ListWorksQuery> = Joi.object({
@@ -38,8 +38,8 @@ export class ListWorksQuery {
 	) {}
 }
 
-@Injectable()
-export class ListWorksQueryHandler {
+@QueryHandler(ListWorksQuery)
+export class ListWorksQueryHandler implements IQueryHandler<ListWorksQuery> {
 	private static readonly defaultLimit = 10;
 	private static readonly maxLimit = 100;
 	private static readonly maxOffset = 5000;

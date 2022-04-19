@@ -1,6 +1,6 @@
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import Joi, { ObjectSchema } from 'joi';
 
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
@@ -13,6 +13,7 @@ import { QuoteType } from '../../../models/QuoteType';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { CommandHandler, ICommandHandler } from '../ICommandHandler';
 
 export class UpdateQuoteCommand {
 	static readonly schema: ObjectSchema<UpdateQuoteCommand> = Joi.object({
@@ -35,8 +36,10 @@ export class UpdateQuoteCommand {
 	) {}
 }
 
-@Injectable()
-export class UpdateQuoteCommandHandler {
+@CommandHandler(UpdateQuoteCommand)
+export class UpdateQuoteCommandHandler
+	implements ICommandHandler<UpdateQuoteCommand>
+{
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly em: EntityManager,

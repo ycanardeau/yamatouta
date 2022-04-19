@@ -1,18 +1,19 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Quote } from '../../../entities/Quote';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class GetQuoteQuery {
 	constructor(readonly quoteId: number) {}
 }
 
-@Injectable()
-export class GetQuoteQueryHandler {
+@QueryHandler(GetQuoteQuery)
+export class GetQuoteQueryHandler implements IQueryHandler<GetQuoteQuery> {
 	constructor(
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,

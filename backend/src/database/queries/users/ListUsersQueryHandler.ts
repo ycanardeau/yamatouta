@@ -6,7 +6,6 @@ import {
 	QueryOrderMap,
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
 import Joi, { ObjectSchema } from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
@@ -15,6 +14,7 @@ import { User } from '../../../entities/User';
 import { UserSortRule } from '../../../models/UserSortRule';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class ListUsersQuery {
 	static readonly schema: ObjectSchema<ListUsersQuery> = Joi.object({
@@ -31,8 +31,8 @@ export class ListUsersQuery {
 	) {}
 }
 
-@Injectable()
-export class ListUsersQueryHandler {
+@QueryHandler(ListUsersQuery)
+export class ListUsersQueryHandler implements IQueryHandler<ListUsersQuery> {
 	private static readonly defaultLimit = 10;
 	private static readonly maxLimit = 100;
 	private static readonly maxOffset = 5000;

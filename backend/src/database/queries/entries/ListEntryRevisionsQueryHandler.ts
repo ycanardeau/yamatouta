@@ -1,6 +1,5 @@
 import { EntityRepository, QueryOrder } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { RevisionObject } from '../../../dto/revisions/RevisionObject';
@@ -12,20 +11,22 @@ import { Entry } from '../../../models/Entry';
 import { Permission } from '../../../models/Permission';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
-export class ListEntryRevisionsQuery {
+export abstract class ListEntryRevisionsQuery {
 	constructor(readonly entryId: number) {}
 }
 
-abstract class ListEntryRevisionsQueryHandler<TEntry extends Entry> {
+abstract class ListEntryRevisionsQueryHandler<
+	TEntry extends Entry,
+	TQuery extends ListEntryRevisionsQuery,
+> {
 	constructor(
 		private readonly permissionContext: PermissionContext,
 		private readonly entryFunc: (entryId: number) => Promise<TEntry>,
 	) {}
 
-	async execute(
-		query: ListEntryRevisionsQuery,
-	): Promise<SearchResultObject<RevisionObject>> {
+	async execute(query: TQuery): Promise<SearchResultObject<RevisionObject>> {
 		this.permissionContext.verifyPermission(Permission.ViewEditHistory);
 
 		const entry = await this.entryFunc(query.entryId);
@@ -53,8 +54,16 @@ abstract class ListEntryRevisionsQueryHandler<TEntry extends Entry> {
 	}
 }
 
-@Injectable()
-export class ListTranslationRevisionsQueryHandler extends ListEntryRevisionsQueryHandler<Translation> {
+export class ListTranslationRevisionsQuery extends ListEntryRevisionsQuery {}
+
+@QueryHandler(ListTranslationRevisionsQuery)
+export class ListTranslationRevisionsQueryHandler
+	extends ListEntryRevisionsQueryHandler<
+		Translation,
+		ListTranslationRevisionsQuery
+	>
+	implements IQueryHandler<ListTranslationRevisionsQuery>
+{
 	constructor(
 		permissionContext: PermissionContext,
 		@InjectRepository(Translation)
@@ -66,8 +75,13 @@ export class ListTranslationRevisionsQueryHandler extends ListEntryRevisionsQuer
 	}
 }
 
-@Injectable()
-export class ListArtistRevisionsQueryHandler extends ListEntryRevisionsQueryHandler<Artist> {
+export class ListArtistRevisionsQuery extends ListEntryRevisionsQuery {}
+
+@QueryHandler(ListArtistRevisionsQuery)
+export class ListArtistRevisionsQueryHandler
+	extends ListEntryRevisionsQueryHandler<Artist, ListArtistRevisionsQuery>
+	implements IQueryHandler<ListArtistRevisionsQuery>
+{
 	constructor(
 		permissionContext: PermissionContext,
 		@InjectRepository(Artist)
@@ -79,8 +93,13 @@ export class ListArtistRevisionsQueryHandler extends ListEntryRevisionsQueryHand
 	}
 }
 
-@Injectable()
-export class ListQuoteRevisionsQueryHandler extends ListEntryRevisionsQueryHandler<Quote> {
+export class ListQuoteRevisionsQuery extends ListEntryRevisionsQuery {}
+
+@QueryHandler(ListQuoteRevisionsQuery)
+export class ListQuoteRevisionsQueryHandler
+	extends ListEntryRevisionsQueryHandler<Quote, ListQuoteRevisionsQuery>
+	implements IQueryHandler<ListQuoteRevisionsQuery>
+{
 	constructor(
 		permissionContext: PermissionContext,
 		@InjectRepository(Quote)
@@ -92,8 +111,13 @@ export class ListQuoteRevisionsQueryHandler extends ListEntryRevisionsQueryHandl
 	}
 }
 
-@Injectable()
-export class ListWorkRevisionsQueryHandler extends ListEntryRevisionsQueryHandler<Work> {
+export class ListWorkRevisionsQuery extends ListEntryRevisionsQuery {}
+
+@QueryHandler(ListWorkRevisionsQuery)
+export class ListWorkRevisionsQueryHandler
+	extends ListEntryRevisionsQueryHandler<Work, ListWorkRevisionsQuery>
+	implements IQueryHandler<ListWorkRevisionsQuery>
+{
 	constructor(
 		permissionContext: PermissionContext,
 		@InjectRepository(Work)

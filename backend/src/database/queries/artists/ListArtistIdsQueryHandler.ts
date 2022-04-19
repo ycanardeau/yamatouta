@@ -1,11 +1,15 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
 
 import { Artist } from '../../../entities/Artist';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
-@Injectable()
-export class ListArtistIdsQueryHandler {
+export class ListArtistIdsQuery {}
+
+@QueryHandler(ListArtistIdsQuery)
+export class ListArtistIdsQueryHandler
+	implements IQueryHandler<ListArtistIdsQuery>
+{
 	constructor(
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,

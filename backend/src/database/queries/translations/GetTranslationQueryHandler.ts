@@ -1,18 +1,21 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Translation } from '../../../entities/Translation';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class GetTranslationQuery {
 	constructor(readonly translationId: number) {}
 }
 
-@Injectable()
-export class GetTranslationQueryHandler {
+@QueryHandler(GetTranslationQuery)
+export class GetTranslationQueryHandler
+	implements IQueryHandler<GetTranslationQuery>
+{
 	constructor(
 		@InjectRepository(Translation)
 		private readonly translationRepo: EntityRepository<Translation>,

@@ -1,18 +1,19 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class GetArtistQuery {
 	constructor(readonly artistId: number) {}
 }
 
-@Injectable()
-export class GetArtistQueryHandler {
+@QueryHandler(GetArtistQuery)
+export class GetArtistQueryHandler implements IQueryHandler<GetArtistQuery> {
 	constructor(
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,

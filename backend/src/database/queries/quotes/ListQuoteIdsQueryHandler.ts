@@ -1,11 +1,15 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
 
 import { Quote } from '../../../entities/Quote';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
-@Injectable()
-export class ListQuoteIdsQueryHandler {
+export class ListQuoteIdsQuery {}
+
+@QueryHandler(ListQuoteIdsQuery)
+export class ListQuoteIdsQueryHandler
+	implements IQueryHandler<ListQuoteIdsQuery>
+{
 	constructor(
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,

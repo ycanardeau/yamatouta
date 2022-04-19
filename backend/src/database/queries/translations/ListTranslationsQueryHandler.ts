@@ -1,5 +1,4 @@
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
-import { Injectable } from '@nestjs/common';
 import Joi from 'joi';
 import _ from 'lodash';
 
@@ -11,6 +10,7 @@ import { WordCategory } from '../../../models/WordCategory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { escapeWildcardCharacters } from '../../../utils/escapeWildcardCharacters';
+import { IQueryHandler, QueryHandler } from '../IQueryHandler';
 
 export class ListTranslationsQuery {
 	static readonly schema = Joi.object({
@@ -37,8 +37,10 @@ export class ListTranslationsQuery {
 	) {}
 }
 
-@Injectable()
-export class ListTranslationsQueryHandler {
+@QueryHandler(ListTranslationsQuery)
+export class ListTranslationsQueryHandler
+	implements IQueryHandler<ListTranslationsQuery>
+{
 	private static readonly defaultLimit = 10;
 	private static readonly maxLimit = 100;
 	private static readonly maxOffset = 5000;
