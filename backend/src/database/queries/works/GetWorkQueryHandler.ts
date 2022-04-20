@@ -8,10 +8,14 @@ import { Work } from '../../../entities/Work';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
+export class GetWorkParams {
+	constructor(readonly workId: number) {}
+}
+
 export class GetWorkQuery {
 	constructor(
 		readonly permissionContext: PermissionContext,
-		readonly workId: number,
+		readonly params: GetWorkParams,
 	) {}
 }
 
@@ -23,16 +27,18 @@ export class GetWorkQueryHandler implements IQueryHandler<GetWorkQuery> {
 	) {}
 
 	async execute(query: GetWorkQuery): Promise<WorkObject> {
+		const { permissionContext, params } = query;
+
 		const work = await this.workRepo.findOne({
-			id: query.workId,
+			id: params.workId,
 			$and: [
-				whereNotDeleted(query.permissionContext),
-				whereNotHidden(query.permissionContext),
+				whereNotDeleted(permissionContext),
+				whereNotHidden(permissionContext),
 			],
 		});
 
 		if (!work) throw new NotFoundException();
 
-		return new WorkObject(work, query.permissionContext);
+		return new WorkObject(work, permissionContext);
 	}
 }

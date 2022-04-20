@@ -8,10 +8,14 @@ import { User } from '../../../entities/User';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
+export class GetUserParams {
+	constructor(readonly userId: number) {}
+}
+
 export class GetUserQuery {
 	constructor(
 		readonly permissionContext: PermissionContext,
-		readonly userId: number,
+		readonly params: GetUserParams,
 	) {}
 }
 
@@ -23,16 +27,18 @@ export class GetUserQueryHandler implements IQueryHandler<GetUserQuery> {
 	) {}
 
 	async execute(query: GetUserQuery): Promise<UserObject> {
+		const { permissionContext, params } = query;
+
 		const user = await this.userRepo.findOne({
-			id: query.userId,
+			id: params.userId,
 			$and: [
-				whereNotDeleted(query.permissionContext),
-				whereNotHidden(query.permissionContext),
+				whereNotDeleted(permissionContext),
+				whereNotHidden(permissionContext),
 			],
 		});
 
 		if (!user) throw new NotFoundException();
 
-		return new UserObject(user, query.permissionContext);
+		return new UserObject(user, permissionContext);
 	}
 }

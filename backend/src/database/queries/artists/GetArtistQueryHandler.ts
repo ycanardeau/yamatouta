@@ -8,10 +8,14 @@ import { Artist } from '../../../entities/Artist';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
+export class GetArtistParams {
+	constructor(readonly artistId: number) {}
+}
+
 export class GetArtistQuery {
 	constructor(
 		readonly permissionContext: PermissionContext,
-		readonly artistId: number,
+		readonly params: GetArtistParams,
 	) {}
 }
 
@@ -23,16 +27,18 @@ export class GetArtistQueryHandler implements IQueryHandler<GetArtistQuery> {
 	) {}
 
 	async execute(query: GetArtistQuery): Promise<ArtistObject> {
+		const { permissionContext, params } = query;
+
 		const artist = await this.artistRepo.findOne({
-			id: query.artistId,
+			id: params.artistId,
 			$and: [
-				whereNotDeleted(query.permissionContext),
-				whereNotHidden(query.permissionContext),
+				whereNotDeleted(permissionContext),
+				whereNotHidden(permissionContext),
 			],
 		});
 
 		if (!artist) throw new NotFoundException();
 
-		return new ArtistObject(artist, query.permissionContext);
+		return new ArtistObject(artist, permissionContext);
 	}
 }

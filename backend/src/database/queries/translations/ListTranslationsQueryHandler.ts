@@ -12,8 +12,8 @@ import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { escapeWildcardCharacters } from '../../../utils/escapeWildcardCharacters';
 
-export class ListTranslationsQuery {
-	static readonly schema = Joi.object({
+export class ListTranslationsParams {
+	static readonly schema = Joi.object<ListTranslationsParams>({
 		sort: Joi.string()
 			.optional()
 			.valid(...Object.values(TranslationSortRule)),
@@ -28,13 +28,19 @@ export class ListTranslationsQuery {
 	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly sort?: TranslationSortRule,
 		readonly offset?: number,
 		readonly limit?: number,
 		readonly getTotalCount?: boolean,
 		readonly query?: string,
 		readonly category?: WordCategory,
+	) {}
+}
+
+export class ListTranslationsQuery {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: ListTranslationsParams,
 	) {}
 }
 
@@ -51,7 +57,7 @@ export class ListTranslationsQueryHandler
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	private createKnex(query: ListTranslationsQuery): Knex.QueryBuilder {
+	private createKnex(params: ListTranslationsParams): Knex.QueryBuilder {
 		const knex = this.em
 			.createQueryBuilder(Translation)
 			.getKnex()
@@ -63,15 +69,15 @@ export class ListTranslationsQueryHandler
 			.andWhere('translations.deleted', false)
 			.andWhere('translations.hidden', false);
 
-		if (query.query) {
+		if (params.query) {
 			knex.andWhereRaw(
 				'MATCH(translation_search_index.headword, translation_search_index.reading, translation_search_index.yamatokotoba) AGAINST(? IN BOOLEAN MODE)',
-				this.ngramConverter.toQuery(query.query, 2),
+				this.ngramConverter.toQuery(params.query, 2),
 			);
 		}
 
-		if (query.category)
-			knex.andWhere('translations.category', query.category);
+		if (params.category)
+			knex.andWhere('translations.category', params.category);
 
 		return knex;
 	}
@@ -119,26 +125,26 @@ export class ListTranslationsQueryHandler
 
 	private orderByQuery(
 		knex: Knex.QueryBuilder,
-		query: ListTranslationsQuery,
+		params: ListTranslationsParams,
 	): Knex.QueryBuilder {
-		if (!query.query) return knex;
+		if (!params.query) return knex;
 
-		switch (query.sort) {
+		switch (params.sort) {
 			case TranslationSortRule.HeadwordAsc:
 			case TranslationSortRule.HeadwordDesc:
 			default:
-				this.orderByHeadwordExact(knex, query.query);
-				this.orderByYamatokotobaExact(knex, query.query);
-				this.orderByHeadwordPrefix(knex, query.query);
-				this.orderByYamatokotobaPrefix(knex, query.query);
+				this.orderByHeadwordExact(knex, params.query);
+				this.orderByYamatokotobaExact(knex, params.query);
+				this.orderByHeadwordPrefix(knex, params.query);
+				this.orderByYamatokotobaPrefix(knex, params.query);
 				return knex;
 
 			case TranslationSortRule.YamatokotobaAsc:
 			case TranslationSortRule.YamatokotobaDesc:
-				this.orderByYamatokotobaExact(knex, query.query);
-				this.orderByHeadwordExact(knex, query.query);
-				this.orderByYamatokotobaPrefix(knex, query.query);
-				this.orderByHeadwordPrefix(knex, query.query);
+				this.orderByYamatokotobaExact(knex, params.query);
+				this.orderByHeadwordExact(knex, params.query);
+				this.orderByYamatokotobaPrefix(knex, params.query);
+				this.orderByHeadwordPrefix(knex, params.query);
 				return knex;
 		}
 	}
@@ -175,11 +181,11 @@ export class ListTranslationsQueryHandler
 
 	private orderBy(
 		knex: Knex.QueryBuilder,
-		query: ListTranslationsQuery,
+		params: ListTranslationsParams,
 	): Knex.QueryBuilder {
-		this.orderByQuery(knex, query);
+		this.orderByQuery(knex, params);
 
-		switch (query.sort) {
+		switch (params.sort) {
 			case TranslationSortRule.HeadwordAsc:
 			default:
 				this.orderByHeadword(knex, 'asc');
@@ -235,21 +241,21 @@ export class ListTranslationsQueryHandler
 		return knex.orderByRaw(sql, ids);
 	}
 
-	private async getIds(query: ListTranslationsQuery): Promise<number[]> {
-		const knex = this.createKnex(query)
+	private async getIds(params: ListTranslationsParams): Promise<number[]> {
+		const knex = this.createKnex(params)
 			.select('translations.id')
 			.limit(
-				query.limit
+				params.limit
 					? Math.min(
-							query.limit,
+							params.limit,
 							ListTranslationsQueryHandler.maxLimit,
 					  )
 					: ListTranslationsQueryHandler.defaultLimit,
 			);
 
-		if (query.offset) knex.offset(query.offset);
+		if (params.offset) knex.offset(params.offset);
 
-		this.orderBy(knex, query);
+		this.orderBy(knex, params);
 
 		const ids = _.map(await this.em.execute(knex), 'id');
 
@@ -257,9 +263,9 @@ export class ListTranslationsQueryHandler
 	}
 
 	private async getItems(
-		query: ListTranslationsQuery,
+		params: ListTranslationsParams,
 	): Promise<Translation[]> {
-		const ids = await this.getIds(query);
+		const ids = await this.getIds(params);
 
 		const knex = this.em
 			.createQueryBuilder(Translation)
@@ -275,8 +281,8 @@ export class ListTranslationsQueryHandler
 		);
 	}
 
-	private async getCount(query: ListTranslationsQuery): Promise<number> {
-		const knex = this.createKnex(query).countDistinct(
+	private async getCount(params: ListTranslationsParams): Promise<number> {
+		const knex = this.createKnex(params).countDistinct(
 			'translations.id as count',
 		);
 
@@ -288,17 +294,19 @@ export class ListTranslationsQueryHandler
 	async execute(
 		query: ListTranslationsQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
+		const { permissionContext, params } = query;
+
 		const [translations, count] = await Promise.all([
-			/*query.offset && query.offset > ListTranslationsService.maxOffset
+			/*params.offset && params.offset > ListTranslationsService.maxOffset
 				? Promise.resolve([])
-				: */ this.getItems(query),
-			query.getTotalCount ? this.getCount(query) : Promise.resolve(0),
+				: */ this.getItems(params),
+			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
 		]);
 
 		return new SearchResultObject(
 			translations.map(
 				(translation) =>
-					new TranslationObject(translation, query.permissionContext),
+					new TranslationObject(translation, permissionContext),
 			),
 			count,
 		);

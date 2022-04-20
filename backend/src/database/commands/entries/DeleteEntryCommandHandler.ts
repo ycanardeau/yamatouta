@@ -16,10 +16,14 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
+export class DeleteEntryParams {
+	constructor(readonly entryId: number) {}
+}
+
 abstract class DeleteEntryCommand {
 	constructor(
 		readonly permissionContext: PermissionContext,
-		readonly entryId: number,
+		readonly params: DeleteEntryParams,
 	) {}
 }
 
@@ -42,12 +46,14 @@ abstract class DeleteEntryCommandHandler<
 	) {}
 
 	async execute(command: TCommand): Promise<void> {
-		command.permissionContext.verifyPermission(this.permission);
+		const { permissionContext, params } = command;
+
+		permissionContext.verifyPermission(this.permission);
 
 		await this.em.transactional(async (em) => {
-			const entry = await this.entryFunc(command.entryId);
+			const entry = await this.entryFunc(params.entryId);
 
-			command.permissionContext.verifyDeletedAndHidden(entry);
+			permissionContext.verifyDeletedAndHidden(entry);
 
 			if (entry.deleted) {
 				throw new BadRequestException(
@@ -56,7 +62,7 @@ abstract class DeleteEntryCommandHandler<
 			}
 
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user?.id,
+				id: permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -77,7 +83,7 @@ abstract class DeleteEntryCommandHandler<
 			const auditLogEntry = this.auditLogFunc(
 				entry,
 				user,
-				command.permissionContext.clientIp,
+				permissionContext.clientIp,
 			);
 
 			em.persist(auditLogEntry);

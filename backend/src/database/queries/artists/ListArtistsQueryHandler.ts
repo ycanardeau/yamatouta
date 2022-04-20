@@ -17,8 +17,8 @@ import { ArtistType } from '../../../models/ArtistType';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
 
-export class ListArtistsQuery {
-	static readonly schema: ObjectSchema<ListArtistsQuery> = Joi.object({
+export class ListArtistsParams {
+	static readonly schema: ObjectSchema<ListArtistsParams> = Joi.object({
 		artistType: Joi.string()
 			.optional()
 			.valid(...Object.values(ArtistType)),
@@ -29,13 +29,19 @@ export class ListArtistsQuery {
 	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly artistType?: ArtistType,
 		readonly sort?: ArtistSortRule,
 		readonly offset?: number,
 		readonly limit?: number,
 		readonly getTotalCount?: boolean,
 		readonly query?: string,
+	) {}
+}
+
+export class ListArtistsQuery {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: ListArtistsParams,
 	) {}
 }
 
@@ -62,37 +68,39 @@ export class ListArtistsQueryHandler
 	async execute(
 		query: ListArtistsQuery,
 	): Promise<SearchResultObject<ArtistObject>> {
+		const { permissionContext, params } = query;
+
 		const where: FilterQuery<Artist> = {
 			$and: [
 				{ deleted: false },
-				whereNotHidden(query.permissionContext),
-				query.artistType ? { artistType: query.artistType } : {},
-				query.query ? { name: { $like: `%${query.query}%` } } : {},
+				whereNotHidden(permissionContext),
+				params.artistType ? { artistType: params.artistType } : {},
+				params.query ? { name: { $like: `%${params.query}%` } } : {},
 			],
 		};
 
 		const options: FindOptions<Artist> = {
-			limit: query.limit
-				? Math.min(query.limit, ListArtistsQueryHandler.maxLimit)
+			limit: params.limit
+				? Math.min(params.limit, ListArtistsQueryHandler.maxLimit)
 				: ListArtistsQueryHandler.defaultLimit,
-			offset: query.offset,
+			offset: params.offset,
 		};
 
 		const [artists, count] = await Promise.all([
-			query.offset && query.offset > ListArtistsQueryHandler.maxOffset
+			params.offset && params.offset > ListArtistsQueryHandler.maxOffset
 				? Promise.resolve([])
 				: this.artistRepo.find(where, {
 						...options,
-						orderBy: this.orderBy(query.sort),
+						orderBy: this.orderBy(params.sort),
 				  }),
-			query.getTotalCount
+			params.getTotalCount
 				? this.artistRepo.count(where, options)
 				: Promise.resolve(0),
 		]);
 
 		return new SearchResultObject<ArtistObject>(
 			artists.map(
-				(artist) => new ArtistObject(artist, query.permissionContext),
+				(artist) => new ArtistObject(artist, permissionContext),
 			),
 			count,
 		);

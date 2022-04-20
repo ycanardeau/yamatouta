@@ -10,9 +10,15 @@ import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
-import { UpdateArtistCommand } from './UpdateArtistCommandHandler';
+import { PermissionContext } from '../../../services/PermissionContext';
+import { UpdateArtistParams } from './UpdateArtistCommandHandler';
 
-export class CreateArtistCommand extends UpdateArtistCommand {}
+export class CreateArtistCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: UpdateArtistParams,
+	) {}
+}
 
 @CommandHandler(CreateArtistCommand)
 export class CreateArtistCommandHandler
@@ -26,9 +32,11 @@ export class CreateArtistCommandHandler
 	) {}
 
 	async execute(command: CreateArtistCommand): Promise<ArtistObject> {
+		const { permissionContext, params } = command;
+
 		command.permissionContext.verifyPermission(Permission.CreateArtists);
 
-		const result = CreateArtistCommand.schema.validate(command, {
+		const result = UpdateArtistParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -37,14 +45,14 @@ export class CreateArtistCommandHandler
 
 		const artist = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user?.id,
+				id: permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
 
 			const artist = new Artist({
-				name: command.name,
-				artistType: command.artistType,
+				name: params.name,
+				artistType: params.artistType,
 			});
 
 			em.persist(artist);
@@ -63,7 +71,7 @@ export class CreateArtistCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.artist_create({
 				artist: artist,
 				actor: user,
-				actorIp: command.permissionContext.clientIp,
+				actorIp: permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -71,6 +79,6 @@ export class CreateArtistCommandHandler
 			return artist;
 		});
 
-		return new ArtistObject(artist, command.permissionContext);
+		return new ArtistObject(artist, permissionContext);
 	}
 }

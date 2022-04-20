@@ -16,19 +16,25 @@ import { UserSortRule } from '../../../models/UserSortRule';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
-export class ListUsersQuery {
-	static readonly schema: ObjectSchema<ListUsersQuery> = Joi.object({
+export class ListUsersParams {
+	static readonly schema: ObjectSchema<ListUsersParams> = Joi.object({
 		offset: Joi.number().optional(),
 		limit: Joi.number().optional(),
 		getTotalCount: Joi.boolean().optional(),
 	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly sort?: UserSortRule,
 		readonly offset?: number,
 		readonly limit?: number,
 		readonly getTotalCount?: boolean,
+	) {}
+}
+
+export class ListUsersQuery {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: ListUsersParams,
 	) {}
 }
 
@@ -53,34 +59,36 @@ export class ListUsersQueryHandler implements IQueryHandler<ListUsersQuery> {
 	async execute(
 		query: ListUsersQuery,
 	): Promise<SearchResultObject<UserObject>> {
+		const { permissionContext, params } = query;
+
 		const where: FilterQuery<User> = {
 			$and: [
-				whereNotDeleted(query.permissionContext),
-				whereNotHidden(query.permissionContext),
+				whereNotDeleted(permissionContext),
+				whereNotHidden(permissionContext),
 			],
 		};
 
 		const options: FindOptions<User> = {
-			limit: query.limit
-				? Math.min(query.limit, ListUsersQueryHandler.maxLimit)
+			limit: params.limit
+				? Math.min(params.limit, ListUsersQueryHandler.maxLimit)
 				: ListUsersQueryHandler.defaultLimit,
-			offset: query.offset,
+			offset: params.offset,
 		};
 
 		const [users, count] = await Promise.all([
-			query.offset && query.offset > ListUsersQueryHandler.maxOffset
+			params.offset && params.offset > ListUsersQueryHandler.maxOffset
 				? Promise.resolve([])
 				: this.userRepo.find(where, {
 						...options,
-						orderBy: this.orderBy(query.sort),
+						orderBy: this.orderBy(params.sort),
 				  }),
-			query.getTotalCount
+			params.getTotalCount
 				? this.userRepo.count(where, options)
 				: Promise.resolve(0),
 		]);
 
 		return new SearchResultObject<UserObject>(
-			users.map((user) => new UserObject(user, query.permissionContext)),
+			users.map((user) => new UserObject(user, permissionContext)),
 			count,
 		);
 	}

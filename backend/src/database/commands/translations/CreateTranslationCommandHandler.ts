@@ -11,9 +11,15 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
-import { UpdateTranslationCommand } from './UpdateTranslationCommandHandler';
+import { PermissionContext } from '../../../services/PermissionContext';
+import { UpdateTranslationParams } from './UpdateTranslationCommandHandler';
 
-export class CreateTranslationCommand extends UpdateTranslationCommand {}
+export class CreateTranslationCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: UpdateTranslationParams,
+	) {}
+}
 
 @CommandHandler(CreateTranslationCommand)
 export class CreateTranslationCommandHandler
@@ -30,11 +36,11 @@ export class CreateTranslationCommandHandler
 	async execute(
 		command: CreateTranslationCommand,
 	): Promise<TranslationObject> {
-		command.permissionContext.verifyPermission(
-			Permission.CreateTranslations,
-		);
+		const { permissionContext, params } = command;
 
-		const result = CreateTranslationCommand.schema.validate(command, {
+		permissionContext.verifyPermission(Permission.CreateTranslations);
+
+		const result = UpdateTranslationParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -46,7 +52,7 @@ export class CreateTranslationCommandHandler
 
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user?.id,
+				id: permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -80,7 +86,7 @@ export class CreateTranslationCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.translation_create({
 				translation: translation,
 				actor: user,
-				actorIp: command.permissionContext.clientIp,
+				actorIp: permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -88,6 +94,6 @@ export class CreateTranslationCommandHandler
 			return translation;
 		});
 
-		return new TranslationObject(translation, command.permissionContext);
+		return new TranslationObject(translation, permissionContext);
 	}
 }

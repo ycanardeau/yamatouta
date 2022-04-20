@@ -9,10 +9,16 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { UpdateAuthenticatedUserCommand } from '../database/commands/users/UpdateAuthenticatedUserCommandHandler';
+import {
+	UpdateAuthenticatedUserCommand,
+	UpdateAuthenticatedUserParams,
+} from '../database/commands/users/UpdateAuthenticatedUserCommandHandler';
 import { GetAuthenticatedUserQuery } from '../database/queries/users/GetAuthenticatedUserQueryHandler';
 import { GetUserQuery } from '../database/queries/users/GetUserQueryHandler';
-import { ListUsersQuery } from '../database/queries/users/ListUsersQueryHandler';
+import {
+	ListUsersParams,
+	ListUsersQuery,
+} from '../database/queries/users/ListUsersQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
@@ -30,17 +36,11 @@ export class UserController {
 	@Get()
 	listUsers(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Query(new JoiValidationPipe(ListUsersQuery.schema))
-		query: ListUsersQuery,
+		@Query(new JoiValidationPipe(ListUsersParams.schema))
+		params: ListUsersParams,
 	): Promise<SearchResultObject<UserObject>> {
 		return this.queryBus.execute(
-			new ListUsersQuery(
-				permissionContext,
-				query.sort,
-				query.offset,
-				query.limit,
-				query.getTotalCount,
-			),
+			new ListUsersQuery(permissionContext, params),
 		);
 	}
 
@@ -56,17 +56,11 @@ export class UserController {
 	@Patch('current')
 	updateAuthenticatedUser(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Body(new JoiValidationPipe(UpdateAuthenticatedUserCommand.schema))
-		command: UpdateAuthenticatedUserCommand,
+		@Body(new JoiValidationPipe(UpdateAuthenticatedUserParams.schema))
+		params: UpdateAuthenticatedUserParams,
 	): Promise<AuthenticatedUserObject> {
 		return this.commandBus.execute(
-			new UpdateAuthenticatedUserCommand(
-				permissionContext,
-				command.password,
-				command.username,
-				command.email,
-				command.newPassword,
-			),
+			new UpdateAuthenticatedUserCommand(permissionContext, params),
 		);
 	}
 
@@ -76,7 +70,7 @@ export class UserController {
 		@Param('userId', ParseIntPipe) userId: number,
 	): Promise<UserObject> {
 		return this.queryBus.execute(
-			new GetUserQuery(permissionContext, userId),
+			new GetUserQuery(permissionContext, { userId }),
 		);
 	}
 }

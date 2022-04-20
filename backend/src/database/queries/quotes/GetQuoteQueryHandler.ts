@@ -8,10 +8,14 @@ import { Quote } from '../../../entities/Quote';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
+export class GetQuoteParams {
+	constructor(readonly quoteId: number) {}
+}
+
 export class GetQuoteQuery {
 	constructor(
 		readonly permissionContext: PermissionContext,
-		readonly quoteId: number,
+		readonly params: GetQuoteParams,
 	) {}
 }
 
@@ -23,12 +27,14 @@ export class GetQuoteQueryHandler implements IQueryHandler<GetQuoteQuery> {
 	) {}
 
 	async execute(query: GetQuoteQuery): Promise<QuoteObject> {
+		const { permissionContext, params } = query;
+
 		const quote = await this.quoteRepo.findOne(
 			{
-				id: query.quoteId,
+				id: params.quoteId,
 				$and: [
-					whereNotDeleted(query.permissionContext),
-					whereNotHidden(query.permissionContext),
+					whereNotDeleted(permissionContext),
+					whereNotHidden(permissionContext),
 				],
 			},
 			{ populate: ['artist'] },
@@ -36,6 +42,6 @@ export class GetQuoteQueryHandler implements IQueryHandler<GetQuoteQuery> {
 
 		if (!quote) throw new NotFoundException();
 
-		return new QuoteObject(quote, query.permissionContext);
+		return new QuoteObject(quote, permissionContext);
 	}
 }

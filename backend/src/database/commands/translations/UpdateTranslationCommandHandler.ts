@@ -15,37 +15,41 @@ import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 
-export class UpdateTranslationCommand {
-	static readonly schema: ObjectSchema<UpdateTranslationCommand> = Joi.object(
-		{
-			translationId: Joi.number().optional(),
-			headword: Joi.string().required().trim().max(200),
-			locale: Joi.string().required().trim(),
-			reading: Joi.string()
-				.required()
-				.trim()
-				.max(200)
-				.regex(/[あ-ん]/u),
-			yamatokotoba: Joi.string()
-				.required()
-				.trim()
-				.max(200)
-				.regex(/[あ-ん]/u),
-			category: Joi.string()
-				.required()
-				.trim()
-				.valid(...Object.values(WordCategory)),
-		},
-	);
+export class UpdateTranslationParams {
+	static readonly schema: ObjectSchema<UpdateTranslationParams> = Joi.object({
+		translationId: Joi.number().optional(),
+		headword: Joi.string().required().trim().max(200),
+		locale: Joi.string().required().trim(),
+		reading: Joi.string()
+			.required()
+			.trim()
+			.max(200)
+			.regex(/[あ-ん]/u),
+		yamatokotoba: Joi.string()
+			.required()
+			.trim()
+			.max(200)
+			.regex(/[あ-ん]/u),
+		category: Joi.string()
+			.required()
+			.trim()
+			.valid(...Object.values(WordCategory)),
+	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly translationId: number | undefined,
 		readonly headword: string,
 		readonly locale: string,
 		readonly reading: string,
 		readonly yamatokotoba: string,
 		readonly category: WordCategory,
+	) {}
+}
+
+export class UpdateTranslationCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: UpdateTranslationParams,
 	) {}
 }
 
@@ -66,9 +70,11 @@ export class UpdateTranslationCommandHandler
 	async execute(
 		command: UpdateTranslationCommand,
 	): Promise<TranslationObject> {
-		command.permissionContext.verifyPermission(Permission.EditTranslations);
+		const { permissionContext, params } = command;
 
-		const result = UpdateTranslationCommand.schema.validate(command, {
+		permissionContext.verifyPermission(Permission.EditTranslations);
+
+		const result = UpdateTranslationParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -80,14 +86,14 @@ export class UpdateTranslationCommandHandler
 
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user?.id,
+				id: permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
 
 			const translation = await this.translationRepo.findOneOrFail(
 				{
-					id: command.translationId,
+					id: params.translationId,
 					deleted: false,
 					hidden: false,
 				},
@@ -116,7 +122,7 @@ export class UpdateTranslationCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.translation_update({
 				translation: translation,
 				actor: user,
-				actorIp: command.permissionContext.clientIp,
+				actorIp: permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -124,6 +130,6 @@ export class UpdateTranslationCommandHandler
 			return translation;
 		});
 
-		return new TranslationObject(translation, command.permissionContext);
+		return new TranslationObject(translation, permissionContext);
 	}
 }

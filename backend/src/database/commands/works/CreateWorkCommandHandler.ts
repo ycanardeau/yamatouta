@@ -10,9 +10,15 @@ import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
-import { UpdateWorkCommand } from './UpdateWorkCommandHandler';
+import { PermissionContext } from '../../../services/PermissionContext';
+import { UpdateWorkParams } from './UpdateWorkCommandHandler';
 
-export class CreateWorkCommand extends UpdateWorkCommand {}
+export class CreateWorkCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: UpdateWorkParams,
+	) {}
+}
 
 @CommandHandler(CreateWorkCommand)
 export class CreateWorkCommandHandler
@@ -26,9 +32,11 @@ export class CreateWorkCommandHandler
 	) {}
 
 	async execute(command: CreateWorkCommand): Promise<WorkObject> {
-		command.permissionContext.verifyPermission(Permission.CreateWorks);
+		const { permissionContext, params } = command;
 
-		const result = CreateWorkCommand.schema.validate(command, {
+		permissionContext.verifyPermission(Permission.CreateWorks);
+
+		const result = UpdateWorkParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -37,14 +45,14 @@ export class CreateWorkCommandHandler
 
 		const work = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user?.id,
+				id: permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
 
 			const work = new Work({
-				name: command.name,
-				workType: command.workType,
+				name: params.name,
+				workType: params.workType,
 			});
 
 			em.persist(work);
@@ -63,7 +71,7 @@ export class CreateWorkCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.work_create({
 				work: work,
 				actor: user,
-				actorIp: command.permissionContext.clientIp,
+				actorIp: permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -71,6 +79,6 @@ export class CreateWorkCommandHandler
 			return work;
 		});
 
-		return new WorkObject(work, command.permissionContext);
+		return new WorkObject(work, permissionContext);
 	}
 }

@@ -6,6 +6,7 @@ import { Strategy } from 'passport-local';
 
 import config from '../../config';
 import {
+	AuthenticateUserCommand,
 	AuthenticateUserCommandHandler,
 	LoginError,
 } from '../../database/commands/users/AuthenticateUserCommandHandler';
@@ -88,11 +89,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 			throw new TooManyRequestsException();
 		}
 
-		const result = await this.authenticateUserCommandHandler.execute({
-			email: email,
-			password: password,
-			clientIp: clientIp,
-		});
+		const result = await this.authenticateUserCommandHandler.execute(
+			new AuthenticateUserCommand({
+				email: email,
+				password: password,
+				clientIp: clientIp,
+			}),
+		);
 
 		if (result.error === LoginError.None) {
 			// Reset on successful authorization.

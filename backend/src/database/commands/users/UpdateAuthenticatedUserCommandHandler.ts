@@ -12,8 +12,8 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
 
-export class UpdateAuthenticatedUserCommand {
-	static readonly schema: ObjectSchema<UpdateAuthenticatedUserCommand> =
+export class UpdateAuthenticatedUserParams {
+	static readonly schema: ObjectSchema<UpdateAuthenticatedUserParams> =
 		Joi.object({
 			password: Joi.string().required(),
 			username: Joi.string().optional().trim().min(2).max(32),
@@ -22,11 +22,17 @@ export class UpdateAuthenticatedUserCommand {
 		});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly password: string,
 		readonly username?: string,
 		readonly email?: string,
 		readonly newPassword?: string,
+	) {}
+}
+
+export class UpdateAuthenticatedUserCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: UpdateAuthenticatedUserParams,
 	) {}
 }
 
@@ -52,7 +58,9 @@ export class UpdateAuthenticatedUserCommandHandler
 	async execute(
 		command: UpdateAuthenticatedUserCommand,
 	): Promise<AuthenticatedUserObject> {
-		const result = UpdateAuthenticatedUserCommand.schema.validate(command, {
+		const { permissionContext, params } = command;
+
+		const result = UpdateAuthenticatedUserParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -60,11 +68,10 @@ export class UpdateAuthenticatedUserCommandHandler
 			throw new BadRequestException(result.error.details[0].message);
 
 		return this.em.transactional(async (em) => {
-			if (!command.permissionContext.user)
-				throw new BadRequestException();
+			if (!permissionContext.user) throw new BadRequestException();
 
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user.id,
+				id: permissionContext.user.id,
 				deleted: false,
 				hidden: false,
 			});
@@ -74,7 +81,7 @@ export class UpdateAuthenticatedUserCommandHandler
 			);
 
 			const passwordHash = await passwordHasher.hashPassword(
-				command.password,
+				params.password,
 				user.salt,
 			);
 
@@ -84,22 +91,22 @@ export class UpdateAuthenticatedUserCommandHandler
 				throw new BadRequestException();
 			}
 
-			if (command.username && command.username !== user.name) {
+			if (params.username && params.username !== user.name) {
 				const auditLogEntry = this.auditLogEntryFactory.user_rename({
 					user: user,
 					actor: user,
-					actorIp: command.permissionContext.clientIp,
+					actorIp: permissionContext.clientIp,
 					oldValue: user.name,
-					newValue: command.username,
+					newValue: params.username,
 				});
 
 				em.persist(auditLogEntry);
 
-				user.name = command.username;
+				user.name = params.username;
 			}
 
-			if (command.email && command.email !== user.email) {
-				const normalizedEmail = await normalizeEmail(command.email);
+			if (params.email && params.email !== user.email) {
+				const normalizedEmail = await normalizeEmail(params.email);
 
 				await this.userRepo
 					.findOne({
@@ -114,30 +121,30 @@ export class UpdateAuthenticatedUserCommandHandler
 					this.auditLogEntryFactory.user_changeEmail({
 						user: user,
 						actor: user,
-						actorIp: command.permissionContext.clientIp,
+						actorIp: permissionContext.clientIp,
 						oldValue: user.email,
-						newValue: command.email,
+						newValue: params.email,
 					});
 
 				em.persist(auditLogEntry);
 
-				user.email = command.email;
+				user.email = params.email;
 				user.normalizedEmail = normalizedEmail;
 			}
 
-			if (command.newPassword) {
+			if (params.newPassword) {
 				const auditLogEntry =
 					this.auditLogEntryFactory.user_changePassword({
 						user: user,
 						actor: user,
-						actorIp: command.permissionContext.clientIp,
+						actorIp: permissionContext.clientIp,
 					});
 
 				em.persist(auditLogEntry);
 
 				await user.updatePassword(
 					this.passwordHasherFactory.default,
-					command.newPassword,
+					params.newPassword,
 				);
 			}
 

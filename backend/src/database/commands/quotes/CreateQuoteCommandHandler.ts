@@ -11,9 +11,15 @@ import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
-import { UpdateQuoteCommand } from './UpdateQuoteCommandHandler';
+import { PermissionContext } from '../../../services/PermissionContext';
+import { UpdateQuoteParams } from './UpdateQuoteCommandHandler';
 
-export class CreateQuoteCommand extends UpdateQuoteCommand {}
+export class CreateQuoteCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: UpdateQuoteParams,
+	) {}
+}
 
 @CommandHandler(CreateQuoteCommand)
 export class CreateQuoteCommandHandler
@@ -29,9 +35,11 @@ export class CreateQuoteCommandHandler
 	) {}
 
 	async execute(command: CreateQuoteCommand): Promise<QuoteObject> {
-		command.permissionContext.verifyPermission(Permission.CreateQuotes);
+		const { permissionContext, params } = command;
 
-		const result = CreateQuoteCommand.schema.validate(command, {
+		permissionContext.verifyPermission(Permission.CreateQuotes);
+
+		const result = UpdateQuoteParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -40,21 +48,21 @@ export class CreateQuoteCommandHandler
 
 		const quote = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user?.id,
+				id: permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
 
 			const artist = await this.artistRepo.findOneOrFail({
-				id: command.artistId,
+				id: params.artistId,
 				deleted: false,
 				hidden: false,
 			});
 
 			const quote = new Quote({
-				text: command.text,
-				quoteType: command.quoteType,
-				locale: command.locale,
+				text: params.text,
+				quoteType: params.quoteType,
+				locale: params.locale,
 				artist: artist,
 			});
 
@@ -74,7 +82,7 @@ export class CreateQuoteCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.quote_create({
 				quote: quote,
 				actor: user,
-				actorIp: command.permissionContext.clientIp,
+				actorIp: permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -82,6 +90,6 @@ export class CreateQuoteCommandHandler
 			return quote;
 		});
 
-		return new QuoteObject(quote, command.permissionContext);
+		return new QuoteObject(quote, permissionContext);
 	}
 }

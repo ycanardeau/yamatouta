@@ -13,18 +13,24 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
 
-export class CreateUserCommand {
-	static readonly schema: ObjectSchema<CreateUserCommand> = Joi.object({
+export class CreateUserParams {
+	static readonly schema: ObjectSchema<CreateUserParams> = Joi.object({
 		username: Joi.string().required().trim().min(2).max(32),
 		email: Joi.string().required().email().max(50),
 		password: Joi.string().required().min(8),
 	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly username: string,
 		readonly email: string,
 		readonly password: string,
+	) {}
+}
+
+export class CreateUserCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: CreateUserParams,
 	) {}
 }
 
@@ -44,10 +50,12 @@ export class CreateUserCommandHandler
 	async execute(
 		command: CreateUserCommand,
 	): Promise<AuthenticatedUserObject> {
+		const { permissionContext, params } = command;
+
 		if (config.disableAccountCreation)
 			throw new ForbiddenException('Account creation is restricted.');
 
-		const result = CreateUserCommand.schema.validate(command, {
+		const result = CreateUserParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -88,7 +96,7 @@ export class CreateUserCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.user_create({
 				user: user,
 				actor: user,
-				actorIp: command.permissionContext.clientIp,
+				actorIp: permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);

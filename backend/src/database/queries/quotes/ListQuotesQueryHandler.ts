@@ -17,8 +17,8 @@ import { QuoteType } from '../../../models/QuoteType';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
 
-export class ListQuotesQuery {
-	static readonly schema: ObjectSchema<ListQuotesQuery> = Joi.object({
+export class ListQuotesParams {
+	static readonly schema: ObjectSchema<ListQuotesParams> = Joi.object({
 		quoteType: Joi.string()
 			.optional()
 			.valid(...Object.values(QuoteType)),
@@ -29,13 +29,19 @@ export class ListQuotesQuery {
 	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly quoteType?: QuoteType,
 		readonly sort?: QuoteSortRule,
 		readonly offset?: number,
 		readonly limit?: number,
 		readonly getTotalCount?: boolean,
 		readonly artistId?: number,
+	) {}
+}
+
+export class ListQuotesQuery {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: ListQuotesParams,
 	) {}
 }
 
@@ -60,40 +66,40 @@ export class ListQuotesQueryHandler implements IQueryHandler<ListQuotesQuery> {
 	async execute(
 		query: ListQuotesQuery,
 	): Promise<SearchResultObject<QuoteObject>> {
+		const { permissionContext, params } = query;
+
 		const where: FilterQuery<Quote> = {
 			$and: [
 				{ deleted: false },
-				whereNotHidden(query.permissionContext),
+				whereNotHidden(permissionContext),
 				{ $not: { quoteType: QuoteType.Word } },
-				query.quoteType ? { quoteType: query.quoteType } : {},
-				query.artistId ? { artist: query.artistId } : {},
+				params.quoteType ? { quoteType: params.quoteType } : {},
+				params.artistId ? { artist: params.artistId } : {},
 			],
 		};
 
 		const options: FindOptions<Quote, 'artist'> = {
-			limit: query.limit
-				? Math.min(query.limit, ListQuotesQueryHandler.maxLimit)
+			limit: params.limit
+				? Math.min(params.limit, ListQuotesQueryHandler.maxLimit)
 				: ListQuotesQueryHandler.defaultLimit,
-			offset: query.offset,
+			offset: params.offset,
 			populate: ['artist'],
 		};
 
 		const [quotes, count] = await Promise.all([
-			query.offset && query.offset > ListQuotesQueryHandler.maxOffset
+			params.offset && params.offset > ListQuotesQueryHandler.maxOffset
 				? Promise.resolve([])
 				: this.quoteRepo.find(where, {
 						...options,
-						orderBy: this.orderBy(query.sort),
+						orderBy: this.orderBy(params.sort),
 				  }),
-			query.getTotalCount
+			params.getTotalCount
 				? this.quoteRepo.count(where, options)
 				: Promise.resolve(0),
 		]);
 
 		return new SearchResultObject<QuoteObject>(
-			quotes.map(
-				(quote) => new QuoteObject(quote, query.permissionContext),
-			),
+			quotes.map((quote) => new QuoteObject(quote, permissionContext)),
 			count,
 		);
 	}

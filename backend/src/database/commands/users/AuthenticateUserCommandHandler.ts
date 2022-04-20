@@ -35,12 +35,16 @@ const createError = (
 	user: undefined,
 });
 
-export class AuthenticateUserCommand {
+export class AuthenticateUserParams {
 	constructor(
 		readonly email: string,
 		readonly password: string,
 		readonly clientIp: string,
 	) {}
+}
+
+export class AuthenticateUserCommand {
+	constructor(readonly params: AuthenticateUserParams) {}
 }
 
 @CommandHandler(AuthenticateUserCommand)
@@ -56,9 +60,11 @@ export class AuthenticateUserCommandHandler
 	) {}
 
 	execute(command: AuthenticateUserCommand): Promise<LoginResult> {
+		const { params } = command;
+
 		return this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOne({
-				email: command.email,
+				email: params.email,
 				deleted: false,
 				hidden: false,
 			});
@@ -70,7 +76,7 @@ export class AuthenticateUserCommandHandler
 			);
 
 			const passwordHash = await passwordHasher.hashPassword(
-				command.password,
+				params.password,
 				user.salt,
 			);
 
@@ -78,7 +84,7 @@ export class AuthenticateUserCommandHandler
 				const auditLogEntry = this.auditLogEntryFactory.user_login({
 					user: user,
 					actor: user,
-					actorIp: command.clientIp,
+					actorIp: params.clientIp,
 				});
 
 				em.persist(auditLogEntry);
@@ -92,7 +98,7 @@ export class AuthenticateUserCommandHandler
 				) {
 					await user.updatePassword(
 						defaultPasswordHasher,
-						command.password,
+						params.password,
 					);
 				}
 
@@ -102,7 +108,7 @@ export class AuthenticateUserCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.user_failedLogin({
 				user: user,
 				actor: user,
-				actorIp: command.clientIp,
+				actorIp: params.clientIp,
 			});
 
 			em.persist(auditLogEntry);

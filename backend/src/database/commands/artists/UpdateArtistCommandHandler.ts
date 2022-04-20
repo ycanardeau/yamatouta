@@ -14,8 +14,8 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
-export class UpdateArtistCommand {
-	static readonly schema: ObjectSchema<UpdateArtistCommand> = Joi.object({
+export class UpdateArtistParams {
+	static readonly schema: ObjectSchema<UpdateArtistParams> = Joi.object({
 		artistId: Joi.number().optional(),
 		name: Joi.string().required().trim().max(200),
 		artistType: Joi.string()
@@ -25,10 +25,16 @@ export class UpdateArtistCommand {
 	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly artistId: number | undefined,
 		readonly name: string,
 		readonly artistType: ArtistType,
+	) {}
+}
+
+export class UpdateArtistCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: UpdateArtistParams,
 	) {}
 }
 
@@ -46,9 +52,11 @@ export class UpdateArtistCommandHandler
 	) {}
 
 	async execute(command: UpdateArtistCommand): Promise<ArtistObject> {
-		command.permissionContext.verifyPermission(Permission.EditArtists);
+		const { permissionContext, params } = command;
 
-		const result = UpdateArtistCommand.schema.validate(command, {
+		permissionContext.verifyPermission(Permission.EditArtists);
+
+		const result = UpdateArtistParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -57,19 +65,19 @@ export class UpdateArtistCommandHandler
 
 		const artist = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user?.id,
+				id: permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
 
 			const artist = await this.artistRepo.findOneOrFail({
-				id: command.artistId,
+				id: params.artistId,
 				deleted: false,
 				hidden: false,
 			});
 
-			artist.name = command.name;
-			artist.artistType = command.artistType;
+			artist.name = params.name;
+			artist.artistType = params.artistType;
 
 			const commit = new Commit();
 
@@ -85,7 +93,7 @@ export class UpdateArtistCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.artist_update({
 				artist: artist,
 				actor: user,
-				actorIp: command.permissionContext.clientIp,
+				actorIp: permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -93,6 +101,6 @@ export class UpdateArtistCommandHandler
 			return artist;
 		});
 
-		return new ArtistObject(artist, command.permissionContext);
+		return new ArtistObject(artist, permissionContext);
 	}
 }

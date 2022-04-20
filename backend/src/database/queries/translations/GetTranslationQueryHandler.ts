@@ -8,10 +8,14 @@ import { Translation } from '../../../entities/Translation';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
+export class GetTranslationParams {
+	constructor(readonly translationId: number) {}
+}
+
 export class GetTranslationQuery {
 	constructor(
 		readonly permissionContext: PermissionContext,
-		readonly translationId: number,
+		readonly params: GetTranslationParams,
 	) {}
 }
 
@@ -25,16 +29,18 @@ export class GetTranslationQueryHandler
 	) {}
 
 	async execute(query: GetTranslationQuery): Promise<TranslationObject> {
+		const { permissionContext, params } = query;
+
 		const translation = await this.translationRepo.findOne({
-			id: query.translationId,
+			id: params.translationId,
 			$and: [
-				whereNotDeleted(query.permissionContext),
-				whereNotHidden(query.permissionContext),
+				whereNotDeleted(permissionContext),
+				whereNotHidden(permissionContext),
 			],
 		});
 
 		if (!translation) throw new NotFoundException();
 
-		return new TranslationObject(translation, query.permissionContext);
+		return new TranslationObject(translation, permissionContext);
 	}
 }

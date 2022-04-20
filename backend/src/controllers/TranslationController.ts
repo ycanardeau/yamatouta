@@ -13,10 +13,16 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { DeleteTranslationCommand } from '../database/commands/entries/DeleteEntryCommandHandler';
 import { CreateTranslationCommand } from '../database/commands/translations/CreateTranslationCommandHandler';
-import { UpdateTranslationCommand } from '../database/commands/translations/UpdateTranslationCommandHandler';
+import {
+	UpdateTranslationCommand,
+	UpdateTranslationParams,
+} from '../database/commands/translations/UpdateTranslationCommandHandler';
 import { ListTranslationRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetTranslationQuery } from '../database/queries/translations/GetTranslationQueryHandler';
-import { ListTranslationsQuery } from '../database/queries/translations/ListTranslationsQueryHandler';
+import {
+	ListTranslationsParams,
+	ListTranslationsQuery,
+} from '../database/queries/translations/ListTranslationsQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { RevisionObject } from '../dto/revisions/RevisionObject';
@@ -34,38 +40,22 @@ export class TranslationController {
 	@Post()
 	createTranslation(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Body(new JoiValidationPipe(UpdateTranslationCommand.schema))
-		command: UpdateTranslationCommand,
+		@Body(new JoiValidationPipe(UpdateTranslationParams.schema))
+		params: UpdateTranslationParams,
 	): Promise<TranslationObject> {
 		return this.commandBus.execute(
-			new CreateTranslationCommand(
-				permissionContext,
-				command.translationId,
-				command.headword,
-				command.locale,
-				command.reading,
-				command.yamatokotoba,
-				command.category,
-			),
+			new CreateTranslationCommand(permissionContext, params),
 		);
 	}
 
 	@Get()
 	listTranslations(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Query(new JoiValidationPipe(ListTranslationsQuery.schema))
-		query: ListTranslationsQuery,
+		@Query(new JoiValidationPipe(ListTranslationsParams.schema))
+		params: ListTranslationsParams,
 	): Promise<SearchResultObject<TranslationObject>> {
 		return this.queryBus.execute(
-			new ListTranslationsQuery(
-				permissionContext,
-				query.sort,
-				query.offset,
-				query.limit,
-				query.getTotalCount,
-				query.query,
-				query.category,
-			),
+			new ListTranslationsQuery(permissionContext, params),
 		);
 	}
 
@@ -73,19 +63,14 @@ export class TranslationController {
 	updateTranslation(
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('translationId', ParseIntPipe) translationId: number,
-		@Body(new JoiValidationPipe(UpdateTranslationCommand.schema))
-		command: UpdateTranslationCommand,
+		@Body(new JoiValidationPipe(UpdateTranslationParams.schema))
+		params: UpdateTranslationParams,
 	): Promise<TranslationObject> {
 		return this.commandBus.execute(
-			new UpdateTranslationCommand(
-				permissionContext,
+			new UpdateTranslationCommand(permissionContext, {
+				...params,
 				translationId,
-				command.headword,
-				command.locale,
-				command.reading,
-				command.yamatokotoba,
-				command.category,
-			),
+			}),
 		);
 	}
 
@@ -95,7 +80,9 @@ export class TranslationController {
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<void> {
 		return this.commandBus.execute(
-			new DeleteTranslationCommand(permissionContext, translationId),
+			new DeleteTranslationCommand(permissionContext, {
+				entryId: translationId,
+			}),
 		);
 	}
 
@@ -105,7 +92,7 @@ export class TranslationController {
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<TranslationObject> {
 		return this.queryBus.execute(
-			new GetTranslationQuery(permissionContext, translationId),
+			new GetTranslationQuery(permissionContext, { translationId }),
 		);
 	}
 
@@ -115,7 +102,9 @@ export class TranslationController {
 		@Param('translationId', ParseIntPipe) translationId: number,
 	): Promise<SearchResultObject<RevisionObject>> {
 		return this.queryBus.execute(
-			new ListTranslationRevisionsQuery(permissionContext, translationId),
+			new ListTranslationRevisionsQuery(permissionContext, {
+				entryId: translationId,
+			}),
 		);
 	}
 }

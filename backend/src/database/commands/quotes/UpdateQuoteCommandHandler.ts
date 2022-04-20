@@ -15,8 +15,8 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
-export class UpdateQuoteCommand {
-	static readonly schema: ObjectSchema<UpdateQuoteCommand> = Joi.object({
+export class UpdateQuoteParams {
+	static readonly schema: ObjectSchema<UpdateQuoteParams> = Joi.object({
 		quoteId: Joi.number().optional(),
 		text: Joi.string().required().trim().max(200),
 		quoteType: Joi.string()
@@ -28,12 +28,18 @@ export class UpdateQuoteCommand {
 	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly quoteId: number | undefined,
 		readonly text: string,
 		readonly quoteType: QuoteType,
 		readonly locale: string,
 		readonly artistId: number,
+	) {}
+}
+
+export class UpdateQuoteCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: UpdateQuoteParams,
 	) {}
 }
 
@@ -53,9 +59,11 @@ export class UpdateQuoteCommandHandler
 	) {}
 
 	async execute(command: UpdateQuoteCommand): Promise<QuoteObject> {
-		command.permissionContext.verifyPermission(Permission.EditQuotes);
+		const { permissionContext, params } = command;
 
-		const result = UpdateQuoteCommand.schema.validate(command, {
+		permissionContext.verifyPermission(Permission.EditQuotes);
+
+		const result = UpdateQuoteParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -64,26 +72,26 @@ export class UpdateQuoteCommandHandler
 
 		const quote = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user?.id,
+				id: permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
 
 			const artist = await this.artistRepo.findOneOrFail({
-				id: command.artistId,
+				id: params.artistId,
 				deleted: false,
 				hidden: false,
 			});
 
 			const quote = await this.quoteRepo.findOneOrFail({
-				id: command.quoteId,
+				id: params.quoteId,
 				deleted: false,
 				hidden: false,
 			});
 
-			quote.text = command.text;
-			quote.quoteType = command.quoteType;
-			quote.locale = command.locale;
+			quote.text = params.text;
+			quote.quoteType = params.quoteType;
+			quote.locale = params.locale;
 			quote.artist = artist;
 
 			const commit = new Commit();
@@ -100,7 +108,7 @@ export class UpdateQuoteCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.quote_update({
 				quote: quote,
 				actor: user,
-				actorIp: command.permissionContext.clientIp,
+				actorIp: permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -108,6 +116,6 @@ export class UpdateQuoteCommandHandler
 			return quote;
 		});
 
-		return new QuoteObject(quote, command.permissionContext);
+		return new QuoteObject(quote, permissionContext);
 	}
 }

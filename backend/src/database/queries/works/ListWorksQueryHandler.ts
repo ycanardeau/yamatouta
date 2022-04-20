@@ -17,8 +17,8 @@ import { WorkType } from '../../../models/WorkType';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
 
-export class ListWorksQuery {
-	static readonly schema: ObjectSchema<ListWorksQuery> = Joi.object({
+export class ListWorksParams {
+	static readonly schema: ObjectSchema<ListWorksParams> = Joi.object({
 		workType: Joi.string()
 			.optional()
 			.valid(...Object.values(WorkType)),
@@ -29,13 +29,19 @@ export class ListWorksQuery {
 	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly workType?: WorkType,
 		readonly sort?: WorkSortRule,
 		readonly offset?: number,
 		readonly limit?: number,
 		readonly getTotalCount?: boolean,
 		readonly query?: string,
+	) {}
+}
+
+export class ListWorksQuery {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: ListWorksParams,
 	) {}
 }
 
@@ -60,36 +66,38 @@ export class ListWorksQueryHandler implements IQueryHandler<ListWorksQuery> {
 	async execute(
 		query: ListWorksQuery,
 	): Promise<SearchResultObject<WorkObject>> {
+		const { permissionContext, params } = query;
+
 		const where: FilterQuery<Work> = {
 			$and: [
 				{ deleted: false },
-				whereNotHidden(query.permissionContext),
-				query.workType ? { workType: query.workType } : {},
-				query.query ? { name: { $like: `%${query.query}%` } } : {},
+				whereNotHidden(permissionContext),
+				params.workType ? { workType: params.workType } : {},
+				params.query ? { name: { $like: `%${params.query}%` } } : {},
 			],
 		};
 
 		const options: FindOptions<Work> = {
-			limit: query.limit
-				? Math.min(query.limit, ListWorksQueryHandler.maxLimit)
+			limit: params.limit
+				? Math.min(params.limit, ListWorksQueryHandler.maxLimit)
 				: ListWorksQueryHandler.defaultLimit,
-			offset: query.offset,
+			offset: params.offset,
 		};
 
 		const [works, count] = await Promise.all([
-			query.offset && query.offset > ListWorksQueryHandler.maxOffset
+			params.offset && params.offset > ListWorksQueryHandler.maxOffset
 				? Promise.resolve([])
 				: this.workRepo.find(where, {
 						...options,
-						orderBy: this.orderBy(query.sort),
+						orderBy: this.orderBy(params.sort),
 				  }),
-			query.getTotalCount
+			params.getTotalCount
 				? this.workRepo.count(where, options)
 				: Promise.resolve(0),
 		]);
 
 		return new SearchResultObject<WorkObject>(
-			works.map((work) => new WorkObject(work, query.permissionContext)),
+			works.map((work) => new WorkObject(work, permissionContext)),
 			count,
 		);
 	}

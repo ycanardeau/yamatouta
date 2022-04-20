@@ -14,8 +14,8 @@ import { WorkType } from '../../../models/WorkType';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
-export class UpdateWorkCommand {
-	static readonly schema: ObjectSchema<UpdateWorkCommand> = Joi.object({
+export class UpdateWorkParams {
+	static readonly schema: ObjectSchema<UpdateWorkParams> = Joi.object({
 		workId: Joi.number().optional(),
 		name: Joi.string().required().trim().max(200),
 		workType: Joi.string()
@@ -25,10 +25,16 @@ export class UpdateWorkCommand {
 	});
 
 	constructor(
-		readonly permissionContext: PermissionContext,
 		readonly workId: number | undefined,
 		readonly name: string,
 		readonly workType: WorkType,
+	) {}
+}
+
+export class UpdateWorkCommand {
+	constructor(
+		readonly permissionContext: PermissionContext,
+		readonly params: UpdateWorkParams,
 	) {}
 }
 
@@ -46,9 +52,11 @@ export class UpdateWorkCommandHandler
 	) {}
 
 	async execute(command: UpdateWorkCommand): Promise<WorkObject> {
-		command.permissionContext.verifyPermission(Permission.EditWorks);
+		const { permissionContext, params } = command;
 
-		const result = UpdateWorkCommand.schema.validate(command, {
+		permissionContext.verifyPermission(Permission.EditWorks);
+
+		const result = UpdateWorkParams.schema.validate(params, {
 			convert: true,
 		});
 
@@ -57,19 +65,19 @@ export class UpdateWorkCommandHandler
 
 		const work = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
-				id: command.permissionContext.user?.id,
+				id: permissionContext.user?.id,
 				deleted: false,
 				hidden: false,
 			});
 
 			const work = await this.workRepo.findOneOrFail({
-				id: command.workId,
+				id: params.workId,
 				deleted: false,
 				hidden: false,
 			});
 
-			work.name = command.name;
-			work.workType = command.workType;
+			work.name = params.name;
+			work.workType = params.workType;
 
 			const commit = new Commit();
 
@@ -85,7 +93,7 @@ export class UpdateWorkCommandHandler
 			const auditLogEntry = this.auditLogEntryFactory.work_update({
 				work: work,
 				actor: user,
-				actorIp: command.permissionContext.clientIp,
+				actorIp: permissionContext.clientIp,
 			});
 
 			em.persist(auditLogEntry);
@@ -93,6 +101,6 @@ export class UpdateWorkCommandHandler
 			return work;
 		});
 
-		return new WorkObject(work, command.permissionContext);
+		return new WorkObject(work, permissionContext);
 	}
 }

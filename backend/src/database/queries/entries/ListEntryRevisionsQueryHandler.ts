@@ -13,10 +13,14 @@ import { Permission } from '../../../models/Permission';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
+export class ListEntryRevisionsParams {
+	constructor(readonly entryId: number) {}
+}
+
 export abstract class ListEntryRevisionsQuery {
 	constructor(
 		readonly permissionContext: PermissionContext,
-		readonly entryId: number,
+		readonly params: ListEntryRevisionsParams,
 	) {}
 }
 
@@ -29,17 +33,19 @@ abstract class ListEntryRevisionsQueryHandler<
 	) {}
 
 	async execute(query: TQuery): Promise<SearchResultObject<RevisionObject>> {
-		query.permissionContext.verifyPermission(Permission.ViewEditHistory);
+		const { permissionContext, params } = query;
 
-		const entry = await this.entryFunc(query.entryId);
+		permissionContext.verifyPermission(Permission.ViewEditHistory);
 
-		query.permissionContext.verifyDeletedAndHidden(entry);
+		const entry = await this.entryFunc(params.entryId);
+
+		permissionContext.verifyDeletedAndHidden(entry);
 
 		const revisions = await entry.revisions.matching({
 			where: {
 				$and: [
-					whereNotDeleted(query.permissionContext),
-					whereNotHidden(query.permissionContext),
+					whereNotDeleted(permissionContext),
+					whereNotHidden(permissionContext),
 				],
 			},
 			orderBy: { version: QueryOrder.DESC },
@@ -48,8 +54,7 @@ abstract class ListEntryRevisionsQueryHandler<
 
 		return new SearchResultObject(
 			revisions.map(
-				(revision) =>
-					new RevisionObject(revision, query.permissionContext),
+				(revision) => new RevisionObject(revision, permissionContext),
 			),
 			revisions.length,
 		);
