@@ -4,6 +4,7 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import {
 	UpdateWorkCommand,
 	UpdateWorkCommandHandler,
+	UpdateWorkParams,
 } from '../../../../src/database/commands/works/UpdateWorkCommandHandler';
 import { WorkAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { WorkRevision } from '../../../../src/entities/Revision';
@@ -29,7 +30,7 @@ describe('UpdateWorkCommandHandler', () => {
 	let workRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateWorkCommandHandler: UpdateWorkCommandHandler;
-	let defaultCommand: UpdateWorkCommand;
+	let defaultParams: UpdateWorkParams;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -78,8 +79,7 @@ describe('UpdateWorkCommandHandler', () => {
 			workRepo as any,
 		);
 
-		defaultCommand = {
-			permissionContext,
+		defaultParams = {
 			workId: work.id,
 			name: 'うた',
 			workType: WorkType.Song,
@@ -96,8 +96,8 @@ describe('UpdateWorkCommandHandler', () => {
 		}): Promise<void> => {
 			const workObject = await updateWorkCommandHandler.execute(command);
 
-			expect(workObject.name).toBe(command.name);
-			expect(workObject.workType).toBe(command.workType);
+			expect(workObject.name).toBe(command.params.name);
+			expect(workObject.workType).toBe(command.params.workType);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof WorkRevision,
@@ -138,21 +138,20 @@ describe('UpdateWorkCommandHandler', () => {
 				);
 
 				await expect(
-					updateWorkCommandHandler.execute({
-						...defaultCommand,
-						permissionContext,
-					}),
+					updateWorkCommandHandler.execute(
+						new UpdateWorkCommand(permissionContext, defaultParams),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('0 changes', async () => {
 			await testUpdateWork({
-				command: {
-					...defaultCommand,
+				command: new UpdateWorkCommand(permissionContext, {
+					...defaultParams,
 					name: work.name,
 					workType: work.workType,
-				},
+				}),
 				snapshot: {
 					name: work.name,
 					workType: work.workType,
@@ -162,12 +161,12 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('1 change', async () => {
 			await testUpdateWork({
-				command: {
-					...defaultCommand,
+				command: new UpdateWorkCommand(permissionContext, {
+					...defaultParams,
 					workType: work.workType,
-				},
+				}),
 				snapshot: {
-					name: defaultCommand.name,
+					name: defaultParams.name,
 					workType: work.workType,
 				},
 			});
@@ -175,57 +174,70 @@ describe('UpdateWorkCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateWork({
-				command: defaultCommand,
+				command: new UpdateWorkCommand(
+					permissionContext,
+					defaultParams,
+				),
 				snapshot: {
-					name: defaultCommand.name,
-					workType: defaultCommand.workType,
+					name: defaultParams.name,
+					workType: defaultParams.workType,
 				},
 			});
 		});
 
 		test('name is undefined', async () => {
 			await expect(
-				updateWorkCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					name: undefined!,
-				}),
+				updateWorkCommandHandler.execute(
+					new UpdateWorkCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						name: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is empty', async () => {
 			await expect(
-				updateWorkCommandHandler.execute({
-					...defaultCommand,
-					name: '',
-				}),
+				updateWorkCommandHandler.execute(
+					new UpdateWorkCommand(permissionContext, {
+						...defaultParams,
+						name: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is too long', async () => {
 			await expect(
-				updateWorkCommandHandler.execute({
-					...defaultCommand,
-					name: 'い'.repeat(201),
-				}),
+				updateWorkCommandHandler.execute(
+					new UpdateWorkCommand(permissionContext, {
+						...defaultParams,
+						name: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('workType is empty', async () => {
 			await expect(
-				updateWorkCommandHandler.execute({
-					...defaultCommand,
-					workType: '' as WorkType,
-				}),
+				updateWorkCommandHandler.execute(
+					new UpdateWorkCommand(permissionContext, {
+						...defaultParams,
+						workType: '' as WorkType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('workType is invalid', async () => {
 			await expect(
-				updateWorkCommandHandler.execute({
-					...defaultCommand,
-					workType: 'abcdef' as WorkType,
-				}),
+				updateWorkCommandHandler.execute(
+					new UpdateWorkCommand(permissionContext, {
+						...defaultParams,
+						workType: 'abcdef' as WorkType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 	});

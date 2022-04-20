@@ -1,7 +1,10 @@
 import { MikroORM } from '@mikro-orm/core';
 import { UnauthorizedException } from '@nestjs/common';
 
-import { DeleteWorkCommandHandler } from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
+import {
+	DeleteWorkCommand,
+	DeleteWorkCommandHandler,
+} from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
 import { WorkAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { WorkRevision } from '../../../../src/entities/Revision';
 import { User } from '../../../../src/entities/User';
@@ -76,10 +79,9 @@ describe('DeleteWorkCommandHandler', () => {
 
 	describe('deleteWork', () => {
 		const testDeleteWork = async (): Promise<void> => {
-			await deleteWorkCommandHandler.execute({
-				permissionContext,
-				entryId: work.id,
-			});
+			await deleteWorkCommandHandler.execute(
+				new DeleteWorkCommand(permissionContext, { entryId: work.id }),
+			);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof WorkRevision,
@@ -122,10 +124,11 @@ describe('DeleteWorkCommandHandler', () => {
 				);
 
 				await expect(
-					deleteWorkCommandHandler.execute({
-						permissionContext,
-						entryId: work.id,
-					}),
+					deleteWorkCommandHandler.execute(
+						new DeleteWorkCommand(permissionContext, {
+							entryId: work.id,
+						}),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

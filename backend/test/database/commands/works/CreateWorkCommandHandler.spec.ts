@@ -1,8 +1,14 @@
 import { MikroORM } from '@mikro-orm/core';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
-import { CreateWorkCommandHandler } from '../../../../src/database/commands/works/CreateWorkCommandHandler';
-import { UpdateWorkCommand } from '../../../../src/database/commands/works/UpdateWorkCommandHandler';
+import {
+	CreateWorkCommand,
+	CreateWorkCommandHandler,
+} from '../../../../src/database/commands/works/CreateWorkCommandHandler';
+import {
+	UpdateWorkCommand,
+	UpdateWorkParams,
+} from '../../../../src/database/commands/works/UpdateWorkCommandHandler';
 import { WorkAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { WorkRevision } from '../../../../src/entities/Revision';
 import { User } from '../../../../src/entities/User';
@@ -25,7 +31,7 @@ describe('CreateWorkCommandHandler', () => {
 	let auditLogEntryFactory: AuditLogEntryFactory;
 	let permissionContext: FakePermissionContext;
 	let createWorkCommandHandler: CreateWorkCommandHandler;
-	let defaultCommand: UpdateWorkCommand;
+	let defaultParams: UpdateWorkParams;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -63,8 +69,7 @@ describe('CreateWorkCommandHandler', () => {
 			auditLogEntryFactory,
 		);
 
-		defaultCommand = {
-			permissionContext,
+		defaultParams = {
 			workId: undefined,
 			name: 'よみもの',
 			workType: WorkType.Book,
@@ -81,8 +86,8 @@ describe('CreateWorkCommandHandler', () => {
 		}): Promise<void> => {
 			const workObject = await createWorkCommandHandler.execute(command);
 
-			expect(workObject.name).toBe(command.name);
-			expect(workObject.workType).toBe(command.workType);
+			expect(workObject.name).toBe(command.params.name);
+			expect(workObject.workType).toBe(command.params.workType);
 
 			const work = em.entities.filter(
 				(entity) => entity instanceof Work,
@@ -127,77 +132,91 @@ describe('CreateWorkCommandHandler', () => {
 				);
 
 				await expect(
-					createWorkCommandHandler.execute({
-						...defaultCommand,
-						permissionContext,
-					}),
+					createWorkCommandHandler.execute(
+						new CreateWorkCommand(permissionContext, defaultParams),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('2 changes', async () => {
 			await testCreateWork({
-				command: defaultCommand,
+				command: new CreateWorkCommand(
+					permissionContext,
+					defaultParams,
+				),
 				snapshot: {
-					name: defaultCommand.name,
-					workType: defaultCommand.workType,
+					name: defaultParams.name,
+					workType: defaultParams.workType,
 				},
 			});
 		});
 
 		test('name is undefined', async () => {
 			await expect(
-				createWorkCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					name: undefined!,
-				}),
+				createWorkCommandHandler.execute(
+					new CreateWorkCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						name: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is empty', async () => {
 			await expect(
-				createWorkCommandHandler.execute({
-					...defaultCommand,
-					name: '',
-				}),
+				createWorkCommandHandler.execute(
+					new CreateWorkCommand(permissionContext, {
+						...defaultParams,
+						name: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is too long', async () => {
 			await expect(
-				createWorkCommandHandler.execute({
-					...defaultCommand,
-					name: 'い'.repeat(201),
-				}),
+				createWorkCommandHandler.execute(
+					new CreateWorkCommand(permissionContext, {
+						...defaultParams,
+						name: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('workType is undefined', async () => {
 			await expect(
-				createWorkCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					workType: undefined!,
-				}),
+				createWorkCommandHandler.execute(
+					new CreateWorkCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						workType: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('workType is empty', async () => {
 			await expect(
-				createWorkCommandHandler.execute({
-					...defaultCommand,
-					workType: '' as WorkType,
-				}),
+				createWorkCommandHandler.execute(
+					new CreateWorkCommand(permissionContext, {
+						...defaultParams,
+						workType: '' as WorkType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('workType is invalid', async () => {
 			await expect(
-				createWorkCommandHandler.execute({
-					...defaultCommand,
-					workType: 'abcdef' as WorkType,
-				}),
+				createWorkCommandHandler.execute(
+					new CreateWorkCommand(permissionContext, {
+						...defaultParams,
+						workType: 'abcdef' as WorkType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 	});

@@ -1,7 +1,11 @@
 import { AnyEntity, Reference } from '@mikro-orm/core';
 import { BadRequestException } from '@nestjs/common';
 
-import { CreateUserCommandHandler } from '../../../../src/database/commands/users/CreateUserCommandHandler';
+import {
+	CreateUserCommand,
+	CreateUserCommandHandler,
+	CreateUserParams,
+} from '../../../../src/database/commands/users/CreateUserCommandHandler';
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
@@ -20,6 +24,7 @@ describe('CreateUserCommandHandler', () => {
 	let em: FakeEntityManager;
 	let permissionContext: FakePermissionContext;
 	let createUserCommandHandler: CreateUserCommandHandler;
+	let defaultParams: CreateUserParams;
 
 	beforeEach(async () => {
 		existingUser = await createUser({
@@ -52,22 +57,21 @@ describe('CreateUserCommandHandler', () => {
 			auditLogEntryFactory,
 			passwordHasherFactory,
 		);
-	});
 
-	describe('createUser', () => {
-		const defaultCommand = {
-			permissionContext,
+		defaultParams = {
 			username: 'user',
 			email: 'user@example.com',
 			password: 'P@$$w0rd',
 		};
+	});
 
+	describe('createUser', () => {
 		test('createUser', async () => {
 			const userObject = await createUserCommandHandler.execute(
-				defaultCommand,
+				new CreateUserCommand(permissionContext, defaultParams),
 			);
 
-			expect(userObject.name).toBe(defaultCommand.username);
+			expect(userObject.name).toBe(defaultParams.username);
 
 			const newUser = em.entities.filter(
 				(entity) => entity instanceof User,
@@ -94,10 +98,12 @@ describe('CreateUserCommandHandler', () => {
 
 			expect(username.length).toBe(2);
 
-			const userObject = await createUserCommandHandler.execute({
-				...defaultCommand,
-				username: username,
-			});
+			const userObject = await createUserCommandHandler.execute(
+				new CreateUserCommand(permissionContext, {
+					...defaultParams,
+					username: username,
+				}),
+			);
 
 			expect(userObject.name).toBe(username);
 
@@ -127,10 +133,12 @@ describe('CreateUserCommandHandler', () => {
 
 			expect(username.length).toBe(32);
 
-			const userObject = await createUserCommandHandler.execute({
-				...defaultCommand,
-				username: username,
-			});
+			const userObject = await createUserCommandHandler.execute(
+				new CreateUserCommand(permissionContext, {
+					...defaultParams,
+					username: username,
+				}),
+			);
 
 			expect(userObject.name).toBe(username);
 
@@ -156,11 +164,13 @@ describe('CreateUserCommandHandler', () => {
 
 		test('username is undefined', async () => {
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					username: undefined!,
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						username: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -172,10 +182,12 @@ describe('CreateUserCommandHandler', () => {
 
 		test('username is empty', async () => {
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					username: '',
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						username: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -187,10 +199,12 @@ describe('CreateUserCommandHandler', () => {
 
 		test('username is whitespace', async () => {
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					username: ' 　\t\t　 ',
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						username: ' 　\t\t　 ',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -206,10 +220,12 @@ describe('CreateUserCommandHandler', () => {
 			expect(username.length).toBe(1);
 
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					username: username,
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						username: username,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -226,10 +242,12 @@ describe('CreateUserCommandHandler', () => {
 			expect(username.length).toBe(33);
 
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					username: username,
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						username: username,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -241,10 +259,12 @@ describe('CreateUserCommandHandler', () => {
 
 		test('email is existing', async () => {
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					email: existingEmail,
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						email: existingEmail,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -256,11 +276,13 @@ describe('CreateUserCommandHandler', () => {
 
 		test('email is undefined', async () => {
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					email: undefined!,
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						email: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -272,10 +294,12 @@ describe('CreateUserCommandHandler', () => {
 
 		test('email is empty', async () => {
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					email: '',
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						email: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -287,10 +311,12 @@ describe('CreateUserCommandHandler', () => {
 
 		test('email is invalid', async () => {
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					email: 'invalid_email',
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						email: 'invalid_email',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -302,11 +328,13 @@ describe('CreateUserCommandHandler', () => {
 
 		test('password is undefined', async () => {
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					password: undefined!,
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						password: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -318,10 +346,12 @@ describe('CreateUserCommandHandler', () => {
 
 		test('password is empty', async () => {
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					password: '',
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						password: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -337,10 +367,12 @@ describe('CreateUserCommandHandler', () => {
 			expect(password.length).toBe(7);
 
 			await expect(
-				createUserCommandHandler.execute({
-					...defaultCommand,
-					password: password,
-				}),
+				createUserCommandHandler.execute(
+					new CreateUserCommand(permissionContext, {
+						...defaultParams,
+						password: password,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(

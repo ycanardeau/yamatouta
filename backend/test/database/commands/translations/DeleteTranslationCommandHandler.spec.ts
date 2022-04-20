@@ -1,7 +1,10 @@
 import { MikroORM } from '@mikro-orm/core';
 import { UnauthorizedException } from '@nestjs/common';
 
-import { DeleteTranslationCommandHandler } from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
+import {
+	DeleteTranslationCommand,
+	DeleteTranslationCommandHandler,
+} from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
 import { TranslationAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { TranslationRevision } from '../../../../src/entities/Revision';
 import { Translation } from '../../../../src/entities/Translation';
@@ -78,10 +81,11 @@ describe('DeleteTranslationCommandHandler', () => {
 
 	describe('deleteTranslation', () => {
 		const testDeleteTranslation = async (): Promise<void> => {
-			await deleteTranslationCommandHandler.execute({
-				permissionContext,
-				entryId: translation.id,
-			});
+			await deleteTranslationCommandHandler.execute(
+				new DeleteTranslationCommand(permissionContext, {
+					entryId: translation.id,
+				}),
+			);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof TranslationRevision,
@@ -126,10 +130,11 @@ describe('DeleteTranslationCommandHandler', () => {
 				);
 
 				await expect(
-					deleteTranslationCommandHandler.execute({
-						permissionContext,
-						entryId: translation.id,
-					}),
+					deleteTranslationCommandHandler.execute(
+						new DeleteTranslationCommand(permissionContext, {
+							entryId: translation.id,
+						}),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

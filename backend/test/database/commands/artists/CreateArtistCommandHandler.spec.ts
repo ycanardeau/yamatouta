@@ -1,8 +1,14 @@
 import { MikroORM } from '@mikro-orm/core';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
-import { CreateArtistCommandHandler } from '../../../../src/database/commands/artists/CreateArtistCommandHandler';
-import { UpdateArtistCommand } from '../../../../src/database/commands/artists/UpdateArtistCommandHandler';
+import {
+	CreateArtistCommand,
+	CreateArtistCommandHandler,
+} from '../../../../src/database/commands/artists/CreateArtistCommandHandler';
+import {
+	UpdateArtistCommand,
+	UpdateArtistParams,
+} from '../../../../src/database/commands/artists/UpdateArtistCommandHandler';
 import { Artist } from '../../../../src/entities/Artist';
 import { ArtistAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { ArtistRevision } from '../../../../src/entities/Revision';
@@ -25,7 +31,7 @@ describe('CreateArtistCommandHandler', () => {
 	let auditLogEntryFactory: AuditLogEntryFactory;
 	let permissionContext: FakePermissionContext;
 	let createArtistCommandHandler: CreateArtistCommandHandler;
-	let defaultCommand: UpdateArtistCommand;
+	let defaultParams: UpdateArtistParams;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -63,8 +69,7 @@ describe('CreateArtistCommandHandler', () => {
 			auditLogEntryFactory,
 		);
 
-		defaultCommand = {
-			permissionContext,
+		defaultParams = {
 			artistId: undefined,
 			name: 'うたよみ',
 			artistType: ArtistType.Person,
@@ -83,8 +88,8 @@ describe('CreateArtistCommandHandler', () => {
 				command,
 			);
 
-			expect(artistObject.name).toBe(command.name);
-			expect(artistObject.artistType).toBe(command.artistType);
+			expect(artistObject.name).toBe(command.params.name);
+			expect(artistObject.artistType).toBe(command.params.artistType);
 
 			const artist = em.entities.filter(
 				(entity) => entity instanceof Artist,
@@ -129,77 +134,94 @@ describe('CreateArtistCommandHandler', () => {
 				);
 
 				await expect(
-					createArtistCommandHandler.execute({
-						...defaultCommand,
-						permissionContext,
-					}),
+					createArtistCommandHandler.execute(
+						new CreateArtistCommand(
+							permissionContext,
+							defaultParams,
+						),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('2 changes', async () => {
 			await testCreateArtist({
-				command: defaultCommand,
+				command: new CreateArtistCommand(
+					permissionContext,
+					defaultParams,
+				),
 				snapshot: {
-					name: defaultCommand.name,
-					artistType: defaultCommand.artistType,
+					name: defaultParams.name,
+					artistType: defaultParams.artistType,
 				},
 			});
 		});
 
 		test('name is undefined', async () => {
 			await expect(
-				createArtistCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					name: undefined!,
-				}),
+				createArtistCommandHandler.execute(
+					new CreateArtistCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						name: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is empty', async () => {
 			await expect(
-				createArtistCommandHandler.execute({
-					...defaultCommand,
-					name: '',
-				}),
+				createArtistCommandHandler.execute(
+					new CreateArtistCommand(permissionContext, {
+						...defaultParams,
+						name: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is too long', async () => {
 			await expect(
-				createArtistCommandHandler.execute({
-					...defaultCommand,
-					name: 'い'.repeat(201),
-				}),
+				createArtistCommandHandler.execute(
+					new CreateArtistCommand(permissionContext, {
+						...defaultParams,
+						name: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistType is undefined', async () => {
 			await expect(
-				createArtistCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					artistType: undefined!,
-				}),
+				createArtistCommandHandler.execute(
+					new CreateArtistCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						artistType: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistType is empty', async () => {
 			await expect(
-				createArtistCommandHandler.execute({
-					...defaultCommand,
-					artistType: '' as ArtistType,
-				}),
+				createArtistCommandHandler.execute(
+					new CreateArtistCommand(permissionContext, {
+						...defaultParams,
+						artistType: '' as ArtistType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistType is invalid', async () => {
 			await expect(
-				createArtistCommandHandler.execute({
-					...defaultCommand,
-					artistType: 'abcdef' as ArtistType,
-				}),
+				createArtistCommandHandler.execute(
+					new CreateArtistCommand(permissionContext, {
+						...defaultParams,
+						artistType: 'abcdef' as ArtistType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 	});

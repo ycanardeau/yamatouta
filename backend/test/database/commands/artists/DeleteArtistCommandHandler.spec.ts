@@ -1,7 +1,10 @@
 import { MikroORM } from '@mikro-orm/core';
 import { UnauthorizedException } from '@nestjs/common';
 
-import { DeleteArtistCommandHandler } from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
+import {
+	DeleteArtistCommand,
+	DeleteArtistCommandHandler,
+} from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
 import { Artist } from '../../../../src/entities/Artist';
 import { ArtistAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { ArtistRevision } from '../../../../src/entities/Revision';
@@ -76,10 +79,11 @@ describe('DeleteArtistCommandHandler', () => {
 
 	describe('deleteArtist', () => {
 		const testDeleteArtist = async (): Promise<void> => {
-			await deleteArtistCommandHandler.execute({
-				permissionContext,
-				entryId: artist.id,
-			});
+			await deleteArtistCommandHandler.execute(
+				new DeleteArtistCommand(permissionContext, {
+					entryId: artist.id,
+				}),
+			);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof ArtistRevision,
@@ -122,10 +126,11 @@ describe('DeleteArtistCommandHandler', () => {
 				);
 
 				await expect(
-					deleteArtistCommandHandler.execute({
-						permissionContext,
-						entryId: artist.id,
-					}),
+					deleteArtistCommandHandler.execute(
+						new DeleteArtistCommand(permissionContext, {
+							entryId: artist.id,
+						}),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

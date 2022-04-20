@@ -1,8 +1,14 @@
 import { MikroORM } from '@mikro-orm/core';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
-import { CreateQuoteCommandHandler } from '../../../../src/database/commands/quotes/CreateQuoteCommandHandler';
-import { UpdateQuoteCommand } from '../../../../src/database/commands/quotes/UpdateQuoteCommandHandler';
+import {
+	CreateQuoteCommand,
+	CreateQuoteCommandHandler,
+} from '../../../../src/database/commands/quotes/CreateQuoteCommandHandler';
+import {
+	UpdateQuoteCommand,
+	UpdateQuoteParams,
+} from '../../../../src/database/commands/quotes/UpdateQuoteCommandHandler';
 import { Artist } from '../../../../src/entities/Artist';
 import { QuoteAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { Quote } from '../../../../src/entities/Quote';
@@ -32,7 +38,7 @@ describe('CreateQuoteCommandHandler', () => {
 	let auditLogEntryFactory: AuditLogEntryFactory;
 	let permissionContext: FakePermissionContext;
 	let createQuoteCommandHandler: CreateQuoteCommandHandler;
-	let defaultCommand: UpdateQuoteCommand;
+	let defaultParams: UpdateQuoteParams;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -80,8 +86,7 @@ describe('CreateQuoteCommandHandler', () => {
 			auditLogEntryFactory,
 		);
 
-		defaultCommand = {
-			permissionContext,
+		defaultParams = {
 			quoteId: undefined,
 			text: 'やまとうた',
 			quoteType: QuoteType.Tanka,
@@ -102,10 +107,10 @@ describe('CreateQuoteCommandHandler', () => {
 				command,
 			);
 
-			expect(quoteObject.text).toBe(command.text);
-			expect(quoteObject.quoteType).toBe(command.quoteType);
-			expect(quoteObject.locale).toBe(command.locale);
-			expect(quoteObject.artist.id).toBe(command.artistId);
+			expect(quoteObject.text).toBe(command.params.text);
+			expect(quoteObject.quoteType).toBe(command.params.quoteType);
+			expect(quoteObject.locale).toBe(command.params.locale);
+			expect(quoteObject.artist.id).toBe(command.params.artistId);
 
 			const quote = em.entities.filter(
 				(entity) => entity instanceof Quote,
@@ -150,21 +155,26 @@ describe('CreateQuoteCommandHandler', () => {
 				);
 
 				await expect(
-					createQuoteCommandHandler.execute({
-						...defaultCommand,
-						permissionContext,
-					}),
+					createQuoteCommandHandler.execute(
+						new CreateQuoteCommand(
+							permissionContext,
+							defaultParams,
+						),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('4 changes', async () => {
 			await testCreateQuote({
-				command: defaultCommand,
+				command: new CreateQuoteCommand(
+					permissionContext,
+					defaultParams,
+				),
 				snapshot: {
-					text: defaultCommand.text,
-					quoteType: defaultCommand.quoteType,
-					locale: defaultCommand.locale,
+					text: defaultParams.text,
+					quoteType: defaultParams.quoteType,
+					locale: defaultParams.locale,
 					artist: new ObjectRefSnapshot({ entry: artist }),
 				},
 			});
@@ -172,67 +182,81 @@ describe('CreateQuoteCommandHandler', () => {
 
 		test('text is undefined', async () => {
 			await expect(
-				createQuoteCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					text: undefined!,
-				}),
+				createQuoteCommandHandler.execute(
+					new CreateQuoteCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						text: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('text is empty', async () => {
 			await expect(
-				createQuoteCommandHandler.execute({
-					...defaultCommand,
-					text: '',
-				}),
+				createQuoteCommandHandler.execute(
+					new CreateQuoteCommand(permissionContext, {
+						...defaultParams,
+						text: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('text is too long', async () => {
 			await expect(
-				createQuoteCommandHandler.execute({
-					...defaultCommand,
-					text: 'い'.repeat(201),
-				}),
+				createQuoteCommandHandler.execute(
+					new CreateQuoteCommand(permissionContext, {
+						...defaultParams,
+						text: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('quoteType is empty', async () => {
 			await expect(
-				createQuoteCommandHandler.execute({
-					...defaultCommand,
-					quoteType: '' as QuoteType,
-				}),
+				createQuoteCommandHandler.execute(
+					new CreateQuoteCommand(permissionContext, {
+						...defaultParams,
+						quoteType: '' as QuoteType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('quoteType is invalid', async () => {
 			await expect(
-				createQuoteCommandHandler.execute({
-					...defaultCommand,
-					quoteType: 'abcdef' as QuoteType,
-				}),
+				createQuoteCommandHandler.execute(
+					new CreateQuoteCommand(permissionContext, {
+						...defaultParams,
+						quoteType: 'abcdef' as QuoteType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistId is undefined', async () => {
 			await expect(
-				createQuoteCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					artistId: undefined!,
-				}),
+				createQuoteCommandHandler.execute(
+					new CreateQuoteCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						artistId: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistId is invalid', async () => {
 			await expect(
-				createQuoteCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					artistId: 'abcdef' as any,
-				}),
+				createQuoteCommandHandler.execute(
+					new CreateQuoteCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						artistId: 'abcdef' as any,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 	});

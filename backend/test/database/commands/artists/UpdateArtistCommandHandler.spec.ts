@@ -4,6 +4,7 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import {
 	UpdateArtistCommand,
 	UpdateArtistCommandHandler,
+	UpdateArtistParams,
 } from '../../../../src/database/commands/artists/UpdateArtistCommandHandler';
 import { Artist } from '../../../../src/entities/Artist';
 import { ArtistAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
@@ -29,7 +30,7 @@ describe('UpdateArtistCommandHandler', () => {
 	let artistRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateArtistCommandHandler: UpdateArtistCommandHandler;
-	let defaultCommand: UpdateArtistCommand;
+	let defaultParams: UpdateArtistParams;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -78,8 +79,7 @@ describe('UpdateArtistCommandHandler', () => {
 			artistRepo as any,
 		);
 
-		defaultCommand = {
-			permissionContext,
+		defaultParams = {
 			artistId: artist.id,
 			name: 'くみあい',
 			artistType: ArtistType.Group,
@@ -98,8 +98,8 @@ describe('UpdateArtistCommandHandler', () => {
 				command,
 			);
 
-			expect(artistObject.name).toBe(command.name);
-			expect(artistObject.artistType).toBe(command.artistType);
+			expect(artistObject.name).toBe(command.params.name);
+			expect(artistObject.artistType).toBe(command.params.artistType);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof ArtistRevision,
@@ -140,21 +140,23 @@ describe('UpdateArtistCommandHandler', () => {
 				);
 
 				await expect(
-					updateArtistCommandHandler.execute({
-						...defaultCommand,
-						permissionContext,
-					}),
+					updateArtistCommandHandler.execute(
+						new UpdateArtistCommand(
+							permissionContext,
+							defaultParams,
+						),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('0 changes', async () => {
 			await testUpdateArtist({
-				command: {
-					...defaultCommand,
+				command: new UpdateArtistCommand(permissionContext, {
+					...defaultParams,
 					name: artist.name,
 					artistType: artist.artistType,
-				},
+				}),
 				snapshot: {
 					name: artist.name,
 					artistType: artist.artistType,
@@ -164,12 +166,12 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('1 change', async () => {
 			await testUpdateArtist({
-				command: {
-					...defaultCommand,
+				command: new UpdateArtistCommand(permissionContext, {
+					...defaultParams,
 					artistType: artist.artistType,
-				},
+				}),
 				snapshot: {
-					name: defaultCommand.name,
+					name: defaultParams.name,
 					artistType: artist.artistType,
 				},
 			});
@@ -177,57 +179,70 @@ describe('UpdateArtistCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateArtist({
-				command: defaultCommand,
+				command: new UpdateArtistCommand(
+					permissionContext,
+					defaultParams,
+				),
 				snapshot: {
-					name: defaultCommand.name,
-					artistType: defaultCommand.artistType,
+					name: defaultParams.name,
+					artistType: defaultParams.artistType,
 				},
 			});
 		});
 
 		test('name is undefined', async () => {
 			await expect(
-				updateArtistCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					name: undefined!,
-				}),
+				updateArtistCommandHandler.execute(
+					new UpdateArtistCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						name: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is empty', async () => {
 			await expect(
-				updateArtistCommandHandler.execute({
-					...defaultCommand,
-					name: '',
-				}),
+				updateArtistCommandHandler.execute(
+					new UpdateArtistCommand(permissionContext, {
+						...defaultParams,
+						name: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is too long', async () => {
 			await expect(
-				updateArtistCommandHandler.execute({
-					...defaultCommand,
-					name: 'い'.repeat(201),
-				}),
+				updateArtistCommandHandler.execute(
+					new UpdateArtistCommand(permissionContext, {
+						...defaultParams,
+						name: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistType is empty', async () => {
 			await expect(
-				updateArtistCommandHandler.execute({
-					...defaultCommand,
-					artistType: '' as ArtistType,
-				}),
+				updateArtistCommandHandler.execute(
+					new UpdateArtistCommand(permissionContext, {
+						...defaultParams,
+						artistType: '' as ArtistType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistType is invalid', async () => {
 			await expect(
-				updateArtistCommandHandler.execute({
-					...defaultCommand,
-					artistType: 'abcdef' as ArtistType,
-				}),
+				updateArtistCommandHandler.execute(
+					new UpdateArtistCommand(permissionContext, {
+						...defaultParams,
+						artistType: 'abcdef' as ArtistType,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 	});

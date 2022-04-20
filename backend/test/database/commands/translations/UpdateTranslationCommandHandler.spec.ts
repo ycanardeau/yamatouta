@@ -4,6 +4,7 @@ import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import {
 	UpdateTranslationCommand,
 	UpdateTranslationCommandHandler,
+	UpdateTranslationParams,
 } from '../../../../src/database/commands/translations/UpdateTranslationCommandHandler';
 import { TranslationAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { TranslationRevision } from '../../../../src/entities/Revision';
@@ -31,7 +32,7 @@ describe('UpdateTranslationCommandHandler', () => {
 	let translationRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateTranslationCommandHandler: UpdateTranslationCommandHandler;
-	let defaultCommand: UpdateTranslationCommand;
+	let defaultParams: UpdateTranslationParams;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -85,8 +86,7 @@ describe('UpdateTranslationCommandHandler', () => {
 			translationRepo as any,
 		);
 
-		defaultCommand = {
-			permissionContext,
+		defaultParams = {
 			translationId: translation.id,
 			headword: '和語',
 			locale: 'ja',
@@ -107,11 +107,13 @@ describe('UpdateTranslationCommandHandler', () => {
 			const translationObject =
 				await updateTranslationCommandHandler.execute(command);
 
-			expect(translationObject.headword).toBe(command.headword);
-			expect(translationObject.locale).toBe(command.locale);
-			expect(translationObject.reading).toBe(command.reading);
-			expect(translationObject.yamatokotoba).toBe(command.yamatokotoba);
-			expect(translationObject.category).toBe(command.category);
+			expect(translationObject.headword).toBe(command.params.headword);
+			expect(translationObject.locale).toBe(command.params.locale);
+			expect(translationObject.reading).toBe(command.params.reading);
+			expect(translationObject.yamatokotoba).toBe(
+				command.params.yamatokotoba,
+			);
+			expect(translationObject.category).toBe(command.params.category);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof TranslationRevision,
@@ -152,24 +154,26 @@ describe('UpdateTranslationCommandHandler', () => {
 				);
 
 				await expect(
-					updateTranslationCommandHandler.execute({
-						...defaultCommand,
-						permissionContext,
-					}),
+					updateTranslationCommandHandler.execute(
+						new UpdateTranslationCommand(
+							permissionContext,
+							defaultParams,
+						),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('0 changes', async () => {
 			await testUpdateTranslation({
-				command: {
-					...defaultCommand,
+				command: new UpdateTranslationCommand(permissionContext, {
+					...defaultParams,
 					headword: translation.headword,
 					locale: translation.locale,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
-				},
+				}),
 				snapshot: {
 					headword: translation.headword,
 					locale: translation.locale,
@@ -183,15 +187,15 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('1 change', async () => {
 			await testUpdateTranslation({
-				command: {
-					...defaultCommand,
+				command: new UpdateTranslationCommand(permissionContext, {
+					...defaultParams,
 					locale: translation.locale,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
-				},
+				}),
 				snapshot: {
-					headword: defaultCommand.headword,
+					headword: defaultParams.headword,
 					locale: translation.locale,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
@@ -203,15 +207,15 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateTranslation({
-				command: {
-					...defaultCommand,
+				command: new UpdateTranslationCommand(permissionContext, {
+					...defaultParams,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
-				},
+				}),
 				snapshot: {
-					headword: defaultCommand.headword,
-					locale: defaultCommand.locale,
+					headword: defaultParams.headword,
+					locale: defaultParams.locale,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
@@ -222,15 +226,15 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('3 changes', async () => {
 			await testUpdateTranslation({
-				command: {
-					...defaultCommand,
+				command: new UpdateTranslationCommand(permissionContext, {
+					...defaultParams,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
-				},
+				}),
 				snapshot: {
-					headword: defaultCommand.headword,
-					locale: defaultCommand.locale,
-					reading: defaultCommand.reading,
+					headword: defaultParams.headword,
+					locale: defaultParams.locale,
+					reading: defaultParams.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
@@ -240,12 +244,15 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('4 changes', async () => {
 			await testUpdateTranslation({
-				command: { ...defaultCommand, category: translation.category },
+				command: new UpdateTranslationCommand(permissionContext, {
+					...defaultParams,
+					category: translation.category,
+				}),
 				snapshot: {
-					headword: defaultCommand.headword,
-					locale: defaultCommand.locale,
-					reading: defaultCommand.reading,
-					yamatokotoba: defaultCommand.yamatokotoba,
+					headword: defaultParams.headword,
+					locale: defaultParams.locale,
+					reading: defaultParams.reading,
+					yamatokotoba: defaultParams.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
 				},
@@ -254,13 +261,16 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('5 changes', async () => {
 			await testUpdateTranslation({
-				command: defaultCommand,
+				command: new UpdateTranslationCommand(
+					permissionContext,
+					defaultParams,
+				),
 				snapshot: {
-					headword: defaultCommand.headword,
-					locale: defaultCommand.locale,
-					reading: defaultCommand.reading,
-					yamatokotoba: defaultCommand.yamatokotoba,
-					category: defaultCommand.category,
+					headword: defaultParams.headword,
+					locale: defaultParams.locale,
+					reading: defaultParams.reading,
+					yamatokotoba: defaultParams.yamatokotoba,
+					category: defaultParams.category,
 					inishienomanabi_tags: [],
 				},
 			});
@@ -268,139 +278,169 @@ describe('UpdateTranslationCommandHandler', () => {
 
 		test('headword is undefined', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					headword: undefined!,
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						headword: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('headword is empty', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					headword: '',
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						headword: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('headword is too long', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					headword: 'い'.repeat(201),
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						headword: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading is undefined', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					reading: undefined!,
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						reading: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading is empty', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					reading: '',
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						reading: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading is too long', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					reading: 'い'.repeat(201),
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						reading: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading contains alphabets', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					reading: 'Anglish',
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						reading: 'Anglish',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading contains kanji', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					reading: '大和言葉',
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						reading: '大和言葉',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba is undefined', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					yamatokotoba: undefined!,
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						yamatokotoba: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba is empty', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					yamatokotoba: '',
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						yamatokotoba: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba is too long', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					yamatokotoba: 'い'.repeat(201),
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						yamatokotoba: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba contains alphabets', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					yamatokotoba: 'Anglish',
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						yamatokotoba: 'Anglish',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba contains kanji', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					yamatokotoba: '大和言葉',
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						yamatokotoba: '大和言葉',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('category is empty', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					category: '' as WordCategory,
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						category: '' as WordCategory,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('category is invalid', async () => {
 			await expect(
-				updateTranslationCommandHandler.execute({
-					...defaultCommand,
-					category: 'abcdef' as WordCategory,
-				}),
+				updateTranslationCommandHandler.execute(
+					new UpdateTranslationCommand(permissionContext, {
+						...defaultParams,
+						category: 'abcdef' as WordCategory,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 	});

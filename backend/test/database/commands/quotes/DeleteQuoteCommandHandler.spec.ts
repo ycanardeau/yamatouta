@@ -1,7 +1,10 @@
 import { MikroORM } from '@mikro-orm/core';
 import { UnauthorizedException } from '@nestjs/common';
 
-import { DeleteQuoteCommandHandler } from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
+import {
+	DeleteQuoteCommand,
+	DeleteQuoteCommandHandler,
+} from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
 import { QuoteAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { Quote } from '../../../../src/entities/Quote';
 import { QuoteRevision } from '../../../../src/entities/Revision';
@@ -85,10 +88,11 @@ describe('DeleteQuoteCommandHandler', () => {
 
 	describe('deleteQuote', () => {
 		const testDeleteQuote = async (): Promise<void> => {
-			await deleteQuoteCommandHandler.execute({
-				permissionContext,
-				entryId: quote.id,
-			});
+			await deleteQuoteCommandHandler.execute(
+				new DeleteQuoteCommand(permissionContext, {
+					entryId: quote.id,
+				}),
+			);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof QuoteRevision,
@@ -131,10 +135,11 @@ describe('DeleteQuoteCommandHandler', () => {
 				);
 
 				await expect(
-					deleteQuoteCommandHandler.execute({
-						permissionContext,
-						entryId: quote.id,
-					}),
+					deleteQuoteCommandHandler.execute(
+						new DeleteQuoteCommand(permissionContext, {
+							entryId: quote.id,
+						}),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

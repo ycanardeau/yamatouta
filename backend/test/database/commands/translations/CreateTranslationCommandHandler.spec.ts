@@ -1,8 +1,14 @@
 import { MikroORM } from '@mikro-orm/core';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 
-import { CreateTranslationCommandHandler } from '../../../../src/database/commands/translations/CreateTranslationCommandHandler';
-import { UpdateTranslationCommand } from '../../../../src/database/commands/translations/UpdateTranslationCommandHandler';
+import {
+	CreateTranslationCommand,
+	CreateTranslationCommandHandler,
+} from '../../../../src/database/commands/translations/CreateTranslationCommandHandler';
+import {
+	UpdateTranslationCommand,
+	UpdateTranslationParams,
+} from '../../../../src/database/commands/translations/UpdateTranslationCommandHandler';
 import { TranslationAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { TranslationRevision } from '../../../../src/entities/Revision';
 import { Translation } from '../../../../src/entities/Translation';
@@ -27,7 +33,7 @@ describe('CreateTranslationCommandHandler', () => {
 	let ngramConverter: NgramConverter;
 	let permissionContext: FakePermissionContext;
 	let createTranslationCommandHandler: CreateTranslationCommandHandler;
-	let defaultCommand: UpdateTranslationCommand;
+	let defaultParams: UpdateTranslationParams;
 
 	beforeAll(async () => {
 		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
@@ -67,8 +73,7 @@ describe('CreateTranslationCommandHandler', () => {
 			ngramConverter,
 		);
 
-		defaultCommand = {
-			permissionContext,
+		defaultParams = {
 			translationId: undefined,
 			headword: '大和言葉',
 			locale: 'ja',
@@ -89,11 +94,13 @@ describe('CreateTranslationCommandHandler', () => {
 			const translationObject =
 				await createTranslationCommandHandler.execute(command);
 
-			expect(translationObject.headword).toBe(command.headword);
-			expect(translationObject.locale).toBe(command.locale);
-			expect(translationObject.reading).toBe(command.reading);
-			expect(translationObject.yamatokotoba).toBe(command.yamatokotoba);
-			expect(translationObject.category).toBe(command.category);
+			expect(translationObject.headword).toBe(command.params.headword);
+			expect(translationObject.locale).toBe(command.params.locale);
+			expect(translationObject.reading).toBe(command.params.reading);
+			expect(translationObject.yamatokotoba).toBe(
+				command.params.yamatokotoba,
+			);
+			expect(translationObject.category).toBe(command.params.category);
 
 			const translation = em.entities.filter(
 				(entity) => entity instanceof Translation,
@@ -134,23 +141,28 @@ describe('CreateTranslationCommandHandler', () => {
 				);
 
 				await expect(
-					createTranslationCommandHandler.execute({
-						...defaultCommand,
-						permissionContext,
-					}),
+					createTranslationCommandHandler.execute(
+						new CreateTranslationCommand(
+							permissionContext,
+							defaultParams,
+						),
+					),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('5 changes', async () => {
 			await testCreateTranslation({
-				command: defaultCommand,
+				command: new CreateTranslationCommand(
+					permissionContext,
+					defaultParams,
+				),
 				snapshot: {
-					headword: defaultCommand.headword,
-					locale: defaultCommand.locale,
-					reading: defaultCommand.reading,
-					yamatokotoba: defaultCommand.yamatokotoba,
-					category: defaultCommand.category,
+					headword: defaultParams.headword,
+					locale: defaultParams.locale,
+					reading: defaultParams.reading,
+					yamatokotoba: defaultParams.yamatokotoba,
+					category: defaultParams.category,
 					inishienomanabi_tags: [],
 				},
 			});
@@ -158,139 +170,169 @@ describe('CreateTranslationCommandHandler', () => {
 
 		test('headword is undefined', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					headword: undefined!,
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						headword: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('headword is empty', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					headword: '',
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						headword: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('headword is too long', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					headword: 'い'.repeat(201),
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						headword: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading is undefined', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					reading: undefined!,
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						reading: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading is empty', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					reading: '',
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						reading: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading is too long', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					reading: 'い'.repeat(201),
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						reading: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading contains alphabets', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					reading: 'Anglish',
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						reading: 'Anglish',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('reading contains kanji', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					reading: '大和言葉',
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						reading: '大和言葉',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba is undefined', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					yamatokotoba: undefined!,
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						yamatokotoba: undefined!,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba is empty', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					yamatokotoba: '',
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						yamatokotoba: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba is too long', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					yamatokotoba: 'い'.repeat(201),
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						yamatokotoba: 'い'.repeat(201),
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba contains alphabets', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					yamatokotoba: 'Anglish',
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						yamatokotoba: 'Anglish',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('yamatokotoba contains kanji', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					yamatokotoba: '大和言葉',
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						yamatokotoba: '大和言葉',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('category is empty', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					category: '' as WordCategory,
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						category: '' as WordCategory,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('category is invalid', async () => {
 			await expect(
-				createTranslationCommandHandler.execute({
-					...defaultCommand,
-					category: 'abcdef' as WordCategory,
-				}),
+				createTranslationCommandHandler.execute(
+					new CreateTranslationCommand(permissionContext, {
+						...defaultParams,
+						category: 'abcdef' as WordCategory,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 		});
 	});

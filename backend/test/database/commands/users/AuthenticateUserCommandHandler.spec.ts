@@ -1,6 +1,7 @@
 import {
 	AuthenticateUserCommand,
 	AuthenticateUserCommandHandler,
+	AuthenticateUserParams,
 	LoginError,
 } from '../../../../src/database/commands/users/AuthenticateUserCommandHandler';
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
@@ -20,7 +21,7 @@ describe('AuthenticateUserCommandHandler', () => {
 	let existingUser: User;
 	let em: FakeEntityManager;
 	let authenticateUserCommandHandler: AuthenticateUserCommandHandler;
-	let defaultCommand: AuthenticateUserCommand;
+	let defaultParams: AuthenticateUserParams;
 
 	beforeEach(async () => {
 		existingUser = await createUser({
@@ -45,7 +46,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			passwordHasherFactory,
 		);
 
-		defaultCommand = {
+		defaultParams = {
 			email: existingEmail,
 			password: existingPassword,
 			clientIp: '::1',
@@ -54,9 +55,9 @@ describe('AuthenticateUserCommandHandler', () => {
 
 	describe('authenticateUser', () => {
 		test('authenticateUser', async () => {
-			const result = await authenticateUserCommandHandler.execute({
-				...defaultCommand,
-			});
+			const result = await authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand(defaultParams),
+			);
 
 			expect(result.error).toBe(LoginError.None);
 			expect(result.user).toBeDefined();
@@ -75,7 +76,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Login,
 				actor: existingUser,
-				actorIp: defaultCommand.clientIp,
+				actorIp: defaultParams.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: existingUser,
@@ -83,11 +84,13 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email is undefined', async () => {
-			const result = await authenticateUserCommandHandler.execute({
-				...defaultCommand,
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-				email: undefined!,
-			});
+			const result = await authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand({
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					email: undefined!,
+				}),
+			);
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -100,10 +103,12 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email is empty', async () => {
-			const result = await authenticateUserCommandHandler.execute({
-				...defaultCommand,
-				email: '',
-			});
+			const result = await authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand({
+					...defaultParams,
+					email: '',
+				}),
+			);
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -116,10 +121,12 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email is whitespace', async () => {
-			const result = await authenticateUserCommandHandler.execute({
-				...defaultCommand,
-				email: ' 　\t\t　 ',
-			});
+			const result = await authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand({
+					...defaultParams,
+					email: ' 　\t\t　 ',
+				}),
+			);
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -132,10 +139,12 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email is invalid', async () => {
-			const result = await authenticateUserCommandHandler.execute({
-				...defaultCommand,
-				email: 'invalid_email',
-			});
+			const result = await authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand({
+					...defaultParams,
+					email: 'invalid_email',
+				}),
+			);
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -148,10 +157,12 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email does not exist', async () => {
-			const result = await authenticateUserCommandHandler.execute({
-				...defaultCommand,
-				email: 'not_found@example.com',
-			});
+			const result = await authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand({
+					...defaultParams,
+					email: 'not_found@example.com',
+				}),
+			);
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -165,11 +176,13 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('password is undefined', async () => {
 			await expect(
-				authenticateUserCommandHandler.execute({
-					...defaultCommand,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					password: undefined!,
-				}),
+				authenticateUserCommandHandler.execute(
+					new AuthenticateUserCommand({
+						...defaultParams,
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						password: undefined!,
+					}),
+				),
 			).rejects.toThrowError('data and salt arguments required');
 
 			const auditLogEntry = em.entities.filter(
@@ -180,10 +193,12 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('password is empty', async () => {
-			const result = await authenticateUserCommandHandler.execute({
-				...defaultCommand,
-				password: '',
-			});
+			const result = await authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand({
+					...defaultParams,
+					password: '',
+				}),
+			);
 
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
@@ -195,7 +210,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
-				actorIp: defaultCommand.clientIp,
+				actorIp: defaultParams.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: existingUser,
@@ -203,10 +218,12 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('password is whitespace', async () => {
-			const result = await authenticateUserCommandHandler.execute({
-				...defaultCommand,
-				password: ' 　\t\t　 ',
-			});
+			const result = await authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand({
+					...defaultParams,
+					password: ' 　\t\t　 ',
+				}),
+			);
 
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
@@ -218,7 +235,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
-				actorIp: defaultCommand.clientIp,
+				actorIp: defaultParams.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: existingUser,
@@ -226,10 +243,12 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('password is wrong', async () => {
-			const result = await authenticateUserCommandHandler.execute({
-				...defaultCommand,
-				password: 'wrong_password',
-			});
+			const result = await authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand({
+					...defaultParams,
+					password: 'wrong_password',
+				}),
+			);
 
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
@@ -241,7 +260,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
-				actorIp: defaultCommand.clientIp,
+				actorIp: defaultParams.clientIp,
 				oldValue: '',
 				newValue: '',
 				user: existingUser,

@@ -1,6 +1,9 @@
 import { BadRequestException } from '@nestjs/common';
 
-import { UpdateAuthenticatedUserCommandHandler } from '../../../../src/database/commands/users/UpdateAuthenticatedUserCommandHandler';
+import {
+	UpdateAuthenticatedUserCommand,
+	UpdateAuthenticatedUserCommandHandler,
+} from '../../../../src/database/commands/users/UpdateAuthenticatedUserCommandHandler';
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
@@ -69,19 +72,21 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			const newUsername = 'new username';
 
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: 'wrong password',
-					username: newUsername,
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: 'wrong password',
+						username: newUsername,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					username: newUsername,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						username: newUsername,
+					}),
+				);
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(newUsername);
@@ -108,11 +113,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('username is not changed', async () => {
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					username: existingUsername,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						username: existingUsername,
+					}),
+				);
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -136,11 +142,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			expect(newUsername.length).toBe(2);
 
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					username: newUsername,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						username: newUsername,
+					}),
+				);
 
 			expect(userObject.name).toBe(newUsername);
 
@@ -165,11 +172,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			expect(newUsername.length).toBe(32);
 
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					username: newUsername,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						username: newUsername,
+					}),
+				);
 
 			expect(userObject.name).toBe(newUsername);
 
@@ -189,11 +197,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('username is undefined', async () => {
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					username: undefined,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						username: undefined,
+					}),
+				);
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -213,11 +222,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('username is empty', async () => {
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					username: '',
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						username: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -229,11 +239,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('username is whitespace', async () => {
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					username: ' 　\t\t　 ',
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						username: ' 　\t\t　 ',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -249,11 +260,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			expect(newUsername.length).toBe(1);
 
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					username: newUsername,
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						username: newUsername,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -270,11 +282,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			expect(newUsername.length).toBe(33);
 
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					username: newUsername,
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						username: newUsername,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -289,19 +302,21 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			const newNormalizedEmail = await normalizeEmail(newEmail);
 
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: 'wrong password',
-					email: newEmail,
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: 'wrong password',
+						email: newEmail,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					email: newEmail,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						email: newEmail,
+					}),
+				);
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -328,11 +343,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('email is not changed', async () => {
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					email: existingEmail,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						email: existingEmail,
+					}),
+				);
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -352,11 +368,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('email is undefined', async () => {
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					email: undefined,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						email: undefined,
+					}),
+				);
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -376,11 +393,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('email is empty', async () => {
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					email: '',
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						email: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -392,11 +410,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('email is invalid', async () => {
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					email: 'invalid_email',
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						email: 'invalid_email',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -410,19 +429,21 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			const newPassword = 'N3wP@$$w0rd';
 
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: 'wrong password',
-					newPassword: newPassword,
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: 'wrong password',
+						newPassword: newPassword,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					newPassword: newPassword,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						newPassword: newPassword,
+					}),
+				);
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -449,11 +470,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('newPassword is undefined', async () => {
 			const userObject =
-				await updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					newPassword: undefined,
-				});
+				await updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						newPassword: undefined,
+					}),
+				);
 
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUsername);
@@ -473,11 +495,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 
 		test('newPassword is empty', async () => {
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					newPassword: '',
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						newPassword: '',
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
@@ -493,11 +516,12 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			expect(newPassword.length).toBe(7);
 
 			await expect(
-				updateAuthenticatedUserCommandHandler.execute({
-					permissionContext,
-					password: existingPassword,
-					newPassword: newPassword,
-				}),
+				updateAuthenticatedUserCommandHandler.execute(
+					new UpdateAuthenticatedUserCommand(permissionContext, {
+						password: existingPassword,
+						newPassword: newPassword,
+					}),
+				),
 			).rejects.toThrow(BadRequestException);
 
 			const auditLogEntry = em.entities.filter(
