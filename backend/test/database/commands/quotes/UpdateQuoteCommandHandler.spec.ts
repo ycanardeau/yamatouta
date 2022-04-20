@@ -6,6 +6,7 @@ import {
 	UpdateQuoteCommandHandler,
 	UpdateQuoteParams,
 } from '../../../../src/database/commands/quotes/UpdateQuoteCommandHandler';
+import { QuoteObject } from '../../../../src/dto/quotes/QuoteObject';
 import { Artist } from '../../../../src/entities/Artist';
 import { QuoteAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { Quote } from '../../../../src/entities/Quote';
@@ -21,6 +22,7 @@ import {
 } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
+import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createQuote, createUser } from '../../../createEntry';
@@ -108,21 +110,30 @@ describe('UpdateQuoteCommandHandler', () => {
 	});
 
 	describe('updateQuote', () => {
+		const execute = (
+			permissionContext: PermissionContext,
+			params: UpdateQuoteParams,
+		): Promise<QuoteObject> => {
+			return updateQuoteCommandHandler.execute(
+				new UpdateQuoteCommand(permissionContext, params),
+			);
+		};
+
 		const testUpdateQuote = async ({
-			command,
+			permissionContext,
+			params,
 			snapshot,
 		}: {
-			command: UpdateQuoteCommand;
+			permissionContext: PermissionContext;
+			params: UpdateQuoteParams;
 			snapshot: QuoteSnapshot;
 		}): Promise<void> => {
-			const quoteObject = await updateQuoteCommandHandler.execute(
-				command,
-			);
+			const quoteObject = await execute(permissionContext, params);
 
-			expect(quoteObject.text).toBe(command.params.text);
-			expect(quoteObject.quoteType).toBe(command.params.quoteType);
-			expect(quoteObject.locale).toBe(command.params.locale);
-			expect(quoteObject.artist.id).toBe(command.params.artistId);
+			expect(quoteObject.text).toBe(params.text);
+			expect(quoteObject.quoteType).toBe(params.quoteType);
+			expect(quoteObject.locale).toBe(params.locale);
+			expect(quoteObject.artist.id).toBe(params.artistId);
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof QuoteRevision,
@@ -163,25 +174,21 @@ describe('UpdateQuoteCommandHandler', () => {
 				);
 
 				await expect(
-					updateQuoteCommandHandler.execute(
-						new UpdateQuoteCommand(
-							permissionContext,
-							defaultParams,
-						),
-					),
+					execute(permissionContext, defaultParams),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('0 changes', async () => {
 			await testUpdateQuote({
-				command: new UpdateQuoteCommand(permissionContext, {
+				permissionContext,
+				params: {
 					...defaultParams,
 					text: quote.text,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
 					artistId: quote.artist.id,
-				}),
+				},
 				snapshot: {
 					text: quote.text,
 					quoteType: quote.quoteType,
@@ -193,12 +200,13 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('1 change', async () => {
 			await testUpdateQuote({
-				command: new UpdateQuoteCommand(permissionContext, {
+				permissionContext,
+				params: {
 					...defaultParams,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
 					artistId: quote.artist.id,
-				}),
+				},
 				snapshot: {
 					text: defaultParams.text,
 					quoteType: quote.quoteType,
@@ -210,11 +218,12 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('2 changes', async () => {
 			await testUpdateQuote({
-				command: new UpdateQuoteCommand(permissionContext, {
+				permissionContext,
+				params: {
 					...defaultParams,
 					locale: quote.locale,
 					artistId: quote.artist.id,
-				}),
+				},
 				snapshot: {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
@@ -226,10 +235,11 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('3 changes', async () => {
 			await testUpdateQuote({
-				command: new UpdateQuoteCommand(permissionContext, {
+				permissionContext,
+				params: {
 					...defaultParams,
 					artistId: quote.artist.id,
-				}),
+				},
 				snapshot: {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
@@ -241,10 +251,8 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('4 changes', async () => {
 			await testUpdateQuote({
-				command: new UpdateQuoteCommand(
-					permissionContext,
-					defaultParams,
-				),
+				permissionContext,
+				params: defaultParams,
 				snapshot: {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
@@ -256,57 +264,47 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		test('text is undefined', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(
-					new UpdateQuoteCommand(permissionContext, {
-						...defaultParams,
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						text: undefined!,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					text: undefined!,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('text is empty', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(
-					new UpdateQuoteCommand(permissionContext, {
-						...defaultParams,
-						text: '',
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					text: '',
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('text is too long', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(
-					new UpdateQuoteCommand(permissionContext, {
-						...defaultParams,
-						text: 'い'.repeat(201),
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					text: 'い'.repeat(201),
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('quoteType is empty', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(
-					new UpdateQuoteCommand(permissionContext, {
-						...defaultParams,
-						quoteType: '' as QuoteType,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					quoteType: '' as QuoteType,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('quoteType is invalid', async () => {
 			await expect(
-				updateQuoteCommandHandler.execute(
-					new UpdateQuoteCommand(permissionContext, {
-						...defaultParams,
-						quoteType: 'abcdef' as QuoteType,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					quoteType: 'abcdef' as QuoteType,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 	});

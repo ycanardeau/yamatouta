@@ -5,10 +5,8 @@ import {
 	CreateArtistCommand,
 	CreateArtistCommandHandler,
 } from '../../../../src/database/commands/artists/CreateArtistCommandHandler';
-import {
-	UpdateArtistCommand,
-	UpdateArtistParams,
-} from '../../../../src/database/commands/artists/UpdateArtistCommandHandler';
+import { UpdateArtistParams } from '../../../../src/database/commands/artists/UpdateArtistCommandHandler';
+import { ArtistObject } from '../../../../src/dto/artists/ArtistObject';
 import { Artist } from '../../../../src/entities/Artist';
 import { ArtistAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { ArtistRevision } from '../../../../src/entities/Revision';
@@ -19,6 +17,7 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
+import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createUser } from '../../../createEntry';
@@ -77,19 +76,28 @@ describe('CreateArtistCommandHandler', () => {
 	});
 
 	describe('createArtist', () => {
+		const execute = (
+			permissionContext: PermissionContext,
+			params: UpdateArtistParams,
+		): Promise<ArtistObject> => {
+			return createArtistCommandHandler.execute(
+				new CreateArtistCommand(permissionContext, params),
+			);
+		};
+
 		const testCreateArtist = async ({
-			command,
+			permissionContext,
+			params,
 			snapshot,
 		}: {
-			command: UpdateArtistCommand;
+			permissionContext: PermissionContext;
+			params: UpdateArtistParams;
 			snapshot: ArtistSnapshot;
 		}): Promise<void> => {
-			const artistObject = await createArtistCommandHandler.execute(
-				command,
-			);
+			const artistObject = await execute(permissionContext, params);
 
-			expect(artistObject.name).toBe(command.params.name);
-			expect(artistObject.artistType).toBe(command.params.artistType);
+			expect(artistObject.name).toBe(params.name);
+			expect(artistObject.artistType).toBe(params.artistType);
 
 			const artist = em.entities.filter(
 				(entity) => entity instanceof Artist,
@@ -134,22 +142,15 @@ describe('CreateArtistCommandHandler', () => {
 				);
 
 				await expect(
-					createArtistCommandHandler.execute(
-						new CreateArtistCommand(
-							permissionContext,
-							defaultParams,
-						),
-					),
+					execute(permissionContext, defaultParams),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('2 changes', async () => {
 			await testCreateArtist({
-				command: new CreateArtistCommand(
-					permissionContext,
-					defaultParams,
-				),
+				permissionContext,
+				params: defaultParams,
 				snapshot: {
 					name: defaultParams.name,
 					artistType: defaultParams.artistType,
@@ -159,69 +160,57 @@ describe('CreateArtistCommandHandler', () => {
 
 		test('name is undefined', async () => {
 			await expect(
-				createArtistCommandHandler.execute(
-					new CreateArtistCommand(permissionContext, {
-						...defaultParams,
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						name: undefined!,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					name: undefined!,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is empty', async () => {
 			await expect(
-				createArtistCommandHandler.execute(
-					new CreateArtistCommand(permissionContext, {
-						...defaultParams,
-						name: '',
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					name: '',
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is too long', async () => {
 			await expect(
-				createArtistCommandHandler.execute(
-					new CreateArtistCommand(permissionContext, {
-						...defaultParams,
-						name: 'い'.repeat(201),
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					name: 'い'.repeat(201),
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistType is undefined', async () => {
 			await expect(
-				createArtistCommandHandler.execute(
-					new CreateArtistCommand(permissionContext, {
-						...defaultParams,
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						artistType: undefined!,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					artistType: undefined!,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistType is empty', async () => {
 			await expect(
-				createArtistCommandHandler.execute(
-					new CreateArtistCommand(permissionContext, {
-						...defaultParams,
-						artistType: '' as ArtistType,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					artistType: '' as ArtistType,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('artistType is invalid', async () => {
 			await expect(
-				createArtistCommandHandler.execute(
-					new CreateArtistCommand(permissionContext, {
-						...defaultParams,
-						artistType: 'abcdef' as ArtistType,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					artistType: 'abcdef' as ArtistType,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 	});

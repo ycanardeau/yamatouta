@@ -2,6 +2,7 @@ import { MikroORM } from '@mikro-orm/core';
 import { UnauthorizedException } from '@nestjs/common';
 
 import {
+	DeleteEntryParams,
 	DeleteTranslationCommand,
 	DeleteTranslationCommandHandler,
 } from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
@@ -14,6 +15,7 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
+import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createTranslation, createUser } from '../../../createEntry';
@@ -80,12 +82,19 @@ describe('DeleteTranslationCommandHandler', () => {
 	});
 
 	describe('deleteTranslation', () => {
-		const testDeleteTranslation = async (): Promise<void> => {
-			await deleteTranslationCommandHandler.execute(
-				new DeleteTranslationCommand(permissionContext, {
-					entryId: translation.id,
-				}),
+		const execute = (
+			permissionContext: PermissionContext,
+			params: DeleteEntryParams,
+		): Promise<void> => {
+			return deleteTranslationCommandHandler.execute(
+				new DeleteTranslationCommand(permissionContext, params),
 			);
+		};
+
+		const testDeleteTranslation = async (): Promise<void> => {
+			await execute(permissionContext, {
+				entryId: translation.id,
+			});
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof TranslationRevision,
@@ -130,11 +139,9 @@ describe('DeleteTranslationCommandHandler', () => {
 				);
 
 				await expect(
-					deleteTranslationCommandHandler.execute(
-						new DeleteTranslationCommand(permissionContext, {
-							entryId: translation.id,
-						}),
-					),
+					execute(permissionContext, {
+						entryId: translation.id,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

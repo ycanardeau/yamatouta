@@ -2,6 +2,7 @@ import { MikroORM } from '@mikro-orm/core';
 import { UnauthorizedException } from '@nestjs/common';
 
 import {
+	DeleteEntryParams,
 	DeleteWorkCommand,
 	DeleteWorkCommandHandler,
 } from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
@@ -15,6 +16,7 @@ import { WorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
 import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
+import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createWork, createUser } from '../../../createEntry';
@@ -78,10 +80,17 @@ describe('DeleteWorkCommandHandler', () => {
 	});
 
 	describe('deleteWork', () => {
-		const testDeleteWork = async (): Promise<void> => {
-			await deleteWorkCommandHandler.execute(
-				new DeleteWorkCommand(permissionContext, { entryId: work.id }),
+		const execute = (
+			permissionContext: PermissionContext,
+			params: DeleteEntryParams,
+		): Promise<void> => {
+			return deleteWorkCommandHandler.execute(
+				new DeleteWorkCommand(permissionContext, params),
 			);
+		};
+
+		const testDeleteWork = async (): Promise<void> => {
+			await execute(permissionContext, { entryId: work.id });
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof WorkRevision,
@@ -124,11 +133,9 @@ describe('DeleteWorkCommandHandler', () => {
 				);
 
 				await expect(
-					deleteWorkCommandHandler.execute(
-						new DeleteWorkCommand(permissionContext, {
-							entryId: work.id,
-						}),
-					),
+					execute(permissionContext, {
+						entryId: work.id,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

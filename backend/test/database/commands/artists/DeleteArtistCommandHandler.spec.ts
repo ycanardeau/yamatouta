@@ -4,6 +4,7 @@ import { UnauthorizedException } from '@nestjs/common';
 import {
 	DeleteArtistCommand,
 	DeleteArtistCommandHandler,
+	DeleteEntryParams,
 } from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
 import { Artist } from '../../../../src/entities/Artist';
 import { ArtistAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
@@ -15,6 +16,7 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
+import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createUser } from '../../../createEntry';
@@ -78,12 +80,19 @@ describe('DeleteArtistCommandHandler', () => {
 	});
 
 	describe('deleteArtist', () => {
-		const testDeleteArtist = async (): Promise<void> => {
-			await deleteArtistCommandHandler.execute(
-				new DeleteArtistCommand(permissionContext, {
-					entryId: artist.id,
-				}),
+		const execute = (
+			permissionContext: PermissionContext,
+			params: DeleteEntryParams,
+		): Promise<void> => {
+			return deleteArtistCommandHandler.execute(
+				new DeleteArtistCommand(permissionContext, params),
 			);
+		};
+
+		const testDeleteArtist = async (): Promise<void> => {
+			await execute(permissionContext, {
+				entryId: artist.id,
+			});
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof ArtistRevision,
@@ -126,11 +135,9 @@ describe('DeleteArtistCommandHandler', () => {
 				);
 
 				await expect(
-					deleteArtistCommandHandler.execute(
-						new DeleteArtistCommand(permissionContext, {
-							entryId: artist.id,
-						}),
-					),
+					execute(permissionContext, {
+						entryId: artist.id,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

@@ -3,6 +3,7 @@ import {
 	AuthenticateUserCommandHandler,
 	AuthenticateUserParams,
 	LoginError,
+	LoginResult,
 } from '../../../../src/database/commands/users/AuthenticateUserCommandHandler';
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
@@ -54,10 +55,16 @@ describe('AuthenticateUserCommandHandler', () => {
 	});
 
 	describe('authenticateUser', () => {
-		test('authenticateUser', async () => {
-			const result = await authenticateUserCommandHandler.execute(
-				new AuthenticateUserCommand(defaultParams),
+		const execute = (
+			params: AuthenticateUserParams,
+		): Promise<LoginResult> => {
+			return authenticateUserCommandHandler.execute(
+				new AuthenticateUserCommand(params),
 			);
+		};
+
+		test('authenticateUser', async () => {
+			const result = await execute(defaultParams);
 
 			expect(result.error).toBe(LoginError.None);
 			expect(result.user).toBeDefined();
@@ -84,13 +91,11 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email is undefined', async () => {
-			const result = await authenticateUserCommandHandler.execute(
-				new AuthenticateUserCommand({
-					...defaultParams,
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					email: undefined!,
-				}),
-			);
+			const result = await execute({
+				...defaultParams,
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				email: undefined!,
+			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -103,12 +108,10 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email is empty', async () => {
-			const result = await authenticateUserCommandHandler.execute(
-				new AuthenticateUserCommand({
-					...defaultParams,
-					email: '',
-				}),
-			);
+			const result = await execute({
+				...defaultParams,
+				email: '',
+			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -121,12 +124,10 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email is whitespace', async () => {
-			const result = await authenticateUserCommandHandler.execute(
-				new AuthenticateUserCommand({
-					...defaultParams,
-					email: ' 　\t\t　 ',
-				}),
-			);
+			const result = await execute({
+				...defaultParams,
+				email: ' 　\t\t　 ',
+			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -139,12 +140,10 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email is invalid', async () => {
-			const result = await authenticateUserCommandHandler.execute(
-				new AuthenticateUserCommand({
-					...defaultParams,
-					email: 'invalid_email',
-				}),
-			);
+			const result = await execute({
+				...defaultParams,
+				email: 'invalid_email',
+			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -157,12 +156,10 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('email does not exist', async () => {
-			const result = await authenticateUserCommandHandler.execute(
-				new AuthenticateUserCommand({
-					...defaultParams,
-					email: 'not_found@example.com',
-				}),
-			);
+			const result = await execute({
+				...defaultParams,
+				email: 'not_found@example.com',
+			});
 
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
@@ -176,13 +173,11 @@ describe('AuthenticateUserCommandHandler', () => {
 
 		test('password is undefined', async () => {
 			await expect(
-				authenticateUserCommandHandler.execute(
-					new AuthenticateUserCommand({
-						...defaultParams,
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						password: undefined!,
-					}),
-				),
+				execute({
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					password: undefined!,
+				}),
 			).rejects.toThrowError('data and salt arguments required');
 
 			const auditLogEntry = em.entities.filter(
@@ -193,12 +188,10 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('password is empty', async () => {
-			const result = await authenticateUserCommandHandler.execute(
-				new AuthenticateUserCommand({
-					...defaultParams,
-					password: '',
-				}),
-			);
+			const result = await execute({
+				...defaultParams,
+				password: '',
+			});
 
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
@@ -218,12 +211,10 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('password is whitespace', async () => {
-			const result = await authenticateUserCommandHandler.execute(
-				new AuthenticateUserCommand({
-					...defaultParams,
-					password: ' 　\t\t　 ',
-				}),
-			);
+			const result = await execute({
+				...defaultParams,
+				password: ' 　\t\t　 ',
+			});
 
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
@@ -243,12 +234,10 @@ describe('AuthenticateUserCommandHandler', () => {
 		});
 
 		test('password is wrong', async () => {
-			const result = await authenticateUserCommandHandler.execute(
-				new AuthenticateUserCommand({
-					...defaultParams,
-					password: 'wrong_password',
-				}),
-			);
+			const result = await execute({
+				...defaultParams,
+				password: 'wrong_password',
+			});
 
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();

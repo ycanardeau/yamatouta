@@ -2,6 +2,7 @@ import { MikroORM } from '@mikro-orm/core';
 import { UnauthorizedException } from '@nestjs/common';
 
 import {
+	DeleteEntryParams,
 	DeleteQuoteCommand,
 	DeleteQuoteCommandHandler,
 } from '../../../../src/database/commands/entries/DeleteEntryCommandHandler';
@@ -16,6 +17,7 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { QuoteSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
+import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createArtist, createQuote, createUser } from '../../../createEntry';
@@ -87,12 +89,19 @@ describe('DeleteQuoteCommandHandler', () => {
 	});
 
 	describe('deleteQuote', () => {
-		const testDeleteQuote = async (): Promise<void> => {
-			await deleteQuoteCommandHandler.execute(
-				new DeleteQuoteCommand(permissionContext, {
-					entryId: quote.id,
-				}),
+		const execute = (
+			permissionContext: PermissionContext,
+			params: DeleteEntryParams,
+		): Promise<void> => {
+			return deleteQuoteCommandHandler.execute(
+				new DeleteQuoteCommand(permissionContext, params),
 			);
+		};
+
+		const testDeleteQuote = async (): Promise<void> => {
+			await execute(permissionContext, {
+				entryId: quote.id,
+			});
 
 			const revision = em.entities.filter(
 				(entity) => entity instanceof QuoteRevision,
@@ -135,11 +144,9 @@ describe('DeleteQuoteCommandHandler', () => {
 				);
 
 				await expect(
-					deleteQuoteCommandHandler.execute(
-						new DeleteQuoteCommand(permissionContext, {
-							entryId: quote.id,
-						}),
-					),
+					execute(permissionContext, {
+						entryId: quote.id,
+					}),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});

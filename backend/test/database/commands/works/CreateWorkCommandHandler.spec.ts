@@ -5,10 +5,8 @@ import {
 	CreateWorkCommand,
 	CreateWorkCommandHandler,
 } from '../../../../src/database/commands/works/CreateWorkCommandHandler';
-import {
-	UpdateWorkCommand,
-	UpdateWorkParams,
-} from '../../../../src/database/commands/works/UpdateWorkCommandHandler';
+import { UpdateWorkParams } from '../../../../src/database/commands/works/UpdateWorkCommandHandler';
+import { WorkObject } from '../../../../src/dto/works/WorkObject';
 import { WorkAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { WorkRevision } from '../../../../src/entities/Revision';
 import { User } from '../../../../src/entities/User';
@@ -19,6 +17,7 @@ import { WorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
 import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
+import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createUser } from '../../../createEntry';
@@ -77,17 +76,28 @@ describe('CreateWorkCommandHandler', () => {
 	});
 
 	describe('createWork', () => {
+		const execute = (
+			permissionContext: PermissionContext,
+			params: UpdateWorkParams,
+		): Promise<WorkObject> => {
+			return createWorkCommandHandler.execute(
+				new CreateWorkCommand(permissionContext, params),
+			);
+		};
+
 		const testCreateWork = async ({
-			command,
+			permissionContext,
+			params,
 			snapshot,
 		}: {
-			command: UpdateWorkCommand;
+			permissionContext: PermissionContext;
+			params: UpdateWorkParams;
 			snapshot: WorkSnapshot;
 		}): Promise<void> => {
-			const workObject = await createWorkCommandHandler.execute(command);
+			const workObject = await execute(permissionContext, params);
 
-			expect(workObject.name).toBe(command.params.name);
-			expect(workObject.workType).toBe(command.params.workType);
+			expect(workObject.name).toBe(params.name);
+			expect(workObject.workType).toBe(params.workType);
 
 			const work = em.entities.filter(
 				(entity) => entity instanceof Work,
@@ -132,19 +142,15 @@ describe('CreateWorkCommandHandler', () => {
 				);
 
 				await expect(
-					createWorkCommandHandler.execute(
-						new CreateWorkCommand(permissionContext, defaultParams),
-					),
+					execute(permissionContext, defaultParams),
 				).rejects.toThrow(UnauthorizedException);
 			}
 		});
 
 		test('2 changes', async () => {
 			await testCreateWork({
-				command: new CreateWorkCommand(
-					permissionContext,
-					defaultParams,
-				),
+				permissionContext,
+				params: defaultParams,
 				snapshot: {
 					name: defaultParams.name,
 					workType: defaultParams.workType,
@@ -154,69 +160,57 @@ describe('CreateWorkCommandHandler', () => {
 
 		test('name is undefined', async () => {
 			await expect(
-				createWorkCommandHandler.execute(
-					new CreateWorkCommand(permissionContext, {
-						...defaultParams,
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						name: undefined!,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					name: undefined!,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is empty', async () => {
 			await expect(
-				createWorkCommandHandler.execute(
-					new CreateWorkCommand(permissionContext, {
-						...defaultParams,
-						name: '',
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					name: '',
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('name is too long', async () => {
 			await expect(
-				createWorkCommandHandler.execute(
-					new CreateWorkCommand(permissionContext, {
-						...defaultParams,
-						name: 'い'.repeat(201),
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					name: 'い'.repeat(201),
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('workType is undefined', async () => {
 			await expect(
-				createWorkCommandHandler.execute(
-					new CreateWorkCommand(permissionContext, {
-						...defaultParams,
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						workType: undefined!,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					workType: undefined!,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('workType is empty', async () => {
 			await expect(
-				createWorkCommandHandler.execute(
-					new CreateWorkCommand(permissionContext, {
-						...defaultParams,
-						workType: '' as WorkType,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					workType: '' as WorkType,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 
 		test('workType is invalid', async () => {
 			await expect(
-				createWorkCommandHandler.execute(
-					new CreateWorkCommand(permissionContext, {
-						...defaultParams,
-						workType: 'abcdef' as WorkType,
-					}),
-				),
+				execute(permissionContext, {
+					...defaultParams,
+					workType: 'abcdef' as WorkType,
+				}),
 			).rejects.toThrow(BadRequestException);
 		});
 	});
