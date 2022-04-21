@@ -1,6 +1,8 @@
 import { Work } from '../../entities/Work';
+import { WorkOptionalFields } from '../../models/WorkOptionalFields';
 import { WorkType } from '../../models/WorkType';
 import { PermissionContext } from '../../services/PermissionContext';
+import { WebLinkObject } from '../WebLinkObject';
 
 export class WorkObject {
 	readonly id: number;
@@ -8,8 +10,13 @@ export class WorkObject {
 	readonly hidden: boolean;
 	readonly name: string;
 	readonly workType: WorkType;
+	readonly webLinks?: WebLinkObject[];
 
-	constructor(work: Work, permissionContext: PermissionContext) {
+	constructor(
+		work: Work,
+		permissionContext: PermissionContext,
+		fields: WorkOptionalFields[] = [],
+	) {
 		permissionContext.verifyDeletedAndHidden(work);
 
 		this.id = work.id;
@@ -17,5 +24,10 @@ export class WorkObject {
 		this.hidden = work.hidden;
 		this.name = work.name;
 		this.workType = work.workType;
+		this.webLinks = fields.includes(WorkOptionalFields.WebLinks)
+			? work.webLinks
+					.getItems()
+					.map((webLink) => new WebLinkObject(webLink))
+			: undefined;
 	}
 }

@@ -9,6 +9,7 @@ import { Translation } from '../../../entities/Translation';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
+import { TranslationOptionalFields } from '../../../models/TranslationOptionalFields';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
@@ -94,6 +95,10 @@ export class CreateTranslationCommandHandler
 			return translation;
 		});
 
-		return new TranslationObject(translation, permissionContext);
+		return new TranslationObject(
+			translation,
+			permissionContext,
+			Object.values(TranslationOptionalFields),
+		);
 	}
 }

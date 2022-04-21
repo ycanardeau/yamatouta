@@ -8,6 +8,7 @@ import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
+import { ArtistOptionalFields } from '../../../models/ArtistOptionalFields';
 import { ArtistType } from '../../../models/ArtistType';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
@@ -104,6 +105,10 @@ export class UpdateArtistCommandHandler
 			return artist;
 		});
 
-		return new ArtistObject(artist, permissionContext);
+		return new ArtistObject(
+			artist,
+			permissionContext,
+			Object.values(ArtistOptionalFields),
+		);
 	}
 }

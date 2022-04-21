@@ -1,6 +1,8 @@
 import { Artist } from '../../entities/Artist';
+import { ArtistOptionalFields } from '../../models/ArtistOptionalFields';
 import { ArtistType } from '../../models/ArtistType';
 import { PermissionContext } from '../../services/PermissionContext';
+import { WebLinkObject } from '../WebLinkObject';
 
 export class ArtistObject {
 	readonly id: number;
@@ -9,8 +11,13 @@ export class ArtistObject {
 	readonly name: string;
 	readonly artistType: ArtistType;
 	readonly avatarUrl?: string;
+	readonly webLinks?: WebLinkObject[];
 
-	constructor(artist: Artist, permissionContext: PermissionContext) {
+	constructor(
+		artist: Artist,
+		permissionContext: PermissionContext,
+		fields: ArtistOptionalFields[] = [],
+	) {
 		permissionContext.verifyDeletedAndHidden(artist);
 
 		this.id = artist.id;
@@ -19,5 +26,10 @@ export class ArtistObject {
 		this.name = artist.name;
 		this.artistType = artist.artistType;
 		this.avatarUrl = undefined /* TODO: Implement. */;
+		this.webLinks = fields.includes(ArtistOptionalFields.WebLinks)
+			? artist.webLinks
+					.getItems()
+					.map((webLink) => new WebLinkObject(webLink))
+			: undefined;
 	}
 }

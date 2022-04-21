@@ -10,6 +10,7 @@ import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
+import { QuoteOptionalFields } from '../../../models/QuoteOptionalFields';
 import { QuoteType } from '../../../models/QuoteType';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
@@ -119,6 +120,10 @@ export class UpdateQuoteCommandHandler
 			return quote;
 		});
 
-		return new QuoteObject(quote, permissionContext);
+		return new QuoteObject(
+			quote,
+			permissionContext,
+			Object.values(QuoteOptionalFields),
+		);
 	}
 }

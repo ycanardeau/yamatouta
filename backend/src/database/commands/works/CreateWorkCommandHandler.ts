@@ -9,6 +9,7 @@ import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
+import { WorkOptionalFields } from '../../../models/WorkOptionalFields';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { UpdateWorkParams } from './UpdateWorkCommandHandler';
@@ -79,6 +80,10 @@ export class CreateWorkCommandHandler
 			return work;
 		});
 
-		return new WorkObject(work, permissionContext);
+		return new WorkObject(
+			work,
+			permissionContext,
+			Object.values(WorkOptionalFields),
+		);
 	}
 }

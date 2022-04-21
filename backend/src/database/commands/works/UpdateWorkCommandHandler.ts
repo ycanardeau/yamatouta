@@ -10,6 +10,7 @@ import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
+import { WorkOptionalFields } from '../../../models/WorkOptionalFields';
 import { WorkType } from '../../../models/WorkType';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
@@ -104,6 +105,10 @@ export class UpdateWorkCommandHandler
 			return work;
 		});
 
-		return new WorkObject(work, permissionContext);
+		return new WorkObject(
+			work,
+			permissionContext,
+			Object.values(WorkOptionalFields),
+		);
 	}
 }

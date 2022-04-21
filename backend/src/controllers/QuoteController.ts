@@ -18,7 +18,10 @@ import {
 	UpdateQuoteParams,
 } from '../database/commands/quotes/UpdateQuoteCommandHandler';
 import { ListQuoteRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
-import { GetQuoteQuery } from '../database/queries/quotes/GetQuoteQueryHandler';
+import {
+	GetQuoteParams,
+	GetQuoteQuery,
+} from '../database/queries/quotes/GetQuoteQueryHandler';
 import {
 	ListQuotesParams,
 	ListQuotesQuery,
@@ -63,9 +66,11 @@ export class QuoteController {
 	getQuote(
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('quoteId', ParseIntPipe) quoteId: number,
+		@Query(new JoiValidationPipe(GetQuoteParams.schema))
+		params: GetQuoteParams,
 	): Promise<QuoteObject> {
 		return this.queryBus.execute(
-			new GetQuoteQuery(permissionContext, { quoteId }),
+			new GetQuoteQuery(permissionContext, { ...params, quoteId }),
 		);
 	}
 

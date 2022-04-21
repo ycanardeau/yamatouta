@@ -17,7 +17,10 @@ import {
 	UpdateArtistParams,
 } from '../database/commands/artists/UpdateArtistCommandHandler';
 import { DeleteArtistCommand } from '../database/commands/entries/DeleteEntryCommandHandler';
-import { GetArtistQuery } from '../database/queries/artists/GetArtistQueryHandler';
+import {
+	GetArtistParams,
+	GetArtistQuery,
+} from '../database/queries/artists/GetArtistQueryHandler';
 import {
 	ListArtistsParams,
 	ListArtistsQuery,
@@ -63,9 +66,11 @@ export class ArtistController {
 	getArtist(
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('artistId', ParseIntPipe) artistId: number,
+		@Query(new JoiValidationPipe(GetArtistParams.schema))
+		params: GetArtistParams,
 	): Promise<ArtistObject> {
 		return this.queryBus.execute(
-			new GetArtistQuery(permissionContext, { artistId }),
+			new GetArtistQuery(permissionContext, { ...params, artistId }),
 		);
 	}
 

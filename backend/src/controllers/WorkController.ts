@@ -18,7 +18,10 @@ import {
 	UpdateWorkParams,
 } from '../database/commands/works/UpdateWorkCommandHandler';
 import { ListWorkRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
-import { GetWorkQuery } from '../database/queries/works/GetWorkQueryHandler';
+import {
+	GetWorkParams,
+	GetWorkQuery,
+} from '../database/queries/works/GetWorkQueryHandler';
 import {
 	ListWorksParams,
 	ListWorksQuery,
@@ -63,9 +66,11 @@ export class WorkController {
 	getWork(
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('workId', ParseIntPipe) workId: number,
+		@Query(new JoiValidationPipe(GetWorkParams.schema))
+		params: GetWorkParams,
 	): Promise<WorkObject> {
 		return this.queryBus.execute(
-			new GetWorkQuery(permissionContext, { workId }),
+			new GetWorkQuery(permissionContext, { ...params, workId }),
 		);
 	}
 

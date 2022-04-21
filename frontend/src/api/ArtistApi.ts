@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IArtistObject } from '../dto/artists/IArtistObject';
+import { ArtistOptionalFields } from '../models/ArtistOptionalFields';
 import { ArtistType } from '../models/ArtistType';
 import { IPaginationParams } from '../stores/PaginationStore';
 
@@ -22,10 +23,14 @@ export const listArtists = async ({
 
 export const getArtist = async ({
 	artistId,
+	fields,
 }: {
 	artistId: number;
+	fields?: ArtistOptionalFields[];
 }): Promise<IArtistObject> => {
-	const response = await axios.get<IArtistObject>(`/artists/${artistId}`);
+	const response = await axios.get<IArtistObject>(`/artists/${artistId}`, {
+		params: { fields: fields },
+	});
 
 	return response.data;
 };

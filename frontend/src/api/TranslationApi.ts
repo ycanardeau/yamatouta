@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { ITranslationObject } from '../dto/translations/ITranslationObject';
+import { TranslationOptionalFields } from '../models/TranslationOptionalFields';
 import { TranslationSortRule } from '../models/TranslationSortRule';
 import { WordCategory } from '../models/WordCategory';
 import { IPaginationParams } from '../stores/PaginationStore';
@@ -95,11 +96,14 @@ export const deleteTranslation = async ({
 
 export const getTranslation = async ({
 	translationId,
+	fields,
 }: {
 	translationId: number;
+	fields?: TranslationOptionalFields[];
 }): Promise<ITranslationObject> => {
 	const response = await axios.get<ITranslationObject>(
 		`/translations/${translationId}`,
+		{ params: { fields: fields } },
 	);
 
 	return response.data;

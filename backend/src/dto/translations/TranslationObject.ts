@@ -1,6 +1,8 @@
 import { Translation } from '../../entities/Translation';
+import { TranslationOptionalFields } from '../../models/TranslationOptionalFields';
 import { WordCategory } from '../../models/WordCategory';
 import { PermissionContext } from '../../services/PermissionContext';
+import { WebLinkObject } from '../WebLinkObject';
 
 export class TranslationObject {
 	readonly id: number;
@@ -10,10 +12,12 @@ export class TranslationObject {
 	readonly reading?: string;
 	readonly yamatokotoba: string;
 	readonly category?: WordCategory;
+	readonly webLinks?: WebLinkObject[];
 
 	constructor(
 		translation: Translation,
 		permissionContext: PermissionContext,
+		fields: TranslationOptionalFields[] = [],
 	) {
 		permissionContext.verifyDeletedAndHidden(translation);
 
@@ -24,5 +28,10 @@ export class TranslationObject {
 		this.reading = translation.translatedString.reading;
 		this.yamatokotoba = translation.translatedString.yamatokotoba;
 		this.category = translation.category;
+		this.webLinks = fields.includes(TranslationOptionalFields.WebLinks)
+			? translation.webLinks
+					.getItems()
+					.map((webLink) => new WebLinkObject(webLink))
+			: undefined;
 	}
 }

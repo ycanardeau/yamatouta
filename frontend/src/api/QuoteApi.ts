@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IQuoteObject } from '../dto/quotes/IQuoteObject';
+import { QuoteOptionalFields } from '../models/QuoteOptionalFields';
 import { QuoteType } from '../models/QuoteType';
 import { IPaginationParams } from '../stores/PaginationStore';
 
@@ -22,10 +23,14 @@ export const listQuotes = async ({
 
 export const getQuote = async ({
 	quoteId,
+	fields,
 }: {
 	quoteId: number;
+	fields?: QuoteOptionalFields[];
 }): Promise<IQuoteObject> => {
-	const response = await axios.get<IQuoteObject>(`/quotes/${quoteId}`);
+	const response = await axios.get<IQuoteObject>(`/quotes/${quoteId}`, {
+		params: { fields: fields },
+	});
 
 	return response.data;
 };
