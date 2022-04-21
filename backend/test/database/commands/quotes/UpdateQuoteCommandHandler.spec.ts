@@ -193,7 +193,7 @@ describe('UpdateQuoteCommandHandler', () => {
 					text: quote.text,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
-					artist: new ObjectRefSnapshot({ entry: artist }),
+					artist: new ObjectRefSnapshot(artist),
 				},
 			});
 		});
@@ -211,7 +211,7 @@ describe('UpdateQuoteCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
-					artist: new ObjectRefSnapshot({ entry: artist }),
+					artist: new ObjectRefSnapshot(artist),
 				},
 			});
 		});
@@ -228,7 +228,7 @@ describe('UpdateQuoteCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: quote.locale,
-					artist: new ObjectRefSnapshot({ entry: artist }),
+					artist: new ObjectRefSnapshot(artist),
 				},
 			});
 		});
@@ -244,7 +244,7 @@ describe('UpdateQuoteCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: defaultParams.locale,
-					artist: new ObjectRefSnapshot({ entry: artist }),
+					artist: new ObjectRefSnapshot(artist),
 				},
 			});
 		});
@@ -257,7 +257,7 @@ describe('UpdateQuoteCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: defaultParams.locale,
-					artist: new ObjectRefSnapshot({ entry: artist }),
+					artist: new ObjectRefSnapshot(artist),
 				},
 			});
 		});

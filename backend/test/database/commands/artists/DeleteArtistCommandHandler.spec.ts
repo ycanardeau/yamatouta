@@ -103,7 +103,7 @@ describe('DeleteArtistCommandHandler', () => {
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Deleted);
 			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(new ArtistSnapshot({ artist: artist })),
+				JSON.stringify(new ArtistSnapshot(artist)),
 			);
 
 			expect(artist.deleted).toBe(true);

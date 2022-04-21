@@ -84,7 +84,7 @@ export class Artist
 			artist: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new ArtistSnapshot({ artist: this }),
+			snapshot: new ArtistSnapshot(this),
 			summary: summary,
 			event: event,
 			version: ++this.version,

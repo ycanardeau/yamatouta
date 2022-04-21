@@ -69,7 +69,7 @@ export class Work
 			work: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new WorkSnapshot({ work: this }),
+			snapshot: new WorkSnapshot(this),
 			summary: summary,
 			event: event,
 			version: ++this.version,

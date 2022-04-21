@@ -176,7 +176,7 @@ describe('CreateQuoteCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: defaultParams.locale,
-					artist: new ObjectRefSnapshot({ entry: artist }),
+					artist: new ObjectRefSnapshot(artist),
 				},
 			});
 		});

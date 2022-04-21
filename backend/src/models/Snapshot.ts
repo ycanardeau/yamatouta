@@ -15,7 +15,7 @@ export class TranslationSnapshot {
 	readonly category: WordCategory;
 	readonly inishienomanabi_tags: string[];
 
-	constructor({ translation }: { translation: Translation }) {
+	constructor(translation: Translation) {
 		this.headword = translation.headword;
 		this.locale = translation.locale;
 		this.reading = translation.reading;
@@ -29,7 +29,7 @@ export class ArtistSnapshot {
 	readonly name: string;
 	readonly artistType: ArtistType;
 
-	constructor({ artist }: { artist: Artist }) {
+	constructor(artist: Artist) {
 		this.name = artist.name;
 		this.artistType = artist.artistType;
 	}
@@ -38,7 +38,7 @@ export class ArtistSnapshot {
 export class ObjectRefSnapshot<TEntry extends { id: number }> {
 	readonly id: number;
 
-	constructor({ entry }: { entry: TEntry }) {
+	constructor(entry: TEntry) {
 		this.id = entry.id;
 	}
 }
@@ -49,11 +49,11 @@ export class QuoteSnapshot {
 	readonly locale: string;
 	readonly artist: ObjectRefSnapshot<Artist>;
 
-	constructor({ quote }: { quote: Quote }) {
+	constructor(quote: Quote) {
 		this.text = quote.text;
 		this.quoteType = quote.quoteType;
 		this.locale = quote.locale;
-		this.artist = new ObjectRefSnapshot<Artist>({ entry: quote.artist });
+		this.artist = new ObjectRefSnapshot<Artist>(quote.artist);
 	}
 }
 
@@ -61,7 +61,7 @@ export class WorkSnapshot {
 	readonly name: string;
 	readonly workType: WorkType;
 
-	constructor({ work }: { work: Work }) {
+	constructor(work: Work) {
 		this.name = work.name;
 		this.workType = work.workType;
 	}

@@ -114,7 +114,7 @@ export class Quote
 			quote: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new QuoteSnapshot({ quote: this }),
+			snapshot: new QuoteSnapshot(this),
 			summary: summary,
 			event: event,
 			version: ++this.version,

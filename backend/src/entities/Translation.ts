@@ -155,7 +155,7 @@ export class Translation
 			translation: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new TranslationSnapshot({ translation: this }),
+			snapshot: new TranslationSnapshot(this),
 			summary: summary,
 			event: event,
 			version: ++this.version,

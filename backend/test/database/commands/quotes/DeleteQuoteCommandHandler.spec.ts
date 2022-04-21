@@ -112,7 +112,7 @@ describe('DeleteQuoteCommandHandler', () => {
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Deleted);
 			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(new QuoteSnapshot({ quote: quote })),
+				JSON.stringify(new QuoteSnapshot(quote)),
 			);
 
 			expect(quote.deleted).toBe(true);
