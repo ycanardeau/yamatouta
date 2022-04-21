@@ -72,6 +72,7 @@ describe('CreateWorkCommandHandler', () => {
 			workId: undefined,
 			name: 'よみもの',
 			workType: WorkType.Book,
+			webLinks: [],
 		};
 	});
 
@@ -211,6 +212,16 @@ describe('CreateWorkCommandHandler', () => {
 				execute(permissionContext, {
 					...defaultParams,
 					workType: 'abcdef' as WorkType,
+				}),
+			).rejects.toThrow(BadRequestException);
+		});
+
+		test('webLinks is undefined', async () => {
+			await expect(
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					webLinks: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
 		});

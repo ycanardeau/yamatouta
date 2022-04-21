@@ -1,4 +1,5 @@
 import { QuoteType } from '../../models/QuoteType';
+import { IWebLinkObject } from '../IWebLinkObject';
 import { IArtistObject } from '../artists/IArtistObject';
 
 export interface IQuoteObject {
@@ -9,4 +10,5 @@ export interface IQuoteObject {
 	locale: string;
 	artist: IArtistObject;
 	sourceUrl: string;
+	webLinks: IWebLinkObject[];
 }

@@ -12,6 +12,7 @@ import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
 import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
+import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class QuoteEditStore {
 	private readonly quote?: IQuoteObject;
@@ -22,6 +23,7 @@ export class QuoteEditStore {
 	readonly artist = new BasicEntryLinkStore<IArtistObject>((entryId) =>
 		getArtist({ artistId: entryId }),
 	);
+	readonly webLinks: WebLinkListEditStore;
 
 	constructor(quote?: IQuoteObject) {
 		makeObservable(this);
@@ -33,6 +35,9 @@ export class QuoteEditStore {
 			this.quoteType = quote.quoteType;
 			this.locale = quote.locale;
 			this.artist.loadEntryById(quote.artist.id);
+			this.webLinks = new WebLinkListEditStore(quote.webLinks);
+		} else {
+			this.webLinks = new WebLinkListEditStore([]);
 		}
 	}
 
@@ -57,6 +62,7 @@ export class QuoteEditStore {
 				quoteType: this.quoteType,
 				locale: this.locale,
 				artistId: this.artist.entry?.id ?? 0,
+				webLinks: this.webLinks.items,
 			};
 
 			// Await.

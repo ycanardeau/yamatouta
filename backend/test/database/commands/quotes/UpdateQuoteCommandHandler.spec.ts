@@ -106,6 +106,7 @@ describe('UpdateQuoteCommandHandler', () => {
 			quoteType: QuoteType.Tanka,
 			locale: 'ja',
 			artistId: 2,
+			webLinks: [],
 		};
 	});
 
@@ -309,6 +310,16 @@ describe('UpdateQuoteCommandHandler', () => {
 				execute(permissionContext, {
 					...defaultParams,
 					quoteType: 'abcdef' as QuoteType,
+				}),
+			).rejects.toThrow(BadRequestException);
+		});
+
+		test('webLinks is undefined', async () => {
+			await expect(
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					webLinks: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
 		});

@@ -4,6 +4,7 @@ import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
+import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
@@ -23,12 +24,14 @@ export class UpdateArtistParams {
 			.required()
 			.trim()
 			.valid(...Object.values(ArtistType)),
+		webLinks: Joi.array().items(WebLinkObject.schema).required(),
 	});
 
 	constructor(
 		readonly artistId: number | undefined,
 		readonly name: string,
 		readonly artistType: ArtistType,
+		readonly webLinks: WebLinkObject[],
 	) {}
 }
 

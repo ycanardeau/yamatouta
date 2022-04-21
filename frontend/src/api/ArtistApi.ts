@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { ISearchResultObject } from '../dto/ISearchResultObject';
+import { IWebLinkObject } from '../dto/IWebLinkObject';
 import { IArtistObject } from '../dto/artists/IArtistObject';
 import { ArtistOptionalFields } from '../models/ArtistOptionalFields';
 import { ArtistType } from '../models/ArtistType';
@@ -38,13 +39,16 @@ export const getArtist = async ({
 export const createArtist = async ({
 	name,
 	artistType,
+	webLinks,
 }: {
 	name: string;
 	artistType: ArtistType;
+	webLinks: IWebLinkObject[];
 }): Promise<IArtistObject> => {
 	const response = await axios.post<IArtistObject>('/artists', {
 		name,
 		artistType,
+		webLinks,
 	});
 
 	return response.data;
@@ -54,14 +58,17 @@ export const updateArtist = async ({
 	artistId,
 	name,
 	artistType,
+	webLinks,
 }: {
 	artistId: number;
 	name: string;
 	artistType: ArtistType;
+	webLinks: IWebLinkObject[];
 }): Promise<IArtistObject> => {
 	const response = await axios.patch<IArtistObject>(`/artists/${artistId}`, {
 		name,
 		artistType,
+		webLinks,
 	});
 
 	return response.data;

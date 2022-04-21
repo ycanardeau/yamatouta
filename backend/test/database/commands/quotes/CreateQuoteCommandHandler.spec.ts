@@ -91,6 +91,7 @@ describe('CreateQuoteCommandHandler', () => {
 			quoteType: QuoteType.Tanka,
 			locale: 'ja',
 			artistId: 2,
+			webLinks: [],
 		};
 	});
 
@@ -244,6 +245,16 @@ describe('CreateQuoteCommandHandler', () => {
 					...defaultParams,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					artistId: 'abcdef' as any,
+				}),
+			).rejects.toThrow(BadRequestException);
+		});
+
+		test('webLinks is undefined', async () => {
+			await expect(
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					webLinks: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
 		});

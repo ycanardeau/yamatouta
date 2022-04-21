@@ -1,4 +1,5 @@
 import { WordCategory } from '../../models/WordCategory';
+import { IWebLinkObject } from '../IWebLinkObject';
 
 export interface ITranslationObject {
 	id: number;
@@ -8,4 +9,5 @@ export interface ITranslationObject {
 	reading: string;
 	yamatokotoba: string;
 	category: WordCategory;
+	webLinks: IWebLinkObject[];
 }

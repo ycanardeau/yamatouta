@@ -4,6 +4,7 @@ import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
+import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { WorkObject } from '../../../dto/works/WorkObject';
 import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
@@ -23,12 +24,14 @@ export class UpdateWorkParams {
 			.required()
 			.trim()
 			.valid(...Object.values(WorkType)),
+		webLinks: Joi.array().items(WebLinkObject.schema).required(),
 	});
 
 	constructor(
 		readonly workId: number | undefined,
 		readonly name: string,
 		readonly workType: WorkType,
+		readonly webLinks: WebLinkObject[],
 	) {}
 }
 

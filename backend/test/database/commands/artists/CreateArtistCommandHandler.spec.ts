@@ -72,6 +72,7 @@ describe('CreateArtistCommandHandler', () => {
 			artistId: undefined,
 			name: 'うたよみ',
 			artistType: ArtistType.Person,
+			webLinks: [],
 		};
 	});
 
@@ -211,6 +212,16 @@ describe('CreateArtistCommandHandler', () => {
 				execute(permissionContext, {
 					...defaultParams,
 					artistType: 'abcdef' as ArtistType,
+				}),
+			).rejects.toThrow(BadRequestException);
+		});
+
+		test('webLinks is undefined', async () => {
+			await expect(
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					webLinks: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
 		});

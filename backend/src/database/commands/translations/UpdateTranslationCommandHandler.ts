@@ -4,6 +4,7 @@ import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
+import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Commit } from '../../../entities/Commit';
 import { Translation } from '../../../entities/Translation';
@@ -35,6 +36,7 @@ export class UpdateTranslationParams {
 			.required()
 			.trim()
 			.valid(...Object.values(WordCategory)),
+		webLinks: Joi.array().items(WebLinkObject.schema).required(),
 	});
 
 	constructor(
@@ -44,6 +46,7 @@ export class UpdateTranslationParams {
 		readonly reading: string,
 		readonly yamatokotoba: string,
 		readonly category: WordCategory,
+		readonly webLinks: WebLinkObject[],
 	) {}
 }
 

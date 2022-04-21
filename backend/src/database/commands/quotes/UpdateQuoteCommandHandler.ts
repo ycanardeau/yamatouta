@@ -4,6 +4,7 @@ import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
+import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
@@ -26,6 +27,7 @@ export class UpdateQuoteParams {
 			.valid(...Object.values(QuoteType)),
 		locale: Joi.string().required().trim(),
 		artistId: Joi.number().required(),
+		webLinks: Joi.array().items(WebLinkObject.schema).required(),
 	});
 
 	constructor(
@@ -34,6 +36,7 @@ export class UpdateQuoteParams {
 		readonly quoteType: QuoteType,
 		readonly locale: string,
 		readonly artistId: number,
+		readonly webLinks: WebLinkObject[],
 	) {}
 }
 

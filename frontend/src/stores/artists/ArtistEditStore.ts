@@ -9,12 +9,14 @@ import {
 import { createArtist, updateArtist } from '../../api/ArtistApi';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
+import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class ArtistEditStore {
 	private readonly artist?: IArtistObject;
 	@observable submitting = false;
 	@observable name = '';
 	@observable artistType = ArtistType.Person;
+	readonly webLinks: WebLinkListEditStore;
 
 	constructor(artist?: IArtistObject) {
 		makeObservable(this);
@@ -24,6 +26,9 @@ export class ArtistEditStore {
 		if (artist) {
 			this.name = artist.name;
 			this.artistType = artist.artistType;
+			this.webLinks = new WebLinkListEditStore(artist.webLinks);
+		} else {
+			this.webLinks = new WebLinkListEditStore([]);
 		}
 	}
 
@@ -43,7 +48,11 @@ export class ArtistEditStore {
 		try {
 			this.submitting = true;
 
-			const params = { name: this.name, artistType: this.artistType };
+			const params = {
+				name: this.name,
+				artistType: this.artistType,
+				webLinks: this.webLinks.items,
+			};
 
 			// Await.
 			const artist = await (this.artist

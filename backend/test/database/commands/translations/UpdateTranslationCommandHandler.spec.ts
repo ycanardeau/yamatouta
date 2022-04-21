@@ -95,6 +95,7 @@ describe('UpdateTranslationCommandHandler', () => {
 			reading: 'わご',
 			yamatokotoba: 'やまとことのは',
 			category: WordCategory.Noun,
+			webLinks: [],
 		};
 	});
 
@@ -424,6 +425,16 @@ describe('UpdateTranslationCommandHandler', () => {
 				execute(permissionContext, {
 					...defaultParams,
 					category: 'abcdef' as WordCategory,
+				}),
+			).rejects.toThrow(BadRequestException);
+		});
+
+		test('webLinks is undefined', async () => {
+			await expect(
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					webLinks: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
 		});

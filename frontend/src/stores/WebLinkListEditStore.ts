@@ -5,7 +5,7 @@ import { WebLinkCategory } from '../models/WebLinkCategory';
 import { BasicListEditStore } from './BasicListEditStore';
 
 export class WebLinkEditStore {
-	@observable id?: number;
+	@observable id = 0;
 	@observable url = '';
 	@observable category = WebLinkCategory.Other;
 
