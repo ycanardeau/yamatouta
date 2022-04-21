@@ -2,7 +2,7 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi, { ObjectSchema } from 'joi';
+import Joi from 'joi';
 
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Artist } from '../../../entities/Artist';
@@ -16,7 +16,7 @@ import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
 export class UpdateQuoteParams {
-	static readonly schema: ObjectSchema<UpdateQuoteParams> = Joi.object({
+	static readonly schema = Joi.object<UpdateQuoteParams>({
 		quoteId: Joi.number().optional(),
 		text: Joi.string().required().trim().max(200),
 		quoteType: Joi.string()

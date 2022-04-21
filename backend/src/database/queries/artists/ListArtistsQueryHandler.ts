@@ -7,7 +7,7 @@ import {
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi, { ObjectSchema } from 'joi';
+import Joi from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
@@ -18,7 +18,7 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
 
 export class ListArtistsParams {
-	static readonly schema: ObjectSchema<ListArtistsParams> = Joi.object({
+	static readonly schema = Joi.object<ListArtistsParams>({
 		artistType: Joi.string()
 			.optional()
 			.valid(...Object.values(ArtistType)),

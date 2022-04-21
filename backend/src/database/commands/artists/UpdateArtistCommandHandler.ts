@@ -2,7 +2,7 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi, { ObjectSchema } from 'joi';
+import Joi from 'joi';
 
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
@@ -15,7 +15,7 @@ import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
 
 export class UpdateArtistParams {
-	static readonly schema: ObjectSchema<UpdateArtistParams> = Joi.object({
+	static readonly schema = Joi.object<UpdateArtistParams>({
 		artistId: Joi.number().optional(),
 		name: Joi.string().required().trim().max(200),
 		artistType: Joi.string()

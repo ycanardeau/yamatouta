@@ -7,7 +7,7 @@ import {
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi, { ObjectSchema } from 'joi';
+import Joi from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { WorkObject } from '../../../dto/works/WorkObject';
@@ -18,7 +18,7 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
 
 export class ListWorksParams {
-	static readonly schema: ObjectSchema<ListWorksParams> = Joi.object({
+	static readonly schema = Joi.object<ListWorksParams>({
 		workType: Joi.string()
 			.optional()
 			.valid(...Object.values(WorkType)),

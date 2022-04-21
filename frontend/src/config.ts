@@ -6,7 +6,7 @@ interface IConfig {
 	disableAccountCreation: boolean;
 }
 
-const schema: Joi.ObjectSchema<IConfig> = Joi.object({
+const schema = Joi.object<IConfig>({
 	apiEndpoint: Joi.string().required(),
 	gaMeasurementId: Joi.string().allow(''),
 	disableAccountCreation: Joi.boolean().required(),
