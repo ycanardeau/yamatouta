@@ -383,7 +383,7 @@ const TranslationSearchTable = observer(
 
 				<EuiSpacer size="m" />
 
-				<Pagination store={store.paginationStore} />
+				<Pagination store={store.pagination} />
 			</>
 		);
 	},
