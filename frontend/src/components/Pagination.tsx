@@ -41,12 +41,12 @@ const Pagination = observer(({ store }: PaginationProps) => {
 
 	const items = [10, 20, 50, 100].map((i) => (
 		<EuiContextMenuItem
-			key={i}
 			icon={getIconType(i)}
 			onClick={(): void => {
 				closePopover();
 				store.setPageSize(i);
 			}}
+			key={i}
 		>
 			{i} items
 		</EuiContextMenuItem>

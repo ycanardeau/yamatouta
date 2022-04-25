@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 
 import { IWebLinkObject } from '../dto/IWebLinkObject';
 import { WebLinkCategory } from '../models/WebLinkCategory';
@@ -7,7 +7,7 @@ import { BasicListEditStore } from './BasicListEditStore';
 export class WebLinkEditStore {
 	@observable id = 0;
 	@observable url = '';
-	@observable category = WebLinkCategory.Other;
+	@observable category = WebLinkCategory.Reference;
 
 	constructor(webLink?: IWebLinkObject) {
 		makeObservable(this);
@@ -18,6 +18,14 @@ export class WebLinkEditStore {
 			this.category = webLink.category;
 		}
 	}
+
+	@action setUrl = (value: string): void => {
+		this.url = value;
+	};
+
+	@action setCategory = (value: WebLinkCategory): void => {
+		this.category = value;
+	};
 }
 
 export class WebLinkListEditStore extends BasicListEditStore<

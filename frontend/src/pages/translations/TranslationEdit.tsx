@@ -13,6 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import WebLinkListEdit from '../../components/WebLinkListEdit';
 import { WordCategory } from '../../models/WordCategory';
 import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';
 import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
@@ -99,6 +100,10 @@ const TranslationEdit = observer(
 								)
 							}
 						/>
+					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
+						<WebLinkListEdit store={store.webLinks} />
 					</EuiFormRow>
 				</EuiForm>
 

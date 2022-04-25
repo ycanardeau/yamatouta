@@ -258,7 +258,7 @@ const TranslationSearchTable = observer(
 
 					<EuiTableBody>
 						{store.translations.map((translation) => (
-							<EuiTableRow key={translation.id} hasActions={true}>
+							<EuiTableRow hasActions={true} key={translation.id}>
 								<EuiTableRowCell
 									mobileOptions={{
 										header: t('translations.headword'),

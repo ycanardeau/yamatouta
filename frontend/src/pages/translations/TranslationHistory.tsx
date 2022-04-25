@@ -14,7 +14,7 @@ const Layout = ({ revisions }: LayoutProps): React.ReactElement => {
 	return (
 		<EuiCommentList>
 			{revisions.map((revision, index) => (
-				<RevisionComment key={index} revision={revision} />
+				<RevisionComment revision={revision} key={index} />
 			))}
 		</EuiCommentList>
 	);

@@ -13,6 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import WebLinkListEdit from '../../components/WebLinkListEdit';
 import { ArtistType } from '../../models/ArtistType';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
@@ -73,6 +74,10 @@ const ArtistEdit = observer(
 								)
 							}
 						/>
+					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
+						<WebLinkListEdit store={store.webLinks} />
 					</EuiFormRow>
 				</EuiForm>
 

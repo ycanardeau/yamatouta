@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 
 // Code from: https://github.com/VocaDB/vocadb/blob/11e105d6b0c838e6d3a089ecbe6c79cc4e8a0e7a/VocaDbWeb/Scripts/ViewModels/BasicListEditViewModel.ts.
 export class BasicListEditStore<TItem, TObject> {
@@ -14,11 +14,11 @@ export class BasicListEditStore<TItem, TObject> {
 		this.items = objects.map((object) => new type(object));
 	}
 
-	add = (): void => {
+	@action add = (): void => {
 		this.items.push(new this.type());
 	};
 
-	remove = (item: TItem): void => {
+	@action remove = (item: TItem): void => {
 		_.pull(this.items, item);
 	};
 }

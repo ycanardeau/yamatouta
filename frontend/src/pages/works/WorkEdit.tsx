@@ -13,6 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import WebLinkListEdit from '../../components/WebLinkListEdit';
 import { WorkType } from '../../models/WorkType';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
 import { WorkEditStore } from '../../stores/works/WorkEditStore';
@@ -71,6 +72,10 @@ const WorkEdit = observer(
 								store.setWorkType(e.target.value as WorkType)
 							}
 						/>
+					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
+						<WebLinkListEdit store={store.webLinks} />
 					</EuiFormRow>
 				</EuiForm>
 
