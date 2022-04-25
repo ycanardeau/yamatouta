@@ -43,11 +43,13 @@ import { ListQuoteIdsQueryHandler } from './database/queries/quotes/ListQuoteIds
 import { ListQuotesQueryHandler } from './database/queries/quotes/ListQuotesQueryHandler';
 import { GenerateSitemapQueryHandler } from './database/queries/sitemap/GenerateSitemapQueryHandler';
 import { GetTranslationQueryHandler } from './database/queries/translations/GetTranslationQueryHandler';
+import { ListTranslationIdsQueryHandler } from './database/queries/translations/ListTranslationIdsQueryHandler';
 import { ListTranslationsQueryHandler } from './database/queries/translations/ListTranslationsQueryHandler';
 import { GetAuthenticatedUserQueryHandler } from './database/queries/users/GetAuthenticatedUserQueryHandler';
 import { GetUserQueryHandler } from './database/queries/users/GetUserQueryHandler';
 import { ListUsersQueryHandler } from './database/queries/users/ListUsersQueryHandler';
 import { GetWorkQueryHandler } from './database/queries/works/GetWorkQueryHandler';
+import { ListWorkIdsQueryHandler } from './database/queries/works/ListWorkIdsQueryHandler';
 import { ListWorksQueryHandler } from './database/queries/works/ListWorksQueryHandler';
 import { Artist } from './entities/Artist';
 import { Quote } from './entities/Quote';
@@ -76,9 +78,11 @@ const queryHandlers = [
 	ListQuoteIdsQueryHandler,
 	ListQuoteRevisionsQueryHandler,
 	ListQuotesQueryHandler,
+	ListTranslationIdsQueryHandler,
 	ListTranslationRevisionsQueryHandler,
 	ListTranslationsQueryHandler,
 	ListUsersQueryHandler,
+	ListWorkIdsQueryHandler,
 	ListWorkRevisionsQueryHandler,
 	ListWorksQueryHandler,
 ];

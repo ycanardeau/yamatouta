@@ -3,6 +3,8 @@ import { SitemapStream, streamToPromise } from 'sitemap';
 
 import { ListArtistIdsQueryHandler } from '../artists/ListArtistIdsQueryHandler';
 import { ListQuoteIdsQueryHandler } from '../quotes/ListQuoteIdsQueryHandler';
+import { ListTranslationIdsQueryHandler } from '../translations/ListTranslationIdsQueryHandler';
+import { ListWorkIdsQueryHandler } from '../works/ListWorkIdsQueryHandler';
 
 export class GenerateSitemapQuery {}
 
@@ -13,13 +15,18 @@ export class GenerateSitemapQueryHandler
 	constructor(
 		private readonly listArtistIdsQueryHandler: ListArtistIdsQueryHandler,
 		private readonly listQuoteIdsQueryHandler: ListQuoteIdsQueryHandler,
+		private readonly listTranslationIdsQueryHandler: ListTranslationIdsQueryHandler,
+		private readonly listWorkIdsQueryHandler: ListWorkIdsQueryHandler,
 	) {}
 
 	async execute(): Promise<Buffer> {
-		const [artistIds, quoteIds] = await Promise.all([
-			this.listArtistIdsQueryHandler.execute(),
-			this.listQuoteIdsQueryHandler.execute(),
-		]);
+		const [artistIds, quoteIds, translationIds, workIds] =
+			await Promise.all([
+				this.listArtistIdsQueryHandler.execute(),
+				this.listQuoteIdsQueryHandler.execute(),
+				this.listTranslationIdsQueryHandler.execute(),
+				this.listWorkIdsQueryHandler.execute(),
+			]);
 
 		const sitemapStream = new SitemapStream({
 			hostname: 'https://yamatouta.net',
@@ -30,6 +37,12 @@ export class GenerateSitemapQueryHandler
 
 		for (const quoteId of quoteIds)
 			sitemapStream.write({ url: `/quotes/${quoteId}` });
+
+		for (const translationId of translationIds)
+			sitemapStream.write({ url: `/translations/${translationId}` });
+
+		for (const workId of workIds)
+			sitemapStream.write({ url: `/works/${workId}` });
 
 		sitemapStream.end();
 
