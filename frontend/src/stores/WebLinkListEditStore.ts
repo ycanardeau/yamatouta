@@ -7,6 +7,7 @@ import { BasicListEditStore } from './BasicListEditStore';
 export class WebLinkEditStore {
 	@observable id = 0;
 	@observable url = '';
+	@observable title = '';
 	@observable category = WebLinkCategory.Reference;
 
 	constructor(webLink?: IWebLinkObject) {
@@ -15,12 +16,17 @@ export class WebLinkEditStore {
 		if (webLink) {
 			this.id = webLink.id;
 			this.url = webLink.url;
+			this.title = webLink.title;
 			this.category = webLink.category;
 		}
 	}
 
 	@action setUrl = (value: string): void => {
 		this.url = value;
+	};
+
+	@action setTitle = (value: string): void => {
+		this.title = value;
 	};
 
 	@action setCategory = (value: WebLinkCategory): void => {

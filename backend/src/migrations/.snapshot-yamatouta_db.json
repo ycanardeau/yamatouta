@@ -2817,6 +2817,15 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
         "category": {
           "name": "category",
           "type": "enum('Unspecified', 'Official', 'Commercial', 'Reference', 'Other')",

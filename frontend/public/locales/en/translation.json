@@ -148,6 +148,7 @@
 	},
 	"webLinks": {
 		"url": "URL",
+		"title": "Title",
 		"category": "Category"
 	},
 	"webLinkCategoryNames": {

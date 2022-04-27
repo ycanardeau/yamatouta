@@ -1,4 +1,4 @@
-import { Entity, Enum, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
 import { WebLinkCategory } from '../models/WebLinkCategory';
@@ -20,17 +20,23 @@ export abstract class WebLink {
 	@ManyToOne()
 	url: Url;
 
+	@Property()
+	title: string;
+
 	@Enum()
 	category: WebLinkCategory;
 
 	protected constructor({
 		url,
+		title,
 		category,
 	}: {
 		url: Url;
+		title: string;
 		category: WebLinkCategory;
 	}) {
 		this.url = url;
+		this.title = title;
 		this.category = category;
 	}
 }
@@ -43,13 +49,15 @@ export class TranslationWebLink extends WebLink {
 	constructor({
 		translation,
 		url,
+		title,
 		category,
 	}: {
 		translation: Translation;
 		url: Url;
+		title: string;
 		category: WebLinkCategory;
 	}) {
-		super({ url, category });
+		super({ url, title, category });
 
 		this.translation = translation;
 	}
@@ -63,13 +71,15 @@ export class ArtistWebLink extends WebLink {
 	constructor({
 		artist,
 		url,
+		title,
 		category,
 	}: {
 		artist: Artist;
 		url: Url;
+		title: string;
 		category: WebLinkCategory;
 	}) {
-		super({ url, category });
+		super({ url, title, category });
 
 		this.artist = artist;
 	}
@@ -83,13 +93,15 @@ export class QuoteWebLink extends WebLink {
 	constructor({
 		quote,
 		url,
+		title,
 		category,
 	}: {
 		quote: Quote;
 		url: Url;
+		title: string;
 		category: WebLinkCategory;
 	}) {
-		super({ url, category });
+		super({ url, title, category });
 
 		this.quote = quote;
 	}
@@ -103,13 +115,15 @@ export class WorkWebLink extends WebLink {
 	constructor({
 		work,
 		url,
+		title,
 		category,
 	}: {
 		work: Work;
 		url: Url;
+		title: string;
 		category: WebLinkCategory;
 	}) {
-		super({ url, category });
+		super({ url, title, category });
 
 		this.work = work;
 	}

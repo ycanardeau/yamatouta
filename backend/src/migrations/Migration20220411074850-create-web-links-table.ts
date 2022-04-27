@@ -8,7 +8,7 @@ export class Migration20220411074850 extends Migration {
 		this.addSql('alter table `urls` add unique `urls_url_unique`(`url`);');
 
 		this.addSql(
-			"create table `web_links` (`id` int unsigned not null auto_increment primary key, `url_id` int unsigned not null, `category` enum('Unspecified', 'Official', 'Commercial', 'Reference', 'Other') not null, `entry_type` enum('Translation', 'Artist', 'Quote', 'Work') not null, `translation_id` int unsigned null, `artist_id` int unsigned null, `quote_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
+			"create table `web_links` (`id` int unsigned not null auto_increment primary key, `url_id` int unsigned not null, `title` varchar(255) not null, `category` enum('Unspecified', 'Official', 'Commercial', 'Reference', 'Other') not null, `entry_type` enum('Translation', 'Artist', 'Quote', 'Work') not null, `translation_id` int unsigned null, `artist_id` int unsigned null, `quote_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
 		);
 		this.addSql(
 			'alter table `web_links` add index `web_links_url_id_index`(`url_id`);',
