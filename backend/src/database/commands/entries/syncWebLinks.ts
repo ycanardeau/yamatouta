@@ -14,38 +14,47 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 	removeFunc: (oldItem: TWebLink) => Promise<void>,
 	permissionContext: PermissionContext,
 ): Promise<void> => {
+	const create = async (newItem: WebLinkObject): Promise<TWebLink> => {
+		permissionContext.verifyPermission(Permission.CreateWebLinks);
+
+		const url = await getOrCreateUrlFunc(newItem.url);
+
+		return entry.createWebLink({
+			url: url,
+			title: newItem.title,
+			category: newItem.category,
+		});
+	};
+
+	const update = async (
+		oldItem: TWebLink,
+		newItem: WebLinkObject,
+	): Promise<boolean> => {
+		if (oldItem.contentEquals(newItem)) return false;
+
+		permissionContext.verifyPermission(Permission.EditWebLinks);
+
+		const url = await getOrCreateUrlFunc(newItem.url);
+
+		oldItem.url = url;
+		oldItem.title = newItem.title;
+		oldItem.category = newItem.category;
+
+		return true;
+	};
+
+	const remove = async (oldItem: TWebLink): Promise<void> => {
+		permissionContext.verifyPermission(Permission.DeleteWebLinks);
+
+		removeFunc(oldItem);
+	};
+
 	await collectionSyncWithContent(
 		entry.webLinks.getItems(),
 		newItems.filter((webLink) => !!webLink.url.trim()),
 		(oldItem, newItem) => oldItem.id === newItem.id,
-		async (newItem) => {
-			permissionContext.verifyPermission(Permission.CreateWebLinks);
-
-			const url = await getOrCreateUrlFunc(newItem.url);
-
-			return entry.createWebLink({
-				url: url,
-				title: newItem.title,
-				category: newItem.category,
-			});
-		},
-		async (oldItem, newItem) => {
-			if (oldItem.contentEquals(newItem)) return false;
-
-			permissionContext.verifyPermission(Permission.EditWebLinks);
-
-			const url = await getOrCreateUrlFunc(newItem.url);
-
-			oldItem.url = url;
-			oldItem.title = newItem.title;
-			oldItem.category = newItem.category;
-
-			return true;
-		},
-		async (oldItem) => {
-			permissionContext.verifyPermission(Permission.DeleteWebLinks);
-
-			removeFunc(oldItem);
-		},
+		create,
+		update,
+		remove,
 	);
 };
