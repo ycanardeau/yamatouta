@@ -1,5 +1,6 @@
 import {
 	EuiButton,
+	EuiButtonIcon,
 	EuiFieldText,
 	EuiIcon,
 	EuiSelect,
@@ -11,7 +12,12 @@ import {
 	EuiTableRow,
 	EuiTableRowCell,
 } from '@elastic/eui';
-import { AddRegular, DeleteRegular, LinkRegular } from '@fluentui/react-icons';
+import {
+	AddRegular,
+	DeleteRegular,
+	LinkRegular,
+	OpenRegular,
+} from '@fluentui/react-icons';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -43,6 +49,14 @@ const WebLinkEdit = observer(
 						onChange={(e): void => store.setUrl(e.target.value)}
 						fullWidth
 						prepend={<EuiIcon type={LinkRegular} />}
+						append={
+							<EuiButtonIcon
+								iconType={OpenRegular}
+								href={store.url}
+								target="_blank"
+								isDisabled={!store.url}
+							/>
+						}
 					/>
 				</EuiTableRowCell>
 				<EuiTableRowCell

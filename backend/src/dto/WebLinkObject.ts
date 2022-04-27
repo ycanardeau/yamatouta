@@ -6,7 +6,7 @@ import { WebLinkCategory } from '../models/WebLinkCategory';
 export class WebLinkObject {
 	static readonly schema = Joi.object<WebLinkObject>({
 		id: Joi.number().required(),
-		url: Joi.string().required().trim(),
+		url: Joi.string().required().trim().allow(''),
 		title: Joi.string().required().trim().allow(''),
 		category: Joi.string()
 			.required()
