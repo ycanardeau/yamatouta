@@ -8,6 +8,7 @@ import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Commit } from '../../../entities/Commit';
 import { Translation } from '../../../entities/Translation';
+import { Url } from '../../../entities/Url';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
@@ -16,6 +17,7 @@ import { WordCategory } from '../../../models/WordCategory';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateTranslationParams {
 	static readonly schema = Joi.object<UpdateTranslationParams>({
@@ -101,7 +103,7 @@ export class UpdateTranslationCommandHandler
 					deleted: false,
 					hidden: false,
 				},
-				{ populate: ['searchIndex', 'webLinks'] },
+				{ populate: true },
 			);
 
 			translation.headword = headword;
@@ -111,6 +113,17 @@ export class UpdateTranslationCommandHandler
 			translation.category = category;
 
 			translation.updateSearchIndex(this.ngramConverter);
+
+			await syncWebLinks(
+				translation,
+				params.webLinks,
+				async (url) =>
+					(await em.findOne(Url, { url: url })) ?? new Url(url),
+				async (oldItem) => {
+					em.remove(oldItem);
+				},
+				permissionContext,
+			);
 
 			const commit = new Commit();
 

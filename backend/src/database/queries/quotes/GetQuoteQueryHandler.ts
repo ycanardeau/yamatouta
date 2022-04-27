@@ -1,5 +1,4 @@
 import { EntityRepository } from '@mikro-orm/core';
-import { AutoPath } from '@mikro-orm/core/typings';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
@@ -45,12 +44,6 @@ export class GetQuoteQueryHandler implements IQueryHandler<GetQuoteQuery> {
 	async execute(query: GetQuoteQuery): Promise<QuoteObject> {
 		const { permissionContext, params } = query;
 
-		const populate = (['artist'] as AutoPath<Quote, keyof Quote>[]).concat(
-			params.fields?.includes(QuoteOptionalFields.WebLinks)
-				? ['webLinks']
-				: [],
-		);
-
 		const quote = await this.quoteRepo.findOne(
 			{
 				id: params.quoteId,
@@ -59,7 +52,7 @@ export class GetQuoteQueryHandler implements IQueryHandler<GetQuoteQuery> {
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: populate },
+			{ populate: true },
 		);
 
 		if (!quote) throw new NotFoundException();

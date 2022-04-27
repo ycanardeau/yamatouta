@@ -1,5 +1,4 @@
 import { EntityRepository } from '@mikro-orm/core';
-import { AutoPath } from '@mikro-orm/core/typings';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
@@ -45,12 +44,6 @@ export class GetArtistQueryHandler implements IQueryHandler<GetArtistQuery> {
 	async execute(query: GetArtistQuery): Promise<ArtistObject> {
 		const { permissionContext, params } = query;
 
-		const populate = ([] as AutoPath<Artist, keyof Artist>[]).concat(
-			params.fields?.includes(ArtistOptionalFields.WebLinks)
-				? ['webLinks']
-				: [],
-		);
-
 		const artist = await this.artistRepo.findOne(
 			{
 				id: params.artistId,
@@ -59,7 +52,7 @@ export class GetArtistQueryHandler implements IQueryHandler<GetArtistQuery> {
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: populate },
+			{ populate: true },
 		);
 
 		if (!artist) throw new NotFoundException();

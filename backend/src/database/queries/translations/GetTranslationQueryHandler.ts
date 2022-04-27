@@ -1,5 +1,4 @@
 import { EntityRepository } from '@mikro-orm/core';
-import { AutoPath } from '@mikro-orm/core/typings';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
@@ -47,14 +46,6 @@ export class GetTranslationQueryHandler
 	async execute(query: GetTranslationQuery): Promise<TranslationObject> {
 		const { permissionContext, params } = query;
 
-		const populate = (
-			[] as AutoPath<Translation, keyof Translation>[]
-		).concat(
-			params.fields?.includes(TranslationOptionalFields.WebLinks)
-				? ['webLinks']
-				: [],
-		);
-
 		const translation = await this.translationRepo.findOne(
 			{
 				id: params.translationId,
@@ -63,7 +54,7 @@ export class GetTranslationQueryHandler
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: populate },
+			{ populate: true },
 		);
 
 		if (!translation) throw new NotFoundException();

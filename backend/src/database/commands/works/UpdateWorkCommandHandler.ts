@@ -7,6 +7,7 @@ import Joi from 'joi';
 import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { WorkObject } from '../../../dto/works/WorkObject';
 import { Commit } from '../../../entities/Commit';
+import { Url } from '../../../entities/Url';
 import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
@@ -15,6 +16,7 @@ import { WorkOptionalFields } from '../../../models/WorkOptionalFields';
 import { WorkType } from '../../../models/WorkType';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateWorkParams {
 	static readonly schema = Joi.object<UpdateWorkParams>({
@@ -80,11 +82,22 @@ export class UpdateWorkCommandHandler
 					deleted: false,
 					hidden: false,
 				},
-				{ populate: ['webLinks'] },
+				{ populate: true },
 			);
 
 			work.name = params.name;
 			work.workType = params.workType;
+
+			await syncWebLinks(
+				work,
+				params.webLinks,
+				async (url) =>
+					(await em.findOne(Url, { url: url })) ?? new Url(url),
+				async (oldItem) => {
+					em.remove(oldItem);
+				},
+				permissionContext,
+			);
 
 			const commit = new Commit();
 

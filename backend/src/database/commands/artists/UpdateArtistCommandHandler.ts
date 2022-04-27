@@ -8,6 +8,7 @@ import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
+import { Url } from '../../../entities/Url';
 import { User } from '../../../entities/User';
 import { ArtistOptionalFields } from '../../../models/ArtistOptionalFields';
 import { ArtistType } from '../../../models/ArtistType';
@@ -15,6 +16,7 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateArtistParams {
 	static readonly schema = Joi.object<UpdateArtistParams>({
@@ -80,11 +82,22 @@ export class UpdateArtistCommandHandler
 					deleted: false,
 					hidden: false,
 				},
-				{ populate: ['webLinks'] },
+				{ populate: true },
 			);
 
 			artist.name = params.name;
 			artist.artistType = params.artistType;
+
+			await syncWebLinks(
+				artist,
+				params.webLinks,
+				async (url) =>
+					(await em.findOne(Url, { url: url })) ?? new Url(url),
+				async (oldItem) => {
+					em.remove(oldItem);
+				},
+				permissionContext,
+			);
 
 			const commit = new Commit();
 

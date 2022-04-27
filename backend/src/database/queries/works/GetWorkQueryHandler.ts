@@ -1,5 +1,4 @@
 import { EntityRepository } from '@mikro-orm/core';
-import { AutoPath } from '@mikro-orm/core/typings';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
@@ -45,12 +44,6 @@ export class GetWorkQueryHandler implements IQueryHandler<GetWorkQuery> {
 	async execute(query: GetWorkQuery): Promise<WorkObject> {
 		const { permissionContext, params } = query;
 
-		const populate = ([] as AutoPath<Work, keyof Work>[]).concat(
-			params.fields?.includes(WorkOptionalFields.WebLinks)
-				? ['webLinks']
-				: [],
-		);
-
 		const work = await this.workRepo.findOne(
 			{
 				id: params.workId,
@@ -59,7 +52,7 @@ export class GetWorkQueryHandler implements IQueryHandler<GetWorkQuery> {
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: populate },
+			{ populate: true },
 		);
 
 		if (!work) throw new NotFoundException();

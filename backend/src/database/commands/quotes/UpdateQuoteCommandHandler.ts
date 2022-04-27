@@ -9,6 +9,7 @@ import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
+import { Url } from '../../../entities/Url';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { QuoteOptionalFields } from '../../../models/QuoteOptionalFields';
@@ -16,6 +17,7 @@ import { QuoteType } from '../../../models/QuoteType';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateQuoteParams {
 	static readonly schema = Joi.object<UpdateQuoteParams>({
@@ -93,13 +95,24 @@ export class UpdateQuoteCommandHandler
 					deleted: false,
 					hidden: false,
 				},
-				{ populate: ['webLinks'] },
+				{ populate: true },
 			);
 
 			quote.text = params.text;
 			quote.quoteType = params.quoteType;
 			quote.locale = params.locale;
 			quote.artist = artist;
+
+			await syncWebLinks(
+				quote,
+				params.webLinks,
+				async (url) =>
+					(await em.findOne(Url, { url: url })) ?? new Url(url),
+				async (oldItem) => {
+					em.remove(oldItem);
+				},
+				permissionContext,
+			);
 
 			const commit = new Commit();
 
