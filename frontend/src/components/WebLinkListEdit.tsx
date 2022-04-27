@@ -22,11 +22,13 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Permission } from '../models/Permission';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import {
 	WebLinkEditStore,
 	WebLinkListEditStore,
 } from '../stores/WebLinkListEditStore';
+import { useAuth } from './useAuth';
 
 interface WebLinkEditProps {
 	webLinkListEditStore: WebLinkListEditStore;
@@ -36,6 +38,8 @@ interface WebLinkEditProps {
 const WebLinkEdit = observer(
 	({ webLinkListEditStore, store }: WebLinkEditProps): React.ReactElement => {
 		const { t } = useTranslation();
+
+		const auth = useAuth();
 
 		return (
 			<EuiTableRow>
@@ -57,6 +61,11 @@ const WebLinkEdit = observer(
 								isDisabled={!store.url}
 							/>
 						}
+						readOnly={
+							!auth.permissionContext.hasPermission(
+								Permission.EditWebLinks,
+							)
+						}
 					/>
 				</EuiTableRowCell>
 				<EuiTableRowCell
@@ -71,6 +80,11 @@ const WebLinkEdit = observer(
 						value={store.title}
 						onChange={(e): void => store.setTitle(e.target.value)}
 						fullWidth
+						readOnly={
+							!auth.permissionContext.hasPermission(
+								Permission.EditWebLinks,
+							)
+						}
 					/>
 				</EuiTableRowCell>
 				<EuiTableRowCell
@@ -80,21 +94,40 @@ const WebLinkEdit = observer(
 						width: '100%',
 					}}
 				>
-					<EuiSelect
-						compressed
-						name="category"
-						options={Object.values(WebLinkCategory).map(
-							(value) => ({
-								value: value,
-								text: t(`webLinkCategoryNames.${value}`),
-							}),
-						)}
-						value={store.category}
-						onChange={(e): void =>
-							store.setCategory(e.target.value as WebLinkCategory)
-						}
-						fullWidth
-					/>
+					{auth.permissionContext.hasPermission(
+						Permission.EditWebLinks,
+					) ? (
+						<EuiSelect
+							compressed
+							name="category"
+							options={Object.values(WebLinkCategory).map(
+								(value) => ({
+									value: value,
+									text: t(`webLinkCategoryNames.${value}`),
+								}),
+							)}
+							value={store.category}
+							onChange={(e): void =>
+								store.setCategory(
+									e.target.value as WebLinkCategory,
+								)
+							}
+							fullWidth
+						/>
+					) : (
+						<EuiFieldText
+							compressed
+							value={`${t(
+								`webLinkCategoryNames.${store.category}`,
+							)}`}
+							fullWidth
+							readOnly={
+								!auth.permissionContext.hasPermission(
+									Permission.EditWebLinks,
+								)
+							}
+						/>
+					)}
 				</EuiTableRowCell>
 				<EuiTableRowCell textOnly={false} align="right">
 					<EuiButton
@@ -102,6 +135,11 @@ const WebLinkEdit = observer(
 						size="s"
 						color="danger"
 						iconType={DeleteRegular}
+						disabled={
+							!auth.permissionContext.hasPermission(
+								Permission.DeleteWebLinks,
+							)
+						}
 					>
 						{t('shared.remove')}
 					</EuiButton>
@@ -118,6 +156,8 @@ interface WebLinkListEditProps {
 const WebLinkListEdit = observer(
 	({ store }: WebLinkListEditProps): React.ReactElement => {
 		const { t } = useTranslation();
+
+		const auth = useAuth();
 
 		return (
 			<>
@@ -148,7 +188,16 @@ const WebLinkListEdit = observer(
 
 				<EuiSpacer size="m" />
 
-				<EuiButton onClick={store.add} size="s" iconType={AddRegular}>
+				<EuiButton
+					onClick={store.add}
+					size="s"
+					iconType={AddRegular}
+					disabled={
+						!auth.permissionContext.hasPermission(
+							Permission.CreateWebLinks,
+						)
+					}
+				>
 					{t('shared.add')}
 				</EuiButton>
 			</>
