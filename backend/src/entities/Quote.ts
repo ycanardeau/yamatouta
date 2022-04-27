@@ -12,14 +12,17 @@ import {
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
+import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { QuoteType } from '../models/QuoteType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { QuoteSnapshot } from '../models/Snapshot';
+import { WebLinkCategory } from '../models/WebLinkCategory';
 import { Artist } from './Artist';
 import { Commit } from './Commit';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
+import { Url } from './Url';
 import { User } from './User';
 import { QuoteWebLink } from './WebLink';
 
@@ -30,7 +33,8 @@ export class Quote
 	implements
 		IEntryWithRevisions<Quote, QuoteRevision, QuoteSnapshot>,
 		IRevisionFactory<Quote, QuoteRevision, QuoteSnapshot>,
-		IEntryWithWebLinks<QuoteWebLink>
+		IEntryWithWebLinks<QuoteWebLink>,
+		IWebLinkFactory<QuoteWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -124,6 +128,23 @@ export class Quote
 			summary: summary,
 			event: event,
 			version: ++this.version,
+		});
+	}
+
+	createWebLink({
+		url,
+		title,
+		category,
+	}: {
+		url: Url;
+		title: string;
+		category: WebLinkCategory;
+	}): QuoteWebLink {
+		return new QuoteWebLink({
+			quote: this,
+			url: url,
+			title: title,
+			category: category,
 		});
 	}
 }

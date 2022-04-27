@@ -14,15 +14,18 @@ import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
+import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { TranslationSnapshot } from '../models/Snapshot';
+import { WebLinkCategory } from '../models/WebLinkCategory';
 import { WordCategory } from '../models/WordCategory';
 import { NgramConverter } from '../services/NgramConverter';
 import { Commit } from './Commit';
 import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
 import { TranslationSearchIndex } from './TranslationSearchIndex';
+import { Url } from './Url';
 import { User } from './User';
 import { TranslationWebLink } from './WebLink';
 
@@ -36,7 +39,8 @@ export class Translation
 			TranslationSnapshot
 		>,
 		IRevisionFactory<Translation, TranslationRevision, TranslationSnapshot>,
-		IEntryWithWebLinks<TranslationWebLink>
+		IEntryWithWebLinks<TranslationWebLink>,
+		IWebLinkFactory<TranslationWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -165,6 +169,23 @@ export class Translation
 			summary: summary,
 			event: event,
 			version: ++this.version,
+		});
+	}
+
+	createWebLink({
+		url,
+		title,
+		category,
+	}: {
+		url: Url;
+		title: string;
+		category: WebLinkCategory;
+	}): TranslationWebLink {
+		return new TranslationWebLink({
+			translation: this,
+			url: url,
+			title: title,
+			category: category,
 		});
 	}
 }
