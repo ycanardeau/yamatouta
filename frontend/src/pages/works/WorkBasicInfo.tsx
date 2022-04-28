@@ -1,22 +1,19 @@
 import {
-	EuiCommentList,
 	EuiDescriptionList,
 	EuiDescriptionListDescription,
 	EuiDescriptionListTitle,
-	EuiSpacer,
 } from '@elastic/eui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import WebLinkList from '../../components/WebLinkList';
-import QuoteComment from '../../components/quotes/QuoteComment';
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IWorkObject } from '../../dto/works/IWorkObject';
 
-interface QuoteBasicInfoProps {
-	quote: IQuoteObject;
+interface WorkBasicInfoProps {
+	work: IWorkObject;
 }
 
-const QuoteBasicInfo = ({ quote }: QuoteBasicInfoProps): React.ReactElement => {
+const WorkBasicInfo = ({ work }: WorkBasicInfoProps): React.ReactElement => {
 	const { t } = useTranslation();
 
 	return (
@@ -24,32 +21,33 @@ const QuoteBasicInfo = ({ quote }: QuoteBasicInfoProps): React.ReactElement => {
 			<div style={{ maxWidth: '400px' }}>
 				<EuiDescriptionList type="column" compressed>
 					<EuiDescriptionListTitle>
-						{t('quotes.quoteType')}
+						{t('works.name')}
 					</EuiDescriptionListTitle>
 					<EuiDescriptionListDescription>
-						{t(`quoteTypeNames.${quote.quoteType}`)}
+						{work.name}
 					</EuiDescriptionListDescription>
 
-					{quote.webLinks.length > 0 && (
+					<EuiDescriptionListTitle>
+						{t('works.workType')}
+					</EuiDescriptionListTitle>
+					<EuiDescriptionListDescription>
+						{t(`workTypeNames.${work.workType}`)}
+					</EuiDescriptionListDescription>
+
+					{work.webLinks.length > 0 && (
 						<>
 							<EuiDescriptionListTitle>
 								{t('shared.externalLinks')}
 							</EuiDescriptionListTitle>
 							<EuiDescriptionListDescription>
-								<WebLinkList webLinks={quote.webLinks} />
+								<WebLinkList webLinks={work.webLinks} />
 							</EuiDescriptionListDescription>
 						</>
 					)}
 				</EuiDescriptionList>
 			</div>
-
-			<EuiSpacer size="l" />
-
-			<EuiCommentList>
-				<QuoteComment quote={quote} />
-			</EuiCommentList>
 		</>
 	);
 };
 
-export default QuoteBasicInfo;
+export default WorkBasicInfo;

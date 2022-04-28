@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
+import WebLinkList from '../../components/WebLinkList';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 
 interface TranslationBasicInfoProps {
@@ -48,6 +49,17 @@ const TranslationBasicInfo = ({
 					<EuiDescriptionListDescription>
 						{t(`wordCategoryNames.${translation.category}`)}
 					</EuiDescriptionListDescription>
+
+					{translation.webLinks.length > 0 && (
+						<>
+							<EuiDescriptionListTitle>
+								{t('shared.externalLinks')}
+							</EuiDescriptionListTitle>
+							<EuiDescriptionListDescription>
+								<WebLinkList webLinks={translation.webLinks} />
+							</EuiDescriptionListDescription>
+						</>
+					)}
 				</EuiDescriptionList>
 			</div>
 		</>

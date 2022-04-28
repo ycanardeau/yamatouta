@@ -16,7 +16,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-	Navigate,
 	Route,
 	Routes,
 	useLocation,
@@ -30,6 +29,7 @@ import { IWorkObject } from '../../dto/works/IWorkObject';
 import { Permission } from '../../models/Permission';
 import { WorkOptionalFields } from '../../models/WorkOptionalFields';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
+import WorkBasicInfo from './WorkBasicInfo';
 import WorkEdit from './WorkEdit';
 import WorkHistory from './WorkHistory';
 
@@ -142,10 +142,8 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 				<EuiPageContentBody>
 					<Routes>
 						<Route
-							path="quotes"
-							element={
-								<Navigate to={`/works/${work.id}`} replace />
-							}
+							path=""
+							element={<WorkBasicInfo work={work} />}
 						/>
 						<Route
 							path="revisions"
