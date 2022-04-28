@@ -1414,8 +1414,8 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "parsed_url_protocol": {
-          "name": "parsed_url_protocol",
+        "scheme": {
+          "name": "scheme",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -1423,8 +1423,8 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "parsed_url_hostname": {
-          "name": "parsed_url_hostname",
+        "host": {
+          "name": "host",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -1432,8 +1432,8 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "parsed_url_port": {
-          "name": "parsed_url_port",
+        "port": {
+          "name": "port",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -1441,8 +1441,8 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "parsed_url_pathname": {
-          "name": "parsed_url_pathname",
+        "path": {
+          "name": "path",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
@@ -1450,8 +1450,8 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "parsed_url_search": {
-          "name": "parsed_url_search",
+        "query": {
+          "name": "query",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
@@ -1459,8 +1459,8 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "parsed_url_hash": {
-          "name": "parsed_url_hash",
+        "fragment": {
+          "name": "fragment",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,

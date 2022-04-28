@@ -3,7 +3,7 @@ import { Migration } from '@mikro-orm/migrations';
 export class Migration20220411074850 extends Migration {
 	async up(): Promise<void> {
 		this.addSql(
-			'create table `urls` (`id` int unsigned not null auto_increment primary key, `url` text not null, `parsed_url_protocol` varchar(255) not null, `parsed_url_hostname` varchar(255) not null, `parsed_url_port` varchar(255) not null, `parsed_url_pathname` text not null, `parsed_url_search` text not null, `parsed_url_hash` text not null) default character set utf8mb4 engine = InnoDB;',
+			'create table `urls` (`id` int unsigned not null auto_increment primary key, `url` text not null, `scheme` varchar(255) not null, `host` varchar(255) not null, `port` varchar(255) not null, `path` text not null, `query` text not null, `fragment` text not null) default character set utf8mb4 engine = InnoDB;',
 		);
 		this.addSql('alter table `urls` add unique `urls_url_unique`(`url`);');
 

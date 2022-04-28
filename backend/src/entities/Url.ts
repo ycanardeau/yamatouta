@@ -9,30 +9,30 @@ export class Url {
 	url: string;
 
 	@Property()
-	protocol: string;
+	scheme: string;
 
 	@Property()
-	hostname: string;
+	host: string;
 
 	@Property()
 	port: string;
 
 	@Property({ columnType: 'text' })
-	pathname: string;
+	path: string;
 
 	@Property({ columnType: 'text' })
-	search: string;
+	query: string;
 
 	@Property({ columnType: 'text' })
-	hash: string;
+	fragment: string;
 
 	constructor(url: URL) {
 		this.url = url.href;
-		this.protocol = url.protocol;
-		this.hostname = url.hostname;
+		this.scheme = url.protocol.split(':')[0];
+		this.host = url.hostname;
 		this.port = url.port;
-		this.pathname = url.pathname;
-		this.search = url.search;
-		this.hash = url.hash;
+		this.path = url.pathname;
+		this.query = url.search;
+		this.fragment = url.hash;
 	}
 }
