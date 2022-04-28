@@ -8,7 +8,6 @@ import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { WorkObject } from '../../../dto/works/WorkObject';
 import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
-import { WebAddress } from '../../../entities/WebAddress';
 import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
@@ -88,17 +87,7 @@ export class UpdateWorkCommandHandler
 			work.name = params.name;
 			work.workType = params.workType;
 
-			await syncWebLinks(
-				work,
-				params.webLinks,
-				async (url) =>
-					(await em.findOne(WebAddress, { url: url.href })) ??
-					new WebAddress(url),
-				async (oldItem) => {
-					em.remove(oldItem);
-				},
-				permissionContext,
-			);
+			await syncWebLinks(em, work, params.webLinks, permissionContext);
 
 			const commit = new Commit();
 

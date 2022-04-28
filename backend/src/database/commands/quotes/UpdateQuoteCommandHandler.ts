@@ -10,7 +10,6 @@ import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
 import { User } from '../../../entities/User';
-import { WebAddress } from '../../../entities/WebAddress';
 import { Permission } from '../../../models/Permission';
 import { QuoteOptionalFields } from '../../../models/QuoteOptionalFields';
 import { QuoteType } from '../../../models/QuoteType';
@@ -103,17 +102,7 @@ export class UpdateQuoteCommandHandler
 			quote.locale = params.locale;
 			quote.artist = artist;
 
-			await syncWebLinks(
-				quote,
-				params.webLinks,
-				async (url) =>
-					(await em.findOne(WebAddress, { url: url.href })) ??
-					new WebAddress(url),
-				async (oldItem) => {
-					em.remove(oldItem);
-				},
-				permissionContext,
-			);
+			await syncWebLinks(em, quote, params.webLinks, permissionContext);
 
 			const commit = new Commit();
 

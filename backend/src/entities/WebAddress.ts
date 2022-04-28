@@ -5,6 +5,12 @@ export class WebAddress {
 	@PrimaryKey()
 	id!: number;
 
+	@Property()
+	createdAt = new Date();
+
+	@Property({ onUpdate: () => new Date() })
+	updatedAt = new Date();
+
 	@Property({ columnType: 'text', unique: true })
 	url: string;
 
@@ -25,6 +31,9 @@ export class WebAddress {
 
 	@Property({ columnType: 'text' })
 	fragment: string;
+
+	@Property()
+	referenceCount = 0;
 
 	constructor(url: URL) {
 		this.url = url.href;

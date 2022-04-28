@@ -54,9 +54,17 @@ export class Migration20220411074850 extends Migration {
 		this.addSql(
 			'alter table `translation_search_index` drop index `translation_search_index_translation_id_index`;',
 		);
+
+		this.addSql(
+			'alter table `web_addresses` add `created_at` datetime not null, add `updated_at` datetime not null, add `reference_count` int not null;',
+		);
 	}
 
 	async down(): Promise<void> {
+		this.addSql('alter table `web_addresses` drop `created_at`;');
+		this.addSql('alter table `web_addresses` drop `updated_at`;');
+		this.addSql('alter table `web_addresses` drop `reference_count`;');
+
 		this.addSql(
 			'alter table `web_links` drop foreign key `web_links_address_id_foreign`;',
 		);

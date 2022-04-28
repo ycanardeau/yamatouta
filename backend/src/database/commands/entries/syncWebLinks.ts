@@ -1,3 +1,5 @@
+import { EntityManager } from '@mikro-orm/core';
+
 import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { WebAddress } from '../../../entities/WebAddress';
 import { WebLink } from '../../../entities/WebLink';
@@ -8,16 +10,27 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { collectionSyncWithContent } from '../../../utils/collectionDiff';
 
 export const syncWebLinks = async <TWebLink extends WebLink>(
+	em: EntityManager,
 	entry: IEntryWithWebLinks<TWebLink> & IWebLinkFactory<TWebLink>,
 	newItems: WebLinkObject[],
-	getOrCreateWebAddressFunc: (url: URL) => Promise<WebAddress>,
-	removeFunc: (oldItem: TWebLink) => Promise<void>,
 	permissionContext: PermissionContext,
 ): Promise<void> => {
+	const getOrCreateWebAddress = async (url: URL): Promise<WebAddress> => {
+		const address =
+			(await em.findOne(WebAddress, { url: url.href })) ??
+			new WebAddress(url);
+
+		em.persist(address);
+
+		address.referenceCount++;
+
+		return address;
+	};
+
 	const create = async (newItem: WebLinkObject): Promise<TWebLink> => {
 		permissionContext.verifyPermission(Permission.CreateWebLinks);
 
-		const address = await getOrCreateWebAddressFunc(new URL(newItem.url));
+		const address = await getOrCreateWebAddress(new URL(newItem.url));
 
 		return entry.createWebLink({
 			address: address,
@@ -34,7 +47,7 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 
 		permissionContext.verifyPermission(Permission.EditWebLinks);
 
-		const address = await getOrCreateWebAddressFunc(new URL(newItem.url));
+		const address = await getOrCreateWebAddress(new URL(newItem.url));
 
 		oldItem.address = address;
 		oldItem.title = newItem.title;
@@ -46,7 +59,9 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 	const remove = async (oldItem: TWebLink): Promise<void> => {
 		permissionContext.verifyPermission(Permission.DeleteWebLinks);
 
-		removeFunc(oldItem);
+		oldItem.address.referenceCount--;
+
+		em.remove(oldItem);
 	};
 
 	await collectionSyncWithContent(

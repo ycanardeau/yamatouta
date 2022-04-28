@@ -9,7 +9,6 @@ import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Commit } from '../../../entities/Commit';
 import { Translation } from '../../../entities/Translation';
 import { User } from '../../../entities/User';
-import { WebAddress } from '../../../entities/WebAddress';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { TranslationOptionalFields } from '../../../models/TranslationOptionalFields';
@@ -115,14 +114,9 @@ export class UpdateTranslationCommandHandler
 			translation.updateSearchIndex(this.ngramConverter);
 
 			await syncWebLinks(
+				em,
 				translation,
 				params.webLinks,
-				async (url) =>
-					(await em.findOne(WebAddress, { url: url.href })) ??
-					new WebAddress(url),
-				async (oldItem) => {
-					em.remove(oldItem);
-				},
 				permissionContext,
 			);
 

@@ -147,6 +147,26 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
         "url": {
           "name": "url",
           "type": "text",
@@ -209,6 +229,15 @@
           "primary": false,
           "nullable": false,
           "mappedType": "text"
+        },
+        "reference_count": {
+          "name": "reference_count",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
         }
       },
       "name": "web_addresses",

@@ -9,7 +9,6 @@ import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
-import { WebAddress } from '../../../entities/WebAddress';
 import { ArtistOptionalFields } from '../../../models/ArtistOptionalFields';
 import { ArtistType } from '../../../models/ArtistType';
 import { Permission } from '../../../models/Permission';
@@ -88,17 +87,7 @@ export class UpdateArtistCommandHandler
 			artist.name = params.name;
 			artist.artistType = params.artistType;
 
-			await syncWebLinks(
-				artist,
-				params.webLinks,
-				async (url) =>
-					(await em.findOne(WebAddress, { url: url.href })) ??
-					new WebAddress(url),
-				async (oldItem) => {
-					em.remove(oldItem);
-				},
-				permissionContext,
-			);
+			await syncWebLinks(em, artist, params.webLinks, permissionContext);
 
 			const commit = new Commit();
 
