@@ -1,13 +1,13 @@
-import {
-	Embeddable,
-	Embedded,
-	Entity,
-	PrimaryKey,
-	Property,
-} from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
-@Embeddable()
-export class ParsedUrl {
+@Entity({ tableName: 'urls' })
+export class Url {
+	@PrimaryKey()
+	id!: number;
+
+	@Property({ columnType: 'text', unique: true })
+	url: string;
+
 	@Property()
 	protocol: string;
 
@@ -26,31 +26,13 @@ export class ParsedUrl {
 	@Property({ columnType: 'text' })
 	hash: string;
 
-	constructor(url: string) {
-		const parsedUrl = new URL(url);
-
-		this.protocol = parsedUrl.protocol;
-		this.hostname = parsedUrl.hostname;
-		this.port = parsedUrl.port;
-		this.pathname = parsedUrl.pathname;
-		this.search = parsedUrl.search;
-		this.hash = parsedUrl.hash;
-	}
-}
-
-@Entity({ tableName: 'urls' })
-export class Url {
-	@PrimaryKey()
-	id!: number;
-
-	@Property({ columnType: 'text', unique: true })
-	url: string;
-
-	@Embedded()
-	parsedUrl: ParsedUrl;
-
-	constructor(url: string) {
-		this.url = url;
-		this.parsedUrl = new ParsedUrl(url);
+	constructor(url: URL) {
+		this.url = url.href;
+		this.protocol = url.protocol;
+		this.hostname = url.hostname;
+		this.port = url.port;
+		this.pathname = url.pathname;
+		this.search = url.search;
+		this.hash = url.hash;
 	}
 }

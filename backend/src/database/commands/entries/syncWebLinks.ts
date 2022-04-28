@@ -10,14 +10,14 @@ import { collectionSyncWithContent } from '../../../utils/collectionDiff';
 export const syncWebLinks = async <TWebLink extends WebLink>(
 	entry: IEntryWithWebLinks<TWebLink> & IWebLinkFactory<TWebLink>,
 	newItems: WebLinkObject[],
-	getOrCreateUrlFunc: (url: string) => Promise<Url>,
+	getOrCreateUrlFunc: (url: URL) => Promise<Url>,
 	removeFunc: (oldItem: TWebLink) => Promise<void>,
 	permissionContext: PermissionContext,
 ): Promise<void> => {
 	const create = async (newItem: WebLinkObject): Promise<TWebLink> => {
 		permissionContext.verifyPermission(Permission.CreateWebLinks);
 
-		const url = await getOrCreateUrlFunc(newItem.url);
+		const url = await getOrCreateUrlFunc(new URL(newItem.url));
 
 		return entry.createWebLink({
 			url: url,
@@ -34,7 +34,7 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 
 		permissionContext.verifyPermission(Permission.EditWebLinks);
 
-		const url = await getOrCreateUrlFunc(newItem.url);
+		const url = await getOrCreateUrlFunc(new URL(newItem.url));
 
 		oldItem.url = url;
 		oldItem.title = newItem.title;
@@ -51,7 +51,7 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 
 	await collectionSyncWithContent(
 		entry.webLinks.getItems(),
-		newItems.filter((webLink) => !!webLink.url.trim()),
+		newItems.filter((newItem) => !!newItem.url.trim()),
 		(oldItem, newItem) => oldItem.id === newItem.id,
 		create,
 		update,

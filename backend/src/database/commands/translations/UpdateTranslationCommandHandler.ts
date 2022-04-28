@@ -118,7 +118,7 @@ export class UpdateTranslationCommandHandler
 				translation,
 				params.webLinks,
 				async (url) =>
-					(await em.findOne(Url, { url: url })) ?? new Url(url),
+					(await em.findOne(Url, { url: url.href })) ?? new Url(url),
 				async (oldItem) => {
 					em.remove(oldItem);
 				},
