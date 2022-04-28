@@ -58,9 +58,28 @@ export class Migration20220411074850 extends Migration {
 		this.addSql(
 			'alter table `web_addresses` add `created_at` datetime not null, add `updated_at` datetime not null, add `reference_count` int not null;',
 		);
+
+		this.addSql(
+			'alter table `web_addresses` add `actor_id` int unsigned not null;',
+		);
+		this.addSql(
+			'alter table `web_addresses` add constraint `web_addresses_actor_id_foreign` foreign key (`actor_id`) references `users` (`id`) on update cascade;',
+		);
+		this.addSql(
+			'alter table `web_addresses` add index `web_addresses_actor_id_index`(`actor_id`);',
+		);
 	}
 
 	async down(): Promise<void> {
+		this.addSql(
+			'alter table `web_addresses` drop foreign key `web_addresses_actor_id_foreign`;',
+		);
+
+		this.addSql(
+			'alter table `web_addresses` drop index `web_addresses_actor_id_index`;',
+		);
+		this.addSql('alter table `web_addresses` drop `actor_id`;');
+
 		this.addSql('alter table `web_addresses` drop `created_at`;');
 		this.addSql('alter table `web_addresses` drop `updated_at`;');
 		this.addSql('alter table `web_addresses` drop `reference_count`;');

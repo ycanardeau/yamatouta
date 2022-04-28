@@ -1,6 +1,7 @@
 import { EntityManager } from '@mikro-orm/core';
 
 import { WebLinkObject } from '../../../dto/WebLinkObject';
+import { User } from '../../../entities/User';
 import { WebAddress } from '../../../entities/WebAddress';
 import { WebLink } from '../../../entities/WebLink';
 import { IEntryWithWebLinks } from '../../../models/IEntryWithWebLinks';
@@ -16,9 +17,15 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 	permissionContext: PermissionContext,
 ): Promise<void> => {
 	const getOrCreateWebAddress = async (url: URL): Promise<WebAddress> => {
+		const user = await em.findOneOrFail(User, {
+			id: permissionContext.user?.id,
+			deleted: false,
+			hidden: false,
+		});
+
 		const address =
 			(await em.findOne(WebAddress, { url: url.href })) ??
-			new WebAddress(url);
+			new WebAddress(url, user);
 
 		em.persist(address);
 
