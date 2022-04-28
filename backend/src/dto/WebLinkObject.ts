@@ -21,7 +21,7 @@ export class WebLinkObject {
 
 	constructor(webLink: WebLink) {
 		this.id = webLink.id;
-		this.url = webLink.url.url;
+		this.url = webLink.url;
 		this.title = webLink.title;
 		this.category = webLink.category;
 	}

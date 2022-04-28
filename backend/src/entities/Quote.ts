@@ -22,8 +22,8 @@ import { Artist } from './Artist';
 import { Commit } from './Commit';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
-import { Url } from './Url';
 import { User } from './User';
+import { WebAddress } from './WebAddress';
 import { QuoteWebLink } from './WebLink';
 
 @Entity({
@@ -132,17 +132,17 @@ export class Quote
 	}
 
 	createWebLink({
-		url,
+		address,
 		title,
 		category,
 	}: {
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}): QuoteWebLink {
 		return new QuoteWebLink({
 			quote: this,
-			url: url,
+			address: address,
 			title: title,
 			category: category,
 		});

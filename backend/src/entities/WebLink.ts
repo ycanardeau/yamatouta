@@ -6,7 +6,7 @@ import { WebLinkCategory } from '../models/WebLinkCategory';
 import { Artist } from './Artist';
 import { Quote } from './Quote';
 import { Translation } from './Translation';
-import { Url } from './Url';
+import { WebAddress } from './WebAddress';
 import { Work } from './Work';
 
 @Entity({
@@ -26,7 +26,7 @@ export abstract class WebLink
 	id!: number;
 
 	@ManyToOne()
-	url: Url;
+	address: WebAddress;
 
 	@Property()
 	title: string;
@@ -35,17 +35,21 @@ export abstract class WebLink
 	category: WebLinkCategory;
 
 	protected constructor({
-		url,
+		address,
 		title,
 		category,
 	}: {
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}) {
-		this.url = url;
+		this.address = address;
 		this.title = title;
 		this.category = category;
+	}
+
+	get url(): string {
+		return this.address.url;
 	}
 
 	contentEquals(other: {
@@ -54,7 +58,7 @@ export abstract class WebLink
 		category: WebLinkCategory;
 	}): boolean {
 		return (
-			this.url.url === other.url &&
+			this.url === other.url &&
 			this.title === other.title &&
 			this.category === other.category
 		);
@@ -68,16 +72,16 @@ export class TranslationWebLink extends WebLink {
 
 	constructor({
 		translation,
-		url,
+		address,
 		title,
 		category,
 	}: {
 		translation: Translation;
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}) {
-		super({ url, title, category });
+		super({ address, title, category });
 
 		this.translation = translation;
 	}
@@ -90,16 +94,16 @@ export class ArtistWebLink extends WebLink {
 
 	constructor({
 		artist,
-		url,
+		address,
 		title,
 		category,
 	}: {
 		artist: Artist;
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}) {
-		super({ url, title, category });
+		super({ address, title, category });
 
 		this.artist = artist;
 	}
@@ -112,16 +116,16 @@ export class QuoteWebLink extends WebLink {
 
 	constructor({
 		quote,
-		url,
+		address,
 		title,
 		category,
 	}: {
 		quote: Quote;
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}) {
-		super({ url, title, category });
+		super({ address, title, category });
 
 		this.quote = quote;
 	}
@@ -134,16 +138,16 @@ export class WorkWebLink extends WebLink {
 
 	constructor({
 		work,
-		url,
+		address,
 		title,
 		category,
 	}: {
 		work: Work;
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}) {
-		super({ url, title, category });
+		super({ address, title, category });
 
 		this.work = work;
 	}

@@ -147,6 +147,105 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "scheme": {
+          "name": "scheme",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "host": {
+          "name": "host",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "port": {
+          "name": "port",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "path": {
+          "name": "path",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "query": {
+          "name": "query",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "fragment": {
+          "name": "fragment",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        }
+      },
+      "name": "web_addresses",
+      "indexes": [
+        {
+          "columnNames": [
+            "url"
+          ],
+          "composite": false,
+          "keyName": "web_addresses_url_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
         "created_at": {
           "name": "created_at",
           "type": "datetime",
@@ -931,15 +1030,6 @@
             "translation_id"
           ],
           "composite": false,
-          "keyName": "inishienomanabi_search_index_translation_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "translation_id"
-          ],
-          "composite": false,
           "keyName": "inishienomanabi_search_index_translation_id_unique",
           "primary": false,
           "unique": true
@@ -1405,105 +1495,6 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "url": {
-          "name": "url",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        },
-        "scheme": {
-          "name": "scheme",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "host": {
-          "name": "host",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "port": {
-          "name": "port",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "path": {
-          "name": "path",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        },
-        "query": {
-          "name": "query",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        },
-        "fragment": {
-          "name": "fragment",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        }
-      },
-      "name": "urls",
-      "indexes": [
-        {
-          "columnNames": [
-            "url"
-          ],
-          "composite": false,
-          "keyName": "urls_url_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
-          "keyName": "PRIMARY",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {}
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
         "created_at": {
           "name": "created_at",
           "type": "datetime",
@@ -1720,15 +1711,6 @@
       },
       "name": "translation_search_index",
       "indexes": [
-        {
-          "columnNames": [
-            "translation_id"
-          ],
-          "composite": false,
-          "keyName": "translation_search_index_translation_id_index",
-          "primary": false,
-          "unique": false
-        },
         {
           "columnNames": [
             "translation_id"
@@ -2808,8 +2790,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "url_id": {
-          "name": "url_id",
+        "address_id": {
+          "name": "address_id",
           "type": "int",
           "unsigned": true,
           "autoincrement": false,
@@ -2898,10 +2880,10 @@
       "indexes": [
         {
           "columnNames": [
-            "url_id"
+            "address_id"
           ],
           "composite": false,
-          "keyName": "web_links_url_id_index",
+          "keyName": "web_links_address_id_index",
           "primary": false,
           "unique": false
         },
@@ -2962,16 +2944,16 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "web_links_url_id_foreign": {
-          "constraintName": "web_links_url_id_foreign",
+        "web_links_address_id_foreign": {
+          "constraintName": "web_links_address_id_foreign",
           "columnNames": [
-            "url_id"
+            "address_id"
           ],
           "localTableName": "web_links",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "urls",
+          "referencedTableName": "web_addresses",
           "updateRule": "cascade"
         },
         "web_links_translation_id_foreign": {

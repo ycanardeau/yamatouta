@@ -9,8 +9,8 @@ import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
-import { Url } from '../../../entities/Url';
 import { User } from '../../../entities/User';
+import { WebAddress } from '../../../entities/WebAddress';
 import { Permission } from '../../../models/Permission';
 import { QuoteOptionalFields } from '../../../models/QuoteOptionalFields';
 import { QuoteType } from '../../../models/QuoteType';
@@ -107,7 +107,8 @@ export class UpdateQuoteCommandHandler
 				quote,
 				params.webLinks,
 				async (url) =>
-					(await em.findOne(Url, { url: url.href })) ?? new Url(url),
+					(await em.findOne(WebAddress, { url: url.href })) ??
+					new WebAddress(url),
 				async (oldItem) => {
 					em.remove(oldItem);
 				},

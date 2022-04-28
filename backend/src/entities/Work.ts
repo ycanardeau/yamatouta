@@ -16,8 +16,8 @@ import { WebLinkCategory } from '../models/WebLinkCategory';
 import { WorkType } from '../models/WorkType';
 import { Commit } from './Commit';
 import { WorkRevision } from './Revision';
-import { Url } from './Url';
 import { User } from './User';
+import { WebAddress } from './WebAddress';
 import { WorkWebLink } from './WebLink';
 
 @Entity({ tableName: 'works' })
@@ -85,17 +85,17 @@ export class Work
 	}
 
 	createWebLink({
-		url,
+		address,
 		title,
 		category,
 	}: {
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}): WorkWebLink {
 		return new WorkWebLink({
 			work: this,
-			url: url,
+			address: address,
 			title: title,
 			category: category,
 		});

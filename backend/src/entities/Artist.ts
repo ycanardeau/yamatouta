@@ -18,8 +18,8 @@ import { ArtistSnapshot } from '../models/Snapshot';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { Commit } from './Commit';
 import { ArtistRevision } from './Revision';
-import { Url } from './Url';
 import { User } from './User';
+import { WebAddress } from './WebAddress';
 import { ArtistWebLink } from './WebLink';
 
 @Entity({ tableName: 'artists' })
@@ -102,17 +102,17 @@ export class Artist
 	}
 
 	createWebLink({
-		url,
+		address,
 		title,
 		category,
 	}: {
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}): ArtistWebLink {
 		return new ArtistWebLink({
 			artist: this,
-			url: url,
+			address: address,
 			title: title,
 			category: category,
 		});

@@ -1,14 +1,14 @@
-import { Url } from '../entities/Url';
+import { WebAddress } from '../entities/WebAddress';
 import { WebLink } from '../entities/WebLink';
 import { WebLinkCategory } from './WebLinkCategory';
 
 export interface IWebLinkFactory<TWebLink extends WebLink> {
 	createWebLink({
-		url,
+		address,
 		title,
 		category,
 	}: {
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}): TWebLink;

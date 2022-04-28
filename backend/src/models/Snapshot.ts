@@ -15,7 +15,7 @@ export class WebLinkSnapshot {
 	readonly category: WebLinkCategory;
 
 	constructor(webLink: WebLink) {
-		this.url = webLink.url.url;
+		this.url = webLink.url;
 		this.title = webLink.title;
 		this.category = webLink.category;
 	}

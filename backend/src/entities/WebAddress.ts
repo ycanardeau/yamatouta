@@ -1,7 +1,7 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
-@Entity({ tableName: 'urls' })
-export class Url {
+@Entity({ tableName: 'web_addresses' })
+export class WebAddress {
 	@PrimaryKey()
 	id!: number;
 

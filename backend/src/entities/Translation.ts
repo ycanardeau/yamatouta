@@ -25,8 +25,8 @@ import { Commit } from './Commit';
 import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
 import { TranslationSearchIndex } from './TranslationSearchIndex';
-import { Url } from './Url';
 import { User } from './User';
+import { WebAddress } from './WebAddress';
 import { TranslationWebLink } from './WebLink';
 
 @Entity({ tableName: 'translations' })
@@ -173,17 +173,17 @@ export class Translation
 	}
 
 	createWebLink({
-		url,
+		address,
 		title,
 		category,
 	}: {
-		url: Url;
+		address: WebAddress;
 		title: string;
 		category: WebLinkCategory;
 	}): TranslationWebLink {
 		return new TranslationWebLink({
 			translation: this,
-			url: url,
+			address: address,
 			title: title,
 			category: category,
 		});

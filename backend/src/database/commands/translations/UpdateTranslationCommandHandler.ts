@@ -8,8 +8,8 @@ import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Commit } from '../../../entities/Commit';
 import { Translation } from '../../../entities/Translation';
-import { Url } from '../../../entities/Url';
 import { User } from '../../../entities/User';
+import { WebAddress } from '../../../entities/WebAddress';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { TranslationOptionalFields } from '../../../models/TranslationOptionalFields';
@@ -118,7 +118,8 @@ export class UpdateTranslationCommandHandler
 				translation,
 				params.webLinks,
 				async (url) =>
-					(await em.findOne(Url, { url: url.href })) ?? new Url(url),
+					(await em.findOne(WebAddress, { url: url.href })) ??
+					new WebAddress(url),
 				async (oldItem) => {
 					em.remove(oldItem);
 				},

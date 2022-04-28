@@ -1,5 +1,5 @@
 import { WebLinkObject } from '../../../dto/WebLinkObject';
-import { Url } from '../../../entities/Url';
+import { WebAddress } from '../../../entities/WebAddress';
 import { WebLink } from '../../../entities/WebLink';
 import { IEntryWithWebLinks } from '../../../models/IEntryWithWebLinks';
 import { IWebLinkFactory } from '../../../models/IWebLinkFactory';
@@ -10,17 +10,17 @@ import { collectionSyncWithContent } from '../../../utils/collectionDiff';
 export const syncWebLinks = async <TWebLink extends WebLink>(
 	entry: IEntryWithWebLinks<TWebLink> & IWebLinkFactory<TWebLink>,
 	newItems: WebLinkObject[],
-	getOrCreateUrlFunc: (url: URL) => Promise<Url>,
+	getOrCreateWebAddressFunc: (url: URL) => Promise<WebAddress>,
 	removeFunc: (oldItem: TWebLink) => Promise<void>,
 	permissionContext: PermissionContext,
 ): Promise<void> => {
 	const create = async (newItem: WebLinkObject): Promise<TWebLink> => {
 		permissionContext.verifyPermission(Permission.CreateWebLinks);
 
-		const url = await getOrCreateUrlFunc(new URL(newItem.url));
+		const address = await getOrCreateWebAddressFunc(new URL(newItem.url));
 
 		return entry.createWebLink({
-			url: url,
+			address: address,
 			title: newItem.title,
 			category: newItem.category,
 		});
@@ -34,9 +34,9 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 
 		permissionContext.verifyPermission(Permission.EditWebLinks);
 
-		const url = await getOrCreateUrlFunc(new URL(newItem.url));
+		const address = await getOrCreateWebAddressFunc(new URL(newItem.url));
 
-		oldItem.url = url;
+		oldItem.address = address;
 		oldItem.title = newItem.title;
 		oldItem.category = newItem.category;
 
