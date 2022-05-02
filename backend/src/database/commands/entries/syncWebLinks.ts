@@ -3,6 +3,7 @@ import { EntityManager } from '@mikro-orm/core';
 import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { User } from '../../../entities/User';
 import { WebAddress } from '../../../entities/WebAddress';
+import { WebAddressHost } from '../../../entities/WebAddressHost';
 import { WebLink } from '../../../entities/WebLink';
 import { IEntryWithWebLinks } from '../../../models/IEntryWithWebLinks';
 import { IWebLinkFactory } from '../../../models/IWebLinkFactory';
@@ -16,20 +17,32 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 	newItems: WebLinkObject[],
 	permissionContext: PermissionContext,
 ): Promise<void> => {
+	const user = await em.findOneOrFail(User, {
+		id: permissionContext.user?.id,
+		deleted: false,
+		hidden: false,
+	});
+
+	const getOrCreateWebAddressHost = async (
+		url: URL,
+	): Promise<WebAddressHost> => {
+		const host =
+			(await em.findOne(WebAddressHost, { hostname: url.host })) ??
+			new WebAddressHost(url.host, user);
+
+		em.persist(host);
+
+		return host;
+	};
+
 	const getOrCreateWebAddress = async (url: URL): Promise<WebAddress> => {
-		const user = await em.findOneOrFail(User, {
-			id: permissionContext.user?.id,
-			deleted: false,
-			hidden: false,
-		});
+		const host = await getOrCreateWebAddressHost(url);
 
 		const address =
 			(await em.findOne(WebAddress, { url: url.href })) ??
-			new WebAddress(url, user);
+			new WebAddress(url, host, user);
 
 		em.persist(address);
-
-		address.referenceCount++;
 
 		return address;
 	};
@@ -38,6 +51,8 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 		permissionContext.verifyPermission(Permission.CreateWebLinks);
 
 		const address = await getOrCreateWebAddress(new URL(newItem.url));
+
+		address.incrementReferenceCount();
 
 		return entry.createWebLink({
 			address: address,
@@ -66,7 +81,7 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 	const remove = async (oldItem: TWebLink): Promise<void> => {
 		permissionContext.verifyPermission(Permission.DeleteWebLinks);
 
-		oldItem.address.referenceCount--;
+		oldItem.address.decrementReferenceCount();
 
 		em.remove(oldItem);
 	};

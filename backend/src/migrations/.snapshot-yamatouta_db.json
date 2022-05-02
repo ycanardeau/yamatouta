@@ -389,6 +389,102 @@
           "length": 0,
           "mappedType": "datetime"
         },
+        "hostname": {
+          "name": "hostname",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "reference_count": {
+          "name": "reference_count",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "web_address_hosts",
+      "indexes": [
+        {
+          "columnNames": [
+            "actor_id"
+          ],
+          "composite": false,
+          "keyName": "web_address_hosts_actor_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "web_address_hosts_actor_id_foreign": {
+          "constraintName": "web_address_hosts_actor_id_foreign",
+          "columnNames": [
+            "actor_id"
+          ],
+          "localTableName": "web_address_hosts",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
         "url": {
           "name": "url",
           "type": "text",
@@ -407,14 +503,14 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "host": {
-          "name": "host",
-          "type": "varchar(255)",
-          "unsigned": false,
+        "host_id": {
+          "name": "host_id",
+          "type": "int",
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "integer"
         },
         "port": {
           "name": "port",
@@ -484,6 +580,15 @@
         },
         {
           "columnNames": [
+            "host_id"
+          ],
+          "composite": false,
+          "keyName": "web_addresses_host_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
             "actor_id"
           ],
           "composite": false,
@@ -503,6 +608,18 @@
       ],
       "checks": [],
       "foreignKeys": {
+        "web_addresses_host_id_foreign": {
+          "constraintName": "web_addresses_host_id_foreign",
+          "columnNames": [
+            "host_id"
+          ],
+          "localTableName": "web_addresses",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "web_address_hosts",
+          "updateRule": "cascade"
+        },
         "web_addresses_actor_id_foreign": {
           "constraintName": "web_addresses_actor_id_foreign",
           "columnNames": [
