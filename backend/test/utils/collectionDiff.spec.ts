@@ -92,20 +92,20 @@ describe('collectionSync', () => {
 
 describe('collectionSyncWithContent', () => {
 	class Entity {
-		id?: number;
+		id: number;
 		value: string;
 
-		constructor({ id, value }: { id?: number; value: string }) {
+		constructor(id: number, value: string) {
 			this.id = id;
 			this.value = value;
 		}
 	}
 
 	class EntityProto {
-		id?: number;
+		id: number;
 		value: number;
 
-		constructor({ id, value }: { id?: number; value: number }) {
+		constructor(id: number, value: number) {
 			this.id = id;
 			this.value = value;
 		}
@@ -116,7 +116,7 @@ describe('collectionSyncWithContent', () => {
 	};
 
 	const createFunc = async (newItem: EntityProto): Promise<Entity> => {
-		return new Entity({ id: undefined, value: newItem.value.toString() });
+		return new Entity(0, newItem.value.toString());
 	};
 
 	const updateFunc = async (
@@ -130,13 +130,11 @@ describe('collectionSyncWithContent', () => {
 	};
 
 	const entityList = (...str: string[]): Entity[] => {
-		return str.map((s, index) => new Entity({ id: index + 1, value: s }));
+		return str.map((s, index) => new Entity(index + 1, s));
 	};
 
 	const entityProtoList = (...str: number[]): EntityProto[] => {
-		return str.map(
-			(s, index) => new EntityProto({ id: index + 1, value: s }),
-		);
+		return str.map((s, index) => new EntityProto(index + 1, s));
 	};
 
 	const testCollectionSyncWithValue = async ({
