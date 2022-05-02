@@ -30,6 +30,7 @@ describe('UpdateWorkCommandHandler', () => {
 	let userRepo: any;
 	let auditLogEntryFactory: AuditLogEntryFactory;
 	let workRepo: any;
+	let webAddressFactory: any;
 	let permissionContext: FakePermissionContext;
 	let updateWorkCommandHandler: UpdateWorkCommandHandler;
 	let defaultParams: UpdateWorkParams;
@@ -71,6 +72,7 @@ describe('UpdateWorkCommandHandler', () => {
 			findOneOrFail: async (where: any): Promise<Work> =>
 				[work].filter((w) => w.id === where.id)[0],
 		};
+		webAddressFactory = {};
 
 		permissionContext = new FakePermissionContext(existingUser);
 
@@ -79,6 +81,7 @@ describe('UpdateWorkCommandHandler', () => {
 			userRepo as any,
 			auditLogEntryFactory,
 			workRepo as any,
+			webAddressFactory,
 		);
 
 		defaultParams = {

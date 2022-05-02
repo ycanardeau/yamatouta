@@ -15,6 +15,7 @@ import { WorkOptionalFields } from '../../../models/WorkOptionalFields';
 import { WorkType } from '../../../models/WorkType';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { WebAddressFactory } from '../../../services/WebAddressFactory';
 import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateWorkParams {
@@ -54,6 +55,7 @@ export class UpdateWorkCommandHandler
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Work)
 		private readonly workRepo: EntityRepository<Work>,
+		private readonly webAddressFactory: WebAddressFactory,
 	) {}
 
 	async execute(command: UpdateWorkCommand): Promise<WorkObject> {
@@ -87,7 +89,14 @@ export class UpdateWorkCommandHandler
 			work.name = params.name;
 			work.workType = params.workType;
 
-			await syncWebLinks(em, work, params.webLinks, permissionContext);
+			await syncWebLinks(
+				em,
+				work,
+				params.webLinks,
+				permissionContext,
+				this.webAddressFactory,
+				user,
+			);
 
 			const commit = new Commit();
 

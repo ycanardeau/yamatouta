@@ -2,13 +2,12 @@ import { EntityManager } from '@mikro-orm/core';
 
 import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { User } from '../../../entities/User';
-import { WebAddress } from '../../../entities/WebAddress';
-import { WebAddressHost } from '../../../entities/WebAddressHost';
 import { WebLink } from '../../../entities/WebLink';
 import { IEntryWithWebLinks } from '../../../models/IEntryWithWebLinks';
 import { IWebLinkFactory } from '../../../models/IWebLinkFactory';
 import { Permission } from '../../../models/Permission';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { WebAddressFactory } from '../../../services/WebAddressFactory';
 import { collectionSyncWithContent } from '../../../utils/collectionDiff';
 
 export const syncWebLinks = async <TWebLink extends WebLink>(
@@ -16,41 +15,17 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 	entry: IEntryWithWebLinks<TWebLink> & IWebLinkFactory<TWebLink>,
 	newItems: WebLinkObject[],
 	permissionContext: PermissionContext,
+	webAddressFactory: WebAddressFactory,
+	actor: User,
 ): Promise<void> => {
-	const user = await em.findOneOrFail(User, {
-		id: permissionContext.user?.id,
-		deleted: false,
-		hidden: false,
-	});
-
-	const getOrCreateWebAddressHost = async (
-		url: URL,
-	): Promise<WebAddressHost> => {
-		const host =
-			(await em.findOne(WebAddressHost, { hostname: url.host })) ??
-			new WebAddressHost(url.host, user);
-
-		em.persist(host);
-
-		return host;
-	};
-
-	const getOrCreateWebAddress = async (url: URL): Promise<WebAddress> => {
-		const host = await getOrCreateWebAddressHost(url);
-
-		const address =
-			(await em.findOne(WebAddress, { url: url.href })) ??
-			new WebAddress(url, host, user);
-
-		em.persist(address);
-
-		return address;
-	};
-
 	const create = async (newItem: WebLinkObject): Promise<TWebLink> => {
 		permissionContext.verifyPermission(Permission.CreateWebLinks);
 
-		const address = await getOrCreateWebAddress(new URL(newItem.url));
+		const address = await webAddressFactory.getOrCreateWebAddress(
+			em,
+			new URL(newItem.url),
+			actor,
+		);
 
 		address.incrementReferenceCount();
 
@@ -69,7 +44,11 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 
 		permissionContext.verifyPermission(Permission.EditWebLinks);
 
-		const address = await getOrCreateWebAddress(new URL(newItem.url));
+		const address = await webAddressFactory.getOrCreateWebAddress(
+			em,
+			new URL(newItem.url),
+			actor,
+		);
 
 		oldItem.address = address;
 		oldItem.title = newItem.title;

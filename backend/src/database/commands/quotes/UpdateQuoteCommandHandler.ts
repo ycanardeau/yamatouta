@@ -16,6 +16,7 @@ import { QuoteType } from '../../../models/QuoteType';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { WebAddressFactory } from '../../../services/WebAddressFactory';
 import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateQuoteParams {
@@ -61,6 +62,7 @@ export class UpdateQuoteCommandHandler
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
+		private readonly webAddressFactory: WebAddressFactory,
 	) {}
 
 	async execute(command: UpdateQuoteCommand): Promise<QuoteObject> {
@@ -102,7 +104,14 @@ export class UpdateQuoteCommandHandler
 			quote.locale = params.locale;
 			quote.artist = artist;
 
-			await syncWebLinks(em, quote, params.webLinks, permissionContext);
+			await syncWebLinks(
+				em,
+				quote,
+				params.webLinks,
+				permissionContext,
+				this.webAddressFactory,
+				user,
+			);
 
 			const commit = new Commit();
 

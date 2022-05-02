@@ -32,6 +32,7 @@ describe('UpdateTranslationCommandHandler', () => {
 	let auditLogEntryFactory: AuditLogEntryFactory;
 	let ngramConverter: NgramConverter;
 	let translationRepo: any;
+	let webAddressFactory: any;
 	let permissionContext: FakePermissionContext;
 	let updateTranslationCommandHandler: UpdateTranslationCommandHandler;
 	let defaultParams: UpdateTranslationParams;
@@ -77,6 +78,7 @@ describe('UpdateTranslationCommandHandler', () => {
 			findOneOrFail: async (where: any): Promise<Translation> =>
 				[translation].filter((t) => t.id === where.id)[0],
 		};
+		webAddressFactory = {};
 
 		permissionContext = new FakePermissionContext(existingUser);
 
@@ -86,6 +88,7 @@ describe('UpdateTranslationCommandHandler', () => {
 			auditLogEntryFactory,
 			ngramConverter,
 			translationRepo as any,
+			webAddressFactory,
 		);
 
 		defaultParams = {

@@ -15,6 +15,7 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { WebAddressFactory } from '../../../services/WebAddressFactory';
 import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateArtistParams {
@@ -54,6 +55,7 @@ export class UpdateArtistCommandHandler
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
+		private readonly webAddressFactory: WebAddressFactory,
 	) {}
 
 	async execute(command: UpdateArtistCommand): Promise<ArtistObject> {
@@ -87,7 +89,14 @@ export class UpdateArtistCommandHandler
 			artist.name = params.name;
 			artist.artistType = params.artistType;
 
-			await syncWebLinks(em, artist, params.webLinks, permissionContext);
+			await syncWebLinks(
+				em,
+				artist,
+				params.webLinks,
+				permissionContext,
+				this.webAddressFactory,
+				user,
+			);
 
 			const commit = new Commit();
 

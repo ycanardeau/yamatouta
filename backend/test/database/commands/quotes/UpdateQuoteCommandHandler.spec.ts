@@ -37,6 +37,7 @@ describe('UpdateQuoteCommandHandler', () => {
 	let artistRepo: any;
 	let auditLogEntryFactory: AuditLogEntryFactory;
 	let quoteRepo: any;
+	let webAddressFactory: any;
 	let permissionContext: FakePermissionContext;
 	let updateQuoteCommandHandler: UpdateQuoteCommandHandler;
 	let defaultParams: UpdateQuoteParams;
@@ -89,6 +90,7 @@ describe('UpdateQuoteCommandHandler', () => {
 			findOneOrFail: async (where: any): Promise<Quote> =>
 				[quote].filter((q) => q.id === where.id)[0],
 		};
+		webAddressFactory = {};
 
 		permissionContext = new FakePermissionContext(existingUser);
 
@@ -98,6 +100,7 @@ describe('UpdateQuoteCommandHandler', () => {
 			artistRepo as any,
 			auditLogEntryFactory,
 			quoteRepo as any,
+			webAddressFactory,
 		);
 
 		defaultParams = {

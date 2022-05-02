@@ -16,6 +16,7 @@ import { WordCategory } from '../../../models/WordCategory';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { WebAddressFactory } from '../../../services/WebAddressFactory';
 import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateTranslationParams {
@@ -70,6 +71,7 @@ export class UpdateTranslationCommandHandler
 		private readonly ngramConverter: NgramConverter,
 		@InjectRepository(Translation)
 		private readonly translationRepo: EntityRepository<Translation>,
+		private readonly webAddressFactory: WebAddressFactory,
 	) {}
 
 	async execute(
@@ -118,6 +120,8 @@ export class UpdateTranslationCommandHandler
 				translation,
 				params.webLinks,
 				permissionContext,
+				this.webAddressFactory,
+				user,
 			);
 
 			const commit = new Commit();

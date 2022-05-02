@@ -30,6 +30,7 @@ describe('UpdateArtistCommandHandler', () => {
 	let userRepo: any;
 	let auditLogEntryFactory: AuditLogEntryFactory;
 	let artistRepo: any;
+	let webAddressFactory: any;
 	let permissionContext: FakePermissionContext;
 	let updateArtistCommandHandler: UpdateArtistCommandHandler;
 	let defaultParams: UpdateArtistParams;
@@ -71,6 +72,7 @@ describe('UpdateArtistCommandHandler', () => {
 			findOneOrFail: async (where: any): Promise<Artist> =>
 				[artist].filter((a) => a.id === where.id)[0],
 		};
+		webAddressFactory = {};
 
 		permissionContext = new FakePermissionContext(existingUser);
 
@@ -79,6 +81,7 @@ describe('UpdateArtistCommandHandler', () => {
 			userRepo as any,
 			auditLogEntryFactory,
 			artistRepo as any,
+			webAddressFactory,
 		);
 
 		defaultParams = {
