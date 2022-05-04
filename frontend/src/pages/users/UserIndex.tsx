@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import Avatar from '../../components/Avatar';
+import Link from '../../components/Link';
 import Pagination from '../../components/Pagination';
 import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
@@ -91,17 +92,9 @@ const UserIndex = observer((): React.ReactElement => {
 											header: t('auth.username'),
 										}}
 									>
-										<EuiLink
-											href={`/users/${user.id}`}
-											onClick={(
-												e: React.MouseEvent<HTMLAnchorElement>,
-											): void => {
-												e.preventDefault();
-												navigate(`/users/${user.id}`);
-											}}
-										>
+										<Link to={`/users/${user.id}`}>
 											{user.name}
-										</EuiLink>
+										</Link>
 									</EuiTableRowCell>
 								</EuiTableRow>
 							))}

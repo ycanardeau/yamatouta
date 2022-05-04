@@ -3,7 +3,6 @@ import {
 	EuiContextMenuItem,
 	EuiContextMenuPanel,
 	EuiIcon,
-	EuiLink,
 	EuiPopover,
 	EuiSpacer,
 	EuiTable,
@@ -29,6 +28,7 @@ import { IWorkObject } from '../../dto/works/IWorkObject';
 import { Permission } from '../../models/Permission';
 import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
 import Avatar from '../Avatar';
+import Link from '../Link';
 import Pagination from '../Pagination';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
@@ -150,8 +150,6 @@ const WorkSearchTable = observer(
 	({ store }: WorkSearchTableProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const navigate = useNavigate();
-
 		return (
 			<>
 				<EuiTable>
@@ -174,17 +172,9 @@ const WorkSearchTable = observer(
 										header: t('works.name'),
 									}}
 								>
-									<EuiLink
-										href={`/works/${work.id}`}
-										onClick={(
-											e: React.MouseEvent<HTMLAnchorElement>,
-										): void => {
-											e.preventDefault();
-											navigate(`/works/${work.id}`);
-										}}
-									>
+									<Link to={`/works/${work.id}`}>
 										{work.name}
-									</EuiLink>
+									</Link>
 								</EuiTableRowCell>
 								<EuiTableRowCell
 									textOnly={false}

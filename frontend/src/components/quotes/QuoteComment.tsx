@@ -4,7 +4,6 @@ import {
 	EuiContextMenuItem,
 	EuiContextMenuPanel,
 	EuiIcon,
-	EuiLink,
 	EuiPopover,
 } from '@elastic/eui';
 import {
@@ -22,6 +21,7 @@ import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { Permission } from '../../models/Permission';
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 import Avatar from '../Avatar';
+import Link from '../Link';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import QuoteDeleteDialog from './QuoteDeleteDialog';
@@ -146,22 +146,16 @@ const QuoteComment = ({
 	store,
 	quote,
 }: QuoteCommentProps): React.ReactElement => {
-	const navigate = useNavigate();
-
 	return (
 		<EuiComment
 			username={
-				<EuiLink
+				<Link
 					color="text"
 					style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
-					href={`/artists/${quote.artist.id}`}
-					onClick={(e: React.MouseEvent<HTMLAnchorElement>): void => {
-						e.preventDefault();
-						navigate(`/artists/${quote.artist.id}`);
-					}}
+					to={`/artists/${quote.artist.id}`}
 				>
 					{quote.artist.name}
-				</EuiLink>
+				</Link>
 			}
 			timelineIcon={<Avatar size="l" name={quote.artist.name} />}
 			actions={<QuotePopover store={store} quote={quote} />}
