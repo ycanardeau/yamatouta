@@ -3,7 +3,6 @@ import {
 	EuiContextMenuItem,
 	EuiContextMenuPanel,
 	EuiIcon,
-	EuiLink,
 	EuiPopover,
 	EuiSpacer,
 	EuiTable,
@@ -30,6 +29,7 @@ import Pagination from '../../components/Pagination';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
+import Link from '../Link';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import ArtistDeleteDialog from './ArtistDeleteDialog';
@@ -153,8 +153,6 @@ const ArtistSearchTable = observer(
 	({ store }: ArtistSearchTableProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const navigate = useNavigate();
-
 		return (
 			<>
 				<EuiTable>
@@ -181,17 +179,9 @@ const ArtistSearchTable = observer(
 										header: t('artists.name'),
 									}}
 								>
-									<EuiLink
-										href={`/artists/${artist.id}`}
-										onClick={(
-											e: React.MouseEvent<HTMLAnchorElement>,
-										): void => {
-											e.preventDefault();
-											navigate(`/artists/${artist.id}`);
-										}}
-									>
+									<Link to={`/artists/${artist.id}`}>
 										{artist.name}
-									</EuiLink>
+									</Link>
 								</EuiTableRowCell>
 								<EuiTableRowCell
 									textOnly={false}
