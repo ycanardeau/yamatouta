@@ -1,8 +1,11 @@
 import { AuthenticatedUserObject } from '../../../src/dto/users/AuthenticatedUserObject';
+import { FakeEntityManager } from '../../FakeEntityManager';
 import { createUser } from '../../createEntry';
 
 test('AuthenticatedUserObject', async () => {
-	const user = await createUser({
+	const em = new FakeEntityManager();
+
+	const user = await createUser(em as any, {
 		id: 1,
 		username: 'user',
 		email: 'user@example.com',

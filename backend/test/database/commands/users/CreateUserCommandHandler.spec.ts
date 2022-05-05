@@ -13,6 +13,7 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { PasswordHasherFactory } from '../../../../src/services/passwordHashers/PasswordHasherFactory';
+import { normalizeEmail } from '../../../../src/utils/normalizeEmail';
 import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { createUser } from '../../../createEntry';
@@ -22,26 +23,30 @@ describe('CreateUserCommandHandler', () => {
 	const existingUsername = 'existing';
 	const existingEmail = 'existing@example.com';
 
-	let existingUser: User;
 	let em: FakeEntityManager;
+	let userRepo: any;
 	let permissionContext: FakePermissionContext;
 	let createUserCommandHandler: CreateUserCommandHandler;
 	let defaultParams: CreateUserParams;
 
 	beforeEach(async () => {
-		existingUser = await createUser({
+		em = new FakeEntityManager();
+
+		await createUser(em as any, {
 			id: 1,
 			username: existingUsername,
 			email: existingEmail,
 			password: 'P@$$w0rd',
 		});
 
-		em = new FakeEntityManager();
-		const userRepo = {
+		userRepo = {
 			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter(
-					(u) => u.normalizedEmail === where.normalizedEmail,
-				)[0],
+				em.entities
+					.filter((entity) => entity instanceof User)
+					.map((entity) => entity as User)
+					.filter(
+						(u) => u.normalizedEmail === where.normalizedEmail,
+					)[0],
 			persist: (
 				entity:
 					| AnyEntity
@@ -82,9 +87,9 @@ describe('CreateUserCommandHandler', () => {
 
 			expect(userObject.name).toBe(defaultParams.username);
 
-			const newUser = em.entities.filter(
-				(entity) => entity instanceof User,
-			)[0] as User;
+			const newUser = await userRepo.findOne({
+				normalizedEmail: await normalizeEmail(defaultParams.email),
+			});
 
 			expect(newUser).toBeInstanceOf(User);
 
@@ -114,9 +119,9 @@ describe('CreateUserCommandHandler', () => {
 
 			expect(userObject.name).toBe(username);
 
-			const newUser = em.entities.filter(
-				(entity) => entity instanceof User,
-			)[0] as User;
+			const newUser = await userRepo.findOne({
+				normalizedEmail: await normalizeEmail(defaultParams.email),
+			});
 
 			expect(newUser).toBeInstanceOf(User);
 
@@ -147,9 +152,9 @@ describe('CreateUserCommandHandler', () => {
 
 			expect(userObject.name).toBe(username);
 
-			const newUser = em.entities.filter(
-				(entity) => entity instanceof User,
-			)[0] as User;
+			const newUser = await userRepo.findOne({
+				normalizedEmail: await normalizeEmail(defaultParams.email),
+			});
 
 			expect(newUser).toBeInstanceOf(User);
 

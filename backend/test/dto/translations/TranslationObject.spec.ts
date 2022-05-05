@@ -2,17 +2,20 @@ import { NotFoundException } from '@nestjs/common';
 
 import { TranslationObject } from '../../../src/dto/translations/TranslationObject';
 import { WordCategory } from '../../../src/models/WordCategory';
+import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createTranslation, createUser } from '../../createEntry';
 
 test('TranslationObject', async () => {
-	const user = await createUser({
+	const em = new FakeEntityManager();
+
+	const user = await createUser(em as any, {
 		id: 1,
 		username: 'user',
 		email: 'user@example.com',
 	});
 
-	const translation = createTranslation({
+	const translation = await createTranslation(em as any, {
 		id: 2,
 		headword: '翻訳',
 		locale: 'ja',
@@ -22,7 +25,7 @@ test('TranslationObject', async () => {
 		user: user,
 	});
 
-	const deletedTranslation = createTranslation({
+	const deletedTranslation = await createTranslation(em as any, {
 		id: 3,
 		headword: '消された',
 		locale: 'ja',
@@ -32,7 +35,7 @@ test('TranslationObject', async () => {
 		deleted: true,
 	});
 
-	const hiddenTranslation = createTranslation({
+	const hiddenTranslation = await createTranslation(em as any, {
 		id: 4,
 		headword: '隠された',
 		locale: 'ja',
@@ -42,7 +45,7 @@ test('TranslationObject', async () => {
 		hidden: true,
 	});
 
-	const viewer = await createUser({
+	const viewer = await createUser(em as any, {
 		id: 5,
 		username: 'viewer',
 		email: 'viewer@example.com',

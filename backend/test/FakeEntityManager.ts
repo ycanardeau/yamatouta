@@ -19,4 +19,6 @@ export class FakeEntityManager {
 	): void {
 		this.entities.push(entity);
 	}
+
+	async flush(): Promise<void> {}
 }

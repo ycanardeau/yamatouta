@@ -41,24 +41,22 @@ describe('UpdateArtistCommandHandler', () => {
 	});
 
 	beforeEach(async () => {
-		const existingUsername = 'existing';
-		const existingEmail = 'existing@example.com';
+		em = new FakeEntityManager();
 
-		existingUser = await createUser({
+		existingUser = await createUser(em as any, {
 			id: 1,
-			username: existingUsername,
-			email: existingEmail,
+			username: 'existing',
+			email: 'existing@example.com',
 			password: 'P@$$w0rd',
 			userGroup: UserGroup.Admin,
 		});
 
-		artist = createArtist({
+		artist = await createArtist(em as any, {
 			id: 2,
 			name: 'うたよみ',
 			artistType: ArtistType.Person,
 		});
 
-		em = new FakeEntityManager();
 		userRepo = {
 			findOneOrFail: async (): Promise<User> => existingUser,
 			findOne: async (where: any): Promise<User> =>

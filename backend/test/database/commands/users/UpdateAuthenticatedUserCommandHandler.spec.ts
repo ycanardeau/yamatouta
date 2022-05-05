@@ -42,7 +42,9 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 			salt,
 		);
 
-		existingUser = await createUser({
+		em = new FakeEntityManager();
+
+		existingUser = await createUser(em as any, {
 			id: 1,
 			username: existingUsername,
 			email: existingEmail,
@@ -51,7 +53,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 		existingUser.passwordHash = passwordHash;
 
 		permissionContext = new FakePermissionContext(existingUser);
-		em = new FakeEntityManager();
+
 		const userRepo = {
 			findOneOrFail: async (): Promise<User> => existingUser,
 			findOne: async (where: any): Promise<User> =>

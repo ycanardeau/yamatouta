@@ -3,48 +3,51 @@ import _ from 'lodash';
 
 import { Permission, userGroupPermissions } from '../../src/models/Permission';
 import { UserGroup } from '../../src/models/UserGroup';
+import { FakeEntityManager } from '../FakeEntityManager';
 import { FakePermissionContext } from '../FakePermissionContext';
 import { createUser } from '../createEntry';
 
 describe('PermissionContext', () => {
 	test('hasPermission', async () => {
+		const em = new FakeEntityManager();
+
 		const users = await Promise.all([
-			createUser({
+			createUser(em as any, {
 				id: 1,
 				username: 'limited',
 				email: 'limited@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.LimitedUser,
 			}),
-			createUser({
+			createUser(em as any, {
 				id: 2,
 				username: 'user',
 				email: 'user@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.User,
 			}),
-			createUser({
+			createUser(em as any, {
 				id: 3,
 				username: 'advanced',
 				email: 'advanced@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.AdvancedUser,
 			}),
-			createUser({
+			createUser(em as any, {
 				id: 4,
 				username: 'mod',
 				email: 'mod@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.Mod,
 			}),
-			createUser({
+			createUser(em as any, {
 				id: 5,
 				username: 'senior',
 				email: 'senior@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.SeniorMod,
 			}),
-			createUser({
+			createUser(em as any, {
 				id: 6,
 				username: 'admin',
 				email: 'admin@example.com',

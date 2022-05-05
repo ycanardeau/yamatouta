@@ -25,14 +25,15 @@ describe('AuthenticateUserCommandHandler', () => {
 	let defaultParams: AuthenticateUserParams;
 
 	beforeEach(async () => {
-		existingUser = await createUser({
+		em = new FakeEntityManager();
+
+		existingUser = await createUser(em as any, {
 			id: 1,
 			username: existingUsername,
 			email: existingEmail,
 			password: existingPassword,
 		});
 
-		em = new FakeEntityManager();
 		const userRepo = {
 			findOne: async (where: any): Promise<User> =>
 				[existingUser].filter((u) => u.email === where.email)[0],

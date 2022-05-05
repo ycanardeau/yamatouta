@@ -40,9 +40,7 @@ async function bootstrap(): Promise<void> {
 			resave: false,
 			saveUninitialized: false,
 			store: new KnexSessionStore({
-				knex: app
-					.get<EntityManager>(EntityManager)
-					.getKnex() as unknown as any,
+				knex: app.get(EntityManager).getKnex() as unknown as any,
 			}),
 		}),
 	);
