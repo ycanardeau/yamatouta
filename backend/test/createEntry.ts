@@ -10,6 +10,7 @@ import { QuoteType } from '../src/models/QuoteType';
 import { UserGroup } from '../src/models/UserGroup';
 import { WordCategory } from '../src/models/WordCategory';
 import { WorkType } from '../src/models/WorkType';
+import { NgramConverter } from '../src/services/NgramConverter';
 import { PasswordHasherFactory } from '../src/services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../src/utils/normalizeEmail';
 
@@ -19,7 +20,6 @@ const passwordHasher = passwordHasherFactory.default;
 export const createUser = async (
 	em: EntityManager,
 	{
-		id,
 		username,
 		email,
 		password = 'P@$$w0rd',
@@ -27,7 +27,6 @@ export const createUser = async (
 		deleted = false,
 		hidden = false,
 	}: {
-		id: number;
 		username: string;
 		email: string;
 		password?: string;
@@ -48,7 +47,6 @@ export const createUser = async (
 		salt: salt,
 		passwordHash: passwordHash,
 	});
-	user.id = id;
 	user.userGroup = userGroup;
 	user.deleted = deleted;
 	user.hidden = hidden;
@@ -60,10 +58,11 @@ export const createUser = async (
 	return user;
 };
 
+const ngramConverter = new NgramConverter();
+
 export const createTranslation = async (
 	em: EntityManager,
 	{
-		id,
 		headword,
 		locale,
 		reading,
@@ -73,7 +72,6 @@ export const createTranslation = async (
 		deleted = false,
 		hidden = false,
 	}: {
-		id: number;
 		headword: string;
 		locale: string;
 		reading: string;
@@ -94,9 +92,10 @@ export const createTranslation = async (
 		category: category,
 		user: user,
 	});
-	translation.id = id;
 	translation.deleted = deleted;
 	translation.hidden = hidden;
+
+	translation.updateSearchIndex(ngramConverter);
 
 	em.persist(translation);
 
@@ -108,7 +107,6 @@ export const createTranslation = async (
 export const createQuote = async (
 	em: EntityManager,
 	{
-		id,
 		quoteType,
 		text,
 		locale,
@@ -116,7 +114,6 @@ export const createQuote = async (
 		deleted = false,
 		hidden = false,
 	}: {
-		id: number;
 		quoteType: QuoteType;
 		text: string;
 		locale: string;
@@ -131,7 +128,6 @@ export const createQuote = async (
 		locale: locale,
 		artist: artist,
 	});
-	quote.id = id;
 	quote.deleted = deleted;
 	quote.hidden = hidden;
 
@@ -145,13 +141,11 @@ export const createQuote = async (
 export const createArtist = async (
 	em: EntityManager,
 	{
-		id,
 		name,
 		artistType,
 		deleted = false,
 		hidden = false,
 	}: {
-		id: number;
 		name: string;
 		artistType: ArtistType;
 		deleted?: boolean;
@@ -162,7 +156,6 @@ export const createArtist = async (
 		name: name,
 		artistType: artistType,
 	});
-	artist.id = id;
 	artist.deleted = deleted;
 	artist.hidden = hidden;
 
@@ -176,13 +169,11 @@ export const createArtist = async (
 export const createWork = async (
 	em: EntityManager,
 	{
-		id,
 		name,
 		workType,
 		deleted = false,
 		hidden = false,
 	}: {
-		id: number;
 		name: string;
 		workType: WorkType;
 		deleted?: boolean;
@@ -193,7 +184,6 @@ export const createWork = async (
 		name: name,
 		workType: workType,
 	});
-	work.id = id;
 	work.deleted = deleted;
 	work.hidden = hidden;
 

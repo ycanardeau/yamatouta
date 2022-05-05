@@ -10,13 +10,11 @@ test('TranslationObject', async () => {
 	const em = new FakeEntityManager();
 
 	const user = await createUser(em as any, {
-		id: 1,
 		username: 'user',
 		email: 'user@example.com',
 	});
 
 	const translation = await createTranslation(em as any, {
-		id: 2,
 		headword: '翻訳',
 		locale: 'ja',
 		reading: 'ほんやく',
@@ -26,7 +24,6 @@ test('TranslationObject', async () => {
 	});
 
 	const deletedTranslation = await createTranslation(em as any, {
-		id: 3,
 		headword: '消された',
 		locale: 'ja',
 		reading: 'けされた',
@@ -36,7 +33,6 @@ test('TranslationObject', async () => {
 	});
 
 	const hiddenTranslation = await createTranslation(em as any, {
-		id: 4,
 		headword: '隠された',
 		locale: 'ja',
 		reading: 'かくされた',
@@ -46,7 +42,6 @@ test('TranslationObject', async () => {
 	});
 
 	const viewer = await createUser(em as any, {
-		id: 5,
 		username: 'viewer',
 		email: 'viewer@example.com',
 	});

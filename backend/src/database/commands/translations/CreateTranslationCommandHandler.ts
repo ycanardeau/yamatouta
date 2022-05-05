@@ -48,9 +48,6 @@ export class CreateTranslationCommandHandler
 		if (result.error)
 			throw new BadRequestException(result.error.details[0].message);
 
-		const { headword, locale, reading, yamatokotoba, category } =
-			result.value;
-
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
 				id: permissionContext.user?.id,
@@ -60,12 +57,12 @@ export class CreateTranslationCommandHandler
 
 			const translation = new Translation({
 				translatedString: {
-					headword: headword,
-					locale: locale,
-					reading: reading,
-					yamatokotoba: yamatokotoba,
+					headword: params.headword,
+					locale: params.locale,
+					reading: params.reading,
+					yamatokotoba: params.yamatokotoba,
 				},
-				category: category,
+				category: params.category,
 				user: user,
 			});
 

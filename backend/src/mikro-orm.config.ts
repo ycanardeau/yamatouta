@@ -23,6 +23,7 @@ const options: Options = {
 	metadataProvider: TsMorphMetadataProvider,
 	forceUndefined: true,
 	forceUtcTimezone: true,
+	allowGlobalContext: process.env.NODE_ENV === 'test',
 };
 
 export default options;

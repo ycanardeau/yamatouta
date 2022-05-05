@@ -88,9 +88,6 @@ export class UpdateTranslationCommandHandler
 		if (result.error)
 			throw new BadRequestException(result.error.details[0].message);
 
-		const { headword, locale, reading, yamatokotoba, category } =
-			result.value;
-
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
 				id: permissionContext.user?.id,
@@ -107,11 +104,11 @@ export class UpdateTranslationCommandHandler
 				{ populate: true },
 			);
 
-			translation.headword = headword;
-			translation.locale = locale;
-			translation.reading = reading;
-			translation.yamatokotoba = yamatokotoba;
-			translation.category = category;
+			translation.headword = params.headword;
+			translation.locale = params.locale;
+			translation.reading = params.reading;
+			translation.yamatokotoba = params.yamatokotoba;
+			translation.category = params.category;
 
 			translation.updateSearchIndex(this.ngramConverter);
 

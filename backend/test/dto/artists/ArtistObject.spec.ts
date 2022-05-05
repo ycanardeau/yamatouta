@@ -10,27 +10,23 @@ test('ArtistObject', async () => {
 	const em = new FakeEntityManager();
 
 	const artist = await createArtist(em as any, {
-		id: 1,
 		name: 'artist',
 		artistType: ArtistType.Person,
 	});
 
 	const deletedArtist = await createArtist(em as any, {
-		id: 2,
 		name: 'deleted',
 		artistType: ArtistType.Person,
 		deleted: true,
 	});
 
 	const hiddenArtist = await createArtist(em as any, {
-		id: 3,
 		name: 'hidden',
 		artistType: ArtistType.Person,
 		hidden: true,
 	});
 
 	const viewer = await createUser(em as any, {
-		id: 4,
 		username: 'viewer',
 		email: 'viewer@example.com',
 	});

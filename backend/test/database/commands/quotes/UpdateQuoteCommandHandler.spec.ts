@@ -1,5 +1,9 @@
-import { MikroORM } from '@mikro-orm/core';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import {
+	BadRequestException,
+	INestApplication,
+	UnauthorizedException,
+} from '@nestjs/common';
 
 import {
 	UpdateQuoteCommand,
@@ -21,94 +25,71 @@ import {
 	QuoteSnapshot,
 } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { createApplication } from '../../../createApplication';
 import { createArtist, createQuote, createUser } from '../../../createEntry';
 import { testQuoteAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('UpdateQuoteCommandHandler', () => {
-	let em: FakeEntityManager;
+	let app: INestApplication;
+	let em: EntityManager;
 	let existingUser: User;
 	let artist: Artist;
 	let quote: Quote;
-	let userRepo: any;
-	let artistRepo: any;
-	let auditLogEntryFactory: AuditLogEntryFactory;
-	let quoteRepo: any;
-	let webAddressFactory: any;
 	let permissionContext: FakePermissionContext;
 	let updateQuoteCommandHandler: UpdateQuoteCommandHandler;
 	let defaultParams: UpdateQuoteParams;
 
 	beforeAll(async () => {
-		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
-		await MikroORM.init(undefined, false);
+		app = await createApplication();
+	});
+
+	afterAll(async () => {
+		await app.close();
 	});
 
 	beforeEach(async () => {
-		em = new FakeEntityManager();
+		em = app.get(EntityManager);
 
-		existingUser = await createUser(em as any, {
-			id: 1,
+		existingUser = await createUser(em, {
 			username: 'existing',
 			email: 'existing@example.com',
 			password: 'P@$$w0rd',
 			userGroup: UserGroup.Admin,
 		});
 
-		artist = await createArtist(em as any, {
-			id: 2,
+		artist = await createArtist(em, {
 			name: 'うたよみ',
 			artistType: ArtistType.Person,
 		});
 
-		quote = await createQuote(em as any, {
-			id: 3,
+		quote = await createQuote(em, {
 			text: 'やまとうた',
 			quoteType: QuoteType.Tanka,
 			locale: 'ja',
 			artist: artist,
 		});
 
-		userRepo = {
-			findOneOrFail: async (): Promise<User> => existingUser,
-			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter(
-					(u) => u.normalizedEmail === where.normalizedEmail,
-				)[0],
-			persist: (): void => {},
-		};
-		artistRepo = {
-			findOneOrFail: async (): Promise<Artist> => artist,
-		};
-		auditLogEntryFactory = new AuditLogEntryFactory();
-		quoteRepo = {
-			findOneOrFail: async (where: any): Promise<Quote> =>
-				[quote].filter((q) => q.id === where.id)[0],
-		};
-		webAddressFactory = {};
-
 		permissionContext = new FakePermissionContext(existingUser);
 
-		updateQuoteCommandHandler = new UpdateQuoteCommandHandler(
-			em as any,
-			userRepo as any,
-			artistRepo as any,
-			auditLogEntryFactory,
-			quoteRepo as any,
-			webAddressFactory,
-		);
+		updateQuoteCommandHandler = app.get(UpdateQuoteCommandHandler);
 
 		defaultParams = {
 			quoteId: quote.id,
 			text: 'やまとうた',
 			quoteType: QuoteType.Tanka,
 			locale: 'ja',
-			artistId: 2,
+			artistId: artist.id,
 			webLinks: [],
 		};
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
 	});
 
 	describe('updateQuote', () => {
@@ -137,9 +118,9 @@ describe('UpdateQuoteCommandHandler', () => {
 			expect(quoteObject.locale).toBe(params.locale);
 			expect(quoteObject.artist.id).toBe(params.artistId);
 
-			const revision = em.entities.filter(
-				(entity) => entity instanceof QuoteRevision,
-			)[0] as QuoteRevision;
+			const quote = await em.findOneOrFail(Quote, { id: quoteObject.id });
+
+			const revision = quote.revisions[0];
 
 			expect(revision).toBeInstanceOf(QuoteRevision);
 			expect(revision.quote).toBe(quote);
@@ -149,9 +130,9 @@ describe('UpdateQuoteCommandHandler', () => {
 				JSON.stringify(snapshot),
 			);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof QuoteAuditLogEntry,
-			)[0] as QuoteAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(QuoteAuditLogEntry, {
+				quote: quote,
+			});
 
 			testQuoteAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Quote_Update,

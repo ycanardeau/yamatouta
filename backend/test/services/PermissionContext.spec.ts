@@ -13,42 +13,36 @@ describe('PermissionContext', () => {
 
 		const users = await Promise.all([
 			createUser(em as any, {
-				id: 1,
 				username: 'limited',
 				email: 'limited@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.LimitedUser,
 			}),
 			createUser(em as any, {
-				id: 2,
 				username: 'user',
 				email: 'user@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.User,
 			}),
 			createUser(em as any, {
-				id: 3,
 				username: 'advanced',
 				email: 'advanced@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.AdvancedUser,
 			}),
 			createUser(em as any, {
-				id: 4,
 				username: 'mod',
 				email: 'mod@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.Mod,
 			}),
 			createUser(em as any, {
-				id: 5,
 				username: 'senior',
 				email: 'senior@example.com',
 				password: 'P@$$w0rd',
 				userGroup: UserGroup.SeniorMod,
 			}),
 			createUser(em as any, {
-				id: 6,
 				username: 'admin',
 				email: 'admin@example.com',
 				password: 'P@$$w0rd',

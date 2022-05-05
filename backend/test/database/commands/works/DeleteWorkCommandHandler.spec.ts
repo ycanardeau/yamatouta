@@ -1,5 +1,5 @@
-import { MikroORM } from '@mikro-orm/core';
-import { UnauthorizedException } from '@nestjs/common';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication, UnauthorizedException } from '@nestjs/common';
 
 import {
 	DeleteEntryParams,
@@ -15,66 +15,53 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { WorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
-import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
-import { createWork, createUser } from '../../../createEntry';
+import { createApplication } from '../../../createApplication';
+import { createUser, createWork } from '../../../createEntry';
 import { testWorkAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('DeleteWorkCommandHandler', () => {
-	let em: FakeEntityManager;
+	let app: INestApplication;
+	let em: EntityManager;
 	let existingUser: User;
 	let work: Work;
-	let userRepo: any;
-	let auditLogEntryFactory: AuditLogEntryFactory;
-	let workRepo: any;
 	let permissionContext: FakePermissionContext;
 	let deleteWorkCommandHandler: DeleteWorkCommandHandler;
 
 	beforeAll(async () => {
-		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
-		await MikroORM.init(undefined, false);
+		app = await createApplication();
+	});
+
+	afterAll(async () => {
+		await app.close();
 	});
 
 	beforeEach(async () => {
-		em = new FakeEntityManager();
+		em = app.get(EntityManager);
 
-		existingUser = await createUser(em as any, {
-			id: 1,
+		existingUser = await createUser(em, {
 			username: 'existing',
 			email: 'existing@example.com',
 			password: 'P@$$w0rd',
 			userGroup: UserGroup.Admin,
 		});
 
-		work = await createWork(em as any, {
-			id: 2,
+		work = await createWork(em, {
 			name: 'よみもの',
 			workType: WorkType.Book,
 		});
 
-		userRepo = {
-			findOneOrFail: async (): Promise<User> => existingUser,
-			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter(
-					(u) => u.normalizedEmail === where.normalizedEmail,
-				)[0],
-			persist: (): void => {},
-		};
-		auditLogEntryFactory = new AuditLogEntryFactory();
-		workRepo = {
-			findOneOrFail: async (): Promise<Work> => work,
-		};
-
 		permissionContext = new FakePermissionContext(existingUser);
 
-		deleteWorkCommandHandler = new DeleteWorkCommandHandler(
-			em as any,
-			userRepo as any,
-			auditLogEntryFactory,
-			workRepo as any,
-		);
+		deleteWorkCommandHandler = app.get(DeleteWorkCommandHandler);
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
 	});
 
 	describe('deleteWork', () => {
@@ -90,9 +77,7 @@ describe('DeleteWorkCommandHandler', () => {
 		const testDeleteWork = async (): Promise<void> => {
 			await execute(permissionContext, { entryId: work.id });
 
-			const revision = em.entities.filter(
-				(entity) => entity instanceof WorkRevision,
-			)[0] as WorkRevision;
+			const revision = work.revisions[0];
 
 			expect(revision).toBeInstanceOf(WorkRevision);
 			expect(revision.work).toBe(work);
@@ -104,9 +89,9 @@ describe('DeleteWorkCommandHandler', () => {
 
 			expect(work.deleted).toBe(true);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof WorkAuditLogEntry,
-			)[0] as WorkAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(WorkAuditLogEntry, {
+				work: work,
+			});
 
 			testWorkAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Work_Delete,

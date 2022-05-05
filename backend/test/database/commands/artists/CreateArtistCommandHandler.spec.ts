@@ -1,5 +1,9 @@
-import { MikroORM } from '@mikro-orm/core';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import {
+	BadRequestException,
+	INestApplication,
+	UnauthorizedException,
+} from '@nestjs/common';
 
 import {
 	CreateArtistCommand,
@@ -16,55 +20,41 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { createApplication } from '../../../createApplication';
 import { createUser } from '../../../createEntry';
 import { testArtistAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('CreateArtistCommandHandler', () => {
-	let em: FakeEntityManager;
+	let app: INestApplication;
+	let em: EntityManager;
 	let existingUser: User;
-	let userRepo: any;
-	let auditLogEntryFactory: AuditLogEntryFactory;
 	let permissionContext: FakePermissionContext;
 	let createArtistCommandHandler: CreateArtistCommandHandler;
 	let defaultParams: UpdateArtistParams;
 
 	beforeAll(async () => {
-		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
-		await MikroORM.init(undefined, false);
+		app = await createApplication();
+	});
+
+	afterAll(async () => {
+		await app.close();
 	});
 
 	beforeEach(async () => {
-		em = new FakeEntityManager();
+		em = app.get(EntityManager);
 
-		existingUser = await createUser(em as any, {
-			id: 1,
+		existingUser = await createUser(em, {
 			username: 'existing',
 			email: 'existing@example.com',
 			password: 'P@$$w0rd',
 			userGroup: UserGroup.Admin,
 		});
 
-		userRepo = {
-			findOneOrFail: async (): Promise<User> => existingUser,
-			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter(
-					(u) => u.normalizedEmail === where.normalizedEmail,
-				)[0],
-			persist: (): void => {},
-		};
-		auditLogEntryFactory = new AuditLogEntryFactory();
-
 		permissionContext = new FakePermissionContext(existingUser);
 
-		createArtistCommandHandler = new CreateArtistCommandHandler(
-			em as any,
-			userRepo as any,
-			auditLogEntryFactory,
-		);
+		createArtistCommandHandler = app.get(CreateArtistCommandHandler);
 
 		defaultParams = {
 			artistId: undefined,
@@ -72,6 +62,13 @@ describe('CreateArtistCommandHandler', () => {
 			artistType: ArtistType.Person,
 			webLinks: [],
 		};
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
 	});
 
 	describe('createArtist', () => {
@@ -98,13 +95,11 @@ describe('CreateArtistCommandHandler', () => {
 			expect(artistObject.name).toBe(params.name);
 			expect(artistObject.artistType).toBe(params.artistType);
 
-			const artist = em.entities.filter(
-				(entity) => entity instanceof Artist,
-			)[0] as Artist;
+			const artist = await em.findOneOrFail(Artist, {
+				id: artistObject.id,
+			});
 
-			const revision = em.entities.filter(
-				(entity) => entity instanceof ArtistRevision,
-			)[0] as ArtistRevision;
+			const revision = artist.revisions[0];
 
 			expect(revision).toBeInstanceOf(ArtistRevision);
 			expect(revision.artist).toBe(artist);
@@ -114,9 +109,9 @@ describe('CreateArtistCommandHandler', () => {
 				JSON.stringify(snapshot),
 			);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof ArtistAuditLogEntry,
-			)[0] as ArtistAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(ArtistAuditLogEntry, {
+				artist: artist,
+			});
 
 			testArtistAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Artist_Create,

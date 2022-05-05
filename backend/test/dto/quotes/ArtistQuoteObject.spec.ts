@@ -11,13 +11,11 @@ test('QuoteObject', async () => {
 	const em = new FakeEntityManager();
 
 	const artist = await createArtist(em as any, {
-		id: 1,
 		name: 'artist',
 		artistType: ArtistType.Person,
 	});
 
 	const artistQuote = await createQuote(em as any, {
-		id: 2,
 		quoteType: QuoteType.Tanka,
 		text: 'quote',
 		locale: '',
@@ -25,7 +23,6 @@ test('QuoteObject', async () => {
 	});
 
 	const deletedQuote = await createQuote(em as any, {
-		id: 3,
 		quoteType: QuoteType.Tanka,
 		text: 'deleted',
 		locale: '',
@@ -34,7 +31,6 @@ test('QuoteObject', async () => {
 	});
 
 	const hiddenQuote = await createQuote(em as any, {
-		id: 4,
 		quoteType: QuoteType.Tanka,
 		text: 'hidden',
 		locale: '',
@@ -43,7 +39,6 @@ test('QuoteObject', async () => {
 	});
 
 	const viewer = await createUser(em as any, {
-		id: 5,
 		username: 'viewer',
 		email: 'viewer@example.com',
 	});

@@ -6,7 +6,6 @@ test('AuthenticatedUserObject', async () => {
 	const em = new FakeEntityManager();
 
 	const user = await createUser(em as any, {
-		id: 1,
 		username: 'user',
 		email: 'user@example.com',
 	});

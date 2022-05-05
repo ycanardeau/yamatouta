@@ -9,27 +9,23 @@ test('UserObject', async () => {
 	const em = new FakeEntityManager();
 
 	const user = await createUser(em as any, {
-		id: 1,
 		username: 'user',
 		email: 'user@example.com',
 	});
 
 	const deletedUser = await createUser(em as any, {
-		id: 2,
 		username: 'deleted',
 		email: 'deleted@example.com',
 		deleted: true,
 	});
 
 	const hiddenUser = await createUser(em as any, {
-		id: 3,
 		username: 'hidden',
 		email: 'deleted@example.com',
 		hidden: true,
 	});
 
 	const viewer = await createUser(em as any, {
-		id: 4,
 		username: 'viewer',
 		email: 'viewer@example.com',
 	});

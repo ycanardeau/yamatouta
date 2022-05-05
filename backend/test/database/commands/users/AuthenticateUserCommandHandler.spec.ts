@@ -1,3 +1,6 @@
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication } from '@nestjs/common';
+
 import {
 	AuthenticateUserCommand,
 	AuthenticateUserCommandHandler,
@@ -8,9 +11,7 @@ import {
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
-import { PasswordHasherFactory } from '../../../../src/services/passwordHashers/PasswordHasherFactory';
-import { FakeEntityManager } from '../../../FakeEntityManager';
+import { createApplication } from '../../../createApplication';
 import { createUser } from '../../../createEntry';
 import { testUserAuditLogEntry } from '../../../testAuditLogEntry';
 
@@ -19,33 +20,31 @@ describe('AuthenticateUserCommandHandler', () => {
 	const existingEmail = 'existing@example.com';
 	const existingPassword = 'P@$$w0rd';
 
+	let app: INestApplication;
 	let existingUser: User;
-	let em: FakeEntityManager;
+	let em: EntityManager;
 	let authenticateUserCommandHandler: AuthenticateUserCommandHandler;
 	let defaultParams: AuthenticateUserParams;
 
-	beforeEach(async () => {
-		em = new FakeEntityManager();
+	beforeAll(async () => {
+		app = await createApplication();
+	});
 
-		existingUser = await createUser(em as any, {
-			id: 1,
+	afterAll(async () => {
+		await app.close();
+	});
+
+	beforeEach(async () => {
+		em = app.get(EntityManager);
+
+		existingUser = await createUser(em, {
 			username: existingUsername,
 			email: existingEmail,
 			password: existingPassword,
 		});
 
-		const userRepo = {
-			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter((u) => u.email === where.email)[0],
-		};
-		const auditLogEntryFactory = new AuditLogEntryFactory();
-		const passwordHasherFactory = new PasswordHasherFactory();
-
-		authenticateUserCommandHandler = new AuthenticateUserCommandHandler(
-			em as any,
-			userRepo as any,
-			auditLogEntryFactory,
-			passwordHasherFactory,
+		authenticateUserCommandHandler = app.get(
+			AuthenticateUserCommandHandler,
 		);
 
 		defaultParams = {
@@ -53,6 +52,13 @@ describe('AuthenticateUserCommandHandler', () => {
 			password: existingPassword,
 			clientIp: '::1',
 		};
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
 	});
 
 	describe('authenticateUser', () => {
@@ -77,9 +83,11 @@ describe('AuthenticateUserCommandHandler', () => {
 			expect(userObject.id).toBe(existingUser.id);
 			expect(userObject.name).toBe(existingUser.name);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
+			const user = await em.findOneOrFail(User, { id: userObject.id });
+
+			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
+				user: user,
+			});
 
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Login,
@@ -101,11 +109,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('email is empty', async () => {
@@ -117,11 +121,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('email is whitespace', async () => {
@@ -133,11 +133,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('email is invalid', async () => {
@@ -149,11 +145,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('email does not exist', async () => {
@@ -165,11 +157,7 @@ describe('AuthenticateUserCommandHandler', () => {
 			expect(result.error).toBe(LoginError.NotFound);
 			expect(result.user).toBeUndefined();
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('password is undefined', async () => {
@@ -181,11 +169,7 @@ describe('AuthenticateUserCommandHandler', () => {
 				}),
 			).rejects.toThrowError('data and salt arguments required');
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('password is empty', async () => {
@@ -197,9 +181,9 @@ describe('AuthenticateUserCommandHandler', () => {
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
+				user: existingUser,
+			});
 
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
@@ -220,9 +204,9 @@ describe('AuthenticateUserCommandHandler', () => {
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
+				user: existingUser,
+			});
 
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
@@ -243,9 +227,9 @@ describe('AuthenticateUserCommandHandler', () => {
 			expect(result.error).toBe(LoginError.InvalidPassword);
 			expect(result.user).toBeUndefined();
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
+				user: existingUser,
+			});
 
 			testUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,

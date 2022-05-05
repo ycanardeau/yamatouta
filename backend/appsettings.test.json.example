@@ -5,8 +5,8 @@
 		"allowedOrigins": ["http://localhost:3000"]
 	},
 	"db": {
-		"connection": "mariadb",
-		"database": "yamatouta_test_db",
+		"connection": "sqlite",
+		"database": ":memory:",
 		"debug": true,
 		"username": "",
 		"password": ""
