@@ -1340,10 +1340,10 @@
     stylis "^4.0.6"
     tslib "^2.1.0"
 
-"@fluentui/react-icons@^2.0.153-canary.0":
-  version "2.0.153-canary.0"
-  resolved "https://registry.yarnpkg.com/@fluentui/react-icons/-/react-icons-2.0.153-canary.0.tgz#e4607758389bb7ef86e7dc2f82c1b2e1a177c570"
-  integrity sha512-t8Wx0k9JoIIC8rbGww9rT2rPDn2BBuBoXIjTGcy50vvpN+9Mrq3IuXVKrpeHmIahW5YlkwPWYA9eCcnCzXwDQw==
+"@fluentui/react-icons@2.0.167-rc.4":
+  version "2.0.167-rc.4"
+  resolved "https://registry.yarnpkg.com/@fluentui/react-icons/-/react-icons-2.0.167-rc.4.tgz#93df38a75caf70bea2e98842ae70e695882a6ad7"
+  integrity sha512-+cQRVulSJob++8IIPwR5l+akkT3agy54KwdKyHJADFhHuk6QM8f2Kssfa8ORdOIopnHprnOW+b6DZnQ/KUuvwg==
 
 "@fluentui/react-make-styles@^9.0.0-beta.4":
   version "9.0.0-beta.4"
@@ -1377,6 +1377,25 @@
   integrity sha512-b5drXcG02SNHokC39/B19dt1cti0ErtyS94ymMl1ppZ/Lh02/3VYukYsTBXBpKim4zmALAxqGkx/yXm95A7UBQ==
   dependencies:
     "@fluentui/keyboard-keys" "9.0.0-beta.1"
+    tslib "^2.1.0"
+
+"@griffel/core@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@griffel/core/-/core-1.3.0.tgz#dd880a30999090e60cc075d5a57122097108328d"
+  integrity sha512-IJCuvK0QjFzLskSGyndxSMzQQQhY2Ggwe5KD0i/cSbTBymS5X96H1XSzXXXjz24Fc6GCQi43h6y0GSIKtMhUCQ==
+  dependencies:
+    "@emotion/hash" "^0.8.0"
+    csstype "^3.0.10"
+    rtl-css-js "^1.15.0"
+    stylis "^4.0.13"
+    tslib "^2.1.0"
+
+"@griffel/react@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@griffel/react/-/react-1.0.4.tgz#2071cf6b5f997a76262e6acc5942750f56bb7ce4"
+  integrity sha512-PbwcVejhQs+QkzFRG2LNYrIaTz7wZsLVlagjyHGtVJQdZ3z+V8W61nDSnk8lxvWATbcilgzVnRkmSuQo2fvbTg==
+  dependencies:
+    "@griffel/core" "^1.3.0"
     tslib "^2.1.0"
 
 "@hapi/hoek@^9.0.0":
@@ -3846,6 +3865,11 @@ csstype@^2.6.7:
   version "2.6.20"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.20.tgz#9229c65ea0b260cf4d3d997cb06288e36a8d6dda"
   integrity sha512-/WwNkdXfckNgw6S5R125rrW8ez139lBHWouiBvX8dfMFtcn6V81REDqnH7+CRpRipfYlyU1CmOnOxrmGcFOjeA==
+
+csstype@^3.0.10:
+  version "3.0.11"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.11.tgz#d66700c5eacfac1940deb4e3ee5642792d85cd33"
+  integrity sha512-sa6P2wJ+CAbgyy4KFssIb/JNMLxFvKF1pCYCSXS8ZMuqZnMsrxqI2E5sPyoTpxoPU/gVZMzr2zjOfg8GIZOMsw==
 
 csstype@^3.0.2, csstype@^3.0.6:
   version "3.0.10"
@@ -8652,7 +8676,7 @@ rollup@^2.43.1:
   optionalDependencies:
     fsevents "~2.3.2"
 
-rtl-css-js@^1.14.0, rtl-css-js@^1.14.5:
+rtl-css-js@^1.14.0, rtl-css-js@^1.14.5, rtl-css-js@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/rtl-css-js/-/rtl-css-js-1.15.0.tgz#680ed816e570a9ebccba9e1cd0f202c6a8bb2dc0"
   integrity sha512-99Cu4wNNIhrI10xxUaABHsdDqzalrSRTie4GeCmbGVuehm4oj+fIy8fTzB+16pmKe8Bv9rl+hxIBez6KxExTew==
@@ -9248,6 +9272,11 @@ stylis@4.0.13, stylis@^4.0.6:
   version "4.0.13"
   resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.0.13.tgz#f5db332e376d13cc84ecfe5dace9a2a51d954c91"
   integrity sha512-xGPXiFVl4YED9Jh7Euv2V220mriG9u4B2TA6Ybjc1catrstKD2PpIdU3U0RKpkVBC2EhmL/F0sPCr9vrFTNRag==
+
+stylis@^4.0.13:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.1.1.tgz#e46c6a9bbf7c58db1e65bb730be157311ae1fe12"
+  integrity sha512-lVrM/bNdhVX2OgBFNa2YJ9Lxj7kPzylieHd3TNjuGE0Re9JB7joL5VUKOVH1kdNNJTgGPpT8hmwIAPLaSyEVFQ==
 
 supports-color@^5.3.0:
   version "5.5.0"
