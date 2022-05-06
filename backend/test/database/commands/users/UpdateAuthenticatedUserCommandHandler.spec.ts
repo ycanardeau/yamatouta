@@ -13,9 +13,9 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { normalizeEmail } from '../../../../src/utils/normalizeEmail';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertUserAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createUser } from '../../../createEntry';
-import { testUserAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('UpdateAuthenticatedUserCommandHandler', () => {
 	const existingUsername = 'user';
@@ -105,7 +105,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 				user: user,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Rename,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,
@@ -153,7 +153,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 				user: user,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Rename,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,
@@ -182,7 +182,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 				user: user,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Rename,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,
@@ -296,7 +296,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 				user: user,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_ChangeEmail,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,
@@ -398,7 +398,7 @@ describe('UpdateAuthenticatedUserCommandHandler', () => {
 				user: user,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_ChangePassword,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,

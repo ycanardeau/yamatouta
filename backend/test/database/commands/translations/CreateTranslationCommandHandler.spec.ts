@@ -22,9 +22,9 @@ import { UserGroup } from '../../../../src/models/UserGroup';
 import { WordCategory } from '../../../../src/models/WordCategory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createUser } from '../../../createEntry';
-import { testTranslationAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('CreateTranslationCommandHandler', () => {
 	let app: INestApplication;
@@ -122,7 +122,7 @@ describe('CreateTranslationCommandHandler', () => {
 				{ translation: translation },
 			);
 
-			testTranslationAuditLogEntry(auditLogEntry, {
+			assertTranslationAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Translation_Create,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,

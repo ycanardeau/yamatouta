@@ -11,9 +11,9 @@ import {
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
+import { assertUserAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createUser } from '../../../createEntry';
-import { testUserAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('AuthenticateUserCommandHandler', () => {
 	const existingUsername = 'existing';
@@ -89,7 +89,7 @@ describe('AuthenticateUserCommandHandler', () => {
 				user: user,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Login,
 				actor: existingUser,
 				actorIp: defaultParams.clientIp,
@@ -185,7 +185,7 @@ describe('AuthenticateUserCommandHandler', () => {
 				user: existingUser,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
 				actorIp: defaultParams.clientIp,
@@ -208,7 +208,7 @@ describe('AuthenticateUserCommandHandler', () => {
 				user: existingUser,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
 				actorIp: defaultParams.clientIp,
@@ -231,7 +231,7 @@ describe('AuthenticateUserCommandHandler', () => {
 				user: existingUser,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_FailedLogin,
 				actor: existingUser,
 				actorIp: defaultParams.clientIp,

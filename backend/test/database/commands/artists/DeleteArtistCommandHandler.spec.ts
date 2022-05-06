@@ -17,9 +17,9 @@ import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertArtistAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createArtist, createUser } from '../../../createEntry';
-import { testArtistAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('DeleteArtistCommandHandler', () => {
 	let app: INestApplication;
@@ -95,7 +95,7 @@ describe('DeleteArtistCommandHandler', () => {
 				artist: artist,
 			});
 
-			testArtistAuditLogEntry(auditLogEntry, {
+			assertArtistAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Artist_Delete,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,

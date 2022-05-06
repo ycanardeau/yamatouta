@@ -13,9 +13,9 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { normalizeEmail } from '../../../../src/utils/normalizeEmail';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertUserAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createUser } from '../../../createEntry';
-import { testUserAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('CreateUserCommandHandler', () => {
 	const existingUsername = 'existing';
@@ -87,7 +87,7 @@ describe('CreateUserCommandHandler', () => {
 				user: newUser,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Create,
 				actor: newUser,
 				actorIp: permissionContext.clientIp,
@@ -119,7 +119,7 @@ describe('CreateUserCommandHandler', () => {
 				user: newUser,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Create,
 				actor: newUser,
 				actorIp: permissionContext.clientIp,
@@ -152,7 +152,7 @@ describe('CreateUserCommandHandler', () => {
 				user: newUser,
 			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Create,
 				actor: newUser,
 				actorIp: permissionContext.clientIp,

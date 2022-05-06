@@ -17,9 +17,9 @@ import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertWorkAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createUser, createWork } from '../../../createEntry';
-import { testWorkAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('DeleteWorkCommandHandler', () => {
 	let app: INestApplication;
@@ -93,7 +93,7 @@ describe('DeleteWorkCommandHandler', () => {
 				work: work,
 			});
 
-			testWorkAuditLogEntry(auditLogEntry, {
+			assertWorkAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Work_Delete,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,

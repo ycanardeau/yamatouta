@@ -16,9 +16,9 @@ import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createTranslation, createUser } from '../../../createEntry';
-import { testTranslationAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('DeleteTranslationCommandHandler', () => {
 	let app: INestApplication;
@@ -100,7 +100,7 @@ describe('DeleteTranslationCommandHandler', () => {
 				{ translation: translation },
 			);
 
-			testTranslationAuditLogEntry(auditLogEntry, {
+			assertTranslationAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Translation_Delete,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,

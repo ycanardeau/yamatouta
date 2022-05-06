@@ -22,9 +22,9 @@ import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertArtistAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createArtist, createUser } from '../../../createEntry';
-import { testArtistAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('UpdateArtistCommandHandler', () => {
 	let app: INestApplication;
@@ -119,7 +119,7 @@ describe('UpdateArtistCommandHandler', () => {
 				artist: artist,
 			});
 
-			testArtistAuditLogEntry(auditLogEntry, {
+			assertArtistAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Artist_Update,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,

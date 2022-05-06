@@ -18,9 +18,9 @@ import { QuoteSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertQuoteAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createArtist, createQuote, createUser } from '../../../createEntry';
-import { testQuoteAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('DeleteQuoteCommandHandler', () => {
 	let app: INestApplication;
@@ -103,7 +103,7 @@ describe('DeleteQuoteCommandHandler', () => {
 				quote: quote,
 			});
 
-			testQuoteAuditLogEntry(auditLogEntry, {
+			assertQuoteAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Quote_Delete,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,

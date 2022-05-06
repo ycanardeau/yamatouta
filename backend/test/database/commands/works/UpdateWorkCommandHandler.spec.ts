@@ -22,9 +22,9 @@ import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertWorkAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createUser, createWork } from '../../../createEntry';
-import { testWorkAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('UpdateWorkCommandHandler', () => {
 	let app: INestApplication;
@@ -117,7 +117,7 @@ describe('UpdateWorkCommandHandler', () => {
 				work: work,
 			});
 
-			testWorkAuditLogEntry(auditLogEntry, {
+			assertWorkAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Work_Update,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,
