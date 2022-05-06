@@ -1,7 +1,6 @@
 import {
 	EuiBreadcrumb,
 	EuiBreadcrumbs,
-	EuiLink,
 	EuiPageContent,
 	EuiPageContentBody,
 	EuiPageHeader,
@@ -52,8 +51,6 @@ const UserIndex = observer((): React.ReactElement => {
 	useYamatoutaTitle(t('shared.users'), ready);
 
 	useStoreWithPagination(store);
-
-	const navigate = useNavigate();
 
 	return (
 		<>
