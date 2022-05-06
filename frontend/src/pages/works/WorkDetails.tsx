@@ -16,7 +16,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-	Navigate,
 	Route,
 	Routes,
 	useLocation,
@@ -28,7 +27,9 @@ import { getWork } from '../../api/WorkApi';
 import { useAuth } from '../../components/useAuth';
 import { IWorkObject } from '../../dto/works/IWorkObject';
 import { Permission } from '../../models/Permission';
+import { WorkOptionalFields } from '../../models/WorkOptionalFields';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
+import WorkBasicInfo from './WorkBasicInfo';
 import WorkEdit from './WorkEdit';
 import WorkHistory from './WorkHistory';
 
@@ -141,10 +142,8 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 				<EuiPageContentBody>
 					<Routes>
 						<Route
-							path="quotes"
-							element={
-								<Navigate to={`/works/${work.id}`} replace />
-							}
+							path=""
+							element={<WorkBasicInfo work={work} />}
 						/>
 						<Route
 							path="revisions"
@@ -167,9 +166,10 @@ const WorkDetails = (): React.ReactElement | null => {
 	const { workId } = useParams();
 
 	React.useEffect(() => {
-		getWork({ workId: Number(workId) }).then((work) =>
-			setStore(new WorkDetailsStore(work)),
-		);
+		getWork({
+			workId: Number(workId),
+			fields: [WorkOptionalFields.WebLinks],
+		}).then((work) => setStore(new WorkDetailsStore(work)));
 	}, [workId]);
 
 	return store ? <Layout store={store} /> : null;

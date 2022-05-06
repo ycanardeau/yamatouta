@@ -1,32 +1,31 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { UserObject } from '../../../src/dto/users/UserObject';
+import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createUser } from '../../createEntry';
 
 test('UserObject', async () => {
-	const user = await createUser({
-		id: 1,
+	const em = new FakeEntityManager();
+
+	const user = await createUser(em as any, {
 		username: 'user',
 		email: 'user@example.com',
 	});
 
-	const deletedUser = await createUser({
-		id: 2,
+	const deletedUser = await createUser(em as any, {
 		username: 'deleted',
 		email: 'deleted@example.com',
 		deleted: true,
 	});
 
-	const hiddenUser = await createUser({
-		id: 3,
+	const hiddenUser = await createUser(em as any, {
 		username: 'hidden',
 		email: 'deleted@example.com',
 		hidden: true,
 	});
 
-	const viewer = await createUser({
-		id: 4,
+	const viewer = await createUser(em as any, {
 		username: 'viewer',
 		email: 'viewer@example.com',
 	});

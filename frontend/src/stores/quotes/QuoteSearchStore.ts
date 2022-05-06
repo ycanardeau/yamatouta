@@ -36,7 +36,7 @@ export class QuoteSearchStore
 			ISearchResultObject<IQuoteObject>
 		>
 {
-	readonly paginationStore = new PaginationStore({ pageSize: 50 });
+	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteObject[] = [];
 	@observable artistId?: number;
 
@@ -51,7 +51,7 @@ export class QuoteSearchStore
 	updateResults = async (
 		clearResults: boolean,
 	): Promise<ISearchResultObject<IQuoteObject>> => {
-		const paginationParams = this.paginationStore.toParams(clearResults);
+		const paginationParams = this.pagination.toParams(clearResults);
 
 		const result = await listQuotes({
 			pagination: paginationParams,
@@ -62,7 +62,7 @@ export class QuoteSearchStore
 			this.quotes = result.items;
 
 			if (paginationParams.getTotalCount)
-				this.paginationStore.totalItems = result.totalCount;
+				this.pagination.totalItems = result.totalCount;
 		});
 
 		return result;
@@ -70,13 +70,13 @@ export class QuoteSearchStore
 
 	@computed.struct get routeParams(): IQuoteSearchRouteParams {
 		return {
-			page: this.paginationStore.page,
-			pageSize: this.paginationStore.pageSize,
+			page: this.pagination.page,
+			pageSize: this.pagination.pageSize,
 		};
 	}
 	set routeParams(value: IQuoteSearchRouteParams) {
-		this.paginationStore.page = value.page ?? 1;
-		this.paginationStore.pageSize = value.pageSize ?? 50;
+		this.pagination.page = value.page ?? 1;
+		this.pagination.pageSize = value.pageSize ?? 50;
 	}
 
 	validateRouteParams = (data: any): data is IQuoteSearchRouteParams => {

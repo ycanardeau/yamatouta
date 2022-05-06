@@ -9,6 +9,7 @@ import {
 import { createTranslation, updateTranslation } from '../../api/TranslationApi';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
+import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class TranslationEditStore {
 	private readonly translation?: ITranslationObject;
@@ -18,6 +19,7 @@ export class TranslationEditStore {
 	@observable reading = '';
 	@observable yamatokotoba = '';
 	@observable category = WordCategory.Unspecified;
+	readonly webLinks: WebLinkListEditStore;
 
 	constructor(translation?: ITranslationObject) {
 		makeObservable(this);
@@ -30,6 +32,9 @@ export class TranslationEditStore {
 			this.reading = translation.reading;
 			this.yamatokotoba = translation.yamatokotoba;
 			this.category = translation.category;
+			this.webLinks = new WebLinkListEditStore(translation.webLinks);
+		} else {
+			this.webLinks = new WebLinkListEditStore([]);
 		}
 	}
 
@@ -75,6 +80,7 @@ export class TranslationEditStore {
 				reading: this.reading,
 				yamatokotoba: this.yamatokotoba,
 				category: this.category,
+				webLinks: this.webLinks.items,
 			};
 
 			// Await.

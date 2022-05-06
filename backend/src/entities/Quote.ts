@@ -10,16 +10,21 @@ import {
 } from '@mikro-orm/core';
 
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
+import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { QuoteType } from '../models/QuoteType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { QuoteSnapshot } from '../models/Snapshot';
+import { WebLinkCategory } from '../models/WebLinkCategory';
 import { Artist } from './Artist';
 import { Commit } from './Commit';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
 import { User } from './User';
+import { WebAddress } from './WebAddress';
+import { QuoteWebLink } from './WebLink';
 
 @Entity({
 	tableName: 'quotes',
@@ -27,7 +32,9 @@ import { User } from './User';
 export class Quote
 	implements
 		IEntryWithRevisions<Quote, QuoteRevision, QuoteSnapshot>,
-		IRevisionFactory<Quote, QuoteRevision, QuoteSnapshot>
+		IRevisionFactory<Quote, QuoteRevision, QuoteSnapshot>,
+		IEntryWithWebLinks<QuoteWebLink>,
+		IWebLinkFactory<QuoteWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -82,6 +89,9 @@ export class Quote
 		return new RevisionManager(this);
 	}
 
+	@OneToMany(() => QuoteWebLink, (webLink) => webLink.quote)
+	webLinks = new Collection<QuoteWebLink>(this);
+
 	constructor({
 		quoteType,
 		text,
@@ -114,10 +124,27 @@ export class Quote
 			quote: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new QuoteSnapshot({ quote: this }),
+			snapshot: new QuoteSnapshot(this),
 			summary: summary,
 			event: event,
 			version: ++this.version,
+		});
+	}
+
+	createWebLink({
+		address,
+		title,
+		category,
+	}: {
+		address: WebAddress;
+		title: string;
+		category: WebLinkCategory;
+	}): QuoteWebLink {
+		return new QuoteWebLink({
+			quote: this,
+			address: address,
+			title: title,
+			category: category,
 		});
 	}
 }

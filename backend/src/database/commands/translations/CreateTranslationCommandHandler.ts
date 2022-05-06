@@ -9,6 +9,7 @@ import { Translation } from '../../../entities/Translation';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
+import { TranslationOptionalFields } from '../../../models/TranslationOptionalFields';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
@@ -47,9 +48,6 @@ export class CreateTranslationCommandHandler
 		if (result.error)
 			throw new BadRequestException(result.error.details[0].message);
 
-		const { headword, locale, reading, yamatokotoba, category } =
-			result.value;
-
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
 				id: permissionContext.user?.id,
@@ -59,12 +57,12 @@ export class CreateTranslationCommandHandler
 
 			const translation = new Translation({
 				translatedString: {
-					headword: headword,
-					locale: locale,
-					reading: reading,
-					yamatokotoba: yamatokotoba,
+					headword: params.headword,
+					locale: params.locale,
+					reading: params.reading,
+					yamatokotoba: params.yamatokotoba,
 				},
-				category: category,
+				category: params.category,
 				user: user,
 			});
 
@@ -94,6 +92,10 @@ export class CreateTranslationCommandHandler
 			return translation;
 		});
 
-		return new TranslationObject(translation, permissionContext);
+		return new TranslationObject(
+			translation,
+			permissionContext,
+			Object.values(TranslationOptionalFields),
+		);
 	}
 }

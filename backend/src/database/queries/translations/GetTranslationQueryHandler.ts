@@ -2,14 +2,29 @@ import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import Joi from 'joi';
 
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Translation } from '../../../entities/Translation';
+import { TranslationOptionalFields } from '../../../models/TranslationOptionalFields';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class GetTranslationParams {
-	constructor(readonly translationId: number) {}
+	static readonly schema = Joi.object<GetTranslationParams>({
+		translationId: Joi.number().optional(),
+		fields: Joi.array().items(
+			Joi.string()
+				.required()
+				.trim()
+				.valid(...Object.values(TranslationOptionalFields)),
+		),
+	});
+
+	constructor(
+		readonly translationId: number,
+		readonly fields?: TranslationOptionalFields[],
+	) {}
 }
 
 export class GetTranslationQuery {
@@ -31,16 +46,23 @@ export class GetTranslationQueryHandler
 	async execute(query: GetTranslationQuery): Promise<TranslationObject> {
 		const { permissionContext, params } = query;
 
-		const translation = await this.translationRepo.findOne({
-			id: params.translationId,
-			$and: [
-				whereNotDeleted(permissionContext),
-				whereNotHidden(permissionContext),
-			],
-		});
+		const translation = await this.translationRepo.findOne(
+			{
+				id: params.translationId,
+				$and: [
+					whereNotDeleted(permissionContext),
+					whereNotHidden(permissionContext),
+				],
+			},
+			{ populate: true },
+		);
 
 		if (!translation) throw new NotFoundException();
 
-		return new TranslationObject(translation, permissionContext);
+		return new TranslationObject(
+			translation,
+			permissionContext,
+			params.fields,
+		);
 	}
 }

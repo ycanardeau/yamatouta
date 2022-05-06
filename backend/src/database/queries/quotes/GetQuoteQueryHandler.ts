@@ -2,14 +2,29 @@ import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import Joi from 'joi';
 
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Quote } from '../../../entities/Quote';
+import { QuoteOptionalFields } from '../../../models/QuoteOptionalFields';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class GetQuoteParams {
-	constructor(readonly quoteId: number) {}
+	static readonly schema = Joi.object<GetQuoteParams>({
+		quoteId: Joi.number().optional(),
+		fields: Joi.array().items(
+			Joi.string()
+				.required()
+				.trim()
+				.valid(...Object.values(QuoteOptionalFields)),
+		),
+	});
+
+	constructor(
+		readonly quoteId: number,
+		readonly fields?: QuoteOptionalFields[],
+	) {}
 }
 
 export class GetQuoteQuery {
@@ -37,11 +52,11 @@ export class GetQuoteQueryHandler implements IQueryHandler<GetQuoteQuery> {
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: ['artist'] },
+			{ populate: true },
 		);
 
 		if (!quote) throw new NotFoundException();
 
-		return new QuoteObject(quote, permissionContext);
+		return new QuoteObject(quote, permissionContext, params.fields);
 	}
 }

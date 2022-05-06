@@ -49,7 +49,10 @@
 		"delete": "けす",
 		"basicInfo": "あらまし",
 		"navigation": "みちしるべ",
-		"viewBasicInfo": "あらましをみる"
+		"viewBasicInfo": "あらましをみる",
+		"add": "かきたす",
+		"remove": "とりのぞく",
+		"externalLinks": "つながり"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -135,6 +138,18 @@
 		"Unspecified": "なし",
 		"Book": "よみもの",
 		"Song": "うた",
+		"Other": "そのほか"
+	},
+	"webLinks": {
+		"url": "あたい",
+		"title": "みだし",
+		"category": "くさわい"
+	},
+	"webLinkCategoryNames": {
+		"Unspecified": "なし",
+		"Official": "おおやけ",
+		"Commercial": "あきない",
+		"Reference": "てらしあわせ",
 		"Other": "そのほか"
 	}
 }

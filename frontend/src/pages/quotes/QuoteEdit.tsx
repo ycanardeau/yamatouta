@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { listArtists } from '../../api/ArtistApi';
+import WebLinkListEdit from '../../components/WebLinkListEdit';
 import { QuoteType } from '../../models/QuoteType';
 import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
@@ -131,6 +132,10 @@ const QuoteEdit = observer(
 							}}
 							onSearchChange={handleSearchChange}
 						/>
+					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
+						<WebLinkListEdit store={store.webLinks} />
 					</EuiFormRow>
 				</EuiForm>
 

@@ -1,5 +1,9 @@
-import { MikroORM } from '@mikro-orm/core';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import {
+	BadRequestException,
+	INestApplication,
+	UnauthorizedException,
+} from '@nestjs/common';
 
 import {
 	CreateQuoteCommand,
@@ -21,69 +25,47 @@ import {
 	QuoteSnapshot,
 } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertQuoteAuditLogEntry } from '../../../assertAuditLogEntry';
+import { createApplication } from '../../../createApplication';
 import { createArtist, createUser } from '../../../createEntry';
-import { testQuoteAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('CreateQuoteCommandHandler', () => {
-	let em: FakeEntityManager;
+	let app: INestApplication;
+	let em: EntityManager;
 	let existingUser: User;
-	let userRepo: any;
 	let artist: Artist;
-	let artistRepo: any;
-	let auditLogEntryFactory: AuditLogEntryFactory;
 	let permissionContext: FakePermissionContext;
 	let createQuoteCommandHandler: CreateQuoteCommandHandler;
 	let defaultParams: UpdateQuoteParams;
 
 	beforeAll(async () => {
-		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
-		await MikroORM.init(undefined, false);
+		app = await createApplication();
+	});
+
+	afterAll(async () => {
+		await app.close();
 	});
 
 	beforeEach(async () => {
-		const existingUsername = 'existing';
-		const existingEmail = 'existing@example.com';
+		em = app.get(EntityManager);
 
-		existingUser = await createUser({
-			id: 1,
-			username: existingUsername,
-			email: existingEmail,
+		existingUser = await createUser(em, {
+			username: 'existing',
+			email: 'existing@example.com',
 			password: 'P@$$w0rd',
 			userGroup: UserGroup.Admin,
 		});
 
-		artist = createArtist({
-			id: 2,
+		artist = await createArtist(em, {
 			name: 'うたよみ',
 			artistType: ArtistType.Person,
 		});
 
-		em = new FakeEntityManager();
-		userRepo = {
-			findOneOrFail: async (): Promise<User> => existingUser,
-			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter(
-					(u) => u.normalizedEmail === where.normalizedEmail,
-				)[0],
-			persist: (): void => {},
-		};
-		artistRepo = {
-			findOneOrFail: async (): Promise<Artist> => artist,
-		};
-		auditLogEntryFactory = new AuditLogEntryFactory();
-
 		permissionContext = new FakePermissionContext(existingUser);
 
-		createQuoteCommandHandler = new CreateQuoteCommandHandler(
-			em as any,
-			userRepo as any,
-			artistRepo as any,
-			auditLogEntryFactory,
-		);
+		createQuoteCommandHandler = app.get(CreateQuoteCommandHandler);
 
 		defaultParams = {
 			quoteId: undefined,
@@ -91,7 +73,15 @@ describe('CreateQuoteCommandHandler', () => {
 			quoteType: QuoteType.Tanka,
 			locale: 'ja',
 			artistId: 2,
+			webLinks: [],
 		};
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
 	});
 
 	describe('createQuote', () => {
@@ -120,13 +110,9 @@ describe('CreateQuoteCommandHandler', () => {
 			expect(quoteObject.locale).toBe(params.locale);
 			expect(quoteObject.artist.id).toBe(params.artistId);
 
-			const quote = em.entities.filter(
-				(entity) => entity instanceof Quote,
-			)[0] as Quote;
+			const quote = await em.findOneOrFail(Quote, { id: quoteObject.id });
 
-			const revision = em.entities.filter(
-				(entity) => entity instanceof QuoteRevision,
-			)[0] as QuoteRevision;
+			const revision = quote.revisions[0];
 
 			expect(revision).toBeInstanceOf(QuoteRevision);
 			expect(revision.quote).toBe(quote);
@@ -136,11 +122,11 @@ describe('CreateQuoteCommandHandler', () => {
 				JSON.stringify(snapshot),
 			);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof QuoteAuditLogEntry,
-			)[0] as QuoteAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(QuoteAuditLogEntry, {
+				quote: quote,
+			});
 
-			testQuoteAuditLogEntry(auditLogEntry, {
+			assertQuoteAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Quote_Create,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,
@@ -176,7 +162,8 @@ describe('CreateQuoteCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: defaultParams.locale,
-					artist: new ObjectRefSnapshot({ entry: artist }),
+					artist: new ObjectRefSnapshot(artist),
+					webLinks: [],
 				},
 			});
 		});
@@ -243,6 +230,16 @@ describe('CreateQuoteCommandHandler', () => {
 					...defaultParams,
 					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					artistId: 'abcdef' as any,
+				}),
+			).rejects.toThrow(BadRequestException);
+		});
+
+		test('webLinks is undefined', async () => {
+			await expect(
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					webLinks: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
 		});

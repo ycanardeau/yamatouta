@@ -1,5 +1,5 @@
-import { AnyEntity, Reference } from '@mikro-orm/core';
-import { BadRequestException } from '@nestjs/common';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { BadRequestException, INestApplication } from '@nestjs/common';
 
 import {
 	CreateUserCommand,
@@ -10,61 +10,56 @@ import { AuthenticatedUserObject } from '../../../../src/dto/users/Authenticated
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { PasswordHasherFactory } from '../../../../src/services/passwordHashers/PasswordHasherFactory';
-import { FakeEntityManager } from '../../../FakeEntityManager';
+import { normalizeEmail } from '../../../../src/utils/normalizeEmail';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertUserAuditLogEntry } from '../../../assertAuditLogEntry';
+import { createApplication } from '../../../createApplication';
 import { createUser } from '../../../createEntry';
-import { testUserAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('CreateUserCommandHandler', () => {
 	const existingUsername = 'existing';
 	const existingEmail = 'existing@example.com';
 
-	let existingUser: User;
-	let em: FakeEntityManager;
+	let app: INestApplication;
+	let em: EntityManager;
 	let permissionContext: FakePermissionContext;
 	let createUserCommandHandler: CreateUserCommandHandler;
 	let defaultParams: CreateUserParams;
 
+	beforeAll(async () => {
+		app = await createApplication();
+	});
+
+	afterAll(async () => {
+		await app.close();
+	});
+
 	beforeEach(async () => {
-		existingUser = await createUser({
-			id: 1,
+		em = app.get(EntityManager);
+
+		await createUser(em, {
 			username: existingUsername,
 			email: existingEmail,
 			password: 'P@$$w0rd',
 		});
 
-		em = new FakeEntityManager();
-		const userRepo = {
-			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter(
-					(u) => u.normalizedEmail === where.normalizedEmail,
-				)[0],
-			persist: (
-				entity:
-					| AnyEntity
-					| Reference<AnyEntity>
-					| (AnyEntity | Reference<AnyEntity>)[],
-			): void => em.persist(entity),
-		};
-		const auditLogEntryFactory = new AuditLogEntryFactory();
 		permissionContext = new FakePermissionContext();
-		const passwordHasherFactory = new PasswordHasherFactory();
 
-		createUserCommandHandler = new CreateUserCommandHandler(
-			em as any,
-			userRepo as any,
-			auditLogEntryFactory,
-			passwordHasherFactory,
-		);
+		createUserCommandHandler = app.get(CreateUserCommandHandler);
 
 		defaultParams = {
 			username: 'user',
 			email: 'user@example.com',
 			password: 'P@$$w0rd',
 		};
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
 	});
 
 	describe('createUser', () => {
@@ -82,17 +77,17 @@ describe('CreateUserCommandHandler', () => {
 
 			expect(userObject.name).toBe(defaultParams.username);
 
-			const newUser = em.entities.filter(
-				(entity) => entity instanceof User,
-			)[0] as User;
+			const newUser = await em.findOneOrFail(User, {
+				normalizedEmail: await normalizeEmail(defaultParams.email),
+			});
 
 			expect(newUser).toBeInstanceOf(User);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
+				user: newUser,
+			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Create,
 				actor: newUser,
 				actorIp: permissionContext.clientIp,
@@ -114,17 +109,17 @@ describe('CreateUserCommandHandler', () => {
 
 			expect(userObject.name).toBe(username);
 
-			const newUser = em.entities.filter(
-				(entity) => entity instanceof User,
-			)[0] as User;
+			const newUser = await em.findOneOrFail(User, {
+				normalizedEmail: await normalizeEmail(defaultParams.email),
+			});
 
 			expect(newUser).toBeInstanceOf(User);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
+				user: newUser,
+			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Create,
 				actor: newUser,
 				actorIp: permissionContext.clientIp,
@@ -147,17 +142,17 @@ describe('CreateUserCommandHandler', () => {
 
 			expect(userObject.name).toBe(username);
 
-			const newUser = em.entities.filter(
-				(entity) => entity instanceof User,
-			)[0] as User;
+			const newUser = await em.findOneOrFail(User, {
+				normalizedEmail: await normalizeEmail(defaultParams.email),
+			});
 
 			expect(newUser).toBeInstanceOf(User);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
+				user: newUser,
+			});
 
-			testUserAuditLogEntry(auditLogEntry, {
+			assertUserAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.User_Create,
 				actor: newUser,
 				actorIp: permissionContext.clientIp,
@@ -176,11 +171,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('username is empty', async () => {
@@ -191,11 +182,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('username is whitespace', async () => {
@@ -206,11 +193,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('username is too short', async () => {
@@ -225,11 +208,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('username is too long', async () => {
@@ -245,11 +224,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('email is existing', async () => {
@@ -260,11 +235,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('email is undefined', async () => {
@@ -276,11 +247,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('email is empty', async () => {
@@ -291,11 +258,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('email is invalid', async () => {
@@ -306,11 +269,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('password is undefined', async () => {
@@ -322,11 +281,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('password is empty', async () => {
@@ -337,11 +292,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 
 		test('password is too short', async () => {
@@ -356,11 +307,7 @@ describe('CreateUserCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof UserAuditLogEntry,
-			)[0] as UserAuditLogEntry;
-
-			expect(auditLogEntry).toBeUndefined();
+			expect(await em.getRepository(UserAuditLogEntry).count()).toBe(0);
 		});
 	});
 });

@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 import { ISearchResultObject } from '../dto/ISearchResultObject';
+import { IWebLinkObject } from '../dto/IWebLinkObject';
 import { IWorkObject } from '../dto/works/IWorkObject';
+import { WorkOptionalFields } from '../models/WorkOptionalFields';
 import { WorkType } from '../models/WorkType';
 import { IPaginationParams } from '../stores/PaginationStore';
 
@@ -22,10 +24,14 @@ export const listWorks = async ({
 
 export const getWork = async ({
 	workId,
+	fields,
 }: {
 	workId: number;
+	fields?: WorkOptionalFields[];
 }): Promise<IWorkObject> => {
-	const response = await axios.get<IWorkObject>(`/works/${workId}`);
+	const response = await axios.get<IWorkObject>(`/works/${workId}`, {
+		params: { fields: fields },
+	});
 
 	return response.data;
 };
@@ -33,13 +39,16 @@ export const getWork = async ({
 export const createWork = async ({
 	name,
 	workType,
+	webLinks,
 }: {
 	name: string;
 	workType: WorkType;
+	webLinks: IWebLinkObject[];
 }): Promise<IWorkObject> => {
 	const response = await axios.post<IWorkObject>('/works', {
 		name,
 		workType,
+		webLinks,
 	});
 
 	return response.data;
@@ -49,14 +58,17 @@ export const updateWork = async ({
 	workId,
 	name,
 	workType,
+	webLinks,
 }: {
 	workId: number;
 	name: string;
 	workType: WorkType;
+	webLinks: IWebLinkObject[];
 }): Promise<IWorkObject> => {
 	const response = await axios.patch<IWorkObject>(`/works/${workId}`, {
 		name,
 		workType,
+		webLinks,
 	});
 
 	return response.data;

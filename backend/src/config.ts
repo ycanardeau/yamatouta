@@ -22,7 +22,7 @@ interface IConfig {
 	};
 }
 
-const schema: Joi.ObjectSchema<IConfig> = Joi.object({
+const schema = Joi.object<IConfig>({
 	port: Joi.number().required(),
 	disableAccountCreation: Joi.boolean().required(),
 	cors: {

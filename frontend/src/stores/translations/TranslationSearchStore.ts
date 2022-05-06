@@ -83,7 +83,7 @@ export class TranslationSearchStore
 			ISearchResultObject<ITranslationObject>
 		>
 {
-	readonly paginationStore = new PaginationStore({ pageSize: 50 });
+	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable translations: ITranslationObject[] = [];
 	@observable sort = TranslationSortRule.HeadwordAsc;
 	@observable query = '';
@@ -119,7 +119,7 @@ export class TranslationSearchStore
 	updateResults = async (
 		clearResults: boolean,
 	): Promise<ISearchResultObject<ITranslationObject>> => {
-		const paginationParams = this.paginationStore.toParams(clearResults);
+		const paginationParams = this.pagination.toParams(clearResults);
 
 		const result = await listTranslations({
 			pagination: paginationParams,
@@ -132,7 +132,7 @@ export class TranslationSearchStore
 			this.translations = result.items;
 
 			if (paginationParams.getTotalCount)
-				this.paginationStore.totalItems = result.totalCount;
+				this.pagination.totalItems = result.totalCount;
 		});
 
 		return result;
@@ -140,16 +140,16 @@ export class TranslationSearchStore
 
 	@computed.struct get routeParams(): ITranslationSearchRouteParams {
 		return {
-			page: this.paginationStore.page,
-			pageSize: this.paginationStore.pageSize,
+			page: this.pagination.page,
+			pageSize: this.pagination.pageSize,
 			sort: this.sort,
 			query: this.query,
 			category: this.category ? this.category : undefined,
 		};
 	}
 	set routeParams(value: ITranslationSearchRouteParams) {
-		this.paginationStore.page = value.page ?? 1;
-		this.paginationStore.pageSize = value.pageSize ?? 50;
+		this.pagination.page = value.page ?? 1;
+		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? TranslationSortRule.HeadwordAsc;
 		this.query = value.query ?? '';
 		this.category = value.category;

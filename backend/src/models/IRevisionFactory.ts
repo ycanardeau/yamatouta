@@ -9,7 +9,11 @@ export interface IRevisionFactory<
 	TRevision extends Revision<TEntry, TSnapshot>,
 	TSnapshot extends Snapshot,
 > {
-	createRevision({}: {
+	createRevision({
+		actor,
+		event,
+		summary,
+	}: {
 		actor: User;
 		event: RevisionEvent;
 		summary: string;

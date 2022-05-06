@@ -3,6 +3,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-local';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 import config from '../../config';
 import {
@@ -22,8 +23,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 	private static readonly maxConsecutiveFailsByEmailAndIp = 10;
 
 	// TODO: Replace with RateLimiterRedis.
-	private readonly limiterSlowBruteByIp: RateLimiterMariaDb;
-	private readonly limiterConsecutiveFailsByEmailAndIp: RateLimiterMariaDb;
+	private readonly limiterSlowBruteByIp:
+		| RateLimiterMemory
+		| RateLimiterMariaDb;
+	private readonly limiterConsecutiveFailsByEmailAndIp:
+		| RateLimiterMemory
+		| RateLimiterMariaDb;
 
 	constructor(
 		private readonly authenticateUserCommandHandler: AuthenticateUserCommandHandler,
@@ -39,24 +44,40 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 			dbName: config.db.database,
 		};
 
-		this.limiterSlowBruteByIp = new RateLimiterMariaDb({
-			...mariaDbOptions,
+		const limiterSlowBruteByIpOptions = {
 			keyPrefix: 'login_fail_ip_per_day',
 			points: LocalStrategy.maxWrongAttemptsByIpPerDay,
 			duration: 60 * 60 * 24,
 			// Block for 1 day, if 10 wrong attempts per day.
 			blockDuration: 60 * 60 * 24,
-		});
+		};
 
-		this.limiterConsecutiveFailsByEmailAndIp = new RateLimiterMariaDb({
-			...mariaDbOptions,
+		const limiterConsecutiveFailsByEmailAndIpOptions = {
 			keyPrefix: 'login_fail_consecutive_email_and_ip',
 			points: LocalStrategy.maxConsecutiveFailsByEmailAndIp,
 			// Store number for 90 days since first fail
 			duration: 60 * 60 * 24 * 90,
 			// Block for 1 hour.
 			blockDuration: 60 * 60,
-		});
+		};
+
+		this.limiterSlowBruteByIp =
+			process.env.NODE_ENV === 'test'
+				? new RateLimiterMemory(limiterSlowBruteByIpOptions)
+				: new RateLimiterMariaDb({
+						...mariaDbOptions,
+						...limiterSlowBruteByIpOptions,
+				  });
+
+		this.limiterConsecutiveFailsByEmailAndIp =
+			process.env.NODE_ENV === 'test'
+				? new RateLimiterMemory(
+						limiterConsecutiveFailsByEmailAndIpOptions,
+				  )
+				: new RateLimiterMariaDb({
+						...mariaDbOptions,
+						...limiterConsecutiveFailsByEmailAndIpOptions,
+				  });
 	}
 
 	async validate(

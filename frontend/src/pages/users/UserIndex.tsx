@@ -103,7 +103,7 @@ const UserIndex = observer((): React.ReactElement => {
 
 					<EuiSpacer size="m" />
 
-					<Pagination store={store.paginationStore} />
+					<Pagination store={store.pagination} />
 				</EuiPageContentBody>
 			</EuiPageContent>
 		</>

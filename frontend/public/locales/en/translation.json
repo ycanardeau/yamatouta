@@ -49,7 +49,10 @@
 		"delete": "Delete",
 		"basicInfo": "Basic info",
 		"navigation": "Navigation",
-		"viewBasicInfo": "View basic info"
+		"viewBasicInfo": "View basic info",
+		"add": "Add",
+		"remove": "Remove",
+		"externalLinks": "External links"
 	},
 	"translations": {
 		"addWord": "Add word",
@@ -141,6 +144,18 @@
 		"Unspecified": "Unspecified",
 		"Book": "Book",
 		"Song": "Song",
+		"Other": "Other"
+	},
+	"webLinks": {
+		"url": "URL",
+		"title": "Title",
+		"category": "Category"
+	},
+	"webLinkCategoryNames": {
+		"Unspecified": "Unspecified",
+		"Official": "Official",
+		"Commercial": "Commercial",
+		"Reference": "Reference",
 		"Other": "Other"
 	}
 }

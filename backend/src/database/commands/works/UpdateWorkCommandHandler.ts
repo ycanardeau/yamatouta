@@ -2,32 +2,38 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi, { ObjectSchema } from 'joi';
+import Joi from 'joi';
 
+import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { WorkObject } from '../../../dto/works/WorkObject';
 import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
+import { WorkOptionalFields } from '../../../models/WorkOptionalFields';
 import { WorkType } from '../../../models/WorkType';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { WebAddressFactory } from '../../../services/WebAddressFactory';
+import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateWorkParams {
-	static readonly schema: ObjectSchema<UpdateWorkParams> = Joi.object({
+	static readonly schema = Joi.object<UpdateWorkParams>({
 		workId: Joi.number().optional(),
 		name: Joi.string().required().trim().max(200),
 		workType: Joi.string()
 			.required()
 			.trim()
 			.valid(...Object.values(WorkType)),
+		webLinks: Joi.array().items(WebLinkObject.schema).required(),
 	});
 
 	constructor(
 		readonly workId: number | undefined,
 		readonly name: string,
 		readonly workType: WorkType,
+		readonly webLinks: WebLinkObject[],
 	) {}
 }
 
@@ -49,6 +55,7 @@ export class UpdateWorkCommandHandler
 		private readonly auditLogEntryFactory: AuditLogEntryFactory,
 		@InjectRepository(Work)
 		private readonly workRepo: EntityRepository<Work>,
+		private readonly webAddressFactory: WebAddressFactory,
 	) {}
 
 	async execute(command: UpdateWorkCommand): Promise<WorkObject> {
@@ -70,14 +77,26 @@ export class UpdateWorkCommandHandler
 				hidden: false,
 			});
 
-			const work = await this.workRepo.findOneOrFail({
-				id: params.workId,
-				deleted: false,
-				hidden: false,
-			});
+			const work = await this.workRepo.findOneOrFail(
+				{
+					id: params.workId,
+					deleted: false,
+					hidden: false,
+				},
+				{ populate: true },
+			);
 
 			work.name = params.name;
 			work.workType = params.workType;
+
+			await syncWebLinks(
+				em,
+				work,
+				params.webLinks,
+				permissionContext,
+				this.webAddressFactory,
+				user,
+			);
 
 			const commit = new Commit();
 
@@ -101,6 +120,10 @@ export class UpdateWorkCommandHandler
 			return work;
 		});
 
-		return new WorkObject(work, permissionContext);
+		return new WorkObject(
+			work,
+			permissionContext,
+			Object.values(WorkOptionalFields),
+		);
 	}
 }

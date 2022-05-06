@@ -1,5 +1,5 @@
-import { MikroORM } from '@mikro-orm/core';
-import { UnauthorizedException } from '@nestjs/common';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication, UnauthorizedException } from '@nestjs/common';
 
 import {
 	DeleteEntryParams,
@@ -14,42 +14,39 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';
+import { createApplication } from '../../../createApplication';
 import { createTranslation, createUser } from '../../../createEntry';
-import { testTranslationAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('DeleteTranslationCommandHandler', () => {
-	let em: FakeEntityManager;
+	let app: INestApplication;
+	let em: EntityManager;
 	let existingUser: User;
 	let translation: Translation;
-	let userRepo: any;
-	let auditLogEntryFactory: AuditLogEntryFactory;
-	let translationRepo: any;
 	let permissionContext: FakePermissionContext;
 	let deleteTranslationCommandHandler: DeleteTranslationCommandHandler;
 
 	beforeAll(async () => {
-		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
-		await MikroORM.init(undefined, false);
+		app = await createApplication();
+	});
+
+	afterAll(async () => {
+		await app.close();
 	});
 
 	beforeEach(async () => {
-		const existingUsername = 'existing';
-		const existingEmail = 'existing@example.com';
+		em = app.get(EntityManager);
 
-		existingUser = await createUser({
-			id: 1,
-			username: existingUsername,
-			email: existingEmail,
+		existingUser = await createUser(em, {
+			username: 'existing',
+			email: 'existing@example.com',
 			password: 'P@$$w0rd',
 			userGroup: UserGroup.Admin,
 		});
 
-		translation = createTranslation({
-			id: 2,
+		translation = await createTranslation(em, {
 			headword: '大和言葉',
 			locale: 'ojp',
 			reading: 'やまとことば',
@@ -57,28 +54,18 @@ describe('DeleteTranslationCommandHandler', () => {
 			user: existingUser,
 		});
 
-		em = new FakeEntityManager();
-		userRepo = {
-			findOneOrFail: async (): Promise<User> => existingUser,
-			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter(
-					(u) => u.normalizedEmail === where.normalizedEmail,
-				)[0],
-			persist: (): void => {},
-		};
-		auditLogEntryFactory = new AuditLogEntryFactory();
-		translationRepo = {
-			findOneOrFail: async (): Promise<Translation> => translation,
-		};
-
 		permissionContext = new FakePermissionContext(existingUser);
 
-		deleteTranslationCommandHandler = new DeleteTranslationCommandHandler(
-			em as any,
-			userRepo as any,
-			auditLogEntryFactory,
-			translationRepo as any,
+		deleteTranslationCommandHandler = app.get(
+			DeleteTranslationCommandHandler,
 		);
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
 	});
 
 	describe('deleteTranslation', () => {
@@ -96,27 +83,24 @@ describe('DeleteTranslationCommandHandler', () => {
 				entryId: translation.id,
 			});
 
-			const revision = em.entities.filter(
-				(entity) => entity instanceof TranslationRevision,
-			)[0] as TranslationRevision;
+			const revision = translation.revisions[0];
 
 			expect(revision).toBeInstanceOf(TranslationRevision);
 			expect(revision.translation).toBe(translation);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Deleted);
 			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(
-					new TranslationSnapshot({ translation: translation }),
-				),
+				JSON.stringify(new TranslationSnapshot(translation)),
 			);
 
 			expect(translation.deleted).toBe(true);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof TranslationAuditLogEntry,
-			)[0] as TranslationAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(
+				TranslationAuditLogEntry,
+				{ translation: translation },
+			);
 
-			testTranslationAuditLogEntry(auditLogEntry, {
+			assertTranslationAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Translation_Delete,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,

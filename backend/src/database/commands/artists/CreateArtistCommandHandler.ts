@@ -7,6 +7,7 @@ import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
+import { ArtistOptionalFields } from '../../../models/ArtistOptionalFields';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
@@ -79,6 +80,10 @@ export class CreateArtistCommandHandler
 			return artist;
 		});
 
-		return new ArtistObject(artist, permissionContext);
+		return new ArtistObject(
+			artist,
+			permissionContext,
+			Object.values(ArtistOptionalFields),
+		);
 	}
 }

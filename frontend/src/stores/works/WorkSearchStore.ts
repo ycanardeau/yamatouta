@@ -36,7 +36,7 @@ export class WorkSearchStore
 			ISearchResultObject<IWorkObject>
 		>
 {
-	readonly paginationStore = new PaginationStore({ pageSize: 50 });
+	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable works: IWorkObject[] = [];
 
 	constructor() {
@@ -50,7 +50,7 @@ export class WorkSearchStore
 	updateResults = async (
 		clearResults: boolean,
 	): Promise<ISearchResultObject<IWorkObject>> => {
-		const paginationParams = this.paginationStore.toParams(clearResults);
+		const paginationParams = this.pagination.toParams(clearResults);
 
 		const result = await listWorks({
 			pagination: paginationParams,
@@ -60,7 +60,7 @@ export class WorkSearchStore
 			this.works = result.items;
 
 			if (paginationParams.getTotalCount)
-				this.paginationStore.totalItems = result.totalCount;
+				this.pagination.totalItems = result.totalCount;
 		});
 
 		return result;
@@ -68,13 +68,13 @@ export class WorkSearchStore
 
 	@computed.struct get routeParams(): IWorkSearchRouteParams {
 		return {
-			page: this.paginationStore.page,
-			pageSize: this.paginationStore.pageSize,
+			page: this.pagination.page,
+			pageSize: this.pagination.pageSize,
 		};
 	}
 	set routeParams(value: IWorkSearchRouteParams) {
-		this.paginationStore.page = value.page ?? 1;
-		this.paginationStore.pageSize = value.pageSize ?? 50;
+		this.pagination.page = value.page ?? 1;
+		this.pagination.pageSize = value.pageSize ?? 50;
 	}
 
 	validateRouteParams = (data: any): data is IWorkSearchRouteParams => {

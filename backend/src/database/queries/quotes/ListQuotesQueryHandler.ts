@@ -7,7 +7,7 @@ import {
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi, { ObjectSchema } from 'joi';
+import Joi from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
@@ -18,7 +18,7 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
 
 export class ListQuotesParams {
-	static readonly schema: ObjectSchema<ListQuotesParams> = Joi.object({
+	static readonly schema = Joi.object<ListQuotesParams>({
 		quoteType: Joi.string()
 			.optional()
 			.valid(...Object.values(QuoteType)),

@@ -12,10 +12,13 @@ import {
 
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
+import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { TranslationSnapshot } from '../models/Snapshot';
+import { WebLinkCategory } from '../models/WebLinkCategory';
 import { WordCategory } from '../models/WordCategory';
 import { NgramConverter } from '../services/NgramConverter';
 import { Commit } from './Commit';
@@ -23,6 +26,8 @@ import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
 import { TranslationSearchIndex } from './TranslationSearchIndex';
 import { User } from './User';
+import { WebAddress } from './WebAddress';
+import { TranslationWebLink } from './WebLink';
 
 @Entity({ tableName: 'translations' })
 export class Translation
@@ -33,7 +38,9 @@ export class Translation
 			TranslationRevision,
 			TranslationSnapshot
 		>,
-		IRevisionFactory<Translation, TranslationRevision, TranslationSnapshot>
+		IRevisionFactory<Translation, TranslationRevision, TranslationSnapshot>,
+		IEntryWithWebLinks<TranslationWebLink>,
+		IWebLinkFactory<TranslationWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -82,6 +89,9 @@ export class Translation
 	> {
 		return new RevisionManager(this);
 	}
+
+	@OneToMany(() => TranslationWebLink, (webLink) => webLink.translation)
+	webLinks = new Collection<TranslationWebLink>(this);
 
 	constructor({
 		translatedString,
@@ -155,10 +165,27 @@ export class Translation
 			translation: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new TranslationSnapshot({ translation: this }),
+			snapshot: new TranslationSnapshot(this),
 			summary: summary,
 			event: event,
 			version: ++this.version,
+		});
+	}
+
+	createWebLink({
+		address,
+		title,
+		category,
+	}: {
+		address: WebAddress;
+		title: string;
+		category: WebLinkCategory;
+	}): TranslationWebLink {
+		return new TranslationWebLink({
+			translation: this,
+			address: address,
+			title: title,
+			category: category,
 		});
 	}
 }

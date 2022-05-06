@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 import { ISearchResultObject } from '../dto/ISearchResultObject';
+import { IWebLinkObject } from '../dto/IWebLinkObject';
 import { ITranslationObject } from '../dto/translations/ITranslationObject';
+import { TranslationOptionalFields } from '../models/TranslationOptionalFields';
 import { TranslationSortRule } from '../models/TranslationSortRule';
 import { WordCategory } from '../models/WordCategory';
 import { IPaginationParams } from '../stores/PaginationStore';
@@ -12,19 +14,22 @@ export const createTranslation = async ({
 	reading,
 	yamatokotoba,
 	category,
+	webLinks,
 }: {
 	headword: string;
-	locale?: string;
-	reading?: string;
+	locale: string;
+	reading: string;
 	yamatokotoba: string;
-	category?: WordCategory;
+	category: WordCategory;
+	webLinks: IWebLinkObject[];
 }): Promise<ITranslationObject> => {
 	const response = await axios.post<ITranslationObject>('/translations', {
-		headword: headword,
-		locale: locale,
-		reading: reading,
-		yamatokotoba: yamatokotoba,
-		category: category,
+		headword,
+		locale,
+		reading,
+		yamatokotoba,
+		category,
+		webLinks,
 	});
 
 	return response.data;
@@ -63,22 +68,25 @@ export const updateTranslation = async ({
 	reading,
 	yamatokotoba,
 	category,
+	webLinks,
 }: {
 	translationId: number;
 	headword: string;
-	locale?: string;
-	reading?: string;
+	locale: string;
+	reading: string;
 	yamatokotoba: string;
-	category?: WordCategory;
+	category: WordCategory;
+	webLinks: IWebLinkObject[];
 }): Promise<ITranslationObject> => {
 	const response = await axios.patch<ITranslationObject>(
 		`/translations/${translationId}`,
 		{
-			headword: headword,
-			locale: locale,
-			reading: reading,
-			yamatokotoba: yamatokotoba,
-			category: category,
+			headword,
+			locale,
+			reading,
+			yamatokotoba,
+			category,
+			webLinks,
 		},
 	);
 
@@ -95,11 +103,14 @@ export const deleteTranslation = async ({
 
 export const getTranslation = async ({
 	translationId,
+	fields,
 }: {
 	translationId: number;
+	fields?: TranslationOptionalFields[];
 }): Promise<ITranslationObject> => {
 	const response = await axios.get<ITranslationObject>(
 		`/translations/${translationId}`,
+		{ params: { fields: fields } },
 	);
 
 	return response.data;

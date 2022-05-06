@@ -8,6 +8,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Link from '../../components/Link';
+import WebLinkList from '../../components/WebLinkList';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 
@@ -71,6 +72,17 @@ const TranslationBasicInfo = ({
 							{t(`wordCategoryNames.${translation.category}`)}
 						</Link>
 					</EuiDescriptionListDescription>
+
+					{translation.webLinks.length > 0 && (
+						<>
+							<EuiDescriptionListTitle>
+								{t('shared.externalLinks')}
+							</EuiDescriptionListTitle>
+							<EuiDescriptionListDescription>
+								<WebLinkList webLinks={translation.webLinks} />
+							</EuiDescriptionListDescription>
+						</>
+					)}
 				</EuiDescriptionList>
 			</div>
 		</>

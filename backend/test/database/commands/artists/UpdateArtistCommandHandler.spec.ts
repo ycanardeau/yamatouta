@@ -1,5 +1,9 @@
-import { MikroORM } from '@mikro-orm/core';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import {
+	BadRequestException,
+	INestApplication,
+	UnauthorizedException,
+} from '@nestjs/common';
 
 import {
 	UpdateArtistCommand,
@@ -16,76 +20,61 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertArtistAuditLogEntry } from '../../../assertAuditLogEntry';
+import { createApplication } from '../../../createApplication';
 import { createArtist, createUser } from '../../../createEntry';
-import { testArtistAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('UpdateArtistCommandHandler', () => {
-	let em: FakeEntityManager;
+	let app: INestApplication;
+	let em: EntityManager;
 	let existingUser: User;
 	let artist: Artist;
-	let userRepo: any;
-	let auditLogEntryFactory: AuditLogEntryFactory;
-	let artistRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateArtistCommandHandler: UpdateArtistCommandHandler;
 	let defaultParams: UpdateArtistParams;
 
 	beforeAll(async () => {
-		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
-		await MikroORM.init(undefined, false);
+		app = await createApplication();
+	});
+
+	afterAll(async () => {
+		await app.close();
 	});
 
 	beforeEach(async () => {
-		const existingUsername = 'existing';
-		const existingEmail = 'existing@example.com';
+		em = app.get(EntityManager);
 
-		existingUser = await createUser({
-			id: 1,
-			username: existingUsername,
-			email: existingEmail,
+		existingUser = await createUser(em, {
+			username: 'existing',
+			email: 'existing@example.com',
 			password: 'P@$$w0rd',
 			userGroup: UserGroup.Admin,
 		});
 
-		artist = createArtist({
-			id: 2,
+		artist = await createArtist(em, {
 			name: 'うたよみ',
 			artistType: ArtistType.Person,
 		});
 
-		em = new FakeEntityManager();
-		userRepo = {
-			findOneOrFail: async (): Promise<User> => existingUser,
-			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter(
-					(u) => u.normalizedEmail === where.normalizedEmail,
-				)[0],
-			persist: (): void => {},
-		};
-		auditLogEntryFactory = new AuditLogEntryFactory();
-		artistRepo = {
-			findOneOrFail: async (where: any): Promise<Artist> =>
-				[artist].filter((a) => a.id === where.id)[0],
-		};
-
 		permissionContext = new FakePermissionContext(existingUser);
 
-		updateArtistCommandHandler = new UpdateArtistCommandHandler(
-			em as any,
-			userRepo as any,
-			auditLogEntryFactory,
-			artistRepo as any,
-		);
+		updateArtistCommandHandler = app.get(UpdateArtistCommandHandler);
 
 		defaultParams = {
 			artistId: artist.id,
 			name: 'くみあい',
 			artistType: ArtistType.Group,
+			webLinks: [],
 		};
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
 	});
 
 	describe('updateArtist', () => {
@@ -112,9 +101,11 @@ describe('UpdateArtistCommandHandler', () => {
 			expect(artistObject.name).toBe(params.name);
 			expect(artistObject.artistType).toBe(params.artistType);
 
-			const revision = em.entities.filter(
-				(entity) => entity instanceof ArtistRevision,
-			)[0] as ArtistRevision;
+			const artist = await em.findOneOrFail(Artist, {
+				id: artistObject.id,
+			});
+
+			const revision = artist.revisions[0];
 
 			expect(revision).toBeInstanceOf(ArtistRevision);
 			expect(revision.artist).toBe(artist);
@@ -124,11 +115,11 @@ describe('UpdateArtistCommandHandler', () => {
 				JSON.stringify(snapshot),
 			);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof ArtistAuditLogEntry,
-			)[0] as ArtistAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(ArtistAuditLogEntry, {
+				artist: artist,
+			});
 
-			testArtistAuditLogEntry(auditLogEntry, {
+			assertArtistAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Artist_Update,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,
@@ -167,6 +158,7 @@ describe('UpdateArtistCommandHandler', () => {
 				snapshot: {
 					name: artist.name,
 					artistType: artist.artistType,
+					webLinks: [],
 				},
 			});
 		});
@@ -181,6 +173,7 @@ describe('UpdateArtistCommandHandler', () => {
 				snapshot: {
 					name: defaultParams.name,
 					artistType: artist.artistType,
+					webLinks: [],
 				},
 			});
 		});
@@ -192,6 +185,7 @@ describe('UpdateArtistCommandHandler', () => {
 				snapshot: {
 					name: defaultParams.name,
 					artistType: defaultParams.artistType,
+					webLinks: [],
 				},
 			});
 		});
@@ -238,6 +232,16 @@ describe('UpdateArtistCommandHandler', () => {
 				execute(permissionContext, {
 					...defaultParams,
 					artistType: 'abcdef' as ArtistType,
+				}),
+			).rejects.toThrow(BadRequestException);
+		});
+
+		test('webLinks is undefined', async () => {
+			await expect(
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					webLinks: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
 		});

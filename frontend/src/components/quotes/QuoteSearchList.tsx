@@ -20,7 +20,7 @@ const QuoteSearchList = observer(
 					</EuiCommentList>
 				))}
 
-				<Pagination store={store.paginationStore} />
+				<Pagination store={store.pagination} />
 			</>
 		);
 	},

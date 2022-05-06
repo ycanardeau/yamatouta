@@ -1,5 +1,9 @@
-import { MikroORM } from '@mikro-orm/core';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import {
+	BadRequestException,
+	INestApplication,
+	UnauthorizedException,
+} from '@nestjs/common';
 
 import {
 	UpdateTranslationCommand,
@@ -16,45 +20,40 @@ import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WordCategory } from '../../../../src/models/WordCategory';
-import { AuditLogEntryFactory } from '../../../../src/services/AuditLogEntryFactory';
-import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakeEntityManager } from '../../../FakeEntityManager';
 import { FakePermissionContext } from '../../../FakePermissionContext';
+import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';
+import { createApplication } from '../../../createApplication';
 import { createTranslation, createUser } from '../../../createEntry';
-import { testTranslationAuditLogEntry } from '../../../testAuditLogEntry';
 
 describe('UpdateTranslationCommandHandler', () => {
-	let em: FakeEntityManager;
+	let app: INestApplication;
+	let em: EntityManager;
 	let existingUser: User;
 	let translation: Translation;
-	let userRepo: any;
-	let auditLogEntryFactory: AuditLogEntryFactory;
-	let ngramConverter: NgramConverter;
-	let translationRepo: any;
 	let permissionContext: FakePermissionContext;
 	let updateTranslationCommandHandler: UpdateTranslationCommandHandler;
 	let defaultParams: UpdateTranslationParams;
 
 	beforeAll(async () => {
-		// See https://stackoverflow.com/questions/69924546/unit-testing-mirkoorm-entities.
-		await MikroORM.init(undefined, false);
+		app = await createApplication();
+	});
+
+	afterAll(async () => {
+		await app.close();
 	});
 
 	beforeEach(async () => {
-		const existingUsername = 'existing';
-		const existingEmail = 'existing@example.com';
+		em = app.get(EntityManager);
 
-		existingUser = await createUser({
-			id: 1,
-			username: existingUsername,
-			email: existingEmail,
+		existingUser = await createUser(em, {
+			username: 'existing',
+			email: 'existing@example.com',
 			password: 'P@$$w0rd',
 			userGroup: UserGroup.Admin,
 		});
 
-		translation = createTranslation({
-			id: 2,
+		translation = await createTranslation(em, {
 			headword: '大和言葉',
 			locale: 'ojp',
 			reading: 'やまとことば',
@@ -62,30 +61,10 @@ describe('UpdateTranslationCommandHandler', () => {
 			user: existingUser,
 		});
 
-		em = new FakeEntityManager();
-		userRepo = {
-			findOneOrFail: async (): Promise<User> => existingUser,
-			findOne: async (where: any): Promise<User> =>
-				[existingUser].filter(
-					(u) => u.normalizedEmail === where.normalizedEmail,
-				)[0],
-			persist: (): void => {},
-		};
-		auditLogEntryFactory = new AuditLogEntryFactory();
-		ngramConverter = new NgramConverter();
-		translationRepo = {
-			findOneOrFail: async (where: any): Promise<Translation> =>
-				[translation].filter((t) => t.id === where.id)[0],
-		};
-
 		permissionContext = new FakePermissionContext(existingUser);
 
-		updateTranslationCommandHandler = new UpdateTranslationCommandHandler(
-			em as any,
-			userRepo as any,
-			auditLogEntryFactory,
-			ngramConverter,
-			translationRepo as any,
+		updateTranslationCommandHandler = app.get(
+			UpdateTranslationCommandHandler,
 		);
 
 		defaultParams = {
@@ -95,7 +74,15 @@ describe('UpdateTranslationCommandHandler', () => {
 			reading: 'わご',
 			yamatokotoba: 'やまとことのは',
 			category: WordCategory.Noun,
+			webLinks: [],
 		};
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
 	});
 
 	describe('updateTranslation', () => {
@@ -125,9 +112,11 @@ describe('UpdateTranslationCommandHandler', () => {
 			expect(translationObject.yamatokotoba).toBe(params.yamatokotoba);
 			expect(translationObject.category).toBe(params.category);
 
-			const revision = em.entities.filter(
-				(entity) => entity instanceof TranslationRevision,
-			)[0] as TranslationRevision;
+			const translation = await em.findOneOrFail(Translation, {
+				id: translationObject.id,
+			});
+
+			const revision = translation.revisions[0];
 
 			expect(revision).toBeInstanceOf(TranslationRevision);
 			expect(revision.translation).toBe(translation);
@@ -137,11 +126,14 @@ describe('UpdateTranslationCommandHandler', () => {
 				JSON.stringify(snapshot),
 			);
 
-			const auditLogEntry = em.entities.filter(
-				(entity) => entity instanceof TranslationAuditLogEntry,
-			)[0] as TranslationAuditLogEntry;
+			const auditLogEntry = await em.findOneOrFail(
+				TranslationAuditLogEntry,
+				{
+					translation: translation,
+				},
+			);
 
-			testTranslationAuditLogEntry(auditLogEntry, {
+			assertTranslationAuditLogEntry(auditLogEntry, {
 				action: AuditedAction.Translation_Update,
 				actor: existingUser,
 				actorIp: permissionContext.clientIp,
@@ -187,6 +179,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -208,6 +201,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -228,6 +222,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -247,6 +242,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -265,6 +261,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: defaultParams.yamatokotoba,
 					category: translation.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -280,6 +277,7 @@ describe('UpdateTranslationCommandHandler', () => {
 					yamatokotoba: defaultParams.yamatokotoba,
 					category: defaultParams.category,
 					inishienomanabi_tags: [],
+					webLinks: [],
 				},
 			});
 		});
@@ -418,6 +416,16 @@ describe('UpdateTranslationCommandHandler', () => {
 				execute(permissionContext, {
 					...defaultParams,
 					category: 'abcdef' as WordCategory,
+				}),
+			).rejects.toThrow(BadRequestException);
+		});
+
+		test('webLinks is undefined', async () => {
+			await expect(
+				execute(permissionContext, {
+					...defaultParams,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+					webLinks: undefined!,
 				}),
 			).rejects.toThrow(BadRequestException);
 		});

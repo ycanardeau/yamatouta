@@ -12,7 +12,7 @@ import { User } from '../src/entities/User';
 import { Work } from '../src/entities/Work';
 import { AuditedAction } from '../src/models/AuditedAction';
 
-export const testUserAuditLogEntry = (
+export const assertUserAuditLogEntry = (
 	actual: UserAuditLogEntry,
 	{
 		action,
@@ -39,7 +39,7 @@ export const testUserAuditLogEntry = (
 	expect(actual.user).toBe(user);
 };
 
-export const testTranslationAuditLogEntry = (
+export const assertTranslationAuditLogEntry = (
 	actual: TranslationAuditLogEntry,
 	{
 		action,
@@ -66,7 +66,7 @@ export const testTranslationAuditLogEntry = (
 	expect(actual.translation).toBe(translation);
 };
 
-export const testArtistAuditLogEntry = (
+export const assertArtistAuditLogEntry = (
 	actual: ArtistAuditLogEntry,
 	{
 		action,
@@ -93,7 +93,7 @@ export const testArtistAuditLogEntry = (
 	expect(actual.artist).toBe(artist);
 };
 
-export const testQuoteAuditLogEntry = (
+export const assertQuoteAuditLogEntry = (
 	actual: QuoteAuditLogEntry,
 	{
 		action,
@@ -120,7 +120,7 @@ export const testQuoteAuditLogEntry = (
 	expect(actual.quote).toBe(quote);
 };
 
-export const testWorkAuditLogEntry = (
+export const assertWorkAuditLogEntry = (
 	actual: WorkAuditLogEntry,
 	{
 		action,

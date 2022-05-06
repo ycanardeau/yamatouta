@@ -7,7 +7,7 @@ import {
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi, { ObjectSchema } from 'joi';
+import Joi from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { UserObject } from '../../../dto/users/UserObject';
@@ -17,7 +17,7 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class ListUsersParams {
-	static readonly schema: ObjectSchema<ListUsersParams> = Joi.object({
+	static readonly schema = Joi.object<ListUsersParams>({
 		offset: Joi.number().optional(),
 		limit: Joi.number().optional(),
 		getTotalCount: Joi.boolean().optional(),

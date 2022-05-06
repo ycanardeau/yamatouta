@@ -9,18 +9,23 @@ import {
 
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IRevisionFactory } from '../models/IRevisionFactory';
+import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { WorkSnapshot } from '../models/Snapshot';
+import { WebLinkCategory } from '../models/WebLinkCategory';
 import { WorkType } from '../models/WorkType';
 import { Commit } from './Commit';
 import { WorkRevision } from './Revision';
 import { User } from './User';
+import { WebAddress } from './WebAddress';
+import { WorkWebLink } from './WebLink';
 
 @Entity({ tableName: 'works' })
 export class Work
 	implements
 		IEntryWithRevisions<Work, WorkRevision, WorkSnapshot>,
-		IRevisionFactory<Work, WorkRevision, WorkSnapshot>
+		IRevisionFactory<Work, WorkRevision, WorkSnapshot>,
+		IWebLinkFactory<WorkWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -54,6 +59,9 @@ export class Work
 		this.workType = workType;
 	}
 
+	@OneToMany(() => WorkWebLink, (webLink) => webLink.work)
+	webLinks = new Collection<WorkWebLink>(this);
+
 	createRevision({
 		commit,
 		actor,
@@ -69,10 +77,27 @@ export class Work
 			work: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new WorkSnapshot({ work: this }),
+			snapshot: new WorkSnapshot(this),
 			summary: summary,
 			event: event,
 			version: ++this.version,
+		});
+	}
+
+	createWebLink({
+		address,
+		title,
+		category,
+	}: {
+		address: WebAddress;
+		title: string;
+		category: WebLinkCategory;
+	}): WorkWebLink {
+		return new WorkWebLink({
+			work: this,
+			address: address,
+			title: title,
+			category: category,
 		});
 	}
 }

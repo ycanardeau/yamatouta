@@ -2,21 +2,25 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi, { ObjectSchema } from 'joi';
+import Joi from 'joi';
 
+import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Commit } from '../../../entities/Commit';
 import { Translation } from '../../../entities/Translation';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
+import { TranslationOptionalFields } from '../../../models/TranslationOptionalFields';
 import { WordCategory } from '../../../models/WordCategory';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { WebAddressFactory } from '../../../services/WebAddressFactory';
+import { syncWebLinks } from '../entries/syncWebLinks';
 
 export class UpdateTranslationParams {
-	static readonly schema: ObjectSchema<UpdateTranslationParams> = Joi.object({
+	static readonly schema = Joi.object<UpdateTranslationParams>({
 		translationId: Joi.number().optional(),
 		headword: Joi.string().required().trim().max(200),
 		locale: Joi.string().required().trim(),
@@ -34,6 +38,7 @@ export class UpdateTranslationParams {
 			.required()
 			.trim()
 			.valid(...Object.values(WordCategory)),
+		webLinks: Joi.array().items(WebLinkObject.schema).required(),
 	});
 
 	constructor(
@@ -43,6 +48,7 @@ export class UpdateTranslationParams {
 		readonly reading: string,
 		readonly yamatokotoba: string,
 		readonly category: WordCategory,
+		readonly webLinks: WebLinkObject[],
 	) {}
 }
 
@@ -65,6 +71,7 @@ export class UpdateTranslationCommandHandler
 		private readonly ngramConverter: NgramConverter,
 		@InjectRepository(Translation)
 		private readonly translationRepo: EntityRepository<Translation>,
+		private readonly webAddressFactory: WebAddressFactory,
 	) {}
 
 	async execute(
@@ -81,9 +88,6 @@ export class UpdateTranslationCommandHandler
 		if (result.error)
 			throw new BadRequestException(result.error.details[0].message);
 
-		const { headword, locale, reading, yamatokotoba, category } =
-			result.value;
-
 		const translation = await this.em.transactional(async (em) => {
 			const user = await this.userRepo.findOneOrFail({
 				id: permissionContext.user?.id,
@@ -97,16 +101,25 @@ export class UpdateTranslationCommandHandler
 					deleted: false,
 					hidden: false,
 				},
-				{ populate: ['searchIndex'] },
+				{ populate: true },
 			);
 
-			translation.headword = headword;
-			translation.locale = locale;
-			translation.reading = reading;
-			translation.yamatokotoba = yamatokotoba;
-			translation.category = category;
+			translation.headword = params.headword;
+			translation.locale = params.locale;
+			translation.reading = params.reading;
+			translation.yamatokotoba = params.yamatokotoba;
+			translation.category = params.category;
 
 			translation.updateSearchIndex(this.ngramConverter);
+
+			await syncWebLinks(
+				em,
+				translation,
+				params.webLinks,
+				permissionContext,
+				this.webAddressFactory,
+				user,
+			);
 
 			const commit = new Commit();
 
@@ -130,6 +143,10 @@ export class UpdateTranslationCommandHandler
 			return translation;
 		});
 
-		return new TranslationObject(translation, permissionContext);
+		return new TranslationObject(
+			translation,
+			permissionContext,
+			Object.values(TranslationOptionalFields),
+		);
 	}
 }

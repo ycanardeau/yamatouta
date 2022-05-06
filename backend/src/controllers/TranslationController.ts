@@ -18,7 +18,10 @@ import {
 	UpdateTranslationParams,
 } from '../database/commands/translations/UpdateTranslationCommandHandler';
 import { ListTranslationRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
-import { GetTranslationQuery } from '../database/queries/translations/GetTranslationQueryHandler';
+import {
+	GetTranslationParams,
+	GetTranslationQuery,
+} from '../database/queries/translations/GetTranslationQueryHandler';
 import {
 	ListTranslationsParams,
 	ListTranslationsQuery,
@@ -90,9 +93,14 @@ export class TranslationController {
 	getTranslation(
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('translationId', ParseIntPipe) translationId: number,
+		@Query(new JoiValidationPipe(GetTranslationParams.schema))
+		params: GetTranslationParams,
 	): Promise<TranslationObject> {
 		return this.queryBus.execute(
-			new GetTranslationQuery(permissionContext, { translationId }),
+			new GetTranslationQuery(permissionContext, {
+				...params,
+				translationId,
+			}),
 		);
 	}
 

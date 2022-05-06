@@ -9,12 +9,14 @@ import {
 import { createWork, updateWork } from '../../api/WorkApi';
 import { IWorkObject } from '../../dto/works/IWorkObject';
 import { WorkType } from '../../models/WorkType';
+import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class WorkEditStore {
 	private readonly work?: IWorkObject;
 	@observable submitting = false;
 	@observable name = '';
 	@observable workType = WorkType.Book;
+	readonly webLinks: WebLinkListEditStore;
 
 	constructor(work?: IWorkObject) {
 		makeObservable(this);
@@ -24,6 +26,9 @@ export class WorkEditStore {
 		if (work) {
 			this.name = work.name;
 			this.workType = work.workType;
+			this.webLinks = new WebLinkListEditStore(work.webLinks);
+		} else {
+			this.webLinks = new WebLinkListEditStore([]);
 		}
 	}
 
@@ -43,7 +48,11 @@ export class WorkEditStore {
 		try {
 			this.submitting = true;
 
-			const params = { name: this.name, workType: this.workType };
+			const params = {
+				name: this.name,
+				workType: this.workType,
+				webLinks: this.webLinks.items,
+			};
 
 			// Await.
 			const work = await (this.work

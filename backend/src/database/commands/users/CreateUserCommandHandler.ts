@@ -2,7 +2,7 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi, { ObjectSchema } from 'joi';
+import Joi from 'joi';
 
 import config from '../../../config';
 import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
@@ -14,7 +14,7 @@ import { PasswordHasherFactory } from '../../../services/passwordHashers/Passwor
 import { normalizeEmail } from '../../../utils/normalizeEmail';
 
 export class CreateUserParams {
-	static readonly schema: ObjectSchema<CreateUserParams> = Joi.object({
+	static readonly schema = Joi.object<CreateUserParams>({
 		username: Joi.string().required().trim().min(2).max(32),
 		email: Joi.string().required().email().max(50),
 		password: Joi.string().required().min(8),

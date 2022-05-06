@@ -3,26 +3,26 @@ import { NotFoundException } from '@nestjs/common';
 import { QuoteObject } from '../../../src/dto/quotes/QuoteObject';
 import { ArtistType } from '../../../src/models/ArtistType';
 import { QuoteType } from '../../../src/models/QuoteType';
+import { FakeEntityManager } from '../../FakeEntityManager';
 import { FakePermissionContext } from '../../FakePermissionContext';
 import { createArtist, createQuote, createUser } from '../../createEntry';
 
 test('QuoteObject', async () => {
-	const artist = createArtist({
-		id: 1,
+	const em = new FakeEntityManager();
+
+	const artist = await createArtist(em as any, {
 		name: 'artist',
 		artistType: ArtistType.Person,
 	});
 
-	const artistQuote = createQuote({
-		id: 2,
+	const artistQuote = await createQuote(em as any, {
 		quoteType: QuoteType.Tanka,
 		text: 'quote',
 		locale: '',
 		artist: artist,
 	});
 
-	const deletedQuote = createQuote({
-		id: 3,
+	const deletedQuote = await createQuote(em as any, {
 		quoteType: QuoteType.Tanka,
 		text: 'deleted',
 		locale: '',
@@ -30,8 +30,7 @@ test('QuoteObject', async () => {
 		deleted: true,
 	});
 
-	const hiddenQuote = createQuote({
-		id: 4,
+	const hiddenQuote = await createQuote(em as any, {
 		quoteType: QuoteType.Tanka,
 		text: 'hidden',
 		locale: '',
@@ -39,8 +38,7 @@ test('QuoteObject', async () => {
 		hidden: true,
 	});
 
-	const viewer = await createUser({
-		id: 5,
+	const viewer = await createUser(em as any, {
 		username: 'viewer',
 		email: 'viewer@example.com',
 	});
