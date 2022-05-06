@@ -1,0 +1,18 @@
+export const hostnameTitlePairs: Record<string, string> = {
+	'yamatouta.net': 'やまとうた',
+	'inishienomanabi.net': 'いにしえのまなび',
+	'vocadb.net': 'VocaDB',
+	'ndlonline.ndl.go.jp': '国立国会図書館オンライン',
+	'ja.wikipedia.org': 'Wikipedia (JA)',
+	'en.wikipedia.org': 'Wikipedia (EN)',
+	'ja.wiktionary.org': 'Wiktionary (JA)',
+	'kobun.weblio.jp': 'Weblio古語辞典',
+	'dictionary.goo.ne.jp': 'goo国語辞書',
+	'kotobank.jp': 'コトバンク',
+	'lapis.nichibun.ac.jp': '和歌データベース',
+	'furigana.info': 'ふりがな文庫',
+	'www.amazon.co.jp': 'Amazon.co.jp',
+	'www.amazon.com': 'Amazon.com',
+	'twitter.com': 'Twitter',
+	'www.youtube.com': 'YouTube',
+};
