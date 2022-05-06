@@ -50,7 +50,7 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 			actor,
 		);
 
-		oldItem.address = address;
+		oldItem.setAddress(address);
 		oldItem.title = newItem.title;
 		oldItem.category = newItem.category;
 

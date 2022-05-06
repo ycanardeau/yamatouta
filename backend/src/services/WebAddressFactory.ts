@@ -13,8 +13,8 @@ export class WebAddressFactory {
 		actor: User,
 	): Promise<WebAddressHost> {
 		const host =
-			(await em.findOne(WebAddressHost, { hostname: url.host })) ??
-			new WebAddressHost(url.host, actor);
+			(await em.findOne(WebAddressHost, { hostname: url.hostname })) ??
+			new WebAddressHost(url.hostname, actor);
 
 		em.persist(host);
 

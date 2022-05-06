@@ -63,6 +63,14 @@ export abstract class WebLink
 			this.category === other.category
 		);
 	}
+
+	setAddress(value: WebAddress): void {
+		this.address.decrementReferenceCount();
+
+		this.address = value;
+
+		this.address.incrementReferenceCount();
+	}
 }
 
 @Entity({ tableName: 'web_links', discriminatorValue: EntryType.Translation })
