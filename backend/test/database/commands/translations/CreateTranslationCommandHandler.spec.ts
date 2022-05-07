@@ -17,7 +17,7 @@ import { Translation } from '../../../../src/entities/Translation';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { TranslationSnapshot } from '../../../../src/models/Snapshot';
+import { ITranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WordCategory } from '../../../../src/models/WordCategory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
@@ -93,7 +93,7 @@ describe('CreateTranslationCommandHandler', () => {
 		}: {
 			permissionContext: PermissionContext;
 			params: UpdateTranslationParams;
-			snapshot: TranslationSnapshot;
+			snapshot: ITranslationSnapshot;
 		}): Promise<void> => {
 			const translationObject = await execute(permissionContext, params);
 
@@ -113,9 +113,7 @@ describe('CreateTranslationCommandHandler', () => {
 			expect(revision.translation).toBe(translation);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Created);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(snapshot),
-			);
+			expect(revision.snapshot.contentEquals(snapshot)).toBe(true);
 
 			const auditLogEntry = await em.findOneOrFail(
 				TranslationAuditLogEntry,

@@ -21,8 +21,8 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { QuoteType } from '../../../../src/models/QuoteType';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import {
+	IQuoteSnapshot,
 	ObjectRefSnapshot,
-	QuoteSnapshot,
 } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
@@ -65,7 +65,7 @@ describe('UpdateQuoteCommandHandler', () => {
 		});
 
 		quote = await createQuote(em, {
-			text: 'やまとうた',
+			text: 'みじかうた',
 			quoteType: QuoteType.Tanka,
 			locale: 'ja',
 			artist: artist,
@@ -77,9 +77,9 @@ describe('UpdateQuoteCommandHandler', () => {
 
 		defaultParams = {
 			quoteId: quote.id,
-			text: 'やまとうた',
-			quoteType: QuoteType.Tanka,
-			locale: 'ja',
+			text: 'うたことば',
+			quoteType: QuoteType.Lyrics,
+			locale: 'ojp',
 			artistId: artist.id,
 			webLinks: [],
 		};
@@ -109,7 +109,7 @@ describe('UpdateQuoteCommandHandler', () => {
 		}: {
 			permissionContext: PermissionContext;
 			params: UpdateQuoteParams;
-			snapshot: QuoteSnapshot;
+			snapshot: IQuoteSnapshot;
 		}): Promise<void> => {
 			const quoteObject = await execute(permissionContext, params);
 
@@ -126,9 +126,7 @@ describe('UpdateQuoteCommandHandler', () => {
 			expect(revision.quote).toBe(quote);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Updated);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(snapshot),
-			);
+			expect(revision.snapshot.contentEquals(snapshot)).toBe(true);
 
 			const auditLogEntry = await em.findOneOrFail(QuoteAuditLogEntry, {
 				quote: quote,
@@ -162,24 +160,16 @@ describe('UpdateQuoteCommandHandler', () => {
 			}
 		});
 
-		test('0 changes', async () => {
-			await testUpdateQuote({
-				permissionContext,
-				params: {
+		test('nothing has changed', async () => {
+			await expect(
+				execute(permissionContext, {
 					...defaultParams,
 					text: quote.text,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
 					artistId: quote.artist.id,
-				},
-				snapshot: {
-					text: quote.text,
-					quoteType: quote.quoteType,
-					locale: quote.locale,
-					artist: new ObjectRefSnapshot(artist),
-					webLinks: [],
-				},
-			});
+				}),
+			).rejects.toThrow(BadRequestException);
 		});
 
 		test('1 change', async () => {

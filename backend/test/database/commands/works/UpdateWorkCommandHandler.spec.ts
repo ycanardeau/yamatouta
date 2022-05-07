@@ -17,7 +17,7 @@ import { User } from '../../../../src/entities/User';
 import { Work } from '../../../../src/entities/Work';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { WorkSnapshot } from '../../../../src/models/Snapshot';
+import { IWorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
@@ -94,7 +94,7 @@ describe('UpdateWorkCommandHandler', () => {
 		}: {
 			permissionContext: PermissionContext;
 			params: UpdateWorkParams;
-			snapshot: WorkSnapshot;
+			snapshot: IWorkSnapshot;
 		}): Promise<void> => {
 			const workObject = await execute(permissionContext, params);
 
@@ -109,9 +109,7 @@ describe('UpdateWorkCommandHandler', () => {
 			expect(revision.work).toBe(work);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Updated);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(snapshot),
-			);
+			expect(revision.snapshot.contentEquals(snapshot)).toBe(true);
 
 			const auditLogEntry = await em.findOneOrFail(WorkAuditLogEntry, {
 				work: work,
@@ -145,20 +143,14 @@ describe('UpdateWorkCommandHandler', () => {
 			}
 		});
 
-		test('0 changes', async () => {
-			await testUpdateWork({
-				permissionContext,
-				params: {
+		test('nothing has changed', async () => {
+			await expect(
+				execute(permissionContext, {
 					...defaultParams,
 					name: work.name,
 					workType: work.workType,
-				},
-				snapshot: {
-					name: work.name,
-					workType: work.workType,
-					webLinks: [],
-				},
-			});
+				}),
+			).rejects.toThrow(BadRequestException);
 		});
 
 		test('1 change', async () => {

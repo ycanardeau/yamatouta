@@ -86,6 +86,8 @@ export class UpdateWorkCommandHandler
 				{ populate: true },
 			);
 
+			const latestSnapshot = work.takeSnapshot();
+
 			work.name = params.name;
 			work.workType = params.workType;
 
@@ -106,6 +108,10 @@ export class UpdateWorkCommandHandler
 				event: RevisionEvent.Updated,
 				summary: '',
 			});
+
+			if (revision.snapshot.contentEquals(latestSnapshot)) {
+				throw new BadRequestException('Nothing has changed.');
+			}
 
 			em.persist(revision);
 

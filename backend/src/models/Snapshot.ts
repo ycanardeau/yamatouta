@@ -4,6 +4,7 @@ import { Translation } from '../entities/Translation';
 import { WebLink } from '../entities/WebLink';
 import { Work } from '../entities/Work';
 import { ArtistType } from './ArtistType';
+import { IContentEquatable } from './IContentEquatable';
 import { QuoteType } from './QuoteType';
 import { WebLinkCategory } from './WebLinkCategory';
 import { WordCategory } from './WordCategory';
@@ -21,7 +22,11 @@ export class WebLinkSnapshot {
 	}
 }
 
-export class TranslationSnapshot {
+export type ITranslationSnapshot = Omit<TranslationSnapshot, 'contentEquals'>;
+
+export class TranslationSnapshot
+	implements IContentEquatable<ITranslationSnapshot>
+{
 	readonly headword: string;
 	readonly locale: string;
 	readonly reading: string;
@@ -41,9 +46,15 @@ export class TranslationSnapshot {
 			.getItems()
 			.map((webLink) => new WebLinkSnapshot(webLink));
 	}
+
+	contentEquals(other: ITranslationSnapshot): boolean {
+		return JSON.stringify(this) === JSON.stringify(other);
+	}
 }
 
-export class ArtistSnapshot {
+export type IArtistSnapshot = Omit<ArtistSnapshot, 'contentEquals'>;
+
+export class ArtistSnapshot implements IContentEquatable<IArtistSnapshot> {
 	readonly name: string;
 	readonly artistType: ArtistType;
 	readonly webLinks: WebLinkSnapshot[];
@@ -55,6 +66,10 @@ export class ArtistSnapshot {
 			.getItems()
 			.map((webLink) => new WebLinkSnapshot(webLink));
 	}
+
+	contentEquals(other: IArtistSnapshot): boolean {
+		return JSON.stringify(this) === JSON.stringify(other);
+	}
 }
 
 export class ObjectRefSnapshot<TEntry extends { id: number }> {
@@ -65,7 +80,9 @@ export class ObjectRefSnapshot<TEntry extends { id: number }> {
 	}
 }
 
-export class QuoteSnapshot {
+export type IQuoteSnapshot = Omit<QuoteSnapshot, 'contentEquals'>;
+
+export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 	readonly text: string;
 	readonly quoteType: QuoteType;
 	readonly locale: string;
@@ -81,9 +98,15 @@ export class QuoteSnapshot {
 			.getItems()
 			.map((webLink) => new WebLinkSnapshot(webLink));
 	}
+
+	contentEquals(other: IQuoteSnapshot): boolean {
+		return JSON.stringify(this) === JSON.stringify(other);
+	}
 }
 
-export class WorkSnapshot {
+export type IWorkSnapshot = Omit<WorkSnapshot, 'contentEquals'>;
+
+export class WorkSnapshot implements IContentEquatable<IWorkSnapshot> {
 	readonly name: string;
 	readonly workType: WorkType;
 	readonly webLinks: WebLinkSnapshot[];
@@ -94,6 +117,10 @@ export class WorkSnapshot {
 		this.webLinks = work.webLinks
 			.getItems()
 			.map((webLink) => new WebLinkSnapshot(webLink));
+	}
+
+	contentEquals(other: IWorkSnapshot): boolean {
+		return JSON.stringify(this) === JSON.stringify(other);
 	}
 }
 

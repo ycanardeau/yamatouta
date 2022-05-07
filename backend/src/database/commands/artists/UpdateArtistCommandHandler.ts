@@ -86,6 +86,8 @@ export class UpdateArtistCommandHandler
 				{ populate: true },
 			);
 
+			const latestSnapshot = artist.takeSnapshot();
+
 			artist.name = params.name;
 			artist.artistType = params.artistType;
 
@@ -106,6 +108,10 @@ export class UpdateArtistCommandHandler
 				event: RevisionEvent.Updated,
 				summary: '',
 			});
+
+			if (revision.snapshot.contentEquals(latestSnapshot)) {
+				throw new BadRequestException('Nothing has changed.');
+			}
 
 			em.persist(revision);
 

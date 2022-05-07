@@ -13,7 +13,6 @@ import { User } from '../../../../src/entities/User';
 import { ArtistType } from '../../../../src/models/ArtistType';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { ArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
@@ -85,8 +84,8 @@ describe('DeleteArtistCommandHandler', () => {
 			expect(revision.artist).toBe(artist);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Deleted);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(new ArtistSnapshot(artist)),
+			expect(revision.snapshot.contentEquals(artist.takeSnapshot())).toBe(
+				true,
 			);
 
 			expect(artist.deleted).toBe(true);

@@ -14,7 +14,6 @@ import { ArtistType } from '../../../../src/models/ArtistType';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { QuoteType } from '../../../../src/models/QuoteType';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { QuoteSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
@@ -93,8 +92,8 @@ describe('DeleteQuoteCommandHandler', () => {
 			expect(revision.quote).toBe(quote);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Deleted);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(new QuoteSnapshot(quote)),
+			expect(revision.snapshot.contentEquals(quote.takeSnapshot())).toBe(
+				true,
 			);
 
 			expect(quote.deleted).toBe(true);

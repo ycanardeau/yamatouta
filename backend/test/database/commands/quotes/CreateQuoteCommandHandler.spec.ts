@@ -21,8 +21,8 @@ import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { QuoteType } from '../../../../src/models/QuoteType';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import {
+	IQuoteSnapshot,
 	ObjectRefSnapshot,
-	QuoteSnapshot,
 } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
@@ -101,7 +101,7 @@ describe('CreateQuoteCommandHandler', () => {
 		}: {
 			permissionContext: PermissionContext;
 			params: UpdateQuoteParams;
-			snapshot: QuoteSnapshot;
+			snapshot: IQuoteSnapshot;
 		}): Promise<void> => {
 			const quoteObject = await execute(permissionContext, params);
 
@@ -118,9 +118,7 @@ describe('CreateQuoteCommandHandler', () => {
 			expect(revision.quote).toBe(quote);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Created);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(snapshot),
-			);
+			expect(revision.snapshot.contentEquals(snapshot)).toBe(true);
 
 			const auditLogEntry = await em.findOneOrFail(QuoteAuditLogEntry, {
 				quote: quote,

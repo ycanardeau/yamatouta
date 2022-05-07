@@ -99,6 +99,8 @@ export class UpdateQuoteCommandHandler
 				{ populate: true },
 			);
 
+			const latestSnapshot = quote.takeSnapshot();
+
 			quote.text = params.text;
 			quote.quoteType = params.quoteType;
 			quote.locale = params.locale;
@@ -121,6 +123,10 @@ export class UpdateQuoteCommandHandler
 				event: RevisionEvent.Updated,
 				summary: '',
 			});
+
+			if (revision.snapshot.contentEquals(latestSnapshot)) {
+				throw new BadRequestException('Nothing has changed.');
+			}
 
 			em.persist(revision);
 

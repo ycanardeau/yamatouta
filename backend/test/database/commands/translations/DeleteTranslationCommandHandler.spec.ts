@@ -12,7 +12,6 @@ import { Translation } from '../../../../src/entities/Translation';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { TranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
@@ -89,9 +88,9 @@ describe('DeleteTranslationCommandHandler', () => {
 			expect(revision.translation).toBe(translation);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Deleted);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(new TranslationSnapshot(translation)),
-			);
+			expect(
+				revision.snapshot.contentEquals(translation.takeSnapshot()),
+			).toBe(true);
 
 			expect(translation.deleted).toBe(true);
 

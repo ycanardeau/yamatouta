@@ -17,7 +17,7 @@ import { Translation } from '../../../../src/entities/Translation';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { TranslationSnapshot } from '../../../../src/models/Snapshot';
+import { ITranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WordCategory } from '../../../../src/models/WordCategory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
@@ -102,7 +102,7 @@ describe('UpdateTranslationCommandHandler', () => {
 		}: {
 			permissionContext: PermissionContext;
 			params: UpdateTranslationParams;
-			snapshot: TranslationSnapshot;
+			snapshot: ITranslationSnapshot;
 		}): Promise<void> => {
 			const translationObject = await execute(permissionContext, params);
 
@@ -122,9 +122,7 @@ describe('UpdateTranslationCommandHandler', () => {
 			expect(revision.translation).toBe(translation);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Updated);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(snapshot),
-			);
+			expect(revision.snapshot.contentEquals(snapshot)).toBe(true);
 
 			const auditLogEntry = await em.findOneOrFail(
 				TranslationAuditLogEntry,
@@ -161,27 +159,17 @@ describe('UpdateTranslationCommandHandler', () => {
 			}
 		});
 
-		test('0 changes', async () => {
-			await testUpdateTranslation({
-				permissionContext,
-				params: {
+		test('nothing has changed', async () => {
+			await expect(
+				execute(permissionContext, {
 					...defaultParams,
 					headword: translation.headword,
 					locale: translation.locale,
 					reading: translation.reading,
 					yamatokotoba: translation.yamatokotoba,
 					category: translation.category,
-				},
-				snapshot: {
-					headword: translation.headword,
-					locale: translation.locale,
-					reading: translation.reading,
-					yamatokotoba: translation.yamatokotoba,
-					category: translation.category,
-					inishienomanabi_tags: [],
-					webLinks: [],
-				},
-			});
+				}),
+			).rejects.toThrow(BadRequestException);
 		});
 
 		test('1 change', async () => {

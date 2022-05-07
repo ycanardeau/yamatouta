@@ -18,7 +18,7 @@ import { User } from '../../../../src/entities/User';
 import { ArtistType } from '../../../../src/models/ArtistType';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { ArtistSnapshot } from '../../../../src/models/Snapshot';
+import { IArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
@@ -88,7 +88,7 @@ describe('CreateArtistCommandHandler', () => {
 		}: {
 			permissionContext: PermissionContext;
 			params: UpdateArtistParams;
-			snapshot: ArtistSnapshot;
+			snapshot: IArtistSnapshot;
 		}): Promise<void> => {
 			const artistObject = await execute(permissionContext, params);
 
@@ -105,9 +105,7 @@ describe('CreateArtistCommandHandler', () => {
 			expect(revision.artist).toBe(artist);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Created);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(snapshot),
-			);
+			expect(revision.snapshot.contentEquals(snapshot)).toBe(true);
 
 			const auditLogEntry = await em.findOneOrFail(ArtistAuditLogEntry, {
 				artist: artist,

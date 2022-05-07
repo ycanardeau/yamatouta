@@ -104,6 +104,8 @@ export class UpdateTranslationCommandHandler
 				{ populate: true },
 			);
 
+			const latestSnapshot = translation.takeSnapshot();
+
 			translation.headword = params.headword;
 			translation.locale = params.locale;
 			translation.reading = params.reading;
@@ -129,6 +131,10 @@ export class UpdateTranslationCommandHandler
 				event: RevisionEvent.Updated,
 				summary: '',
 			});
+
+			if (revision.snapshot.contentEquals(latestSnapshot)) {
+				throw new BadRequestException('Nothing has changed.');
+			}
 
 			em.persist(revision);
 

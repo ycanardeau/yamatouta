@@ -12,7 +12,6 @@ import { User } from '../../../../src/entities/User';
 import { Work } from '../../../../src/entities/Work';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { WorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
@@ -83,8 +82,8 @@ describe('DeleteWorkCommandHandler', () => {
 			expect(revision.work).toBe(work);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Deleted);
-			expect(JSON.stringify(revision.snapshot)).toBe(
-				JSON.stringify(new WorkSnapshot(work)),
+			expect(revision.snapshot.contentEquals(work.takeSnapshot())).toBe(
+				true,
 			);
 
 			expect(work.deleted).toBe(true);
