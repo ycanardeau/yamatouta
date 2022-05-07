@@ -690,10 +690,10 @@
     knex "2.0.0"
     umzug "3.1.1"
 
-"@mikro-orm/nestjs@^4.3.1":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@mikro-orm/nestjs/-/nestjs-4.3.1.tgz#6359070b70c3621e780026ec1b3fdb20228d0952"
-  integrity sha512-wfWbKpmvQyUyJhsjbguRySNZr1xOUqB198kW0FL7sgBuM/+cnvDEC1OaD0SAF8Tl+f5uN3D+GkqVZmDXWfol9A==
+"@mikro-orm/nestjs@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@mikro-orm/nestjs/-/nestjs-5.0.1.tgz#658052cc91691839e32c2653a95aa7311788dce4"
+  integrity sha512-nvUlMCB0yFHSr44ZyWOSGH4RMo/3bM7Wdzsuc2Rf/JeXfErARYIzJWeRXuPlxGYSbFGLKx+uFmZgq+3gIqtWJw==
 
 "@mikro-orm/reflection@^5.1.3":
   version "5.1.3"
