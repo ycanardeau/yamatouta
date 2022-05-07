@@ -109,6 +109,10 @@ export class Quote
 		this.artist = artist;
 	}
 
+	takeSnapshot(): QuoteSnapshot {
+		return new QuoteSnapshot(this);
+	}
+
 	createRevision({
 		commit,
 		actor,
@@ -124,7 +128,7 @@ export class Quote
 			quote: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new QuoteSnapshot(this),
+			snapshot: this.takeSnapshot(),
 			summary: summary,
 			event: event,
 			version: ++this.version,

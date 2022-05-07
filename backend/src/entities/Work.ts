@@ -62,6 +62,10 @@ export class Work
 	@OneToMany(() => WorkWebLink, (webLink) => webLink.work)
 	webLinks = new Collection<WorkWebLink>(this);
 
+	takeSnapshot(): WorkSnapshot {
+		return new WorkSnapshot(this);
+	}
+
 	createRevision({
 		commit,
 		actor,
@@ -77,7 +81,7 @@ export class Work
 			work: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new WorkSnapshot(this),
+			snapshot: this.takeSnapshot(),
 			summary: summary,
 			event: event,
 			version: ++this.version,

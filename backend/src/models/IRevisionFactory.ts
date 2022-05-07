@@ -9,6 +9,8 @@ export interface IRevisionFactory<
 	TRevision extends Revision<TEntry, TSnapshot>,
 	TSnapshot extends Snapshot,
 > {
+	takeSnapshot(): TSnapshot;
+
 	createRevision({
 		actor,
 		event,

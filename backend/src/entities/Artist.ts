@@ -79,6 +79,10 @@ export class Artist
 		this.artistType = artistType;
 	}
 
+	takeSnapshot(): ArtistSnapshot {
+		return new ArtistSnapshot(this);
+	}
+
 	createRevision({
 		commit,
 		actor,
@@ -94,7 +98,7 @@ export class Artist
 			artist: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new ArtistSnapshot(this),
+			snapshot: this.takeSnapshot(),
 			summary: summary,
 			event: event,
 			version: ++this.version,

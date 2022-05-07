@@ -150,6 +150,10 @@ export class Translation
 		);
 	}
 
+	takeSnapshot(): TranslationSnapshot {
+		return new TranslationSnapshot(this);
+	}
+
 	createRevision({
 		commit,
 		actor,
@@ -165,7 +169,7 @@ export class Translation
 			translation: this,
 			commit: commit,
 			actor: actor,
-			snapshot: new TranslationSnapshot(this),
+			snapshot: this.takeSnapshot(),
 			summary: summary,
 			event: event,
 			version: ++this.version,
