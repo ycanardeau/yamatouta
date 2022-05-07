@@ -5,9 +5,6 @@ export class Migration20220411074850 extends Migration {
 		this.addSql(
 			'create table `web_addresses` (`id` int unsigned not null auto_increment primary key, `url` text not null, `scheme` varchar(255) not null, `host` varchar(255) not null, `port` varchar(255) not null, `path` text not null, `query` text not null, `fragment` text not null) default character set utf8mb4 engine = InnoDB;',
 		);
-		this.addSql(
-			'alter table `web_addresses` add unique `web_addresses_url_unique`(`url`);',
-		);
 
 		this.addSql(
 			"create table `web_links` (`id` int unsigned not null auto_increment primary key, `address_id` int unsigned not null, `title` varchar(255) not null, `category` enum('Unspecified', 'Official', 'Commercial', 'Reference', 'Other') not null, `entry_type` enum('Translation', 'Artist', 'Quote', 'Work') not null, `translation_id` int unsigned null, `artist_id` int unsigned null, `quote_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",

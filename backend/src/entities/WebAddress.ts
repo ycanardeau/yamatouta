@@ -14,7 +14,7 @@ export class WebAddress {
 	@Property({ onUpdate: () => new Date() })
 	updatedAt = new Date();
 
-	@Property({ columnType: 'text', unique: true })
+	@Property({ columnType: 'text' /* TODO: , unique: true */ })
 	url: string;
 
 	@Property()

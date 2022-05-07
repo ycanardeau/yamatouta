@@ -571,15 +571,6 @@
       "indexes": [
         {
           "columnNames": [
-            "url"
-          ],
-          "composite": false,
-          "keyName": "web_addresses_url_unique",
-          "primary": false,
-          "unique": true
-        },
-        {
-          "columnNames": [
             "host_id"
           ],
           "composite": false,
