@@ -160,6 +160,7 @@ describe('QuoteCreateCommandHandler', () => {
 					locale: defaultParams.locale,
 					artist: new ObjectRefSnapshot(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});

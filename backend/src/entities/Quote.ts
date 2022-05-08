@@ -11,8 +11,10 @@ import {
 
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
+import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { IWebLinkFactory } from '../models/IWebLinkFactory';
+import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
@@ -20,11 +22,14 @@ import { QuoteType } from '../models/quotes/QuoteType';
 import { QuoteSnapshot } from '../models/snapshots/QuoteSnapshot';
 import { Artist } from './Artist';
 import { Commit } from './Commit';
+import { Link } from './Link';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
 import { User } from './User';
 import { WebAddress } from './WebAddress';
 import { QuoteWebLink } from './WebLink';
+import { Work } from './Work';
+import { QuoteWorkLink } from './WorkLink';
 
 @Entity({
 	tableName: 'quotes',
@@ -34,7 +39,9 @@ export class Quote
 		IEntryWithRevisions<Quote, QuoteRevision, QuoteSnapshot>,
 		IRevisionFactory<Quote, QuoteRevision, QuoteSnapshot>,
 		IEntryWithWebLinks<QuoteWebLink>,
-		IWebLinkFactory<QuoteWebLink>
+		IWebLinkFactory<QuoteWebLink>,
+		IEntryWithWorkLinks<QuoteWorkLink>,
+		IWorkLinkFactory<QuoteWorkLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -92,6 +99,9 @@ export class Quote
 	@OneToMany(() => QuoteWebLink, (webLink) => webLink.quote)
 	webLinks = new Collection<QuoteWebLink>(this);
 
+	@OneToMany(() => QuoteWorkLink, (workLink) => workLink.quote)
+	workLinks = new Collection<QuoteWorkLink>(this);
+
 	takeSnapshot(): QuoteSnapshot {
 		return new QuoteSnapshot(this);
 	}
@@ -132,6 +142,17 @@ export class Quote
 			address: address,
 			title: title,
 			category: category,
+		});
+	}
+
+	createWorkLink({
+		relatedWork,
+		...params
+	}: Link & { relatedWork: Work }): QuoteWorkLink {
+		return new QuoteWorkLink({
+			...params,
+			quote: this,
+			relatedWork: relatedWork,
 		});
 	}
 }

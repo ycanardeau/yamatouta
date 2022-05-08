@@ -2,6 +2,7 @@ import { Translation } from '../entities/Translation';
 import { TranslationOptionalField } from '../models/translations/TranslationOptionalField';
 import { WordCategory } from '../models/translations/WordCategory';
 import { PermissionContext } from '../services/PermissionContext';
+import { WorkLinkObject } from './LinkObject';
 import { WebLinkObject } from './WebLinkObject';
 
 export class TranslationObject {
@@ -13,6 +14,7 @@ export class TranslationObject {
 	readonly yamatokotoba: string;
 	readonly category?: WordCategory;
 	readonly webLinks?: WebLinkObject[];
+	readonly workLinks?: WorkLinkObject[];
 
 	constructor(
 		translation: Translation,
@@ -32,6 +34,14 @@ export class TranslationObject {
 			? translation.webLinks
 					.getItems()
 					.map((webLink) => new WebLinkObject(webLink))
+			: undefined;
+		this.workLinks = fields.includes(TranslationOptionalField.WorkLinks)
+			? translation.workLinks
+					.getItems()
+					.map(
+						(workLink) =>
+							new WorkLinkObject(workLink, permissionContext),
+					)
 			: undefined;
 	}
 }

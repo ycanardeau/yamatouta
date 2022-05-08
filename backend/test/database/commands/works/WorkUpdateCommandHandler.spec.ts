@@ -164,6 +164,7 @@ describe('WorkUpdateCommandHandler', () => {
 					name: defaultParams.name,
 					workType: work.workType,
 					webLinks: [],
+					artistLinks: [],
 				},
 			});
 		});
@@ -176,6 +177,7 @@ describe('WorkUpdateCommandHandler', () => {
 					name: defaultParams.name,
 					workType: defaultParams.workType,
 					webLinks: [],
+					artistLinks: [],
 				},
 			});
 		});

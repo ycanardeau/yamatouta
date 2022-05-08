@@ -2,6 +2,7 @@ import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
 import { IContentEquatable } from '../models/IContentEquatable';
+import { IWebLink } from '../models/IWebLink';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { Artist } from './Artist';
 import { Quote } from './Quote';
@@ -14,14 +15,7 @@ import { Work } from './Work';
 	abstract: true,
 	discriminatorColumn: 'entryType',
 })
-export abstract class WebLink
-	implements
-		IContentEquatable<{
-			url: string;
-			title: string;
-			category: WebLinkCategory;
-		}>
-{
+export abstract class WebLink implements IWebLink, IContentEquatable<IWebLink> {
 	@PrimaryKey()
 	id!: number;
 
@@ -52,11 +46,7 @@ export abstract class WebLink
 		return this.address.url;
 	}
 
-	contentEquals(other: {
-		url: string;
-		title: string;
-		category: WebLinkCategory;
-	}): boolean {
+	contentEquals(other: IWebLink): boolean {
 		return (
 			this.url === other.url &&
 			this.title === other.title &&

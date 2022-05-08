@@ -2028,6 +2028,84 @@
           "primary": true,
           "nullable": false,
           "mappedType": "integer"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "enum('User', 'Translation', 'Quote', 'Artist', 'Work')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "User",
+            "Translation",
+            "Quote",
+            "Artist",
+            "Work"
+          ],
+          "mappedType": "enum"
+        },
+        "related_entry_type": {
+          "name": "related_entry_type",
+          "type": "enum('User', 'Translation', 'Quote', 'Artist', 'Work')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "User",
+            "Translation",
+            "Quote",
+            "Artist",
+            "Work"
+          ],
+          "mappedType": "enum"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        }
+      },
+      "name": "link_types",
+      "indexes": [
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
         }
       },
       "name": "commits",
@@ -2142,6 +2220,230 @@
       ],
       "checks": [],
       "foreignKeys": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "link_type": {
+          "name": "link_type",
+          "type": "tinyint",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "enum"
+        },
+        "begin_date_year": {
+          "name": "begin_date_year",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "ended": {
+          "name": "ended",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "begin_date_month": {
+          "name": "begin_date_month",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "end_date_year": {
+          "name": "end_date_year",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "begin_date_day": {
+          "name": "begin_date_day",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "end_date_month": {
+          "name": "end_date_month",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "end_date_day": {
+          "name": "end_date_day",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "related_artist_id": {
+          "name": "related_artist_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "enum('Artist', 'Work')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Artist",
+            "Work"
+          ],
+          "mappedType": "enum"
+        },
+        "artist_id": {
+          "name": "artist_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "work_id": {
+          "name": "work_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        }
+      },
+      "name": "artist_links",
+      "indexes": [
+        {
+          "columnNames": [
+            "related_artist_id"
+          ],
+          "composite": false,
+          "keyName": "artist_links_related_artist_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "entry_type"
+          ],
+          "composite": false,
+          "keyName": "artist_links_entry_type_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "artist_id"
+          ],
+          "composite": false,
+          "keyName": "artist_links_artist_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "work_id"
+          ],
+          "composite": false,
+          "keyName": "artist_links_work_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "artist_links_related_artist_id_foreign": {
+          "constraintName": "artist_links_related_artist_id_foreign",
+          "columnNames": [
+            "related_artist_id"
+          ],
+          "localTableName": "artist_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "artists",
+          "updateRule": "cascade"
+        },
+        "artist_links_artist_id_foreign": {
+          "constraintName": "artist_links_artist_id_foreign",
+          "columnNames": [
+            "artist_id"
+          ],
+          "localTableName": "artist_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "artists",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "artist_links_work_id_foreign": {
+          "constraintName": "artist_links_work_id_foreign",
+          "columnNames": [
+            "work_id"
+          ],
+          "localTableName": "artist_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "works",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
     },
     {
       "columns": {
@@ -2633,6 +2935,262 @@
             "work_id"
           ],
           "localTableName": "audit_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "works",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "link_type": {
+          "name": "link_type",
+          "type": "tinyint",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "enum"
+        },
+        "begin_date_year": {
+          "name": "begin_date_year",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "ended": {
+          "name": "ended",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "begin_date_month": {
+          "name": "begin_date_month",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "end_date_year": {
+          "name": "end_date_year",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "begin_date_day": {
+          "name": "begin_date_day",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "end_date_month": {
+          "name": "end_date_month",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "end_date_day": {
+          "name": "end_date_day",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "related_work_id": {
+          "name": "related_work_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "enum('Quote', 'Translation', 'Work')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Quote",
+            "Translation",
+            "Work"
+          ],
+          "mappedType": "enum"
+        },
+        "quote_id": {
+          "name": "quote_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "translation_id": {
+          "name": "translation_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "work_id": {
+          "name": "work_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        }
+      },
+      "name": "work_links",
+      "indexes": [
+        {
+          "columnNames": [
+            "related_work_id"
+          ],
+          "composite": false,
+          "keyName": "work_links_related_work_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "entry_type"
+          ],
+          "composite": false,
+          "keyName": "work_links_entry_type_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "quote_id"
+          ],
+          "composite": false,
+          "keyName": "work_links_quote_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "translation_id"
+          ],
+          "composite": false,
+          "keyName": "work_links_translation_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "work_id"
+          ],
+          "composite": false,
+          "keyName": "work_links_work_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "work_links_related_work_id_foreign": {
+          "constraintName": "work_links_related_work_id_foreign",
+          "columnNames": [
+            "related_work_id"
+          ],
+          "localTableName": "work_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "works",
+          "updateRule": "cascade"
+        },
+        "work_links_quote_id_foreign": {
+          "constraintName": "work_links_quote_id_foreign",
+          "columnNames": [
+            "quote_id"
+          ],
+          "localTableName": "work_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "quotes",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "work_links_translation_id_foreign": {
+          "constraintName": "work_links_translation_id_foreign",
+          "columnNames": [
+            "translation_id"
+          ],
+          "localTableName": "work_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "translations",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "work_links_work_id_foreign": {
+          "constraintName": "work_links_work_id_foreign",
+          "columnNames": [
+            "work_id"
+          ],
+          "localTableName": "work_links",
           "referencedColumnNames": [
             "id"
           ],

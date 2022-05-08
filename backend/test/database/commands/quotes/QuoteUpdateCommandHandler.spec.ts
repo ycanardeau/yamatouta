@@ -185,6 +185,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					locale: quote.locale,
 					artist: new ObjectRefSnapshot(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});
@@ -203,6 +204,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					locale: quote.locale,
 					artist: new ObjectRefSnapshot(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});
@@ -220,6 +222,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					locale: defaultParams.locale,
 					artist: new ObjectRefSnapshot(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});
@@ -234,6 +237,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					locale: defaultParams.locale,
 					artist: new ObjectRefSnapshot(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});

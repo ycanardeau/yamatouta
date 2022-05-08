@@ -2,6 +2,7 @@ import { Work } from '../entities/Work';
 import { WorkOptionalField } from '../models/works/WorkOptionalField';
 import { WorkType } from '../models/works/WorkType';
 import { PermissionContext } from '../services/PermissionContext';
+import { ArtistLinkObject } from './LinkObject';
 import { WebLinkObject } from './WebLinkObject';
 
 export class WorkObject {
@@ -11,6 +12,7 @@ export class WorkObject {
 	readonly name: string;
 	readonly workType: WorkType;
 	readonly webLinks?: WebLinkObject[];
+	readonly artistLinks?: ArtistLinkObject[];
 
 	constructor(
 		work: Work,
@@ -28,6 +30,14 @@ export class WorkObject {
 			? work.webLinks
 					.getItems()
 					.map((webLink) => new WebLinkObject(webLink))
+			: undefined;
+		this.artistLinks = fields.includes(WorkOptionalField.ArtistLinks)
+			? work.artistLinks
+					.getItems()
+					.map(
+						(artistLink) =>
+							new ArtistLinkObject(artistLink, permissionContext),
+					)
 			: undefined;
 	}
 }

@@ -6,6 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AdminController } from './controllers/AdminController';
 import { ArtistController } from './controllers/ArtistController';
 import { AuthController } from './controllers/AuthController';
+import { LinkController } from './controllers/LinkController';
 import { QuoteController } from './controllers/QuoteController';
 import { SitemapController } from './controllers/SitemapController';
 import { TranslationController } from './controllers/TranslationController';
@@ -34,6 +35,8 @@ import {
 import { ArtistGetQueryHandler } from './database/queries/artists/ArtistGetQueryHandler';
 import { ArtistListIdsQueryHandler } from './database/queries/artists/ArtistListIdsQueryHandler';
 import { ArtistListQueryHandler } from './database/queries/artists/ArtistListQueryHandler';
+import { LinkGetTypeQueryHandler } from './database/queries/links/LinkGetTypeQueryHandler';
+import { LinkListTypesQueryHandler } from './database/queries/links/LinkListTypesQueryHandler';
 import { QuoteGetQueryHandler } from './database/queries/quotes/QuoteGetQueryHandler';
 import { QuoteListIdsQueryHandler } from './database/queries/quotes/QuoteListIdsQueryHandler';
 import { QuoteListQueryHandler } from './database/queries/quotes/QuoteListQueryHandler';
@@ -65,6 +68,8 @@ const queryHandlers = [
 	ArtistListIdsQueryHandler,
 	ArtistListQueryHandler,
 	ArtistListRevisionsQueryHandler,
+	LinkGetTypeQueryHandler,
+	LinkListTypesQueryHandler,
 	QuoteGetQueryHandler,
 	QuoteListIdsQueryHandler,
 	QuoteListQueryHandler,
@@ -116,6 +121,7 @@ const commandHandlers = [
 		AdminController,
 		AuthController,
 		ArtistController,
+		LinkController,
 		QuoteController,
 		SitemapController,
 		TranslationController,

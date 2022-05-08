@@ -156,6 +156,7 @@ describe('TranslationCreateCommandHandler', () => {
 					category: defaultParams.category,
 					inishienomanabi_tags: [],
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});

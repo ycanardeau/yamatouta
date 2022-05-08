@@ -2,6 +2,7 @@ import { Artist } from '../../entities/Artist';
 import { Quote } from '../../entities/Quote';
 import { IContentEquatable } from '../IContentEquatable';
 import { QuoteType } from '../quotes/QuoteType';
+import { WorkLinkSnapshot } from './LinkSnapshot';
 import { ObjectRefSnapshot } from './ObjectRefSnapshot';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 
@@ -13,6 +14,7 @@ export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 	readonly locale: string;
 	readonly artist: ObjectRefSnapshot<Artist>;
 	readonly webLinks: WebLinkSnapshot[];
+	readonly workLinks: WorkLinkSnapshot[];
 
 	constructor(quote: Quote) {
 		this.text = quote.text;
@@ -22,6 +24,9 @@ export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 		this.webLinks = quote.webLinks
 			.getItems()
 			.map((webLink) => new WebLinkSnapshot(webLink));
+		this.workLinks = quote.workLinks
+			.getItems()
+			.map((workLink) => new WorkLinkSnapshot(workLink));
 	}
 
 	contentEquals(other?: IQuoteSnapshot): boolean {
