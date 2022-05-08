@@ -27,7 +27,7 @@ import { getWork } from '../../api/WorkApi';
 import { useAuth } from '../../components/useAuth';
 import { IWorkObject } from '../../dto/works/IWorkObject';
 import { Permission } from '../../models/Permission';
-import { WorkOptionalFields } from '../../models/WorkOptionalFields';
+import { WorkOptionalField } from '../../models/WorkOptionalField';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
 import WorkBasicInfo from './WorkBasicInfo';
 import WorkEdit from './WorkEdit';
@@ -168,7 +168,7 @@ const WorkDetails = (): React.ReactElement | null => {
 	React.useEffect(() => {
 		getWork({
 			workId: Number(workId),
-			fields: [WorkOptionalFields.WebLinks],
+			fields: [WorkOptionalField.WebLinks],
 		}).then((work) => setStore(new WorkDetailsStore(work)));
 	}, [workId]);
 

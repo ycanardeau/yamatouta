@@ -1,5 +1,5 @@
 import { Translation } from '../../entities/Translation';
-import { TranslationOptionalFields } from '../../models/TranslationOptionalFields';
+import { TranslationOptionalField } from '../../models/TranslationOptionalField';
 import { WordCategory } from '../../models/WordCategory';
 import { PermissionContext } from '../../services/PermissionContext';
 import { WebLinkObject } from '../WebLinkObject';
@@ -17,7 +17,7 @@ export class TranslationObject {
 	constructor(
 		translation: Translation,
 		permissionContext: PermissionContext,
-		fields: TranslationOptionalFields[] = [],
+		fields: TranslationOptionalField[] = [],
 	) {
 		permissionContext.verifyDeletedAndHidden(translation);
 
@@ -28,7 +28,7 @@ export class TranslationObject {
 		this.reading = translation.translatedString.reading;
 		this.yamatokotoba = translation.translatedString.yamatokotoba;
 		this.category = translation.category;
-		this.webLinks = fields.includes(TranslationOptionalFields.WebLinks)
+		this.webLinks = fields.includes(TranslationOptionalField.WebLinks)
 			? translation.webLinks
 					.getItems()
 					.map((webLink) => new WebLinkObject(webLink))

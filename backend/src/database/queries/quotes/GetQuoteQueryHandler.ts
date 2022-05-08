@@ -6,7 +6,7 @@ import Joi from 'joi';
 
 import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Quote } from '../../../entities/Quote';
-import { QuoteOptionalFields } from '../../../models/QuoteOptionalFields';
+import { QuoteOptionalField } from '../../../models/QuoteOptionalField';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
@@ -17,13 +17,13 @@ export class GetQuoteParams {
 			Joi.string()
 				.required()
 				.trim()
-				.valid(...Object.values(QuoteOptionalFields)),
+				.valid(...Object.values(QuoteOptionalField)),
 		),
 	});
 
 	constructor(
 		readonly quoteId: number,
-		readonly fields?: QuoteOptionalFields[],
+		readonly fields?: QuoteOptionalField[],
 	) {}
 }
 

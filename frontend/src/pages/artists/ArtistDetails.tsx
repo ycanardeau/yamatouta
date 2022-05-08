@@ -27,7 +27,7 @@ import {
 import { getArtist } from '../../api/ArtistApi';
 import { useAuth } from '../../components/useAuth';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
-import { ArtistOptionalFields } from '../../models/ArtistOptionalFields';
+import { ArtistOptionalField } from '../../models/ArtistOptionalField';
 import { Permission } from '../../models/Permission';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 import ArtistEdit from './ArtistEdit';
@@ -180,7 +180,7 @@ const ArtistDetails = (): React.ReactElement | null => {
 	React.useEffect(() => {
 		getArtist({
 			artistId: Number(artistId),
-			fields: [ArtistOptionalFields.WebLinks],
+			fields: [ArtistOptionalField.WebLinks],
 		}).then((artist) => setStore(new ArtistDetailsStore(artist)));
 	}, [artistId]);
 

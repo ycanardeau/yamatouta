@@ -6,7 +6,7 @@ import Joi from 'joi';
 
 import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
-import { ArtistOptionalFields } from '../../../models/ArtistOptionalFields';
+import { ArtistOptionalField } from '../../../models/ArtistOptionalField';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
@@ -17,13 +17,13 @@ export class GetArtistParams {
 			Joi.string()
 				.required()
 				.trim()
-				.valid(...Object.values(ArtistOptionalFields)),
+				.valid(...Object.values(ArtistOptionalField)),
 		),
 	});
 
 	constructor(
 		readonly artistId: number,
-		readonly fields?: ArtistOptionalFields[],
+		readonly fields?: ArtistOptionalField[],
 	) {}
 }
 

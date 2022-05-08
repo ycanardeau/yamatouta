@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IWebLinkObject } from '../dto/IWebLinkObject';
 import { ITranslationObject } from '../dto/translations/ITranslationObject';
-import { TranslationOptionalFields } from '../models/TranslationOptionalFields';
+import { TranslationOptionalField } from '../models/TranslationOptionalField';
 import { TranslationSortRule } from '../models/TranslationSortRule';
 import { WordCategory } from '../models/WordCategory';
 import { IPaginationParams } from '../stores/PaginationStore';
@@ -106,7 +106,7 @@ export const getTranslation = async ({
 	fields,
 }: {
 	translationId: number;
-	fields?: TranslationOptionalFields[];
+	fields?: TranslationOptionalField[];
 }): Promise<ITranslationObject> => {
 	const response = await axios.get<ITranslationObject>(
 		`/translations/${translationId}`,

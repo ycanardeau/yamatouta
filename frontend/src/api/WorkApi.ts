@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IWebLinkObject } from '../dto/IWebLinkObject';
 import { IWorkObject } from '../dto/works/IWorkObject';
-import { WorkOptionalFields } from '../models/WorkOptionalFields';
+import { WorkOptionalField } from '../models/WorkOptionalField';
 import { WorkType } from '../models/WorkType';
 import { IPaginationParams } from '../stores/PaginationStore';
 
@@ -27,7 +27,7 @@ export const getWork = async ({
 	fields,
 }: {
 	workId: number;
-	fields?: WorkOptionalFields[];
+	fields?: WorkOptionalField[];
 }): Promise<IWorkObject> => {
 	const response = await axios.get<IWorkObject>(`/works/${workId}`, {
 		params: { fields: fields },

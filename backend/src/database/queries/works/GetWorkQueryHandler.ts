@@ -6,7 +6,7 @@ import Joi from 'joi';
 
 import { WorkObject } from '../../../dto/works/WorkObject';
 import { Work } from '../../../entities/Work';
-import { WorkOptionalFields } from '../../../models/WorkOptionalFields';
+import { WorkOptionalField } from '../../../models/WorkOptionalField';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
@@ -17,13 +17,13 @@ export class GetWorkParams {
 			Joi.string()
 				.required()
 				.trim()
-				.valid(...Object.values(WorkOptionalFields)),
+				.valid(...Object.values(WorkOptionalField)),
 		),
 	});
 
 	constructor(
 		readonly workId: number,
-		readonly fields?: WorkOptionalFields[],
+		readonly fields?: WorkOptionalField[],
 	) {}
 }
 

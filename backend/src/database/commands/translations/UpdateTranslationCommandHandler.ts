@@ -11,7 +11,7 @@ import { Translation } from '../../../entities/Translation';
 import { User } from '../../../entities/User';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { TranslationOptionalFields } from '../../../models/TranslationOptionalFields';
+import { TranslationOptionalField } from '../../../models/TranslationOptionalField';
 import { WordCategory } from '../../../models/WordCategory';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { NgramConverter } from '../../../services/NgramConverter';
@@ -152,7 +152,7 @@ export class UpdateTranslationCommandHandler
 		return new TranslationObject(
 			translation,
 			permissionContext,
-			Object.values(TranslationOptionalFields),
+			Object.values(TranslationOptionalField),
 		);
 	}
 }

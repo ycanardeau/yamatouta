@@ -6,7 +6,7 @@ import Joi from 'joi';
 
 import { TranslationObject } from '../../../dto/translations/TranslationObject';
 import { Translation } from '../../../entities/Translation';
-import { TranslationOptionalFields } from '../../../models/TranslationOptionalFields';
+import { TranslationOptionalField } from '../../../models/TranslationOptionalField';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
@@ -17,13 +17,13 @@ export class GetTranslationParams {
 			Joi.string()
 				.required()
 				.trim()
-				.valid(...Object.values(TranslationOptionalFields)),
+				.valid(...Object.values(TranslationOptionalField)),
 		),
 	});
 
 	constructor(
 		readonly translationId: number,
-		readonly fields?: TranslationOptionalFields[],
+		readonly fields?: TranslationOptionalField[],
 	) {}
 }
 

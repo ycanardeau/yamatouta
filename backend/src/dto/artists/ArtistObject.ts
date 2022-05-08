@@ -1,5 +1,5 @@
 import { Artist } from '../../entities/Artist';
-import { ArtistOptionalFields } from '../../models/ArtistOptionalFields';
+import { ArtistOptionalField } from '../../models/ArtistOptionalField';
 import { ArtistType } from '../../models/ArtistType';
 import { PermissionContext } from '../../services/PermissionContext';
 import { WebLinkObject } from '../WebLinkObject';
@@ -16,7 +16,7 @@ export class ArtistObject {
 	constructor(
 		artist: Artist,
 		permissionContext: PermissionContext,
-		fields: ArtistOptionalFields[] = [],
+		fields: ArtistOptionalField[] = [],
 	) {
 		permissionContext.verifyDeletedAndHidden(artist);
 
@@ -26,7 +26,7 @@ export class ArtistObject {
 		this.name = artist.name;
 		this.artistType = artist.artistType;
 		this.avatarUrl = undefined /* TODO: Implement. */;
-		this.webLinks = fields.includes(ArtistOptionalFields.WebLinks)
+		this.webLinks = fields.includes(ArtistOptionalField.WebLinks)
 			? artist.webLinks
 					.getItems()
 					.map((webLink) => new WebLinkObject(webLink))

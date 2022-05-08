@@ -11,7 +11,7 @@ import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { WorkOptionalFields } from '../../../models/WorkOptionalFields';
+import { WorkOptionalField } from '../../../models/WorkOptionalField';
 import { WorkType } from '../../../models/WorkType';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PermissionContext } from '../../../services/PermissionContext';
@@ -129,7 +129,7 @@ export class UpdateWorkCommandHandler
 		return new WorkObject(
 			work,
 			permissionContext,
-			Object.values(WorkOptionalFields),
+			Object.values(WorkOptionalField),
 		);
 	}
 }

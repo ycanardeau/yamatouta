@@ -1,5 +1,5 @@
 import { Work } from '../../entities/Work';
-import { WorkOptionalFields } from '../../models/WorkOptionalFields';
+import { WorkOptionalField } from '../../models/WorkOptionalField';
 import { WorkType } from '../../models/WorkType';
 import { PermissionContext } from '../../services/PermissionContext';
 import { WebLinkObject } from '../WebLinkObject';
@@ -15,7 +15,7 @@ export class WorkObject {
 	constructor(
 		work: Work,
 		permissionContext: PermissionContext,
-		fields: WorkOptionalFields[] = [],
+		fields: WorkOptionalField[] = [],
 	) {
 		permissionContext.verifyDeletedAndHidden(work);
 
@@ -24,7 +24,7 @@ export class WorkObject {
 		this.hidden = work.hidden;
 		this.name = work.name;
 		this.workType = work.workType;
-		this.webLinks = fields.includes(WorkOptionalFields.WebLinks)
+		this.webLinks = fields.includes(WorkOptionalField.WebLinks)
 			? work.webLinks
 					.getItems()
 					.map((webLink) => new WebLinkObject(webLink))

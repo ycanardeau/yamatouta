@@ -28,7 +28,7 @@ import { useAuth } from '../../components/useAuth';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { Permission } from '../../models/Permission';
-import { TranslationOptionalFields } from '../../models/TranslationOptionalFields';
+import { TranslationOptionalField } from '../../models/TranslationOptionalField';
 import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';
 import TranslationBasicInfo from './TranslationBasicInfo';
 import TranslationEdit from './TranslationEdit';
@@ -189,7 +189,7 @@ const TranslationDetails = (): React.ReactElement | null => {
 	React.useEffect(() => {
 		getTranslation({
 			translationId: Number(translationId),
-			fields: [TranslationOptionalFields.WebLinks],
+			fields: [TranslationOptionalField.WebLinks],
 		}).then((translation) =>
 			setStore(new TranslationDetailsStore(translation)),
 		);

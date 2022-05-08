@@ -28,7 +28,7 @@ import { useAuth } from '../../components/useAuth';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { Permission } from '../../models/Permission';
-import { QuoteOptionalFields } from '../../models/QuoteOptionalFields';
+import { QuoteOptionalField } from '../../models/QuoteOptionalField';
 import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
 import QuoteBasicInfo from './QuoteBasicInfo';
 import QuoteEdit from './QuoteEdit';
@@ -171,7 +171,7 @@ const QuoteDetails = (): React.ReactElement | null => {
 	React.useEffect(() => {
 		getQuote({
 			quoteId: Number(quoteId),
-			fields: [QuoteOptionalFields.WebLinks],
+			fields: [QuoteOptionalField.WebLinks],
 		}).then((quote) => setStore(new QuoteDetailsStore(quote)));
 	}, [quoteId]);
 

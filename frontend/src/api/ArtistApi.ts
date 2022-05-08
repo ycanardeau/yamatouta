@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IWebLinkObject } from '../dto/IWebLinkObject';
 import { IArtistObject } from '../dto/artists/IArtistObject';
-import { ArtistOptionalFields } from '../models/ArtistOptionalFields';
+import { ArtistOptionalField } from '../models/ArtistOptionalField';
 import { ArtistType } from '../models/ArtistType';
 import { IPaginationParams } from '../stores/PaginationStore';
 
@@ -27,7 +27,7 @@ export const getArtist = async ({
 	fields,
 }: {
 	artistId: number;
-	fields?: ArtistOptionalFields[];
+	fields?: ArtistOptionalField[];
 }): Promise<IArtistObject> => {
 	const response = await axios.get<IArtistObject>(`/artists/${artistId}`, {
 		params: { fields: fields },
