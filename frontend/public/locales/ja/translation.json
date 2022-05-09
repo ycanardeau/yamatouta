@@ -53,8 +53,17 @@
 		"add": "かきたす",
 		"remove": "とりのぞく",
 		"externalLinks": "つながり",
+		"artistLinks": "まつわるうたよみ",
+		"artist": "うたよみ",
 		"selectArtist": "うたよみをえらぶ...",
-		"selectWork": "しながきをえらぶ..."
+		"linkType": "くさわい",
+		"workLinks": "まつわるしながき",
+		"work": "しながき",
+		"selectWork": "しながきをえらぶ...",
+		"year": "とし",
+		"month": "つき",
+		"day": "ひ",
+		"selectMonth": "つきをえらぶ..."
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -117,7 +126,6 @@
 		"editQuote": "やまとうたをかきかえる",
 		"quote": "やまとうた",
 		"quoteType": "くさわい",
-		"artist": "うたよみ",
 		"deleteQuote": "やまとうたをけす",
 		"deleteDialogSubtitle": "このやまとうたをけしてもよろしいですか?"
 	},
@@ -166,5 +174,11 @@
 		"10": "かんなづき",
 		"11": "しもつき",
 		"12": "しわす"
+	},
+	"links": {
+		"linkType": "くさわい",
+		"startDate": "はじまり",
+		"endDate": "おわり",
+		"ended": "おわった"
 	}
 }

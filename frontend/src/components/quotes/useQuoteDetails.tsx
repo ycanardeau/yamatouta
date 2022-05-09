@@ -16,7 +16,7 @@ export const useQuoteDetails = <T,>(
 		quoteApi
 			.get({
 				id: Number(id),
-				fields: [QuoteOptionalField.WebLinks],
+				fields: Object.values(QuoteOptionalField),
 			})
 			.then((quote) => setQuote(factory(quote)));
 	}, [id, factory]);

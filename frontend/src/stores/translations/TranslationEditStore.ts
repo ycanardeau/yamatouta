@@ -10,6 +10,7 @@ import { translationApi } from '../../api/translationApi';
 import { ITranslationObject } from '../../dto/ITranslationObject';
 import { WordCategory } from '../../models/translations/WordCategory';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
+import { WorkLinkListEditStore } from '../WorkLinkListEditStore';
 
 export class TranslationEditStore {
 	@observable submitting = false;
@@ -19,6 +20,7 @@ export class TranslationEditStore {
 	@observable yamatokotoba = '';
 	@observable category = WordCategory.Unspecified;
 	readonly webLinks: WebLinkListEditStore;
+	readonly workLinks: WorkLinkListEditStore;
 
 	constructor(private readonly translation?: ITranslationObject) {
 		makeObservable(this);
@@ -30,8 +32,10 @@ export class TranslationEditStore {
 			this.yamatokotoba = translation.yamatokotoba;
 			this.category = translation.category;
 			this.webLinks = new WebLinkListEditStore(translation.webLinks);
+			this.workLinks = new WorkLinkListEditStore(translation.workLinks);
 		} else {
 			this.webLinks = new WebLinkListEditStore([]);
+			this.workLinks = new WorkLinkListEditStore([]);
 		}
 	}
 

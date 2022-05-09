@@ -16,7 +16,7 @@ export const useArtistDetails = <T,>(
 		artistApi
 			.get({
 				id: Number(id),
-				fields: [ArtistOptionalField.WebLinks],
+				fields: Object.values(ArtistOptionalField),
 			})
 			.then((artist) => setArtist(factory(artist)));
 	}, [id, factory]);

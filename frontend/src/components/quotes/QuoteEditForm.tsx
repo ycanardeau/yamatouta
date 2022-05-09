@@ -16,8 +16,10 @@ import { useNavigate } from 'react-router-dom';
 import WebLinkListEdit from '../../components/WebLinkListEdit';
 import ArtistComboBox from '../../components/artists/ArtistComboBox';
 import { IQuoteObject } from '../../dto/IQuoteObject';
+import { EntryType } from '../../models/EntryType';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
+import WorkLinkListEdit from '../WorkLinkListEdit';
 
 interface QuoteEditFormProps {
 	quote?: IQuoteObject;
@@ -73,12 +75,19 @@ const QuoteEditForm = observer(
 						/>
 					</EuiFormRow>
 
-					<EuiFormRow label={t('quotes.artist')}>
+					<EuiFormRow label={t('shared.artist')}>
 						<ArtistComboBox store={store.artist} />
 					</EuiFormRow>
 
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
 						<WebLinkListEdit store={store.webLinks} />
+					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.workLinks')} fullWidth>
+						<WorkLinkListEdit
+							store={store.workLinks}
+							entryType={EntryType.Quote}
+						/>
 					</EuiFormRow>
 				</EuiForm>
 

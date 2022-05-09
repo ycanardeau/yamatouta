@@ -13,6 +13,7 @@ import { IQuoteObject } from '../../dto/IQuoteObject';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
+import { WorkLinkListEditStore } from '../WorkLinkListEditStore';
 
 export class QuoteEditStore {
 	@observable submitting = false;
@@ -23,6 +24,7 @@ export class QuoteEditStore {
 		artistApi.get({ id: id }),
 	);
 	readonly webLinks: WebLinkListEditStore;
+	readonly workLinks: WorkLinkListEditStore;
 
 	constructor(private readonly quote?: IQuoteObject) {
 		makeObservable(this);
@@ -33,8 +35,10 @@ export class QuoteEditStore {
 			this.locale = quote.locale;
 			this.artist.loadEntryById(quote.artist.id);
 			this.webLinks = new WebLinkListEditStore(quote.webLinks);
+			this.workLinks = new WorkLinkListEditStore(quote.workLinks);
 		} else {
 			this.webLinks = new WebLinkListEditStore([]);
+			this.workLinks = new WorkLinkListEditStore([]);
 		}
 	}
 
