@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import lazyWithRetry from '../../components/lazyWithRetry';
+import lazyImport from '../../components/lazyImport';
 
-const SettingsIndex = lazyWithRetry(() => import('./SettingsIndex'));
+const SettingsIndex = lazyImport(() => import('./SettingsIndex'));
 
 const SettingsRoutes = (): React.ReactElement => {
 	return (

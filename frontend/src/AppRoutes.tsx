@@ -1,22 +1,20 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import lazyWithRetry from './components/lazyWithRetry';
+import lazyImport from './components/lazyImport';
 
-const ArtistRoutes = lazyWithRetry(
-	() => import('./pages/artists/ArtistRoutes'),
-);
-const QuoteRoutes = lazyWithRetry(() => import('./pages/quotes/QuoteRoutes'));
-const TranslationRoutes = lazyWithRetry(
+const ArtistRoutes = lazyImport(() => import('./pages/artists/ArtistRoutes'));
+const QuoteRoutes = lazyImport(() => import('./pages/quotes/QuoteRoutes'));
+const TranslationRoutes = lazyImport(
 	() => import('./pages/translations/TranslationRoutes'),
 );
-const UserRoutes = lazyWithRetry(() => import('./pages/users/UserRoutes'));
-const HomeRoutes = lazyWithRetry(() => import('./pages/home/HomeRoutes'));
-const SettingsRoutes = lazyWithRetry(
+const UserRoutes = lazyImport(() => import('./pages/users/UserRoutes'));
+const HomeRoutes = lazyImport(() => import('./pages/home/HomeRoutes'));
+const SettingsRoutes = lazyImport(
 	() => import('./pages/settings/SettingsRoutes'),
 );
-const AdminRoutes = lazyWithRetry(() => import('./pages/admin/AdminRoutes'));
-const WorkRoutes = lazyWithRetry(() => import('./pages/works/WorkRoutes'));
+const AdminRoutes = lazyImport(() => import('./pages/admin/AdminRoutes'));
+const WorkRoutes = lazyImport(() => import('./pages/works/WorkRoutes'));
 
 const AppRoutes = (): React.ReactElement => {
 	return (

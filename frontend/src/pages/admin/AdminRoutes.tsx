@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import lazyWithRetry from '../../components/lazyWithRetry';
+import lazyImport from '../../components/lazyImport';
 
-const AdminIndex = lazyWithRetry(() => import('./AdminIndex'));
+const AdminIndex = lazyImport(() => import('./AdminIndex'));
 
 const AdminRoutes = (): React.ReactElement => {
 	return (

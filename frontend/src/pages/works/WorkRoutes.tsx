@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import lazyWithRetry from '../../components/lazyWithRetry';
+import lazyImport from '../../components/lazyImport';
 
-const WorkIndex = lazyWithRetry(() => import('./WorkIndex'));
-const WorkDetails = lazyWithRetry(() => import('./WorkDetails'));
+const WorkIndex = lazyImport(() => import('./WorkIndex'));
+const WorkDetails = lazyImport(() => import('./WorkDetails'));
 
 const WorkRoutes = (): React.ReactElement => {
 	return (
