@@ -3,7 +3,6 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listWorks } from '../../api/WorkApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { ISearchResultObject } from '../../dto/ISearchResultObject';
 import { IWorkObject } from '../../dto/works/IWorkObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -30,11 +29,7 @@ const validate = ajv.compile<IWorkSearchRouteParams>(
 );
 
 export class WorkSearchStore
-	implements
-		IStoreWithPagination<
-			IWorkSearchRouteParams,
-			ISearchResultObject<IWorkObject>
-		>
+	implements IStoreWithPagination<IWorkSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable works: IWorkObject[] = [];
@@ -47,23 +42,31 @@ export class WorkSearchStore
 
 	clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = ['pageSize'];
 
-	updateResults = async (
-		clearResults: boolean,
-	): Promise<ISearchResultObject<IWorkObject>> => {
-		const paginationParams = this.pagination.toParams(clearResults);
+	private pauseNotifications = false;
 
-		const result = await listWorks({
-			pagination: paginationParams,
-		});
+	updateResults = async (clearResults: boolean): Promise<void> => {
+		if (this.pauseNotifications) return;
 
-		runInAction(() => {
-			this.works = result.items;
+		this.pauseNotifications = true;
 
-			if (paginationParams.getTotalCount)
-				this.pagination.totalItems = result.totalCount;
-		});
+		try {
+			const paginationParams = this.pagination.toParams(clearResults);
 
-		return result;
+			const result = await listWorks({
+				pagination: paginationParams,
+			});
+
+			runInAction(() => {
+				this.works = result.items;
+
+				if (paginationParams.getTotalCount)
+					this.pagination.totalItems = result.totalCount;
+			});
+
+			return;
+		} finally {
+			this.pauseNotifications = false;
+		}
 	};
 
 	@computed.struct get routeParams(): IWorkSearchRouteParams {

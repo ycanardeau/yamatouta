@@ -9,20 +9,19 @@ import {
 } from './useStoreWithRouteParams';
 
 // Code from: https://github.com/VocaDB/vocadb/blob/7778877a5f0daafdfbd2f92b9387d6897fd5fa9c/VocaDbWeb/Scripts/Stores/IStoreWithUpdateResults.ts
-export interface IStoreWithUpdateResults<TRouteParams, TResult>
+export interface IStoreWithUpdateResults<TRouteParams>
 	extends IStoreWithRouteParams<TRouteParams> {
 	clearResultsByQueryKeys: string[];
 
-	updateResults: (clearResults: boolean) => Promise<TResult>;
+	updateResults: (clearResults: boolean) => Promise<void>;
 }
 
 // Code from: https://github.com/VocaDB/vocadb/blob/7778877a5f0daafdfbd2f92b9387d6897fd5fa9c/VocaDbWeb/Scripts/Components/useStoreWithUpdateResults.ts
 // Updates search results whenever the `routeParams` property changes.
 export const useStoreWithUpdateResults = <
 	TRouteParams extends PartialObject<TRouteParams>,
-	TResult,
 >(
-	store: IStoreWithUpdateResults<TRouteParams, TResult>,
+	store: IStoreWithUpdateResults<TRouteParams>,
 	// Called when search results should be cleared.
 	onClearResults?: (popState: boolean) => void,
 ): void => {

@@ -3,7 +3,6 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listArtists } from '../../api/ArtistApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { ISearchResultObject } from '../../dto/ISearchResultObject';
 import { IArtistObject } from '../../dto/artists/IArtistObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -30,11 +29,7 @@ const validate = ajv.compile<IArtistSearchRouteParams>(
 );
 
 export class ArtistSearchStore
-	implements
-		IStoreWithPagination<
-			IArtistSearchRouteParams,
-			ISearchResultObject<IArtistObject>
-		>
+	implements IStoreWithPagination<IArtistSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable artists: IArtistObject[] = [];
@@ -47,23 +42,31 @@ export class ArtistSearchStore
 
 	clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = ['pageSize'];
 
-	updateResults = async (
-		clearResults: boolean,
-	): Promise<ISearchResultObject<IArtistObject>> => {
-		const paginationParams = this.pagination.toParams(clearResults);
+	private pauseNotifications = false;
 
-		const result = await listArtists({
-			pagination: paginationParams,
-		});
+	updateResults = async (clearResults: boolean): Promise<void> => {
+		if (this.pauseNotifications) return;
 
-		runInAction(() => {
-			this.artists = result.items;
+		this.pauseNotifications = true;
 
-			if (paginationParams.getTotalCount)
-				this.pagination.totalItems = result.totalCount;
-		});
+		try {
+			const paginationParams = this.pagination.toParams(clearResults);
 
-		return result;
+			const result = await listArtists({
+				pagination: paginationParams,
+			});
+
+			runInAction(() => {
+				this.artists = result.items;
+
+				if (paginationParams.getTotalCount)
+					this.pagination.totalItems = result.totalCount;
+			});
+
+			return;
+		} finally {
+			this.pauseNotifications = false;
+		}
 	};
 
 	@computed.struct get routeParams(): IArtistSearchRouteParams {

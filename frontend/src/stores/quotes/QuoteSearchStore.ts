@@ -3,7 +3,6 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listQuotes } from '../../api/QuoteApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { ISearchResultObject } from '../../dto/ISearchResultObject';
 import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -30,11 +29,7 @@ const validate = ajv.compile<IQuoteSearchRouteParams>(
 );
 
 export class QuoteSearchStore
-	implements
-		IStoreWithPagination<
-			IQuoteSearchRouteParams,
-			ISearchResultObject<IQuoteObject>
-		>
+	implements IStoreWithPagination<IQuoteSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteObject[] = [];
@@ -48,24 +43,32 @@ export class QuoteSearchStore
 
 	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = ['pageSize'];
 
-	updateResults = async (
-		clearResults: boolean,
-	): Promise<ISearchResultObject<IQuoteObject>> => {
-		const paginationParams = this.pagination.toParams(clearResults);
+	private pauseNotifications = false;
 
-		const result = await listQuotes({
-			pagination: paginationParams,
-			artistId: this.artistId,
-		});
+	updateResults = async (clearResults: boolean): Promise<void> => {
+		if (this.pauseNotifications) return;
 
-		runInAction(() => {
-			this.quotes = result.items;
+		this.pauseNotifications = true;
 
-			if (paginationParams.getTotalCount)
-				this.pagination.totalItems = result.totalCount;
-		});
+		try {
+			const paginationParams = this.pagination.toParams(clearResults);
 
-		return result;
+			const result = await listQuotes({
+				pagination: paginationParams,
+				artistId: this.artistId,
+			});
+
+			runInAction(() => {
+				this.quotes = result.items;
+
+				if (paginationParams.getTotalCount)
+					this.pagination.totalItems = result.totalCount;
+			});
+
+			return;
+		} finally {
+			this.pauseNotifications = false;
+		}
 	};
 
 	@computed.struct get routeParams(): IQuoteSearchRouteParams {

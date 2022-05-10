@@ -3,7 +3,6 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listUsers } from '../../api/UserApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { ISearchResultObject } from '../../dto/ISearchResultObject';
 import { IUserObject } from '../../dto/users/IUserObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -30,11 +29,7 @@ const validate = ajv.compile<IUserSearchRouteParams>(
 );
 
 export class UserSearchStore
-	implements
-		IStoreWithPagination<
-			IUserSearchRouteParams,
-			ISearchResultObject<IUserObject>
-		>
+	implements IStoreWithPagination<IUserSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable users: IUserObject[] = [];
@@ -47,23 +42,31 @@ export class UserSearchStore
 
 	clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = ['pageSize'];
 
-	updateResults = async (
-		clearResults: boolean,
-	): Promise<ISearchResultObject<IUserObject>> => {
-		const paginationParams = this.pagination.toParams(clearResults);
+	private pauseNotifications = false;
 
-		const result = await listUsers({
-			pagination: paginationParams,
-		});
+	updateResults = async (clearResults: boolean): Promise<void> => {
+		if (this.pauseNotifications) return;
 
-		runInAction(() => {
-			this.users = result.items;
+		this.pauseNotifications = true;
 
-			if (paginationParams.getTotalCount)
-				this.pagination.totalItems = result.totalCount;
-		});
+		try {
+			const paginationParams = this.pagination.toParams(clearResults);
 
-		return result;
+			const result = await listUsers({
+				pagination: paginationParams,
+			});
+
+			runInAction(() => {
+				this.users = result.items;
+
+				if (paginationParams.getTotalCount)
+					this.pagination.totalItems = result.totalCount;
+			});
+
+			return;
+		} finally {
+			this.pauseNotifications = false;
+		}
 	};
 
 	@computed.struct get routeParams(): IUserSearchRouteParams {

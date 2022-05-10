@@ -9,7 +9,6 @@ import {
 import { ajv } from '../../ajv';
 import { listTranslations } from '../../api/TranslationApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { ISearchResultObject } from '../../dto/ISearchResultObject';
 import { ITranslationObject } from '../../dto/translations/ITranslationObject';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';
@@ -77,11 +76,7 @@ const validate = ajv.compile<ITranslationSearchRouteParams>(
 );
 
 export class TranslationSearchStore
-	implements
-		IStoreWithPagination<
-			ITranslationSearchRouteParams,
-			ISearchResultObject<ITranslationObject>
-		>
+	implements IStoreWithPagination<ITranslationSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable translations: ITranslationObject[] = [];
@@ -116,26 +111,34 @@ export class TranslationSearchStore
 		'category',
 	];
 
-	updateResults = async (
-		clearResults: boolean,
-	): Promise<ISearchResultObject<ITranslationObject>> => {
-		const paginationParams = this.pagination.toParams(clearResults);
+	private pauseNotifications = false;
 
-		const result = await listTranslations({
-			pagination: paginationParams,
-			sort: this.sort,
-			query: this.query,
-			category: this.category,
-		});
+	updateResults = async (clearResults: boolean): Promise<void> => {
+		if (this.pauseNotifications) return;
 
-		runInAction(() => {
-			this.translations = result.items;
+		this.pauseNotifications = true;
 
-			if (paginationParams.getTotalCount)
-				this.pagination.totalItems = result.totalCount;
-		});
+		try {
+			const paginationParams = this.pagination.toParams(clearResults);
 
-		return result;
+			const result = await listTranslations({
+				pagination: paginationParams,
+				sort: this.sort,
+				query: this.query,
+				category: this.category,
+			});
+
+			runInAction(() => {
+				this.translations = result.items;
+
+				if (paginationParams.getTotalCount)
+					this.pagination.totalItems = result.totalCount;
+			});
+
+			return;
+		} finally {
+			this.pauseNotifications = false;
+		}
 	};
 
 	@computed.struct get routeParams(): ITranslationSearchRouteParams {
