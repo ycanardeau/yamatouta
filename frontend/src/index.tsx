@@ -2,6 +2,7 @@ import { EuiProvider } from '@elastic/eui';
 import '@elastic/eui/dist/eui_theme_dark.css';
 import createCache from '@emotion/cache';
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -15,6 +16,8 @@ import reportWebVitals from './reportWebVitals';
 
 axios.defaults.baseURL = config.apiEndpoint;
 axios.defaults.withCredentials = true;
+
+axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 // See https://github.com/elastic/eui/issues/5436 and https://elastic.github.io/eui/#/utilities/provider.
 const emotionCache = createCache({
