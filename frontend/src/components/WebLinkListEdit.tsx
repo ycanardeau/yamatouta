@@ -59,6 +59,7 @@ const WebLinkEdit = observer(
 								href={store.url}
 								target="_blank"
 								isDisabled={!store.url}
+								aria-label={t('shared.externalLink')}
 							/>
 						}
 						readOnly={

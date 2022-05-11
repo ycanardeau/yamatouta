@@ -52,7 +52,9 @@
 		"viewBasicInfo": "View basic info",
 		"add": "Add",
 		"remove": "Remove",
-		"externalLinks": "External links"
+		"externalLinks": "External links",
+		"actions": "Actions",
+		"externalLink": "External link"
 	},
 	"translations": {
 		"addWord": "Add word",

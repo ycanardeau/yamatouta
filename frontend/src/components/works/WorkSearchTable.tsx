@@ -61,6 +61,7 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 						size="xs"
 						color="text"
 						onClick={togglePopover}
+						aria-label={t(`shared.actions`)}
 					/>
 				}
 				isOpen={isPopoverOpen}
