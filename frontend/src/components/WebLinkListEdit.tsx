@@ -72,25 +72,6 @@ const WebLinkEdit = observer(
 				<EuiTableRowCell
 					textOnly={false}
 					mobileOptions={{
-						header: t('webLinks.title'),
-						width: '100%',
-					}}
-				>
-					<EuiFieldText
-						compressed
-						value={store.title}
-						onChange={(e): void => store.setTitle(e.target.value)}
-						fullWidth
-						readOnly={
-							!auth.permissionContext.hasPermission(
-								Permission.EditWebLinks,
-							)
-						}
-					/>
-				</EuiTableRowCell>
-				<EuiTableRowCell
-					textOnly={false}
-					mobileOptions={{
 						header: t('webLinks.category'),
 						width: '100%',
 					}}
@@ -166,9 +147,6 @@ const WebLinkListEdit = observer(
 					<EuiTableHeader>
 						<EuiTableHeaderCell>
 							{t('webLinks.url')}
-						</EuiTableHeaderCell>
-						<EuiTableHeaderCell>
-							{t('webLinks.title')}
 						</EuiTableHeaderCell>
 						<EuiTableHeaderCell>
 							{t('webLinks.category')}
