@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { createWork, updateWork } from '../../api/WorkApi';
-import { IWorkObject } from '../../dto/works/IWorkObject';
+import { IWorkObject } from '../../dto/IWorkObject';
 import { WorkType } from '../../models/WorkType';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 

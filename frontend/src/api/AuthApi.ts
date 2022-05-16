@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IAuthenticatedUserObject } from '../dto/users/IAuthenticatedUserObject';
+import { IAuthenticatedUserObject } from '../dto/IAuthenticatedUserObject';
 
 export const register = async ({
 	email,

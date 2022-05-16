@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { User } from '../../entities/User';
-import { Permission } from '../../models/Permission';
-import { generateGravatarUrl } from '../../utils/generateGravatarUrl';
+import { User } from '../entities/User';
+import { Permission } from '../models/Permission';
+import { generateGravatarUrl } from '../utils/generateGravatarUrl';
 
 export class AuthenticatedUserObject {
 	readonly id: number;

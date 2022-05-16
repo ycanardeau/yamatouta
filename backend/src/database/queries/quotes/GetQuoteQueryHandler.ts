@@ -4,7 +4,7 @@ import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
-import { QuoteObject } from '../../../dto/quotes/QuoteObject';
+import { QuoteObject } from '../../../dto/QuoteObject';
 import { Quote } from '../../../entities/Quote';
 import { QuoteOptionalField } from '../../../models/QuoteOptionalField';
 import { PermissionContext } from '../../../services/PermissionContext';

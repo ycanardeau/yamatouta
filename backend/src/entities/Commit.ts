@@ -1,7 +1,7 @@
 import { Collection, Entity, OneToMany, PrimaryKey } from '@mikro-orm/core';
 
 import { Entry } from '../models/Entry';
-import { Snapshot } from '../models/Snapshot';
+import { Snapshot } from '../models/snapshots/Snapshot';
 import { Revision } from './Revision';
 
 // At times, more than one type of history record can be recorded by a single action.

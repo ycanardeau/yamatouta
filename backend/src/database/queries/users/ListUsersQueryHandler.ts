@@ -10,7 +10,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { UserObject } from '../../../dto/users/UserObject';
+import { UserObject } from '../../../dto/UserObject';
 import { User } from '../../../entities/User';
 import { UserSortRule } from '../../../models/UserSortRule';
 import { PermissionContext } from '../../../services/PermissionContext';

@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { IArtistObject } from '../../dto/IArtistObject';
 import { QuoteSearchStore } from '../quotes/QuoteSearchStore';
 
 export class ArtistDetailsStore {

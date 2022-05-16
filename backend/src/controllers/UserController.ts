@@ -20,9 +20,9 @@ import {
 	ListUsersQuery,
 } from '../database/queries/users/ListUsersQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
+import { AuthenticatedUserObject } from '../dto/AuthenticatedUserObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
-import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
-import { UserObject } from '../dto/users/UserObject';
+import { UserObject } from '../dto/UserObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

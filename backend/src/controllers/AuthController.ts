@@ -15,7 +15,7 @@ import {
 	CreateUserParams,
 } from '../database/commands/users/CreateUserCommandHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
-import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../dto/AuthenticatedUserObject';
 import { LocalAuthGuard } from '../guards/LocalAuthGuard';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';

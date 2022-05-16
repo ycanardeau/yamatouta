@@ -2,7 +2,7 @@ import { Collection } from '@mikro-orm/core';
 
 import { Revision } from '../entities/Revision';
 import { Entry } from './Entry';
-import { Snapshot } from './Snapshot';
+import { Snapshot } from './snapshots/Snapshot';
 
 export interface IEntryWithRevisions<
 	TEntry extends Entry,

@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 
 export class QuoteDetailsStore {
 	@observable quote: IQuoteObject;

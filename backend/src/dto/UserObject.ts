@@ -1,6 +1,6 @@
-import { User } from '../../entities/User';
-import { PermissionContext } from '../../services/PermissionContext';
-import { generateGravatarUrl } from '../../utils/generateGravatarUrl';
+import { User } from '../entities/User';
+import { PermissionContext } from '../services/PermissionContext';
+import { generateGravatarUrl } from '../utils/generateGravatarUrl';
 
 export class UserObject {
 	readonly id: number;

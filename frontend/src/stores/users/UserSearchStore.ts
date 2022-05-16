@@ -3,7 +3,7 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listUsers } from '../../api/UserApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { IUserObject } from '../../dto/users/IUserObject';
+import { IUserObject } from '../../dto/IUserObject';
 import { PaginationStore } from '../PaginationStore';
 
 interface IUserSearchRouteParams {

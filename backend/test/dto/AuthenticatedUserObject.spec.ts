@@ -1,6 +1,6 @@
-import { AuthenticatedUserObject } from '../../../src/dto/users/AuthenticatedUserObject';
-import { FakeEntityManager } from '../../FakeEntityManager';
-import { createUser } from '../../createEntry';
+import { AuthenticatedUserObject } from '../../src/dto/AuthenticatedUserObject';
+import { FakeEntityManager } from '../FakeEntityManager';
+import { createUser } from '../createEntry';
 
 test('AuthenticatedUserObject', async () => {
 	const em = new FakeEntityManager();

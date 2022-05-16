@@ -16,7 +16,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IUserObject } from '../../dto/users/IUserObject';
+import { IUserObject } from '../../dto/IUserObject';
 import { RegisterDialogStore } from '../../stores/auth/RegisterDialogStore';
 
 interface RegisterDialogProps {

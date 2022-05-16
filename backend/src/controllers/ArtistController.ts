@@ -27,9 +27,9 @@ import {
 } from '../database/queries/artists/ListArtistsQueryHandler';
 import { ListArtistRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
+import { ArtistObject } from '../dto/ArtistObject';
+import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
-import { ArtistObject } from '../dto/artists/ArtistObject';
-import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

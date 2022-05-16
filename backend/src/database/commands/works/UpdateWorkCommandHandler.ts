@@ -5,7 +5,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
 import { WebLinkObject } from '../../../dto/WebLinkObject';
-import { WorkObject } from '../../../dto/works/WorkObject';
+import { WorkObject } from '../../../dto/WorkObject';
 import { Commit } from '../../../entities/Commit';
 import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';

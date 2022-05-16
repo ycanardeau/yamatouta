@@ -5,7 +5,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
 import config from '../../../config';
-import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
 import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';

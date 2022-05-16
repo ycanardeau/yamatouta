@@ -1,6 +1,6 @@
-import { QuoteType } from '../../models/QuoteType';
-import { IWebLinkObject } from '../IWebLinkObject';
-import { IArtistObject } from '../artists/IArtistObject';
+import { QuoteType } from '../models/QuoteType';
+import { IArtistObject } from './IArtistObject';
+import { IWebLinkObject } from './IWebLinkObject';
 
 export interface IQuoteObject {
 	id: number;

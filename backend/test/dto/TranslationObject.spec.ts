@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { TranslationObject } from '../../../src/dto/translations/TranslationObject';
-import { WordCategory } from '../../../src/models/WordCategory';
-import { FakeEntityManager } from '../../FakeEntityManager';
-import { FakePermissionContext } from '../../FakePermissionContext';
-import { createTranslation, createUser } from '../../createEntry';
+import { TranslationObject } from '../../src/dto/TranslationObject';
+import { WordCategory } from '../../src/models/WordCategory';
+import { FakeEntityManager } from '../FakeEntityManager';
+import { FakePermissionContext } from '../FakePermissionContext';
+import { createTranslation, createUser } from '../createEntry';
 
 test('TranslationObject', async () => {
 	const em = new FakeEntityManager();

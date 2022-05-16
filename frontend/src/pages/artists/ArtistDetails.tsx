@@ -26,7 +26,7 @@ import {
 
 import { getArtist } from '../../api/ArtistApi';
 import { useAuth } from '../../components/useAuth';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { IArtistObject } from '../../dto/IArtistObject';
 import { ArtistOptionalField } from '../../models/ArtistOptionalField';
 import { Permission } from '../../models/Permission';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';

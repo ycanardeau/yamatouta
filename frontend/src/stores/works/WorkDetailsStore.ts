@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { IWorkObject } from '../../dto/works/IWorkObject';
+import { IWorkObject } from '../../dto/IWorkObject';
 
 export class WorkDetailsStore {
 	@observable work: IWorkObject;

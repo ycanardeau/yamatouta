@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { register } from '../../api/AuthApi';
-import { IUserObject } from '../../dto/users/IUserObject';
+import { IUserObject } from '../../dto/IUserObject';
 
 export class RegisterDialogStore {
 	@observable submitting = false;

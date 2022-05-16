@@ -4,7 +4,7 @@ import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
-import { TranslationObject } from '../../../dto/translations/TranslationObject';
+import { TranslationObject } from '../../../dto/TranslationObject';
 import { Translation } from '../../../entities/Translation';
 import { TranslationOptionalField } from '../../../models/TranslationOptionalField';
 import { PermissionContext } from '../../../services/PermissionContext';

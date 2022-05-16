@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { ITranslationObject } from '../../dto/ITranslationObject';
 import { TranslationDeleteStore } from '../../stores/translations/TranslationDeleteStore';
 
 interface TranslationDeleteDialogProps {

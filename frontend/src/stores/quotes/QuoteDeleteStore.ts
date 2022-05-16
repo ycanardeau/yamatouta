@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { deleteQuote } from '../../api/QuoteApi';
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 
 export class QuoteDeleteStore {
 	private readonly quote: IQuoteObject;

@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { deleteWork } from '../../api/WorkApi';
-import { IWorkObject } from '../../dto/works/IWorkObject';
+import { IWorkObject } from '../../dto/IWorkObject';
 
 export class WorkDeleteStore {
 	private readonly work: IWorkObject;

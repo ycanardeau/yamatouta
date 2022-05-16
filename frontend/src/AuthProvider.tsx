@@ -3,7 +3,7 @@ import React from 'react';
 import { AuthContext } from './AuthContext';
 import { PermissionContext } from './PermissionContext';
 import { getAuthenticatedUser } from './api/UserApi';
-import { IAuthenticatedUserObject } from './dto/users/IAuthenticatedUserObject';
+import { IAuthenticatedUserObject } from './dto/IAuthenticatedUserObject';
 
 interface AuthProviderProps {
 	children: React.ReactNode;

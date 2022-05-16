@@ -9,8 +9,8 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
+import { QuoteObject } from '../../../dto/QuoteObject';
 import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Quote } from '../../../entities/Quote';
 import { QuoteSortRule } from '../../../models/QuoteSortRule';
 import { QuoteType } from '../../../models/QuoteType';

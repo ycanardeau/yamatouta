@@ -3,8 +3,8 @@ import React from 'react';
 
 import { listQuoteRevisions } from '../../api/RevisionApi';
 import RevisionComment from '../../components/revisions/RevisionComment';
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
-import { IRevisionObject } from '../../dto/revisions/IRevisionObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
+import { IRevisionObject } from '../../dto/IRevisionObject';
 
 interface LayoutProps {
 	revisions: IRevisionObject[];

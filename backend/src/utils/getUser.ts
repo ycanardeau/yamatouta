@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../dto/AuthenticatedUserObject';
 
 export const getUser = (
 	request: Request,

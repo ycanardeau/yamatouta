@@ -10,7 +10,7 @@ import {
 	CreateQuoteCommandHandler,
 } from '../../../../src/database/commands/quotes/CreateQuoteCommandHandler';
 import { UpdateQuoteParams } from '../../../../src/database/commands/quotes/UpdateQuoteCommandHandler';
-import { QuoteObject } from '../../../../src/dto/quotes/QuoteObject';
+import { QuoteObject } from '../../../../src/dto/QuoteObject';
 import { Artist } from '../../../../src/entities/Artist';
 import { QuoteAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { Quote } from '../../../../src/entities/Quote';
@@ -20,11 +20,9 @@ import { ArtistType } from '../../../../src/models/ArtistType';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { QuoteType } from '../../../../src/models/QuoteType';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import {
-	IQuoteSnapshot,
-	ObjectRefSnapshot,
-} from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
+import { ObjectRefSnapshot } from '../../../../src/models/snapshots/ObjectRefSnapshot';
+import { IQuoteSnapshot } from '../../../../src/models/snapshots/QuoteSnapshot';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertQuoteAuditLogEntry } from '../../../assertAuditLogEntry';

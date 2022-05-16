@@ -27,9 +27,9 @@ import {
 	ListTranslationsQuery,
 } from '../database/queries/translations/ListTranslationsQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
+import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
-import { RevisionObject } from '../dto/revisions/RevisionObject';
-import { TranslationObject } from '../dto/translations/TranslationObject';
+import { TranslationObject } from '../dto/TranslationObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

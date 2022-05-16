@@ -3,7 +3,7 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listQuotes } from '../../api/QuoteApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 import { PaginationStore } from '../PaginationStore';
 
 interface IQuoteSearchRouteParams {

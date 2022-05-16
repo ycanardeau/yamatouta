@@ -19,7 +19,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { listArtists } from '../../api/ArtistApi';
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
 

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
+import { IArtistObject } from '../dto/IArtistObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IWebLinkObject } from '../dto/IWebLinkObject';
-import { IArtistObject } from '../dto/artists/IArtistObject';
 import { ArtistOptionalField } from '../models/ArtistOptionalField';
 import { ArtistType } from '../models/ArtistType';
 import { IPaginationParams } from '../stores/PaginationStore';

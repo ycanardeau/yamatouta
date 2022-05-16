@@ -8,8 +8,8 @@ import {
 
 import { getArtist } from '../../api/ArtistApi';
 import { createQuote, updateQuote } from '../../api/QuoteApi';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IArtistObject } from '../../dto/IArtistObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
 import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';

@@ -3,8 +3,8 @@ import React from 'react';
 
 import { listArtistRevisions } from '../../api/RevisionApi';
 import RevisionComment from '../../components/revisions/RevisionComment';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
-import { IRevisionObject } from '../../dto/revisions/IRevisionObject';
+import { IArtistObject } from '../../dto/IArtistObject';
+import { IRevisionObject } from '../../dto/IRevisionObject';
 
 interface LayoutProps {
 	revisions: IRevisionObject[];

@@ -26,7 +26,7 @@ import {
 import { getQuote } from '../../api/QuoteApi';
 import { useAuth } from '../../components/useAuth';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 import { Permission } from '../../models/Permission';
 import { QuoteOptionalField } from '../../models/QuoteOptionalField';
 import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';

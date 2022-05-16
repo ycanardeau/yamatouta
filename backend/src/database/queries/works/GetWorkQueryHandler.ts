@@ -4,7 +4,7 @@ import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
-import { WorkObject } from '../../../dto/works/WorkObject';
+import { WorkObject } from '../../../dto/WorkObject';
 import { Work } from '../../../entities/Work';
 import { WorkOptionalField } from '../../../models/WorkOptionalField';
 import { PermissionContext } from '../../../services/PermissionContext';

@@ -6,7 +6,7 @@ import {
 	UpdateAuthenticatedUserCommandHandler,
 	UpdateAuthenticatedUserParams,
 } from '../../../../src/database/commands/users/UpdateAuthenticatedUserCommandHandler';
-import { AuthenticatedUserObject } from '../../../../src/dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../../../../src/dto/AuthenticatedUserObject';
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';

@@ -1,9 +1,9 @@
-import { Quote } from '../../entities/Quote';
-import { QuoteOptionalField } from '../../models/QuoteOptionalField';
-import { QuoteType } from '../../models/QuoteType';
-import { PermissionContext } from '../../services/PermissionContext';
-import { WebLinkObject } from '../WebLinkObject';
-import { ArtistObject } from '../artists/ArtistObject';
+import { Quote } from '../entities/Quote';
+import { QuoteOptionalField } from '../models/QuoteOptionalField';
+import { QuoteType } from '../models/QuoteType';
+import { PermissionContext } from '../services/PermissionContext';
+import { ArtistObject } from './ArtistObject';
+import { WebLinkObject } from './WebLinkObject';
 
 export class QuoteObject {
 	readonly id: number;

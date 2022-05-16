@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Avatar from '../../components/Avatar';
 import Pagination from '../../components/Pagination';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { IArtistObject } from '../../dto/IArtistObject';
 import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 import Link from '../Link';

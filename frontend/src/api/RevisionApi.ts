@@ -1,7 +1,7 @@
 import axios from 'axios';
 
+import { IRevisionObject } from '../dto/IRevisionObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { IRevisionObject } from '../dto/revisions/IRevisionObject';
 
 export const listTranslationRevisions = async ({
 	translationId,

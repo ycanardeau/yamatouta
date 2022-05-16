@@ -1,8 +1,8 @@
 import axios from 'axios';
 
+import { IAuthenticatedUserObject } from '../dto/IAuthenticatedUserObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { IAuthenticatedUserObject } from '../dto/users/IAuthenticatedUserObject';
-import { IUserObject } from '../dto/users/IUserObject';
+import { IUserObject } from '../dto/IUserObject';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 export const listUsers = async ({

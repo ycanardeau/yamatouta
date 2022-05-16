@@ -11,7 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { getUser } from '../../api/UserApi';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import { IUserObject } from '../../dto/users/IUserObject';
+import { IUserObject } from '../../dto/IUserObject';
 import { UserDetailsStore } from '../../stores/users/UserDetailsStore';
 
 interface BreadcrumbsProps {

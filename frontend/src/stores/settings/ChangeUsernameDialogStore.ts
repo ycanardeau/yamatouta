@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { updateAuthenticatedUser } from '../../api/UserApi';
-import { IAuthenticatedUserObject } from '../../dto/users/IAuthenticatedUserObject';
+import { IAuthenticatedUserObject } from '../../dto/IAuthenticatedUserObject';
 
 export class ChangeUsernameDialogStore {
 	@observable submitting = false;

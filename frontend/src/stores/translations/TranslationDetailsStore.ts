@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { ITranslationObject } from '../../dto/ITranslationObject';
 
 export class TranslationDetailsStore {
 	@observable translation: ITranslationObject;

@@ -4,7 +4,7 @@ import Joi from 'joi';
 import _ from 'lodash';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { TranslationObject } from '../../../dto/translations/TranslationObject';
+import { TranslationObject } from '../../../dto/TranslationObject';
 import { Translation } from '../../../entities/Translation';
 import { TranslationSortRule } from '../../../models/TranslationSortRule';
 import { WordCategory } from '../../../models/WordCategory';

@@ -10,16 +10,16 @@ import {
 	UpdateWorkCommandHandler,
 	UpdateWorkParams,
 } from '../../../../src/database/commands/works/UpdateWorkCommandHandler';
-import { WorkObject } from '../../../../src/dto/works/WorkObject';
+import { WorkObject } from '../../../../src/dto/WorkObject';
 import { WorkAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { WorkRevision } from '../../../../src/entities/Revision';
 import { User } from '../../../../src/entities/User';
 import { Work } from '../../../../src/entities/Work';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { IWorkSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WorkType } from '../../../../src/models/WorkType';
+import { IWorkSnapshot } from '../../../../src/models/snapshots/WorkSnapshot';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertWorkAuditLogEntry } from '../../../assertAuditLogEntry';

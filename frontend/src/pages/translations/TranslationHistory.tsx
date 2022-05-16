@@ -3,8 +3,8 @@ import React from 'react';
 
 import { listTranslationRevisions } from '../../api/RevisionApi';
 import RevisionComment from '../../components/revisions/RevisionComment';
-import { IRevisionObject } from '../../dto/revisions/IRevisionObject';
-import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { IRevisionObject } from '../../dto/IRevisionObject';
+import { ITranslationObject } from '../../dto/ITranslationObject';
 
 interface LayoutProps {
 	revisions: IRevisionObject[];

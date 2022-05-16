@@ -10,7 +10,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { WorkObject } from '../../../dto/works/WorkObject';
+import { WorkObject } from '../../../dto/WorkObject';
 import { Work } from '../../../entities/Work';
 import { WorkSortRule } from '../../../models/WorkSortRule';
 import { WorkType } from '../../../models/WorkType';

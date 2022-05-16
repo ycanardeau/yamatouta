@@ -1,8 +1,8 @@
-import { Work } from '../../entities/Work';
-import { WorkOptionalField } from '../../models/WorkOptionalField';
-import { WorkType } from '../../models/WorkType';
-import { PermissionContext } from '../../services/PermissionContext';
-import { WebLinkObject } from '../WebLinkObject';
+import { Work } from '../entities/Work';
+import { WorkOptionalField } from '../models/WorkOptionalField';
+import { WorkType } from '../models/WorkType';
+import { PermissionContext } from '../services/PermissionContext';
+import { WebLinkObject } from './WebLinkObject';
 
 export class WorkObject {
 	readonly id: number;

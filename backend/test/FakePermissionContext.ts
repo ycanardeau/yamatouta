@@ -1,4 +1,4 @@
-import { AuthenticatedUserObject } from '../src/dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../src/dto/AuthenticatedUserObject';
 import { User } from '../src/entities/User';
 import { PermissionContext } from '../src/services/PermissionContext';
 

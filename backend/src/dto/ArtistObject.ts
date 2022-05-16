@@ -1,8 +1,8 @@
-import { Artist } from '../../entities/Artist';
-import { ArtistOptionalField } from '../../models/ArtistOptionalField';
-import { ArtistType } from '../../models/ArtistType';
-import { PermissionContext } from '../../services/PermissionContext';
-import { WebLinkObject } from '../WebLinkObject';
+import { Artist } from '../entities/Artist';
+import { ArtistOptionalField } from '../models/ArtistOptionalField';
+import { ArtistType } from '../models/ArtistType';
+import { PermissionContext } from '../services/PermissionContext';
+import { WebLinkObject } from './WebLinkObject';
 
 export class ArtistObject {
 	readonly id: number;

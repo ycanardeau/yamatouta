@@ -31,7 +31,7 @@ import Highlighter from 'react-highlight-words';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { ITranslationObject } from '../../dto/ITranslationObject';
 import { Permission } from '../../models/Permission';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';

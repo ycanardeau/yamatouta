@@ -3,7 +3,7 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listWorks } from '../../api/WorkApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { IWorkObject } from '../../dto/works/IWorkObject';
+import { IWorkObject } from '../../dto/IWorkObject';
 import { PaginationStore } from '../PaginationStore';
 
 interface IWorkSearchRouteParams {

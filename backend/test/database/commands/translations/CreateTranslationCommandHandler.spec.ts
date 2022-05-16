@@ -10,16 +10,16 @@ import {
 	CreateTranslationCommandHandler,
 } from '../../../../src/database/commands/translations/CreateTranslationCommandHandler';
 import { UpdateTranslationParams } from '../../../../src/database/commands/translations/UpdateTranslationCommandHandler';
-import { TranslationObject } from '../../../../src/dto/translations/TranslationObject';
+import { TranslationObject } from '../../../../src/dto/TranslationObject';
 import { TranslationAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { TranslationRevision } from '../../../../src/entities/Revision';
 import { Translation } from '../../../../src/entities/Translation';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { ITranslationSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { WordCategory } from '../../../../src/models/WordCategory';
+import { ITranslationSnapshot } from '../../../../src/models/snapshots/TranslationSnapshot';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';

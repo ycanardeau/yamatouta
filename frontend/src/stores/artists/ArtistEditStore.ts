@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { createArtist, updateArtist } from '../../api/ArtistApi';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { IArtistObject } from '../../dto/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 

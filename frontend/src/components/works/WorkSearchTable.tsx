@@ -24,7 +24,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { IWorkObject } from '../../dto/works/IWorkObject';
+import { IWorkObject } from '../../dto/IWorkObject';
 import { Permission } from '../../models/Permission';
 import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
 import Avatar from '../Avatar';

@@ -4,7 +4,7 @@ import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
-import { ArtistObject } from '../../../dto/artists/ArtistObject';
+import { ArtistObject } from '../../../dto/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { ArtistOptionalField } from '../../../models/ArtistOptionalField';
 import { PermissionContext } from '../../../services/PermissionContext';

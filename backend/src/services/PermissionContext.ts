@@ -1,7 +1,7 @@
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 
-import { AuthenticatedUserObject } from '../dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../dto/AuthenticatedUserObject';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { Permission } from '../models/Permission';
 import { getClientIp } from '../utils/getClientIp';

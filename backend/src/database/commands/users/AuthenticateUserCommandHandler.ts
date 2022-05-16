@@ -2,7 +2,7 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
 import { User } from '../../../entities/User';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';

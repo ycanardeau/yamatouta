@@ -1,8 +1,8 @@
 import axios from 'axios';
 
+import { IQuoteObject } from '../dto/IQuoteObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IWebLinkObject } from '../dto/IWebLinkObject';
-import { IQuoteObject } from '../dto/quotes/IQuoteObject';
 import { QuoteOptionalField } from '../models/QuoteOptionalField';
 import { QuoteType } from '../models/QuoteType';
 import { IPaginationParams } from '../stores/PaginationStore';

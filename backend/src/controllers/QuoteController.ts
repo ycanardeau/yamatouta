@@ -27,9 +27,9 @@ import {
 	ListQuotesQuery,
 } from '../database/queries/quotes/ListQuotesQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
+import { QuoteObject } from '../dto/QuoteObject';
+import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
-import { QuoteObject } from '../dto/quotes/QuoteObject';
-import { RevisionObject } from '../dto/revisions/RevisionObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

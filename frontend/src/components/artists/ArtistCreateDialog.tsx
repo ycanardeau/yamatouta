@@ -16,7 +16,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { IArtistObject } from '../../dto/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
 import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
 

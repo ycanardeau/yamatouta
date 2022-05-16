@@ -3,7 +3,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
 
-import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
 import { User } from '../../entities/User';
 
 @Injectable()

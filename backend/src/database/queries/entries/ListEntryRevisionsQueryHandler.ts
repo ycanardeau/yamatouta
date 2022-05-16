@@ -2,8 +2,8 @@ import { EntityRepository, QueryOrder } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
+import { RevisionObject } from '../../../dto/RevisionObject';
 import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { RevisionObject } from '../../../dto/revisions/RevisionObject';
 import { Artist } from '../../../entities/Artist';
 import { Quote } from '../../../entities/Quote';
 import { Translation } from '../../../entities/Translation';

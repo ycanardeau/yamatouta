@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 
-import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
 import { getUser } from '../../utils/getUser';
 
 @Injectable()

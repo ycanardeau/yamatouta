@@ -9,8 +9,8 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
+import { ArtistObject } from '../../../dto/ArtistObject';
 import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { ArtistObject } from '../../../dto/artists/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { ArtistSortRule } from '../../../models/ArtistSortRule';
 import { ArtistType } from '../../../models/ArtistType';

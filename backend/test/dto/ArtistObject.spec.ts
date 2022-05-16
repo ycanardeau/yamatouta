@@ -1,10 +1,10 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { ArtistObject } from '../../../src/dto/artists/ArtistObject';
-import { ArtistType } from '../../../src/models/ArtistType';
-import { FakeEntityManager } from '../../FakeEntityManager';
-import { FakePermissionContext } from '../../FakePermissionContext';
-import { createArtist, createUser } from '../../createEntry';
+import { ArtistObject } from '../../src/dto/ArtistObject';
+import { ArtistType } from '../../src/models/ArtistType';
+import { FakeEntityManager } from '../FakeEntityManager';
+import { FakePermissionContext } from '../FakePermissionContext';
+import { createArtist, createUser } from '../createEntry';
 
 test('ArtistObject', async () => {
 	const em = new FakeEntityManager();

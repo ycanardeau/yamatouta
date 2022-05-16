@@ -17,7 +17,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 import { Permission } from '../../models/Permission';
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 import Avatar from '../Avatar';

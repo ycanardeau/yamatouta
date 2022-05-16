@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import WebLinkList from '../../components/WebLinkList';
 import QuoteComment from '../../components/quotes/QuoteComment';
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 
 interface QuoteBasicInfoProps {
 	quote: IQuoteObject;

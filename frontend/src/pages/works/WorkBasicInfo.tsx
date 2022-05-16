@@ -7,7 +7,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import WebLinkList from '../../components/WebLinkList';
-import { IWorkObject } from '../../dto/works/IWorkObject';
+import { IWorkObject } from '../../dto/IWorkObject';
 
 interface WorkBasicInfoProps {
 	work: IWorkObject;

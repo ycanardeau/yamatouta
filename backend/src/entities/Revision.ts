@@ -3,13 +3,11 @@ import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { Entry } from '../models/Entry';
 import { EntryType } from '../models/EntryType';
 import { RevisionEvent } from '../models/RevisionEvent';
-import {
-	ArtistSnapshot,
-	QuoteSnapshot,
-	Snapshot,
-	TranslationSnapshot,
-	WorkSnapshot,
-} from '../models/Snapshot';
+import { ArtistSnapshot } from '../models/snapshots/ArtistSnapshot';
+import { QuoteSnapshot } from '../models/snapshots/QuoteSnapshot';
+import { Snapshot } from '../models/snapshots/Snapshot';
+import { TranslationSnapshot } from '../models/snapshots/TranslationSnapshot';
+import { WorkSnapshot } from '../models/snapshots/WorkSnapshot';
 import { Artist } from './Artist';
 import { Commit } from './Commit';
 import { Quote } from './Quote';

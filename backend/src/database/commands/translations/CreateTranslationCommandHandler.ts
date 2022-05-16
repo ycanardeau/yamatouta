@@ -3,7 +3,7 @@ import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { TranslationObject } from '../../../dto/translations/TranslationObject';
+import { TranslationObject } from '../../../dto/TranslationObject';
 import { Commit } from '../../../entities/Commit';
 import { Translation } from '../../../entities/Translation';
 import { User } from '../../../entities/User';

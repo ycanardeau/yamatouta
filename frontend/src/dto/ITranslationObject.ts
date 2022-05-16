@@ -1,5 +1,5 @@
-import { WordCategory } from '../../models/WordCategory';
-import { IWebLinkObject } from '../IWebLinkObject';
+import { WordCategory } from '../models/WordCategory';
+import { IWebLinkObject } from './IWebLinkObject';
 
 export interface ITranslationObject {
 	id: number;

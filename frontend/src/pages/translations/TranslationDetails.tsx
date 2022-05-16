@@ -26,7 +26,7 @@ import {
 import { getTranslation } from '../../api/TranslationApi';
 import { useAuth } from '../../components/useAuth';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { ITranslationObject } from '../../dto/ITranslationObject';
 import { Permission } from '../../models/Permission';
 import { TranslationOptionalField } from '../../models/TranslationOptionalField';
 import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';

@@ -8,7 +8,7 @@ import moment from 'moment';
 import React from 'react';
 
 import Avatar from '../../components/Avatar';
-import { IRevisionObject } from '../../dto/revisions/IRevisionObject';
+import { IRevisionObject } from '../../dto/IRevisionObject';
 import { RevisionEvent } from '../../models/RevisionEvent';
 import Link from '../Link';
 

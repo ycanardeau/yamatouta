@@ -27,9 +27,9 @@ import {
 	ListWorksQuery,
 } from '../database/queries/works/ListWorksQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
+import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
-import { RevisionObject } from '../dto/revisions/RevisionObject';
-import { WorkObject } from '../dto/works/WorkObject';
+import { WorkObject } from '../dto/WorkObject';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

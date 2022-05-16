@@ -25,7 +25,7 @@ import {
 
 import { getWork } from '../../api/WorkApi';
 import { useAuth } from '../../components/useAuth';
-import { IWorkObject } from '../../dto/works/IWorkObject';
+import { IWorkObject } from '../../dto/IWorkObject';
 import { Permission } from '../../models/Permission';
 import { WorkOptionalField } from '../../models/WorkOptionalField';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';

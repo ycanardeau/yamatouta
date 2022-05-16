@@ -3,7 +3,7 @@ import { computed, makeObservable, observable, runInAction } from 'mobx';
 import { ajv } from '../../ajv';
 import { listArtists } from '../../api/ArtistApi';
 import { IStoreWithPagination } from '../../components/useStoreWithPagination';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { IArtistObject } from '../../dto/IArtistObject';
 import { PaginationStore } from '../PaginationStore';
 
 interface IArtistSearchRouteParams {

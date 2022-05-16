@@ -1,11 +1,11 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { QuoteObject } from '../../../src/dto/quotes/QuoteObject';
-import { ArtistType } from '../../../src/models/ArtistType';
-import { QuoteType } from '../../../src/models/QuoteType';
-import { FakeEntityManager } from '../../FakeEntityManager';
-import { FakePermissionContext } from '../../FakePermissionContext';
-import { createArtist, createQuote, createUser } from '../../createEntry';
+import { QuoteObject } from '../../src/dto/QuoteObject';
+import { ArtistType } from '../../src/models/ArtistType';
+import { QuoteType } from '../../src/models/QuoteType';
+import { FakeEntityManager } from '../FakeEntityManager';
+import { FakePermissionContext } from '../FakePermissionContext';
+import { createArtist, createQuote, createUser } from '../createEntry';
 
 test('QuoteObject', async () => {
 	const em = new FakeEntityManager();

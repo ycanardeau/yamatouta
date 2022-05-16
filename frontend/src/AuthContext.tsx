@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PermissionContext } from './PermissionContext';
-import { IAuthenticatedUserObject } from './dto/users/IAuthenticatedUserObject';
+import { IAuthenticatedUserObject } from './dto/IAuthenticatedUserObject';
 
 export interface IAuthContext {
 	isAuthenticated: boolean;

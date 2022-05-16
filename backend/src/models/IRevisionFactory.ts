@@ -2,7 +2,7 @@ import { Revision } from '../entities/Revision';
 import { User } from '../entities/User';
 import { Entry } from './Entry';
 import { RevisionEvent } from './RevisionEvent';
-import { Snapshot } from './Snapshot';
+import { Snapshot } from './snapshots/Snapshot';
 
 export interface IRevisionFactory<
 	TEntry extends Entry,

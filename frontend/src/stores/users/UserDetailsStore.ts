@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { IUserObject } from '../../dto/users/IUserObject';
+import { IUserObject } from '../../dto/IUserObject';
 
 export class UserDetailsStore {
 	@observable user: IUserObject;

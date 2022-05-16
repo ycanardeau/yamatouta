@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { UserObject } from '../../../src/dto/users/UserObject';
-import { FakeEntityManager } from '../../FakeEntityManager';
-import { FakePermissionContext } from '../../FakePermissionContext';
-import { createUser } from '../../createEntry';
+import { UserObject } from '../../src/dto/UserObject';
+import { FakeEntityManager } from '../FakeEntityManager';
+import { FakePermissionContext } from '../FakePermissionContext';
+import { createUser } from '../createEntry';
 
 test('UserObject', async () => {
 	const em = new FakeEntityManager();

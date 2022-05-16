@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { deleteArtist } from '../../api/ArtistApi';
-import { IArtistObject } from '../../dto/artists/IArtistObject';
+import { IArtistObject } from '../../dto/IArtistObject';
 
 export class ArtistDeleteStore {
 	private readonly artist: IArtistObject;

@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { deleteTranslation } from '../../api/TranslationApi';
-import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { ITranslationObject } from '../../dto/ITranslationObject';
 
 export class TranslationDeleteStore {
 	private readonly translation: ITranslationObject;

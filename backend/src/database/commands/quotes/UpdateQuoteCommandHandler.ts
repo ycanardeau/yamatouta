@@ -4,8 +4,8 @@ import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
+import { QuoteObject } from '../../../dto/QuoteObject';
 import { WebLinkObject } from '../../../dto/WebLinkObject';
-import { QuoteObject } from '../../../dto/quotes/QuoteObject';
 import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';

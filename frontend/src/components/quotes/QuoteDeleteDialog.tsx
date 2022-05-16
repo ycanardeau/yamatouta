@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IQuoteObject } from '../../dto/quotes/IQuoteObject';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 import { QuoteDeleteStore } from '../../stores/quotes/QuoteDeleteStore';
 
 interface QuoteDeleteDialogProps {

@@ -4,7 +4,7 @@ import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
-import { AuthenticatedUserObject } from '../../../dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
 import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
 import { AuditLogEntryFactory } from '../../../services/AuditLogEntryFactory';

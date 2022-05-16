@@ -7,7 +7,7 @@ import {
 } from 'mobx';
 
 import { createTranslation, updateTranslation } from '../../api/TranslationApi';
-import { ITranslationObject } from '../../dto/translations/ITranslationObject';
+import { ITranslationObject } from '../../dto/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 

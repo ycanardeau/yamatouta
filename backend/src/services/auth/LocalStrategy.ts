@@ -11,7 +11,7 @@ import {
 	AuthenticateUserCommandHandler,
 	LoginError,
 } from '../../database/commands/users/AuthenticateUserCommandHandler';
-import { AuthenticatedUserObject } from '../../dto/users/AuthenticatedUserObject';
+import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
 import { TooManyRequestsException } from '../../exceptions/TooManyRequestsException';
 import { getClientIp } from '../../utils/getClientIp';
 import { RateLimiterMariaDb } from './RateLimiterMariaDb';

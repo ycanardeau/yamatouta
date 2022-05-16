@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 import { ISearchResultObject } from '../dto/ISearchResultObject';
+import { ITranslationObject } from '../dto/ITranslationObject';
 import { IWebLinkObject } from '../dto/IWebLinkObject';
-import { ITranslationObject } from '../dto/translations/ITranslationObject';
 import { TranslationOptionalField } from '../models/TranslationOptionalField';
 import { TranslationSortRule } from '../models/TranslationSortRule';
 import { WordCategory } from '../models/WordCategory';

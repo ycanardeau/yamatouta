@@ -10,7 +10,7 @@ import {
 	UpdateArtistCommandHandler,
 	UpdateArtistParams,
 } from '../../../../src/database/commands/artists/UpdateArtistCommandHandler';
-import { ArtistObject } from '../../../../src/dto/artists/ArtistObject';
+import { ArtistObject } from '../../../../src/dto/ArtistObject';
 import { Artist } from '../../../../src/entities/Artist';
 import { ArtistAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { ArtistRevision } from '../../../../src/entities/Revision';
@@ -18,8 +18,8 @@ import { User } from '../../../../src/entities/User';
 import { ArtistType } from '../../../../src/models/ArtistType';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { IArtistSnapshot } from '../../../../src/models/Snapshot';
 import { UserGroup } from '../../../../src/models/UserGroup';
+import { IArtistSnapshot } from '../../../../src/models/snapshots/ArtistSnapshot';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertArtistAuditLogEntry } from '../../../assertAuditLogEntry';
