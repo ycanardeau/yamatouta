@@ -48,7 +48,7 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 
 	const navigate = useNavigate();
 
-	const deleteWorkDialog = useDialog();
+	const workDeleteDialog = useDialog();
 
 	const auth = useAuth();
 
@@ -117,7 +117,7 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 						icon={<EuiIcon type={DeleteRegular} color="danger" />}
 						onClick={(): void => {
 							closePopover();
-							deleteWorkDialog.show();
+							workDeleteDialog.show();
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
@@ -130,10 +130,10 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 				</EuiContextMenuPanel>
 			</EuiPopover>
 
-			{deleteWorkDialog.visible && (
+			{workDeleteDialog.visible && (
 				<WorkDeleteDialog
 					work={work}
-					onClose={deleteWorkDialog.close}
+					onClose={workDeleteDialog.close}
 					onSuccess={async (): Promise<void> => {
 						await store.updateResults(true);
 					}}

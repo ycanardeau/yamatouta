@@ -55,7 +55,7 @@ const TranslationIndex = observer((): React.ReactElement => {
 
 	const navigate = useNavigate();
 
-	const createTranslationDialog = useDialog();
+	const translationCreateDialog = useDialog();
 
 	return (
 		<>
@@ -66,7 +66,7 @@ const TranslationIndex = observer((): React.ReactElement => {
 				rightSideItems={[
 					<EuiButton
 						size="s"
-						onClick={createTranslationDialog.show}
+						onClick={translationCreateDialog.show}
 						disabled={
 							!auth.permissionContext.hasPermission(
 								Permission.CreateTranslations,
@@ -93,9 +93,9 @@ const TranslationIndex = observer((): React.ReactElement => {
 
 					<TranslationSearchTable store={store} />
 
-					{createTranslationDialog.visible && (
+					{translationCreateDialog.visible && (
 						<TranslationCreateDialog
-							onClose={createTranslationDialog.close}
+							onClose={translationCreateDialog.close}
 							onSuccess={(translation): void =>
 								navigate(`/translations/${translation.id}/edit`)
 							}

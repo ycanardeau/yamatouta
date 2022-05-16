@@ -54,7 +54,7 @@ const ArtistIndex = observer((): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const createArtistDialog = useDialog();
+	const artistCreateDialog = useDialog();
 
 	return (
 		<>
@@ -65,7 +65,7 @@ const ArtistIndex = observer((): React.ReactElement => {
 				rightSideItems={[
 					<EuiButton
 						size="s"
-						onClick={createArtistDialog.show}
+						onClick={artistCreateDialog.show}
 						disabled={
 							!auth.permissionContext.hasPermission(
 								Permission.CreateArtists,
@@ -88,9 +88,9 @@ const ArtistIndex = observer((): React.ReactElement => {
 				<EuiPageContentBody>
 					<ArtistSearchTable store={store} />
 
-					{createArtistDialog.visible && (
+					{artistCreateDialog.visible && (
 						<ArtistCreateDialog
-							onClose={createArtistDialog.close}
+							onClose={artistCreateDialog.close}
 							onSuccess={(artist): void =>
 								navigate(`/artists/${artist.id}/edit`)
 							}

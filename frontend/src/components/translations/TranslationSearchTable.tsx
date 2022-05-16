@@ -84,7 +84,7 @@ const TranslationPopover = ({
 
 	const navigate = useNavigate();
 
-	const deleteTranslationDialog = useDialog();
+	const translationDeleteDialog = useDialog();
 
 	const auth = useAuth();
 
@@ -155,7 +155,7 @@ const TranslationPopover = ({
 						icon={<EuiIcon type={DeleteRegular} color="danger" />}
 						onClick={(): void => {
 							closePopover();
-							deleteTranslationDialog.show();
+							translationDeleteDialog.show();
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
@@ -182,10 +182,10 @@ const TranslationPopover = ({
 				</EuiContextMenuPanel>
 			</EuiPopover>
 
-			{deleteTranslationDialog.visible && (
+			{translationDeleteDialog.visible && (
 				<TranslationDeleteDialog
 					translation={translation}
-					onClose={deleteTranslationDialog.close}
+					onClose={translationDeleteDialog.close}
 					onSuccess={async (): Promise<void> => {
 						await store.updateResults(true);
 					}}

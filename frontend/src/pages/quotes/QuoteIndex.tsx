@@ -52,7 +52,7 @@ const QuoteIndex = observer((): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const createQuoteDialog = useDialog();
+	const quoteCreateDialog = useDialog();
 
 	const navigate = useNavigate();
 
@@ -65,7 +65,7 @@ const QuoteIndex = observer((): React.ReactElement => {
 				rightSideItems={[
 					<EuiButton
 						size="s"
-						onClick={createQuoteDialog.show}
+						onClick={quoteCreateDialog.show}
 						disabled={
 							!auth.permissionContext.hasPermission(
 								Permission.CreateQuotes,
@@ -88,9 +88,9 @@ const QuoteIndex = observer((): React.ReactElement => {
 				<EuiPageContentBody>
 					<QuoteSearchList store={store} />
 
-					{createQuoteDialog.visible && (
+					{quoteCreateDialog.visible && (
 						<QuoteCreateDialog
-							onClose={createQuoteDialog.close}
+							onClose={quoteCreateDialog.close}
 							onSuccess={(quote): void =>
 								navigate(`/quotes/${quote.id}/edit`)
 							}

@@ -53,7 +53,7 @@ const WorkIndex = (): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const createWorkDialog = useDialog();
+	const workCreateDialog = useDialog();
 
 	return (
 		<>
@@ -64,7 +64,7 @@ const WorkIndex = (): React.ReactElement => {
 				rightSideItems={[
 					<EuiButton
 						size="s"
-						onClick={createWorkDialog.show}
+						onClick={workCreateDialog.show}
 						disabled={
 							!auth.permissionContext.hasPermission(
 								Permission.CreateWorks,
@@ -87,9 +87,9 @@ const WorkIndex = (): React.ReactElement => {
 				<EuiPageContentBody>
 					<WorkSearchTable store={store} />
 
-					{createWorkDialog.visible && (
+					{workCreateDialog.visible && (
 						<WorkCreateDialog
-							onClose={createWorkDialog.close}
+							onClose={workCreateDialog.close}
 							onSuccess={(work): void =>
 								navigate(`/works/${work.id}/edit`)
 							}

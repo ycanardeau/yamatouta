@@ -43,7 +43,7 @@ const QuotePopover = ({
 
 	const navigate = useNavigate();
 
-	const deleteQuoteDialog = useDialog();
+	const quoteDeleteDialog = useDialog();
 
 	const auth = useAuth();
 
@@ -112,7 +112,7 @@ const QuotePopover = ({
 						icon={<EuiIcon type={DeleteRegular} color="danger" />}
 						onClick={(): void => {
 							closePopover();
-							deleteQuoteDialog.show();
+							quoteDeleteDialog.show();
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
@@ -125,10 +125,10 @@ const QuotePopover = ({
 				</EuiContextMenuPanel>
 			</EuiPopover>
 
-			{deleteQuoteDialog.visible && (
+			{quoteDeleteDialog.visible && (
 				<QuoteDeleteDialog
 					quote={quote}
-					onClose={deleteQuoteDialog.close}
+					onClose={quoteDeleteDialog.close}
 					onSuccess={async (): Promise<void> => {
 						await store?.updateResults(true);
 					}}

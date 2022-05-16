@@ -80,7 +80,7 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	// TODO: const auth = useAuth();
 
-	// TODO: const editTranslationDialog = useDialog();
+	// TODO: const translationEditDialog = useDialog();
 
 	const navigate = useNavigate();
 	const { pathname } = useLocation();

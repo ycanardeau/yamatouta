@@ -51,7 +51,7 @@ const ArtistPopover = ({
 
 	const navigate = useNavigate();
 
-	const deleteArtistDialog = useDialog();
+	const artistDeleteDialog = useDialog();
 
 	const auth = useAuth();
 
@@ -120,7 +120,7 @@ const ArtistPopover = ({
 						icon={<EuiIcon type={DeleteRegular} color="danger" />}
 						onClick={(): void => {
 							closePopover();
-							deleteArtistDialog.show();
+							artistDeleteDialog.show();
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
@@ -133,10 +133,10 @@ const ArtistPopover = ({
 				</EuiContextMenuPanel>
 			</EuiPopover>
 
-			{deleteArtistDialog.visible && (
+			{artistDeleteDialog.visible && (
 				<ArtistDeleteDialog
 					artist={artist}
-					onClose={deleteArtistDialog.close}
+					onClose={artistDeleteDialog.close}
 					onSuccess={async (): Promise<void> => {
 						await store.updateResults(true);
 					}}
