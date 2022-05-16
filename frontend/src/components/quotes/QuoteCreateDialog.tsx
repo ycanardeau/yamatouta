@@ -1,8 +1,6 @@
 import {
 	EuiButton,
 	EuiButtonEmpty,
-	EuiComboBox,
-	EuiComboBoxOptionOption,
 	EuiForm,
 	EuiFormRow,
 	EuiModal,
@@ -18,10 +16,10 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { listArtists } from '../../api/ArtistApi';
 import { IQuoteObject } from '../../dto/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
+import ArtistComboBox from '../artists/ArtistComboBox';
 
 interface QuoteCreateDialogProps {
 	quote?: IQuoteObject;
@@ -40,35 +38,6 @@ const QuoteCreateDialog = observer(
 		const [store] = React.useState(() => new QuoteEditStore(quote));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
-
-		const [options, setOptions] = React.useState<EuiComboBoxOptionOption[]>(
-			[],
-		);
-
-		const handleSearchChange = React.useCallback(
-			async (searchValue: string): Promise<void> => {
-				const artists = await listArtists({
-					pagination: {
-						offset: 0,
-						limit: 20,
-						getTotalCount: false,
-					},
-					query: searchValue,
-				});
-
-				setOptions(
-					artists.items.map((artist) => ({
-						key: artist.id.toString(),
-						label: artist.name,
-					})),
-				);
-			},
-			[],
-		);
-
-		React.useEffect(() => {
-			handleSearchChange('');
-		}, [handleSearchChange]);
 
 		return (
 			<EuiModal onClose={onClose} initialFocus="[name=text]">
@@ -127,31 +96,7 @@ const QuoteCreateDialog = observer(
 						</EuiFormRow>
 
 						<EuiFormRow label={t('quotes.artist')}>
-							<EuiComboBox
-								compressed
-								placeholder={t('quotes.selectArtist')}
-								singleSelection={{ asPlainText: true }}
-								options={options}
-								selectedOptions={
-									store.artist.entry
-										? [
-												{
-													key: store.artist.entry.id.toString(),
-													label: store.artist.entry
-														.name,
-												},
-										  ]
-										: []
-								}
-								onChange={async (
-									selectedOptions,
-								): Promise<void> => {
-									await store.artist.loadEntryById(
-										Number(selectedOptions[0]?.key),
-									);
-								}}
-								onSearchChange={handleSearchChange}
-							/>
+							<ArtistComboBox store={store.artist} />
 						</EuiFormRow>
 					</EuiForm>
 				</EuiModalBody>

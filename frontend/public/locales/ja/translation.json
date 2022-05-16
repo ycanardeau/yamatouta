@@ -52,7 +52,9 @@
 		"viewBasicInfo": "あらましをみる",
 		"add": "かきたす",
 		"remove": "とりのぞく",
-		"externalLinks": "つながり"
+		"externalLinks": "つながり",
+		"selectArtist": "うたよみをえらぶ...",
+		"selectWork": "しながきをえらぶ..."
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -116,7 +118,6 @@
 		"quote": "やまとうた",
 		"quoteType": "くさわい",
 		"artist": "うたよみ",
-		"selectArtist": "うたよみをえらぶ...",
 		"deleteQuote": "やまとうたをけす",
 		"deleteDialogSubtitle": "このやまとうたをけしてもよろしいですか?"
 	},

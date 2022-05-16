@@ -1,8 +1,6 @@
 import {
 	EuiButton,
 	EuiButtonEmpty,
-	EuiComboBox,
-	EuiComboBoxOptionOption,
 	EuiForm,
 	EuiFormRow,
 	EuiSelect,
@@ -15,8 +13,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { listArtists } from '../../api/ArtistApi';
 import WebLinkListEdit from '../../components/WebLinkListEdit';
+import ArtistComboBox from '../../components/artists/ArtistComboBox';
 import { QuoteType } from '../../models/QuoteType';
 import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
@@ -34,35 +32,6 @@ const QuoteEdit = observer(
 		const [store] = React.useState(() => new QuoteEditStore(quote));
 
 		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
-
-		const [options, setOptions] = React.useState<EuiComboBoxOptionOption[]>(
-			[],
-		);
-
-		const handleSearchChange = React.useCallback(
-			async (searchValue: string): Promise<void> => {
-				const artists = await listArtists({
-					pagination: {
-						offset: 0,
-						limit: 20,
-						getTotalCount: false,
-					},
-					query: searchValue,
-				});
-
-				setOptions(
-					artists.items.map((artist) => ({
-						key: artist.id.toString(),
-						label: artist.name,
-					})),
-				);
-			},
-			[],
-		);
-
-		React.useEffect(() => {
-			handleSearchChange('');
-		}, [handleSearchChange]);
 
 		const navigate = useNavigate();
 
@@ -108,30 +77,7 @@ const QuoteEdit = observer(
 					</EuiFormRow>
 
 					<EuiFormRow label={t('quotes.artist')}>
-						<EuiComboBox
-							compressed
-							placeholder={t('quotes.selectArtist')}
-							singleSelection={{ asPlainText: true }}
-							options={options}
-							selectedOptions={
-								store.artist.entry
-									? [
-											{
-												key: store.artist.entry.id.toString(),
-												label: store.artist.entry.name,
-											},
-									  ]
-									: []
-							}
-							onChange={async (
-								selectedOptions,
-							): Promise<void> => {
-								await store.artist.loadEntryById(
-									Number(selectedOptions[0]?.key),
-								);
-							}}
-							onSearchChange={handleSearchChange}
-						/>
+						<ArtistComboBox store={store.artist} />
 					</EuiFormRow>
 
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>

@@ -54,7 +54,9 @@
 		"remove": "Remove",
 		"externalLinks": "External links",
 		"actions": "Actions",
-		"externalLink": "External link"
+		"externalLink": "External link",
+		"selectArtist": "Select an artist...",
+		"selectWork": "Select a work..."
 	},
 	"translations": {
 		"addWord": "Add word",
@@ -120,7 +122,6 @@
 		"quote": "Quote",
 		"quoteType": "Type",
 		"artist": "Artist",
-		"selectArtist": "Select an artist...",
 		"deleteQuote": "Delete quote",
 		"deleteDialogSubtitle": "Are you sure you want to delete this quote?"
 	},
