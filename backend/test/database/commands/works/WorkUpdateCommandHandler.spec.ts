@@ -67,6 +67,7 @@ describe('WorkUpdateCommandHandler', () => {
 			name: 'うた',
 			workType: WorkType.Song,
 			webLinks: [],
+			artistLinks: [],
 		};
 	});
 

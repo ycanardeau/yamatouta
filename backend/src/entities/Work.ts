@@ -125,7 +125,7 @@ export class Work
 	createArtistLink({
 		relatedArtist,
 		...params
-	}: Link & { relatedArtist: Artist }): WorkArtistLink {
+	}: { relatedArtist: Artist } & Link): WorkArtistLink {
 		return new WorkArtistLink({
 			...params,
 			work: this,

@@ -14,6 +14,7 @@ class QuoteApi {
 		locale,
 		artistId,
 		webLinks,
+		workLinks,
 	}: IQuoteUpdateParams): Promise<IQuoteObject> => {
 		const response = await axios.post<IQuoteObject>('/quotes/create', {
 			id: 0,
@@ -22,6 +23,7 @@ class QuoteApi {
 			locale,
 			artistId,
 			webLinks,
+			workLinks,
 		});
 
 		return response.data;
@@ -80,6 +82,7 @@ class QuoteApi {
 		locale,
 		artistId,
 		webLinks,
+		workLinks,
 	}: IQuoteUpdateParams): Promise<IQuoteObject> => {
 		const response = await axios.post<IQuoteObject>(`/quotes/update`, {
 			id: id,
@@ -88,6 +91,7 @@ class QuoteApi {
 			locale,
 			artistId,
 			webLinks,
+			workLinks,
 		});
 
 		return response.data;

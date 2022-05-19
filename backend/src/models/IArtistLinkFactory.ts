@@ -5,5 +5,5 @@ import { Link } from '../entities/Link';
 export interface IArtistLinkFactory<TArtistLink extends ArtistLink> {
 	createArtistLink({
 		relatedArtist,
-	}: Link & { relatedArtist: Artist }): TArtistLink;
+	}: { relatedArtist: Artist } & Link): TArtistLink;
 }

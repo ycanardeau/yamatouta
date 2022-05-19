@@ -196,7 +196,7 @@ export class Translation
 	createWorkLink({
 		relatedWork,
 		...params
-	}: Link & { relatedWork: Work }): TranslationWorkLink {
+	}: { relatedWork: Work } & Link): TranslationWorkLink {
 		return new TranslationWorkLink({
 			...params,
 			translation: this,

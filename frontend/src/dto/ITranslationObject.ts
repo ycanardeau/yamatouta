@@ -1,6 +1,6 @@
 import { WordCategory } from '../models/translations/WordCategory';
+import { IWorkLinkObject } from './ILinkObject';
 import { IWebLinkObject } from './IWebLinkObject';
-import { IWorkLinkObject } from './IWorkLinkObject';
 
 export interface ITranslationObject {
 	id: number;

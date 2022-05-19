@@ -1,6 +1,8 @@
-import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
+import { IContentEquatable } from '../models/IContentEquatable';
+import { IWorkLink } from '../models/IWorkLink';
 import { Link } from './Link';
 import { Quote } from './Quote';
 import { Translation } from './Translation';
@@ -11,7 +13,13 @@ import { Work } from './Work';
 	abstract: true,
 	discriminatorColumn: 'entryType',
 })
-export abstract class WorkLink extends Link {
+export abstract class WorkLink
+	extends Link
+	implements IWorkLink, IContentEquatable<IWorkLink>
+{
+	@Property()
+	createdAt = new Date();
+
 	@PrimaryKey()
 	id!: number;
 
@@ -21,10 +29,31 @@ export abstract class WorkLink extends Link {
 	protected constructor({
 		relatedWork,
 		...params
-	}: Link & { relatedWork: Work }) {
+	}: { relatedWork: Work } & Link) {
 		super(params);
 
 		this.relatedWork = relatedWork;
+	}
+
+	get relatedWorkId(): number {
+		return this.relatedWork.id;
+	}
+	set relatedWorkId(value: number) {
+		this.relatedWork.id = value;
+	}
+
+	get linkTypeId(): number {
+		return this.linkType.id;
+	}
+	set linkTypeId(value: number) {
+		this.linkType.id = value;
+	}
+
+	contentEquals(other: IWorkLink): boolean {
+		return (
+			this.relatedWorkId === other.relatedWorkId &&
+			this.linkTypeId === other.linkTypeId
+		);
 	}
 }
 
@@ -37,10 +66,10 @@ export class QuoteWorkLink extends WorkLink {
 		quote,
 		relatedWork,
 		...params
-	}: Link & {
+	}: {
 		quote: Quote;
 		relatedWork: Work;
-	}) {
+	} & Link) {
 		super({ ...params, relatedWork });
 
 		this.quote = quote;
@@ -56,10 +85,10 @@ export class TranslationWorkLink extends WorkLink {
 		translation,
 		relatedWork,
 		...params
-	}: Link & {
+	}: {
 		translation: Translation;
 		relatedWork: Work;
-	}) {
+	} & Link) {
 		super({ ...params, relatedWork });
 
 		this.translation = translation;
@@ -75,10 +104,10 @@ export class WorkWorkLink extends WorkLink {
 		work,
 		relatedWork,
 		...params
-	}: Link & {
+	}: {
 		work: Work;
 		relatedWork: Work;
-	}) {
+	} & Link) {
 		super({ ...params, relatedWork });
 
 		this.work = work;

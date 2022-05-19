@@ -1,6 +1,8 @@
-import { Entity, ManyToOne, PrimaryKey } from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
+import { IArtistLink } from '../models/IArtistLink';
+import { IContentEquatable } from '../models/IContentEquatable';
 import { Artist } from './Artist';
 import { Link } from './Link';
 import { Work } from './Work';
@@ -10,7 +12,13 @@ import { Work } from './Work';
 	abstract: true,
 	discriminatorColumn: 'entryType',
 })
-export abstract class ArtistLink extends Link {
+export abstract class ArtistLink
+	extends Link
+	implements IArtistLink, IContentEquatable<IArtistLink>
+{
+	@Property()
+	createdAt = new Date();
+
 	@PrimaryKey()
 	id!: number;
 
@@ -20,10 +28,31 @@ export abstract class ArtistLink extends Link {
 	protected constructor({
 		relatedArtist,
 		...params
-	}: Link & { relatedArtist: Artist }) {
+	}: { relatedArtist: Artist } & Link) {
 		super(params);
 
 		this.relatedArtist = relatedArtist;
+	}
+
+	get relatedArtistId(): number {
+		return this.relatedArtist.id;
+	}
+	set relatedArtistId(value: number) {
+		this.relatedArtist.id = value;
+	}
+
+	get linkTypeId(): number {
+		return this.linkType.id;
+	}
+	set linkTypeId(value: number) {
+		this.linkType.id = value;
+	}
+
+	contentEquals(other: IArtistLink): boolean {
+		return (
+			this.relatedArtistId === other.relatedArtistId &&
+			this.linkTypeId === other.linkTypeId
+		);
 	}
 }
 
@@ -36,10 +65,10 @@ export class ArtistArtistLink extends ArtistLink {
 		artist,
 		relatedArtist,
 		...params
-	}: Link & {
+	}: {
 		artist: Artist;
 		relatedArtist: Artist;
-	}) {
+	} & Link) {
 		super({ ...params, relatedArtist });
 
 		this.artist = artist;
@@ -55,10 +84,10 @@ export class WorkArtistLink extends ArtistLink {
 		work,
 		relatedArtist,
 		...params
-	}: Link & {
+	}: {
 		work: Work;
 		relatedArtist: Artist;
-	}) {
+	} & Link) {
 		super({ ...params, relatedArtist });
 
 		this.work = work;

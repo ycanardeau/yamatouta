@@ -148,7 +148,7 @@ export class Quote
 	createWorkLink({
 		relatedWork,
 		...params
-	}: Link & { relatedWork: Work }): QuoteWorkLink {
+	}: { relatedWork: Work } & Link): QuoteWorkLink {
 		return new QuoteWorkLink({
 			...params,
 			quote: this,

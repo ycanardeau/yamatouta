@@ -66,6 +66,7 @@ describe('TranslationCreateCommandHandler', () => {
 			yamatokotoba: 'やまとことのは',
 			category: WordCategory.Noun,
 			webLinks: [],
+			workLinks: [],
 		};
 	});
 

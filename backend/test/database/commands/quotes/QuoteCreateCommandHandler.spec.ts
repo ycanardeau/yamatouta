@@ -72,6 +72,7 @@ describe('QuoteCreateCommandHandler', () => {
 			locale: 'ja',
 			artistId: 2,
 			webLinks: [],
+			workLinks: [],
 		};
 	});
 

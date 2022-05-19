@@ -2232,24 +2232,14 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime",
-          "unsigned": false,
+        "link_type_id": {
+          "name": "link_type_id",
+          "type": "int",
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
-        },
-        "link_type": {
-          "name": "link_type",
-          "type": "tinyint",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "enum"
+          "mappedType": "integer"
         },
         "begin_date_year": {
           "name": "begin_date_year",
@@ -2314,6 +2304,16 @@
           "nullable": true,
           "mappedType": "integer"
         },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
         "related_artist_id": {
           "name": "related_artist_id",
           "type": "int",
@@ -2357,6 +2357,15 @@
       },
       "name": "artist_links",
       "indexes": [
+        {
+          "columnNames": [
+            "link_type_id"
+          ],
+          "composite": false,
+          "keyName": "artist_links_link_type_id_index",
+          "primary": false,
+          "unique": false
+        },
         {
           "columnNames": [
             "related_artist_id"
@@ -2405,6 +2414,18 @@
       ],
       "checks": [],
       "foreignKeys": {
+        "artist_links_link_type_id_foreign": {
+          "constraintName": "artist_links_link_type_id_foreign",
+          "columnNames": [
+            "link_type_id"
+          ],
+          "localTableName": "artist_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "link_types",
+          "updateRule": "cascade"
+        },
         "artist_links_related_artist_id_foreign": {
           "constraintName": "artist_links_related_artist_id_foreign",
           "columnNames": [
@@ -2955,24 +2976,14 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime",
-          "unsigned": false,
+        "link_type_id": {
+          "name": "link_type_id",
+          "type": "int",
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
-        },
-        "link_type": {
-          "name": "link_type",
-          "type": "tinyint",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "enum"
+          "mappedType": "integer"
         },
         "begin_date_year": {
           "name": "begin_date_year",
@@ -3037,6 +3048,16 @@
           "nullable": true,
           "mappedType": "integer"
         },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
         "related_work_id": {
           "name": "related_work_id",
           "type": "int",
@@ -3090,6 +3111,15 @@
       },
       "name": "work_links",
       "indexes": [
+        {
+          "columnNames": [
+            "link_type_id"
+          ],
+          "composite": false,
+          "keyName": "work_links_link_type_id_index",
+          "primary": false,
+          "unique": false
+        },
         {
           "columnNames": [
             "related_work_id"
@@ -3147,6 +3177,18 @@
       ],
       "checks": [],
       "foreignKeys": {
+        "work_links_link_type_id_foreign": {
+          "constraintName": "work_links_link_type_id_foreign",
+          "columnNames": [
+            "link_type_id"
+          ],
+          "localTableName": "work_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "link_types",
+          "updateRule": "cascade"
+        },
         "work_links_related_work_id_foreign": {
           "constraintName": "work_links_related_work_id_foreign",
           "columnNames": [

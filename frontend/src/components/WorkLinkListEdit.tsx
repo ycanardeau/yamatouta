@@ -57,7 +57,7 @@ const WorkLinkEdit = observer(
 						width: '100%',
 					}}
 				>
-					<WorkComboBox store={store.work} />
+					<WorkComboBox store={store.relatedWork} />
 				</EuiTableRowCell>
 				<EuiTableRowCell
 					textOnly={false}

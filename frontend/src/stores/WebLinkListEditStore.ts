@@ -1,6 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 
 import { IWebLinkObject } from '../dto/IWebLinkObject';
+import { IWebLinkUpdateParams } from '../models/IWebLinkUpdateParams';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { BasicListEditStore } from './BasicListEditStore';
 
@@ -32,6 +33,15 @@ export class WebLinkEditStore {
 	@action setCategory = (value: WebLinkCategory): void => {
 		this.category = value;
 	};
+
+	toParams = (): IWebLinkUpdateParams => {
+		return {
+			id: this.id,
+			url: this.url,
+			title: this.title,
+			category: this.category,
+		};
+	};
 }
 
 export class WebLinkListEditStore extends BasicListEditStore<
@@ -41,4 +51,8 @@ export class WebLinkListEditStore extends BasicListEditStore<
 	constructor(objects: IWebLinkObject[]) {
 		super(WebLinkEditStore, objects);
 	}
+
+	toParams = (): IWebLinkUpdateParams[] => {
+		return this.items.map((item) => item.toParams());
+	};
 }

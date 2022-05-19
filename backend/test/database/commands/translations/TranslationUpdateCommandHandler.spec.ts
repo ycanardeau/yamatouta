@@ -75,6 +75,7 @@ describe('TranslationUpdateCommandHandler', () => {
 			yamatokotoba: 'やまとことのは',
 			category: WordCategory.Noun,
 			webLinks: [],
+			workLinks: [],
 		};
 	});
 

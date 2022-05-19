@@ -80,6 +80,7 @@ describe('QuoteUpdateCommandHandler', () => {
 			locale: 'ojp',
 			artistId: artist.id,
 			webLinks: [],
+			workLinks: [],
 		};
 	});
 

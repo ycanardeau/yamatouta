@@ -1,7 +1,8 @@
 import { WebLink } from '../entities/WebLink';
+import { IWebLink } from '../models/IWebLink';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 
-export class WebLinkObject {
+export class WebLinkObject implements IWebLink {
 	readonly id: number;
 	readonly url: string;
 	readonly title: string;

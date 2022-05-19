@@ -15,6 +15,7 @@ import { TranslationUpdateParams } from '../../../models/translations/Translatio
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
+import { WorkLinkService } from '../../../services/WorkLinkService';
 
 export class TranslationUpdateCommand {
 	constructor(
@@ -33,6 +34,7 @@ export class TranslationUpdateCommandHandler
 		@InjectRepository(Translation)
 		private readonly translationRepo: EntityRepository<Translation>,
 		private readonly webLinkService: WebLinkService,
+		private readonly workLinkService: WorkLinkService,
 	) {}
 
 	async execute(
@@ -85,6 +87,13 @@ export class TranslationUpdateCommandHandler
 				params.webLinks,
 				permissionContext,
 				user,
+			);
+
+			await this.workLinkService.sync(
+				em,
+				translation,
+				params.workLinks,
+				permissionContext,
 			);
 
 			const commit = new Commit();

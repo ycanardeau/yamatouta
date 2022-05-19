@@ -57,7 +57,7 @@ const ArtistLinkEdit = observer(
 						width: '100%',
 					}}
 				>
-					<ArtistComboBox store={store.artist} />
+					<ArtistComboBox store={store.relatedArtist} />
 				</EuiTableRowCell>
 				<EuiTableRowCell
 					textOnly={false}

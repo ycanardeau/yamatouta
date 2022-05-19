@@ -61,6 +61,7 @@ describe('WorkCreateCommandHandler', () => {
 			name: 'よみもの',
 			workType: WorkType.Book,
 			webLinks: [],
+			artistLinks: [],
 		};
 	});
 

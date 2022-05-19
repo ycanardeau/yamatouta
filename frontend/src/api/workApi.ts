@@ -12,12 +12,14 @@ class WorkApi {
 		name,
 		workType,
 		webLinks,
+		artistLinks,
 	}: IWorkUpdateParams): Promise<IWorkObject> => {
 		const response = await axios.post<IWorkObject>('/works/create', {
 			id: 0,
 			name,
 			workType,
 			webLinks,
+			artistLinks,
 		});
 
 		return response.data;
@@ -74,12 +76,14 @@ class WorkApi {
 		name,
 		workType,
 		webLinks,
+		artistLinks,
 	}: IWorkUpdateParams): Promise<IWorkObject> => {
 		const response = await axios.post<IWorkObject>(`/works/update`, {
 			id: id,
 			name,
 			workType,
 			webLinks,
+			artistLinks,
 		});
 
 		return response.data;

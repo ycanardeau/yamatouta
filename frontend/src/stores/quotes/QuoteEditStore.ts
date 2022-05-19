@@ -10,6 +10,7 @@ import { artistApi } from '../../api/artistApi';
 import { quoteApi } from '../../api/quoteApi';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { IQuoteObject } from '../../dto/IQuoteObject';
+import { IQuoteUpdateParams } from '../../models/quotes/IQuoteUpdateParams';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
@@ -54,6 +55,18 @@ export class QuoteEditStore {
 		this.quoteType = value;
 	};
 
+	toParams = (): IQuoteUpdateParams => {
+		return {
+			id: this.quote?.id ?? 0,
+			text: this.text,
+			quoteType: this.quoteType,
+			locale: this.locale,
+			artistId: this.artist.entry?.id ?? 0,
+			webLinks: this.webLinks.toParams(),
+			workLinks: this.workLinks.toParams(),
+		};
+	};
+
 	@action submit = async (): Promise<IQuoteObject> => {
 		try {
 			this.submitting = true;
@@ -63,14 +76,7 @@ export class QuoteEditStore {
 				: quoteApi.create;
 
 			// Await.
-			const quote = await createOrUpdate({
-				id: this.quote?.id ?? 0,
-				text: this.text,
-				quoteType: this.quoteType,
-				locale: this.locale,
-				artistId: this.artist.entry?.id ?? 0,
-				webLinks: this.webLinks.items,
-			});
+			const quote = await createOrUpdate(this.toParams());
 
 			return quote;
 		} finally {

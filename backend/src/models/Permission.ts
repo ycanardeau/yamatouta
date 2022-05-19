@@ -7,6 +7,9 @@ export enum Permission {
 	Artist_Create = 'Artist_Create',
 	Artist_Delete = 'Artist_Delete',
 	Artist_Update = 'Artist_Update',
+	ArtistLink_Create = 'ArtistLink_Create',
+	ArtistLink_Delete = 'ArtistLink_Delete',
+	ArtistLink_Update = 'ArtistLink_Update',
 	Quote_Create = 'Quote_Create',
 	Quote_Delete = 'Quote_Delete',
 	Quote_Update = 'Quote_Update',
@@ -20,6 +23,9 @@ export enum Permission {
 	Work_Create = 'Work_Create',
 	Work_Delete = 'Work_Delete',
 	Work_Update = 'Work_Update',
+	WorkLink_Create = 'WorkLink_Create',
+	WorkLink_Delete = 'WorkLink_Delete',
+	WorkLink_Update = 'WorkLink_Update',
 }
 
 const limitedUserPermissions: Permission[] = [];
@@ -43,6 +49,9 @@ const adminPermissions: Permission[] = [
 	Permission.Artist_Create,
 	Permission.Artist_Delete,
 	Permission.Artist_Update,
+	Permission.ArtistLink_Create,
+	Permission.ArtistLink_Delete,
+	Permission.ArtistLink_Update,
 	Permission.Quote_Create,
 	Permission.Quote_Delete,
 	Permission.Quote_Update,
@@ -55,6 +64,9 @@ const adminPermissions: Permission[] = [
 	Permission.Work_Create,
 	Permission.Work_Update,
 	Permission.Work_Delete,
+	Permission.WorkLink_Create,
+	Permission.WorkLink_Delete,
+	Permission.WorkLink_Update,
 ];
 
 export const userGroupPermissions: Record<UserGroup, Permission[]> = {
