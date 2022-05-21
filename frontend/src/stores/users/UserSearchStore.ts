@@ -1,8 +1,8 @@
+import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
 import { listUsers } from '../../api/UserApi';
-import { IStoreWithPagination } from '../../components/useStoreWithPagination';
 import { IUserObject } from '../../dto/IUserObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -29,7 +29,7 @@ const validate = ajv.compile<IUserSearchRouteParams>(
 );
 
 export class UserSearchStore
-	implements IStoreWithPagination<IUserSearchRouteParams>
+	implements StoreWithPagination<IUserSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable users: IUserObject[] = [];
@@ -82,5 +82,9 @@ export class UserSearchStore
 
 	validateRouteParams = (data: any): data is IUserSearchRouteParams => {
 		return validate(data);
+	};
+
+	onClearResults = (): void => {
+		this.pagination.goToFirstPage();
 	};
 }

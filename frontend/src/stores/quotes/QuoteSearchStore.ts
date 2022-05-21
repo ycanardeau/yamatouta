@@ -1,8 +1,8 @@
+import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
 import { listQuotes } from '../../api/QuoteApi';
-import { IStoreWithPagination } from '../../components/useStoreWithPagination';
 import { IQuoteObject } from '../../dto/IQuoteObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -29,7 +29,7 @@ const validate = ajv.compile<IQuoteSearchRouteParams>(
 );
 
 export class QuoteSearchStore
-	implements IStoreWithPagination<IQuoteSearchRouteParams>
+	implements StoreWithPagination<IQuoteSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteObject[] = [];
@@ -84,5 +84,9 @@ export class QuoteSearchStore
 
 	validateRouteParams = (data: any): data is IQuoteSearchRouteParams => {
 		return validate(data);
+	};
+
+	onClearResults = (): void => {
+		this.pagination.goToFirstPage();
 	};
 }

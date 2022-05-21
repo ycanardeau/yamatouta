@@ -1,3 +1,4 @@
+import { StoreWithPagination } from '@vocadb/route-sphere';
 import {
 	action,
 	computed,
@@ -8,7 +9,6 @@ import {
 
 import { ajv } from '../../ajv';
 import { listTranslations } from '../../api/TranslationApi';
-import { IStoreWithPagination } from '../../components/useStoreWithPagination';
 import { ITranslationObject } from '../../dto/ITranslationObject';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';
@@ -76,7 +76,7 @@ const validate = ajv.compile<ITranslationSearchRouteParams>(
 );
 
 export class TranslationSearchStore
-	implements IStoreWithPagination<ITranslationSearchRouteParams>
+	implements StoreWithPagination<ITranslationSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable translations: ITranslationObject[] = [];
@@ -162,5 +162,9 @@ export class TranslationSearchStore
 		data: any,
 	): data is ITranslationSearchRouteParams => {
 		return validate(data);
+	};
+
+	onClearResults = (): void => {
+		this.pagination.goToFirstPage();
 	};
 }

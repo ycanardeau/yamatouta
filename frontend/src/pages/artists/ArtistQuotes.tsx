@@ -4,13 +4,13 @@ import {
 	EuiDescriptionListTitle,
 	EuiSpacer,
 } from '@elastic/eui';
+import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import WebLinkList from '../../components/WebLinkList';
 import QuoteSearchList from '../../components/quotes/QuoteSearchList';
-import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 

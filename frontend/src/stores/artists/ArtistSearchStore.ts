@@ -1,8 +1,8 @@
+import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
 import { listArtists } from '../../api/ArtistApi';
-import { IStoreWithPagination } from '../../components/useStoreWithPagination';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -29,7 +29,7 @@ const validate = ajv.compile<IArtistSearchRouteParams>(
 );
 
 export class ArtistSearchStore
-	implements IStoreWithPagination<IArtistSearchRouteParams>
+	implements StoreWithPagination<IArtistSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable artists: IArtistObject[] = [];
@@ -82,5 +82,9 @@ export class ArtistSearchStore
 
 	validateRouteParams = (data: any): data is IArtistSearchRouteParams => {
 		return validate(data);
+	};
+
+	onClearResults = (): void => {
+		this.pagination.goToFirstPage();
 	};
 }

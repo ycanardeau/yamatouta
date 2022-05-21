@@ -8,6 +8,7 @@ import {
 	EuiSpacer,
 } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
+import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,6 @@ import ArtistCreateDialog from '../../components/artists/ArtistCreateDialog';
 import ArtistSearchTable from '../../components/artists/ArtistSearchTable';
 import { useAuth } from '../../components/useAuth';
 import { useDialog } from '../../components/useDialog';
-import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';

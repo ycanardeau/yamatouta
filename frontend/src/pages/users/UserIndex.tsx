@@ -12,6 +12,7 @@ import {
 	EuiTableRow,
 	EuiTableRowCell,
 } from '@elastic/eui';
+import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +21,6 @@ import { useNavigate } from 'react-router-dom';
 import Avatar from '../../components/Avatar';
 import Link from '../../components/Link';
 import Pagination from '../../components/Pagination';
-import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { UserSearchStore } from '../../stores/users/UserSearchStore';
 

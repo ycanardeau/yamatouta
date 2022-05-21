@@ -1,8 +1,8 @@
+import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
 import { listWorks } from '../../api/WorkApi';
-import { IStoreWithPagination } from '../../components/useStoreWithPagination';
 import { IWorkObject } from '../../dto/IWorkObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -29,7 +29,7 @@ const validate = ajv.compile<IWorkSearchRouteParams>(
 );
 
 export class WorkSearchStore
-	implements IStoreWithPagination<IWorkSearchRouteParams>
+	implements StoreWithPagination<IWorkSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable works: IWorkObject[] = [];
@@ -82,5 +82,9 @@ export class WorkSearchStore
 
 	validateRouteParams = (data: any): data is IWorkSearchRouteParams => {
 		return validate(data);
+	};
+
+	onClearResults = (): void => {
+		this.pagination.goToFirstPage();
 	};
 }

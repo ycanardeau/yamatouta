@@ -8,13 +8,13 @@ import {
 	EuiSpacer,
 } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
+import { useStoreWithPagination } from '@vocadb/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../components/useAuth';
 import { useDialog } from '../../components/useDialog';
-import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import WorkCreateDialog from '../../components/works/WorkCreateDialog';
 import WorkSearchTable from '../../components/works/WorkSearchTable';

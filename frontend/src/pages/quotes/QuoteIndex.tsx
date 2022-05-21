@@ -8,6 +8,7 @@ import {
 	EuiSpacer,
 } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
+import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,6 @@ import QuoteCreateDialog from '../../components/quotes/QuoteCreateDialog';
 import QuoteSearchList from '../../components/quotes/QuoteSearchList';
 import { useAuth } from '../../components/useAuth';
 import { useDialog } from '../../components/useDialog';
-import { useStoreWithPagination } from '../../components/useStoreWithPagination';
 import useYamatoutaTitle from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
