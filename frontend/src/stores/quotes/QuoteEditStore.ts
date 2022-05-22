@@ -6,8 +6,8 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { getArtist } from '../../api/ArtistApi';
-import { createQuote, updateQuote } from '../../api/QuoteApi';
+import { artistApi } from '../../api/artistApi';
+import { quoteApi } from '../../api/quoteApi';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { IQuoteObject } from '../../dto/IQuoteObject';
 import { QuoteType } from '../../models/QuoteType';
@@ -15,20 +15,17 @@ import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class QuoteEditStore {
-	private readonly quote?: IQuoteObject;
 	@observable submitting = false;
 	@observable text = '';
 	@observable quoteType = QuoteType.Tanka;
 	@observable locale = 'ja';
-	readonly artist = new BasicEntryLinkStore<IArtistObject>((entryId) =>
-		getArtist({ artistId: entryId }),
+	readonly artist = new BasicEntryLinkStore<IArtistObject>((id) =>
+		artistApi.get({ id: id }),
 	);
 	readonly webLinks: WebLinkListEditStore;
 
-	constructor(quote?: IQuoteObject) {
+	constructor(private readonly quote?: IQuoteObject) {
 		makeObservable(this);
-
-		this.quote = quote;
 
 		if (quote) {
 			this.text = quote.text;
@@ -57,18 +54,19 @@ export class QuoteEditStore {
 		try {
 			this.submitting = true;
 
-			const params = {
+			const createOrUpdate = this.quote
+				? quoteApi.update
+				: quoteApi.create;
+
+			// Await.
+			const quote = await createOrUpdate({
+				id: this.quote?.id ?? 0,
 				text: this.text,
 				quoteType: this.quoteType,
 				locale: this.locale,
 				artistId: this.artist.entry?.id ?? 0,
 				webLinks: this.webLinks.items,
-			};
-
-			// Await.
-			const quote = await (this.quote
-				? updateQuote({ ...params, quoteId: this.quote.id })
-				: createQuote(params));
+			});
 
 			return quote;
 		} finally {

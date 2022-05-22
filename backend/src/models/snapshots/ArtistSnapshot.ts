@@ -18,7 +18,7 @@ export class ArtistSnapshot implements IContentEquatable<IArtistSnapshot> {
 			.map((webLink) => new WebLinkSnapshot(webLink));
 	}
 
-	contentEquals(other: IArtistSnapshot): boolean {
+	contentEquals(other?: IArtistSnapshot): boolean {
 		return JSON.stringify(this) === JSON.stringify(other);
 	}
 }

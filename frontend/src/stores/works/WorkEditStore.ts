@@ -6,22 +6,19 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { createWork, updateWork } from '../../api/WorkApi';
+import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
 import { WorkType } from '../../models/WorkType';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class WorkEditStore {
-	private readonly work?: IWorkObject;
 	@observable submitting = false;
 	@observable name = '';
 	@observable workType = WorkType.Book;
 	readonly webLinks: WebLinkListEditStore;
 
-	constructor(work?: IWorkObject) {
+	constructor(private readonly work?: IWorkObject) {
 		makeObservable(this);
-
-		this.work = work;
 
 		if (work) {
 			this.name = work.name;
@@ -48,16 +45,15 @@ export class WorkEditStore {
 		try {
 			this.submitting = true;
 
-			const params = {
+			const createOrUpdate = this.work ? workApi.update : workApi.create;
+
+			// Await.
+			const work = await createOrUpdate({
+				id: this.work?.id ?? 0,
 				name: this.name,
 				workType: this.workType,
 				webLinks: this.webLinks.items,
-			};
-
-			// Await.
-			const work = await (this.work
-				? updateWork({ ...params, workId: this.work.id })
-				: createWork(params));
+			});
 
 			return work;
 		} finally {

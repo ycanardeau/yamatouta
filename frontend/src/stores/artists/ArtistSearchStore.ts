@@ -2,7 +2,7 @@ import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
-import { listArtists } from '../../api/ArtistApi';
+import { artistApi } from '../../api/artistApi';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -52,7 +52,7 @@ export class ArtistSearchStore
 		try {
 			const paginationParams = this.pagination.toParams(clearResults);
 
-			const result = await listArtists({
+			const result = await artistApi.list({
 				pagination: paginationParams,
 			});
 

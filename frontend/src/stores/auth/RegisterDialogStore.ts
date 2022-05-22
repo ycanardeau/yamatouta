@@ -6,7 +6,7 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { register } from '../../api/AuthApi';
+import { userApi } from '../../api/userApi';
 import { IUserObject } from '../../dto/IUserObject';
 
 export class RegisterDialogStore {
@@ -40,7 +40,7 @@ export class RegisterDialogStore {
 			this.submitting = true;
 
 			// Await.
-			const user = await register({
+			const user = await userApi.create({
 				email: this.email,
 				username: this.username,
 				password: this.password,

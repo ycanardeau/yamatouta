@@ -20,9 +20,7 @@ const ArtistDeleteDialog = observer(
 	}: ArtistDeleteDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(
-			() => new ArtistDeleteStore({ artist: artist }),
-		);
+		const [store] = React.useState(() => new ArtistDeleteStore(artist));
 
 		return (
 			<EuiConfirmModal

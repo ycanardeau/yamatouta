@@ -2,7 +2,7 @@ import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
-import { listQuotes } from '../../api/QuoteApi';
+import { quoteApi } from '../../api/quoteApi';
 import { IQuoteObject } from '../../dto/IQuoteObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -53,7 +53,7 @@ export class QuoteSearchStore
 		try {
 			const paginationParams = this.pagination.toParams(clearResults);
 
-			const result = await listQuotes({
+			const result = await quoteApi.list({
 				pagination: paginationParams,
 				artistId: this.artistId,
 			});

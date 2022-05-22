@@ -64,7 +64,7 @@ const WebLinkEdit = observer(
 						}
 						readOnly={
 							!auth.permissionContext.hasPermission(
-								Permission.EditWebLinks,
+								Permission.WebLink_Update,
 							)
 						}
 					/>
@@ -77,7 +77,7 @@ const WebLinkEdit = observer(
 					}}
 				>
 					{auth.permissionContext.hasPermission(
-						Permission.EditWebLinks,
+						Permission.WebLink_Update,
 					) ? (
 						<EuiSelect
 							compressed
@@ -105,26 +105,29 @@ const WebLinkEdit = observer(
 							fullWidth
 							readOnly={
 								!auth.permissionContext.hasPermission(
-									Permission.EditWebLinks,
+									Permission.WebLink_Update,
 								)
 							}
 						/>
 					)}
 				</EuiTableRowCell>
-				<EuiTableRowCell textOnly={false} align="right">
-					<EuiButton
-						onClick={(): void => webLinkListEditStore.remove(store)}
-						size="s"
-						color="danger"
+				<EuiTableRowCell
+					textOnly={false}
+					hasActions={true}
+					align="right"
+				>
+					<EuiButtonIcon
 						iconType={DeleteRegular}
+						size="xs"
+						color="danger"
+						onClick={(): void => webLinkListEditStore.remove(store)}
+						aria-label={t(`shared.remove`)}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.DeleteWebLinks,
+								Permission.WebLink_Delete,
 							)
 						}
-					>
-						{t('shared.remove')}
-					</EuiButton>
+					/>
 				</EuiTableRowCell>
 			</EuiTableRow>
 		);
@@ -151,7 +154,7 @@ const WebLinkListEdit = observer(
 						<EuiTableHeaderCell>
 							{t('webLinks.category')}
 						</EuiTableHeaderCell>
-						<EuiTableHeaderCell />
+						<EuiTableHeaderCell width={32} />
 					</EuiTableHeader>
 
 					<EuiTableBody>
@@ -173,7 +176,7 @@ const WebLinkListEdit = observer(
 					iconType={AddRegular}
 					disabled={
 						!auth.permissionContext.hasPermission(
-							Permission.CreateWebLinks,
+							Permission.WebLink_Create,
 						)
 					}
 				>

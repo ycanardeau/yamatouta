@@ -1,12 +1,4 @@
-import {
-	EuiBreadcrumb,
-	EuiBreadcrumbs,
-	EuiIcon,
-	EuiPageContent,
-	EuiPageContentBody,
-	EuiPageHeader,
-	EuiSpacer,
-} from '@elastic/eui';
+import { EuiButton, EuiIcon } from '@elastic/eui';
 import {
 	EditRegular,
 	HistoryRegular,
@@ -15,55 +7,15 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-	Route,
-	Routes,
-	useLocation,
-	useNavigate,
-	useParams,
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import { getTranslation } from '../../api/TranslationApi';
+import TranslationPage from '../../components/translations/TranslationPage';
+import { useTranslationDetails } from '../../components/translations/useTranslationDetails';
 import { useAuth } from '../../components/useAuth';
-import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import { ITranslationObject } from '../../dto/ITranslationObject';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
-import { TranslationOptionalField } from '../../models/TranslationOptionalField';
 import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';
 import TranslationBasicInfo from './TranslationBasicInfo';
-import TranslationEdit from './TranslationEdit';
-import TranslationHistory from './TranslationHistory';
-
-interface BreadcrumbsProps {
-	translation: ITranslationObject;
-}
-
-const Breadcrumbs = ({ translation }: BreadcrumbsProps): React.ReactElement => {
-	const { t } = useTranslation();
-
-	const navigate = useNavigate();
-
-	const breadcrumbs: EuiBreadcrumb[] = [
-		{
-			text: t('shared.words'),
-			href: '/translations',
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate('/translations');
-			},
-		},
-		{
-			text: `${translation.headword} ↔ ${translation.yamatokotoba}`,
-			href: `/translations/${translation.id}`,
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate(`/translations/${translation.id}`);
-			},
-		},
-	];
-
-	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
-};
 
 interface LayoutProps {
 	store: TranslationDetailsStore;
@@ -73,10 +25,6 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 	const { t } = useTranslation();
 
 	const translation = store.translation;
-
-	const title = `${translation.headword} ↔ ${translation.yamatokotoba}`;
-
-	useYamatoutaTitle(title, true);
 
 	// TODO: const auth = useAuth();
 
@@ -89,13 +37,56 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const auth = useAuth();
 
+	const title = `${translation.headword} ↔ ${translation.yamatokotoba}`;
+
+	useYamatoutaTitle(title, true);
+
 	return (
-		<>
-			<Breadcrumbs translation={translation} />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader
-				pageTitle={title}
-				tabs={[
+		<TranslationPage
+			translation={translation}
+			pageHeaderProps={{
+				pageTitle: title,
+				rightSideItems: [
+					<EuiButton
+						size="s"
+						href={`/translations/${translation.id}/edit`}
+						onClick={(
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/translations/${translation.id}/edit`);
+						}}
+						iconType={EditRegular}
+						isDisabled={
+							!auth.permissionContext.hasPermission(
+								Permission.Translation_Update,
+							)
+						}
+					>
+						{t('shared.doEdit')}
+					</EuiButton>,
+					<EuiButton
+						size="s"
+						href={`/translations/${translation.id}/revisions`}
+						onClick={(
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(
+								`/translations/${translation.id}/revisions`,
+							);
+						}}
+						iconType={HistoryRegular}
+						isDisabled={
+							!auth.permissionContext.hasPermission(
+								Permission.Revision_View,
+							)
+						}
+					>
+						{t('shared.viewHistory')}
+					</EuiButton>,
+				],
+				tabs: [
 					{
 						href: `/translations/${translation.id}`,
 						onClick: (
@@ -105,95 +96,29 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 							navigate(`/translations/${translation.id}`);
 						},
 						prepend: <EuiIcon type={InfoRegular} />,
-						isSelected: !tab,
+						isSelected: tab === undefined,
 						label: t('shared.basicInfo'),
 					},
-					{
-						href: `/translations/${translation.id}/edit`,
-						onClick: (
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/translations/${translation.id}/edit`);
-						},
-						prepend: <EuiIcon type={EditRegular} />,
-						isSelected: tab === 'edit',
-						disabled: !auth.permissionContext.hasPermission(
-							Permission.EditTranslations,
-						),
-						label: t('shared.edit'),
-					},
-					{
-						href: `/translations/${translation.id}/revisions`,
-						onClick: (
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(
-								`/translations/${translation.id}/revisions`,
-							);
-						},
-						prepend: <EuiIcon type={HistoryRegular} />,
-						isSelected: tab === 'revisions',
-						disabled: !auth.permissionContext.hasPermission(
-							Permission.ViewEditHistory,
-						),
-						label: t('shared.revisions'),
-					},
-				]}
-			/>
-
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody>
-					<Routes>
-						<Route
-							path=""
-							element={
-								<TranslationBasicInfo
-									translation={translation}
-								/>
-							}
-						/>
-						<Route
-							path="revisions"
-							element={
-								<TranslationHistory translation={translation} />
-							}
-						/>
-						<Route
-							path="edit"
-							element={
-								<TranslationEdit
-									translationDetailsStore={store}
-								/>
-							}
-						/>
-					</Routes>
-				</EuiPageContentBody>
-			</EuiPageContent>
-		</>
+				],
+			}}
+		>
+			<Routes>
+				<Route
+					path=""
+					element={<TranslationBasicInfo translation={translation} />}
+				/>
+			</Routes>
+		</TranslationPage>
 	);
 });
 
 const TranslationDetails = (): React.ReactElement | null => {
-	const { translationId } = useParams();
-
-	const [store, setStore] = React.useState<TranslationDetailsStore>();
-
-	React.useEffect(() => {
-		getTranslation({
-			translationId: Number(translationId),
-			fields: [TranslationOptionalField.WebLinks],
-		}).then((translation) =>
-			setStore(new TranslationDetailsStore(translation)),
-		);
-	}, [translationId]);
+	const [store] = useTranslationDetails(
+		React.useCallback(
+			(translation) => new TranslationDetailsStore(translation),
+			[],
+		),
+	);
 
 	return store ? <Layout store={store} /> : null;
 };

@@ -18,7 +18,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { logout } from './api/AuthApi';
+import { authApi } from './api/authApi';
 import LoginDialog from './components/auth/LoginDialog';
 import RegisterDialog from './components/auth/RegisterDialog';
 import { useAuth } from './components/useAuth';
@@ -130,7 +130,7 @@ const SideNav = (): React.ReactElement => {
 								name: t('auth.logOut'),
 								id: htmlIdGenerator()(),
 								onClick: async (): Promise<void> => {
-									await logout();
+									await authApi.logout();
 
 									auth.setUser(undefined);
 

@@ -6,17 +6,14 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { deleteArtist } from '../../api/ArtistApi';
+import { artistApi } from '../../api/artistApi';
 import { IArtistObject } from '../../dto/IArtistObject';
 
 export class ArtistDeleteStore {
-	private readonly artist: IArtistObject;
 	@observable submitting = false;
 
-	constructor({ artist }: { artist: IArtistObject }) {
+	constructor(private readonly artist: IArtistObject) {
 		makeObservable(this);
-
-		this.artist = artist;
 	}
 
 	@computed get isValid(): boolean {
@@ -27,7 +24,7 @@ export class ArtistDeleteStore {
 		try {
 			this.submitting = true;
 
-			await deleteArtist({ artistId: this.artist.id });
+			await artistApi.delete({ id: this.artist.id });
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

@@ -20,9 +20,7 @@ const WorkDeleteDialog = observer(
 	}: WorkDeleteDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(
-			() => new WorkDeleteStore({ work: work }),
-		);
+		const [store] = React.useState(() => new WorkDeleteStore(work));
 
 		return (
 			<EuiConfirmModal

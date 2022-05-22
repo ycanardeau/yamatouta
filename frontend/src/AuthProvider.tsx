@@ -2,7 +2,7 @@ import React from 'react';
 
 import { AuthContext } from './AuthContext';
 import { PermissionContext } from './PermissionContext';
-import { getAuthenticatedUser } from './api/UserApi';
+import { userApi } from './api/userApi';
 import { IAuthenticatedUserObject } from './dto/IAuthenticatedUserObject';
 
 interface AuthProviderProps {
@@ -21,7 +21,7 @@ export const AuthProvider = ({
 		(async (): Promise<void> => {
 			try {
 				if (localStorage.getItem('isAuthenticated') === 'true') {
-					const user = await getAuthenticatedUser();
+					const user = await userApi.getCurrent();
 
 					setUser(user);
 				}

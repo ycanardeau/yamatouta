@@ -24,7 +24,7 @@ export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 			.map((webLink) => new WebLinkSnapshot(webLink));
 	}
 
-	contentEquals(other: IQuoteSnapshot): boolean {
+	contentEquals(other?: IQuoteSnapshot): boolean {
 		return JSON.stringify(this) === JSON.stringify(other);
 	}
 }

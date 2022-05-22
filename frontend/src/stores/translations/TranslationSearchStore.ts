@@ -8,7 +8,7 @@ import {
 } from 'mobx';
 
 import { ajv } from '../../ajv';
-import { listTranslations } from '../../api/TranslationApi';
+import { translationApi } from '../../api/translationApi';
 import { ITranslationObject } from '../../dto/ITranslationObject';
 import { TranslationSortRule } from '../../models/TranslationSortRule';
 import { WordCategory } from '../../models/WordCategory';
@@ -121,7 +121,7 @@ export class TranslationSearchStore
 		try {
 			const paginationParams = this.pagination.toParams(clearResults);
 
-			const result = await listTranslations({
+			const result = await translationApi.list({
 				pagination: paginationParams,
 				sort: this.sort,
 				query: this.query,

@@ -1,12 +1,4 @@
-import {
-	EuiBreadcrumb,
-	EuiBreadcrumbs,
-	EuiIcon,
-	EuiPageContent,
-	EuiPageContentBody,
-	EuiPageHeader,
-	EuiSpacer,
-} from '@elastic/eui';
+import { EuiButton, EuiIcon } from '@elastic/eui';
 import {
 	EditRegular,
 	HistoryRegular,
@@ -15,54 +7,15 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-	Route,
-	Routes,
-	useLocation,
-	useNavigate,
-	useParams,
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import { getWork } from '../../api/WorkApi';
 import { useAuth } from '../../components/useAuth';
-import { IWorkObject } from '../../dto/IWorkObject';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
+import WorkPage from '../../components/works/WorkPage';
+import { useWorkDetails } from '../../components/works/useWorkDetails';
 import { Permission } from '../../models/Permission';
-import { WorkOptionalField } from '../../models/WorkOptionalField';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
 import WorkBasicInfo from './WorkBasicInfo';
-import WorkEdit from './WorkEdit';
-import WorkHistory from './WorkHistory';
-
-interface BreadcrumbsProps {
-	work: IWorkObject;
-}
-
-const Breadcrumbs = ({ work }: BreadcrumbsProps): React.ReactElement => {
-	const { t } = useTranslation();
-
-	const navigate = useNavigate();
-
-	const breadcrumbs: EuiBreadcrumb[] = [
-		{
-			text: t('shared.works'),
-			href: '/works',
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate('/works');
-			},
-		},
-		{
-			text: work.name,
-			href: `/works/${work.id}`,
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate(`/works/${work.id}`);
-			},
-		},
-	];
-
-	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
-};
 
 interface LayoutProps {
 	store: WorkDetailsStore;
@@ -80,13 +33,54 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const auth = useAuth();
 
+	const title = work.name;
+
+	useYamatoutaTitle(title, true);
+
 	return (
-		<>
-			<Breadcrumbs work={work} />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader
-				pageTitle={work.name}
-				tabs={[
+		<WorkPage
+			work={work}
+			pageHeaderProps={{
+				pageTitle: title,
+				rightSideItems: [
+					<EuiButton
+						size="s"
+						href={`/works/${work.id}/edit`}
+						onClick={(
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/works/${work.id}/edit`);
+						}}
+						iconType={EditRegular}
+						isDisabled={
+							!auth.permissionContext.hasPermission(
+								Permission.Work_Update,
+							)
+						}
+					>
+						{t('shared.edit')}
+					</EuiButton>,
+					<EuiButton
+						size="s"
+						href={`/works/${work.id}/revisions`}
+						onClick={(
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/works/${work.id}/revisions`);
+						}}
+						iconType={HistoryRegular}
+						isDisabled={
+							!auth.permissionContext.hasPermission(
+								Permission.Revision_View,
+							)
+						}
+					>
+						{t('shared.viewHistory')}
+					</EuiButton>,
+				],
+				tabs: [
 					{
 						href: `/works/${work.id}`,
 						onClick: (
@@ -96,81 +90,23 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 							navigate(`/works/${work.id}`);
 						},
 						prepend: <EuiIcon type={InfoRegular} />,
-						isSelected: !tab,
+						isSelected: tab === undefined,
 						label: t('shared.basicInfo'),
 					},
-					{
-						href: `/works/${work.id}/edit`,
-						onClick: (
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/works/${work.id}/edit`);
-						},
-						prepend: <EuiIcon type={EditRegular} />,
-						isSelected: tab === 'edit',
-						disabled: !auth.permissionContext.hasPermission(
-							Permission.EditWorks,
-						),
-						label: t('shared.edit'),
-					},
-					{
-						href: `/works/${work.id}/revisions`,
-						onClick: (
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/works/${work.id}/revisions`);
-						},
-						prepend: <EuiIcon type={HistoryRegular} />,
-						isSelected: tab === 'revisions',
-						disabled: !auth.permissionContext.hasPermission(
-							Permission.ViewEditHistory,
-						),
-						label: t('shared.revisions'),
-					},
-				]}
-			/>
-
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody>
-					<Routes>
-						<Route
-							path=""
-							element={<WorkBasicInfo work={work} />}
-						/>
-						<Route
-							path="revisions"
-							element={<WorkHistory work={work} />}
-						/>
-						<Route
-							path="edit"
-							element={<WorkEdit workDetailsStore={store} />}
-						/>
-					</Routes>
-				</EuiPageContentBody>
-			</EuiPageContent>
-		</>
+				],
+			}}
+		>
+			<Routes>
+				<Route path="" element={<WorkBasicInfo work={work} />} />
+			</Routes>
+		</WorkPage>
 	);
 });
 
 const WorkDetails = (): React.ReactElement | null => {
-	const [store, setStore] = React.useState<WorkDetailsStore>();
-
-	const { workId } = useParams();
-
-	React.useEffect(() => {
-		getWork({
-			workId: Number(workId),
-			fields: [WorkOptionalField.WebLinks],
-		}).then((work) => setStore(new WorkDetailsStore(work)));
-	}, [workId]);
+	const [store] = useWorkDetails(
+		React.useCallback((work) => new WorkDetailsStore(work), []),
+	);
 
 	return store ? <Layout store={store} /> : null;
 };

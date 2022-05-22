@@ -6,17 +6,14 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { deleteWork } from '../../api/WorkApi';
+import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
 
 export class WorkDeleteStore {
-	private readonly work: IWorkObject;
 	@observable submitting = false;
 
-	constructor({ work }: { work: IWorkObject }) {
+	constructor(private readonly work: IWorkObject) {
 		makeObservable(this);
-
-		this.work = work;
 	}
 
 	@computed get isValid(): boolean {
@@ -27,7 +24,7 @@ export class WorkDeleteStore {
 		try {
 			this.submitting = true;
 
-			await deleteWork({ workId: this.work.id });
+			await workApi.delete({ id: this.work.id });
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

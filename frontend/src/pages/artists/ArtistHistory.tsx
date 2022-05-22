@@ -1,41 +1,53 @@
 import { EuiCommentList } from '@elastic/eui';
 import React from 'react';
 
-import { listArtistRevisions } from '../../api/RevisionApi';
+import { artistApi } from '../../api/artistApi';
+import ArtistPage from '../../components/artists/ArtistPage';
+import { useArtistDetails } from '../../components/artists/useArtistDetails';
 import RevisionComment from '../../components/revisions/RevisionComment';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { IRevisionObject } from '../../dto/IRevisionObject';
 
 interface LayoutProps {
+	artist: IArtistObject;
 	revisions: IRevisionObject[];
 }
 
-const Layout = ({ revisions }: LayoutProps): React.ReactElement => {
+const Layout = ({ artist, revisions }: LayoutProps): React.ReactElement => {
+	const title = artist.name;
+
+	useYamatoutaTitle(title, true);
+
 	return (
-		<EuiCommentList>
-			{revisions.map((revision, index) => (
-				<RevisionComment revision={revision} key={index} />
-			))}
-		</EuiCommentList>
+		<ArtistPage artist={artist} pageHeaderProps={{ pageTitle: title }}>
+			<EuiCommentList>
+				{revisions.map((revision, index) => (
+					<RevisionComment revision={revision} key={index} />
+				))}
+			</EuiCommentList>
+		</ArtistPage>
 	);
 };
 
-interface ArtistHistoryProps {
-	artist: IArtistObject;
-}
+const ArtistHistory = (): React.ReactElement | null => {
+	const [artist] = useArtistDetails(
+		React.useCallback((artist) => artist, []),
+	);
 
-const ArtistHistory = ({
-	artist,
-}: ArtistHistoryProps): React.ReactElement | null => {
 	const [revisions, setRevisions] = React.useState<IRevisionObject[]>();
 
 	React.useEffect(() => {
-		listArtistRevisions({ artistId: artist.id }).then((result) =>
-			setRevisions(result.items),
-		);
+		if (!artist) return;
+
+		artistApi
+			.listRevisions({ id: artist.id })
+			.then((result) => setRevisions(result.items));
 	}, [artist]);
 
-	return revisions ? <Layout revisions={revisions} /> : null;
+	return artist && revisions ? (
+		<Layout artist={artist} revisions={revisions} />
+	) : null;
 };
 
 export default ArtistHistory;

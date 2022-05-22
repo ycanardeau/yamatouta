@@ -10,7 +10,7 @@ const UserRoutes = (): React.ReactElement => {
 	return (
 		<Routes>
 			<Route path="" element={<UserIndex />} />
-			<Route path=":userId/*" element={<UserDetails />} />
+			<Route path=":id/*" element={<UserDetails />} />
 		</Routes>
 	);
 };

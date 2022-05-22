@@ -1,12 +1,4 @@
-import {
-	EuiBreadcrumb,
-	EuiBreadcrumbs,
-	EuiIcon,
-	EuiPageContent,
-	EuiPageContentBody,
-	EuiPageHeader,
-	EuiSpacer,
-} from '@elastic/eui';
+import { EuiButton, EuiIcon } from '@elastic/eui';
 import {
 	EditRegular,
 	HistoryRegular,
@@ -15,55 +7,15 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-	Route,
-	Routes,
-	useLocation,
-	useNavigate,
-	useParams,
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import { getQuote } from '../../api/QuoteApi';
+import QuotePage from '../../components/quotes/QuotePage';
+import { useQuoteDetails } from '../../components/quotes/useQuoteDetails';
 import { useAuth } from '../../components/useAuth';
-import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import { IQuoteObject } from '../../dto/IQuoteObject';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
-import { QuoteOptionalField } from '../../models/QuoteOptionalField';
 import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
 import QuoteBasicInfo from './QuoteBasicInfo';
-import QuoteEdit from './QuoteEdit';
-import QuoteHistory from './QuoteHistory';
-
-interface BreadcrumbsProps {
-	quote: IQuoteObject;
-}
-
-const Breadcrumbs = ({ quote }: BreadcrumbsProps): React.ReactElement => {
-	const { t } = useTranslation();
-
-	const navigate = useNavigate();
-
-	const breadcrumbs: EuiBreadcrumb[] = [
-		{
-			text: t('shared.quotes'),
-			href: '/quotes',
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate('/quotes');
-			},
-		},
-		{
-			text: quote.text.replaceAll('\n', ''),
-			href: `/quotes/${quote.id}`,
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate(`/quotes/${quote.id}`);
-			},
-		},
-	];
-
-	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
-};
 
 interface LayoutProps {
 	store: QuoteDetailsStore;
@@ -74,8 +26,6 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const quote = store.quote;
 
-	useYamatoutaTitle(quote.text.replaceAll('\n', ''), true);
-
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
 
@@ -83,13 +33,54 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const auth = useAuth();
 
+	const title = quote.text.replaceAll('\n', '');
+
+	useYamatoutaTitle(title, true);
+
 	return (
-		<>
-			<Breadcrumbs quote={quote} />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader
-				pageTitle={quote.text.replaceAll('\n', '')}
-				tabs={[
+		<QuotePage
+			quote={quote}
+			pageHeaderProps={{
+				pageTitle: title,
+				rightSideItems: [
+					<EuiButton
+						size="s"
+						href={`/quotes/${quote.id}/edit`}
+						onClick={(
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/quotes/${quote.id}/edit`);
+						}}
+						iconType={EditRegular}
+						isDisabled={
+							!auth.permissionContext.hasPermission(
+								Permission.Quote_Update,
+							)
+						}
+					>
+						{t('shared.doEdit')}
+					</EuiButton>,
+					<EuiButton
+						size="s"
+						href={`/quotes/${quote.id}/revisions`}
+						onClick={(
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/quotes/${quote.id}/revisions`);
+						}}
+						iconType={HistoryRegular}
+						isDisabled={
+							!auth.permissionContext.hasPermission(
+								Permission.Revision_View,
+							)
+						}
+					>
+						{t('shared.viewHistory')}
+					</EuiButton>,
+				],
+				tabs: [
 					{
 						href: `/quotes/${quote.id}`,
 						onClick: (
@@ -99,81 +90,23 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 							navigate(`/quotes/${quote.id}`);
 						},
 						prepend: <EuiIcon type={InfoRegular} />,
-						isSelected: !tab,
+						isSelected: tab === undefined,
 						label: t('shared.basicInfo'),
 					},
-					{
-						href: `/quotes/${quote.id}/edit`,
-						onClick: (
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/quotes/${quote.id}/edit`);
-						},
-						prepend: <EuiIcon type={EditRegular} />,
-						isSelected: tab === 'edit',
-						disabled: !auth.permissionContext.hasPermission(
-							Permission.EditQuotes,
-						),
-						label: t('shared.edit'),
-					},
-					{
-						href: `/quotes/${quote.id}/revisions`,
-						onClick: (
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/quotes/${quote.id}/revisions`);
-						},
-						prepend: <EuiIcon type={HistoryRegular} />,
-						isSelected: tab === 'revisions',
-						disabled: !auth.permissionContext.hasPermission(
-							Permission.ViewEditHistory,
-						),
-						label: t('shared.revisions'),
-					},
-				]}
-			/>
-
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody>
-					<Routes>
-						<Route
-							path=""
-							element={<QuoteBasicInfo quote={quote} />}
-						/>
-						<Route
-							path="revisions"
-							element={<QuoteHistory quote={quote} />}
-						/>
-						<Route
-							path="edit"
-							element={<QuoteEdit quoteDetailsStore={store} />}
-						/>
-					</Routes>
-				</EuiPageContentBody>
-			</EuiPageContent>
-		</>
+				],
+			}}
+		>
+			<Routes>
+				<Route path="" element={<QuoteBasicInfo quote={quote} />} />
+			</Routes>
+		</QuotePage>
 	);
 });
 
 const QuoteDetails = (): React.ReactElement | null => {
-	const [store, setStore] = React.useState<QuoteDetailsStore>();
-
-	const { quoteId } = useParams();
-
-	React.useEffect(() => {
-		getQuote({
-			quoteId: Number(quoteId),
-			fields: [QuoteOptionalField.WebLinks],
-		}).then((quote) => setStore(new QuoteDetailsStore(quote)));
-	}, [quoteId]);
+	const [store] = useQuoteDetails(
+		React.useCallback((quote) => new QuoteDetailsStore(quote), []),
+	);
 
 	return store ? <Layout store={store} /> : null;
 };

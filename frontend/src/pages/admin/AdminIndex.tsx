@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { createMissingRevisions } from '../../api/AdminApi';
+import { adminApi } from '../../api/adminApi';
 import { useAuth } from '../../components/useAuth';
 
 const AdminIndex = (): React.ReactElement => {
@@ -18,7 +18,9 @@ const AdminIndex = (): React.ReactElement => {
 				<EuiListGroupItem
 					icon={<EuiIcon type={HistoryRegular} />}
 					label={t('admin.createMissingRevisions')}
-					onClick={(): Promise<void> => createMissingRevisions()}
+					onClick={(): Promise<void> =>
+						adminApi.createMissingRevisions()
+					}
 					isActive
 				/>
 			</EuiListGroup>

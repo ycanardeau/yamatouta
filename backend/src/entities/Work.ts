@@ -43,21 +43,16 @@ export class Work
 	hidden = false;
 
 	@Property()
-	name: string;
+	name!: string;
 
 	@Enum()
-	workType: WorkType;
+	workType!: WorkType;
 
 	@Property()
 	version = 0;
 
 	@OneToMany(() => WorkRevision, (revision) => revision.work)
 	revisions = new Collection<WorkRevision>(this);
-
-	constructor({ name, workType }: { name: string; workType: WorkType }) {
-		this.name = name;
-		this.workType = workType;
-	}
 
 	@OneToMany(() => WorkWebLink, (webLink) => webLink.work)
 	webLinks = new Collection<WorkWebLink>(this);

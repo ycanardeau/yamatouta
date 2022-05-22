@@ -1,7 +1,7 @@
 import { Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
-import { CreateMissingRevisionsCommand } from '../database/commands/admin/CreateMissingRevisionsCommandHandler';
+import { AdminCreateMissingRevisionsCommand } from '../database/commands/admin/AdminCreateMissingRevisionsCommandHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { PermissionContext } from '../services/PermissionContext';
 
@@ -14,7 +14,7 @@ export class AdminController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 	): Promise<void> {
 		return this.commandBus.execute(
-			new CreateMissingRevisionsCommand(permissionContext),
+			new AdminCreateMissingRevisionsCommand(permissionContext),
 		);
 	}
 }

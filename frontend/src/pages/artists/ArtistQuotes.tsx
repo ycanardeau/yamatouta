@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import WebLinkList from '../../components/WebLinkList';
 import QuoteSearchList from '../../components/quotes/QuoteSearchList';
-import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 
 interface ArtistQuotesProps {

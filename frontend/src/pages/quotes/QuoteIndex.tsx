@@ -1,6 +1,4 @@
 import {
-	EuiBreadcrumb,
-	EuiBreadcrumbs,
 	EuiButton,
 	EuiPageContent,
 	EuiPageContentBody,
@@ -14,32 +12,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import QuoteCreateDialog from '../../components/quotes/QuoteCreateDialog';
+import QuoteBreadcrumbs from '../../components/quotes/QuoteBreadcrumbs';
 import QuoteSearchList from '../../components/quotes/QuoteSearchList';
 import { useAuth } from '../../components/useAuth';
-import { useDialog } from '../../components/useDialog';
-import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
-
-const Breadcrumbs = (): React.ReactElement => {
-	const { t } = useTranslation();
-
-	const navigate = useNavigate();
-
-	const breadcrumbs: EuiBreadcrumb[] = [
-		{
-			text: t('shared.quotes'),
-			href: '/quotes',
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate('/quotes');
-			},
-		},
-	];
-
-	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
-};
 
 const QuoteIndex = observer((): React.ReactElement => {
 	const { t } = useTranslation();
@@ -52,23 +30,25 @@ const QuoteIndex = observer((): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const quoteCreateDialog = useDialog();
-
 	const navigate = useNavigate();
 
 	return (
 		<>
-			<Breadcrumbs />
+			<QuoteBreadcrumbs />
 			<EuiSpacer size="xs" />
 			<EuiPageHeader
 				pageTitle={t('shared.quotes')}
 				rightSideItems={[
 					<EuiButton
 						size="s"
-						onClick={quoteCreateDialog.show}
-						disabled={
+						href="/quotes/create"
+						onClick={(e: any): void => {
+							e.preventDefault();
+							navigate('/quotes/create');
+						}}
+						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.CreateQuotes,
+								Permission.Quote_Create,
 							)
 						}
 						iconType={AddRegular}
@@ -87,15 +67,6 @@ const QuoteIndex = observer((): React.ReactElement => {
 			>
 				<EuiPageContentBody>
 					<QuoteSearchList store={store} />
-
-					{quoteCreateDialog.visible && (
-						<QuoteCreateDialog
-							onClose={quoteCreateDialog.close}
-							onSuccess={(quote): void =>
-								navigate(`/quotes/${quote.id}/edit`)
-							}
-						/>
-					)}
 				</EuiPageContentBody>
 			</EuiPageContent>
 		</>

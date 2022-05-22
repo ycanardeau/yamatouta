@@ -1,112 +1,31 @@
-import {
-	EuiButton,
-	EuiButtonEmpty,
-	EuiFieldText,
-	EuiForm,
-	EuiFormRow,
-	EuiSelect,
-	EuiSpacer,
-	useGeneratedHtmlId,
-} from '@elastic/eui';
-import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import WebLinkListEdit from '../../components/WebLinkListEdit';
-import { WorkType } from '../../models/WorkType';
-import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
-import { WorkEditStore } from '../../stores/works/WorkEditStore';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
+import WorkEditForm from '../../components/works/WorkEditForm';
+import WorkPage from '../../components/works/WorkPage';
+import { useWorkDetails } from '../../components/works/useWorkDetails';
+import { IWorkObject } from '../../dto/IWorkObject';
 
-interface WorkEditProps {
-	workDetailsStore: WorkDetailsStore;
+interface LayoutProps {
+	work: IWorkObject;
 }
 
-const WorkEdit = observer(
-	({ workDetailsStore }: WorkEditProps): React.ReactElement => {
-		const { t } = useTranslation();
+const Layout = ({ work }: LayoutProps): React.ReactElement => {
+	const title = work.name;
 
-		const work = workDetailsStore.work;
+	useYamatoutaTitle(title, true);
 
-		const [store] = React.useState(() => new WorkEditStore(work));
+	return (
+		<WorkPage work={work} pageHeaderProps={{ pageTitle: title }}>
+			<WorkEditForm work={work} />
+		</WorkPage>
+	);
+};
 
-		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
+const WorkEdit = (): React.ReactElement | null => {
+	const [work] = useWorkDetails(React.useCallback((work) => work, []));
 
-		const navigate = useNavigate();
-
-		return (
-			<>
-				<EuiForm
-					id={modalFormId}
-					component="form"
-					onSubmit={async (e): Promise<void> => {
-						e.preventDefault();
-
-						const work = await store.submit();
-
-						workDetailsStore.setWork(work);
-						navigate(`/works/${work.id}`);
-					}}
-				>
-					<EuiFormRow label={t('works.name')}>
-						<EuiFieldText
-							compressed
-							name="name"
-							value={store.name}
-							onChange={(e): void =>
-								store.setName(e.target.value)
-							}
-						/>
-					</EuiFormRow>
-
-					<EuiFormRow label={t('works.workType')}>
-						<EuiSelect
-							compressed
-							name="workType"
-							options={Object.values(WorkType).map((value) => ({
-								value: value,
-								text: t(`workTypeNames.${value}`),
-							}))}
-							value={store.workType ?? ''}
-							onChange={(e): void =>
-								store.setWorkType(e.target.value as WorkType)
-							}
-						/>
-					</EuiFormRow>
-
-					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
-						<WebLinkListEdit store={store.webLinks} />
-					</EuiFormRow>
-				</EuiForm>
-
-				<EuiSpacer />
-
-				<div>
-					<EuiButton
-						size="s"
-						type="submit"
-						form={modalFormId}
-						disabled={!store.isValid || store.submitting}
-					>
-						{work ? t('works.editWork') : t('works.addWork')}
-					</EuiButton>
-					&emsp;
-					<EuiButtonEmpty
-						size="s"
-						href={`/works/${work.id}`}
-						onClick={(
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/works/${work.id}`);
-						}}
-					>
-						{t('shared.cancel')}
-					</EuiButtonEmpty>
-				</div>
-			</>
-		);
-	},
-);
+	return work ? <Layout work={work} /> : null;
+};
 
 export default WorkEdit;

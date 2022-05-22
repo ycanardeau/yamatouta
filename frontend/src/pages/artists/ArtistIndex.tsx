@@ -1,6 +1,4 @@
 import {
-	EuiBreadcrumb,
-	EuiBreadcrumbs,
 	EuiButton,
 	EuiPageContent,
 	EuiPageContentBody,
@@ -14,32 +12,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArtistCreateDialog from '../../components/artists/ArtistCreateDialog';
+import ArtistBreadcrumbs from '../../components/artists/ArtistBreadcrumbs';
 import ArtistSearchTable from '../../components/artists/ArtistSearchTable';
 import { useAuth } from '../../components/useAuth';
-import { useDialog } from '../../components/useDialog';
-import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
-
-const Breadcrumbs = (): React.ReactElement => {
-	const { t } = useTranslation();
-
-	const navigate = useNavigate();
-
-	const breadcrumbs: EuiBreadcrumb[] = [
-		{
-			text: t('shared.artists'),
-			href: '/artists',
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate('/artists');
-			},
-		},
-	];
-
-	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
-};
 
 const ArtistIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
@@ -54,21 +32,23 @@ const ArtistIndex = observer((): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const artistCreateDialog = useDialog();
-
 	return (
 		<>
-			<Breadcrumbs />
+			<ArtistBreadcrumbs />
 			<EuiSpacer size="xs" />
 			<EuiPageHeader
 				pageTitle={t('shared.artists')}
 				rightSideItems={[
 					<EuiButton
 						size="s"
-						onClick={artistCreateDialog.show}
-						disabled={
+						href="/artists/create"
+						onClick={(e: any): void => {
+							e.preventDefault();
+							navigate('/artists/create');
+						}}
+						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.CreateArtists,
+								Permission.Artist_Create,
 							)
 						}
 						iconType={AddRegular}
@@ -87,15 +67,6 @@ const ArtistIndex = observer((): React.ReactElement => {
 			>
 				<EuiPageContentBody>
 					<ArtistSearchTable store={store} />
-
-					{artistCreateDialog.visible && (
-						<ArtistCreateDialog
-							onClose={artistCreateDialog.close}
-							onSuccess={(artist): void =>
-								navigate(`/artists/${artist.id}/edit`)
-							}
-						/>
-					)}
 				</EuiPageContentBody>
 			</EuiPageContent>
 		</>

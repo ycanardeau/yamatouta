@@ -2,7 +2,7 @@ import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
-import { listWorks } from '../../api/WorkApi';
+import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -52,7 +52,7 @@ export class WorkSearchStore
 		try {
 			const paginationParams = this.pagination.toParams(clearResults);
 
-			const result = await listWorks({
+			const result = await workApi.list({
 				pagination: paginationParams,
 			});
 

@@ -1,31 +1,26 @@
-import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Param,
-	ParseIntPipe,
-	Patch,
-	Post,
-	Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { CreateArtistCommand } from '../database/commands/artists/CreateArtistCommandHandler';
 import {
-	UpdateArtistCommand,
-	UpdateArtistParams,
-} from '../database/commands/artists/UpdateArtistCommandHandler';
-import { DeleteArtistCommand } from '../database/commands/entries/DeleteEntryCommandHandler';
+	ArtistUpdateCommand,
+	ArtistUpdateParams,
+} from '../database/commands/artists/ArtistUpdateCommandHandler';
 import {
-	GetArtistParams,
-	GetArtistQuery,
-} from '../database/queries/artists/GetArtistQueryHandler';
+	ArtistDeleteCommand,
+	EntryDeleteParams,
+} from '../database/commands/entries/EntryDeleteCommandHandler';
 import {
-	ListArtistsParams,
-	ListArtistsQuery,
-} from '../database/queries/artists/ListArtistsQueryHandler';
-import { ListArtistRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
+	ArtistGetParams,
+	ArtistGetQuery,
+} from '../database/queries/artists/ArtistGetQueryHandler';
+import {
+	ArtistListParams,
+	ArtistListQuery,
+} from '../database/queries/artists/ArtistListQueryHandler';
+import {
+	ArtistListRevisionsQuery,
+	EntryListRevisionsParams,
+} from '../database/queries/entries/EntryListRevisionsQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { ArtistObject } from '../dto/ArtistObject';
 import { RevisionObject } from '../dto/RevisionObject';
@@ -40,71 +35,69 @@ export class ArtistController {
 		private readonly commandBus: CommandBus,
 	) {}
 
-	@Post()
-	createArtist(
+	@Post('create')
+	create(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Body(new JoiValidationPipe(UpdateArtistParams.schema))
-		params: UpdateArtistParams,
+		@Body(new JoiValidationPipe(ArtistUpdateParams.schema))
+		params: ArtistUpdateParams,
 	): Promise<ArtistObject> {
 		return this.commandBus.execute(
-			new CreateArtistCommand(permissionContext, params),
+			new ArtistUpdateCommand(permissionContext, params),
 		);
 	}
 
-	@Get()
-	listArtists(
+	@Delete('delete')
+	delete(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Query(new JoiValidationPipe(ListArtistsParams.schema))
-		params: ListArtistsParams,
-	): Promise<SearchResultObject<ArtistObject>> {
-		return this.queryBus.execute(
-			new ListArtistsQuery(permissionContext, params),
-		);
-	}
-
-	@Get(':artistId')
-	getArtist(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Param('artistId', ParseIntPipe) artistId: number,
-		@Query(new JoiValidationPipe(GetArtistParams.schema))
-		params: GetArtistParams,
-	): Promise<ArtistObject> {
-		return this.queryBus.execute(
-			new GetArtistQuery(permissionContext, { ...params, artistId }),
-		);
-	}
-
-	@Patch(':artistId')
-	updateArtist(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Param('artistId', ParseIntPipe) artistId: number,
-		@Body(new JoiValidationPipe(UpdateArtistParams.schema))
-		params: UpdateArtistParams,
-	): Promise<ArtistObject> {
-		return this.commandBus.execute(
-			new UpdateArtistCommand(permissionContext, { ...params, artistId }),
-		);
-	}
-
-	@Delete(':artistId')
-	deleteArtist(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Param('artistId', ParseIntPipe) artistId: number,
+		@Body(new JoiValidationPipe(EntryDeleteParams.schema))
+		params: EntryDeleteParams,
 	): Promise<void> {
 		return this.commandBus.execute(
-			new DeleteArtistCommand(permissionContext, { entryId: artistId }),
+			new ArtistDeleteCommand(permissionContext, params),
 		);
 	}
 
-	@Get(':artistId/revisions')
-	listArtistRevisions(
+	@Get('get')
+	get(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Param('artistId', ParseIntPipe) artistId: number,
+		@Query(new JoiValidationPipe(ArtistGetParams.schema))
+		params: ArtistGetParams,
+	): Promise<ArtistObject> {
+		return this.queryBus.execute(
+			new ArtistGetQuery(permissionContext, params),
+		);
+	}
+
+	@Get('list')
+	list(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Query(new JoiValidationPipe(ArtistListParams.schema))
+		params: ArtistListParams,
+	): Promise<SearchResultObject<ArtistObject>> {
+		return this.queryBus.execute(
+			new ArtistListQuery(permissionContext, params),
+		);
+	}
+
+	@Get('list-revisions')
+	listRevisions(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Query(new JoiValidationPipe(EntryListRevisionsParams.schema))
+		params: EntryListRevisionsParams,
 	): Promise<SearchResultObject<RevisionObject>> {
 		return this.queryBus.execute(
-			new ListArtistRevisionsQuery(permissionContext, {
-				entryId: artistId,
-			}),
+			new ArtistListRevisionsQuery(permissionContext, params),
+		);
+	}
+
+	@Post('update')
+	update(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Body(new JoiValidationPipe(ArtistUpdateParams.schema))
+		params: ArtistUpdateParams,
+	): Promise<ArtistObject> {
+		return this.commandBus.execute(
+			new ArtistUpdateCommand(permissionContext, params),
 		);
 	}
 }

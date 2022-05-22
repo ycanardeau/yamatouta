@@ -21,7 +21,7 @@ const TranslationDeleteDialog = observer(
 		const { t } = useTranslation();
 
 		const [store] = React.useState(
-			() => new TranslationDeleteStore({ translation: translation }),
+			() => new TranslationDeleteStore(translation),
 		);
 
 		return (

@@ -20,9 +20,7 @@ const QuoteDeleteDialog = observer(
 	}: QuoteDeleteDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const [store] = React.useState(
-			() => new QuoteDeleteStore({ quote: quote }),
-		);
+		const [store] = React.useState(() => new QuoteDeleteStore(quote));
 
 		return (
 			<EuiConfirmModal

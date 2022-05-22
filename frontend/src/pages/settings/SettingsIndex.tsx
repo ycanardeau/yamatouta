@@ -14,7 +14,7 @@ import ChangePasswordDialog from '../../components/settings/ChangePasswordDialog
 import ChangeUsernameDialog from '../../components/settings/ChangeUsernameDialog';
 import { useAuth } from '../../components/useAuth';
 import { useDialog } from '../../components/useDialog';
-import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 
 const SettingsIndex = (): React.ReactElement => {
 	const { t, ready } = useTranslation();

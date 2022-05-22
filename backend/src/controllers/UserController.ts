@@ -1,24 +1,23 @@
-import {
-	Body,
-	Controller,
-	Get,
-	Param,
-	ParseIntPipe,
-	Patch,
-	Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import {
-	UpdateAuthenticatedUserCommand,
-	UpdateAuthenticatedUserParams,
-} from '../database/commands/users/UpdateAuthenticatedUserCommandHandler';
-import { GetAuthenticatedUserQuery } from '../database/queries/users/GetAuthenticatedUserQueryHandler';
-import { GetUserQuery } from '../database/queries/users/GetUserQueryHandler';
+	UserCreateCommand,
+	UserCreateParams,
+} from '../database/commands/users/UserCreateCommandHandler';
 import {
-	ListUsersParams,
-	ListUsersQuery,
-} from '../database/queries/users/ListUsersQueryHandler';
+	UserUpdateCommand,
+	UserUpdateParams,
+} from '../database/commands/users/UserUpdateCommandHandler';
+import { UserGetCurrentQuery } from '../database/queries/users/UserGetCurrentQueryHandler';
+import {
+	UserGetParams,
+	UserGetQuery,
+} from '../database/queries/users/UserGetQueryHandler';
+import {
+	UserListParams,
+	UserListQuery,
+} from '../database/queries/users/UserListQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { AuthenticatedUserObject } from '../dto/AuthenticatedUserObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
@@ -33,44 +32,56 @@ export class UserController {
 		private readonly commandBus: CommandBus,
 	) {}
 
-	@Get()
-	listUsers(
+	@Post('create')
+	create(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Query(new JoiValidationPipe(ListUsersParams.schema))
-		params: ListUsersParams,
-	): Promise<SearchResultObject<UserObject>> {
-		return this.queryBus.execute(
-			new ListUsersQuery(permissionContext, params),
-		);
-	}
-
-	@Get('current')
-	getAuthenticatedUser(
-		@GetPermissionContext() permissionContext: PermissionContext,
-	): Promise<AuthenticatedUserObject> {
-		return this.queryBus.execute(
-			new GetAuthenticatedUserQuery(permissionContext),
-		);
-	}
-
-	@Patch('current')
-	updateAuthenticatedUser(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Body(new JoiValidationPipe(UpdateAuthenticatedUserParams.schema))
-		params: UpdateAuthenticatedUserParams,
+		@Body(new JoiValidationPipe(UserCreateParams.schema))
+		params: UserCreateParams,
 	): Promise<AuthenticatedUserObject> {
 		return this.commandBus.execute(
-			new UpdateAuthenticatedUserCommand(permissionContext, params),
+			new UserCreateCommand(permissionContext, params),
 		);
 	}
 
-	@Get(':userId')
-	getUser(
+	@Get('get')
+	get(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Param('userId', ParseIntPipe) userId: number,
+		@Query(new JoiValidationPipe(UserGetParams.schema))
+		params: UserGetParams,
 	): Promise<UserObject> {
 		return this.queryBus.execute(
-			new GetUserQuery(permissionContext, { userId }),
+			new UserGetQuery(permissionContext, params),
+		);
+	}
+
+	@Get('get-current')
+	getCurrent(
+		@GetPermissionContext() permissionContext: PermissionContext,
+	): Promise<AuthenticatedUserObject> {
+		return this.queryBus.execute(
+			new UserGetCurrentQuery(permissionContext),
+		);
+	}
+
+	@Get('list')
+	list(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Query(new JoiValidationPipe(UserListParams.schema))
+		params: UserListParams,
+	): Promise<SearchResultObject<UserObject>> {
+		return this.queryBus.execute(
+			new UserListQuery(permissionContext, params),
+		);
+	}
+
+	@Post('update')
+	update(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Body(new JoiValidationPipe(UserUpdateParams.schema))
+		params: UserUpdateParams,
+	): Promise<AuthenticatedUserObject> {
+		return this.commandBus.execute(
+			new UserUpdateCommand(permissionContext, params),
 		);
 	}
 }

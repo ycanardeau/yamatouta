@@ -1,6 +1,4 @@
 import {
-	EuiBreadcrumb,
-	EuiBreadcrumbs,
 	EuiButton,
 	EuiPageContent,
 	EuiPageContentBody,
@@ -14,31 +12,11 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../components/useAuth';
-import { useDialog } from '../../components/useDialog';
-import useYamatoutaTitle from '../../components/useYamatoutaTitle';
-import WorkCreateDialog from '../../components/works/WorkCreateDialog';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
+import WorkBreadcrumbs from '../../components/works/WorkBreadcrumbs';
 import WorkSearchTable from '../../components/works/WorkSearchTable';
 import { Permission } from '../../models/Permission';
 import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
-
-const Breadcrumbs = (): React.ReactElement => {
-	const { t } = useTranslation();
-
-	const navigate = useNavigate();
-
-	const breadcrumbs: EuiBreadcrumb[] = [
-		{
-			text: t('shared.works'),
-			href: '/works',
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate('/works');
-			},
-		},
-	];
-
-	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
-};
 
 const WorkIndex = (): React.ReactElement => {
 	const { t, ready } = useTranslation();
@@ -53,21 +31,23 @@ const WorkIndex = (): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const workCreateDialog = useDialog();
-
 	return (
 		<>
-			<Breadcrumbs />
+			<WorkBreadcrumbs />
 			<EuiSpacer size="xs" />
 			<EuiPageHeader
 				pageTitle={t('shared.works')}
 				rightSideItems={[
 					<EuiButton
 						size="s"
-						onClick={workCreateDialog.show}
-						disabled={
+						href="/works/create"
+						onClick={(e): void => {
+							e.preventDefault();
+							navigate('/works/create');
+						}}
+						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.CreateWorks,
+								Permission.Work_Create,
 							)
 						}
 						iconType={AddRegular}
@@ -86,15 +66,6 @@ const WorkIndex = (): React.ReactElement => {
 			>
 				<EuiPageContentBody>
 					<WorkSearchTable store={store} />
-
-					{workCreateDialog.visible && (
-						<WorkCreateDialog
-							onClose={workCreateDialog.close}
-							onSuccess={(work): void =>
-								navigate(`/works/${work.id}/edit`)
-							}
-						/>
-					)}
 				</EuiPageContentBody>
 			</EuiPageContent>
 		</>

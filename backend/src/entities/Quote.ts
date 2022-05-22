@@ -52,10 +52,10 @@ export class Quote
 	hidden = false;
 
 	@Enum(() => QuoteType)
-	quoteType: QuoteType;
+	quoteType!: QuoteType;
 
 	@Property({ length: 2048 })
-	text: string;
+	text!: string;
 
 	@Property()
 	phraseCount = 0;
@@ -64,10 +64,10 @@ export class Quote
 	transcription = '';
 
 	@Property({ length: 85 })
-	locale: string;
+	locale!: string;
 
 	@ManyToOne()
-	artist: Artist;
+	artist!: Artist;
 
 	@Property()
 	sourceUrl = '';
@@ -91,23 +91,6 @@ export class Quote
 
 	@OneToMany(() => QuoteWebLink, (webLink) => webLink.quote)
 	webLinks = new Collection<QuoteWebLink>(this);
-
-	constructor({
-		quoteType,
-		text,
-		locale,
-		artist,
-	}: {
-		quoteType: QuoteType;
-		text: string;
-		locale: string;
-		artist: Artist;
-	}) {
-		this.quoteType = quoteType;
-		this.text = text;
-		this.locale = locale;
-		this.artist = artist;
-	}
 
 	takeSnapshot(): QuoteSnapshot {
 		return new QuoteSnapshot(this);

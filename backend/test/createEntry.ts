@@ -82,16 +82,12 @@ export const createTranslation = async (
 		hidden?: boolean;
 	},
 ): Promise<Translation> => {
-	const translation = new Translation({
-		translatedString: {
-			headword: headword,
-			locale: locale,
-			reading: reading,
-			yamatokotoba: yamatokotoba,
-		},
-		category: category,
-		user: user,
-	});
+	const translation = new Translation(user);
+	translation.headword = headword;
+	translation.locale = locale;
+	translation.reading = reading;
+	translation.yamatokotoba = yamatokotoba;
+	translation.category = category;
 	translation.deleted = deleted;
 	translation.hidden = hidden;
 
@@ -122,12 +118,11 @@ export const createQuote = async (
 		hidden?: boolean;
 	},
 ): Promise<Quote> => {
-	const quote = new Quote({
-		quoteType: quoteType,
-		text: text,
-		locale: locale,
-		artist: artist,
-	});
+	const quote = new Quote();
+	quote.quoteType = quoteType;
+	quote.text = text;
+	quote.locale = locale;
+	quote.artist = artist;
 	quote.deleted = deleted;
 	quote.hidden = hidden;
 
@@ -152,10 +147,9 @@ export const createArtist = async (
 		hidden?: boolean;
 	},
 ): Promise<Artist> => {
-	const artist = new Artist({
-		name: name,
-		artistType: artistType,
-	});
+	const artist = new Artist();
+	artist.name = name;
+	artist.artistType = artistType;
 	artist.deleted = deleted;
 	artist.hidden = hidden;
 
@@ -180,10 +174,9 @@ export const createWork = async (
 		hidden?: boolean;
 	},
 ): Promise<Work> => {
-	const work = new Work({
-		name: name,
-		workType: workType,
-	});
+	const work = new Work();
+	work.name = name;
+	work.workType = workType;
 	work.deleted = deleted;
 	work.hidden = hidden;
 

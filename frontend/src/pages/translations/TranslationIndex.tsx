@@ -1,6 +1,4 @@
 import {
-	EuiBreadcrumb,
-	EuiBreadcrumbs,
 	EuiButton,
 	EuiPageContent,
 	EuiPageContentBody,
@@ -14,33 +12,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import TranslationCreateDialog from '../../components/translations/TranslationCreateDialog';
+import TranslationBreadcrumbs from '../../components/translations/TranslationBreadcrumbs';
 import TranslationSearchOptions from '../../components/translations/TranslationSearchOptions';
 import TranslationSearchTable from '../../components/translations/TranslationSearchTable';
 import { useAuth } from '../../components/useAuth';
-import { useDialog } from '../../components/useDialog';
-import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
 import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
-
-const Breadcrumbs = (): React.ReactElement => {
-	const { t } = useTranslation();
-
-	const navigate = useNavigate();
-
-	const breadcrumbs: EuiBreadcrumb[] = [
-		{
-			text: t('shared.words'),
-			href: '/translations',
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate('/translations');
-			},
-		},
-	];
-
-	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
-};
 
 const TranslationIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
@@ -55,21 +33,23 @@ const TranslationIndex = observer((): React.ReactElement => {
 
 	const navigate = useNavigate();
 
-	const translationCreateDialog = useDialog();
-
 	return (
 		<>
-			<Breadcrumbs />
+			<TranslationBreadcrumbs />
 			<EuiSpacer size="xs" />
 			<EuiPageHeader
 				pageTitle={t('shared.words')}
 				rightSideItems={[
 					<EuiButton
 						size="s"
-						onClick={translationCreateDialog.show}
-						disabled={
+						href="/translations/create"
+						onClick={(e: any): void => {
+							e.preventDefault();
+							navigate('/translations/create');
+						}}
+						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.CreateTranslations,
+								Permission.Translation_Create,
 							)
 						}
 						iconType={AddRegular}
@@ -92,15 +72,6 @@ const TranslationIndex = observer((): React.ReactElement => {
 					<EuiSpacer size="m" />
 
 					<TranslationSearchTable store={store} />
-
-					{translationCreateDialog.visible && (
-						<TranslationCreateDialog
-							onClose={translationCreateDialog.close}
-							onSuccess={(translation): void =>
-								navigate(`/translations/${translation.id}/edit`)
-							}
-						/>
-					)}
 				</EuiPageContentBody>
 			</EuiPageContent>
 		</>

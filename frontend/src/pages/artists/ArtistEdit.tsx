@@ -1,116 +1,33 @@
-import {
-	EuiButton,
-	EuiButtonEmpty,
-	EuiFieldText,
-	EuiForm,
-	EuiFormRow,
-	EuiSelect,
-	EuiSpacer,
-	useGeneratedHtmlId,
-} from '@elastic/eui';
-import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import WebLinkListEdit from '../../components/WebLinkListEdit';
-import { ArtistType } from '../../models/ArtistType';
-import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
-import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
+import ArtistEditForm from '../../components/artists/ArtistEditForm';
+import ArtistPage from '../../components/artists/ArtistPage';
+import { useArtistDetails } from '../../components/artists/useArtistDetails';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
+import { IArtistObject } from '../../dto/IArtistObject';
 
-interface ArtistEditProps {
-	artistDetailsStore: ArtistDetailsStore;
+interface LayoutProps {
+	artist: IArtistObject;
 }
 
-const ArtistEdit = observer(
-	({ artistDetailsStore }: ArtistEditProps): React.ReactElement => {
-		const { t } = useTranslation();
+const Layout = ({ artist }: LayoutProps): React.ReactElement => {
+	const title = artist.name;
 
-		const artist = artistDetailsStore.artist;
+	useYamatoutaTitle(title, true);
 
-		const [store] = React.useState(() => new ArtistEditStore(artist));
+	return (
+		<ArtistPage artist={artist} pageHeaderProps={{ pageTitle: title }}>
+			<ArtistEditForm artist={artist} />
+		</ArtistPage>
+	);
+};
 
-		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
+const ArtistEdit = (): React.ReactElement | null => {
+	const [artist] = useArtistDetails(
+		React.useCallback((artist) => artist, []),
+	);
 
-		const navigate = useNavigate();
-
-		return (
-			<>
-				<EuiForm
-					id={modalFormId}
-					component="form"
-					onSubmit={async (e): Promise<void> => {
-						e.preventDefault();
-
-						const artist = await store.submit();
-
-						artistDetailsStore.setArtist(artist);
-						navigate(`/artists/${artist.id}`);
-					}}
-				>
-					<EuiFormRow label={t('artists.name')}>
-						<EuiFieldText
-							compressed
-							name="name"
-							value={store.name}
-							onChange={(e): void =>
-								store.setName(e.target.value)
-							}
-						/>
-					</EuiFormRow>
-
-					<EuiFormRow label={t('artists.artistType')}>
-						<EuiSelect
-							compressed
-							name="artistType"
-							options={Object.values(ArtistType).map((value) => ({
-								value: value,
-								text: t(`artistTypeNames.${value}`),
-							}))}
-							value={store.artistType ?? ''}
-							onChange={(e): void =>
-								store.setArtistType(
-									e.target.value as ArtistType,
-								)
-							}
-						/>
-					</EuiFormRow>
-
-					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
-						<WebLinkListEdit store={store.webLinks} />
-					</EuiFormRow>
-				</EuiForm>
-
-				<EuiSpacer />
-
-				<div>
-					<EuiButton
-						size="s"
-						type="submit"
-						form={modalFormId}
-						disabled={!store.isValid || store.submitting}
-					>
-						{artist
-							? t('artists.editArtist')
-							: t('artists.addArtist')}
-					</EuiButton>
-					&emsp;
-					<EuiButtonEmpty
-						size="s"
-						href={`/artists/${artist.id}`}
-						onClick={(
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/artists/${artist.id}`);
-						}}
-					>
-						{t('shared.cancel')}
-					</EuiButtonEmpty>
-				</div>
-			</>
-		);
-	},
-);
+	return artist ? <Layout artist={artist} /> : null;
+};
 
 export default ArtistEdit;

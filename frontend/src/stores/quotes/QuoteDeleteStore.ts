@@ -6,17 +6,14 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { deleteQuote } from '../../api/QuoteApi';
+import { quoteApi } from '../../api/quoteApi';
 import { IQuoteObject } from '../../dto/IQuoteObject';
 
 export class QuoteDeleteStore {
-	private readonly quote: IQuoteObject;
 	@observable submitting = false;
 
-	constructor({ quote }: { quote: IQuoteObject }) {
+	constructor(private readonly quote: IQuoteObject) {
 		makeObservable(this);
-
-		this.quote = quote;
 	}
 
 	@computed get isValid(): boolean {
@@ -27,7 +24,7 @@ export class QuoteDeleteStore {
 		try {
 			this.submitting = true;
 
-			await deleteQuote({ quoteId: this.quote.id });
+			await quoteApi.delete({ id: this.quote.id });
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

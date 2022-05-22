@@ -1,25 +1,25 @@
 import { UserGroup } from './UserGroup';
 
 export enum Permission {
-	CreateArtists = 'CreateArtists',
-	CreateMissingRevisions = 'CreateMissingRevisions',
-	CreateQuotes = 'CreateQuotes',
-	CreateTranslations = 'CreateTranslations',
-	CreateWebLinks = 'CreateWebLinks',
-	CreateWorks = 'CreateWorks',
-	DeleteArtists = 'DeleteArtists',
-	DeleteQuotes = 'DeleteQuotes',
-	DeleteTranslations = 'DeleteTranslations',
-	DeleteWebLinks = 'DeleteWebLinks',
-	DeleteWorks = 'DeleteWorks',
-	EditArtists = 'EditArtists',
-	EditQuotes = 'EditQuotes',
-	EditTranslations = 'EditTranslations',
-	EditWebLinks = 'EditWebLinks',
-	EditWorks = 'EditWorks',
-	ViewDeletedEntries = 'ViewDeletedEntries',
-	ViewEditHistory = 'ViewEditHistory',
-	ViewHiddenEntries = 'ViewHiddenEntries',
+	Admin_CreateMissingRevisions = 'Admin_CreateMissingRevisions',
+	Admin_ViewDeletedEntries = 'Admin_ViewDeletedEntries',
+	Admin_ViewHiddenEntries = 'Admin_ViewHiddenEntries',
+	Artist_Create = 'Artist_Create',
+	Artist_Delete = 'Artist_Delete',
+	Artist_Update = 'Artist_Update',
+	Quote_Create = 'Quote_Create',
+	Quote_Delete = 'Quote_Delete',
+	Quote_Update = 'Quote_Update',
+	Revision_View = 'Revision_View',
+	Translation_Create = 'Translation_Create',
+	Translation_Delete = 'Translation_Delete',
+	Translation_Update = 'Translation_Update',
+	WebLink_Create = 'WebLink_Create',
+	WebLink_Delete = 'WebLink_Delete',
+	WebLink_Update = 'WebLink_Update',
+	Work_Create = 'Work_Create',
+	Work_Delete = 'Work_Delete',
+	Work_Update = 'Work_Update',
 }
 
 const limitedUserPermissions: Permission[] = [];
@@ -28,7 +28,7 @@ const userPermissions: Permission[] = [...limitedUserPermissions];
 
 const advancedUserPermissions: Permission[] = [
 	...userPermissions,
-	Permission.CreateTranslations,
+	Permission.Translation_Create,
 ];
 
 const modPermissions: Permission[] = [...advancedUserPermissions];
@@ -37,24 +37,24 @@ const seniorModPermissions: Permission[] = [...modPermissions];
 
 const adminPermissions: Permission[] = [
 	...seniorModPermissions,
-	Permission.CreateArtists,
-	Permission.CreateMissingRevisions,
-	Permission.CreateQuotes,
-	Permission.CreateWebLinks,
-	Permission.CreateWorks,
-	Permission.DeleteArtists,
-	Permission.DeleteQuotes,
-	Permission.DeleteTranslations,
-	Permission.DeleteWebLinks,
-	Permission.DeleteWorks,
-	Permission.EditArtists,
-	Permission.EditQuotes,
-	Permission.EditTranslations,
-	Permission.EditWebLinks,
-	Permission.EditWorks,
-	Permission.ViewDeletedEntries,
-	Permission.ViewHiddenEntries,
-	Permission.ViewEditHistory,
+	Permission.Admin_CreateMissingRevisions,
+	Permission.Admin_ViewDeletedEntries,
+	Permission.Admin_ViewHiddenEntries,
+	Permission.Artist_Create,
+	Permission.Artist_Delete,
+	Permission.Artist_Update,
+	Permission.Quote_Create,
+	Permission.Quote_Delete,
+	Permission.Quote_Update,
+	Permission.Revision_View,
+	Permission.Translation_Delete,
+	Permission.Translation_Update,
+	Permission.WebLink_Create,
+	Permission.WebLink_Delete,
+	Permission.WebLink_Update,
+	Permission.Work_Create,
+	Permission.Work_Update,
+	Permission.Work_Delete,
 ];
 
 export const userGroupPermissions: Record<UserGroup, Permission[]> = {

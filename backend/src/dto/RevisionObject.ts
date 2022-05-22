@@ -17,7 +17,7 @@ export class RevisionObject {
 		revision: Revision<Entry, Snapshot>,
 		permissionContext: PermissionContext,
 	) {
-		if (!permissionContext.hasPermission(Permission.ViewEditHistory))
+		if (!permissionContext.hasPermission(Permission.Revision_View))
 			throw new NotFoundException();
 
 		permissionContext.verifyDeletedAndHidden(revision.entry);

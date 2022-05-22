@@ -6,17 +6,14 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { deleteTranslation } from '../../api/TranslationApi';
+import { translationApi } from '../../api/translationApi';
 import { ITranslationObject } from '../../dto/ITranslationObject';
 
 export class TranslationDeleteStore {
-	private readonly translation: ITranslationObject;
 	@observable submitting = false;
 
-	constructor({ translation }: { translation: ITranslationObject }) {
+	constructor(private readonly translation: ITranslationObject) {
 		makeObservable(this);
-
-		this.translation = translation;
 	}
 
 	@computed get isValid(): boolean {
@@ -27,7 +24,7 @@ export class TranslationDeleteStore {
 		try {
 			this.submitting = true;
 
-			await deleteTranslation({ translationId: this.translation.id });
+			await translationApi.delete({ id: this.translation.id });
 		} finally {
 			runInAction(() => {
 				this.submitting = false;

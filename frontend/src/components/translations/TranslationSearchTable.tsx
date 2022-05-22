@@ -127,7 +127,7 @@ const TranslationPopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.EditTranslations,
+								Permission.Translation_Update,
 							)
 						}
 					>
@@ -145,7 +145,7 @@ const TranslationPopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.ViewEditHistory,
+								Permission.Revision_View,
 							)
 						}
 					>
@@ -159,7 +159,7 @@ const TranslationPopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.DeleteTranslations,
+								Permission.Translation_Delete,
 							)
 						}
 					>
@@ -271,10 +271,6 @@ const TranslationSearchTable = observer(
 											<React.Fragment key={index}>
 												{index > 0 && ' '}
 												<EuiLink
-													/* TODO: component={RouterLink}
-								to={`/words/${encodeURIComponent(
-									part,
-								)}/yamato-kotoba`} */
 													onClick={(
 														e: React.MouseEvent<HTMLAnchorElement>,
 													): void => {
@@ -326,10 +322,6 @@ const TranslationSearchTable = observer(
 											<React.Fragment key={index}>
 												{index > 0 && ' '}
 												<EuiLink
-													/* TODO: component={RouterLink}
-								to={`/words/${encodeURIComponent(
-									part,
-								)}/headwords`} */
 													onClick={(
 														e: React.MouseEvent<HTMLAnchorElement>,
 													): void => {

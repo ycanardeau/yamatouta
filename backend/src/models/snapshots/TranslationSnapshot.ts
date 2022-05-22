@@ -28,7 +28,7 @@ export class TranslationSnapshot
 			.map((webLink) => new WebLinkSnapshot(webLink));
 	}
 
-	contentEquals(other: ITranslationSnapshot): boolean {
+	contentEquals(other?: ITranslationSnapshot): boolean {
 		return JSON.stringify(this) === JSON.stringify(other);
 	}
 }

@@ -1,31 +1,26 @@
-import {
-	Body,
-	Controller,
-	Delete,
-	Get,
-	Param,
-	ParseIntPipe,
-	Patch,
-	Post,
-	Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { DeleteWorkCommand } from '../database/commands/entries/DeleteEntryCommandHandler';
-import { CreateWorkCommand } from '../database/commands/works/CreateWorkCommandHandler';
 import {
-	UpdateWorkCommand,
-	UpdateWorkParams,
-} from '../database/commands/works/UpdateWorkCommandHandler';
-import { ListWorkRevisionsQuery } from '../database/queries/entries/ListEntryRevisionsQueryHandler';
+	EntryDeleteParams,
+	WorkDeleteCommand,
+} from '../database/commands/entries/EntryDeleteCommandHandler';
 import {
-	GetWorkParams,
-	GetWorkQuery,
-} from '../database/queries/works/GetWorkQueryHandler';
+	WorkUpdateCommand,
+	WorkUpdateParams,
+} from '../database/commands/works/WorkUpdateCommandHandler';
 import {
-	ListWorksParams,
-	ListWorksQuery,
-} from '../database/queries/works/ListWorksQueryHandler';
+	EntryListRevisionsParams,
+	WorkListRevisionsQuery,
+} from '../database/queries/entries/EntryListRevisionsQueryHandler';
+import {
+	WorkGetParams,
+	WorkGetQuery,
+} from '../database/queries/works/WorkGetQueryHandler';
+import {
+	WorkListParams,
+	WorkListQuery,
+} from '../database/queries/works/WorkListQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
@@ -40,69 +35,69 @@ export class WorkController {
 		private readonly commandBus: CommandBus,
 	) {}
 
-	@Post()
-	createWork(
+	@Post('create')
+	create(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Body(new JoiValidationPipe(UpdateWorkParams.schema))
-		params: UpdateWorkParams,
+		@Body(new JoiValidationPipe(WorkUpdateParams.schema))
+		params: WorkUpdateParams,
 	): Promise<WorkObject> {
 		return this.commandBus.execute(
-			new CreateWorkCommand(permissionContext, params),
+			new WorkUpdateCommand(permissionContext, params),
 		);
 	}
 
-	@Get()
-	listWorks(
+	@Delete('delete')
+	delete(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Query(new JoiValidationPipe(ListWorksParams.schema))
-		params: ListWorksParams,
-	): Promise<SearchResultObject<WorkObject>> {
-		return this.queryBus.execute(
-			new ListWorksQuery(permissionContext, params),
-		);
-	}
-
-	@Get(':workId')
-	getWork(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Param('workId', ParseIntPipe) workId: number,
-		@Query(new JoiValidationPipe(GetWorkParams.schema))
-		params: GetWorkParams,
-	): Promise<WorkObject> {
-		return this.queryBus.execute(
-			new GetWorkQuery(permissionContext, { ...params, workId }),
-		);
-	}
-
-	@Patch(':workId')
-	updateWork(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Param('workId', ParseIntPipe) workId: number,
-		@Body(new JoiValidationPipe(UpdateWorkParams.schema))
-		params: UpdateWorkParams,
-	): Promise<WorkObject> {
-		return this.commandBus.execute(
-			new UpdateWorkCommand(permissionContext, { ...params, workId }),
-		);
-	}
-
-	@Delete(':workId')
-	deleteWork(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Param('workId', ParseIntPipe) workId: number,
+		@Body(new JoiValidationPipe(EntryDeleteParams.schema))
+		params: EntryDeleteParams,
 	): Promise<void> {
 		return this.commandBus.execute(
-			new DeleteWorkCommand(permissionContext, { entryId: workId }),
+			new WorkDeleteCommand(permissionContext, params),
 		);
 	}
 
-	@Get(':workId/revisions')
-	listWorkRevisions(
+	@Get('get')
+	get(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Param('workId', ParseIntPipe) workId: number,
+		@Query(new JoiValidationPipe(WorkGetParams.schema))
+		params: WorkGetParams,
+	): Promise<WorkObject> {
+		return this.queryBus.execute(
+			new WorkGetQuery(permissionContext, params),
+		);
+	}
+
+	@Get('list')
+	list(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Query(new JoiValidationPipe(WorkListParams.schema))
+		params: WorkListParams,
+	): Promise<SearchResultObject<WorkObject>> {
+		return this.queryBus.execute(
+			new WorkListQuery(permissionContext, params),
+		);
+	}
+
+	@Get('list-revisions')
+	listRevisions(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Query(new JoiValidationPipe(EntryListRevisionsParams.schema))
+		params: EntryListRevisionsParams,
 	): Promise<SearchResultObject<RevisionObject>> {
 		return this.queryBus.execute(
-			new ListWorkRevisionsQuery(permissionContext, { entryId: workId }),
+			new WorkListRevisionsQuery(permissionContext, params),
+		);
+	}
+
+	@Post('update')
+	update(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Body(new JoiValidationPipe(WorkUpdateParams.schema))
+		params: WorkUpdateParams,
+	): Promise<WorkObject> {
+		return this.commandBus.execute(
+			new WorkUpdateCommand(permissionContext, params),
 		);
 	}
 }

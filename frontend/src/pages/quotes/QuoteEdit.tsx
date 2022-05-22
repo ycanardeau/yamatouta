@@ -1,118 +1,31 @@
-import {
-	EuiButton,
-	EuiButtonEmpty,
-	EuiForm,
-	EuiFormRow,
-	EuiSelect,
-	EuiSpacer,
-	EuiTextArea,
-	useGeneratedHtmlId,
-} from '@elastic/eui';
-import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
-import WebLinkListEdit from '../../components/WebLinkListEdit';
-import ArtistComboBox from '../../components/artists/ArtistComboBox';
-import { QuoteType } from '../../models/QuoteType';
-import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
-import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
+import QuoteEditForm from '../../components/quotes/QuoteEditForm';
+import QuotePage from '../../components/quotes/QuotePage';
+import { useQuoteDetails } from '../../components/quotes/useQuoteDetails';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
+import { IQuoteObject } from '../../dto/IQuoteObject';
 
-interface QuoteEditProps {
-	quoteDetailsStore: QuoteDetailsStore;
+interface LayoutProps {
+	quote: IQuoteObject;
 }
 
-const QuoteEdit = observer(
-	({ quoteDetailsStore }: QuoteEditProps): React.ReactElement => {
-		const { t } = useTranslation();
+const Layout = ({ quote }: LayoutProps): React.ReactElement => {
+	const title = quote.text.replaceAll('\n', '');
 
-		const quote = quoteDetailsStore.quote;
+	useYamatoutaTitle(title, true);
 
-		const [store] = React.useState(() => new QuoteEditStore(quote));
+	return (
+		<QuotePage quote={quote} pageHeaderProps={{ pageTitle: title }}>
+			<QuoteEditForm quote={quote} />
+		</QuotePage>
+	);
+};
 
-		const modalFormId = useGeneratedHtmlId({ prefix: 'modalForm' });
+const QuoteEdit = (): React.ReactElement | null => {
+	const [quote] = useQuoteDetails(React.useCallback((quote) => quote, []));
 
-		const navigate = useNavigate();
-
-		return (
-			<>
-				<EuiForm
-					id={modalFormId}
-					component="form"
-					onSubmit={async (e): Promise<void> => {
-						e.preventDefault();
-
-						const quote = await store.submit();
-
-						quoteDetailsStore.setQuote(quote);
-						navigate(`/quotes/${quote.id}`);
-					}}
-				>
-					<EuiFormRow label={t('quotes.quote')}>
-						<EuiTextArea
-							compressed
-							name="text"
-							value={store.text}
-							onChange={(e): void =>
-								store.setText(e.target.value)
-							}
-							rows={5}
-						/>
-					</EuiFormRow>
-
-					<EuiFormRow label={t('quotes.quoteType')}>
-						<EuiSelect
-							compressed
-							name="quoteType"
-							options={Object.values(QuoteType).map((value) => ({
-								value: value,
-								text: t(`quoteTypeNames.${value}`),
-							}))}
-							value={store.quoteType ?? ''}
-							onChange={(e): void =>
-								store.setQuoteType(e.target.value as QuoteType)
-							}
-						/>
-					</EuiFormRow>
-
-					<EuiFormRow label={t('quotes.artist')}>
-						<ArtistComboBox store={store.artist} />
-					</EuiFormRow>
-
-					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
-						<WebLinkListEdit store={store.webLinks} />
-					</EuiFormRow>
-				</EuiForm>
-
-				<EuiSpacer />
-
-				<div>
-					<EuiButton
-						size="s"
-						type="submit"
-						form={modalFormId}
-						disabled={!store.isValid || store.submitting}
-					>
-						{quote ? t('quotes.editQuote') : t('quotes.addQuote')}
-					</EuiButton>
-					&emsp;
-					<EuiButtonEmpty
-						size="s"
-						href={`/quotes/${quote.id}`}
-						onClick={(
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/quotes/${quote.id}`);
-						}}
-					>
-						{t('shared.cancel')}
-					</EuiButtonEmpty>
-				</div>
-			</>
-		);
-	},
-);
+	return quote ? <Layout quote={quote} /> : null;
+};
 
 export default QuoteEdit;

@@ -6,13 +6,12 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { createTranslation, updateTranslation } from '../../api/TranslationApi';
+import { translationApi } from '../../api/translationApi';
 import { ITranslationObject } from '../../dto/ITranslationObject';
 import { WordCategory } from '../../models/WordCategory';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class TranslationEditStore {
-	private readonly translation?: ITranslationObject;
 	@observable submitting = false;
 	@observable headword = '';
 	@observable locale = 'ja';
@@ -21,10 +20,8 @@ export class TranslationEditStore {
 	@observable category = WordCategory.Unspecified;
 	readonly webLinks: WebLinkListEditStore;
 
-	constructor(translation?: ITranslationObject) {
+	constructor(private readonly translation?: ITranslationObject) {
 		makeObservable(this);
-
-		this.translation = translation;
 
 		if (translation) {
 			this.headword = translation.headword;
@@ -74,22 +71,20 @@ export class TranslationEditStore {
 		try {
 			this.submitting = true;
 
-			const params = {
+			const createOrUpdate = this.translation
+				? translationApi.update
+				: translationApi.create;
+
+			// Await.
+			const translation = await createOrUpdate({
+				id: this.translation?.id ?? 0,
 				headword: this.headword,
 				locale: this.locale,
 				reading: this.reading,
 				yamatokotoba: this.yamatokotoba,
 				category: this.category,
 				webLinks: this.webLinks.items,
-			};
-
-			// Await.
-			const translation = await (this.translation
-				? updateTranslation({
-						...params,
-						translationId: this.translation.id,
-				  })
-				: createTranslation(params));
+			});
 
 			return translation;
 		} finally {

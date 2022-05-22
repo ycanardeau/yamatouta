@@ -6,7 +6,7 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { login } from '../../api/AuthApi';
+import { authApi } from '../../api/authApi';
 import { IAuthenticatedUserObject } from '../../dto/IAuthenticatedUserObject';
 
 export class LoginDialogStore {
@@ -35,7 +35,7 @@ export class LoginDialogStore {
 			this.submitting = true;
 
 			// Await.
-			const user = await login({
+			const user = await authApi.login({
 				email: this.email,
 				password: this.password,
 			});

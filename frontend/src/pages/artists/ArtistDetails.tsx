@@ -1,12 +1,4 @@
-import {
-	EuiBreadcrumb,
-	EuiBreadcrumbs,
-	EuiIcon,
-	EuiPageContent,
-	EuiPageContentBody,
-	EuiPageHeader,
-	EuiSpacer,
-} from '@elastic/eui';
+import { EuiButton, EuiIcon } from '@elastic/eui';
 import {
 	EditRegular,
 	HistoryRegular,
@@ -21,49 +13,15 @@ import {
 	Routes,
 	useLocation,
 	useNavigate,
-	useParams,
 } from 'react-router-dom';
 
-import { getArtist } from '../../api/ArtistApi';
+import ArtistPage from '../../components/artists/ArtistPage';
+import { useArtistDetails } from '../../components/artists/useArtistDetails';
 import { useAuth } from '../../components/useAuth';
-import { IArtistObject } from '../../dto/IArtistObject';
-import { ArtistOptionalField } from '../../models/ArtistOptionalField';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
-import ArtistEdit from './ArtistEdit';
-import ArtistHistory from './ArtistHistory';
 import ArtistQuotes from './ArtistQuotes';
-
-interface BreadcrumbsProps {
-	artist: IArtistObject;
-}
-
-const Breadcrumbs = ({ artist }: BreadcrumbsProps): React.ReactElement => {
-	const { t } = useTranslation();
-
-	const navigate = useNavigate();
-
-	const breadcrumbs: EuiBreadcrumb[] = [
-		{
-			text: t('shared.artists'),
-			href: '/artists',
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate('/artists');
-			},
-		},
-		{
-			text: artist.name,
-			href: `/artists/${artist.id}`,
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate(`/artists/${artist.id}`);
-			},
-		},
-	];
-
-	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
-};
 
 interface LayoutProps {
 	store: ArtistDetailsStore;
@@ -81,13 +39,54 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const auth = useAuth();
 
+	const title = artist.name;
+
+	useYamatoutaTitle(title, true);
+
 	return (
-		<>
-			<Breadcrumbs artist={artist} />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader
-				pageTitle={artist.name}
-				tabs={[
+		<ArtistPage
+			artist={artist}
+			pageHeaderProps={{
+				pageTitle: title,
+				rightSideItems: [
+					<EuiButton
+						size="s"
+						href={`/artists/${artist.id}/edit`}
+						onClick={(
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/artists/${artist.id}/edit`);
+						}}
+						iconType={EditRegular}
+						isDisabled={
+							!auth.permissionContext.hasPermission(
+								Permission.Artist_Update,
+							)
+						}
+					>
+						{t('shared.doEdit')}
+					</EuiButton>,
+					<EuiButton
+						size="s"
+						href={`/artists/${artist.id}/revisions`}
+						onClick={(
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/artists/${artist.id}/revisions`);
+						}}
+						iconType={HistoryRegular}
+						isDisabled={
+							!auth.permissionContext.hasPermission(
+								Permission.Revision_View,
+							)
+						}
+					>
+						{t('shared.viewHistory')}
+					</EuiButton>,
+				],
+				tabs: [
 					{
 						href: `/artists/${artist.id}`,
 						onClick: (
@@ -97,92 +96,30 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 							navigate(`/artists/${artist.id}`);
 						},
 						prepend: <EuiIcon type={MusicNote2Regular} />,
-						isSelected: !tab,
+						isSelected: tab === undefined,
 						label: t('shared.quotes'),
 					},
-					{
-						href: `/artists/${artist.id}/edit`,
-						onClick: (
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/artists/${artist.id}/edit`);
-						},
-						prepend: <EuiIcon type={EditRegular} />,
-						isSelected: tab === 'edit',
-						disabled: !auth.permissionContext.hasPermission(
-							Permission.EditArtists,
-						),
-						label: t('shared.edit'),
-					},
-					{
-						href: `/artists/${artist.id}/revisions`,
-						onClick: (
-							e: React.MouseEvent<HTMLAnchorElement>,
-						): void => {
-							e.preventDefault();
-							navigate(`/artists/${artist.id}/revisions`);
-						},
-						prepend: <EuiIcon type={HistoryRegular} />,
-						isSelected: tab === 'revisions',
-						disabled: !auth.permissionContext.hasPermission(
-							Permission.ViewEditHistory,
-						),
-						label: t('shared.revisions'),
-					},
-				]}
-			/>
-
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody>
-					<Routes>
-						<Route
-							path=""
-							element={
-								<ArtistQuotes artistDetailsStore={store} />
-							}
-						/>
-						<Route
-							path="quotes"
-							element={
-								<Navigate
-									to={`/artists/${artist.id}`}
-									replace
-								/>
-							}
-						/>
-						<Route
-							path="revisions"
-							element={<ArtistHistory artist={artist} />}
-						/>
-						<Route
-							path="edit"
-							element={<ArtistEdit artistDetailsStore={store} />}
-						/>
-					</Routes>
-				</EuiPageContentBody>
-			</EuiPageContent>
-		</>
+				],
+			}}
+		>
+			<Routes>
+				<Route
+					path=""
+					element={<ArtistQuotes artistDetailsStore={store} />}
+				/>
+				<Route
+					path="quotes"
+					element={<Navigate to={`/artists/${artist.id}`} replace />}
+				/>
+			</Routes>
+		</ArtistPage>
 	);
 });
 
 const ArtistDetails = (): React.ReactElement | null => {
-	const [store, setStore] = React.useState<ArtistDetailsStore>();
-
-	const { artistId } = useParams();
-
-	React.useEffect(() => {
-		getArtist({
-			artistId: Number(artistId),
-			fields: [ArtistOptionalField.WebLinks],
-		}).then((artist) => setStore(new ArtistDetailsStore(artist)));
-	}, [artistId]);
+	const [store] = useArtistDetails(
+		React.useCallback((artist) => new ArtistDetailsStore(artist), []),
+	);
 
 	return store ? <Layout store={store} /> : null;
 };

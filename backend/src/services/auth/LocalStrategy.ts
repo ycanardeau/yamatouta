@@ -7,10 +7,10 @@ import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 import config from '../../config';
 import {
-	AuthenticateUserCommand,
-	AuthenticateUserCommandHandler,
+	UserAuthenticateCommand,
+	UserAuthenticateCommandHandler,
 	LoginError,
-} from '../../database/commands/users/AuthenticateUserCommandHandler';
+} from '../../database/commands/users/UserAuthenticateCommandHandler';
 import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
 import { TooManyRequestsException } from '../../exceptions/TooManyRequestsException';
 import { getClientIp } from '../../utils/getClientIp';
@@ -31,7 +31,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		| RateLimiterMariaDb;
 
 	constructor(
-		private readonly authenticateUserCommandHandler: AuthenticateUserCommandHandler,
+		private readonly authenticateUserCommandHandler: UserAuthenticateCommandHandler,
 		em: EntityManager,
 	) {
 		super({ usernameField: 'email', passReqToCallback: true });
@@ -111,7 +111,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		}
 
 		const result = await this.authenticateUserCommandHandler.execute(
-			new AuthenticateUserCommand({
+			new UserAuthenticateCommand({
 				email: email,
 				password: password,
 				clientIp: clientIp,

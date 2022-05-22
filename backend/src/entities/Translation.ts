@@ -58,17 +58,17 @@ export class Translation
 	hidden = false;
 
 	@Embedded({ prefix: false })
-	translatedString: TranslatedString;
+	translatedString = new TranslatedString();
 
 	@Enum()
-	category: WordCategory;
+	category!: WordCategory;
 
 	// For backward compatibility.
 	@Property({ type: Array })
 	inishienomanabi_tags: string[] = [];
 
 	@ManyToOne()
-	user: User;
+	user!: User;
 
 	@OneToOne(
 		() => TranslationSearchIndex,
@@ -93,17 +93,7 @@ export class Translation
 	@OneToMany(() => TranslationWebLink, (webLink) => webLink.translation)
 	webLinks = new Collection<TranslationWebLink>(this);
 
-	constructor({
-		translatedString,
-		category,
-		user,
-	}: {
-		translatedString: TranslatedString;
-		category: WordCategory;
-		user: User;
-	}) {
-		this.translatedString = translatedString;
-		this.category = category;
+	constructor(user: User) {
 		this.user = user;
 	}
 

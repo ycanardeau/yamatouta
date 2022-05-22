@@ -1,6 +1,4 @@
 import {
-	EuiBreadcrumb,
-	EuiBreadcrumbs,
 	EuiPageContent,
 	EuiPageContentBody,
 	EuiPageHeader,
@@ -16,32 +14,13 @@ import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import Avatar from '../../components/Avatar';
 import Link from '../../components/Link';
 import Pagination from '../../components/Pagination';
-import useYamatoutaTitle from '../../components/useYamatoutaTitle';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
+import UserBreadcrumbs from '../../components/users/UserBreadcrumbs';
 import { UserSearchStore } from '../../stores/users/UserSearchStore';
-
-const Breadcrumbs = (): React.ReactElement => {
-	const { t } = useTranslation();
-
-	const navigate = useNavigate();
-
-	const breadcrumbs: EuiBreadcrumb[] = [
-		{
-			text: t('shared.users'),
-			href: '/users',
-			onClick: (e): void => {
-				e.preventDefault();
-				navigate('/users');
-			},
-		},
-	];
-
-	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
-};
 
 const UserIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();
@@ -54,7 +33,7 @@ const UserIndex = observer((): React.ReactElement => {
 
 	return (
 		<>
-			<Breadcrumbs />
+			<UserBreadcrumbs />
 			<EuiSpacer size="xs" />
 			<EuiPageHeader pageTitle={t('shared.users')} />
 

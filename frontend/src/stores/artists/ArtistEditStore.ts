@@ -6,22 +6,19 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { createArtist, updateArtist } from '../../api/ArtistApi';
+import { artistApi } from '../../api/artistApi';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { ArtistType } from '../../models/ArtistType';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class ArtistEditStore {
-	private readonly artist?: IArtistObject;
 	@observable submitting = false;
 	@observable name = '';
 	@observable artistType = ArtistType.Person;
 	readonly webLinks: WebLinkListEditStore;
 
-	constructor(artist?: IArtistObject) {
+	constructor(private readonly artist?: IArtistObject) {
 		makeObservable(this);
-
-		this.artist = artist;
 
 		if (artist) {
 			this.name = artist.name;
@@ -48,16 +45,17 @@ export class ArtistEditStore {
 		try {
 			this.submitting = true;
 
-			const params = {
+			const createOrUpdate = this.artist
+				? artistApi.update
+				: artistApi.create;
+
+			// Await.
+			const artist = await createOrUpdate({
+				id: this.artist?.id ?? 0,
 				name: this.name,
 				artistType: this.artistType,
 				webLinks: this.webLinks.items,
-			};
-
-			// Await.
-			const artist = await (this.artist
-				? updateArtist({ ...params, artistId: this.artist.id })
-				: createArtist(params));
+			});
 
 			return artist;
 		} finally {

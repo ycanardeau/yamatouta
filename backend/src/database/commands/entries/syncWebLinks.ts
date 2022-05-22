@@ -19,7 +19,7 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 	actor: User,
 ): Promise<void> => {
 	const create = async (newItem: WebLinkObject): Promise<TWebLink> => {
-		permissionContext.verifyPermission(Permission.CreateWebLinks);
+		permissionContext.verifyPermission(Permission.WebLink_Create);
 
 		const address = await webAddressFactory.getOrCreateWebAddress(
 			em,
@@ -42,7 +42,7 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 	): Promise<boolean> => {
 		if (oldItem.contentEquals(newItem)) return false;
 
-		permissionContext.verifyPermission(Permission.EditWebLinks);
+		permissionContext.verifyPermission(Permission.WebLink_Update);
 
 		const address = await webAddressFactory.getOrCreateWebAddress(
 			em,
@@ -58,7 +58,7 @@ export const syncWebLinks = async <TWebLink extends WebLink>(
 	};
 
 	const remove = async (oldItem: TWebLink): Promise<void> => {
-		permissionContext.verifyPermission(Permission.DeleteWebLinks);
+		permissionContext.verifyPermission(Permission.WebLink_Delete);
 
 		oldItem.address.decrementReferenceCount();
 

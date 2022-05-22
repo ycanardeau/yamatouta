@@ -8,7 +8,7 @@ export class BasicEntryLinkStore<TEntry extends IEntryWithIdAndName> {
 
 	constructor(
 		private readonly entryFunc?: (
-			entryId: number,
+			id: number,
 		) => Promise<TEntry | undefined>,
 	) {
 		makeObservable(this);

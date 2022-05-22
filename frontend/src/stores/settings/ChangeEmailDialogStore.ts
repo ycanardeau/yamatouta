@@ -6,7 +6,7 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { updateAuthenticatedUser } from '../../api/UserApi';
+import { userApi } from '../../api/userApi';
 import { IAuthenticatedUserObject } from '../../dto/IAuthenticatedUserObject';
 
 export class ChangeEmailDialogStore {
@@ -35,7 +35,7 @@ export class ChangeEmailDialogStore {
 			this.submitting = false;
 
 			// Await.
-			const user = await updateAuthenticatedUser({
+			const user = await userApi.update({
 				password: this.currentPassword,
 				email: this.email,
 			});

@@ -2,7 +2,7 @@ import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
 import { ajv } from '../../ajv';
-import { listUsers } from '../../api/UserApi';
+import { userApi } from '../../api/userApi';
 import { IUserObject } from '../../dto/IUserObject';
 import { PaginationStore } from '../PaginationStore';
 
@@ -52,7 +52,7 @@ export class UserSearchStore
 		try {
 			const paginationParams = this.pagination.toParams(clearResults);
 
-			const result = await listUsers({
+			const result = await userApi.list({
 				pagination: paginationParams,
 			});
 

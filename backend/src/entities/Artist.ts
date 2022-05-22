@@ -46,7 +46,7 @@ export class Artist
 	hidden = false;
 
 	@Property()
-	name: string;
+	name!: string;
 
 	@Enum(() => ArtistType)
 	artistType!: ArtistType;
@@ -67,17 +67,6 @@ export class Artist
 
 	@OneToMany(() => ArtistWebLink, (webLink) => webLink.artist)
 	webLinks = new Collection<ArtistWebLink>(this);
-
-	constructor({
-		name,
-		artistType,
-	}: {
-		name: string;
-		artistType: ArtistType;
-	}) {
-		this.name = name;
-		this.artistType = artistType;
-	}
 
 	takeSnapshot(): ArtistSnapshot {
 		return new ArtistSnapshot(this);

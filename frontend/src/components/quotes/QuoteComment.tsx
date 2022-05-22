@@ -86,7 +86,7 @@ const QuotePopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.EditQuotes,
+								Permission.Quote_Update,
 							)
 						}
 					>
@@ -102,7 +102,7 @@ const QuotePopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.ViewEditHistory,
+								Permission.Revision_View,
 							)
 						}
 					>
@@ -116,7 +116,7 @@ const QuotePopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.DeleteQuotes,
+								Permission.Quote_Delete,
 							)
 						}
 					>

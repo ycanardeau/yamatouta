@@ -18,7 +18,7 @@ export class WorkSnapshot implements IContentEquatable<IWorkSnapshot> {
 			.map((webLink) => new WebLinkSnapshot(webLink));
 	}
 
-	contentEquals(other: IWorkSnapshot): boolean {
+	contentEquals(other?: IWorkSnapshot): boolean {
 		return JSON.stringify(this) === JSON.stringify(other);
 	}
 }
