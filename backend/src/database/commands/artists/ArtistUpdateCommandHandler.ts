@@ -15,8 +15,7 @@ import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
-import { WebAddressFactory } from '../../../services/WebAddressFactory';
-import { syncWebLinks } from '../entries/syncWebLinks';
+import { WebLinkService } from '../../../services/WebLinkService';
 
 export class ArtistUpdateParams {
 	static readonly schema = Joi.object<ArtistUpdateParams>({
@@ -52,7 +51,7 @@ export class ArtistUpdateCommandHandler
 		private readonly em: EntityManager,
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
-		private readonly webAddressFactory: WebAddressFactory,
+		private readonly webLinkService: WebLinkService,
 	) {}
 
 	async execute(command: ArtistUpdateCommand): Promise<ArtistObject> {
@@ -90,12 +89,11 @@ export class ArtistUpdateCommandHandler
 			artist.name = params.name;
 			artist.artistType = params.artistType;
 
-			await syncWebLinks(
+			await this.webLinkService.sync(
 				em,
 				artist,
 				params.webLinks,
 				permissionContext,
-				this.webAddressFactory,
 				user,
 			);
 

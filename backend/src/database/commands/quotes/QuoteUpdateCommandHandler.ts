@@ -16,8 +16,7 @@ import { QuoteOptionalField } from '../../../models/QuoteOptionalField';
 import { QuoteType } from '../../../models/QuoteType';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
-import { WebAddressFactory } from '../../../services/WebAddressFactory';
-import { syncWebLinks } from '../entries/syncWebLinks';
+import { WebLinkService } from '../../../services/WebLinkService';
 
 export class QuoteUpdateParams {
 	static readonly schema = Joi.object<QuoteUpdateParams>({
@@ -59,7 +58,7 @@ export class QuoteUpdateCommandHandler
 		private readonly artistRepo: EntityRepository<Artist>,
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
-		private readonly webAddressFactory: WebAddressFactory,
+		private readonly webLinkService: WebLinkService,
 	) {}
 
 	async execute(command: QuoteUpdateCommand): Promise<QuoteObject> {
@@ -105,12 +104,11 @@ export class QuoteUpdateCommandHandler
 			quote.locale = params.locale;
 			quote.artist = artist;
 
-			await syncWebLinks(
+			await this.webLinkService.sync(
 				em,
 				quote,
 				params.webLinks,
 				permissionContext,
-				this.webAddressFactory,
 				user,
 			);
 

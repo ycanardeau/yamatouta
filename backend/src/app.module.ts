@@ -54,7 +54,7 @@ import { Translation } from './entities/Translation';
 import { User } from './entities/User';
 import { Work } from './entities/Work';
 import { NgramConverter } from './services/NgramConverter';
-import { WebAddressFactory } from './services/WebAddressFactory';
+import { WebLinkService } from './services/WebLinkService';
 import { AuthService } from './services/auth/AuthService';
 import { LocalSerializer } from './services/auth/LocalSerializer';
 import { LocalStrategy } from './services/auth/LocalStrategy';
@@ -130,7 +130,7 @@ const commandHandlers = [
 		LocalStrategy,
 		NgramConverter,
 		PasswordHasherFactory,
-		WebAddressFactory,
+		WebLinkService,
 	],
 })
 export class AppModule {}

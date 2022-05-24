@@ -16,8 +16,7 @@ import { TranslationOptionalField } from '../../../models/TranslationOptionalFie
 import { WordCategory } from '../../../models/WordCategory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
-import { WebAddressFactory } from '../../../services/WebAddressFactory';
-import { syncWebLinks } from '../entries/syncWebLinks';
+import { WebLinkService } from '../../../services/WebLinkService';
 
 export class TranslationUpdateParams {
 	static readonly schema = Joi.object<TranslationUpdateParams>({
@@ -68,7 +67,7 @@ export class TranslationUpdateCommandHandler
 		private readonly ngramConverter: NgramConverter,
 		@InjectRepository(Translation)
 		private readonly translationRepo: EntityRepository<Translation>,
-		private readonly webAddressFactory: WebAddressFactory,
+		private readonly webLinkService: WebLinkService,
 	) {}
 
 	async execute(
@@ -115,12 +114,11 @@ export class TranslationUpdateCommandHandler
 
 			translation.updateSearchIndex(this.ngramConverter);
 
-			await syncWebLinks(
+			await this.webLinkService.sync(
 				em,
 				translation,
 				params.webLinks,
 				permissionContext,
-				this.webAddressFactory,
 				user,
 			);
 

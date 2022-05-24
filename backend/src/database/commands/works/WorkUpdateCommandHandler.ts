@@ -15,8 +15,7 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { WorkOptionalField } from '../../../models/WorkOptionalField';
 import { WorkType } from '../../../models/WorkType';
 import { PermissionContext } from '../../../services/PermissionContext';
-import { WebAddressFactory } from '../../../services/WebAddressFactory';
-import { syncWebLinks } from '../entries/syncWebLinks';
+import { WebLinkService } from '../../../services/WebLinkService';
 
 export class WorkUpdateParams {
 	static readonly schema = Joi.object<WorkUpdateParams>({
@@ -52,7 +51,7 @@ export class WorkUpdateCommandHandler
 		private readonly em: EntityManager,
 		@InjectRepository(Work)
 		private readonly workRepo: EntityRepository<Work>,
-		private readonly webAddressFactory: WebAddressFactory,
+		private readonly webLinkService: WebLinkService,
 	) {}
 
 	async execute(command: WorkUpdateCommand): Promise<WorkObject> {
@@ -90,12 +89,11 @@ export class WorkUpdateCommandHandler
 			work.name = params.name;
 			work.workType = params.workType;
 
-			await syncWebLinks(
+			await this.webLinkService.sync(
 				em,
 				work,
 				params.webLinks,
 				permissionContext,
-				this.webAddressFactory,
 				user,
 			);
 
