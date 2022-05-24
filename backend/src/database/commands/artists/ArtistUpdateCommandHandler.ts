@@ -9,7 +9,6 @@ import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { Artist } from '../../../entities/Artist';
 import { ArtistAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
-import { User } from '../../../entities/User';
 import { ArtistOptionalField } from '../../../models/ArtistOptionalField';
 import { ArtistType } from '../../../models/ArtistType';
 import { AuditedAction } from '../../../models/AuditedAction';
@@ -51,8 +50,6 @@ export class ArtistUpdateCommandHandler
 {
 	constructor(
 		private readonly em: EntityManager,
-		@InjectRepository(User)
-		private readonly userRepo: EntityRepository<User>,
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
 		private readonly webAddressFactory: WebAddressFactory,
@@ -73,11 +70,7 @@ export class ArtistUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const artist = await this.em.transactional(async (em) => {
-			const user = await this.userRepo.findOneOrFail({
-				id: permissionContext.user?.id,
-				deleted: false,
-				hidden: false,
-			});
+			const user = await permissionContext.getCurrentUser(em);
 
 			const artist = isNew
 				? new Artist()

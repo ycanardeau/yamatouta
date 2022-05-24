@@ -44,8 +44,6 @@ abstract class EntryDeleteCommandHandler<
 > {
 	constructor(
 		private readonly em: EntityManager,
-		@InjectRepository(User)
-		private readonly userRepo: EntityRepository<User>,
 		private readonly permission: Permission,
 		private readonly entryFunc: (id: number) => Promise<TEntry>,
 		private readonly auditLogFunc: (
@@ -71,11 +69,7 @@ abstract class EntryDeleteCommandHandler<
 				);
 			}
 
-			const user = await this.userRepo.findOneOrFail({
-				id: permissionContext.user?.id,
-				deleted: false,
-				hidden: false,
-			});
+			const user = await permissionContext.getCurrentUser(em);
 
 			entry.deleted = true;
 
@@ -110,14 +104,11 @@ export class TranslationDeleteCommandHandler
 {
 	constructor(
 		em: EntityManager,
-		@InjectRepository(User)
-		userRepo: EntityRepository<User>,
 		@InjectRepository(Translation)
 		translationRepo: EntityRepository<Translation>,
 	) {
 		super(
 			em,
-			userRepo,
 			Permission.Translation_Delete,
 			(id) =>
 				translationRepo.findOneOrFail({ id: id }, { populate: true }),
@@ -141,14 +132,11 @@ export class ArtistDeleteCommandHandler
 {
 	constructor(
 		em: EntityManager,
-		@InjectRepository(User)
-		userRepo: EntityRepository<User>,
 		@InjectRepository(Artist)
 		artistRepo: EntityRepository<Artist>,
 	) {
 		super(
 			em,
-			userRepo,
 			Permission.Artist_Delete,
 			(id) => artistRepo.findOneOrFail({ id: id }, { populate: true }),
 			(entry, actor, actorIp) =>
@@ -171,14 +159,11 @@ export class QuoteDeleteCommandHandler
 {
 	constructor(
 		em: EntityManager,
-		@InjectRepository(User)
-		userRepo: EntityRepository<User>,
 		@InjectRepository(Quote)
 		quoteRepo: EntityRepository<Quote>,
 	) {
 		super(
 			em,
-			userRepo,
 			Permission.Quote_Delete,
 			(id) => quoteRepo.findOneOrFail({ id: id }, { populate: true }),
 			(entry, actor, actorIp) =>
@@ -201,14 +186,11 @@ export class WorkDeleteCommandHandler
 {
 	constructor(
 		em: EntityManager,
-		@InjectRepository(User)
-		userRepo: EntityRepository<User>,
 		@InjectRepository(Work)
 		workRepo: EntityRepository<Work>,
 	) {
 		super(
 			em,
-			userRepo,
 			Permission.Work_Delete,
 			(id) => workRepo.findOneOrFail({ id: id }, { populate: true }),
 			(entry, actor, actorIp) =>

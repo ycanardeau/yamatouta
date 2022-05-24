@@ -8,7 +8,6 @@ import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { WorkObject } from '../../../dto/WorkObject';
 import { WorkAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
-import { User } from '../../../entities/User';
 import { Work } from '../../../entities/Work';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
@@ -51,8 +50,6 @@ export class WorkUpdateCommandHandler
 {
 	constructor(
 		private readonly em: EntityManager,
-		@InjectRepository(User)
-		private readonly userRepo: EntityRepository<User>,
 		@InjectRepository(Work)
 		private readonly workRepo: EntityRepository<Work>,
 		private readonly webAddressFactory: WebAddressFactory,
@@ -73,11 +70,7 @@ export class WorkUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const work = await this.em.transactional(async (em) => {
-			const user = await this.userRepo.findOneOrFail({
-				id: permissionContext.user?.id,
-				deleted: false,
-				hidden: false,
-			});
+			const user = await permissionContext.getCurrentUser(em);
 
 			const work = isNew
 				? new Work()

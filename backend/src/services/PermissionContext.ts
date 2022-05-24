@@ -1,7 +1,9 @@
+import { EntityManager } from '@mikro-orm/core';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 
 import { AuthenticatedUserObject } from '../dto/AuthenticatedUserObject';
+import { User } from '../entities/User';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { Permission } from '../models/Permission';
 import { getClientIp } from '../utils/getClientIp';
@@ -43,4 +45,14 @@ export class PermissionContext {
 		if (entry.hidden && !this.canViewHiddenEntries)
 			throw new NotFoundException();
 	}
+
+	getCurrentUser = async (em: EntityManager): Promise<User> => {
+		if (!this.user) throw new UnauthorizedException();
+
+		return em.findOneOrFail(User, {
+			id: this.user.id,
+			deleted: false,
+			hidden: false,
+		});
+	};
 }

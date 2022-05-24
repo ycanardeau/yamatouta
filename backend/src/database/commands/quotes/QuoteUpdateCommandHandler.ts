@@ -10,7 +10,6 @@ import { Artist } from '../../../entities/Artist';
 import { QuoteAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
-import { User } from '../../../entities/User';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
 import { QuoteOptionalField } from '../../../models/QuoteOptionalField';
@@ -56,8 +55,6 @@ export class QuoteUpdateCommandHandler
 {
 	constructor(
 		private readonly em: EntityManager,
-		@InjectRepository(User)
-		private readonly userRepo: EntityRepository<User>,
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
 		@InjectRepository(Quote)
@@ -80,11 +77,7 @@ export class QuoteUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const quote = await this.em.transactional(async (em) => {
-			const user = await this.userRepo.findOneOrFail({
-				id: permissionContext.user?.id,
-				deleted: false,
-				hidden: false,
-			});
+			const user = await permissionContext.getCurrentUser(em);
 
 			const artist = await this.artistRepo.findOneOrFail({
 				id: params.artistId,

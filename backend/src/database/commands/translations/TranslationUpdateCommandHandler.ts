@@ -9,7 +9,6 @@ import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { TranslationAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
 import { Translation } from '../../../entities/Translation';
-import { User } from '../../../entities/User';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
@@ -66,8 +65,6 @@ export class TranslationUpdateCommandHandler
 {
 	constructor(
 		private readonly em: EntityManager,
-		@InjectRepository(User)
-		private readonly userRepo: EntityRepository<User>,
 		private readonly ngramConverter: NgramConverter,
 		@InjectRepository(Translation)
 		private readonly translationRepo: EntityRepository<Translation>,
@@ -91,11 +88,7 @@ export class TranslationUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const translation = await this.em.transactional(async (em) => {
-			const user = await this.userRepo.findOneOrFail({
-				id: permissionContext.user?.id,
-				deleted: false,
-				hidden: false,
-			});
+			const user = await permissionContext.getCurrentUser(em);
 
 			const translation = isNew
 				? new Translation(user)

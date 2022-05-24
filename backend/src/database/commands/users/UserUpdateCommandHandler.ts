@@ -67,13 +67,7 @@ export class UserUpdateCommandHandler
 			throw new BadRequestException(result.error.details[0].message);
 
 		return this.em.transactional(async (em) => {
-			if (!permissionContext.user) throw new BadRequestException();
-
-			const user = await this.userRepo.findOneOrFail({
-				id: permissionContext.user.id,
-				deleted: false,
-				hidden: false,
-			});
+			const user = await permissionContext.getCurrentUser(em);
 
 			const passwordHasher = this.passwordHasherFactory.create(
 				user.passwordHashAlgorithm,

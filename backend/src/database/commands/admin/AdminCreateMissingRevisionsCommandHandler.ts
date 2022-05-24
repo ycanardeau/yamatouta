@@ -5,7 +5,6 @@ import { Artist } from '../../../entities/Artist';
 import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
 import { Translation } from '../../../entities/Translation';
-import { User } from '../../../entities/User';
 import { Entry } from '../../../models/Entry';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
@@ -22,16 +21,14 @@ export class AdminCreateMissingRevisionsCommandHandler
 	constructor(private readonly em: EntityManager) {}
 
 	execute(command: AdminCreateMissingRevisionsCommand): Promise<void> {
-		command.permissionContext.verifyPermission(
+		const { permissionContext } = command;
+
+		permissionContext.verifyPermission(
 			Permission.Admin_CreateMissingRevisions,
 		);
 
 		return this.em.transactional(async (em) => {
-			const user = await em.findOneOrFail(User, {
-				id: command.permissionContext.user?.id,
-				deleted: false,
-				hidden: false,
-			});
+			const user = await permissionContext.getCurrentUser(em);
 
 			const [translations, artists, quotes] = await Promise.all([
 				em.find(Translation, { version: 0 }),
