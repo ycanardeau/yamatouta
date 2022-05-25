@@ -1,5 +1,5 @@
-import { ArtistType } from '../models/ArtistType';
 import { IEntryWithIdAndName } from '../models/IEntryWithIdAndName';
+import { ArtistType } from '../models/artists/ArtistType';
 import { IWebLinkObject } from './IWebLinkObject';
 
 export interface IArtistObject extends IEntryWithIdAndName {

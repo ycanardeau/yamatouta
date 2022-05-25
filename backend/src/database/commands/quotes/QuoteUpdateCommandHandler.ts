@@ -2,7 +2,6 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { QuoteObject } from '../../../dto/QuoteObject';
 import { Artist } from '../../../entities/Artist';
@@ -11,35 +10,11 @@ import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
-import { QuoteOptionalField } from '../../../models/QuoteOptionalField';
-import { QuoteType } from '../../../models/QuoteType';
 import { RevisionEvent } from '../../../models/RevisionEvent';
+import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
+import { QuoteUpdateParams } from '../../../models/quotes/QuoteUpdateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
-import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
-
-export class QuoteUpdateParams {
-	constructor(
-		readonly id: number,
-		readonly text: string,
-		readonly quoteType: QuoteType,
-		readonly locale: string,
-		readonly artistId: number,
-		readonly webLinks: WebLinkUpdateParams[],
-	) {}
-
-	static readonly schema = Joi.object<QuoteUpdateParams>({
-		id: Joi.number().required(),
-		text: Joi.string().required().trim().max(200),
-		quoteType: Joi.string()
-			.required()
-			.trim()
-			.valid(...Object.values(QuoteType)),
-		locale: Joi.string().required().trim(),
-		artistId: Joi.number().required(),
-		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
-	});
-}
 
 export class QuoteUpdateCommand {
 	constructor(

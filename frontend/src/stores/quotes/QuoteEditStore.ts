@@ -10,7 +10,7 @@ import { artistApi } from '../../api/artistApi';
 import { quoteApi } from '../../api/quoteApi';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { IQuoteObject } from '../../dto/IQuoteObject';
-import { QuoteType } from '../../models/QuoteType';
+import { QuoteType } from '../../models/quotes/QuoteType';
 import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 

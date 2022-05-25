@@ -3,9 +3,8 @@ import axios from 'axios';
 import { IQuoteObject } from '../dto/IQuoteObject';
 import { IRevisionObject } from '../dto/IRevisionObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { IWebLinkObject } from '../dto/IWebLinkObject';
-import { QuoteOptionalField } from '../models/QuoteOptionalField';
-import { QuoteType } from '../models/QuoteType';
+import { IQuoteUpdateParams } from '../models/quotes/IQuoteUpdateParams';
+import { QuoteOptionalField } from '../models/quotes/QuoteOptionalField';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 class QuoteApi {
@@ -15,13 +14,7 @@ class QuoteApi {
 		locale,
 		artistId,
 		webLinks,
-	}: {
-		text: string;
-		quoteType: QuoteType;
-		locale: string;
-		artistId: number;
-		webLinks: IWebLinkObject[];
-	}): Promise<IQuoteObject> => {
+	}: IQuoteUpdateParams): Promise<IQuoteObject> => {
 		const response = await axios.post<IQuoteObject>('/quotes/create', {
 			id: 0,
 			text,
@@ -87,14 +80,7 @@ class QuoteApi {
 		locale,
 		artistId,
 		webLinks,
-	}: {
-		id: number;
-		text: string;
-		quoteType: QuoteType;
-		locale: string;
-		artistId: number;
-		webLinks: IWebLinkObject[];
-	}): Promise<IQuoteObject> => {
+	}: IQuoteUpdateParams): Promise<IQuoteObject> => {
 		const response = await axios.post<IQuoteObject>(`/quotes/update`, {
 			id: id,
 			text,

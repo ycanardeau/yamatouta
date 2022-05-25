@@ -3,10 +3,10 @@ import axios from 'axios';
 import { IRevisionObject } from '../dto/IRevisionObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { ITranslationObject } from '../dto/ITranslationObject';
-import { IWebLinkObject } from '../dto/IWebLinkObject';
-import { TranslationOptionalField } from '../models/TranslationOptionalField';
-import { TranslationSortRule } from '../models/TranslationSortRule';
-import { WordCategory } from '../models/WordCategory';
+import { ITranslationUpdateParams } from '../models/translations/ITranslationUpdateParams';
+import { TranslationOptionalField } from '../models/translations/TranslationOptionalField';
+import { TranslationSortRule } from '../models/translations/TranslationSortRule';
+import { WordCategory } from '../models/translations/WordCategory';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 class TranslationApi {
@@ -17,14 +17,7 @@ class TranslationApi {
 		yamatokotoba,
 		category,
 		webLinks,
-	}: {
-		headword: string;
-		locale: string;
-		reading: string;
-		yamatokotoba: string;
-		category: WordCategory;
-		webLinks: IWebLinkObject[];
-	}): Promise<ITranslationObject> => {
+	}: ITranslationUpdateParams): Promise<ITranslationObject> => {
 		const response = await axios.post<ITranslationObject>(
 			'/translations/create',
 			{
@@ -108,15 +101,7 @@ class TranslationApi {
 		yamatokotoba,
 		category,
 		webLinks,
-	}: {
-		id: number;
-		headword: string;
-		locale: string;
-		reading: string;
-		yamatokotoba: string;
-		category: WordCategory;
-		webLinks: IWebLinkObject[];
-	}): Promise<ITranslationObject> => {
+	}: ITranslationUpdateParams): Promise<ITranslationObject> => {
 		const response = await axios.post<ITranslationObject>(
 			`/translations/update`,
 			{

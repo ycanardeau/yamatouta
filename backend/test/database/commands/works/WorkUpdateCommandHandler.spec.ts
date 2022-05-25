@@ -8,7 +8,6 @@ import {
 import {
 	WorkUpdateCommand,
 	WorkUpdateCommandHandler,
-	WorkUpdateParams,
 } from '../../../../src/database/commands/works/WorkUpdateCommandHandler';
 import { WorkObject } from '../../../../src/dto/WorkObject';
 import { WorkAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
@@ -18,8 +17,9 @@ import { Work } from '../../../../src/entities/Work';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { WorkType } from '../../../../src/models/WorkType';
 import { IWorkSnapshot } from '../../../../src/models/snapshots/WorkSnapshot';
+import { WorkType } from '../../../../src/models/works/WorkType';
+import { WorkUpdateParams } from '../../../../src/models/works/WorkUpdateParams';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertWorkAuditLogEntry } from '../../../assertAuditLogEntry';

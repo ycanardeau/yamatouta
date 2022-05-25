@@ -1,41 +1,15 @@
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 import _ from 'lodash';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { TranslationObject } from '../../../dto/TranslationObject';
 import { Translation } from '../../../entities/Translation';
-import { TranslationSortRule } from '../../../models/TranslationSortRule';
-import { WordCategory } from '../../../models/WordCategory';
+import { TranslationListParams } from '../../../models/translations/TranslationListParams';
+import { TranslationSortRule } from '../../../models/translations/TranslationSortRule';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { escapeWildcardCharacters } from '../../../utils/escapeWildcardCharacters';
-
-export class TranslationListParams {
-	constructor(
-		readonly sort?: TranslationSortRule,
-		readonly offset?: number,
-		readonly limit?: number,
-		readonly getTotalCount?: boolean,
-		readonly query?: string,
-		readonly category?: WordCategory,
-	) {}
-
-	static readonly schema = Joi.object<TranslationListParams>({
-		sort: Joi.string()
-			.optional()
-			.valid(...Object.values(TranslationSortRule)),
-		offset: Joi.number().optional(),
-		limit: Joi.number().optional(),
-		getTotalCount: Joi.boolean().optional(),
-		query: Joi.string().optional().allow(''),
-		category: Joi.string()
-			.optional()
-			.allow('')
-			.valid(...Object.values(WordCategory)),
-	});
-}
 
 export class TranslationListQuery {
 	constructor(

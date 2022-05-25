@@ -1,6 +1,6 @@
 import { Translation } from '../entities/Translation';
-import { TranslationOptionalField } from '../models/TranslationOptionalField';
-import { WordCategory } from '../models/WordCategory';
+import { TranslationOptionalField } from '../models/translations/TranslationOptionalField';
+import { WordCategory } from '../models/translations/WordCategory';
 import { PermissionContext } from '../services/PermissionContext';
 import { WebLinkObject } from './WebLinkObject';
 

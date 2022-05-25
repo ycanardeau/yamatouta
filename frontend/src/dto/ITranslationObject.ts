@@ -1,4 +1,4 @@
-import { WordCategory } from '../models/WordCategory';
+import { WordCategory } from '../models/translations/WordCategory';
 import { IWebLinkObject } from './IWebLinkObject';
 
 export interface ITranslationObject {

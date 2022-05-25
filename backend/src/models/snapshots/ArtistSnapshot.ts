@@ -1,6 +1,6 @@
 import { Artist } from '../../entities/Artist';
-import { ArtistType } from '../ArtistType';
 import { IContentEquatable } from '../IContentEquatable';
+import { ArtistType } from '../artists/ArtistType';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 
 export type IArtistSnapshot = Omit<ArtistSnapshot, 'contentEquals'>;

@@ -4,12 +4,12 @@ import { BadRequestException, INestApplication } from '@nestjs/common';
 import {
 	UserUpdateCommand,
 	UserUpdateCommandHandler,
-	UserUpdateParams,
 } from '../../../../src/database/commands/users/UserUpdateCommandHandler';
 import { AuthenticatedUserObject } from '../../../../src/dto/AuthenticatedUserObject';
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
+import { UserUpdateParams } from '../../../../src/models/users/UserUpdateParams';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { normalizeEmail } from '../../../../src/utils/normalizeEmail';
 import { FakePermissionContext } from '../../../FakePermissionContext';

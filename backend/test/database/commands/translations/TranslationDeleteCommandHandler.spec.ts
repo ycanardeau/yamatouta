@@ -2,15 +2,15 @@ import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication, UnauthorizedException } from '@nestjs/common';
 
 import {
-	EntryDeleteParams,
 	TranslationDeleteCommand,
 	TranslationDeleteCommandHandler,
-} from '../../../../src/database/commands/entries/EntryDeleteCommandHandler';
+} from '../../../../src/database/commands/EntryDeleteCommandHandler';
 import { TranslationAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { TranslationRevision } from '../../../../src/entities/Revision';
 import { Translation } from '../../../../src/entities/Translation';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
+import { EntryDeleteParams } from '../../../../src/models/EntryDeleteParams';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { UserGroup } from '../../../../src/models/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';

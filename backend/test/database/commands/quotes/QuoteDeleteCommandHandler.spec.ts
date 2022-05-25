@@ -2,19 +2,19 @@ import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication, UnauthorizedException } from '@nestjs/common';
 
 import {
-	EntryDeleteParams,
 	QuoteDeleteCommand,
 	QuoteDeleteCommandHandler,
-} from '../../../../src/database/commands/entries/EntryDeleteCommandHandler';
+} from '../../../../src/database/commands/EntryDeleteCommandHandler';
 import { QuoteAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { Quote } from '../../../../src/entities/Quote';
 import { QuoteRevision } from '../../../../src/entities/Revision';
 import { User } from '../../../../src/entities/User';
-import { ArtistType } from '../../../../src/models/ArtistType';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { QuoteType } from '../../../../src/models/QuoteType';
+import { EntryDeleteParams } from '../../../../src/models/EntryDeleteParams';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { UserGroup } from '../../../../src/models/UserGroup';
+import { ArtistType } from '../../../../src/models/artists/ArtistType';
+import { QuoteType } from '../../../../src/models/quotes/QuoteType';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertQuoteAuditLogEntry } from '../../../assertAuditLogEntry';

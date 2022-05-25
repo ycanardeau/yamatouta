@@ -7,7 +7,6 @@ import {
 	Property,
 } from '@mikro-orm/core';
 
-import { ArtistType } from '../models/ArtistType';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
@@ -15,6 +14,7 @@ import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
+import { ArtistType } from '../models/artists/ArtistType';
 import { ArtistSnapshot } from '../models/snapshots/ArtistSnapshot';
 import { Commit } from './Commit';
 import { ArtistRevision } from './Revision';

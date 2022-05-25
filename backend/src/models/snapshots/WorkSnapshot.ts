@@ -1,6 +1,6 @@
 import { Work } from '../../entities/Work';
 import { IContentEquatable } from '../IContentEquatable';
-import { WorkType } from '../WorkType';
+import { WorkType } from '../works/WorkType';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 
 export type IWorkSnapshot = Omit<WorkSnapshot, 'contentEquals'>;

@@ -2,7 +2,6 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import config from '../../../config';
 import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
@@ -10,23 +9,10 @@ import { UserAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
 import { AuditedAction } from '../../../models/AuditedAction';
+import { UserCreateParams } from '../../../models/users/UserCreateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
-
-export class UserCreateParams {
-	constructor(
-		readonly username: string,
-		readonly email: string,
-		readonly password: string,
-	) {}
-
-	static readonly schema = Joi.object<UserCreateParams>({
-		username: Joi.string().required().trim().min(2).max(32),
-		email: Joi.string().required().email().max(50),
-		password: Joi.string().required().min(8),
-	});
-}
 
 export class UserCreateCommand {
 	constructor(

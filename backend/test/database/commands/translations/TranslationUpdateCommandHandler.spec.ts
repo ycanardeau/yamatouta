@@ -8,7 +8,6 @@ import {
 import {
 	TranslationUpdateCommand,
 	TranslationUpdateCommandHandler,
-	TranslationUpdateParams,
 } from '../../../../src/database/commands/translations/TranslationUpdateCommandHandler';
 import { TranslationObject } from '../../../../src/dto/TranslationObject';
 import { TranslationAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
@@ -18,8 +17,9 @@ import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { WordCategory } from '../../../../src/models/WordCategory';
 import { ITranslationSnapshot } from '../../../../src/models/snapshots/TranslationSnapshot';
+import { TranslationUpdateParams } from '../../../../src/models/translations/TranslationUpdateParams';
+import { WordCategory } from '../../../../src/models/translations/WordCategory';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';

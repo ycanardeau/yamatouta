@@ -1,30 +1,20 @@
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import {
-	EntryDeleteParams,
-	QuoteDeleteCommand,
-} from '../database/commands/entries/EntryDeleteCommandHandler';
-import {
-	QuoteUpdateCommand,
-	QuoteUpdateParams,
-} from '../database/commands/quotes/QuoteUpdateCommandHandler';
-import {
-	EntryListRevisionsParams,
-	QuoteListRevisionsQuery,
-} from '../database/queries/entries/EntryListRevisionsQueryHandler';
-import {
-	QuoteGetParams,
-	QuoteGetQuery,
-} from '../database/queries/quotes/QuoteGetQueryHandler';
-import {
-	QuoteListParams,
-	QuoteListQuery,
-} from '../database/queries/quotes/QuoteListQueryHandler';
+import { QuoteDeleteCommand } from '../database/commands/EntryDeleteCommandHandler';
+import { QuoteUpdateCommand } from '../database/commands/quotes/QuoteUpdateCommandHandler';
+import { QuoteListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
+import { QuoteGetQuery } from '../database/queries/quotes/QuoteGetQueryHandler';
+import { QuoteListQuery } from '../database/queries/quotes/QuoteListQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { QuoteObject } from '../dto/QuoteObject';
 import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
+import { EntryDeleteParams } from '../models/EntryDeleteParams';
+import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
+import { QuoteGetParams } from '../models/quotes/QuoteGetParams';
+import { QuoteListParams } from '../models/quotes/QuoteListParams';
+import { QuoteUpdateParams } from '../models/quotes/QuoteUpdateParams';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

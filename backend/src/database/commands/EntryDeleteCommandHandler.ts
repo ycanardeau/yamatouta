@@ -2,34 +2,26 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
-import { Artist } from '../../../entities/Artist';
+import { Artist } from '../../entities/Artist';
 import {
 	ArtistAuditLogEntry,
 	AuditLogEntry,
 	QuoteAuditLogEntry,
 	TranslationAuditLogEntry,
 	WorkAuditLogEntry,
-} from '../../../entities/AuditLogEntry';
-import { Commit } from '../../../entities/Commit';
-import { Quote } from '../../../entities/Quote';
-import { Translation } from '../../../entities/Translation';
-import { User } from '../../../entities/User';
-import { Work } from '../../../entities/Work';
-import { AuditedAction } from '../../../models/AuditedAction';
-import { Entry } from '../../../models/Entry';
-import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
-import { PermissionContext } from '../../../services/PermissionContext';
-
-export class EntryDeleteParams {
-	constructor(readonly id: number) {}
-
-	static readonly schema = Joi.object<EntryDeleteParams>({
-		id: Joi.number().required(),
-	});
-}
+} from '../../entities/AuditLogEntry';
+import { Commit } from '../../entities/Commit';
+import { Quote } from '../../entities/Quote';
+import { Translation } from '../../entities/Translation';
+import { User } from '../../entities/User';
+import { Work } from '../../entities/Work';
+import { AuditedAction } from '../../models/AuditedAction';
+import { Entry } from '../../models/Entry';
+import { EntryDeleteParams } from '../../models/EntryDeleteParams';
+import { Permission } from '../../models/Permission';
+import { RevisionEvent } from '../../models/RevisionEvent';
+import { PermissionContext } from '../../services/PermissionContext';
 
 abstract class EntryDeleteCommand {
 	constructor(

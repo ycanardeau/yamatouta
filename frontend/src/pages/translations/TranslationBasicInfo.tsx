@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import Link from '../../components/Link';
 import WebLinkList from '../../components/WebLinkList';
 import { ITranslationObject } from '../../dto/ITranslationObject';
-import { TranslationSortRule } from '../../models/TranslationSortRule';
+import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
 
 interface TranslationBasicInfoProps {
 	translation: ITranslationObject;

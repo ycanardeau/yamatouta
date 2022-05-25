@@ -1,6 +1,6 @@
 import { Quote } from '../entities/Quote';
-import { QuoteOptionalField } from '../models/QuoteOptionalField';
-import { QuoteType } from '../models/QuoteType';
+import { QuoteOptionalField } from '../models/quotes/QuoteOptionalField';
+import { QuoteType } from '../models/quotes/QuoteType';
 import { PermissionContext } from '../services/PermissionContext';
 import { ArtistObject } from './ArtistObject';
 import { WebLinkObject } from './WebLinkObject';

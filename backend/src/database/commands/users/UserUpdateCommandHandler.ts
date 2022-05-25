@@ -2,32 +2,16 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
 import { UserAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
 import { AuditedAction } from '../../../models/AuditedAction';
+import { UserUpdateParams } from '../../../models/users/UserUpdateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
-
-export class UserUpdateParams {
-	constructor(
-		readonly password: string,
-		readonly username?: string,
-		readonly email?: string,
-		readonly newPassword?: string,
-	) {}
-
-	static readonly schema = Joi.object<UserUpdateParams>({
-		password: Joi.string().required(),
-		username: Joi.string().optional().trim().min(2).max(32),
-		email: Joi.string().optional().email().max(50),
-		newPassword: Joi.string().optional().min(8),
-	});
-}
 
 export class UserUpdateCommand {
 	constructor(
@@ -35,13 +19,6 @@ export class UserUpdateCommand {
 		readonly params: UserUpdateParams,
 	) {}
 }
-
-export const updateAuthenticatedUserBodySchema = Joi.object({
-	password: Joi.string().required(),
-	username: Joi.string().optional(),
-	email: Joi.string().optional(),
-	newPassword: Joi.string().optional(),
-});
 
 @CommandHandler(UserUpdateCommand)
 export class UserUpdateCommandHandler

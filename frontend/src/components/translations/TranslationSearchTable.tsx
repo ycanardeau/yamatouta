@@ -33,8 +33,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { ITranslationObject } from '../../dto/ITranslationObject';
 import { Permission } from '../../models/Permission';
-import { TranslationSortRule } from '../../models/TranslationSortRule';
-import { WordCategory } from '../../models/WordCategory';
+import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
+import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
 import Pagination from '../Pagination';
 import { useAuth } from '../useAuth';

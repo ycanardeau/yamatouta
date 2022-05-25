@@ -10,8 +10,8 @@ import {
 import { ajv } from '../../ajv';
 import { translationApi } from '../../api/translationApi';
 import { ITranslationObject } from '../../dto/ITranslationObject';
-import { TranslationSortRule } from '../../models/TranslationSortRule';
-import { WordCategory } from '../../models/WordCategory';
+import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
+import { WordCategory } from '../../models/translations/WordCategory';
 import { PaginationStore } from '../PaginationStore';
 
 interface ITranslationSearchRouteParams {

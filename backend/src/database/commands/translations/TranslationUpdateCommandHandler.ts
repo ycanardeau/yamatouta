@@ -2,7 +2,6 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { TranslationObject } from '../../../dto/TranslationObject';
 import { TranslationAuditLogEntry } from '../../../entities/AuditLogEntry';
@@ -11,45 +10,11 @@ import { Translation } from '../../../entities/Translation';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
-import { TranslationOptionalField } from '../../../models/TranslationOptionalField';
-import { WordCategory } from '../../../models/WordCategory';
+import { TranslationOptionalField } from '../../../models/translations/TranslationOptionalField';
+import { TranslationUpdateParams } from '../../../models/translations/TranslationUpdateParams';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
-import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
-
-export class TranslationUpdateParams {
-	constructor(
-		readonly id: number,
-		readonly headword: string,
-		readonly locale: string,
-		readonly reading: string,
-		readonly yamatokotoba: string,
-		readonly category: WordCategory,
-		readonly webLinks: WebLinkUpdateParams[],
-	) {}
-
-	static readonly schema = Joi.object<TranslationUpdateParams>({
-		id: Joi.number().required(),
-		headword: Joi.string().required().trim().max(200),
-		locale: Joi.string().required().trim(),
-		reading: Joi.string()
-			.required()
-			.trim()
-			.max(200)
-			.regex(/[あ-ん]/u),
-		yamatokotoba: Joi.string()
-			.required()
-			.trim()
-			.max(200)
-			.regex(/[あ-ん]/u),
-		category: Joi.string()
-			.required()
-			.trim()
-			.valid(...Object.values(WordCategory)),
-		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
-	});
-}
 
 export class TranslationUpdateCommand {
 	constructor(

@@ -7,29 +7,14 @@ import {
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { UserObject } from '../../../dto/UserObject';
 import { User } from '../../../entities/User';
 import { UserSortRule } from '../../../models/UserSortRule';
+import { UserListParams } from '../../../models/users/UserListParams';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
-
-export class UserListParams {
-	constructor(
-		readonly sort?: UserSortRule,
-		readonly offset?: number,
-		readonly limit?: number,
-		readonly getTotalCount?: boolean,
-	) {}
-
-	static readonly schema = Joi.object<UserListParams>({
-		offset: Joi.number().optional(),
-		limit: Joi.number().optional(),
-		getTotalCount: Joi.boolean().optional(),
-	});
-}
 
 export class UserListQuery {
 	constructor(

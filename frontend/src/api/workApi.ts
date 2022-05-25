@@ -2,10 +2,9 @@ import axios from 'axios';
 
 import { IRevisionObject } from '../dto/IRevisionObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { IWebLinkObject } from '../dto/IWebLinkObject';
 import { IWorkObject } from '../dto/IWorkObject';
-import { WorkOptionalField } from '../models/WorkOptionalField';
-import { WorkType } from '../models/WorkType';
+import { IWorkUpdateParams } from '../models/works/IWorkUpdateParams';
+import { WorkOptionalField } from '../models/works/WorkOptionalField';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 class WorkApi {
@@ -13,11 +12,7 @@ class WorkApi {
 		name,
 		workType,
 		webLinks,
-	}: {
-		name: string;
-		workType: WorkType;
-		webLinks: IWebLinkObject[];
-	}): Promise<IWorkObject> => {
+	}: IWorkUpdateParams): Promise<IWorkObject> => {
 		const response = await axios.post<IWorkObject>('/works/create', {
 			id: 0,
 			name,
@@ -79,12 +74,7 @@ class WorkApi {
 		name,
 		workType,
 		webLinks,
-	}: {
-		id: number;
-		name: string;
-		workType: WorkType;
-		webLinks: IWebLinkObject[];
-	}): Promise<IWorkObject> => {
+	}: IWorkUpdateParams): Promise<IWorkObject> => {
 		const response = await axios.post<IWorkObject>(`/works/update`, {
 			id: id,
 			name,

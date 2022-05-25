@@ -1,0 +1,27 @@
+import Joi from 'joi';
+
+import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
+import { QuoteType } from './QuoteType';
+
+export class QuoteUpdateParams {
+	constructor(
+		readonly id: number,
+		readonly text: string,
+		readonly quoteType: QuoteType,
+		readonly locale: string,
+		readonly artistId: number,
+		readonly webLinks: WebLinkUpdateParams[],
+	) {}
+
+	static readonly schema = Joi.object<QuoteUpdateParams>({
+		id: Joi.number().required(),
+		text: Joi.string().required().trim().max(200),
+		quoteType: Joi.string()
+			.required()
+			.trim()
+			.valid(...Object.values(QuoteType)),
+		locale: Joi.string().required().trim(),
+		artistId: Joi.number().required(),
+		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
+	});
+}

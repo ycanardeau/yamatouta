@@ -1,6 +1,6 @@
 import { Work } from '../entities/Work';
-import { WorkOptionalField } from '../models/WorkOptionalField';
-import { WorkType } from '../models/WorkType';
+import { WorkOptionalField } from '../models/works/WorkOptionalField';
+import { WorkType } from '../models/works/WorkType';
 import { PermissionContext } from '../services/PermissionContext';
 import { WebLinkObject } from './WebLinkObject';
 

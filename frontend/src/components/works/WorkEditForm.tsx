@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import WebLinkListEdit from '../../components/WebLinkListEdit';
 import { IWorkObject } from '../../dto/IWorkObject';
-import { WorkType } from '../../models/WorkType';
+import { WorkType } from '../../models/works/WorkType';
 import { WorkEditStore } from '../../stores/works/WorkEditStore';
 
 interface WorkEditFormProps {

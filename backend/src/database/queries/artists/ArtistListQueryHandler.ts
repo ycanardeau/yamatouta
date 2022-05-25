@@ -7,36 +7,14 @@ import {
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { ArtistObject } from '../../../dto/ArtistObject';
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { Artist } from '../../../entities/Artist';
-import { ArtistSortRule } from '../../../models/ArtistSortRule';
-import { ArtistType } from '../../../models/ArtistType';
+import { ArtistListParams } from '../../../models/artists/ArtistListParams';
+import { ArtistSortRule } from '../../../models/artists/ArtistSortRule';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
-
-export class ArtistListParams {
-	constructor(
-		readonly artistType?: ArtistType,
-		readonly sort?: ArtistSortRule,
-		readonly offset?: number,
-		readonly limit?: number,
-		readonly getTotalCount?: boolean,
-		readonly query?: string,
-	) {}
-
-	static readonly schema = Joi.object<ArtistListParams>({
-		artistType: Joi.string()
-			.optional()
-			.valid(...Object.values(ArtistType)),
-		offset: Joi.number().optional(),
-		limit: Joi.number().optional(),
-		getTotalCount: Joi.boolean().optional(),
-		query: Joi.string().optional().allow(''),
-	});
-}
 
 export class ArtistListQuery {
 	constructor(

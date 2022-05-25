@@ -4,13 +4,13 @@ import { INestApplication } from '@nestjs/common';
 import {
 	UserAuthenticateCommand,
 	UserAuthenticateCommandHandler,
-	UserAuthenticateParams,
 	LoginError,
 	LoginResult,
 } from '../../../../src/database/commands/users/UserAuthenticateCommandHandler';
 import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
+import { UserAuthenticateParams } from '../../../../src/models/users/UserAuthenticateParams';
 import { assertUserAuditLogEntry } from '../../../assertAuditLogEntry';
 import { createApplication } from '../../../createApplication';
 import { createUser } from '../../../createEntry';

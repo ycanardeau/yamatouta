@@ -1,6 +1,6 @@
 import { Artist } from '../entities/Artist';
-import { ArtistOptionalField } from '../models/ArtistOptionalField';
-import { ArtistType } from '../models/ArtistType';
+import { ArtistOptionalField } from '../models/artists/ArtistOptionalField';
+import { ArtistType } from '../models/artists/ArtistType';
 import { PermissionContext } from '../services/PermissionContext';
 import { WebLinkObject } from './WebLinkObject';
 

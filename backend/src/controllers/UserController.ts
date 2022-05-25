@@ -1,27 +1,19 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import {
-	UserCreateCommand,
-	UserCreateParams,
-} from '../database/commands/users/UserCreateCommandHandler';
-import {
-	UserUpdateCommand,
-	UserUpdateParams,
-} from '../database/commands/users/UserUpdateCommandHandler';
+import { UserCreateCommand } from '../database/commands/users/UserCreateCommandHandler';
+import { UserUpdateCommand } from '../database/commands/users/UserUpdateCommandHandler';
 import { UserGetCurrentQuery } from '../database/queries/users/UserGetCurrentQueryHandler';
-import {
-	UserGetParams,
-	UserGetQuery,
-} from '../database/queries/users/UserGetQueryHandler';
-import {
-	UserListParams,
-	UserListQuery,
-} from '../database/queries/users/UserListQueryHandler';
+import { UserGetQuery } from '../database/queries/users/UserGetQueryHandler';
+import { UserListQuery } from '../database/queries/users/UserListQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { AuthenticatedUserObject } from '../dto/AuthenticatedUserObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { UserObject } from '../dto/UserObject';
+import { UserCreateParams } from '../models/users/UserCreateParams';
+import { UserGetParams } from '../models/users/UserGetParams';
+import { UserListParams } from '../models/users/UserListParams';
+import { UserUpdateParams } from '../models/users/UserUpdateParams';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

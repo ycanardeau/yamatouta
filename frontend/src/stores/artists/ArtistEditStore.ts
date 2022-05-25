@@ -8,7 +8,7 @@ import {
 
 import { artistApi } from '../../api/artistApi';
 import { IArtistObject } from '../../dto/IArtistObject';
-import { ArtistType } from '../../models/ArtistType';
+import { ArtistType } from '../../models/artists/ArtistType';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class ArtistEditStore {

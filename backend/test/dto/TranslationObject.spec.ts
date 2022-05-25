@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { TranslationObject } from '../../src/dto/TranslationObject';
-import { WordCategory } from '../../src/models/WordCategory';
+import { WordCategory } from '../../src/models/translations/WordCategory';
 import { FakeEntityManager } from '../FakeEntityManager';
 import { FakePermissionContext } from '../FakePermissionContext';
 import { createTranslation, createUser } from '../createEntry';

@@ -2,18 +2,18 @@ import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication, UnauthorizedException } from '@nestjs/common';
 
 import {
-	EntryDeleteParams,
 	WorkDeleteCommand,
 	WorkDeleteCommandHandler,
-} from '../../../../src/database/commands/entries/EntryDeleteCommandHandler';
+} from '../../../../src/database/commands/EntryDeleteCommandHandler';
 import { WorkAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { WorkRevision } from '../../../../src/entities/Revision';
 import { User } from '../../../../src/entities/User';
 import { Work } from '../../../../src/entities/Work';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
+import { EntryDeleteParams } from '../../../../src/models/EntryDeleteParams';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { UserGroup } from '../../../../src/models/UserGroup';
-import { WorkType } from '../../../../src/models/WorkType';
+import { WorkType } from '../../../../src/models/works/WorkType';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertWorkAuditLogEntry } from '../../../assertAuditLogEntry';

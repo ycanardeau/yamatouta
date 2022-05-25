@@ -8,7 +8,7 @@ import {
 
 import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
-import { WorkType } from '../../models/WorkType';
+import { WorkType } from '../../models/works/WorkType';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class WorkEditStore {

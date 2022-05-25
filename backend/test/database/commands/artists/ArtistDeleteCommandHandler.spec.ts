@@ -4,16 +4,16 @@ import { INestApplication, UnauthorizedException } from '@nestjs/common';
 import {
 	ArtistDeleteCommand,
 	ArtistDeleteCommandHandler,
-	EntryDeleteParams,
-} from '../../../../src/database/commands/entries/EntryDeleteCommandHandler';
+} from '../../../../src/database/commands/EntryDeleteCommandHandler';
 import { Artist } from '../../../../src/entities/Artist';
 import { ArtistAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { ArtistRevision } from '../../../../src/entities/Revision';
 import { User } from '../../../../src/entities/User';
-import { ArtistType } from '../../../../src/models/ArtistType';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
+import { EntryDeleteParams } from '../../../../src/models/EntryDeleteParams';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
 import { UserGroup } from '../../../../src/models/UserGroup';
+import { ArtistType } from '../../../../src/models/artists/ArtistType';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertArtistAuditLogEntry } from '../../../assertAuditLogEntry';

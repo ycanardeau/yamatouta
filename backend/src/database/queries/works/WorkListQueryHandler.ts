@@ -7,36 +7,14 @@ import {
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { WorkObject } from '../../../dto/WorkObject';
 import { Work } from '../../../entities/Work';
-import { WorkSortRule } from '../../../models/WorkSortRule';
-import { WorkType } from '../../../models/WorkType';
+import { WorkListParams } from '../../../models/works/WorkListParams';
+import { WorkSortRule } from '../../../models/works/WorkSortRule';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
-
-export class WorkListParams {
-	constructor(
-		readonly workType?: WorkType,
-		readonly sort?: WorkSortRule,
-		readonly offset?: number,
-		readonly limit?: number,
-		readonly getTotalCount?: boolean,
-		readonly query?: string,
-	) {}
-
-	static readonly schema = Joi.object<WorkListParams>({
-		workType: Joi.string()
-			.optional()
-			.valid(...Object.values(WorkType)),
-		offset: Joi.number().optional(),
-		limit: Joi.number().optional(),
-		getTotalCount: Joi.boolean().optional(),
-		query: Joi.string().optional().allow(''),
-	});
-}
 
 export class WorkListQuery {
 	constructor(

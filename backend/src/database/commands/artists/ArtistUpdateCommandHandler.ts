@@ -2,39 +2,18 @@ import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { ArtistObject } from '../../../dto/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { ArtistAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
-import { ArtistOptionalField } from '../../../models/ArtistOptionalField';
-import { ArtistType } from '../../../models/ArtistType';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
+import { ArtistOptionalField } from '../../../models/artists/ArtistOptionalField';
+import { ArtistUpdateParams } from '../../../models/artists/ArtistUpdateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
-import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
-
-export class ArtistUpdateParams {
-	constructor(
-		readonly id: number,
-		readonly name: string,
-		readonly artistType: ArtistType,
-		readonly webLinks: WebLinkUpdateParams[],
-	) {}
-
-	static readonly schema = Joi.object<ArtistUpdateParams>({
-		id: Joi.number().required(),
-		name: Joi.string().required().trim().max(200),
-		artistType: Joi.string()
-			.required()
-			.trim()
-			.valid(...Object.values(ArtistType)),
-		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
-	});
-}
 
 export class ArtistUpdateCommand {
 	constructor(

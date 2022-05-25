@@ -3,9 +3,8 @@ import axios from 'axios';
 import { IArtistObject } from '../dto/IArtistObject';
 import { IRevisionObject } from '../dto/IRevisionObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { IWebLinkObject } from '../dto/IWebLinkObject';
-import { ArtistOptionalField } from '../models/ArtistOptionalField';
-import { ArtistType } from '../models/ArtistType';
+import { ArtistOptionalField } from '../models/artists/ArtistOptionalField';
+import { IArtistUpdateParams } from '../models/artists/IArtistUpdateParams';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 class ArtistApi {
@@ -13,11 +12,7 @@ class ArtistApi {
 		name,
 		artistType,
 		webLinks,
-	}: {
-		name: string;
-		artistType: ArtistType;
-		webLinks: IWebLinkObject[];
-	}): Promise<IArtistObject> => {
+	}: IArtistUpdateParams): Promise<IArtistObject> => {
 		const response = await axios.post<IArtistObject>('/artists/create', {
 			id: 0,
 			name,
@@ -79,12 +74,7 @@ class ArtistApi {
 		name,
 		artistType,
 		webLinks,
-	}: {
-		id: number;
-		name: string;
-		artistType: ArtistType;
-		webLinks: IWebLinkObject[];
-	}): Promise<IArtistObject> => {
+	}: IArtistUpdateParams): Promise<IArtistObject> => {
 		const response = await axios.post<IArtistObject>(`/artists/update`, {
 			id: id,
 			name,

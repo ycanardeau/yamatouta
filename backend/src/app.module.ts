@@ -11,29 +11,29 @@ import { SitemapController } from './controllers/SitemapController';
 import { TranslationController } from './controllers/TranslationController';
 import { UserController } from './controllers/UserController';
 import { WorkController } from './controllers/WorkController';
-import { AdminCreateMissingRevisionsCommandHandler } from './database/commands/admin/AdminCreateMissingRevisionsCommandHandler';
-import { ArtistUpdateCommandHandler } from './database/commands/artists/ArtistUpdateCommandHandler';
 import {
 	ArtistDeleteCommandHandler,
 	QuoteDeleteCommandHandler,
 	TranslationDeleteCommandHandler,
 	WorkDeleteCommandHandler,
-} from './database/commands/entries/EntryDeleteCommandHandler';
+} from './database/commands/EntryDeleteCommandHandler';
+import { AdminCreateMissingRevisionsCommandHandler } from './database/commands/admin/AdminCreateMissingRevisionsCommandHandler';
+import { ArtistUpdateCommandHandler } from './database/commands/artists/ArtistUpdateCommandHandler';
 import { QuoteUpdateCommandHandler } from './database/commands/quotes/QuoteUpdateCommandHandler';
 import { TranslationUpdateCommandHandler } from './database/commands/translations/TranslationUpdateCommandHandler';
 import { UserAuthenticateCommandHandler } from './database/commands/users/UserAuthenticateCommandHandler';
 import { UserCreateCommandHandler } from './database/commands/users/UserCreateCommandHandler';
 import { UserUpdateCommandHandler } from './database/commands/users/UserUpdateCommandHandler';
 import { WorkUpdateCommandHandler } from './database/commands/works/WorkUpdateCommandHandler';
-import { ArtistGetQueryHandler } from './database/queries/artists/ArtistGetQueryHandler';
-import { ArtistListIdsQueryHandler } from './database/queries/artists/ArtistListIdsQueryHandler';
-import { ArtistListQueryHandler } from './database/queries/artists/ArtistListQueryHandler';
 import {
 	ArtistListRevisionsQueryHandler,
 	QuoteListRevisionsQueryHandler,
 	TranslationListRevisionsQueryHandler,
 	WorkListRevisionsQueryHandler,
-} from './database/queries/entries/EntryListRevisionsQueryHandler';
+} from './database/queries/EntryListRevisionsQueryHandler';
+import { ArtistGetQueryHandler } from './database/queries/artists/ArtistGetQueryHandler';
+import { ArtistListIdsQueryHandler } from './database/queries/artists/ArtistListIdsQueryHandler';
+import { ArtistListQueryHandler } from './database/queries/artists/ArtistListQueryHandler';
 import { QuoteGetQueryHandler } from './database/queries/quotes/QuoteGetQueryHandler';
 import { QuoteListIdsQueryHandler } from './database/queries/quotes/QuoteListIdsQueryHandler';
 import { QuoteListQueryHandler } from './database/queries/quotes/QuoteListQueryHandler';

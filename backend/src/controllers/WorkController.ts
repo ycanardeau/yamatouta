@@ -1,30 +1,20 @@
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import {
-	EntryDeleteParams,
-	WorkDeleteCommand,
-} from '../database/commands/entries/EntryDeleteCommandHandler';
-import {
-	WorkUpdateCommand,
-	WorkUpdateParams,
-} from '../database/commands/works/WorkUpdateCommandHandler';
-import {
-	EntryListRevisionsParams,
-	WorkListRevisionsQuery,
-} from '../database/queries/entries/EntryListRevisionsQueryHandler';
-import {
-	WorkGetParams,
-	WorkGetQuery,
-} from '../database/queries/works/WorkGetQueryHandler';
-import {
-	WorkListParams,
-	WorkListQuery,
-} from '../database/queries/works/WorkListQueryHandler';
+import { WorkDeleteCommand } from '../database/commands/EntryDeleteCommandHandler';
+import { WorkUpdateCommand } from '../database/commands/works/WorkUpdateCommandHandler';
+import { WorkListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
+import { WorkGetQuery } from '../database/queries/works/WorkGetQueryHandler';
+import { WorkListQuery } from '../database/queries/works/WorkListQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { WorkObject } from '../dto/WorkObject';
+import { EntryDeleteParams } from '../models/EntryDeleteParams';
+import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
+import { WorkGetParams } from '../models/works/WorkGetParams';
+import { WorkListParams } from '../models/works/WorkListParams';
+import { WorkUpdateParams } from '../models/works/WorkUpdateParams';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

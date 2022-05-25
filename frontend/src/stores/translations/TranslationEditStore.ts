@@ -8,7 +8,7 @@ import {
 
 import { translationApi } from '../../api/translationApi';
 import { ITranslationObject } from '../../dto/ITranslationObject';
-import { WordCategory } from '../../models/WordCategory';
+import { WordCategory } from '../../models/translations/WordCategory';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class TranslationEditStore {

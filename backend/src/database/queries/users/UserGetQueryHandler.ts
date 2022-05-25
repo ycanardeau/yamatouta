@@ -2,20 +2,12 @@ import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { UserObject } from '../../../dto/UserObject';
 import { User } from '../../../entities/User';
+import { UserGetParams } from '../../../models/users/UserGetParams';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
-
-export class UserGetParams {
-	constructor(readonly id: number) {}
-
-	static readonly schema = Joi.object<UserGetParams>({
-		id: Joi.number().required(),
-	});
-}
 
 export class UserGetQuery {
 	constructor(

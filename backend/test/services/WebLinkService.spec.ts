@@ -1,7 +1,6 @@
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication } from '@nestjs/common';
 
-import { WebLinkUpdateParams } from '../../src/database/commands/WebLinkUpdateParams';
 import { Translation } from '../../src/entities/Translation';
 import { User } from '../../src/entities/User';
 import { WebAddress } from '../../src/entities/WebAddress';
@@ -9,7 +8,8 @@ import { WebAddressHost } from '../../src/entities/WebAddressHost';
 import { WebLink } from '../../src/entities/WebLink';
 import { UserGroup } from '../../src/models/UserGroup';
 import { WebLinkCategory } from '../../src/models/WebLinkCategory';
-import { WordCategory } from '../../src/models/WordCategory';
+import { WebLinkUpdateParams } from '../../src/models/WebLinkUpdateParams';
+import { WordCategory } from '../../src/models/translations/WordCategory';
 import { WebLinkService } from '../../src/services/WebLinkService';
 import { FakePermissionContext } from '../FakePermissionContext';
 import { createApplication } from '../createApplication';

@@ -6,6 +6,7 @@ import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
 import { UserAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { User } from '../../../entities/User';
 import { AuditedAction } from '../../../models/AuditedAction';
+import { UserAuthenticateParams } from '../../../models/users/UserAuthenticateParams';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 
 export enum LoginError {
@@ -35,14 +36,6 @@ const createError = (
 	error: error,
 	user: undefined,
 });
-
-export class UserAuthenticateParams {
-	constructor(
-		readonly email: string,
-		readonly password: string,
-		readonly clientIp: string,
-	) {}
-}
 
 export class UserAuthenticateCommand {
 	constructor(readonly params: UserAuthenticateParams) {}

@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import WebLinkListEdit from '../../components/WebLinkListEdit';
 import { ITranslationObject } from '../../dto/ITranslationObject';
-import { WordCategory } from '../../models/WordCategory';
+import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
 
 interface TranslationEditFormProps {

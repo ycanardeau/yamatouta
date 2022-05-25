@@ -1,7 +1,7 @@
 import { Artist } from '../../entities/Artist';
 import { Quote } from '../../entities/Quote';
 import { IContentEquatable } from '../IContentEquatable';
-import { QuoteType } from '../QuoteType';
+import { QuoteType } from '../quotes/QuoteType';
 import { ObjectRefSnapshot } from './ObjectRefSnapshot';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 

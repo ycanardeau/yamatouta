@@ -7,36 +7,15 @@ import {
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { QuoteObject } from '../../../dto/QuoteObject';
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { Quote } from '../../../entities/Quote';
-import { QuoteSortRule } from '../../../models/QuoteSortRule';
-import { QuoteType } from '../../../models/QuoteType';
+import { QuoteListParams } from '../../../models/quotes/QuoteListParams';
+import { QuoteSortRule } from '../../../models/quotes/QuoteSortRule';
+import { QuoteType } from '../../../models/quotes/QuoteType';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
-
-export class QuoteListParams {
-	constructor(
-		readonly quoteType?: QuoteType,
-		readonly sort?: QuoteSortRule,
-		readonly offset?: number,
-		readonly limit?: number,
-		readonly getTotalCount?: boolean,
-		readonly artistId?: number,
-	) {}
-
-	static readonly schema = Joi.object<QuoteListParams>({
-		quoteType: Joi.string()
-			.optional()
-			.valid(...Object.values(QuoteType)),
-		offset: Joi.number().optional(),
-		limit: Joi.number().optional(),
-		getTotalCount: Joi.boolean().optional(),
-		artistId: Joi.number().optional(),
-	});
-}
 
 export class QuoteListQuery {
 	constructor(

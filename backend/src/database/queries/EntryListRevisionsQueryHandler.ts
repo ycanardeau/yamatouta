@@ -1,26 +1,18 @@
 import { EntityRepository, QueryOrder } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
-import { RevisionObject } from '../../../dto/RevisionObject';
-import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { Artist } from '../../../entities/Artist';
-import { Quote } from '../../../entities/Quote';
-import { Translation } from '../../../entities/Translation';
-import { Work } from '../../../entities/Work';
-import { Entry } from '../../../models/Entry';
-import { Permission } from '../../../models/Permission';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
-
-export class EntryListRevisionsParams {
-	constructor(readonly id: number) {}
-
-	static readonly schema = Joi.object<EntryListRevisionsParams>({
-		id: Joi.number().required(),
-	});
-}
+import { RevisionObject } from '../../dto/RevisionObject';
+import { SearchResultObject } from '../../dto/SearchResultObject';
+import { Artist } from '../../entities/Artist';
+import { Quote } from '../../entities/Quote';
+import { Translation } from '../../entities/Translation';
+import { Work } from '../../entities/Work';
+import { Entry } from '../../models/Entry';
+import { EntryListRevisionsParams } from '../../models/EntryListRevisionsParams';
+import { Permission } from '../../models/Permission';
+import { PermissionContext } from '../../services/PermissionContext';
+import { whereNotDeleted, whereNotHidden } from '../../services/filters';
 
 export abstract class EntryListRevisionsQuery {
 	constructor(

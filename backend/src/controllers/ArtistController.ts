@@ -1,30 +1,20 @@
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import {
-	ArtistUpdateCommand,
-	ArtistUpdateParams,
-} from '../database/commands/artists/ArtistUpdateCommandHandler';
-import {
-	ArtistDeleteCommand,
-	EntryDeleteParams,
-} from '../database/commands/entries/EntryDeleteCommandHandler';
-import {
-	ArtistGetParams,
-	ArtistGetQuery,
-} from '../database/queries/artists/ArtistGetQueryHandler';
-import {
-	ArtistListParams,
-	ArtistListQuery,
-} from '../database/queries/artists/ArtistListQueryHandler';
-import {
-	ArtistListRevisionsQuery,
-	EntryListRevisionsParams,
-} from '../database/queries/entries/EntryListRevisionsQueryHandler';
+import { ArtistDeleteCommand } from '../database/commands/EntryDeleteCommandHandler';
+import { ArtistUpdateCommand } from '../database/commands/artists/ArtistUpdateCommandHandler';
+import { ArtistListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
+import { ArtistGetQuery } from '../database/queries/artists/ArtistGetQueryHandler';
+import { ArtistListQuery } from '../database/queries/artists/ArtistListQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { ArtistObject } from '../dto/ArtistObject';
 import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
+import { EntryDeleteParams } from '../models/EntryDeleteParams';
+import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
+import { ArtistGetParams } from '../models/artists/ArtistGetParams';
+import { ArtistListParams } from '../models/artists/ArtistListParams';
+import { ArtistUpdateParams } from '../models/artists/ArtistUpdateParams';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

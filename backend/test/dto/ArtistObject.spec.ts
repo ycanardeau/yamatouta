@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { ArtistObject } from '../../src/dto/ArtistObject';
-import { ArtistType } from '../../src/models/ArtistType';
+import { ArtistType } from '../../src/models/artists/ArtistType';
 import { FakeEntityManager } from '../FakeEntityManager';
 import { FakePermissionContext } from '../FakePermissionContext';
 import { createArtist, createUser } from '../createEntry';

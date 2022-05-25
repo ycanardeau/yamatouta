@@ -11,8 +11,8 @@ import React from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import { useTranslation } from 'react-i18next';
 
-import { TranslationSortRule } from '../../models/TranslationSortRule';
-import { WordCategory } from '../../models/WordCategory';
+import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
+import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
 
 interface TranslationSearchOptionsProps {

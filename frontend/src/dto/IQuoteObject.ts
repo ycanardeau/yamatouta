@@ -1,4 +1,4 @@
-import { QuoteType } from '../models/QuoteType';
+import { QuoteType } from '../models/quotes/QuoteType';
 import { IArtistObject } from './IArtistObject';
 import { IWebLinkObject } from './IWebLinkObject';
 

@@ -2,27 +2,12 @@ import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import Joi from 'joi';
 
 import { QuoteObject } from '../../../dto/QuoteObject';
 import { Quote } from '../../../entities/Quote';
-import { QuoteOptionalField } from '../../../models/QuoteOptionalField';
+import { QuoteGetParams } from '../../../models/quotes/QuoteGetParams';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
-
-export class QuoteGetParams {
-	constructor(readonly id: number, readonly fields?: QuoteOptionalField[]) {}
-
-	static readonly schema = Joi.object<QuoteGetParams>({
-		id: Joi.number().required(),
-		fields: Joi.array().items(
-			Joi.string()
-				.required()
-				.trim()
-				.valid(...Object.values(QuoteOptionalField)),
-		),
-	});
-}
 
 export class QuoteGetQuery {
 	constructor(

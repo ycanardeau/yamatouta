@@ -1,6 +1,6 @@
 import { Translation } from '../../entities/Translation';
 import { IContentEquatable } from '../IContentEquatable';
-import { WordCategory } from '../WordCategory';
+import { WordCategory } from '../translations/WordCategory';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 
 export type ITranslationSnapshot = Omit<TranslationSnapshot, 'contentEquals'>;

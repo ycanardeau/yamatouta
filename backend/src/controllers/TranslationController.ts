@@ -1,30 +1,20 @@
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import {
-	EntryDeleteParams,
-	TranslationDeleteCommand,
-} from '../database/commands/entries/EntryDeleteCommandHandler';
-import {
-	TranslationUpdateCommand,
-	TranslationUpdateParams,
-} from '../database/commands/translations/TranslationUpdateCommandHandler';
-import {
-	EntryListRevisionsParams,
-	TranslationListRevisionsQuery,
-} from '../database/queries/entries/EntryListRevisionsQueryHandler';
-import {
-	TranslationGetParams,
-	TranslationGetQuery,
-} from '../database/queries/translations/TranslationGetQueryHandler';
-import {
-	TranslationListParams,
-	TranslationListQuery,
-} from '../database/queries/translations/TranslationListQueryHandler';
+import { TranslationDeleteCommand } from '../database/commands/EntryDeleteCommandHandler';
+import { TranslationUpdateCommand } from '../database/commands/translations/TranslationUpdateCommandHandler';
+import { TranslationListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
+import { TranslationGetQuery } from '../database/queries/translations/TranslationGetQueryHandler';
+import { TranslationListQuery } from '../database/queries/translations/TranslationListQueryHandler';
 import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { TranslationObject } from '../dto/TranslationObject';
+import { EntryDeleteParams } from '../models/EntryDeleteParams';
+import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
+import { TranslationGetParams } from '../models/translations/TranslationGetParams';
+import { TranslationListParams } from '../models/translations/TranslationListParams';
+import { TranslationUpdateParams } from '../models/translations/TranslationUpdateParams';
 import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 

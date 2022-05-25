@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import WebLinkListEdit from '../../components/WebLinkListEdit';
 import { IArtistObject } from '../../dto/IArtistObject';
-import { ArtistType } from '../../models/ArtistType';
+import { ArtistType } from '../../models/artists/ArtistType';
 import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
 
 interface ArtistEditFormProps {

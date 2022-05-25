@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import WebLinkListEdit from '../../components/WebLinkListEdit';
 import ArtistComboBox from '../../components/artists/ArtistComboBox';
 import { IQuoteObject } from '../../dto/IQuoteObject';
-import { QuoteType } from '../../models/QuoteType';
+import { QuoteType } from '../../models/quotes/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
 
 interface QuoteEditFormProps {
