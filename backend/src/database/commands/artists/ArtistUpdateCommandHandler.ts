@@ -5,7 +5,6 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
 import { ArtistObject } from '../../../dto/ArtistObject';
-import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { Artist } from '../../../entities/Artist';
 import { ArtistAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
@@ -16,8 +15,16 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
+import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
 
 export class ArtistUpdateParams {
+	constructor(
+		readonly id: number,
+		readonly name: string,
+		readonly artistType: ArtistType,
+		readonly webLinks: WebLinkUpdateParams[],
+	) {}
+
 	static readonly schema = Joi.object<ArtistUpdateParams>({
 		id: Joi.number().required(),
 		name: Joi.string().required().trim().max(200),
@@ -25,15 +32,8 @@ export class ArtistUpdateParams {
 			.required()
 			.trim()
 			.valid(...Object.values(ArtistType)),
-		webLinks: Joi.array().items(WebLinkObject.schema).required(),
+		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
 	});
-
-	constructor(
-		readonly id: number,
-		readonly name: string,
-		readonly artistType: ArtistType,
-		readonly webLinks: WebLinkObject[],
-	) {}
 }
 
 export class ArtistUpdateCommand {

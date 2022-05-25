@@ -11,6 +11,8 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class QuoteGetParams {
+	constructor(readonly id: number, readonly fields?: QuoteOptionalField[]) {}
+
 	static readonly schema = Joi.object<QuoteGetParams>({
 		id: Joi.number().required(),
 		fields: Joi.array().items(
@@ -20,8 +22,6 @@ export class QuoteGetParams {
 				.valid(...Object.values(QuoteOptionalField)),
 		),
 	});
-
-	constructor(readonly id: number, readonly fields?: QuoteOptionalField[]) {}
 }
 
 export class QuoteGetQuery {

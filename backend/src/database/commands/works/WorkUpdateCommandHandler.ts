@@ -4,7 +4,6 @@ import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
-import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { WorkObject } from '../../../dto/WorkObject';
 import { WorkAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
@@ -16,8 +15,16 @@ import { WorkOptionalField } from '../../../models/WorkOptionalField';
 import { WorkType } from '../../../models/WorkType';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
+import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
 
 export class WorkUpdateParams {
+	constructor(
+		readonly id: number,
+		readonly name: string,
+		readonly workType: WorkType,
+		readonly webLinks: WebLinkUpdateParams[],
+	) {}
+
 	static readonly schema = Joi.object<WorkUpdateParams>({
 		id: Joi.number().required(),
 		name: Joi.string().required().trim().max(200),
@@ -25,15 +32,8 @@ export class WorkUpdateParams {
 			.required()
 			.trim()
 			.valid(...Object.values(WorkType)),
-		webLinks: Joi.array().items(WebLinkObject.schema).required(),
+		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
 	});
-
-	constructor(
-		readonly id: number,
-		readonly name: string,
-		readonly workType: WorkType,
-		readonly webLinks: WebLinkObject[],
-	) {}
 }
 
 export class WorkUpdateCommand {

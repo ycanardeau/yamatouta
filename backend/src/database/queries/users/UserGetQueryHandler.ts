@@ -10,11 +10,11 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class UserGetParams {
+	constructor(readonly id: number) {}
+
 	static readonly schema = Joi.object<UserGetParams>({
 		id: Joi.number().required(),
 	});
-
-	constructor(readonly id: number) {}
 }
 
 export class UserGetQuery {

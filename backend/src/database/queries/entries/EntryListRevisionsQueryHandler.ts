@@ -15,11 +15,11 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class EntryListRevisionsParams {
+	constructor(readonly id: number) {}
+
 	static readonly schema = Joi.object<EntryListRevisionsParams>({
 		id: Joi.number().required(),
 	});
-
-	constructor(readonly id: number) {}
 }
 
 export abstract class EntryListRevisionsQuery {

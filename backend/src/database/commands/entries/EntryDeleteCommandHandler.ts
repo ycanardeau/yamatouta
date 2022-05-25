@@ -24,11 +24,11 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
 
 export class EntryDeleteParams {
+	constructor(readonly id: number) {}
+
 	static readonly schema = Joi.object<EntryDeleteParams>({
 		id: Joi.number().required(),
 	});
-
-	constructor(readonly id: number) {}
 }
 
 abstract class EntryDeleteCommand {

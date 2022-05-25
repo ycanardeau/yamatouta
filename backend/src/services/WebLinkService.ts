@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 
-import { WebLinkObject } from '../dto/WebLinkObject';
+import { WebLinkUpdateParams } from '../database/commands/WebLinkUpdateParams';
 import { User } from '../entities/User';
 import { WebAddress } from '../entities/WebAddress';
 import { WebAddressHost } from '../entities/WebAddressHost';
@@ -47,11 +47,13 @@ export class WebLinkService {
 	async sync<TWebLink extends WebLink>(
 		em: EntityManager,
 		entry: IEntryWithWebLinks<TWebLink> & IWebLinkFactory<TWebLink>,
-		newItems: WebLinkObject[],
+		newItems: WebLinkUpdateParams[],
 		permissionContext: PermissionContext,
 		actor: User,
 	): Promise<void> {
-		const create = async (newItem: WebLinkObject): Promise<TWebLink> => {
+		const create = async (
+			newItem: WebLinkUpdateParams,
+		): Promise<TWebLink> => {
 			permissionContext.verifyPermission(Permission.WebLink_Create);
 
 			const address = await this.getOrCreateWebAddress(
@@ -71,7 +73,7 @@ export class WebLinkService {
 
 		const update = async (
 			oldItem: TWebLink,
-			newItem: WebLinkObject,
+			newItem: WebLinkUpdateParams,
 		): Promise<boolean> => {
 			if (oldItem.contentEquals(newItem)) return false;
 

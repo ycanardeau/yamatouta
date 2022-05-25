@@ -5,7 +5,6 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
 import { TranslationObject } from '../../../dto/TranslationObject';
-import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { TranslationAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
 import { Translation } from '../../../entities/Translation';
@@ -17,8 +16,19 @@ import { WordCategory } from '../../../models/WordCategory';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
+import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
 
 export class TranslationUpdateParams {
+	constructor(
+		readonly id: number,
+		readonly headword: string,
+		readonly locale: string,
+		readonly reading: string,
+		readonly yamatokotoba: string,
+		readonly category: WordCategory,
+		readonly webLinks: WebLinkUpdateParams[],
+	) {}
+
 	static readonly schema = Joi.object<TranslationUpdateParams>({
 		id: Joi.number().required(),
 		headword: Joi.string().required().trim().max(200),
@@ -37,18 +47,8 @@ export class TranslationUpdateParams {
 			.required()
 			.trim()
 			.valid(...Object.values(WordCategory)),
-		webLinks: Joi.array().items(WebLinkObject.schema).required(),
+		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
 	});
-
-	constructor(
-		readonly id: number,
-		readonly headword: string,
-		readonly locale: string,
-		readonly reading: string,
-		readonly yamatokotoba: string,
-		readonly category: WordCategory,
-		readonly webLinks: WebLinkObject[],
-	) {}
 }
 
 export class TranslationUpdateCommand {

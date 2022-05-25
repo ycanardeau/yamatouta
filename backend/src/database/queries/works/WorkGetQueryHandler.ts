@@ -11,6 +11,8 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class WorkGetParams {
+	constructor(readonly id: number, readonly fields?: WorkOptionalField[]) {}
+
 	static readonly schema = Joi.object<WorkGetParams>({
 		id: Joi.number().required(),
 		fields: Joi.array().items(
@@ -20,8 +22,6 @@ export class WorkGetParams {
 				.valid(...Object.values(WorkOptionalField)),
 		),
 	});
-
-	constructor(readonly id: number, readonly fields?: WorkOptionalField[]) {}
 }
 
 export class WorkGetQuery {

@@ -13,6 +13,15 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { escapeWildcardCharacters } from '../../../utils/escapeWildcardCharacters';
 
 export class TranslationListParams {
+	constructor(
+		readonly sort?: TranslationSortRule,
+		readonly offset?: number,
+		readonly limit?: number,
+		readonly getTotalCount?: boolean,
+		readonly query?: string,
+		readonly category?: WordCategory,
+	) {}
+
 	static readonly schema = Joi.object<TranslationListParams>({
 		sort: Joi.string()
 			.optional()
@@ -26,15 +35,6 @@ export class TranslationListParams {
 			.allow('')
 			.valid(...Object.values(WordCategory)),
 	});
-
-	constructor(
-		readonly sort?: TranslationSortRule,
-		readonly offset?: number,
-		readonly limit?: number,
-		readonly getTotalCount?: boolean,
-		readonly query?: string,
-		readonly category?: WordCategory,
-	) {}
 }
 
 export class TranslationListQuery {

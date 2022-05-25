@@ -18,6 +18,15 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotHidden } from '../../../services/filters';
 
 export class QuoteListParams {
+	constructor(
+		readonly quoteType?: QuoteType,
+		readonly sort?: QuoteSortRule,
+		readonly offset?: number,
+		readonly limit?: number,
+		readonly getTotalCount?: boolean,
+		readonly artistId?: number,
+	) {}
+
 	static readonly schema = Joi.object<QuoteListParams>({
 		quoteType: Joi.string()
 			.optional()
@@ -27,15 +36,6 @@ export class QuoteListParams {
 		getTotalCount: Joi.boolean().optional(),
 		artistId: Joi.number().optional(),
 	});
-
-	constructor(
-		readonly quoteType?: QuoteType,
-		readonly sort?: QuoteSortRule,
-		readonly offset?: number,
-		readonly limit?: number,
-		readonly getTotalCount?: boolean,
-		readonly artistId?: number,
-	) {}
 }
 
 export class QuoteListQuery {

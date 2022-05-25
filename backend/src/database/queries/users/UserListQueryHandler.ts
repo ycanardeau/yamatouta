@@ -17,18 +17,18 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class UserListParams {
-	static readonly schema = Joi.object<UserListParams>({
-		offset: Joi.number().optional(),
-		limit: Joi.number().optional(),
-		getTotalCount: Joi.boolean().optional(),
-	});
-
 	constructor(
 		readonly sort?: UserSortRule,
 		readonly offset?: number,
 		readonly limit?: number,
 		readonly getTotalCount?: boolean,
 	) {}
+
+	static readonly schema = Joi.object<UserListParams>({
+		offset: Joi.number().optional(),
+		limit: Joi.number().optional(),
+		getTotalCount: Joi.boolean().optional(),
+	});
 }
 
 export class UserListQuery {

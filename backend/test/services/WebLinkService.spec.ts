@@ -1,7 +1,7 @@
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication } from '@nestjs/common';
 
-import { WebLinkObject } from '../../src/dto/WebLinkObject';
+import { WebLinkUpdateParams } from '../../src/database/commands/WebLinkUpdateParams';
 import { Translation } from '../../src/entities/Translation';
 import { User } from '../../src/entities/User';
 import { WebAddress } from '../../src/entities/WebAddress';
@@ -24,7 +24,7 @@ describe('WebLinkService', () => {
 		let translation: Translation;
 		let permissionContext: FakePermissionContext;
 
-		const defaultWebLinks: WebLinkObject[] = [
+		const defaultWebLinks: WebLinkUpdateParams[] = [
 			{
 				id: 0,
 				url: 'https://yamatouta.net/translations/1',

@@ -5,7 +5,6 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import Joi from 'joi';
 
 import { QuoteObject } from '../../../dto/QuoteObject';
-import { WebLinkObject } from '../../../dto/WebLinkObject';
 import { Artist } from '../../../entities/Artist';
 import { QuoteAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Commit } from '../../../entities/Commit';
@@ -17,8 +16,18 @@ import { QuoteType } from '../../../models/QuoteType';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
+import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
 
 export class QuoteUpdateParams {
+	constructor(
+		readonly id: number,
+		readonly text: string,
+		readonly quoteType: QuoteType,
+		readonly locale: string,
+		readonly artistId: number,
+		readonly webLinks: WebLinkUpdateParams[],
+	) {}
+
 	static readonly schema = Joi.object<QuoteUpdateParams>({
 		id: Joi.number().required(),
 		text: Joi.string().required().trim().max(200),
@@ -28,17 +37,8 @@ export class QuoteUpdateParams {
 			.valid(...Object.values(QuoteType)),
 		locale: Joi.string().required().trim(),
 		artistId: Joi.number().required(),
-		webLinks: Joi.array().items(WebLinkObject.schema).required(),
+		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
 	});
-
-	constructor(
-		readonly id: number,
-		readonly text: string,
-		readonly quoteType: QuoteType,
-		readonly locale: string,
-		readonly artistId: number,
-		readonly webLinks: WebLinkObject[],
-	) {}
 }
 
 export class QuoteUpdateCommand {

@@ -11,6 +11,11 @@ import { PermissionContext } from '../../../services/PermissionContext';
 import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class TranslationGetParams {
+	constructor(
+		readonly id: number,
+		readonly fields?: TranslationOptionalField[],
+	) {}
+
 	static readonly schema = Joi.object<TranslationGetParams>({
 		id: Joi.number().required(),
 		fields: Joi.array().items(
@@ -20,11 +25,6 @@ export class TranslationGetParams {
 				.valid(...Object.values(TranslationOptionalField)),
 		),
 	});
-
-	constructor(
-		readonly id: number,
-		readonly fields?: TranslationOptionalField[],
-	) {}
 }
 
 export class TranslationGetQuery {
