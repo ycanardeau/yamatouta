@@ -182,6 +182,9 @@
 		"ended": "おわった"
 	},
 	"linkPhrases": {
+		"Unspecified": "",
+		"Quote_Work_Source": "でどころ",
+		"Translation_Work_Source": "でどころ",
 		"Work_Artist_Author": "かきて",
 		"Work_Artist_Editor": "えらびて",
 		"Work_Artist_Foreword": "はしがき",

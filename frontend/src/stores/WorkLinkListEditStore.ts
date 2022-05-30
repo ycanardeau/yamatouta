@@ -12,7 +12,7 @@ export class WorkLinkEditStore {
 	readonly relatedWork = new BasicEntryLinkStore<IWorkObject>((id) =>
 		workApi.get({ id: id }),
 	);
-	@observable linkType = LinkType.Work_Artist_Author;
+	@observable linkType = LinkType.Unspecified;
 	//readonly beginDate: PartialDateEditStore;
 	//readonly endDate: PartialDateEditStore;
 	@observable ended = false;

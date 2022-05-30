@@ -190,6 +190,9 @@
 		"ended": "Ended"
 	},
 	"linkPhrases": {
+		"Unspecified": "",
+		"Quote_Work_Source": "Source",
+		"Translation_Work_Source": "Source",
 		"Work_Artist_Author": "Author",
 		"Work_Artist_Contributor": "Contributor",
 		"Work_Artist_Editor": "Editor",

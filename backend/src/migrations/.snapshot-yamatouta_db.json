@@ -2156,12 +2156,15 @@
         },
         "link_type": {
           "name": "link_type",
-          "type": "enum('Work_Artist_Author', 'Work_Artist_Contributor', 'Work_Artist_Editor', 'Work_Artist_Foreword', 'Work_Artist_Publisher', 'Work_Artist_Translator')",
+          "type": "enum('Unspecified', 'Quote_Work_Source', 'Translation_Work_Source', 'Work_Artist_Author', 'Work_Artist_Contributor', 'Work_Artist_Editor', 'Work_Artist_Foreword', 'Work_Artist_Publisher', 'Work_Artist_Translator')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
+            "Unspecified",
+            "Quote_Work_Source",
+            "Translation_Work_Source",
             "Work_Artist_Author",
             "Work_Artist_Contributor",
             "Work_Artist_Editor",
@@ -2887,12 +2890,15 @@
         },
         "link_type": {
           "name": "link_type",
-          "type": "enum('Work_Artist_Author', 'Work_Artist_Contributor', 'Work_Artist_Editor', 'Work_Artist_Foreword', 'Work_Artist_Publisher', 'Work_Artist_Translator')",
+          "type": "enum('Unspecified', 'Quote_Work_Source', 'Translation_Work_Source', 'Work_Artist_Author', 'Work_Artist_Contributor', 'Work_Artist_Editor', 'Work_Artist_Foreword', 'Work_Artist_Publisher', 'Work_Artist_Translator')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
+            "Unspecified",
+            "Quote_Work_Source",
+            "Translation_Work_Source",
             "Work_Artist_Author",
             "Work_Artist_Contributor",
             "Work_Artist_Editor",
