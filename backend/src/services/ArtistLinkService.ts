@@ -6,17 +6,19 @@ import { ArtistLink } from '../entities/ArtistLink';
 import { LinkType } from '../entities/LinkType';
 import { PartialDate } from '../entities/PartialDate';
 import { ArtistLinkUpdateParams } from '../models/ArtistLinkUpdateParams';
+import { EntryType } from '../models/EntryType';
 import { IArtistLinkFactory } from '../models/IArtistLinkFactory';
 import { IEntryWithArtistLinks } from '../models/IEntryWithArtistLinks';
 import { Permission } from '../models/Permission';
 import { collectionSyncWithContent } from '../utils/collectionDiff';
 import { PermissionContext } from './PermissionContext';
 
+// TODO: Add unit tests.
 @Injectable()
 export class ArtistLinkService {
 	async sync<TArtistLink extends ArtistLink>(
 		em: EntityManager,
-		entry: IEntryWithArtistLinks<TArtistLink> &
+		entry: { entryType: EntryType } & IEntryWithArtistLinks<TArtistLink> &
 			IArtistLinkFactory<TArtistLink>,
 		newItems: ArtistLinkUpdateParams[],
 		permissionContext: PermissionContext,
@@ -34,6 +36,8 @@ export class ArtistLinkService {
 				}),
 				em.findOneOrFail(LinkType, {
 					id: newItem.linkTypeId,
+					entryType: entry.entryType,
+					relatedEntryType: EntryType.Artist,
 				}),
 			]);
 

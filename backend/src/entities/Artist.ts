@@ -7,6 +7,7 @@ import {
 	Property,
 } from '@mikro-orm/core';
 
+import { EntryType } from '../models/EntryType';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
@@ -71,6 +72,10 @@ export class Artist
 
 	@OneToMany(() => WorkArtistLink, (workLink) => workLink.relatedArtist)
 	workLinks = new Collection<WorkArtistLink>(this);
+
+	get entryType(): EntryType {
+		return EntryType.Artist;
+	}
 
 	takeSnapshot(): ArtistSnapshot {
 		return ArtistSnapshot.create(this);

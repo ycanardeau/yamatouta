@@ -1,5 +1,6 @@
 import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
 
+import { EntryType } from '../models/EntryType';
 import { PasswordHashAlgorithm } from '../models/PasswordHashAlgorithm';
 import { Permission, userGroupPermissions } from '../models/Permission';
 import { UserGroup } from '../models/UserGroup';
@@ -91,6 +92,10 @@ export class User {
 		this.passwordHashAlgorithm = passwordHashAlgorithm;
 		this.salt = salt;
 		this.passwordHash = passwordHash;
+	}
+
+	get entryType(): EntryType {
+		return EntryType.User;
 	}
 
 	get effectivePermissions(): Permission[] {

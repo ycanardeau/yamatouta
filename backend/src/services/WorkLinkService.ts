@@ -5,6 +5,7 @@ import { LinkType } from '../entities/LinkType';
 import { PartialDate } from '../entities/PartialDate';
 import { Work } from '../entities/Work';
 import { WorkLink } from '../entities/WorkLink';
+import { EntryType } from '../models/EntryType';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
 import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
 import { Permission } from '../models/Permission';
@@ -12,11 +13,13 @@ import { WorkLinkUpdateParams } from '../models/WorkLinkUpdateParams';
 import { collectionSyncWithContent } from '../utils/collectionDiff';
 import { PermissionContext } from './PermissionContext';
 
+// TODO: Add unit tests.
 @Injectable()
 export class WorkLinkService {
 	async sync<TWorkLink extends WorkLink>(
 		em: EntityManager,
-		entry: IEntryWithWorkLinks<TWorkLink> & IWorkLinkFactory<TWorkLink>,
+		entry: { entryType: EntryType } & IEntryWithWorkLinks<TWorkLink> &
+			IWorkLinkFactory<TWorkLink>,
 		newItems: WorkLinkUpdateParams[],
 		permissionContext: PermissionContext,
 	): Promise<void> {
@@ -31,7 +34,11 @@ export class WorkLinkService {
 					deleted: false,
 					hidden: false,
 				}),
-				em.findOneOrFail(LinkType, { id: newItem.linkTypeId }),
+				em.findOneOrFail(LinkType, {
+					id: newItem.linkTypeId,
+					entryType: entry.entryType,
+					relatedEntryType: EntryType.Work,
+				}),
 			]);
 
 			return entry.createWorkLink({

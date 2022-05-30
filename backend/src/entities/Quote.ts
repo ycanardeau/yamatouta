@@ -9,6 +9,7 @@ import {
 	Property,
 } from '@mikro-orm/core';
 
+import { EntryType } from '../models/EntryType';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
@@ -101,6 +102,10 @@ export class Quote
 
 	@OneToMany(() => QuoteWorkLink, (workLink) => workLink.quote)
 	workLinks = new Collection<QuoteWorkLink>(this);
+
+	get entryType(): EntryType {
+		return EntryType.Quote;
+	}
 
 	takeSnapshot(): QuoteSnapshot {
 		return QuoteSnapshot.create(this);

@@ -10,6 +10,7 @@ import {
 	Property,
 } from '@mikro-orm/core';
 
+import { EntryType } from '../models/EntryType';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
@@ -105,6 +106,10 @@ export class Translation
 
 	constructor(user: User) {
 		this.user = user;
+	}
+
+	get entryType(): EntryType {
+		return EntryType.Translation;
 	}
 
 	get headword(): string {

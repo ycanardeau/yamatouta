@@ -7,6 +7,7 @@ import {
 	Property,
 } from '@mikro-orm/core';
 
+import { EntryType } from '../models/EntryType';
 import { IArtistLinkFactory } from '../models/IArtistLinkFactory';
 import { IEntryWithArtistLinks } from '../models/IEntryWithArtistLinks';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
@@ -78,6 +79,10 @@ export class Work
 		(translationLink) => translationLink.relatedWork,
 	)
 	translationLinks = new Collection<TranslationWorkLink>(this);
+
+	get entryType(): EntryType {
+		return EntryType.Work;
+	}
 
 	takeSnapshot(): WorkSnapshot {
 		return WorkSnapshot.create(this);
