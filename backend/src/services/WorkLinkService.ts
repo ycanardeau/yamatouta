@@ -1,12 +1,12 @@
 import { EntityManager } from '@mikro-orm/core';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { PartialDate } from '../entities/PartialDate';
 import { Work } from '../entities/Work';
 import { WorkLink } from '../entities/WorkLink';
-import { EntryType } from '../models/EntryType';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
 import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
+import { workLinkTypes } from '../models/LinkType';
 import { Permission } from '../models/Permission';
 import { WorkLinkUpdateParams } from '../models/WorkLinkUpdateParams';
 import { collectionSyncWithContent } from '../utils/collectionDiff';
@@ -17,7 +17,9 @@ import { PermissionContext } from './PermissionContext';
 export class WorkLinkService {
 	async sync<TWorkLink extends WorkLink>(
 		em: EntityManager,
-		entry: { entryType: EntryType } & IEntryWithWorkLinks<TWorkLink> &
+		entry: {
+			entryType: keyof typeof workLinkTypes;
+		} & IEntryWithWorkLinks<TWorkLink> &
 			IWorkLinkFactory<TWorkLink>,
 		newItems: WorkLinkUpdateParams[],
 		permissionContext: PermissionContext,
@@ -32,6 +34,9 @@ export class WorkLinkService {
 				deleted: false,
 				hidden: false,
 			});
+
+			if (!workLinkTypes[entry.entryType].includes(newItem.linkType))
+				throw new BadRequestException('Invalid link type');
 
 			return entry.createWorkLink({
 				relatedWork: relatedWork,

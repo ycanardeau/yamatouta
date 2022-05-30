@@ -103,7 +103,7 @@ export class Quote
 	@OneToMany(() => QuoteWorkLink, (workLink) => workLink.quote)
 	workLinks = new Collection<QuoteWorkLink>(this);
 
-	get entryType(): EntryType {
+	get entryType(): EntryType.Quote {
 		return EntryType.Quote;
 	}
 

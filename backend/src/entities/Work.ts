@@ -80,7 +80,7 @@ export class Work
 	)
 	translationLinks = new Collection<TranslationWorkLink>(this);
 
-	get entryType(): EntryType {
+	get entryType(): EntryType.Work {
 		return EntryType.Work;
 	}
 

@@ -108,7 +108,7 @@ export class Translation
 		this.user = user;
 	}
 
-	get entryType(): EntryType {
+	get entryType(): EntryType.Translation {
 		return EntryType.Translation;
 	}
 

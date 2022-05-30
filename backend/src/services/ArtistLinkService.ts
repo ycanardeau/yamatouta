@@ -1,13 +1,13 @@
 import { EntityManager } from '@mikro-orm/core';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { Artist } from '../entities/Artist';
 import { ArtistLink } from '../entities/ArtistLink';
 import { PartialDate } from '../entities/PartialDate';
 import { ArtistLinkUpdateParams } from '../models/ArtistLinkUpdateParams';
-import { EntryType } from '../models/EntryType';
 import { IArtistLinkFactory } from '../models/IArtistLinkFactory';
 import { IEntryWithArtistLinks } from '../models/IEntryWithArtistLinks';
+import { artistLinkTypes } from '../models/LinkType';
 import { Permission } from '../models/Permission';
 import { collectionSyncWithContent } from '../utils/collectionDiff';
 import { PermissionContext } from './PermissionContext';
@@ -17,7 +17,9 @@ import { PermissionContext } from './PermissionContext';
 export class ArtistLinkService {
 	async sync<TArtistLink extends ArtistLink>(
 		em: EntityManager,
-		entry: { entryType: EntryType } & IEntryWithArtistLinks<TArtistLink> &
+		entry: {
+			entryType: keyof typeof artistLinkTypes;
+		} & IEntryWithArtistLinks<TArtistLink> &
 			IArtistLinkFactory<TArtistLink>,
 		newItems: ArtistLinkUpdateParams[],
 		permissionContext: PermissionContext,
@@ -32,6 +34,9 @@ export class ArtistLinkService {
 				deleted: false,
 				hidden: false,
 			});
+
+			if (!artistLinkTypes[entry.entryType].includes(newItem.linkType))
+				throw new BadRequestException('Invalid link type');
 
 			return entry.createArtistLink({
 				relatedArtist: relatedArtist,

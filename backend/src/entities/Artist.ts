@@ -73,7 +73,7 @@ export class Artist
 	@OneToMany(() => WorkArtistLink, (workLink) => workLink.relatedArtist)
 	workLinks = new Collection<WorkArtistLink>(this);
 
-	get entryType(): EntryType {
+	get entryType(): EntryType.Artist {
 		return EntryType.Artist;
 	}
 

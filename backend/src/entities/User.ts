@@ -94,7 +94,7 @@ export class User {
 		this.passwordHash = passwordHash;
 	}
 
-	get entryType(): EntryType {
+	get entryType(): EntryType.User {
 		return EntryType.User;
 	}
 
