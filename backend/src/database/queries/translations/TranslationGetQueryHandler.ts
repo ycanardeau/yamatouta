@@ -36,7 +36,15 @@ export class TranslationGetQueryHandler
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: true },
+			{
+				populate: [
+					'webLinks',
+					'webLinks.address',
+					'workLinks',
+					'workLinks.relatedWork',
+					'workLinks.linkType',
+				],
+			},
 		);
 
 		if (!translation) throw new NotFoundException();
