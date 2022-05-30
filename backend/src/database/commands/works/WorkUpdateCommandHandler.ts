@@ -114,7 +114,7 @@ export class WorkUpdateCommandHandler
 			return work;
 		});
 
-		return new WorkObject(
+		return WorkObject.create(
 			work,
 			permissionContext,
 			Object.values(WorkOptionalField),

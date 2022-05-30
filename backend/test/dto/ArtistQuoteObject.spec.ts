@@ -45,17 +45,17 @@ test('QuoteObject', async () => {
 
 	const permissionContext = new FakePermissionContext(viewer);
 
-	const quoteObject = new QuoteObject(artistQuote, permissionContext);
+	const quoteObject = QuoteObject.create(artistQuote, permissionContext);
 	expect(quoteObject.id).toBe(artistQuote.id);
 	expect(quoteObject.quoteType).toBe(artistQuote.quoteType);
 	expect(quoteObject.artist.id).toBe(artist.id);
 	expect(quoteObject.artist.name).toBe(artist.name);
 
-	expect(() => new QuoteObject(deletedQuote, permissionContext)).toThrow(
+	expect(() => QuoteObject.create(deletedQuote, permissionContext)).toThrow(
 		NotFoundException,
 	);
 
-	expect(() => new QuoteObject(hiddenQuote, permissionContext)).toThrow(
+	expect(() => QuoteObject.create(hiddenQuote, permissionContext)).toThrow(
 		NotFoundException,
 	);
 });

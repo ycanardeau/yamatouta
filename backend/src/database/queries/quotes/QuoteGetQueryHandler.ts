@@ -39,6 +39,6 @@ export class QuoteGetQueryHandler implements IQueryHandler<QuoteGetQuery> {
 
 		if (!quote) throw new NotFoundException();
 
-		return new QuoteObject(quote, permissionContext, params.fields);
+		return QuoteObject.create(quote, permissionContext, params.fields);
 	}
 }

@@ -5,7 +5,7 @@ import { PermissionContext } from '../src/services/PermissionContext';
 export class FakePermissionContext extends PermissionContext {
 	constructor(user?: User) {
 		super({
-			user: user ? new AuthenticatedUserObject(user) : undefined,
+			user: user ? AuthenticatedUserObject.create(user) : undefined,
 			socket: { remoteAddress: '::1' },
 		} as any);
 	}

@@ -125,7 +125,7 @@ export class QuoteUpdateCommandHandler
 			return quote;
 		});
 
-		return new QuoteObject(
+		return QuoteObject.create(
 			quote,
 			permissionContext,
 			Object.values(QuoteOptionalField),

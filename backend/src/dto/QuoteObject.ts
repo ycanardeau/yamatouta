@@ -7,44 +7,51 @@ import { WorkLinkObject } from './LinkObject';
 import { WebLinkObject } from './WebLinkObject';
 
 export class QuoteObject {
-	readonly id: number;
-	readonly deleted: boolean;
-	readonly hidden: boolean;
-	readonly quoteType: QuoteType;
-	readonly text: string;
-	readonly locale: string;
-	readonly artist: ArtistObject;
-	readonly sourceUrl: string;
-	readonly webLinks?: WebLinkObject[];
-	readonly workLinks?: WorkLinkObject[];
+	private constructor(
+		readonly id: number,
+		readonly deleted: boolean,
+		readonly hidden: boolean,
+		readonly quoteType: QuoteType,
+		readonly text: string,
+		readonly locale: string,
+		readonly artist: ArtistObject,
+		readonly sourceUrl: string,
+		readonly webLinks?: WebLinkObject[],
+		readonly workLinks?: WorkLinkObject[],
+	) {}
 
-	constructor(
+	static create(
 		quote: Quote,
 		permissionContext: PermissionContext,
 		fields: QuoteOptionalField[] = [],
-	) {
+	): QuoteObject {
 		permissionContext.verifyDeletedAndHidden(quote);
 
-		this.id = quote.id;
-		this.deleted = quote.deleted;
-		this.hidden = quote.hidden;
-		this.quoteType = quote.quoteType;
-		this.text = quote.text;
-		this.locale = quote.locale;
-		this.artist = new ArtistObject(quote.artist, permissionContext);
-		this.sourceUrl = quote.sourceUrl;
-		this.webLinks = fields.includes(QuoteOptionalField.WebLinks)
+		const webLinks = fields.includes(QuoteOptionalField.WebLinks)
 			? quote.webLinks
 					.getItems()
-					.map((webLink) => new WebLinkObject(webLink))
+					.map((webLink) => WebLinkObject.create(webLink))
 			: undefined;
-		this.workLinks = fields.includes(QuoteOptionalField.WorkLinks)
+
+		const workLinks = fields.includes(QuoteOptionalField.WorkLinks)
 			? quote.workLinks
 					.getItems()
-					.map(
-						(workLink) =>
-							new WorkLinkObject(workLink, permissionContext),
+					.map((workLink) =>
+						WorkLinkObject.create(workLink, permissionContext),
 					)
 			: undefined;
+
+		return new QuoteObject(
+			quote.id,
+			quote.deleted,
+			quote.hidden,
+			quote.quoteType,
+			quote.text,
+			quote.locale,
+			ArtistObject.create(quote.artist, permissionContext),
+			quote.sourceUrl,
+			webLinks,
+			workLinks,
+		);
 	}
 }

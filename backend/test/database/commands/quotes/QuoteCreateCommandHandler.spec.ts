@@ -159,7 +159,7 @@ describe('QuoteCreateCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: defaultParams.locale,
-					artist: new ObjectRefSnapshot(artist),
+					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
 					workLinks: [],
 				},

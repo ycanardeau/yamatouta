@@ -13,32 +13,44 @@ abstract class LinkSnapshot {
 	readonly endDate: PartialDateSnapshot;
 	readonly ended: boolean;
 
-	constructor(link: Link) {
-		this.linkType = new ObjectRefSnapshot<LinkType>(link.linkType);
-		this.beginDate = new PartialDateSnapshot(link.beginDate);
-		this.endDate = new PartialDateSnapshot(link.endDate);
+	protected constructor(link: Link) {
+		this.linkType = ObjectRefSnapshot.create<LinkType>(link.linkType);
+		this.beginDate = PartialDateSnapshot.create(link.beginDate);
+		this.endDate = PartialDateSnapshot.create(link.endDate);
 		this.ended = link.ended;
 	}
 }
 
 export class ArtistLinkSnapshot extends LinkSnapshot {
-	readonly relatedArtist: ObjectRefSnapshot<Artist>;
-
-	constructor(artistLink: ArtistLink) {
+	private constructor(
+		artistLink: ArtistLink,
+		readonly relatedArtist: ObjectRefSnapshot<Artist>,
+	) {
 		super(artistLink);
+	}
 
-		this.relatedArtist = new ObjectRefSnapshot<Artist>(
+	static create(artistLink: ArtistLink): ArtistLinkSnapshot {
+		const relatedArtist = ObjectRefSnapshot.create<Artist>(
 			artistLink.relatedArtist,
 		);
+
+		return new ArtistLinkSnapshot(artistLink, relatedArtist);
 	}
 }
 
 export class WorkLinkSnapshot extends LinkSnapshot {
-	readonly relatedWork: ObjectRefSnapshot<Work>;
-
-	constructor(workLink: WorkLink) {
+	private constructor(
+		workLink: WorkLink,
+		readonly relatedWork: ObjectRefSnapshot<Work>,
+	) {
 		super(workLink);
+	}
 
-		this.relatedWork = new ObjectRefSnapshot<Work>(workLink.relatedWork);
+	static create(workLink: WorkLink): WorkLinkSnapshot {
+		const relatedWork = ObjectRefSnapshot.create<Work>(
+			workLink.relatedWork,
+		);
+
+		return new WorkLinkSnapshot(workLink, relatedWork);
 	}
 }

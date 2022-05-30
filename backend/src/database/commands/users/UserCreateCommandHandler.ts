@@ -91,6 +91,6 @@ export class UserCreateCommandHandler
 			return user;
 		});
 
-		return new AuthenticatedUserObject(user);
+		return AuthenticatedUserObject.create(user);
 	}
 }

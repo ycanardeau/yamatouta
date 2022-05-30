@@ -103,7 +103,7 @@ export class Quote
 	workLinks = new Collection<QuoteWorkLink>(this);
 
 	takeSnapshot(): QuoteSnapshot {
-		return new QuoteSnapshot(this);
+		return QuoteSnapshot.create(this);
 	}
 
 	createRevision({

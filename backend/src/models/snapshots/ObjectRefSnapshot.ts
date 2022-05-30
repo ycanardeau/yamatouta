@@ -1,7 +1,9 @@
 export class ObjectRefSnapshot<TEntry extends { id: number }> {
-	readonly id: number;
+	private constructor(readonly id: number) {}
 
-	constructor(entry: TEntry) {
-		this.id = entry.id;
+	static create<TEntry extends { id: number }>(
+		entry: TEntry,
+	): ObjectRefSnapshot<TEntry> {
+		return new ObjectRefSnapshot<TEntry>(entry.id);
 	}
 }

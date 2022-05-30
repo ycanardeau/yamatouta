@@ -151,7 +151,7 @@ export class Translation
 	}
 
 	takeSnapshot(): TranslationSnapshot {
-		return new TranslationSnapshot(this);
+		return TranslationSnapshot.create(this);
 	}
 
 	createRevision({

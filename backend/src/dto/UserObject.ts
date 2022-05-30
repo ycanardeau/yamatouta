@@ -3,19 +3,26 @@ import { PermissionContext } from '../services/PermissionContext';
 import { generateGravatarUrl } from '../utils/generateGravatarUrl';
 
 export class UserObject {
-	readonly id: number;
-	readonly deleted: boolean;
-	readonly hidden: boolean;
-	readonly name: string;
-	readonly avatarUrl: string;
+	private constructor(
+		readonly id: number,
+		readonly deleted: boolean,
+		readonly hidden: boolean,
+		readonly name: string,
+		readonly avatarUrl: string,
+	) {}
 
-	constructor(user: User, permissionContext: PermissionContext) {
+	static create(
+		user: User,
+		permissionContext: PermissionContext,
+	): UserObject {
 		permissionContext.verifyDeletedAndHidden(user);
 
-		this.id = user.id;
-		this.deleted = user.deleted;
-		this.hidden = user.hidden;
-		this.name = user.name;
-		this.avatarUrl = generateGravatarUrl(user.email);
+		return new UserObject(
+			user.id,
+			user.deleted,
+			user.hidden,
+			user.name,
+			generateGravatarUrl(user.email),
+		);
 	}
 }

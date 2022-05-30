@@ -80,7 +80,7 @@ export class Work
 	translationLinks = new Collection<TranslationWorkLink>(this);
 
 	takeSnapshot(): WorkSnapshot {
-		return new WorkSnapshot(this);
+		return WorkSnapshot.create(this);
 	}
 
 	createRevision({

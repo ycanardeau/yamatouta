@@ -1,13 +1,17 @@
 import { PartialDate } from '../../entities/PartialDate';
 
 export class PartialDateSnapshot {
-	readonly year?: number;
-	readonly month?: number;
-	readonly day?: number;
+	private constructor(
+		readonly year?: number,
+		readonly month?: number,
+		readonly day?: number,
+	) {}
 
-	constructor(partialDate: PartialDate) {
-		this.year = partialDate.year;
-		this.month = partialDate.month;
-		this.day = partialDate.day;
+	static create(partialDate: PartialDate): PartialDateSnapshot {
+		return new PartialDateSnapshot(
+			partialDate.year,
+			partialDate.month,
+			partialDate.day,
+		);
 	}
 }

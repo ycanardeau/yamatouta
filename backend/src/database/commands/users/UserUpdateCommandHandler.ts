@@ -119,7 +119,7 @@ export class UserUpdateCommandHandler
 				);
 			}
 
-			return new AuthenticatedUserObject(user);
+			return AuthenticatedUserObject.create(user);
 		});
 	}
 }

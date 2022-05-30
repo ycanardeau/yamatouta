@@ -73,7 +73,7 @@ export class Artist
 	workLinks = new Collection<WorkArtistLink>(this);
 
 	takeSnapshot(): ArtistSnapshot {
-		return new ArtistSnapshot(this);
+		return ArtistSnapshot.create(this);
 	}
 
 	createRevision({

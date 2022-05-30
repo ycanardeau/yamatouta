@@ -74,8 +74,8 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 				: Promise.resolve(0),
 		]);
 
-		return new SearchResultObject<WorkObject>(
-			works.map((work) => new WorkObject(work, permissionContext)),
+		return SearchResultObject.create<WorkObject>(
+			works.map((work) => WorkObject.create(work, permissionContext)),
 			count,
 		);
 	}

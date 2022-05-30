@@ -32,8 +32,8 @@ export class LinkListTypesQueryHandler
 
 		const [linkTypes, count] = await this.em.findAndCount(LinkType, where);
 
-		return new SearchResultObject<LinkTypeObject>(
-			linkTypes.map((linkType) => new LinkTypeObject(linkType)),
+		return SearchResultObject.create<LinkTypeObject>(
+			linkTypes.map((linkType) => LinkTypeObject.create(linkType)),
 			count,
 		);
 	}

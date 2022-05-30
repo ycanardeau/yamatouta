@@ -14,39 +14,53 @@ abstract class LinkObject {
 	readonly ended: boolean;
 
 	protected constructor(link: Link) {
-		this.linkType = new LinkTypeObject(link.linkType);
-		this.beginDate = new PartialDateObject(link.beginDate);
-		this.endDate = new PartialDateObject(link.endDate);
+		this.linkType = LinkTypeObject.create(link.linkType);
+		this.beginDate = PartialDateObject.create(link.beginDate);
+		this.endDate = PartialDateObject.create(link.endDate);
 		this.ended = link.ended;
 	}
 }
 
 export class ArtistLinkObject extends LinkObject {
-	readonly id: number;
-	readonly relatedArtist: ArtistObject;
-
-	constructor(artistLink: ArtistLink, permissionContext: PermissionContext) {
+	private constructor(
+		artistLink: ArtistLink,
+		readonly id: number,
+		readonly relatedArtist: ArtistObject,
+	) {
 		super(artistLink);
+	}
 
-		this.id = artistLink.id;
-		this.relatedArtist = new ArtistObject(
+	static create(
+		artistLink: ArtistLink,
+		permissionContext: PermissionContext,
+	): ArtistLinkObject {
+		const relatedArtist = ArtistObject.create(
 			artistLink.relatedArtist,
 			permissionContext,
 		);
+
+		return new ArtistLinkObject(artistLink, artistLink.id, relatedArtist);
 	}
 }
 
 export class WorkLinkObject extends LinkObject {
-	readonly id: number;
-	readonly relatedWork: WorkObject;
-
-	constructor(workLink: WorkLink, permissionContext: PermissionContext) {
+	private constructor(
+		workLink: WorkLink,
+		readonly id: number,
+		readonly relatedWork: WorkObject,
+	) {
 		super(workLink);
+	}
 
-		this.id = workLink.id;
-		this.relatedWork = new WorkObject(
+	static create(
+		workLink: WorkLink,
+		permissionContext: PermissionContext,
+	): WorkLinkObject {
+		const relatedWork = WorkObject.create(
 			workLink.relatedWork,
 			permissionContext,
 		);
+
+		return new WorkLinkObject(workLink, workLink.id, relatedWork);
 	}
 }

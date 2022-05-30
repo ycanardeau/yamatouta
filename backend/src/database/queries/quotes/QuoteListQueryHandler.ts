@@ -77,8 +77,8 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 				: Promise.resolve(0),
 		]);
 
-		return new SearchResultObject<QuoteObject>(
-			quotes.map((quote) => new QuoteObject(quote, permissionContext)),
+		return SearchResultObject.create<QuoteObject>(
+			quotes.map((quote) => QuoteObject.create(quote, permissionContext)),
 			count,
 		);
 	}

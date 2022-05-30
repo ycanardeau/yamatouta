@@ -125,7 +125,7 @@ export class TranslationUpdateCommandHandler
 			return translation;
 		});
 
-		return new TranslationObject(
+		return TranslationObject.create(
 			translation,
 			permissionContext,
 			Object.values(TranslationOptionalField),

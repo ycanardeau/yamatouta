@@ -10,7 +10,7 @@ test('AuthenticatedUserObject', async () => {
 		email: 'user@example.com',
 	});
 
-	const userObject = new AuthenticatedUserObject(user);
+	const userObject = AuthenticatedUserObject.create(user);
 	expect(userObject.id).toBe(user.id);
 	expect(userObject.avatarUrl).toBe(
 		`https://www.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af`,

@@ -59,7 +59,7 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 							)
 						}
 					>
-						{t('shared.edit')}
+						{t('shared.doEdit')}
 					</EuiButton>,
 					<EuiButton
 						size="s"

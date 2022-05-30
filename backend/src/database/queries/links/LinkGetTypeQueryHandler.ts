@@ -25,6 +25,6 @@ export class LinkGetTypeQueryHandler
 
 		if (!linkType) throw new NotFoundException();
 
-		return new LinkTypeObject(linkType);
+		return LinkTypeObject.create(linkType);
 	}
 }

@@ -26,6 +26,6 @@ export class LocalSerializer extends PassportSerializer {
 			hidden: false,
 		});
 
-		done(null, new AuthenticatedUserObject(user));
+		done(null, AuthenticatedUserObject.create(user));
 	}
 }

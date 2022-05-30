@@ -5,21 +5,25 @@ import { Permission } from '../models/Permission';
 import { generateGravatarUrl } from '../utils/generateGravatarUrl';
 
 export class AuthenticatedUserObject {
-	readonly id: number;
-	readonly deleted: boolean;
-	readonly hidden: boolean;
-	readonly name: string;
-	readonly avatarUrl: string;
-	readonly effectivePermissions: Permission[];
+	private constructor(
+		readonly id: number,
+		readonly deleted: boolean,
+		readonly hidden: boolean,
+		readonly name: string,
+		readonly avatarUrl: string,
+		readonly effectivePermissions: Permission[],
+	) {}
 
-	constructor(user: User) {
+	static create(user: User): AuthenticatedUserObject {
 		if (user.deleted || user.hidden) throw new NotFoundException();
 
-		this.id = user.id;
-		this.deleted = user.deleted;
-		this.hidden = user.hidden;
-		this.name = user.name;
-		this.avatarUrl = generateGravatarUrl(user.email);
-		this.effectivePermissions = user.effectivePermissions;
+		return new AuthenticatedUserObject(
+			user.id,
+			user.deleted,
+			user.hidden,
+			user.name,
+			generateGravatarUrl(user.email),
+			user.effectivePermissions,
+		);
 	}
 }

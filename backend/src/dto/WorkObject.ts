@@ -6,38 +6,45 @@ import { ArtistLinkObject } from './LinkObject';
 import { WebLinkObject } from './WebLinkObject';
 
 export class WorkObject {
-	readonly id: number;
-	readonly deleted: boolean;
-	readonly hidden: boolean;
-	readonly name: string;
-	readonly workType: WorkType;
-	readonly webLinks?: WebLinkObject[];
-	readonly artistLinks?: ArtistLinkObject[];
+	private constructor(
+		readonly id: number,
+		readonly deleted: boolean,
+		readonly hidden: boolean,
+		readonly name: string,
+		readonly workType: WorkType,
+		readonly webLinks?: WebLinkObject[],
+		readonly artistLinks?: ArtistLinkObject[],
+	) {}
 
-	constructor(
+	static create(
 		work: Work,
 		permissionContext: PermissionContext,
 		fields: WorkOptionalField[] = [],
-	) {
+	): WorkObject {
 		permissionContext.verifyDeletedAndHidden(work);
 
-		this.id = work.id;
-		this.deleted = work.deleted;
-		this.hidden = work.hidden;
-		this.name = work.name;
-		this.workType = work.workType;
-		this.webLinks = fields.includes(WorkOptionalField.WebLinks)
+		const webLinks = fields.includes(WorkOptionalField.WebLinks)
 			? work.webLinks
 					.getItems()
-					.map((webLink) => new WebLinkObject(webLink))
+					.map((webLink) => WebLinkObject.create(webLink))
 			: undefined;
-		this.artistLinks = fields.includes(WorkOptionalField.ArtistLinks)
+
+		const artistLinks = fields.includes(WorkOptionalField.ArtistLinks)
 			? work.artistLinks
 					.getItems()
-					.map(
-						(artistLink) =>
-							new ArtistLinkObject(artistLink, permissionContext),
+					.map((artistLink) =>
+						ArtistLinkObject.create(artistLink, permissionContext),
 					)
 			: undefined;
+
+		return new WorkObject(
+			work.id,
+			work.deleted,
+			work.hidden,
+			work.name,
+			work.workType,
+			webLinks,
+			artistLinks,
+		);
 	}
 }

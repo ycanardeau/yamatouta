@@ -277,10 +277,9 @@ export class TranslationListQueryHandler
 			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
 		]);
 
-		return new SearchResultObject(
-			translations.map(
-				(translation) =>
-					new TranslationObject(translation, permissionContext),
+		return SearchResultObject.create(
+			translations.map((translation) =>
+				TranslationObject.create(translation, permissionContext),
 			),
 			count,
 		);
