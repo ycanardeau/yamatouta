@@ -1,4 +1,6 @@
+import { LinkType } from './LinkType';
+
 export interface IArtistLink {
 	relatedArtistId: number;
-	linkTypeId: number;
+	linkType: LinkType;
 }

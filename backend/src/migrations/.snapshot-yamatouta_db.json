@@ -2028,84 +2028,6 @@
           "primary": true,
           "nullable": false,
           "mappedType": "integer"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "datetime",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
-        },
-        "entry_type": {
-          "name": "entry_type",
-          "type": "enum('User', 'Translation', 'Quote', 'Artist', 'Work')",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "enumItems": [
-            "User",
-            "Translation",
-            "Quote",
-            "Artist",
-            "Work"
-          ],
-          "mappedType": "enum"
-        },
-        "related_entry_type": {
-          "name": "related_entry_type",
-          "type": "enum('User', 'Translation', 'Quote', 'Artist', 'Work')",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "enumItems": [
-            "User",
-            "Translation",
-            "Quote",
-            "Artist",
-            "Work"
-          ],
-          "mappedType": "enum"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        }
-      },
-      "name": "link_types",
-      "indexes": [
-        {
-          "keyName": "PRIMARY",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {}
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
         }
       },
       "name": "commits",
@@ -2232,14 +2154,22 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "link_type_id": {
-          "name": "link_type_id",
-          "type": "int",
-          "unsigned": true,
+        "link_type": {
+          "name": "link_type",
+          "type": "enum('Work_Artist_Author', 'Work_Artist_Contributor', 'Work_Artist_Editor', 'Work_Artist_Foreword', 'Work_Artist_Publisher', 'Work_Artist_Translator')",
+          "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "integer"
+          "enumItems": [
+            "Work_Artist_Author",
+            "Work_Artist_Contributor",
+            "Work_Artist_Editor",
+            "Work_Artist_Foreword",
+            "Work_Artist_Publisher",
+            "Work_Artist_Translator"
+          ],
+          "mappedType": "enum"
         },
         "begin_date_year": {
           "name": "begin_date_year",
@@ -2359,15 +2289,6 @@
       "indexes": [
         {
           "columnNames": [
-            "link_type_id"
-          ],
-          "composite": false,
-          "keyName": "artist_links_link_type_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
             "related_artist_id"
           ],
           "composite": false,
@@ -2414,18 +2335,6 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "artist_links_link_type_id_foreign": {
-          "constraintName": "artist_links_link_type_id_foreign",
-          "columnNames": [
-            "link_type_id"
-          ],
-          "localTableName": "artist_links",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "link_types",
-          "updateRule": "cascade"
-        },
         "artist_links_related_artist_id_foreign": {
           "constraintName": "artist_links_related_artist_id_foreign",
           "columnNames": [
@@ -2976,14 +2885,22 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "link_type_id": {
-          "name": "link_type_id",
-          "type": "int",
-          "unsigned": true,
+        "link_type": {
+          "name": "link_type",
+          "type": "enum('Work_Artist_Author', 'Work_Artist_Contributor', 'Work_Artist_Editor', 'Work_Artist_Foreword', 'Work_Artist_Publisher', 'Work_Artist_Translator')",
+          "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "integer"
+          "enumItems": [
+            "Work_Artist_Author",
+            "Work_Artist_Contributor",
+            "Work_Artist_Editor",
+            "Work_Artist_Foreword",
+            "Work_Artist_Publisher",
+            "Work_Artist_Translator"
+          ],
+          "mappedType": "enum"
         },
         "begin_date_year": {
           "name": "begin_date_year",
@@ -3113,15 +3030,6 @@
       "indexes": [
         {
           "columnNames": [
-            "link_type_id"
-          ],
-          "composite": false,
-          "keyName": "work_links_link_type_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
             "related_work_id"
           ],
           "composite": false,
@@ -3177,18 +3085,6 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "work_links_link_type_id_foreign": {
-          "constraintName": "work_links_link_type_id_foreign",
-          "columnNames": [
-            "link_type_id"
-          ],
-          "localTableName": "work_links",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "link_types",
-          "updateRule": "cascade"
-        },
         "work_links_related_work_id_foreign": {
           "constraintName": "work_links_related_work_id_foreign",
           "columnNames": [

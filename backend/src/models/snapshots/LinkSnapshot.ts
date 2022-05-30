@@ -1,20 +1,20 @@
 import { Artist } from '../../entities/Artist';
 import { ArtistLink } from '../../entities/ArtistLink';
 import { Link } from '../../entities/Link';
-import { LinkType } from '../../entities/LinkType';
 import { Work } from '../../entities/Work';
 import { WorkLink } from '../../entities/WorkLink';
+import { LinkType } from '../LinkType';
 import { ObjectRefSnapshot } from './ObjectRefSnapshot';
 import { PartialDateSnapshot } from './PartialDateSnapshot';
 
 abstract class LinkSnapshot {
-	readonly linkType: ObjectRefSnapshot<LinkType>;
+	readonly linkType: LinkType;
 	readonly beginDate: PartialDateSnapshot;
 	readonly endDate: PartialDateSnapshot;
 	readonly ended: boolean;
 
 	protected constructor(link: Link) {
-		this.linkType = ObjectRefSnapshot.create<LinkType>(link.linkType);
+		this.linkType = link.linkType;
 		this.beginDate = PartialDateSnapshot.create(link.beginDate);
 		this.endDate = PartialDateSnapshot.create(link.endDate);
 		this.ended = link.ended;

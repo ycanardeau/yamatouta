@@ -1,6 +1,7 @@
 import {
 	EuiButton,
 	EuiButtonIcon,
+	EuiSelect,
 	EuiSpacer,
 	EuiTable,
 	EuiTableBody,
@@ -13,25 +14,24 @@ import { AddRegular, DeleteRegular } from '@fluentui/react-icons';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
-import { EntryType } from '../models/EntryType';
+import { LinkType } from '../models/LinkType';
 import {
 	ArtistLinkEditStore,
 	ArtistLinkListEditStore,
 } from '../stores/ArtistLinkListEditStore';
-import LinkTypeComboBox from './LinkTypeComboBox';
 import ArtistComboBox from './artists/ArtistComboBox';
 
 interface ArtistLinkEditProps {
 	artistLinkListEditStore: ArtistLinkListEditStore;
 	store: ArtistLinkEditStore;
-	entryType: EntryType;
+	allowedLinkTypes: LinkType[];
 }
 
 const ArtistLinkEdit = observer(
 	({
 		artistLinkListEditStore,
 		store,
-		entryType,
+		allowedLinkTypes,
 	}: ArtistLinkEditProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -44,10 +44,17 @@ const ArtistLinkEdit = observer(
 						width: '100%',
 					}}
 				>
-					<LinkTypeComboBox
-						store={store.linkType}
-						entryType={entryType}
-						relatedEntryType={EntryType.Artist}
+					<EuiSelect
+						compressed
+						options={allowedLinkTypes.map((linkType) => ({
+							value: linkType,
+							text: t(`linkPhrases.${linkType}`),
+						}))}
+						value={store.linkType}
+						onChange={(e): void =>
+							store.setLinkType(e.target.value as LinkType)
+						}
+						fullWidth
 					/>
 				</EuiTableRowCell>
 				<EuiTableRowCell
@@ -81,11 +88,14 @@ const ArtistLinkEdit = observer(
 
 interface ArtistLinkListEditProps {
 	store: ArtistLinkListEditStore;
-	entryType: EntryType;
+	allowedLinkTypes: LinkType[];
 }
 
 const ArtistLinkListEdit = observer(
-	({ store, entryType }: ArtistLinkListEditProps): React.ReactElement => {
+	({
+		store,
+		allowedLinkTypes,
+	}: ArtistLinkListEditProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (
@@ -106,7 +116,7 @@ const ArtistLinkListEdit = observer(
 							<ArtistLinkEdit
 								artistLinkListEditStore={store}
 								store={item}
-								entryType={entryType}
+								allowedLinkTypes={allowedLinkTypes}
 								key={index}
 							/>
 						))}

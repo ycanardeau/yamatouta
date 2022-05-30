@@ -42,17 +42,10 @@ export abstract class WorkLink
 		this.relatedWork.id = value;
 	}
 
-	get linkTypeId(): number {
-		return this.linkType.id;
-	}
-	set linkTypeId(value: number) {
-		this.linkType.id = value;
-	}
-
 	contentEquals(other: IWorkLink): boolean {
 		return (
 			this.relatedWorkId === other.relatedWorkId &&
-			this.linkTypeId === other.linkTypeId
+			this.linkType === other.linkType
 		);
 	}
 }

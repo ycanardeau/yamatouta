@@ -1,7 +1,6 @@
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 
-import { LinkType } from '../entities/LinkType';
 import { PartialDate } from '../entities/PartialDate';
 import { Work } from '../entities/Work';
 import { WorkLink } from '../entities/WorkLink';
@@ -28,22 +27,15 @@ export class WorkLinkService {
 		): Promise<TWorkLink> => {
 			permissionContext.verifyPermission(Permission.WorkLink_Create);
 
-			const [relatedWork, linkType] = await Promise.all([
-				em.findOneOrFail(Work, {
-					id: newItem.relatedWorkId,
-					deleted: false,
-					hidden: false,
-				}),
-				em.findOneOrFail(LinkType, {
-					id: newItem.linkTypeId,
-					entryType: entry.entryType,
-					relatedEntryType: EntryType.Work,
-				}),
-			]);
+			const relatedWork = await em.findOneOrFail(Work, {
+				id: newItem.relatedWorkId,
+				deleted: false,
+				hidden: false,
+			});
 
 			return entry.createWorkLink({
 				relatedWork: relatedWork,
-				linkType: linkType,
+				linkType: newItem.linkType,
 				beginDate: new PartialDate() /* TODO */,
 				endDate: new PartialDate() /* TODO */,
 				ended: newItem.ended,
@@ -71,9 +63,7 @@ export class WorkLinkService {
 
 		await collectionSyncWithContent(
 			entry.workLinks.getItems(),
-			newItems.filter(
-				(newItem) => newItem.relatedWorkId && newItem.linkTypeId,
-			),
+			newItems.filter((newItem) => newItem.relatedWorkId),
 			(oldItem, newItem) => oldItem.id === newItem.id,
 			create,
 			update,

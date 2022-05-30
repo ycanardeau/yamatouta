@@ -188,5 +188,13 @@
 		"startDate": "Start date",
 		"endDate": "End date",
 		"ended": "Ended"
+	},
+	"linkPhrases": {
+		"Work_Artist_Author": "Author",
+		"Work_Artist_Contributor": "Contributor",
+		"Work_Artist_Editor": "Editor",
+		"Work_Artist_Foreword": "Foreword",
+		"Work_Artist_Publisher": "Publisher",
+		"Work_Artist_Translator": "Translator"
 	}
 }

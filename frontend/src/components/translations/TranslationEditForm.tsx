@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import WebLinkListEdit from '../../components/WebLinkListEdit';
 import { ITranslationObject } from '../../dto/ITranslationObject';
-import { EntryType } from '../../models/EntryType';
+import { translationWorkLinkTypes } from '../../models/LinkType';
 import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
 import WorkLinkListEdit from '../WorkLinkListEdit';
@@ -108,7 +108,7 @@ const TranslationEditForm = observer(
 					<EuiFormRow label={t('shared.workLinks')} fullWidth>
 						<WorkLinkListEdit
 							store={store.workLinks}
-							entryType={EntryType.Translation}
+							allowedLinkTypes={translationWorkLinkTypes}
 						/>
 					</EuiFormRow>
 				</EuiForm>

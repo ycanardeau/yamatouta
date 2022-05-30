@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import WebLinkListEdit from '../../components/WebLinkListEdit';
 import { IWorkObject } from '../../dto/IWorkObject';
-import { EntryType } from '../../models/EntryType';
+import { workArtistLinkTypes } from '../../models/LinkType';
 import { WorkType } from '../../models/works/WorkType';
 import { WorkEditStore } from '../../stores/works/WorkEditStore';
 import ArtistLinkListEdit from '../ArtistLinkListEdit';
@@ -80,7 +80,7 @@ const WorkEditForm = observer(
 					<EuiFormRow label={t('shared.artistLinks')} fullWidth>
 						<ArtistLinkListEdit
 							store={store.artistLinks}
-							entryType={EntryType.Work}
+							allowedLinkTypes={workArtistLinkTypes}
 						/>
 					</EuiFormRow>
 				</EuiForm>

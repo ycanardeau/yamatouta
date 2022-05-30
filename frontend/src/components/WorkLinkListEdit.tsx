@@ -1,6 +1,7 @@
 import {
 	EuiButton,
 	EuiButtonIcon,
+	EuiSelect,
 	EuiSpacer,
 	EuiTable,
 	EuiTableBody,
@@ -13,25 +14,24 @@ import { AddRegular, DeleteRegular } from '@fluentui/react-icons';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
-import { EntryType } from '../models/EntryType';
+import { LinkType } from '../models/LinkType';
 import {
 	WorkLinkEditStore,
 	WorkLinkListEditStore,
 } from '../stores/WorkLinkListEditStore';
-import LinkTypeComboBox from './LinkTypeComboBox';
 import WorkComboBox from './works/WorkComboBox';
 
 interface WorkLinkEditProps {
 	workLinkListEditStore: WorkLinkListEditStore;
 	store: WorkLinkEditStore;
-	entryType: EntryType;
+	allowedLinkTypes: LinkType[];
 }
 
 const WorkLinkEdit = observer(
 	({
 		workLinkListEditStore,
 		store,
-		entryType,
+		allowedLinkTypes,
 	}: WorkLinkEditProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -44,10 +44,17 @@ const WorkLinkEdit = observer(
 						width: '100%',
 					}}
 				>
-					<LinkTypeComboBox
-						store={store.linkType}
-						entryType={entryType}
-						relatedEntryType={EntryType.Work}
+					<EuiSelect
+						compressed
+						options={allowedLinkTypes.map((linkType) => ({
+							value: linkType,
+							text: t(`linkPhrases.${linkType}`),
+						}))}
+						value={store.linkType}
+						onChange={(e): void =>
+							store.setLinkType(e.target.value as LinkType)
+						}
+						fullWidth
 					/>
 				</EuiTableRowCell>
 				<EuiTableRowCell
@@ -81,11 +88,14 @@ const WorkLinkEdit = observer(
 
 interface WorkLinkListEditProps {
 	store: WorkLinkListEditStore;
-	entryType: EntryType;
+	allowedLinkTypes: LinkType[];
 }
 
 const WorkLinkListEdit = observer(
-	({ store, entryType }: WorkLinkListEditProps): React.ReactElement => {
+	({
+		store,
+		allowedLinkTypes,
+	}: WorkLinkListEditProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (
@@ -106,7 +116,7 @@ const WorkLinkListEdit = observer(
 							<WorkLinkEdit
 								workLinkListEditStore={store}
 								store={item}
-								entryType={entryType}
+								allowedLinkTypes={allowedLinkTypes}
 								key={index}
 							/>
 						))}

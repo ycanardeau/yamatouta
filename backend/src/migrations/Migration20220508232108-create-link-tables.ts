@@ -3,14 +3,7 @@ import { Migration } from '@mikro-orm/migrations';
 export class Migration20220508232108 extends Migration {
 	async up(): Promise<void> {
 		this.addSql(
-			"create table `link_types` (`id` int unsigned not null auto_increment primary key, `updated_at` datetime not null, `entry_type` enum('User', 'Translation', 'Quote', 'Artist', 'Work') not null, `related_entry_type` enum('User', 'Translation', 'Quote', 'Artist', 'Work') not null, `name` varchar(255) not null) default character set utf8mb4 engine = InnoDB;",
-		);
-
-		this.addSql(
-			"create table `artist_links` (`id` int unsigned not null auto_increment primary key, `link_type_id` int unsigned not null, `begin_date_year` int null, `ended` tinyint(1) not null, `begin_date_month` int null, `end_date_year` int null, `begin_date_day` int null, `end_date_month` int null, `end_date_day` int null, `created_at` datetime not null, `related_artist_id` int unsigned not null, `entry_type` enum('Artist', 'Work') not null, `artist_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
-		);
-		this.addSql(
-			'alter table `artist_links` add index `artist_links_link_type_id_index`(`link_type_id`);',
+			"create table `artist_links` (`id` int unsigned not null auto_increment primary key, `link_type` enum('Work_Artist_Author', 'Work_Artist_Contributor', 'Work_Artist_Editor', 'Work_Artist_Foreword', 'Work_Artist_Publisher', 'Work_Artist_Translator') not null, `begin_date_year` int null, `ended` tinyint(1) not null, `begin_date_month` int null, `end_date_year` int null, `begin_date_day` int null, `end_date_month` int null, `end_date_day` int null, `created_at` datetime not null, `related_artist_id` int unsigned not null, `entry_type` enum('Artist', 'Work') not null, `artist_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
 		);
 		this.addSql(
 			'alter table `artist_links` add index `artist_links_related_artist_id_index`(`related_artist_id`);',
@@ -26,10 +19,7 @@ export class Migration20220508232108 extends Migration {
 		);
 
 		this.addSql(
-			"create table `work_links` (`id` int unsigned not null auto_increment primary key, `link_type_id` int unsigned not null, `begin_date_year` int null, `ended` tinyint(1) not null, `begin_date_month` int null, `end_date_year` int null, `begin_date_day` int null, `end_date_month` int null, `end_date_day` int null, `created_at` datetime not null, `related_work_id` int unsigned not null, `entry_type` enum('Quote', 'Translation', 'Work') not null, `quote_id` int unsigned null, `translation_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
-		);
-		this.addSql(
-			'alter table `work_links` add index `work_links_link_type_id_index`(`link_type_id`);',
+			"create table `work_links` (`id` int unsigned not null auto_increment primary key, `link_type` enum('Work_Artist_Author', 'Work_Artist_Contributor', 'Work_Artist_Editor', 'Work_Artist_Foreword', 'Work_Artist_Publisher', 'Work_Artist_Translator') not null, `begin_date_year` int null, `ended` tinyint(1) not null, `begin_date_month` int null, `end_date_year` int null, `begin_date_day` int null, `end_date_month` int null, `end_date_day` int null, `created_at` datetime not null, `related_work_id` int unsigned not null, `entry_type` enum('Quote', 'Translation', 'Work') not null, `quote_id` int unsigned null, `translation_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
 		);
 		this.addSql(
 			'alter table `work_links` add index `work_links_related_work_id_index`(`related_work_id`);',
@@ -48,9 +38,6 @@ export class Migration20220508232108 extends Migration {
 		);
 
 		this.addSql(
-			'alter table `artist_links` add constraint `artist_links_link_type_id_foreign` foreign key (`link_type_id`) references `link_types` (`id`) on update cascade;',
-		);
-		this.addSql(
 			'alter table `artist_links` add constraint `artist_links_related_artist_id_foreign` foreign key (`related_artist_id`) references `artists` (`id`) on update cascade;',
 		);
 		this.addSql(
@@ -60,9 +47,6 @@ export class Migration20220508232108 extends Migration {
 			'alter table `artist_links` add constraint `artist_links_work_id_foreign` foreign key (`work_id`) references `works` (`id`) on update cascade on delete set null;',
 		);
 
-		this.addSql(
-			'alter table `work_links` add constraint `work_links_link_type_id_foreign` foreign key (`link_type_id`) references `link_types` (`id`) on update cascade;',
-		);
 		this.addSql(
 			'alter table `work_links` add constraint `work_links_related_work_id_foreign` foreign key (`related_work_id`) references `works` (`id`) on update cascade;',
 		);
@@ -78,16 +62,6 @@ export class Migration20220508232108 extends Migration {
 	}
 
 	async down(): Promise<void> {
-		this.addSql(
-			'alter table `artist_links` drop foreign key `artist_links_link_type_id_foreign`;',
-		);
-
-		this.addSql(
-			'alter table `work_links` drop foreign key `work_links_link_type_id_foreign`;',
-		);
-
-		this.addSql('drop table if exists `link_types`;');
-
 		this.addSql('drop table if exists `artist_links`;');
 
 		this.addSql('drop table if exists `work_links`;');

@@ -41,17 +41,10 @@ export abstract class ArtistLink
 		this.relatedArtist.id = value;
 	}
 
-	get linkTypeId(): number {
-		return this.linkType.id;
-	}
-	set linkTypeId(value: number) {
-		this.linkType.id = value;
-	}
-
 	contentEquals(other: IArtistLink): boolean {
 		return (
 			this.relatedArtistId === other.relatedArtistId &&
-			this.linkTypeId === other.linkTypeId
+			this.linkType === other.linkType
 		);
 	}
 }

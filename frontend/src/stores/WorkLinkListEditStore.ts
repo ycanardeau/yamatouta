@@ -1,21 +1,18 @@
-import { makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 
-import { linkApi } from '../api/linkApi';
 import { workApi } from '../api/workApi';
 import { IWorkLinkObject } from '../dto/ILinkObject';
-import { ILinkTypeObject } from '../dto/ILinkTypeObject';
 import { IWorkObject } from '../dto/IWorkObject';
 import { IWorkLinkUpdateParams } from '../models/IWorkLinkUpdateParams';
+import { LinkType } from '../models/LinkType';
 import { BasicEntryLinkStore } from './BasicEntryLinkStore';
 import { BasicListEditStore } from './BasicListEditStore';
 
 export class WorkLinkEditStore {
-	readonly linkType = new BasicEntryLinkStore<ILinkTypeObject>((id) =>
-		linkApi.getType({ id: id }),
-	);
 	readonly relatedWork = new BasicEntryLinkStore<IWorkObject>((id) =>
 		workApi.get({ id: id }),
 	);
+	@observable linkType = LinkType.Work_Artist_Author;
 	//readonly beginDate: PartialDateEditStore;
 	//readonly endDate: PartialDateEditStore;
 	@observable ended = false;
@@ -24,17 +21,21 @@ export class WorkLinkEditStore {
 		makeObservable(this);
 
 		if (workLink) {
-			this.linkType.loadEntryById(workLink.linkType.id);
 			this.relatedWork.loadEntryById(workLink.relatedWork.id);
+			this.linkType = workLink.linkType;
 			this.ended = workLink.ended;
 		}
 	}
 
+	@action setLinkType = (value: LinkType): void => {
+		this.linkType = value;
+	};
+
 	toParams = (): IWorkLinkUpdateParams => {
 		return {
 			id: this.workLink?.id ?? 0,
-			linkTypeId: this.linkType.entry?.id ?? 0,
 			relatedWorkId: this.relatedWork.entry?.id ?? 0,
+			linkType: this.linkType,
 			beginDate: {} /* TODO */,
 			endDate: {} /* TODO */,
 			ended: this.ended,

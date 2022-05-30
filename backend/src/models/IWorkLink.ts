@@ -1,4 +1,6 @@
+import { LinkType } from './LinkType';
+
 export interface IWorkLink {
 	relatedWorkId: number;
-	linkTypeId: number;
+	linkType: LinkType;
 }

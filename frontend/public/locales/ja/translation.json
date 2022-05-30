@@ -180,5 +180,11 @@
 		"startDate": "はじまり",
 		"endDate": "おわり",
 		"ended": "おわった"
+	},
+	"linkPhrases": {
+		"Work_Artist_Author": "かきて",
+		"Work_Artist_Editor": "えらびて",
+		"Work_Artist_Foreword": "はしがき",
+		"Work_Artist_Publisher": "くばりて"
 	}
 }

@@ -1,10 +1,10 @@
+import { LinkType } from '../models/LinkType';
 import { IArtistObject } from './IArtistObject';
-import { ILinkTypeObject } from './ILinkTypeObject';
 import { IPartialDateObject } from './IPartialDateObject';
 import { IWorkObject } from './IWorkObject';
 
 interface ILinkObject {
-	linkType: ILinkTypeObject;
+	linkType: LinkType;
 	beginDate: IPartialDateObject;
 	endDate: IPartialDateObject;
 	ended: boolean;
