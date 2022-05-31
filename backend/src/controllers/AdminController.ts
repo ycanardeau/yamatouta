@@ -2,7 +2,7 @@ import { Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { AdminCreateMissingRevisionsCommand } from '../database/commands/admin/AdminCreateMissingRevisionsCommandHandler';
-import { GetPermissionContext } from '../decorators/GetPermissionContext';
+import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
 import { PermissionContext } from '../services/PermissionContext';
 
 @Controller('admin')

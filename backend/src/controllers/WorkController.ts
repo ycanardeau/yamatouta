@@ -6,16 +6,16 @@ import { WorkUpdateCommand } from '../database/commands/works/WorkUpdateCommandH
 import { WorkListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
 import { WorkGetQuery } from '../database/queries/works/WorkGetQueryHandler';
 import { WorkListQuery } from '../database/queries/works/WorkListQueryHandler';
-import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { WorkObject } from '../dto/WorkObject';
+import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '../framework/pipes/JoiValidationPipe';
 import { EntryDeleteParams } from '../models/EntryDeleteParams';
 import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
 import { WorkGetParams } from '../models/works/WorkGetParams';
 import { WorkListParams } from '../models/works/WorkListParams';
 import { WorkUpdateParams } from '../models/works/WorkUpdateParams';
-import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 
 @Controller('works')

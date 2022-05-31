@@ -7,7 +7,7 @@ import config from '../../../config';
 import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
 import { UserAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { User } from '../../../entities/User';
-import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
+import { UserEmailAlreadyExistsException } from '../../../framework/exceptions/UserEmailAlreadyExistsException';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { UserCreateParams } from '../../../models/users/UserCreateParams';
 import { PermissionContext } from '../../../services/PermissionContext';

@@ -6,16 +6,16 @@ import { TranslationUpdateCommand } from '../database/commands/translations/Tran
 import { TranslationListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
 import { TranslationGetQuery } from '../database/queries/translations/TranslationGetQueryHandler';
 import { TranslationListQuery } from '../database/queries/translations/TranslationListQueryHandler';
-import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { TranslationObject } from '../dto/TranslationObject';
+import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '../framework/pipes/JoiValidationPipe';
 import { EntryDeleteParams } from '../models/EntryDeleteParams';
 import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
 import { TranslationGetParams } from '../models/translations/TranslationGetParams';
 import { TranslationListParams } from '../models/translations/TranslationListParams';
 import { TranslationUpdateParams } from '../models/translations/TranslationUpdateParams';
-import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 
 @Controller('translations')

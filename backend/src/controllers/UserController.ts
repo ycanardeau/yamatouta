@@ -6,15 +6,15 @@ import { UserUpdateCommand } from '../database/commands/users/UserUpdateCommandH
 import { UserGetCurrentQuery } from '../database/queries/users/UserGetCurrentQueryHandler';
 import { UserGetQuery } from '../database/queries/users/UserGetQueryHandler';
 import { UserListQuery } from '../database/queries/users/UserListQueryHandler';
-import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { AuthenticatedUserObject } from '../dto/AuthenticatedUserObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
 import { UserObject } from '../dto/UserObject';
+import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '../framework/pipes/JoiValidationPipe';
 import { UserCreateParams } from '../models/users/UserCreateParams';
 import { UserGetParams } from '../models/users/UserGetParams';
 import { UserListParams } from '../models/users/UserListParams';
 import { UserUpdateParams } from '../models/users/UserUpdateParams';
-import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 
 @Controller('users')

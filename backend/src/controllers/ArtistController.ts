@@ -6,16 +6,16 @@ import { ArtistUpdateCommand } from '../database/commands/artists/ArtistUpdateCo
 import { ArtistListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
 import { ArtistGetQuery } from '../database/queries/artists/ArtistGetQueryHandler';
 import { ArtistListQuery } from '../database/queries/artists/ArtistListQueryHandler';
-import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { ArtistObject } from '../dto/ArtistObject';
 import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
+import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '../framework/pipes/JoiValidationPipe';
 import { EntryDeleteParams } from '../models/EntryDeleteParams';
 import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
 import { ArtistGetParams } from '../models/artists/ArtistGetParams';
 import { ArtistListParams } from '../models/artists/ArtistListParams';
 import { ArtistUpdateParams } from '../models/artists/ArtistUpdateParams';
-import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 
 @Controller('artists')
