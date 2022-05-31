@@ -12,7 +12,6 @@ import { Permission } from '../models/Permission';
 import { collectionSyncWithContent } from '../utils/collectionDiff';
 import { PermissionContext } from './PermissionContext';
 
-// TODO: Add unit tests.
 @Injectable()
 export class ArtistLinkService {
 	async sync<TArtistLink extends ArtistLink>(
@@ -41,8 +40,8 @@ export class ArtistLinkService {
 			return entry.createArtistLink({
 				relatedArtist: relatedArtist,
 				linkType: newItem.linkType,
-				beginDate: new PartialDate() /* TODO */,
-				endDate: new PartialDate() /* TODO */,
+				beginDate: PartialDate.create(newItem.beginDate),
+				endDate: PartialDate.create(newItem.endDate),
 				ended: newItem.ended,
 			});
 		};

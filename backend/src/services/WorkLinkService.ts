@@ -12,7 +12,6 @@ import { WorkLinkUpdateParams } from '../models/WorkLinkUpdateParams';
 import { collectionSyncWithContent } from '../utils/collectionDiff';
 import { PermissionContext } from './PermissionContext';
 
-// TODO: Add unit tests.
 @Injectable()
 export class WorkLinkService {
 	async sync<TWorkLink extends WorkLink>(
@@ -41,8 +40,8 @@ export class WorkLinkService {
 			return entry.createWorkLink({
 				relatedWork: relatedWork,
 				linkType: newItem.linkType,
-				beginDate: new PartialDate() /* TODO */,
-				endDate: new PartialDate() /* TODO */,
+				beginDate: PartialDate.create(newItem.beginDate),
+				endDate: PartialDate.create(newItem.endDate),
 				ended: newItem.ended,
 			});
 		};
@@ -56,6 +55,7 @@ export class WorkLinkService {
 			permissionContext.verifyPermission(Permission.WorkLink_Update);
 
 			oldItem.relatedWorkId = newItem.relatedWorkId;
+			oldItem.linkType = newItem.linkType;
 
 			return true;
 		};

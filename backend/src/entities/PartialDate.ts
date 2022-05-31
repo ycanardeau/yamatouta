@@ -16,6 +16,20 @@ export class PartialDate
 	@Property()
 	day?: number;
 
+	constructor(year?: number, month?: number, day?: number) {
+		this.year = year;
+		this.month = month;
+		this.day = day;
+	}
+
+	static create(partialDate: IPartialDate): PartialDate {
+		return new PartialDate(
+			partialDate.year,
+			partialDate.month,
+			partialDate.day,
+		);
+	}
+
 	contentEquals(other: IPartialDate): boolean {
 		return (
 			this.year === other.year &&
