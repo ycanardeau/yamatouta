@@ -10,10 +10,10 @@ import { useTranslation } from 'react-i18next';
 
 import WebLinkList from '../../components/WebLinkList';
 import QuoteComment from '../../components/quotes/QuoteComment';
-import { IQuoteObject } from '../../dto/IQuoteObject';
+import { QuoteDetailsObject } from '../../dto/QuoteDetailsObject';
 
 interface QuoteBasicInfoProps {
-	quote: IQuoteObject;
+	quote: QuoteDetailsObject;
 }
 
 const QuoteBasicInfo = ({ quote }: QuoteBasicInfoProps): React.ReactElement => {

@@ -13,6 +13,8 @@ import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import WorkPage from '../../components/works/WorkPage';
 import { useWorkDetails } from '../../components/works/useWorkDetails';
+import { IWorkObject } from '../../dto/IWorkObject';
+import { WorkDetailsObject } from '../../dto/WorkDetailsObject';
 import { Permission } from '../../models/Permission';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
 import WorkBasicInfo from './WorkBasicInfo';
@@ -105,7 +107,13 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 const WorkDetails = (): React.ReactElement | null => {
 	const [store] = useWorkDetails(
-		React.useCallback((work) => new WorkDetailsStore(work), []),
+		React.useCallback(
+			(work) =>
+				new WorkDetailsStore(
+					WorkDetailsObject.create(work as Required<IWorkObject>),
+				),
+			[],
+		),
 	);
 
 	return store ? <Layout store={store} /> : null;

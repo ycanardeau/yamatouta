@@ -8,6 +8,7 @@ import {
 
 import { translationApi } from '../../api/translationApi';
 import { ITranslationObject } from '../../dto/ITranslationObject';
+import { TranslationEditObject } from '../../dto/TranslationEditObject';
 import { ITranslationUpdateParams } from '../../models/translations/ITranslationUpdateParams';
 import { WordCategory } from '../../models/translations/WordCategory';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
@@ -23,7 +24,7 @@ export class TranslationEditStore {
 	readonly webLinks: WebLinkListEditStore;
 	readonly workLinks: WorkLinkListEditStore;
 
-	constructor(private readonly translation?: ITranslationObject) {
+	constructor(private readonly translation?: TranslationEditObject) {
 		makeObservable(this);
 
 		if (translation) {

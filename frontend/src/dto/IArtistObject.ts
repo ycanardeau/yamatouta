@@ -5,5 +5,5 @@ import { IWebLinkObject } from './IWebLinkObject';
 export interface IArtistObject extends IEntryWithIdAndName {
 	artistType: ArtistType;
 	avatarUrl?: string;
-	webLinks: IWebLinkObject[];
+	webLinks?: IWebLinkObject[];
 }

@@ -1,17 +1,5 @@
-import { action, makeObservable, observable } from 'mobx';
-
-import { IWorkObject } from '../../dto/IWorkObject';
+import { WorkDetailsObject } from '../../dto/WorkDetailsObject';
 
 export class WorkDetailsStore {
-	@observable work: IWorkObject;
-
-	constructor(work: IWorkObject) {
-		makeObservable(this);
-
-		this.work = work;
-	}
-
-	@action setWork = (value: IWorkObject): void => {
-		this.work = value;
-	};
+	constructor(readonly work: WorkDetailsObject) {}
 }

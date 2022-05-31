@@ -7,10 +7,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import WebLinkList from '../../components/WebLinkList';
-import { IWorkObject } from '../../dto/IWorkObject';
+import { WorkDetailsObject } from '../../dto/WorkDetailsObject';
 
 interface WorkBasicInfoProps {
-	work: IWorkObject;
+	work: WorkDetailsObject;
 }
 
 const WorkBasicInfo = ({ work }: WorkBasicInfoProps): React.ReactElement => {

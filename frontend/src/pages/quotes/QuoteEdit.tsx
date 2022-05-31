@@ -4,10 +4,10 @@ import QuoteEditForm from '../../components/quotes/QuoteEditForm';
 import QuotePage from '../../components/quotes/QuotePage';
 import { useQuoteDetails } from '../../components/quotes/useQuoteDetails';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { IQuoteObject } from '../../dto/IQuoteObject';
+import { QuoteEditObject } from '../../dto/QuoteEditObject';
 
 interface LayoutProps {
-	quote: IQuoteObject;
+	quote: QuoteEditObject;
 }
 
 const Layout = ({ quote }: LayoutProps): React.ReactElement => {
@@ -23,7 +23,9 @@ const Layout = ({ quote }: LayoutProps): React.ReactElement => {
 };
 
 const QuoteEdit = (): React.ReactElement | null => {
-	const [quote] = useQuoteDetails(React.useCallback((quote) => quote, []));
+	const [quote] = useQuoteDetails(
+		React.useCallback((quote) => quote as QuoteEditObject, []),
+	);
 
 	return quote ? <Layout quote={quote} /> : null;
 };

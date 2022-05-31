@@ -9,11 +9,11 @@ import { useTranslation } from 'react-i18next';
 
 import Link from '../../components/Link';
 import WebLinkList from '../../components/WebLinkList';
-import { ITranslationObject } from '../../dto/ITranslationObject';
+import { TranslationDetailsObject } from '../../dto/TranslationDetailsObject';
 import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
 
 interface TranslationBasicInfoProps {
-	translation: ITranslationObject;
+	translation: TranslationDetailsObject;
 }
 
 const TranslationBasicInfo = ({

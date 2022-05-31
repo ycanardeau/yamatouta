@@ -11,6 +11,6 @@ export interface IQuoteObject {
 	locale: string;
 	artist: IArtistObject;
 	sourceUrl: string;
-	webLinks: IWebLinkObject[];
-	workLinks: IWorkLinkObject[];
+	webLinks?: IWebLinkObject[];
+	workLinks?: IWorkLinkObject[];
 }

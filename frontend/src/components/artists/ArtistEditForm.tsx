@@ -14,12 +14,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import WebLinkListEdit from '../../components/WebLinkListEdit';
-import { IArtistObject } from '../../dto/IArtistObject';
+import { ArtistEditObject } from '../../dto/ArtistEditObject';
 import { ArtistType } from '../../models/artists/ArtistType';
 import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
 
 interface ArtistEditFormProps {
-	artist?: IArtistObject;
+	artist?: ArtistEditObject;
 }
 
 const ArtistEditForm = observer(

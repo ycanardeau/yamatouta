@@ -7,6 +7,7 @@ import {
 } from 'mobx';
 
 import { artistApi } from '../../api/artistApi';
+import { ArtistEditObject } from '../../dto/ArtistEditObject';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { ArtistType } from '../../models/artists/ArtistType';
 import { IArtistUpdateParams } from '../../models/artists/IArtistUpdateParams';
@@ -18,7 +19,7 @@ export class ArtistEditStore {
 	@observable artistType = ArtistType.Person;
 	readonly webLinks: WebLinkListEditStore;
 
-	constructor(private readonly artist?: IArtistObject) {
+	constructor(private readonly artist?: ArtistEditObject) {
 		makeObservable(this);
 
 		if (artist) {

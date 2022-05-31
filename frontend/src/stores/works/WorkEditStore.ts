@@ -8,6 +8,7 @@ import {
 
 import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
+import { WorkEditObject } from '../../dto/WorkEditObject';
 import { IWorkUpdateParams } from '../../models/works/IWorkUpdateParams';
 import { WorkType } from '../../models/works/WorkType';
 import { ArtistLinkListEditStore } from '../ArtistLinkListEditStore';
@@ -20,7 +21,7 @@ export class WorkEditStore {
 	readonly webLinks: WebLinkListEditStore;
 	readonly artistLinks: ArtistLinkListEditStore;
 
-	constructor(private readonly work?: IWorkObject) {
+	constructor(private readonly work?: WorkEditObject) {
 		makeObservable(this);
 
 		if (work) {

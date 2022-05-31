@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import WebLinkListEdit from '../../components/WebLinkListEdit';
-import { ITranslationObject } from '../../dto/ITranslationObject';
+import { TranslationEditObject } from '../../dto/TranslationEditObject';
 import { EntryType } from '../../models/EntryType';
 import { workLinkTypes } from '../../models/LinkType';
 import { WordCategory } from '../../models/translations/WordCategory';
@@ -22,7 +22,7 @@ import { TranslationEditStore } from '../../stores/translations/TranslationEditS
 import WorkLinkListEdit from '../WorkLinkListEdit';
 
 interface TranslationEditFormProps {
-	translation?: ITranslationObject;
+	translation?: TranslationEditObject;
 }
 
 const TranslationEditForm = observer(

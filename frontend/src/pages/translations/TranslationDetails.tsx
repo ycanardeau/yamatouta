@@ -13,6 +13,8 @@ import TranslationPage from '../../components/translations/TranslationPage';
 import { useTranslationDetails } from '../../components/translations/useTranslationDetails';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
+import { ITranslationObject } from '../../dto/ITranslationObject';
+import { TranslationDetailsObject } from '../../dto/TranslationDetailsObject';
 import { Permission } from '../../models/Permission';
 import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';
 import TranslationBasicInfo from './TranslationBasicInfo';
@@ -115,7 +117,12 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 const TranslationDetails = (): React.ReactElement | null => {
 	const [store] = useTranslationDetails(
 		React.useCallback(
-			(translation) => new TranslationDetailsStore(translation),
+			(translation) =>
+				new TranslationDetailsStore(
+					TranslationDetailsObject.create(
+						translation as Required<ITranslationObject>,
+					),
+				),
 			[],
 		),
 	);

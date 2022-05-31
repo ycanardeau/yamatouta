@@ -10,6 +10,7 @@ import { artistApi } from '../../api/artistApi';
 import { quoteApi } from '../../api/quoteApi';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { IQuoteObject } from '../../dto/IQuoteObject';
+import { QuoteEditObject } from '../../dto/QuoteEditObject';
 import { IQuoteUpdateParams } from '../../models/quotes/IQuoteUpdateParams';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
@@ -27,7 +28,7 @@ export class QuoteEditStore {
 	readonly webLinks: WebLinkListEditStore;
 	readonly workLinks: WorkLinkListEditStore;
 
-	constructor(private readonly quote?: IQuoteObject) {
+	constructor(private readonly quote?: QuoteEditObject) {
 		makeObservable(this);
 
 		if (quote) {

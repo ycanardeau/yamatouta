@@ -19,6 +19,8 @@ import ArtistPage from '../../components/artists/ArtistPage';
 import { useArtistDetails } from '../../components/artists/useArtistDetails';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
+import { ArtistDetailsObject } from '../../dto/ArtistDetailsObject';
+import { IArtistObject } from '../../dto/IArtistObject';
 import { Permission } from '../../models/Permission';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 import ArtistQuotes from './ArtistQuotes';
@@ -118,7 +120,15 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 const ArtistDetails = (): React.ReactElement | null => {
 	const [store] = useArtistDetails(
-		React.useCallback((artist) => new ArtistDetailsStore(artist), []),
+		React.useCallback(
+			(artist) =>
+				new ArtistDetailsStore(
+					ArtistDetailsObject.create(
+						artist as Required<IArtistObject>,
+					),
+				),
+			[],
+		),
 	);
 
 	return store ? <Layout store={store} /> : null;

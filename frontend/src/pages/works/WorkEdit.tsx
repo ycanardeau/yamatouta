@@ -4,10 +4,10 @@ import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import WorkEditForm from '../../components/works/WorkEditForm';
 import WorkPage from '../../components/works/WorkPage';
 import { useWorkDetails } from '../../components/works/useWorkDetails';
-import { IWorkObject } from '../../dto/IWorkObject';
+import { WorkEditObject } from '../../dto/WorkEditObject';
 
 interface LayoutProps {
-	work: IWorkObject;
+	work: WorkEditObject;
 }
 
 const Layout = ({ work }: LayoutProps): React.ReactElement => {
@@ -23,7 +23,9 @@ const Layout = ({ work }: LayoutProps): React.ReactElement => {
 };
 
 const WorkEdit = (): React.ReactElement | null => {
-	const [work] = useWorkDetails(React.useCallback((work) => work, []));
+	const [work] = useWorkDetails(
+		React.useCallback((work) => work as WorkEditObject, []),
+	);
 
 	return work ? <Layout work={work} /> : null;
 };

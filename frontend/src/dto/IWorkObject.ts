@@ -5,6 +5,6 @@ import { IWebLinkObject } from './IWebLinkObject';
 
 export interface IWorkObject extends IEntryWithIdAndName {
 	workType: WorkType;
-	webLinks: IWebLinkObject[];
-	artistLinks: IArtistLinkObject[];
+	webLinks?: IWebLinkObject[];
+	artistLinks?: IArtistLinkObject[];
 }

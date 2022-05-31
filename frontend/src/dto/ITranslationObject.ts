@@ -10,6 +10,6 @@ export interface ITranslationObject {
 	reading: string;
 	yamatokotoba: string;
 	category: WordCategory;
-	webLinks: IWebLinkObject[];
-	workLinks: IWorkLinkObject[];
+	webLinks?: IWebLinkObject[];
+	workLinks?: IWorkLinkObject[];
 }
