@@ -8,7 +8,8 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { WebLinkList } from '../../components/WebLinkList';
+import { WebLinkDescriptionList } from '../../components/WebLinkDescriptionList';
+import { WorkLinkDescriptionList } from '../../components/WorkLinkDescriptionList';
 import { QuoteComment } from '../../components/quotes/QuoteComment';
 import { QuoteDetailsObject } from '../../dto/QuoteDetailsObject';
 
@@ -30,15 +31,15 @@ const QuoteBasicInfo = ({ quote }: QuoteBasicInfoProps): React.ReactElement => {
 						{t(`quoteTypeNames.${quote.quoteType}`)}
 					</EuiDescriptionListDescription>
 
+					{quote.sources.length > 0 && (
+						<WorkLinkDescriptionList
+							title={t('quotes.sources')}
+							workLinks={quote.sources}
+						/>
+					)}
+
 					{quote.webLinks.length > 0 && (
-						<>
-							<EuiDescriptionListTitle>
-								{t('shared.externalLinks')}
-							</EuiDescriptionListTitle>
-							<EuiDescriptionListDescription>
-								<WebLinkList webLinks={quote.webLinks} />
-							</EuiDescriptionListDescription>
-						</>
+						<WebLinkDescriptionList webLinks={quote.webLinks} />
 					)}
 				</EuiDescriptionList>
 			</div>

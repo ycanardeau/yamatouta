@@ -1,4 +1,6 @@
+import { LinkType } from '../models/LinkType';
 import { WordCategory } from '../models/translations/WordCategory';
+import { IWorkLinkObject } from './ILinkObject';
 import { ITranslationObject } from './ITranslationObject';
 import { IWebLinkObject } from './IWebLinkObject';
 
@@ -12,6 +14,7 @@ export class TranslationDetailsObject {
 		readonly yamatokotoba: string,
 		readonly category: WordCategory,
 		readonly webLinks: IWebLinkObject[],
+		readonly sources: IWorkLinkObject[],
 	) {}
 
 	static create(
@@ -26,6 +29,10 @@ export class TranslationDetailsObject {
 			translation.yamatokotoba,
 			translation.category,
 			translation.webLinks,
+			translation.workLinks.filter(
+				(workLink) =>
+					workLink.linkType === LinkType.Translation_Work_Source,
+			),
 		);
 	}
 }

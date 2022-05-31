@@ -1,5 +1,7 @@
+import { LinkType } from '../models/LinkType';
 import { QuoteType } from '../models/quotes/QuoteType';
 import { IArtistObject } from './IArtistObject';
+import { IWorkLinkObject } from './ILinkObject';
 import { IQuoteObject } from './IQuoteObject';
 import { IWebLinkObject } from './IWebLinkObject';
 
@@ -13,6 +15,7 @@ export class QuoteDetailsObject {
 		readonly artist: IArtistObject,
 		readonly sourceUrl: string,
 		readonly webLinks: IWebLinkObject[],
+		readonly sources: IWorkLinkObject[],
 	) {}
 
 	static create(quote: Required<IQuoteObject>): QuoteDetailsObject {
@@ -25,6 +28,9 @@ export class QuoteDetailsObject {
 			quote.artist,
 			quote.sourceUrl,
 			quote.webLinks,
+			quote.workLinks.filter(
+				(workLink) => workLink.linkType === LinkType.Quote_Work_Source,
+			),
 		);
 	}
 }

@@ -78,7 +78,8 @@
 		"viewOnInishienomanabi": "いにしえのまなびでみる",
 		"editWord": "やまとことばをかきかえる",
 		"deleteWord": "やまとことばをけす",
-		"deleteDialogSubtitle": "このやまとことばをけしてもよろしいですか?"
+		"deleteDialogSubtitle": "このやまとことばをけしてもよろしいですか?",
+		"sources": "でどころ"
 	},
 	"wordCategoryNames": {
 		"Unspecified": "なし",
@@ -127,7 +128,8 @@
 		"quote": "やまとうた",
 		"quoteType": "くさわい",
 		"deleteQuote": "やまとうたをけす",
-		"deleteDialogSubtitle": "このやまとうたをけしてもよろしいですか?"
+		"deleteDialogSubtitle": "このやまとうたをけしてもよろしいですか?",
+		"sources": "でどころ"
 	},
 	"quoteTypeNames": {
 		"Word": "ことば",
@@ -141,7 +143,10 @@
 		"deleteWork": "しながきをけす",
 		"deleteDialogSubtitle": "このしながきをけしてもよろしいですか?",
 		"name": "なまえ",
-		"workType": "くさわい"
+		"workType": "くさわい",
+		"authors": "かきて",
+		"editors": "えらびて",
+		"publishers": "くばりて"
 	},
 	"workTypeNames": {
 		"Unspecified": "なし",

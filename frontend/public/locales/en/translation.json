@@ -80,7 +80,8 @@
 		"viewOnInishienomanabi": "View on Inishienomanabi",
 		"editWord": "Edit word",
 		"deleteWord": "Delete word",
-		"deleteDialogSubtitle": "Are you sure you want to delete this word?"
+		"deleteDialogSubtitle": "Are you sure you want to delete this word?",
+		"sources": "Sources"
 	},
 	"wordCategoryNames": {
 		"Unspecified": "Unspecified",
@@ -131,7 +132,8 @@
 		"quote": "Quote",
 		"quoteType": "Type",
 		"deleteQuote": "Delete quote",
-		"deleteDialogSubtitle": "Are you sure you want to delete this quote?"
+		"deleteDialogSubtitle": "Are you sure you want to delete this quote?",
+		"sources": "Sources"
 	},
 	"quoteTypeNames": {
 		"Word": "Word",
@@ -149,7 +151,11 @@
 		"deleteWork": "Delete work",
 		"deleteDialogSubtitle": "Are you sure you want to delete this work?",
 		"name": "Name",
-		"workType": "Type"
+		"workType": "Type",
+		"authors": "Authors",
+		"editors": "Editors",
+		"publishers": "Publishers",
+		"translators": "Translators"
 	},
 	"workTypeNames": {
 		"Unspecified": "Unspecified",
