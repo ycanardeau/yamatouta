@@ -24,7 +24,7 @@ interface ChangePasswordDialogProps {
 	onSuccess: (user: IAuthenticatedUserObject) => void;
 }
 
-const ChangePasswordDialog = observer(
+export const ChangePasswordDialog = observer(
 	({ onClose, onSuccess }: ChangePasswordDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -112,5 +112,3 @@ const ChangePasswordDialog = observer(
 		);
 	},
 );
-
-export default ChangePasswordDialog;

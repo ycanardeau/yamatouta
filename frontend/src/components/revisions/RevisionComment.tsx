@@ -7,10 +7,10 @@ import {
 import moment from 'moment';
 import React from 'react';
 
-import Avatar from '../../components/Avatar';
+import { Avatar } from '../../components/Avatar';
 import { IRevisionObject } from '../../dto/IRevisionObject';
 import { RevisionEvent } from '../../models/RevisionEvent';
-import Link from '../Link';
+import { Link } from '../Link';
 
 interface TimelineIconProps {
 	event: RevisionEvent;
@@ -33,7 +33,7 @@ interface RevisionCommentProps {
 	revision: IRevisionObject;
 }
 
-const RevisionComment = ({
+export const RevisionComment = ({
 	revision,
 }: RevisionCommentProps): React.ReactElement => {
 	return (
@@ -80,5 +80,3 @@ const RevisionComment = ({
 		/>
 	);
 };
-
-export default RevisionComment;

@@ -26,10 +26,8 @@ const componentLoader = <T extends React.ComponentType<any>>(
 	});
 };
 
-const lazyImport = <T extends React.ComponentType<any>>(
+export const lazyImport = <T extends React.ComponentType<any>>(
 	componentImport: () => Promise<{ default: T }>,
 ): React.LazyExoticComponent<T> => {
 	return React.lazy(() => componentLoader(componentImport, retryAttempts));
 };
-
-export default lazyImport;

@@ -12,7 +12,7 @@ import {
 	LoginError,
 } from '../../database/commands/users/UserAuthenticateCommandHandler';
 import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
-import { TooManyRequestsException } from '../../exceptions/TooManyRequestsException';
+import { TooManyRequestsException } from '../../framework/exceptions/TooManyRequestsException';
 import { getClientIp } from '../../utils/getClientIp';
 import { RateLimiterMariaDb } from './RateLimiterMariaDb';
 

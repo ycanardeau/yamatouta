@@ -12,7 +12,7 @@ interface EntryComboBoxProps<T extends IEntryWithIdAndName> {
 	onSearchChange: (searchValue: string) => Promise<ISearchResultObject<T>>;
 }
 
-const EntryComboBox = observer(
+export const EntryComboBox = observer(
 	<T extends IEntryWithIdAndName>({
 		store,
 		placeholder,
@@ -65,5 +65,3 @@ const EntryComboBox = observer(
 		);
 	},
 );
-
-export default EntryComboBox;

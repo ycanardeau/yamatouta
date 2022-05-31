@@ -34,11 +34,11 @@ export class ArtistGetQueryHandler implements IQueryHandler<ArtistGetQuery> {
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: true },
+			{ populate: ['webLinks', 'webLinks.address'] },
 		);
 
 		if (!artist) throw new NotFoundException();
 
-		return new ArtistObject(artist, permissionContext, params.fields);
+		return ArtistObject.create(artist, permissionContext, params.fields);
 	}
 }

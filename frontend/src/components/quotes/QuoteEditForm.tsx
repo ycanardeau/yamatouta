@@ -13,17 +13,20 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import WebLinkListEdit from '../../components/WebLinkListEdit';
-import ArtistComboBox from '../../components/artists/ArtistComboBox';
-import { IQuoteObject } from '../../dto/IQuoteObject';
+import { WebLinkListEdit } from '../../components/WebLinkListEdit';
+import { ArtistComboBox } from '../../components/artists/ArtistComboBox';
+import { QuoteEditObject } from '../../dto/QuoteEditObject';
+import { EntryType } from '../../models/EntryType';
+import { workLinkTypes } from '../../models/LinkType';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
+import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface QuoteEditFormProps {
-	quote?: IQuoteObject;
+	quote?: QuoteEditObject;
 }
 
-const QuoteEditForm = observer(
+export const QuoteEditForm = observer(
 	({ quote }: QuoteEditFormProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -73,12 +76,19 @@ const QuoteEditForm = observer(
 						/>
 					</EuiFormRow>
 
-					<EuiFormRow label={t('quotes.artist')}>
+					<EuiFormRow label={t('shared.artist')}>
 						<ArtistComboBox store={store.artist} />
 					</EuiFormRow>
 
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
 						<WebLinkListEdit store={store.webLinks} />
+					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.workLinks')} fullWidth>
+						<WorkLinkListEdit
+							store={store.workLinks}
+							allowedLinkTypes={workLinkTypes[EntryType.Quote]}
+						/>
 					</EuiFormRow>
 				</EuiForm>
 
@@ -111,5 +121,3 @@ const QuoteEditForm = observer(
 		);
 	},
 );
-
-export default QuoteEditForm;

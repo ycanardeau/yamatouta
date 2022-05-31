@@ -7,13 +7,14 @@ import qs from 'qs';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Link from '../../components/Link';
-import WebLinkList from '../../components/WebLinkList';
-import { ITranslationObject } from '../../dto/ITranslationObject';
+import { Link } from '../../components/Link';
+import { WebLinkDescriptionList } from '../../components/WebLinkDescriptionList';
+import { WorkLinkDescriptionList } from '../../components/WorkLinkDescriptionList';
+import { TranslationDetailsObject } from '../../dto/TranslationDetailsObject';
 import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
 
 interface TranslationBasicInfoProps {
-	translation: ITranslationObject;
+	translation: TranslationDetailsObject;
 }
 
 const TranslationBasicInfo = ({
@@ -73,15 +74,17 @@ const TranslationBasicInfo = ({
 						</Link>
 					</EuiDescriptionListDescription>
 
+					{translation.sources.length > 0 && (
+						<WorkLinkDescriptionList
+							title={t('translations.sources')}
+							workLinks={translation.sources}
+						/>
+					)}
+
 					{translation.webLinks.length > 0 && (
-						<>
-							<EuiDescriptionListTitle>
-								{t('shared.externalLinks')}
-							</EuiDescriptionListTitle>
-							<EuiDescriptionListDescription>
-								<WebLinkList webLinks={translation.webLinks} />
-							</EuiDescriptionListDescription>
-						</>
+						<WebLinkDescriptionList
+							webLinks={translation.webLinks}
+						/>
 					)}
 				</EuiDescriptionList>
 			</div>

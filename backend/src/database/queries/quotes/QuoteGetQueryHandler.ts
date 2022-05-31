@@ -34,11 +34,20 @@ export class QuoteGetQueryHandler implements IQueryHandler<QuoteGetQuery> {
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: true },
+			{
+				populate: [
+					'artist',
+					'webLinks',
+					'webLinks.address',
+					'workLinks',
+					'workLinks.relatedWork',
+					'workLinks.linkType',
+				],
+			},
 		);
 
 		if (!quote) throw new NotFoundException();
 
-		return new QuoteObject(quote, permissionContext, params.fields);
+		return QuoteObject.create(quote, permissionContext, params.fields);
 	}
 }

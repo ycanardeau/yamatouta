@@ -9,10 +9,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import QuotePage from '../../components/quotes/QuotePage';
+import { QuotePage } from '../../components/quotes/QuotePage';
 import { useQuoteDetails } from '../../components/quotes/useQuoteDetails';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
+import { IQuoteObject } from '../../dto/IQuoteObject';
+import { QuoteDetailsObject } from '../../dto/QuoteDetailsObject';
 import { Permission } from '../../models/Permission';
 import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
 import QuoteBasicInfo from './QuoteBasicInfo';
@@ -105,7 +107,13 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 const QuoteDetails = (): React.ReactElement | null => {
 	const [store] = useQuoteDetails(
-		React.useCallback((quote) => new QuoteDetailsStore(quote), []),
+		React.useCallback(
+			(quote) =>
+				new QuoteDetailsStore(
+					QuoteDetailsObject.create(quote as Required<IQuoteObject>),
+				),
+			[],
+		),
 	);
 
 	return store ? <Layout store={store} /> : null;

@@ -105,7 +105,7 @@ export class ArtistUpdateCommandHandler
 			return artist;
 		});
 
-		return new ArtistObject(
+		return ArtistObject.create(
 			artist,
 			permissionContext,
 			Object.values(ArtistOptionalField),

@@ -53,8 +53,17 @@
 		"add": "かきたす",
 		"remove": "とりのぞく",
 		"externalLinks": "つながり",
+		"artistLinks": "まつわるうたよみ",
+		"artist": "うたよみ",
 		"selectArtist": "うたよみをえらぶ...",
-		"selectWork": "しながきをえらぶ..."
+		"linkType": "くさわい",
+		"workLinks": "まつわるしながき",
+		"work": "しながき",
+		"selectWork": "しながきをえらぶ...",
+		"year": "とし",
+		"month": "つき",
+		"day": "ひ",
+		"selectMonth": "つきをえらぶ..."
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -69,7 +78,8 @@
 		"viewOnInishienomanabi": "いにしえのまなびでみる",
 		"editWord": "やまとことばをかきかえる",
 		"deleteWord": "やまとことばをけす",
-		"deleteDialogSubtitle": "このやまとことばをけしてもよろしいですか?"
+		"deleteDialogSubtitle": "このやまとことばをけしてもよろしいですか?",
+		"sources": "でどころ"
 	},
 	"wordCategoryNames": {
 		"Unspecified": "なし",
@@ -117,9 +127,9 @@
 		"editQuote": "やまとうたをかきかえる",
 		"quote": "やまとうた",
 		"quoteType": "くさわい",
-		"artist": "うたよみ",
 		"deleteQuote": "やまとうたをけす",
-		"deleteDialogSubtitle": "このやまとうたをけしてもよろしいですか?"
+		"deleteDialogSubtitle": "このやまとうたをけしてもよろしいですか?",
+		"sources": "でどころ"
 	},
 	"quoteTypeNames": {
 		"Word": "ことば",
@@ -133,7 +143,10 @@
 		"deleteWork": "しながきをけす",
 		"deleteDialogSubtitle": "このしながきをけしてもよろしいですか?",
 		"name": "なまえ",
-		"workType": "くさわい"
+		"workType": "くさわい",
+		"authors": "かきて",
+		"editors": "えらびて",
+		"publishers": "くばりて"
 	},
 	"workTypeNames": {
 		"Unspecified": "なし",
@@ -166,5 +179,20 @@
 		"10": "かんなづき",
 		"11": "しもつき",
 		"12": "しわす"
+	},
+	"links": {
+		"linkType": "くさわい",
+		"startDate": "はじまり",
+		"endDate": "おわり",
+		"ended": "おわった"
+	},
+	"linkPhrases": {
+		"Unspecified": "",
+		"Quote_Work_Source": "でどころ",
+		"Translation_Work_Source": "でどころ",
+		"Work_Artist_Author": "かきて",
+		"Work_Artist_Editor": "えらびて",
+		"Work_Artist_Foreword": "はしがき",
+		"Work_Artist_Publisher": "くばりて"
 	}
 }

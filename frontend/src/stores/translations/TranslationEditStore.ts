@@ -8,8 +8,11 @@ import {
 
 import { translationApi } from '../../api/translationApi';
 import { ITranslationObject } from '../../dto/ITranslationObject';
+import { TranslationEditObject } from '../../dto/TranslationEditObject';
+import { ITranslationUpdateParams } from '../../models/translations/ITranslationUpdateParams';
 import { WordCategory } from '../../models/translations/WordCategory';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
+import { WorkLinkListEditStore } from '../WorkLinkListEditStore';
 
 export class TranslationEditStore {
 	@observable submitting = false;
@@ -19,8 +22,9 @@ export class TranslationEditStore {
 	@observable yamatokotoba = '';
 	@observable category = WordCategory.Unspecified;
 	readonly webLinks: WebLinkListEditStore;
+	readonly workLinks: WorkLinkListEditStore;
 
-	constructor(private readonly translation?: ITranslationObject) {
+	constructor(private readonly translation?: TranslationEditObject) {
 		makeObservable(this);
 
 		if (translation) {
@@ -30,8 +34,10 @@ export class TranslationEditStore {
 			this.yamatokotoba = translation.yamatokotoba;
 			this.category = translation.category;
 			this.webLinks = new WebLinkListEditStore(translation.webLinks);
+			this.workLinks = new WorkLinkListEditStore(translation.workLinks);
 		} else {
 			this.webLinks = new WebLinkListEditStore([]);
+			this.workLinks = new WorkLinkListEditStore([]);
 		}
 	}
 
@@ -67,6 +73,19 @@ export class TranslationEditStore {
 		this.category = value;
 	};
 
+	toParams = (): ITranslationUpdateParams => {
+		return {
+			id: this.translation?.id ?? 0,
+			headword: this.headword,
+			locale: this.locale,
+			reading: this.reading,
+			yamatokotoba: this.yamatokotoba,
+			category: this.category,
+			webLinks: this.webLinks.toParams(),
+			workLinks: this.workLinks.toParams(),
+		};
+	};
+
 	@action submit = async (): Promise<ITranslationObject> => {
 		try {
 			this.submitting = true;
@@ -76,15 +95,7 @@ export class TranslationEditStore {
 				: translationApi.create;
 
 			// Await.
-			const translation = await createOrUpdate({
-				id: this.translation?.id ?? 0,
-				headword: this.headword,
-				locale: this.locale,
-				reading: this.reading,
-				yamatokotoba: this.yamatokotoba,
-				category: this.category,
-				webLinks: this.webLinks.items,
-			});
+			const translation = await createOrUpdate(this.toParams());
 
 			return translation;
 		} finally {

@@ -26,14 +26,6 @@ export class PaginationStore {
 		return Math.ceil(this.totalItems / this.pageSize);
 	}
 
-	toParams = (clearResults: boolean): IPaginationParams => {
-		return {
-			offset: this.firstItem,
-			limit: this.pageSize,
-			getTotalCount: clearResults || this.totalItems === 0,
-		};
-	};
-
 	@action setPage = (value: number): void => {
 		this.page = value;
 	};
@@ -42,5 +34,13 @@ export class PaginationStore {
 
 	@action setPageSize = (value: number): void => {
 		this.pageSize = value;
+	};
+
+	toParams = (clearResults: boolean): IPaginationParams => {
+		return {
+			offset: this.firstItem,
+			limit: this.pageSize,
+			getTotalCount: clearResults || this.totalItems === 0,
+		};
 	};
 }

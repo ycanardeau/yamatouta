@@ -12,8 +12,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import ArtistBreadcrumbs from '../../components/artists/ArtistBreadcrumbs';
-import ArtistSearchTable from '../../components/artists/ArtistSearchTable';
+import { ArtistBreadcrumbs } from '../../components/artists/ArtistBreadcrumbs';
+import { ArtistSearchTable } from '../../components/artists/ArtistSearchTable';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';

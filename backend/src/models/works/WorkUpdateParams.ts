@@ -1,5 +1,6 @@
 import Joi from 'joi';
 
+import { ArtistLinkUpdateParams } from '../ArtistLinkUpdateParams';
 import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
 import { WorkType } from './WorkType';
 
@@ -9,6 +10,7 @@ export class WorkUpdateParams {
 		readonly name: string,
 		readonly workType: WorkType,
 		readonly webLinks: WebLinkUpdateParams[],
+		readonly artistLinks: ArtistLinkUpdateParams[],
 	) {}
 
 	static readonly schema = Joi.object<WorkUpdateParams>({
@@ -19,5 +21,8 @@ export class WorkUpdateParams {
 			.trim()
 			.valid(...Object.values(WorkType)),
 		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
+		artistLinks: Joi.array()
+			.items(ArtistLinkUpdateParams.schema)
+			.required(),
 	});
 }

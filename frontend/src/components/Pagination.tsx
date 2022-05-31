@@ -16,7 +16,7 @@ interface PaginationProps {
 	store: PaginationStore;
 }
 
-const Pagination = observer(({ store }: PaginationProps) => {
+export const Pagination = observer(({ store }: PaginationProps) => {
 	const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
 
 	const onButtonClick = (): void =>
@@ -84,5 +84,3 @@ const Pagination = observer(({ store }: PaginationProps) => {
 		</EuiFlexGroup>
 	);
 });
-
-export default Pagination;

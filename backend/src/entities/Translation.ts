@@ -10,11 +10,14 @@ import {
 	Property,
 } from '@mikro-orm/core';
 
+import { EntryType } from '../models/EntryType';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
+import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { IWebLinkFactory } from '../models/IWebLinkFactory';
+import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
@@ -22,12 +25,15 @@ import { TranslationSnapshot } from '../models/snapshots/TranslationSnapshot';
 import { WordCategory } from '../models/translations/WordCategory';
 import { NgramConverter } from '../services/NgramConverter';
 import { Commit } from './Commit';
+import { Link } from './Link';
 import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
 import { TranslationSearchIndex } from './TranslationSearchIndex';
 import { User } from './User';
 import { WebAddress } from './WebAddress';
 import { TranslationWebLink } from './WebLink';
+import { Work } from './Work';
+import { TranslationWorkLink } from './WorkLink';
 
 @Entity({ tableName: 'translations' })
 export class Translation
@@ -40,7 +46,9 @@ export class Translation
 		>,
 		IRevisionFactory<Translation, TranslationRevision, TranslationSnapshot>,
 		IEntryWithWebLinks<TranslationWebLink>,
-		IWebLinkFactory<TranslationWebLink>
+		IWebLinkFactory<TranslationWebLink>,
+		IEntryWithWorkLinks<TranslationWorkLink>,
+		IWorkLinkFactory<TranslationWorkLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -93,8 +101,15 @@ export class Translation
 	@OneToMany(() => TranslationWebLink, (webLink) => webLink.translation)
 	webLinks = new Collection<TranslationWebLink>(this);
 
+	@OneToMany(() => TranslationWorkLink, (workLink) => workLink.translation)
+	workLinks = new Collection<TranslationWorkLink>(this);
+
 	constructor(user: User) {
 		this.user = user;
+	}
+
+	get entryType(): EntryType.Translation {
+		return EntryType.Translation;
 	}
 
 	get headword(): string {
@@ -141,7 +156,7 @@ export class Translation
 	}
 
 	takeSnapshot(): TranslationSnapshot {
-		return new TranslationSnapshot(this);
+		return TranslationSnapshot.create(this);
 	}
 
 	createRevision({
@@ -180,6 +195,17 @@ export class Translation
 			address: address,
 			title: title,
 			category: category,
+		});
+	}
+
+	createWorkLink({
+		relatedWork,
+		...params
+	}: { relatedWork: Work } & Link): TranslationWorkLink {
+		return new TranslationWorkLink({
+			...params,
+			translation: this,
+			relatedWork: relatedWork,
 		});
 	}
 }

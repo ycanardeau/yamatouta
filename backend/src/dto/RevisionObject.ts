@@ -9,21 +9,25 @@ import { PermissionContext } from '../services/PermissionContext';
 import { UserObject } from './UserObject';
 
 export class RevisionObject {
-	readonly createdAt: Date;
-	readonly actor: UserObject;
-	readonly event: RevisionEvent;
+	private constructor(
+		readonly createdAt: Date,
+		readonly actor: UserObject,
+		readonly event: RevisionEvent,
+	) {}
 
-	constructor(
+	static create(
 		revision: Revision<Entry, Snapshot>,
 		permissionContext: PermissionContext,
-	) {
+	): RevisionObject {
 		if (!permissionContext.hasPermission(Permission.Revision_View))
 			throw new NotFoundException();
 
 		permissionContext.verifyDeletedAndHidden(revision.entry);
 
-		this.createdAt = revision.createdAt;
-		this.actor = new UserObject(revision.actor, permissionContext);
-		this.event = revision.event;
+		return new RevisionObject(
+			revision.createdAt,
+			UserObject.create(revision.actor, permissionContext),
+			revision.event,
+		);
 	}
 }

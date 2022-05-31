@@ -8,7 +8,10 @@ import {
 
 import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
+import { WorkEditObject } from '../../dto/WorkEditObject';
+import { IWorkUpdateParams } from '../../models/works/IWorkUpdateParams';
 import { WorkType } from '../../models/works/WorkType';
+import { ArtistLinkListEditStore } from '../ArtistLinkListEditStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class WorkEditStore {
@@ -16,16 +19,19 @@ export class WorkEditStore {
 	@observable name = '';
 	@observable workType = WorkType.Book;
 	readonly webLinks: WebLinkListEditStore;
+	readonly artistLinks: ArtistLinkListEditStore;
 
-	constructor(private readonly work?: IWorkObject) {
+	constructor(private readonly work?: WorkEditObject) {
 		makeObservable(this);
 
 		if (work) {
 			this.name = work.name;
 			this.workType = work.workType;
 			this.webLinks = new WebLinkListEditStore(work.webLinks);
+			this.artistLinks = new ArtistLinkListEditStore(work.artistLinks);
 		} else {
 			this.webLinks = new WebLinkListEditStore([]);
+			this.artistLinks = new ArtistLinkListEditStore([]);
 		}
 	}
 
@@ -41,6 +47,16 @@ export class WorkEditStore {
 		this.workType = value;
 	};
 
+	toParams = (): IWorkUpdateParams => {
+		return {
+			id: this.work?.id ?? 0,
+			name: this.name,
+			workType: this.workType,
+			webLinks: this.webLinks.toParams(),
+			artistLinks: this.artistLinks.toParams(),
+		};
+	};
+
 	@action submit = async (): Promise<IWorkObject> => {
 		try {
 			this.submitting = true;
@@ -48,12 +64,7 @@ export class WorkEditStore {
 			const createOrUpdate = this.work ? workApi.update : workApi.create;
 
 			// Await.
-			const work = await createOrUpdate({
-				id: this.work?.id ?? 0,
-				name: this.name,
-				workType: this.workType,
-				webLinks: this.webLinks.items,
-			});
+			const work = await createOrUpdate(this.toParams());
 
 			return work;
 		} finally {

@@ -36,6 +36,6 @@ export class UserGetQueryHandler implements IQueryHandler<UserGetQuery> {
 
 		if (!user) throw new NotFoundException();
 
-		return new UserObject(user, permissionContext);
+		return UserObject.create(user, permissionContext);
 	}
 }

@@ -72,8 +72,8 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 				: Promise.resolve(0),
 		]);
 
-		return new SearchResultObject<UserObject>(
-			users.map((user) => new UserObject(user, permissionContext)),
+		return SearchResultObject.create<UserObject>(
+			users.map((user) => UserObject.create(user, permissionContext)),
 			count,
 		);
 	}

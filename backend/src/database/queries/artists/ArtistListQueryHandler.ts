@@ -74,9 +74,9 @@ export class ArtistListQueryHandler implements IQueryHandler<ArtistListQuery> {
 				: Promise.resolve(0),
 		]);
 
-		return new SearchResultObject<ArtistObject>(
-			artists.map(
-				(artist) => new ArtistObject(artist, permissionContext),
+		return SearchResultObject.create<ArtistObject>(
+			artists.map((artist) =>
+				ArtistObject.create(artist, permissionContext),
 			),
 			count,
 		);

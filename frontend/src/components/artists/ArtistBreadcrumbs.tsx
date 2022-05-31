@@ -8,7 +8,7 @@ interface ArtistBreadcrumbsProps {
 	artist?: Pick<IArtistObject, 'id' | 'name'>;
 }
 
-const ArtistBreadcrumbs = ({
+export const ArtistBreadcrumbs = ({
 	artist,
 }: ArtistBreadcrumbsProps): React.ReactElement => {
 	const { t } = useTranslation();
@@ -39,5 +39,3 @@ const ArtistBreadcrumbs = ({
 
 	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
 };
-
-export default ArtistBreadcrumbs;

@@ -34,11 +34,19 @@ export class WorkGetQueryHandler implements IQueryHandler<WorkGetQuery> {
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: true },
+			{
+				populate: [
+					'webLinks',
+					'webLinks.address',
+					'artistLinks',
+					'artistLinks.relatedArtist',
+					'artistLinks.linkType',
+				],
+			},
 		);
 
 		if (!work) throw new NotFoundException();
 
-		return new WorkObject(work, permissionContext, params.fields);
+		return WorkObject.create(work, permissionContext, params.fields);
 	}
 }

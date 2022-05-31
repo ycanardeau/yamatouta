@@ -36,12 +36,20 @@ export class TranslationGetQueryHandler
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: true },
+			{
+				populate: [
+					'webLinks',
+					'webLinks.address',
+					'workLinks',
+					'workLinks.relatedWork',
+					'workLinks.linkType',
+				],
+			},
 		);
 
 		if (!translation) throw new NotFoundException();
 
-		return new TranslationObject(
+		return TranslationObject.create(
 			translation,
 			permissionContext,
 			params.fields,

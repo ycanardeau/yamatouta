@@ -10,9 +10,12 @@ import { artistApi } from '../../api/artistApi';
 import { quoteApi } from '../../api/quoteApi';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { IQuoteObject } from '../../dto/IQuoteObject';
+import { QuoteEditObject } from '../../dto/QuoteEditObject';
+import { IQuoteUpdateParams } from '../../models/quotes/IQuoteUpdateParams';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
+import { WorkLinkListEditStore } from '../WorkLinkListEditStore';
 
 export class QuoteEditStore {
 	@observable submitting = false;
@@ -23,8 +26,9 @@ export class QuoteEditStore {
 		artistApi.get({ id: id }),
 	);
 	readonly webLinks: WebLinkListEditStore;
+	readonly workLinks: WorkLinkListEditStore;
 
-	constructor(private readonly quote?: IQuoteObject) {
+	constructor(private readonly quote?: QuoteEditObject) {
 		makeObservable(this);
 
 		if (quote) {
@@ -33,8 +37,10 @@ export class QuoteEditStore {
 			this.locale = quote.locale;
 			this.artist.loadEntryById(quote.artist.id);
 			this.webLinks = new WebLinkListEditStore(quote.webLinks);
+			this.workLinks = new WorkLinkListEditStore(quote.workLinks);
 		} else {
 			this.webLinks = new WebLinkListEditStore([]);
+			this.workLinks = new WorkLinkListEditStore([]);
 		}
 	}
 
@@ -50,6 +56,18 @@ export class QuoteEditStore {
 		this.quoteType = value;
 	};
 
+	toParams = (): IQuoteUpdateParams => {
+		return {
+			id: this.quote?.id ?? 0,
+			text: this.text,
+			quoteType: this.quoteType,
+			locale: this.locale,
+			artistId: this.artist.entry?.id ?? 0,
+			webLinks: this.webLinks.toParams(),
+			workLinks: this.workLinks.toParams(),
+		};
+	};
+
 	@action submit = async (): Promise<IQuoteObject> => {
 		try {
 			this.submitting = true;
@@ -59,14 +77,7 @@ export class QuoteEditStore {
 				: quoteApi.create;
 
 			// Await.
-			const quote = await createOrUpdate({
-				id: this.quote?.id ?? 0,
-				text: this.text,
-				quoteType: this.quoteType,
-				locale: this.locale,
-				artistId: this.artist.entry?.id ?? 0,
-				webLinks: this.webLinks.items,
-			});
+			const quote = await createOrUpdate(this.toParams());
 
 			return quote;
 		} finally {

@@ -6,16 +6,18 @@ import { WebLinkSnapshot } from './WebLinkSnapshot';
 export type IArtistSnapshot = Omit<ArtistSnapshot, 'contentEquals'>;
 
 export class ArtistSnapshot implements IContentEquatable<IArtistSnapshot> {
-	readonly name: string;
-	readonly artistType: ArtistType;
-	readonly webLinks: WebLinkSnapshot[];
+	private constructor(
+		readonly name: string,
+		readonly artistType: ArtistType,
+		readonly webLinks: WebLinkSnapshot[],
+	) {}
 
-	constructor(artist: Artist) {
-		this.name = artist.name;
-		this.artistType = artist.artistType;
-		this.webLinks = artist.webLinks
+	static create(artist: Artist): ArtistSnapshot {
+		const webLinks = artist.webLinks
 			.getItems()
-			.map((webLink) => new WebLinkSnapshot(webLink));
+			.map((webLink) => WebLinkSnapshot.create(webLink));
+
+		return new ArtistSnapshot(artist.name, artist.artistType, webLinks);
 	}
 
 	contentEquals(other?: IArtistSnapshot): boolean {

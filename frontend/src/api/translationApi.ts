@@ -17,6 +17,7 @@ class TranslationApi {
 		yamatokotoba,
 		category,
 		webLinks,
+		workLinks,
 	}: ITranslationUpdateParams): Promise<ITranslationObject> => {
 		const response = await axios.post<ITranslationObject>(
 			'/translations/create',
@@ -28,6 +29,7 @@ class TranslationApi {
 				yamatokotoba,
 				category,
 				webLinks,
+				workLinks,
 			},
 		);
 
@@ -101,6 +103,7 @@ class TranslationApi {
 		yamatokotoba,
 		category,
 		webLinks,
+		workLinks,
 	}: ITranslationUpdateParams): Promise<ITranslationObject> => {
 		const response = await axios.post<ITranslationObject>(
 			`/translations/update`,
@@ -112,6 +115,7 @@ class TranslationApi {
 				yamatokotoba,
 				category,
 				webLinks,
+				workLinks,
 			},
 		);
 

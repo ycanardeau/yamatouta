@@ -48,7 +48,7 @@ test('TranslationObject', async () => {
 
 	const permissionContext = new FakePermissionContext(viewer);
 
-	const translationObject = new TranslationObject(
+	const translationObject = TranslationObject.create(
 		translation,
 		permissionContext,
 	);
@@ -65,11 +65,11 @@ test('TranslationObject', async () => {
 	);
 	expect(translationObject.category).toBe(translation.category);
 
-	expect(
-		() => new TranslationObject(deletedTranslation, permissionContext),
+	expect(() =>
+		TranslationObject.create(deletedTranslation, permissionContext),
 	).toThrow(NotFoundException);
 
-	expect(
-		() => new TranslationObject(hiddenTranslation, permissionContext),
+	expect(() =>
+		TranslationObject.create(hiddenTranslation, permissionContext),
 	).toThrow(NotFoundException);
 });

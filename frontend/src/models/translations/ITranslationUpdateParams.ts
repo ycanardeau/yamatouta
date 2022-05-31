@@ -1,4 +1,5 @@
 import { IWebLinkUpdateParams } from '../IWebLinkUpdateParams';
+import { IWorkLinkUpdateParams } from '../IWorkLinkUpdateParams';
 import { WordCategory } from './WordCategory';
 
 export interface ITranslationUpdateParams {
@@ -9,4 +10,5 @@ export interface ITranslationUpdateParams {
 	yamatokotoba: string;
 	category: WordCategory;
 	webLinks: IWebLinkUpdateParams[];
+	workLinks: IWorkLinkUpdateParams[];
 }

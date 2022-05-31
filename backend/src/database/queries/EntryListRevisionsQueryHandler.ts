@@ -47,9 +47,9 @@ abstract class EntryListRevisionsQueryHandler<
 			populate: ['actor'],
 		});
 
-		return new SearchResultObject(
-			revisions.map(
-				(revision) => new RevisionObject(revision, permissionContext),
+		return SearchResultObject.create(
+			revisions.map((revision) =>
+				RevisionObject.create(revision, permissionContext),
 			),
 			revisions.length,
 		);

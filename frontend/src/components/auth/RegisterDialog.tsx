@@ -24,7 +24,7 @@ interface RegisterDialogProps {
 	onSuccess: (user: IUserObject) => void;
 }
 
-const RegisterDialog = observer(
+export const RegisterDialog = observer(
 	({ onClose, onSuccess }: RegisterDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -109,5 +109,3 @@ const RegisterDialog = observer(
 		);
 	},
 );
-
-export default RegisterDialog;

@@ -55,8 +55,17 @@
 		"externalLinks": "External links",
 		"actions": "Actions",
 		"externalLink": "External link",
+		"artistLinks": "Artist links",
+		"artist": "Artist",
 		"selectArtist": "Select an artist...",
-		"selectWork": "Select a work..."
+		"linkType": "Type",
+		"workLinks": "Work links",
+		"work": "Work",
+		"selectWork": "Select a work...",
+		"year": "Year",
+		"month": "Month",
+		"day": "Day",
+		"selectMonth": "Select a month..."
 	},
 	"translations": {
 		"addWord": "Add word",
@@ -71,7 +80,8 @@
 		"viewOnInishienomanabi": "View on Inishienomanabi",
 		"editWord": "Edit word",
 		"deleteWord": "Delete word",
-		"deleteDialogSubtitle": "Are you sure you want to delete this word?"
+		"deleteDialogSubtitle": "Are you sure you want to delete this word?",
+		"sources": "Sources"
 	},
 	"wordCategoryNames": {
 		"Unspecified": "Unspecified",
@@ -121,9 +131,9 @@
 		"editQuote": "Edit quote",
 		"quote": "Quote",
 		"quoteType": "Type",
-		"artist": "Artist",
 		"deleteQuote": "Delete quote",
-		"deleteDialogSubtitle": "Are you sure you want to delete this quote?"
+		"deleteDialogSubtitle": "Are you sure you want to delete this quote?",
+		"sources": "Sources"
 	},
 	"quoteTypeNames": {
 		"Word": "Word",
@@ -141,7 +151,11 @@
 		"deleteWork": "Delete work",
 		"deleteDialogSubtitle": "Are you sure you want to delete this work?",
 		"name": "Name",
-		"workType": "Type"
+		"workType": "Type",
+		"authors": "Authors",
+		"editors": "Editors",
+		"publishers": "Publishers",
+		"translators": "Translators"
 	},
 	"workTypeNames": {
 		"Unspecified": "Unspecified",
@@ -174,5 +188,22 @@
 		"10": "October",
 		"11": "November",
 		"12": "December"
+	},
+	"links": {
+		"linkType": "Type",
+		"startDate": "Start date",
+		"endDate": "End date",
+		"ended": "Ended"
+	},
+	"linkPhrases": {
+		"Unspecified": "",
+		"Quote_Work_Source": "Source",
+		"Translation_Work_Source": "Source",
+		"Work_Artist_Author": "Author",
+		"Work_Artist_Contributor": "Contributor",
+		"Work_Artist_Editor": "Editor",
+		"Work_Artist_Foreword": "Foreword",
+		"Work_Artist_Publisher": "Publisher",
+		"Work_Artist_Translator": "Translator"
 	}
 }

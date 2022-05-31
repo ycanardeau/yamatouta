@@ -1,6 +1,11 @@
-import { EuiLink } from '@elastic/eui';
+import {
+	EuiDescriptionListDescription,
+	EuiDescriptionListTitle,
+	EuiLink,
+} from '@elastic/eui';
 import _ from 'lodash';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { IWebLinkObject } from '../dto/IWebLinkObject';
 import { hostnameTitlePairs } from '../models/hostnameTitlePairs';
@@ -53,4 +58,23 @@ const WebLinkList = React.memo(
 	},
 );
 
-export default WebLinkList;
+interface WebLinkDescriptionListProps {
+	webLinks: IWebLinkObject[];
+}
+
+export const WebLinkDescriptionList = ({
+	webLinks,
+}: WebLinkDescriptionListProps): React.ReactElement => {
+	const { t } = useTranslation();
+
+	return (
+		<>
+			<EuiDescriptionListTitle>
+				{t('shared.externalLinks')}
+			</EuiDescriptionListTitle>
+			<EuiDescriptionListDescription>
+				<WebLinkList webLinks={webLinks} />
+			</EuiDescriptionListDescription>
+		</>
+	);
+};

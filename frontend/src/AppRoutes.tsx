@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import lazyImport from './components/lazyImport';
+import { lazyImport } from './components/lazyImport';
 
 const AdminRoutes = lazyImport(() => import('./pages/admin/AdminRoutes'));
 const ArtistRoutes = lazyImport(() => import('./pages/artists/ArtistRoutes'));

@@ -7,6 +7,7 @@ import {
 	Property,
 } from '@mikro-orm/core';
 
+import { EntryType } from '../models/EntryType';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
@@ -16,6 +17,7 @@ import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { ArtistType } from '../models/artists/ArtistType';
 import { ArtistSnapshot } from '../models/snapshots/ArtistSnapshot';
+import { WorkArtistLink } from './ArtistLink';
 import { Commit } from './Commit';
 import { ArtistRevision } from './Revision';
 import { User } from './User';
@@ -68,8 +70,15 @@ export class Artist
 	@OneToMany(() => ArtistWebLink, (webLink) => webLink.artist)
 	webLinks = new Collection<ArtistWebLink>(this);
 
+	@OneToMany(() => WorkArtistLink, (workLink) => workLink.relatedArtist)
+	workLinks = new Collection<WorkArtistLink>(this);
+
+	get entryType(): EntryType.Artist {
+		return EntryType.Artist;
+	}
+
 	takeSnapshot(): ArtistSnapshot {
-		return new ArtistSnapshot(this);
+		return ArtistSnapshot.create(this);
 	}
 
 	createRevision({

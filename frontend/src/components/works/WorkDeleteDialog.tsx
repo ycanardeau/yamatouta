@@ -12,7 +12,7 @@ interface WorkDeleteDialogProps {
 	onSuccess: () => void;
 }
 
-const WorkDeleteDialog = observer(
+export const WorkDeleteDialog = observer(
 	({
 		work,
 		onClose,
@@ -43,5 +43,3 @@ const WorkDeleteDialog = observer(
 		);
 	},
 );
-
-export default WorkDeleteDialog;

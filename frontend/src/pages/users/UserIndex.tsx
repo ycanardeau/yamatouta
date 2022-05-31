@@ -15,11 +15,11 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import Avatar from '../../components/Avatar';
-import Link from '../../components/Link';
-import Pagination from '../../components/Pagination';
+import { Avatar } from '../../components/Avatar';
+import { Link } from '../../components/Link';
+import { Pagination } from '../../components/Pagination';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import UserBreadcrumbs from '../../components/users/UserBreadcrumbs';
+import { UserBreadcrumbs } from '../../components/users/UserBreadcrumbs';
 import { UserSearchStore } from '../../stores/users/UserSearchStore';
 
 const UserIndex = observer((): React.ReactElement => {

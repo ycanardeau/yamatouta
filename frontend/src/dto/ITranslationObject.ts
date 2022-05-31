@@ -1,4 +1,5 @@
 import { WordCategory } from '../models/translations/WordCategory';
+import { IWorkLinkObject } from './ILinkObject';
 import { IWebLinkObject } from './IWebLinkObject';
 
 export interface ITranslationObject {
@@ -9,5 +10,6 @@ export interface ITranslationObject {
 	reading: string;
 	yamatokotoba: string;
 	category: WordCategory;
-	webLinks: IWebLinkObject[];
+	webLinks?: IWebLinkObject[];
+	workLinks?: IWorkLinkObject[];
 }

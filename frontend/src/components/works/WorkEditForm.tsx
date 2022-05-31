@@ -13,16 +13,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import WebLinkListEdit from '../../components/WebLinkListEdit';
-import { IWorkObject } from '../../dto/IWorkObject';
+import { WebLinkListEdit } from '../../components/WebLinkListEdit';
+import { WorkEditObject } from '../../dto/WorkEditObject';
+import { EntryType } from '../../models/EntryType';
+import { artistLinkTypes } from '../../models/LinkType';
 import { WorkType } from '../../models/works/WorkType';
 import { WorkEditStore } from '../../stores/works/WorkEditStore';
+import { ArtistLinkListEdit } from '../ArtistLinkListEdit';
 
 interface WorkEditFormProps {
-	work?: IWorkObject;
+	work?: WorkEditObject;
 }
 
-const WorkEditForm = observer(
+export const WorkEditForm = observer(
 	({ work }: WorkEditFormProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -74,6 +77,13 @@ const WorkEditForm = observer(
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
 						<WebLinkListEdit store={store.webLinks} />
 					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.artistLinks')} fullWidth>
+						<ArtistLinkListEdit
+							store={store.artistLinks}
+							allowedLinkTypes={artistLinkTypes[EntryType.Work]}
+						/>
+					</EuiFormRow>
 				</EuiForm>
 
 				<EuiSpacer />
@@ -105,5 +115,3 @@ const WorkEditForm = observer(
 		);
 	},
 );
-
-export default WorkEditForm;

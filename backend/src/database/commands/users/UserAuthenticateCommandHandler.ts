@@ -96,7 +96,7 @@ export class UserAuthenticateCommandHandler
 					);
 				}
 
-				return createSuccess(new AuthenticatedUserObject(user));
+				return createSuccess(AuthenticatedUserObject.create(user));
 			}
 
 			const auditLogEntry = new UserAuditLogEntry({

@@ -80,6 +80,7 @@ describe('QuoteUpdateCommandHandler', () => {
 			locale: 'ojp',
 			artistId: artist.id,
 			webLinks: [],
+			workLinks: [],
 		};
 	});
 
@@ -183,8 +184,9 @@ describe('QuoteUpdateCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: quote.quoteType,
 					locale: quote.locale,
-					artist: new ObjectRefSnapshot(artist),
+					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});
@@ -201,8 +203,9 @@ describe('QuoteUpdateCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: quote.locale,
-					artist: new ObjectRefSnapshot(artist),
+					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});
@@ -218,8 +221,9 @@ describe('QuoteUpdateCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: defaultParams.locale,
-					artist: new ObjectRefSnapshot(artist),
+					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});
@@ -232,8 +236,9 @@ describe('QuoteUpdateCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: defaultParams.locale,
-					artist: new ObjectRefSnapshot(artist),
+					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});

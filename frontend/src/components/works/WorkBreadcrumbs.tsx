@@ -8,7 +8,7 @@ interface WorkBreadcrumbsProps {
 	work?: Pick<IWorkObject, 'id' | 'name'>;
 }
 
-const WorkBreadcrumbs = ({
+export const WorkBreadcrumbs = ({
 	work,
 }: WorkBreadcrumbsProps): React.ReactElement => {
 	const { t } = useTranslation();
@@ -39,5 +39,3 @@ const WorkBreadcrumbs = ({
 
 	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
 };
-
-export default WorkBreadcrumbs;

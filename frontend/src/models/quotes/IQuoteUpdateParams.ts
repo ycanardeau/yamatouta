@@ -1,4 +1,5 @@
 import { IWebLinkUpdateParams } from '../IWebLinkUpdateParams';
+import { IWorkLinkUpdateParams } from '../IWorkLinkUpdateParams';
 import { QuoteType } from './QuoteType';
 
 export interface IQuoteUpdateParams {
@@ -8,4 +9,5 @@ export interface IQuoteUpdateParams {
 	locale: string;
 	artistId: number;
 	webLinks: IWebLinkUpdateParams[];
+	workLinks: IWorkLinkUpdateParams[];
 }

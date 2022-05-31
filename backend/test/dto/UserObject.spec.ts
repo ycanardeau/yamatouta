@@ -32,7 +32,7 @@ test('UserObject', async () => {
 
 	const permissionContext = new FakePermissionContext(viewer);
 
-	const userObject = new UserObject(user, permissionContext);
+	const userObject = UserObject.create(user, permissionContext);
 	expect(userObject.id).toBe(user.id);
 	expect(userObject.name).toBe(user.name);
 	expect(userObject.avatarUrl).toBe(
@@ -43,11 +43,11 @@ test('UserObject', async () => {
 		`https://www.gravatar.com/avatar/${user.email}`,
 	);
 
-	expect(() => new UserObject(deletedUser, permissionContext)).toThrow(
+	expect(() => UserObject.create(deletedUser, permissionContext)).toThrow(
 		NotFoundException,
 	);
 
-	expect(() => new UserObject(hiddenUser, permissionContext)).toThrow(
+	expect(() => UserObject.create(hiddenUser, permissionContext)).toThrow(
 		NotFoundException,
 	);
 });

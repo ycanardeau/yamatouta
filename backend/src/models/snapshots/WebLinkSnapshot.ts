@@ -2,13 +2,17 @@ import { WebLink } from '../../entities/WebLink';
 import { WebLinkCategory } from '../WebLinkCategory';
 
 export class WebLinkSnapshot {
-	readonly url: string;
-	readonly title: string;
-	readonly category: WebLinkCategory;
+	private constructor(
+		readonly url: string,
+		readonly title: string,
+		readonly category: WebLinkCategory,
+	) {}
 
-	constructor(webLink: WebLink) {
-		this.url = webLink.url;
-		this.title = webLink.title;
-		this.category = webLink.category;
+	static create(webLink: WebLink): WebLinkSnapshot {
+		return new WebLinkSnapshot(
+			webLink.url,
+			webLink.title,
+			webLink.category,
+		);
 	}
 }

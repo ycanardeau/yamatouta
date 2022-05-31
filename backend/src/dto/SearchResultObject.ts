@@ -1,9 +1,7 @@
 export class SearchResultObject<T> {
-	readonly items: T[];
-	readonly totalCount: number;
+	private constructor(readonly items: T[], readonly totalCount: number) {}
 
-	constructor(items: T[], totalCount: number) {
-		this.items = items;
-		this.totalCount = totalCount;
+	static create<T>(items: T[], totalCount: number): SearchResultObject<T> {
+		return new SearchResultObject(items, totalCount);
 	}
 }

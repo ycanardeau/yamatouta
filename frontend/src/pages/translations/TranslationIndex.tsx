@@ -12,9 +12,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import TranslationBreadcrumbs from '../../components/translations/TranslationBreadcrumbs';
-import TranslationSearchOptions from '../../components/translations/TranslationSearchOptions';
-import TranslationSearchTable from '../../components/translations/TranslationSearchTable';
+import { TranslationBreadcrumbs } from '../../components/translations/TranslationBreadcrumbs';
+import { TranslationSearchOptions } from '../../components/translations/TranslationSearchOptions';
+import { TranslationSearchTable } from '../../components/translations/TranslationSearchTable';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';

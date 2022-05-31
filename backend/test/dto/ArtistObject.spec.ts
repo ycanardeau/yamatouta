@@ -33,16 +33,16 @@ test('ArtistObject', async () => {
 
 	const permissionContext = new FakePermissionContext(viewer);
 
-	const artistObject = new ArtistObject(artist, permissionContext);
+	const artistObject = ArtistObject.create(artist, permissionContext);
 	expect(artistObject.id).toBe(artist.id);
 	expect(artistObject.name).toBe(artist.name);
 	expect(artistObject.artistType).toBe(artist.artistType);
 
-	expect(() => new ArtistObject(deletedArtist, permissionContext)).toThrow(
+	expect(() => ArtistObject.create(deletedArtist, permissionContext)).toThrow(
 		NotFoundException,
 	);
 
-	expect(() => new ArtistObject(hiddenArtist, permissionContext)).toThrow(
+	expect(() => ArtistObject.create(hiddenArtist, permissionContext)).toThrow(
 		NotFoundException,
 	);
 });

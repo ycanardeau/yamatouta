@@ -16,7 +16,7 @@ export const useWorkDetails = <T,>(
 		workApi
 			.get({
 				id: Number(id),
-				fields: [WorkOptionalField.WebLinks],
+				fields: Object.values(WorkOptionalField),
 			})
 			.then((work) => setWork(factory(work)));
 	}, [id, factory]);

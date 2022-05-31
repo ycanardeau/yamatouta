@@ -1,6 +1,7 @@
 import Joi from 'joi';
 
 import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
+import { WorkLinkUpdateParams } from '../WorkLinkUpdateParams';
 import { QuoteType } from './QuoteType';
 
 export class QuoteUpdateParams {
@@ -11,6 +12,7 @@ export class QuoteUpdateParams {
 		readonly locale: string,
 		readonly artistId: number,
 		readonly webLinks: WebLinkUpdateParams[],
+		readonly workLinks: WorkLinkUpdateParams[],
 	) {}
 
 	static readonly schema = Joi.object<QuoteUpdateParams>({
@@ -23,5 +25,6 @@ export class QuoteUpdateParams {
 		locale: Joi.string().required().trim(),
 		artistId: Joi.number().required(),
 		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
+		workLinks: Joi.array().items(WorkLinkUpdateParams.schema).required(),
 	});
 }

@@ -12,6 +12,7 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { WorkOptionalField } from '../../../models/works/WorkOptionalField';
 import { WorkUpdateParams } from '../../../models/works/WorkUpdateParams';
+import { ArtistLinkService } from '../../../services/ArtistLinkService';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
 
@@ -31,6 +32,7 @@ export class WorkUpdateCommandHandler
 		@InjectRepository(Work)
 		private readonly workRepo: EntityRepository<Work>,
 		private readonly webLinkService: WebLinkService,
+		private readonly artistLinkService: ArtistLinkService,
 	) {}
 
 	async execute(command: WorkUpdateCommand): Promise<WorkObject> {
@@ -76,6 +78,13 @@ export class WorkUpdateCommandHandler
 				user,
 			);
 
+			await this.artistLinkService.sync(
+				em,
+				work,
+				params.artistLinks,
+				permissionContext,
+			);
+
 			const commit = new Commit();
 
 			const revision = work.createRevision({
@@ -105,7 +114,7 @@ export class WorkUpdateCommandHandler
 			return work;
 		});
 
-		return new WorkObject(
+		return WorkObject.create(
 			work,
 			permissionContext,
 			Object.values(WorkOptionalField),

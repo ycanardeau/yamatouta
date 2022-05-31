@@ -6,16 +6,16 @@ import { QuoteUpdateCommand } from '../database/commands/quotes/QuoteUpdateComma
 import { QuoteListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
 import { QuoteGetQuery } from '../database/queries/quotes/QuoteGetQueryHandler';
 import { QuoteListQuery } from '../database/queries/quotes/QuoteListQueryHandler';
-import { GetPermissionContext } from '../decorators/GetPermissionContext';
 import { QuoteObject } from '../dto/QuoteObject';
 import { RevisionObject } from '../dto/RevisionObject';
 import { SearchResultObject } from '../dto/SearchResultObject';
+import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '../framework/pipes/JoiValidationPipe';
 import { EntryDeleteParams } from '../models/EntryDeleteParams';
 import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
 import { QuoteGetParams } from '../models/quotes/QuoteGetParams';
 import { QuoteListParams } from '../models/quotes/QuoteListParams';
 import { QuoteUpdateParams } from '../models/quotes/QuoteUpdateParams';
-import { JoiValidationPipe } from '../pipes/JoiValidationPipe';
 import { PermissionContext } from '../services/PermissionContext';
 
 @Controller('quotes')

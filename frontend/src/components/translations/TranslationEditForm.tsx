@@ -13,16 +13,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import WebLinkListEdit from '../../components/WebLinkListEdit';
-import { ITranslationObject } from '../../dto/ITranslationObject';
+import { WebLinkListEdit } from '../../components/WebLinkListEdit';
+import { TranslationEditObject } from '../../dto/TranslationEditObject';
+import { EntryType } from '../../models/EntryType';
+import { workLinkTypes } from '../../models/LinkType';
 import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
+import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface TranslationEditFormProps {
-	translation?: ITranslationObject;
+	translation?: TranslationEditObject;
 }
 
-const TranslationEditForm = observer(
+export const TranslationEditForm = observer(
 	({ translation }: TranslationEditFormProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -102,6 +105,15 @@ const TranslationEditForm = observer(
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>
 						<WebLinkListEdit store={store.webLinks} />
 					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.workLinks')} fullWidth>
+						<WorkLinkListEdit
+							store={store.workLinks}
+							allowedLinkTypes={
+								workLinkTypes[EntryType.Translation]
+							}
+						/>
+					</EuiFormRow>
 				</EuiForm>
 
 				<EuiSpacer />
@@ -143,5 +155,3 @@ const TranslationEditForm = observer(
 		);
 	},
 );
-
-export default TranslationEditForm;

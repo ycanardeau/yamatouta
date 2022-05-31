@@ -1,6 +1,7 @@
 import Joi from 'joi';
 
 import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
+import { WorkLinkUpdateParams } from '../WorkLinkUpdateParams';
 import { WordCategory } from './WordCategory';
 
 export class TranslationUpdateParams {
@@ -12,6 +13,7 @@ export class TranslationUpdateParams {
 		readonly yamatokotoba: string,
 		readonly category: WordCategory,
 		readonly webLinks: WebLinkUpdateParams[],
+		readonly workLinks: WorkLinkUpdateParams[],
 	) {}
 
 	static readonly schema = Joi.object<TranslationUpdateParams>({
@@ -33,5 +35,6 @@ export class TranslationUpdateParams {
 			.trim()
 			.valid(...Object.values(WordCategory)),
 		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
+		workLinks: Joi.array().items(WorkLinkUpdateParams.schema).required(),
 	});
 }

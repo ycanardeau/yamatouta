@@ -9,8 +9,8 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import WebLinkList from '../../components/WebLinkList';
-import QuoteSearchList from '../../components/quotes/QuoteSearchList';
+import { WebLinkDescriptionList } from '../../components/WebLinkDescriptionList';
+import { QuoteSearchList } from '../../components/quotes/QuoteSearchList';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 
@@ -47,14 +47,9 @@ const ArtistQuotes = observer(
 						</EuiDescriptionListDescription>
 
 						{artist.webLinks.length > 0 && (
-							<>
-								<EuiDescriptionListTitle>
-									{t('shared.externalLinks')}
-								</EuiDescriptionListTitle>
-								<EuiDescriptionListDescription>
-									<WebLinkList webLinks={artist.webLinks} />
-								</EuiDescriptionListDescription>
-							</>
+							<WebLinkDescriptionList
+								webLinks={artist.webLinks}
+							/>
 						)}
 					</EuiDescriptionList>
 				</div>

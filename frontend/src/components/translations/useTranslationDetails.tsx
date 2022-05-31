@@ -16,7 +16,7 @@ export const useTranslationDetails = <T,>(
 		translationApi
 			.get({
 				id: Number(id),
-				fields: [TranslationOptionalField.WebLinks],
+				fields: Object.values(TranslationOptionalField),
 			})
 			.then((translation) => setTranslation(factory(translation)));
 	}, [id, factory]);

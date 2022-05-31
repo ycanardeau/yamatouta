@@ -2,8 +2,8 @@ import { EuiCommentList } from '@elastic/eui';
 import React from 'react';
 
 import { translationApi } from '../../api/translationApi';
-import RevisionComment from '../../components/revisions/RevisionComment';
-import TranslationPage from '../../components/translations/TranslationPage';
+import { RevisionComment } from '../../components/revisions/RevisionComment';
+import { TranslationPage } from '../../components/translations/TranslationPage';
 import { useTranslationDetails } from '../../components/translations/useTranslationDetails';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { IRevisionObject } from '../../dto/IRevisionObject';

@@ -15,6 +15,7 @@ import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
 import { QuoteUpdateParams } from '../../../models/quotes/QuoteUpdateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { WebLinkService } from '../../../services/WebLinkService';
+import { WorkLinkService } from '../../../services/WorkLinkService';
 
 export class QuoteUpdateCommand {
 	constructor(
@@ -34,6 +35,7 @@ export class QuoteUpdateCommandHandler
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
 		private readonly webLinkService: WebLinkService,
+		private readonly workLinkService: WorkLinkService,
 	) {}
 
 	async execute(command: QuoteUpdateCommand): Promise<QuoteObject> {
@@ -87,6 +89,13 @@ export class QuoteUpdateCommandHandler
 				user,
 			);
 
+			await this.workLinkService.sync(
+				em,
+				quote,
+				params.workLinks,
+				permissionContext,
+			);
+
 			const commit = new Commit();
 
 			const revision = quote.createRevision({
@@ -116,7 +125,7 @@ export class QuoteUpdateCommandHandler
 			return quote;
 		});
 
-		return new QuoteObject(
+		return QuoteObject.create(
 			quote,
 			permissionContext,
 			Object.values(QuoteOptionalField),

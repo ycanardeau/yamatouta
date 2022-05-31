@@ -1,13 +1,13 @@
 import React from 'react';
 
-import ArtistEditForm from '../../components/artists/ArtistEditForm';
-import ArtistPage from '../../components/artists/ArtistPage';
+import { ArtistEditForm } from '../../components/artists/ArtistEditForm';
+import { ArtistPage } from '../../components/artists/ArtistPage';
 import { useArtistDetails } from '../../components/artists/useArtistDetails';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { IArtistObject } from '../../dto/IArtistObject';
+import { ArtistEditObject } from '../../dto/ArtistEditObject';
 
 interface LayoutProps {
-	artist: IArtistObject;
+	artist: ArtistEditObject;
 }
 
 const Layout = ({ artist }: LayoutProps): React.ReactElement => {
@@ -24,7 +24,7 @@ const Layout = ({ artist }: LayoutProps): React.ReactElement => {
 
 const ArtistEdit = (): React.ReactElement | null => {
 	const [artist] = useArtistDetails(
-		React.useCallback((artist) => artist, []),
+		React.useCallback((artist) => artist as ArtistEditObject, []),
 	);
 
 	return artist ? <Layout artist={artist} /> : null;

@@ -36,10 +36,10 @@ import { Permission } from '../../models/Permission';
 import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
 import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
-import Pagination from '../Pagination';
+import { Pagination } from '../Pagination';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
-import TranslationDeleteDialog from './TranslationDeleteDialog';
+import { TranslationDeleteDialog } from './TranslationDeleteDialog';
 
 interface HighlightProps {
 	children: React.ReactNode;
@@ -199,7 +199,7 @@ interface TranslationSearchTableProps {
 	store: TranslationSearchStore;
 }
 
-const TranslationSearchTable = observer(
+export const TranslationSearchTable = observer(
 	({ store }: TranslationSearchTableProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -381,5 +381,3 @@ const TranslationSearchTable = observer(
 		);
 	},
 );
-
-export default TranslationSearchTable;

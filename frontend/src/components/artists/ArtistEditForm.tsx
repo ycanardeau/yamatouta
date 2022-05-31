@@ -13,16 +13,16 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import WebLinkListEdit from '../../components/WebLinkListEdit';
-import { IArtistObject } from '../../dto/IArtistObject';
+import { WebLinkListEdit } from '../../components/WebLinkListEdit';
+import { ArtistEditObject } from '../../dto/ArtistEditObject';
 import { ArtistType } from '../../models/artists/ArtistType';
 import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
 
 interface ArtistEditFormProps {
-	artist?: IArtistObject;
+	artist?: ArtistEditObject;
 }
 
-const ArtistEditForm = observer(
+export const ArtistEditForm = observer(
 	({ artist }: ArtistEditFormProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -111,5 +111,3 @@ const ArtistEditForm = observer(
 		);
 	},
 );
-
-export default ArtistEditForm;

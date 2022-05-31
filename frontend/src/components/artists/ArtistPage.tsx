@@ -8,7 +8,7 @@ import {
 } from '@elastic/eui';
 
 import { IArtistObject } from '../../dto/IArtistObject';
-import ArtistBreadcrumbs from './ArtistBreadcrumbs';
+import { ArtistBreadcrumbs } from './ArtistBreadcrumbs';
 
 interface ArtistPageProps {
 	artist?: IArtistObject;
@@ -16,7 +16,7 @@ interface ArtistPageProps {
 	children?: React.ReactNode;
 }
 
-const ArtistPage = ({
+export const ArtistPage = ({
 	artist,
 	pageHeaderProps,
 	children,
@@ -41,5 +41,3 @@ const ArtistPage = ({
 		</>
 	);
 };
-
-export default ArtistPage;

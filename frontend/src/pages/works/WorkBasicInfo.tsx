@@ -6,11 +6,12 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import WebLinkList from '../../components/WebLinkList';
-import { IWorkObject } from '../../dto/IWorkObject';
+import { ArtistLinkDescriptionList } from '../../components/ArtistLinkDescriptionList';
+import { WebLinkDescriptionList } from '../../components/WebLinkDescriptionList';
+import { WorkDetailsObject } from '../../dto/WorkDetailsObject';
 
 interface WorkBasicInfoProps {
-	work: IWorkObject;
+	work: WorkDetailsObject;
 }
 
 const WorkBasicInfo = ({ work }: WorkBasicInfoProps): React.ReactElement => {
@@ -34,15 +35,33 @@ const WorkBasicInfo = ({ work }: WorkBasicInfoProps): React.ReactElement => {
 						{t(`workTypeNames.${work.workType}`)}
 					</EuiDescriptionListDescription>
 
+					{work.authors.length > 0 && (
+						<ArtistLinkDescriptionList
+							title={t('works.authors')}
+							artistLinks={work.authors}
+						/>
+					)}
+					{work.editors.length > 0 && (
+						<ArtistLinkDescriptionList
+							title={t('works.editors')}
+							artistLinks={work.editors}
+						/>
+					)}
+					{work.publishers.length > 0 && (
+						<ArtistLinkDescriptionList
+							title={t('works.publishers')}
+							artistLinks={work.publishers}
+						/>
+					)}
+					{work.translators.length > 0 && (
+						<ArtistLinkDescriptionList
+							title={t('works.translators')}
+							artistLinks={work.translators}
+						/>
+					)}
+
 					{work.webLinks.length > 0 && (
-						<>
-							<EuiDescriptionListTitle>
-								{t('shared.externalLinks')}
-							</EuiDescriptionListTitle>
-							<EuiDescriptionListDescription>
-								<WebLinkList webLinks={work.webLinks} />
-							</EuiDescriptionListDescription>
-						</>
+						<WebLinkDescriptionList webLinks={work.webLinks} />
 					)}
 				</EuiDescriptionList>
 			</div>

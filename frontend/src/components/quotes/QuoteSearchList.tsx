@@ -3,14 +3,14 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
-import Pagination from '../Pagination';
-import QuoteComment from './QuoteComment';
+import { Pagination } from '../Pagination';
+import { QuoteComment } from './QuoteComment';
 
 interface QuoteSearchListProps {
 	store: QuoteSearchStore;
 }
 
-const QuoteSearchList = observer(
+export const QuoteSearchList = observer(
 	({ store }: QuoteSearchListProps): React.ReactElement => {
 		return (
 			<>
@@ -25,5 +25,3 @@ const QuoteSearchList = observer(
 		);
 	},
 );
-
-export default QuoteSearchList;

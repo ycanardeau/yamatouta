@@ -6,7 +6,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
 import { UserAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { User } from '../../../entities/User';
-import { UserEmailAlreadyExistsException } from '../../../exceptions/UserEmailAlreadyExistsException';
+import { UserEmailAlreadyExistsException } from '../../../framework/exceptions/UserEmailAlreadyExistsException';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { UserUpdateParams } from '../../../models/users/UserUpdateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
@@ -119,7 +119,7 @@ export class UserUpdateCommandHandler
 				);
 			}
 
-			return new AuthenticatedUserObject(user);
+			return AuthenticatedUserObject.create(user);
 		});
 	}
 }

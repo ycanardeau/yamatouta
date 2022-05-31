@@ -7,8 +7,10 @@ import {
 } from 'mobx';
 
 import { artistApi } from '../../api/artistApi';
+import { ArtistEditObject } from '../../dto/ArtistEditObject';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { ArtistType } from '../../models/artists/ArtistType';
+import { IArtistUpdateParams } from '../../models/artists/IArtistUpdateParams';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class ArtistEditStore {
@@ -17,7 +19,7 @@ export class ArtistEditStore {
 	@observable artistType = ArtistType.Person;
 	readonly webLinks: WebLinkListEditStore;
 
-	constructor(private readonly artist?: IArtistObject) {
+	constructor(private readonly artist?: ArtistEditObject) {
 		makeObservable(this);
 
 		if (artist) {
@@ -41,6 +43,15 @@ export class ArtistEditStore {
 		this.artistType = value;
 	};
 
+	toParams = (): IArtistUpdateParams => {
+		return {
+			id: this.artist?.id ?? 0,
+			name: this.name,
+			artistType: this.artistType,
+			webLinks: this.webLinks.toParams(),
+		};
+	};
+
 	@action submit = async (): Promise<IArtistObject> => {
 		try {
 			this.submitting = true;
@@ -50,12 +61,7 @@ export class ArtistEditStore {
 				: artistApi.create;
 
 			// Await.
-			const artist = await createOrUpdate({
-				id: this.artist?.id ?? 0,
-				name: this.name,
-				artistType: this.artistType,
-				webLinks: this.webLinks.items,
-			});
+			const artist = await createOrUpdate(this.toParams());
 
 			return artist;
 		} finally {

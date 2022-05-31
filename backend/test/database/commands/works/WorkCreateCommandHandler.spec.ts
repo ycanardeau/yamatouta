@@ -61,6 +61,7 @@ describe('WorkCreateCommandHandler', () => {
 			name: 'よみもの',
 			workType: WorkType.Book,
 			webLinks: [],
+			artistLinks: [],
 		};
 	});
 
@@ -145,6 +146,7 @@ describe('WorkCreateCommandHandler', () => {
 					name: defaultParams.name,
 					workType: defaultParams.workType,
 					webLinks: [],
+					artistLinks: [],
 				},
 			});
 		});

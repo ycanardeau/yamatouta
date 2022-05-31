@@ -20,11 +20,11 @@ import { useNavigate } from 'react-router-dom';
 import { IQuoteObject } from '../../dto/IQuoteObject';
 import { Permission } from '../../models/Permission';
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
-import Avatar from '../Avatar';
-import Link from '../Link';
+import { Avatar } from '../Avatar';
+import { Link } from '../Link';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
-import QuoteDeleteDialog from './QuoteDeleteDialog';
+import { QuoteDeleteDialog } from './QuoteDeleteDialog';
 
 interface QuotePopoverProps {
 	store?: QuoteSearchStore;
@@ -143,7 +143,7 @@ interface QuoteCommentProps {
 	quote: IQuoteObject;
 }
 
-const QuoteComment = ({
+export const QuoteComment = ({
 	store,
 	quote,
 }: QuoteCommentProps): React.ReactElement => {
@@ -165,5 +165,3 @@ const QuoteComment = ({
 		</EuiComment>
 	);
 };
-
-export default QuoteComment;

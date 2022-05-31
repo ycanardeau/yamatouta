@@ -138,7 +138,7 @@ interface WebLinkListEditProps {
 	store: WebLinkListEditStore;
 }
 
-const WebLinkListEdit = observer(
+export const WebLinkListEdit = observer(
 	({ store }: WebLinkListEditProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -186,5 +186,3 @@ const WebLinkListEdit = observer(
 		);
 	},
 );
-
-export default WebLinkListEdit;

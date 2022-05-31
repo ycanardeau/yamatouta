@@ -72,6 +72,7 @@ describe('QuoteCreateCommandHandler', () => {
 			locale: 'ja',
 			artistId: 2,
 			webLinks: [],
+			workLinks: [],
 		};
 	});
 
@@ -158,8 +159,9 @@ describe('QuoteCreateCommandHandler', () => {
 					text: defaultParams.text,
 					quoteType: defaultParams.quoteType,
 					locale: defaultParams.locale,
-					artist: new ObjectRefSnapshot(artist),
+					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
+					workLinks: [],
 				},
 			});
 		});

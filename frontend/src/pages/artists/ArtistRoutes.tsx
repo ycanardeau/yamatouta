@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import lazyImport from '../../components/lazyImport';
+import { lazyImport } from '../../components/lazyImport';
 
 const ArtistIndex = lazyImport(() => import('./ArtistIndex'));
 const ArtistCreate = lazyImport(() => import('./ArtistCreate'));
