@@ -12,8 +12,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import QuoteBreadcrumbs from '../../components/quotes/QuoteBreadcrumbs';
-import QuoteSearchList from '../../components/quotes/QuoteSearchList';
+import { QuoteBreadcrumbs } from '../../components/quotes/QuoteBreadcrumbs';
+import { QuoteSearchList } from '../../components/quotes/QuoteSearchList';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';

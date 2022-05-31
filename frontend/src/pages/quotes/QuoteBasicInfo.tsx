@@ -8,8 +8,8 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import WebLinkList from '../../components/WebLinkList';
-import QuoteComment from '../../components/quotes/QuoteComment';
+import { WebLinkList } from '../../components/WebLinkList';
+import { QuoteComment } from '../../components/quotes/QuoteComment';
 import { QuoteDetailsObject } from '../../dto/QuoteDetailsObject';
 
 interface QuoteBasicInfoProps {

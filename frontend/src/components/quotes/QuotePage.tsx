@@ -8,7 +8,7 @@ import {
 } from '@elastic/eui';
 
 import { IQuoteObject } from '../../dto/IQuoteObject';
-import QuoteBreadcrumbs from './QuoteBreadcrumbs';
+import { QuoteBreadcrumbs } from './QuoteBreadcrumbs';
 
 interface QuotePageProps {
 	quote?: IQuoteObject;
@@ -16,7 +16,7 @@ interface QuotePageProps {
 	children?: React.ReactNode;
 }
 
-const QuotePage = ({
+export const QuotePage = ({
 	quote,
 	pageHeaderProps,
 	children,
@@ -41,5 +41,3 @@ const QuotePage = ({
 		</>
 	);
 };
-
-export default QuotePage;

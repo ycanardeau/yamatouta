@@ -8,7 +8,7 @@ interface QuoteBreadcrumbsProps {
 	quote?: Pick<IQuoteObject, 'id' | 'text'>;
 }
 
-const QuoteBreadcrumbs = ({
+export const QuoteBreadcrumbs = ({
 	quote,
 }: QuoteBreadcrumbsProps): React.ReactElement => {
 	const { t } = useTranslation();
@@ -39,5 +39,3 @@ const QuoteBreadcrumbs = ({
 
 	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
 };
-
-export default QuoteBreadcrumbs;

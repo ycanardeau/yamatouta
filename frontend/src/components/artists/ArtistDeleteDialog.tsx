@@ -12,7 +12,7 @@ interface ArtistDeleteDialogProps {
 	onSuccess: () => void;
 }
 
-const ArtistDeleteDialog = observer(
+export const ArtistDeleteDialog = observer(
 	({
 		artist,
 		onClose,
@@ -43,5 +43,3 @@ const ArtistDeleteDialog = observer(
 		);
 	},
 );
-
-export default ArtistDeleteDialog;

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 type LinkProps = Omit<EuiLinkAnchorProps, 'href' | 'onClick'> & { to: string };
 
-const Link = ({ to, ...props }: LinkProps): React.ReactElement => {
+export const Link = ({ to, ...props }: LinkProps): React.ReactElement => {
 	const navigate = useNavigate();
 
 	return (
@@ -18,5 +18,3 @@ const Link = ({ to, ...props }: LinkProps): React.ReactElement => {
 		/>
 	);
 };
-
-export default Link;

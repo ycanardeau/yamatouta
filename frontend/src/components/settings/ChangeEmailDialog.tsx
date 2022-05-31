@@ -25,7 +25,7 @@ interface ChangeEmailDialogProps {
 	onSuccess: (user: IAuthenticatedUserObject) => void;
 }
 
-const ChangeEmailDialog = observer(
+export const ChangeEmailDialog = observer(
 	({ onClose, onSuccess }: ChangeEmailDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -101,5 +101,3 @@ const ChangeEmailDialog = observer(
 		);
 	},
 );
-
-export default ChangeEmailDialog;

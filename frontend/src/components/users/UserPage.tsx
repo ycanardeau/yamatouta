@@ -9,7 +9,7 @@ import {
 
 import { IUserObject } from '../../dto/IUserObject';
 import { useYamatoutaTitle } from '../useYamatoutaTitle';
-import UserBreadcrumbs from './UserBreadcrumbs';
+import { UserBreadcrumbs } from './UserBreadcrumbs';
 
 interface UserPageProps {
 	user: IUserObject;
@@ -17,7 +17,7 @@ interface UserPageProps {
 	children?: React.ReactNode;
 }
 
-const UserPage = ({
+export const UserPage = ({
 	user,
 	pageHeaderProps,
 	children,
@@ -46,5 +46,3 @@ const UserPage = ({
 		</>
 	);
 };
-
-export default UserPage;

@@ -13,20 +13,20 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import WebLinkListEdit from '../../components/WebLinkListEdit';
-import ArtistComboBox from '../../components/artists/ArtistComboBox';
+import { WebLinkListEdit } from '../../components/WebLinkListEdit';
+import { ArtistComboBox } from '../../components/artists/ArtistComboBox';
 import { QuoteEditObject } from '../../dto/QuoteEditObject';
 import { EntryType } from '../../models/EntryType';
 import { workLinkTypes } from '../../models/LinkType';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
-import WorkLinkListEdit from '../WorkLinkListEdit';
+import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface QuoteEditFormProps {
 	quote?: QuoteEditObject;
 }
 
-const QuoteEditForm = observer(
+export const QuoteEditForm = observer(
 	({ quote }: QuoteEditFormProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -121,5 +121,3 @@ const QuoteEditForm = observer(
 		);
 	},
 );
-
-export default QuoteEditForm;

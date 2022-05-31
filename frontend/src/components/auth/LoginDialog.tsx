@@ -25,7 +25,7 @@ interface LoginDialogProps {
 	onSuccess: (user: IAuthenticatedUserObject) => void;
 }
 
-const LoginDialog = observer(
+export const LoginDialog = observer(
 	({ onClose, onSuccess }: LoginDialogProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -101,5 +101,3 @@ const LoginDialog = observer(
 		);
 	},
 );
-
-export default LoginDialog;

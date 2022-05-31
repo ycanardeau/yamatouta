@@ -9,7 +9,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import TranslationPage from '../../components/translations/TranslationPage';
+import { TranslationPage } from '../../components/translations/TranslationPage';
 import { useTranslationDetails } from '../../components/translations/useTranslationDetails';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';

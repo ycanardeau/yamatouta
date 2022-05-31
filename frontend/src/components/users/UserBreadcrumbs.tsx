@@ -8,7 +8,7 @@ interface UserBreadcrumbsProps {
 	user?: Pick<IUserObject, 'id' | 'name'>;
 }
 
-const UserBreadcrumbs = ({
+export const UserBreadcrumbs = ({
 	user,
 }: UserBreadcrumbsProps): React.ReactElement => {
 	const { t } = useTranslation();
@@ -39,5 +39,3 @@ const UserBreadcrumbs = ({
 
 	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
 };
-
-export default UserBreadcrumbs;

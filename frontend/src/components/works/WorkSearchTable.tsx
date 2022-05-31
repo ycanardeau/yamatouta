@@ -27,12 +27,12 @@ import { useNavigate } from 'react-router-dom';
 import { IWorkObject } from '../../dto/IWorkObject';
 import { Permission } from '../../models/Permission';
 import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
-import Avatar from '../Avatar';
-import Link from '../Link';
-import Pagination from '../Pagination';
+import { Avatar } from '../Avatar';
+import { Link } from '../Link';
+import { Pagination } from '../Pagination';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
-import WorkDeleteDialog from './WorkDeleteDialog';
+import { WorkDeleteDialog } from './WorkDeleteDialog';
 
 interface WorkPopoverProps {
 	store: WorkSearchStore;
@@ -147,7 +147,7 @@ interface WorkSearchTableProps {
 	store: WorkSearchStore;
 }
 
-const WorkSearchTable = observer(
+export const WorkSearchTable = observer(
 	({ store }: WorkSearchTableProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -196,5 +196,3 @@ const WorkSearchTable = observer(
 		);
 	},
 );
-
-export default WorkSearchTable;

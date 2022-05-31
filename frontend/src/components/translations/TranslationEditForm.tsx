@@ -13,19 +13,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import WebLinkListEdit from '../../components/WebLinkListEdit';
+import { WebLinkListEdit } from '../../components/WebLinkListEdit';
 import { TranslationEditObject } from '../../dto/TranslationEditObject';
 import { EntryType } from '../../models/EntryType';
 import { workLinkTypes } from '../../models/LinkType';
 import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
-import WorkLinkListEdit from '../WorkLinkListEdit';
+import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface TranslationEditFormProps {
 	translation?: TranslationEditObject;
 }
 
-const TranslationEditForm = observer(
+export const TranslationEditForm = observer(
 	({ translation }: TranslationEditFormProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -155,5 +155,3 @@ const TranslationEditForm = observer(
 		);
 	},
 );
-
-export default TranslationEditForm;

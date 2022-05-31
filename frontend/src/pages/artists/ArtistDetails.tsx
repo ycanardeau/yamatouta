@@ -15,7 +15,7 @@ import {
 	useNavigate,
 } from 'react-router-dom';
 
-import ArtistPage from '../../components/artists/ArtistPage';
+import { ArtistPage } from '../../components/artists/ArtistPage';
 import { useArtistDetails } from '../../components/artists/useArtistDetails';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';

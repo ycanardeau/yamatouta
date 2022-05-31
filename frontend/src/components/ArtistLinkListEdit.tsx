@@ -19,7 +19,7 @@ import {
 	ArtistLinkEditStore,
 	ArtistLinkListEditStore,
 } from '../stores/ArtistLinkListEditStore';
-import ArtistComboBox from './artists/ArtistComboBox';
+import { ArtistComboBox } from './artists/ArtistComboBox';
 
 interface ArtistLinkEditProps {
 	artistLinkListEditStore: ArtistLinkListEditStore;
@@ -91,7 +91,7 @@ interface ArtistLinkListEditProps {
 	allowedLinkTypes: LinkType[];
 }
 
-const ArtistLinkListEdit = observer(
+export const ArtistLinkListEdit = observer(
 	({
 		store,
 		allowedLinkTypes,
@@ -137,5 +137,3 @@ const ArtistLinkListEdit = observer(
 		);
 	},
 );
-
-export default ArtistLinkListEdit;

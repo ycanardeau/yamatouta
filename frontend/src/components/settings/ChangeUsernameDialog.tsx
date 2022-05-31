@@ -26,7 +26,7 @@ interface ChangeUsernameDialogProps {
 	onSuccess: (user: IAuthenticatedUserObject) => void;
 }
 
-const ChangeUsernameDialog = observer(
+export const ChangeUsernameDialog = observer(
 	({
 		user,
 		onClose,
@@ -108,5 +108,3 @@ const ChangeUsernameDialog = observer(
 		);
 	},
 );
-
-export default ChangeUsernameDialog;

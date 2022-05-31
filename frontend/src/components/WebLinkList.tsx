@@ -23,7 +23,7 @@ interface WebLinkListProps {
 	webLinks: IWebLinkObject[];
 }
 
-const WebLinkList = React.memo(
+export const WebLinkList = React.memo(
 	({ webLinks }: WebLinkListProps): React.ReactElement => {
 		const ordered = React.useMemo(
 			() =>
@@ -52,5 +52,3 @@ const WebLinkList = React.memo(
 		);
 	},
 );
-
-export default WebLinkList;

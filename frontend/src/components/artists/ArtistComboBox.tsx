@@ -4,13 +4,15 @@ import { artistApi } from '../../api/artistApi';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { ISearchResultObject } from '../../dto/ISearchResultObject';
 import { BasicEntryLinkStore } from '../../stores/BasicEntryLinkStore';
-import EntryComboBox from '../EntryComboBox';
+import { EntryComboBox } from '../EntryComboBox';
 
 interface ArtistComboBoxProps {
 	store: BasicEntryLinkStore<IArtistObject>;
 }
 
-const ArtistComboBox = ({ store }: ArtistComboBoxProps): React.ReactElement => {
+export const ArtistComboBox = ({
+	store,
+}: ArtistComboBoxProps): React.ReactElement => {
 	const { t } = useTranslation();
 
 	return (
@@ -32,5 +34,3 @@ const ArtistComboBox = ({ store }: ArtistComboBoxProps): React.ReactElement => {
 		/>
 	);
 };
-
-export default ArtistComboBox;

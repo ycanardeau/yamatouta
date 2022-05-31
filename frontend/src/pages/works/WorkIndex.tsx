@@ -13,8 +13,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import WorkBreadcrumbs from '../../components/works/WorkBreadcrumbs';
-import WorkSearchTable from '../../components/works/WorkSearchTable';
+import { WorkBreadcrumbs } from '../../components/works/WorkBreadcrumbs';
+import { WorkSearchTable } from '../../components/works/WorkSearchTable';
 import { Permission } from '../../models/Permission';
 import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
 

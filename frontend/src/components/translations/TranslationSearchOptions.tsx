@@ -19,7 +19,7 @@ interface TranslationSearchOptionsProps {
 	store: TranslationSearchStore;
 }
 
-const TranslationSearchOptions = observer(
+export const TranslationSearchOptions = observer(
 	({ store }: TranslationSearchOptionsProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -104,5 +104,3 @@ const TranslationSearchOptions = observer(
 		);
 	},
 );
-
-export default TranslationSearchOptions;

@@ -8,7 +8,7 @@ import {
 } from '@elastic/eui';
 
 import { ITranslationObject } from '../../dto/ITranslationObject';
-import TranslationBreadcrumbs from './TranslationBreadcrumbs';
+import { TranslationBreadcrumbs } from './TranslationBreadcrumbs';
 
 interface TranslationPageProps {
 	translation?: ITranslationObject;
@@ -16,7 +16,7 @@ interface TranslationPageProps {
 	children?: React.ReactNode;
 }
 
-const TranslationPage = ({
+export const TranslationPage = ({
 	translation,
 	pageHeaderProps,
 	children,
@@ -41,5 +41,3 @@ const TranslationPage = ({
 		</>
 	);
 };
-
-export default TranslationPage;

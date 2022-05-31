@@ -11,7 +11,7 @@ import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import WorkPage from '../../components/works/WorkPage';
+import { WorkPage } from '../../components/works/WorkPage';
 import { useWorkDetails } from '../../components/works/useWorkDetails';
 import { IWorkObject } from '../../dto/IWorkObject';
 import { WorkDetailsObject } from '../../dto/WorkDetailsObject';

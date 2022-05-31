@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TranslationEditForm from '../../components/translations/TranslationEditForm';
-import TranslationPage from '../../components/translations/TranslationPage';
+import { TranslationEditForm } from '../../components/translations/TranslationEditForm';
+import { TranslationPage } from '../../components/translations/TranslationPage';
 import { useTranslationDetails } from '../../components/translations/useTranslationDetails';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { TranslationEditObject } from '../../dto/TranslationEditObject';

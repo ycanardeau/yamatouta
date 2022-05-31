@@ -19,7 +19,7 @@ import {
 	WorkLinkEditStore,
 	WorkLinkListEditStore,
 } from '../stores/WorkLinkListEditStore';
-import WorkComboBox from './works/WorkComboBox';
+import { WorkComboBox } from './works/WorkComboBox';
 
 interface WorkLinkEditProps {
 	workLinkListEditStore: WorkLinkListEditStore;
@@ -91,7 +91,7 @@ interface WorkLinkListEditProps {
 	allowedLinkTypes: LinkType[];
 }
 
-const WorkLinkListEdit = observer(
+export const WorkLinkListEdit = observer(
 	({
 		store,
 		allowedLinkTypes,
@@ -137,5 +137,3 @@ const WorkLinkListEdit = observer(
 		);
 	},
 );
-
-export default WorkLinkListEdit;

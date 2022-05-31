@@ -8,7 +8,7 @@ import {
 } from '@elastic/eui';
 
 import { IWorkObject } from '../../dto/IWorkObject';
-import WorkBreadcrumbs from './WorkBreadcrumbs';
+import { WorkBreadcrumbs } from './WorkBreadcrumbs';
 
 interface WorkPageProps {
 	work?: IWorkObject;
@@ -16,7 +16,7 @@ interface WorkPageProps {
 	children?: React.ReactNode;
 }
 
-const WorkPage = ({
+export const WorkPage = ({
 	work,
 	pageHeaderProps,
 	children,
@@ -41,5 +41,3 @@ const WorkPage = ({
 		</>
 	);
 };
-
-export default WorkPage;

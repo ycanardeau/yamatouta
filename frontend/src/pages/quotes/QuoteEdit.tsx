@@ -1,7 +1,7 @@
 import React from 'react';
 
-import QuoteEditForm from '../../components/quotes/QuoteEditForm';
-import QuotePage from '../../components/quotes/QuotePage';
+import { QuoteEditForm } from '../../components/quotes/QuoteEditForm';
+import { QuotePage } from '../../components/quotes/QuotePage';
 import { useQuoteDetails } from '../../components/quotes/useQuoteDetails';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { QuoteEditObject } from '../../dto/QuoteEditObject';

@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import WorkEditForm from '../../components/works/WorkEditForm';
-import WorkPage from '../../components/works/WorkPage';
+import { WorkEditForm } from '../../components/works/WorkEditForm';
+import { WorkPage } from '../../components/works/WorkPage';
 import { useWorkDetails } from '../../components/works/useWorkDetails';
 import { WorkEditObject } from '../../dto/WorkEditObject';
 

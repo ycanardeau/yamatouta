@@ -19,8 +19,8 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { authApi } from './api/authApi';
-import LoginDialog from './components/auth/LoginDialog';
-import RegisterDialog from './components/auth/RegisterDialog';
+import { LoginDialog } from './components/auth/LoginDialog';
+import { RegisterDialog } from './components/auth/RegisterDialog';
 import { useAuth } from './components/useAuth';
 import { useDialog } from './components/useDialog';
 import config from './config';

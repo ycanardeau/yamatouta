@@ -9,7 +9,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import QuotePage from '../../components/quotes/QuotePage';
+import { QuotePage } from '../../components/quotes/QuotePage';
 import { useQuoteDetails } from '../../components/quotes/useQuoteDetails';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';

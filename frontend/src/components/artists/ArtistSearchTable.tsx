@@ -24,15 +24,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import Avatar from '../../components/Avatar';
-import Pagination from '../../components/Pagination';
+import { Avatar } from '../../components/Avatar';
+import { Pagination } from '../../components/Pagination';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
-import Link from '../Link';
+import { Link } from '../Link';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
-import ArtistDeleteDialog from './ArtistDeleteDialog';
+import { ArtistDeleteDialog } from './ArtistDeleteDialog';
 
 interface ArtistPopoverProps {
 	store: ArtistSearchStore;
@@ -150,7 +150,7 @@ interface ArtistSearchTableProps {
 	store: ArtistSearchStore;
 }
 
-const ArtistSearchTable = observer(
+export const ArtistSearchTable = observer(
 	({ store }: ArtistSearchTableProps): React.ReactElement => {
 		const { t } = useTranslation();
 
@@ -206,5 +206,3 @@ const ArtistSearchTable = observer(
 		);
 	},
 );
-
-export default ArtistSearchTable;

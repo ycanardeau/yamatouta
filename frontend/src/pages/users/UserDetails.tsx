@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 
-import UserPage from '../../components/users/UserPage';
+import { UserPage } from '../../components/users/UserPage';
 import { useUserDetails } from '../../components/users/useUserDetails';
 import { IUserObject } from '../../dto/IUserObject';
 import { UserDetailsObject } from '../../dto/UserDetailsObject';

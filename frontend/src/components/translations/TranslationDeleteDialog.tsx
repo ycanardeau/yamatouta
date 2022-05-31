@@ -12,7 +12,7 @@ interface TranslationDeleteDialogProps {
 	onSuccess: () => void;
 }
 
-const TranslationDeleteDialog = observer(
+export const TranslationDeleteDialog = observer(
 	({
 		translation,
 		onClose,
@@ -45,5 +45,3 @@ const TranslationDeleteDialog = observer(
 		);
 	},
 );
-
-export default TranslationDeleteDialog;

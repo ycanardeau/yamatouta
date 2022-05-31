@@ -8,7 +8,7 @@ interface TranslationBreadcrumbsProps {
 	translation?: Pick<ITranslationObject, 'id' | 'headword' | 'yamatokotoba'>;
 }
 
-const TranslationBreadcrumbs = ({
+export const TranslationBreadcrumbs = ({
 	translation,
 }: TranslationBreadcrumbsProps): React.ReactElement => {
 	const { t } = useTranslation();
@@ -39,5 +39,3 @@ const TranslationBreadcrumbs = ({
 
 	return <EuiBreadcrumbs breadcrumbs={breadcrumbs} truncate={false} />;
 };
-
-export default TranslationBreadcrumbs;

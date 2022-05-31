@@ -12,7 +12,7 @@ interface QuoteDeleteDialogProps {
 	onSuccess: () => void;
 }
 
-const QuoteDeleteDialog = observer(
+export const QuoteDeleteDialog = observer(
 	({
 		quote,
 		onClose,
@@ -43,5 +43,3 @@ const QuoteDeleteDialog = observer(
 		);
 	},
 );
-
-export default QuoteDeleteDialog;
