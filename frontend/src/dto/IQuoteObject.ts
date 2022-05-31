@@ -5,7 +5,7 @@ import { IWebLinkObject } from './IWebLinkObject';
 
 export interface IQuoteObject {
 	id: number;
-	createdAt: Date;
+	createdAt: string;
 	text: string;
 	quoteType: QuoteType;
 	locale: string;
