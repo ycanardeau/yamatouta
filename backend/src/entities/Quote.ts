@@ -62,13 +62,13 @@ export class Quote
 	@Enum(() => QuoteType)
 	quoteType!: QuoteType;
 
-	@Property({ length: 2048 })
+	@Property({ columnType: 'text' })
 	text!: string;
 
 	@Property()
 	phraseCount = 0;
 
-	@Property()
+	@Property({ columnType: 'text' })
 	transcription = '';
 
 	@Property({ length: 85 })
@@ -102,6 +102,12 @@ export class Quote
 
 	@OneToMany(() => QuoteWorkLink, (workLink) => workLink.quote)
 	workLinks = new Collection<QuoteWorkLink>(this);
+
+	@Property({ columnType: 'text' })
+	foreword = '';
+
+	@Property()
+	customArtistName = '';
 
 	get entryType(): EntryType.Quote {
 		return EntryType.Quote;

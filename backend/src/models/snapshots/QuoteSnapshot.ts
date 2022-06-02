@@ -16,6 +16,9 @@ export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 		readonly artist: ObjectRefSnapshot<Artist>,
 		readonly webLinks: WebLinkSnapshot[],
 		readonly workLinks: WorkLinkSnapshot[],
+		readonly transcription: string,
+		readonly foreword: string,
+		readonly customArtistName: string,
 	) {}
 
 	static create(quote: Quote): QuoteSnapshot {
@@ -34,6 +37,9 @@ export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 			ObjectRefSnapshot.create<Artist>(quote.artist),
 			webLinks,
 			workLinks,
+			quote.transcription,
+			quote.foreword,
+			quote.customArtistName,
 		);
 	}
 

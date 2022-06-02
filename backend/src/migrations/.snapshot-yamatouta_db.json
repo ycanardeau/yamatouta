@@ -2445,13 +2445,12 @@
         },
         "text": {
           "name": "text",
-          "type": "varchar(2048)",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 2048,
-          "mappedType": "string"
+          "mappedType": "text"
         },
         "phrase_count": {
           "name": "phrase_count",
@@ -2464,12 +2463,12 @@
         },
         "transcription": {
           "name": "transcription",
-          "type": "varchar(255)",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "string"
+          "mappedType": "text"
         },
         "locale": {
           "name": "locale",
@@ -2534,6 +2533,24 @@
           "primary": false,
           "nullable": false,
           "mappedType": "integer"
+        },
+        "foreword": {
+          "name": "foreword",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "custom_artist_name": {
+          "name": "custom_artist_name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
         }
       },
       "name": "quotes",
