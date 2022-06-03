@@ -8,6 +8,7 @@ import { Artist } from '../../../entities/Artist';
 import { ArtistAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
+import { RevisionEvent } from '../../../models/RevisionEvent';
 import { ArtistOptionalField } from '../../../models/artists/ArtistOptionalField';
 import { ArtistUpdateParams } from '../../../models/artists/ArtistUpdateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
@@ -78,6 +79,8 @@ export class ArtistUpdateCommandHandler
 					);
 				},
 				user,
+				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
+				false,
 			);
 
 			em.persist(revision);

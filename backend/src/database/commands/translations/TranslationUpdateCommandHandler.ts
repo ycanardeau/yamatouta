@@ -8,6 +8,7 @@ import { TranslationAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Translation } from '../../../entities/Translation';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
+import { RevisionEvent } from '../../../models/RevisionEvent';
 import { TranslationOptionalField } from '../../../models/translations/TranslationOptionalField';
 import { TranslationUpdateParams } from '../../../models/translations/TranslationUpdateParams';
 import { NgramConverter } from '../../../services/NgramConverter';
@@ -96,6 +97,8 @@ export class TranslationUpdateCommandHandler
 					);
 				},
 				user,
+				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
+				false,
 			);
 
 			em.persist(revision);

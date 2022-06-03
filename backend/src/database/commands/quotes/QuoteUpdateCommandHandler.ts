@@ -9,6 +9,7 @@ import { QuoteAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Quote } from '../../../entities/Quote';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
+import { RevisionEvent } from '../../../models/RevisionEvent';
 import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
 import { QuoteUpdateParams } from '../../../models/quotes/QuoteUpdateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
@@ -98,6 +99,8 @@ export class QuoteUpdateCommandHandler
 					);
 				},
 				user,
+				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
+				false,
 			);
 
 			em.persist(revision);

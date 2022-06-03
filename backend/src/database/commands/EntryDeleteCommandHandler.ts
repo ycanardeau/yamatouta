@@ -11,7 +11,6 @@ import {
 	TranslationAuditLogEntry,
 	WorkAuditLogEntry,
 } from '../../entities/AuditLogEntry';
-import { Commit } from '../../entities/Commit';
 import { Quote } from '../../entities/Quote';
 import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
@@ -22,6 +21,7 @@ import { EntryDeleteParams } from '../../models/EntryDeleteParams';
 import { Permission } from '../../models/Permission';
 import { RevisionEvent } from '../../models/RevisionEvent';
 import { PermissionContext } from '../../services/PermissionContext';
+import { RevisionService } from '../../services/RevisionService';
 
 abstract class EntryDeleteCommand {
 	constructor(
@@ -36,6 +36,7 @@ abstract class EntryDeleteCommandHandler<
 > {
 	constructor(
 		private readonly em: EntityManager,
+		private readonly revisionService: RevisionService,
 		private readonly permission: Permission,
 		private readonly entryFunc: (id: number) => Promise<TEntry>,
 		private readonly auditLogFunc: (
@@ -63,16 +64,14 @@ abstract class EntryDeleteCommandHandler<
 
 			const user = await permissionContext.getCurrentUser(em);
 
-			entry.deleted = true;
-
-			const commit = new Commit();
-
-			const revision = entry.createRevision(
-				commit,
+			const revision = await this.revisionService.create(
+				entry,
+				async () => {
+					entry.deleted = true;
+				},
 				user,
 				RevisionEvent.Deleted,
-				'',
-				++entry.version,
+				true,
 			);
 
 			em.persist(revision);
@@ -97,11 +96,13 @@ export class TranslationDeleteCommandHandler
 {
 	constructor(
 		em: EntityManager,
+		revisionService: RevisionService,
 		@InjectRepository(Translation)
 		translationRepo: EntityRepository<Translation>,
 	) {
 		super(
 			em,
+			revisionService,
 			Permission.Translation_Delete,
 			(id) =>
 				translationRepo.findOneOrFail({ id: id }, { populate: true }),
@@ -125,11 +126,13 @@ export class ArtistDeleteCommandHandler
 {
 	constructor(
 		em: EntityManager,
+		revisionService: RevisionService,
 		@InjectRepository(Artist)
 		artistRepo: EntityRepository<Artist>,
 	) {
 		super(
 			em,
+			revisionService,
 			Permission.Artist_Delete,
 			(id) => artistRepo.findOneOrFail({ id: id }, { populate: true }),
 			(entry, actor, actorIp) =>
@@ -152,11 +155,13 @@ export class QuoteDeleteCommandHandler
 {
 	constructor(
 		em: EntityManager,
+		revisionService: RevisionService,
 		@InjectRepository(Quote)
 		quoteRepo: EntityRepository<Quote>,
 	) {
 		super(
 			em,
+			revisionService,
 			Permission.Quote_Delete,
 			(id) => quoteRepo.findOneOrFail({ id: id }, { populate: true }),
 			(entry, actor, actorIp) =>
@@ -179,11 +184,13 @@ export class WorkDeleteCommandHandler
 {
 	constructor(
 		em: EntityManager,
+		revisionService: RevisionService,
 		@InjectRepository(Work)
 		workRepo: EntityRepository<Work>,
 	) {
 		super(
 			em,
+			revisionService,
 			Permission.Work_Delete,
 			(id) => workRepo.findOneOrFail({ id: id }, { populate: true }),
 			(entry, actor, actorIp) =>
