@@ -18,6 +18,7 @@ import { WorkDetailsObject } from '../../dto/WorkDetailsObject';
 import { Permission } from '../../models/Permission';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
 import WorkBasicInfo from './WorkBasicInfo';
+import WorkQuotes from './WorkQuotes';
 
 interface LayoutProps {
 	store: WorkDetailsStore;
@@ -95,11 +96,27 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 						isSelected: tab === undefined,
 						label: t('shared.basicInfo'),
 					},
+					{
+						href: `/works/${work.id}/quotes`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/works/${work.id}/quotes`);
+						},
+						prepend: <EuiIcon type={InfoRegular} />,
+						isSelected: tab === 'quotes',
+						label: t('shared.quotes'),
+					},
 				],
 			}}
 		>
 			<Routes>
 				<Route path="" element={<WorkBasicInfo work={work} />} />
+				<Route
+					path="quotes"
+					element={<WorkQuotes workDetailsStore={store} />}
+				/>
 			</Routes>
 		</WorkPage>
 	);

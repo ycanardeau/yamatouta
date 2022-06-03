@@ -34,6 +34,7 @@ export class QuoteSearchStore
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteObject[] = [];
 	@observable artistId?: number;
+	@observable workId?: number;
 
 	constructor() {
 		makeObservable(this);
@@ -56,6 +57,7 @@ export class QuoteSearchStore
 			const result = await quoteApi.list({
 				pagination: paginationParams,
 				artistId: this.artistId,
+				workId: this.workId,
 			});
 
 			runInAction(() => {

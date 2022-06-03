@@ -50,13 +50,15 @@ class QuoteApi {
 	list = async ({
 		pagination,
 		artistId,
+		workId,
 	}: {
 		pagination: IPaginationParams;
 		artistId?: number;
+		workId?: number;
 	}): Promise<ISearchResultObject<IQuoteObject>> => {
 		const response = await axios.get<ISearchResultObject<IQuoteObject>>(
 			'/quotes/list',
-			{ params: { ...pagination, artistId } },
+			{ params: { ...pagination, artistId, workId } },
 		);
 
 		return response.data;
