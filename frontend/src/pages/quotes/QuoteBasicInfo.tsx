@@ -22,6 +22,12 @@ const QuoteBasicInfo = ({ quote }: QuoteBasicInfoProps): React.ReactElement => {
 
 	return (
 		<>
+			<EuiCommentList>
+				<QuoteComment quote={quote} />
+			</EuiCommentList>
+
+			<EuiSpacer size="l" />
+
 			<div style={{ maxWidth: '400px' }}>
 				<EuiDescriptionList type="column" compressed>
 					<EuiDescriptionListTitle>
@@ -43,12 +49,6 @@ const QuoteBasicInfo = ({ quote }: QuoteBasicInfoProps): React.ReactElement => {
 					)}
 				</EuiDescriptionList>
 			</div>
-
-			<EuiSpacer size="l" />
-
-			<EuiCommentList>
-				<QuoteComment quote={quote} />
-			</EuiCommentList>
 		</>
 	);
 };
