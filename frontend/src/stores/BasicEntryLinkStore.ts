@@ -1,4 +1,10 @@
-import { computed, makeObservable, observable, runInAction } from 'mobx';
+import {
+	action,
+	computed,
+	makeObservable,
+	observable,
+	runInAction,
+} from 'mobx';
 
 import { IEntryWithIdAndName } from '../models/IEntryWithIdAndName';
 
@@ -18,7 +24,9 @@ export class BasicEntryLinkStore<TEntry extends IEntryWithIdAndName> {
 		return this._entry;
 	}
 
-	loadEntryById = async (value: number | undefined): Promise<void> => {
+	@action loadEntryById = async (
+		value: number | undefined,
+	): Promise<void> => {
 		if (!value) {
 			this._entry = undefined;
 			return;
