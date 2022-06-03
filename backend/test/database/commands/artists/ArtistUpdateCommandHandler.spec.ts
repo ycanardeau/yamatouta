@@ -106,7 +106,7 @@ describe('ArtistUpdateCommandHandler', () => {
 				id: artistObject.id,
 			});
 
-			const revision = artist.revisions[0];
+			const revision = artist.revisions[1];
 
 			expect(revision).toBeInstanceOf(ArtistRevision);
 			expect(revision.artist.getEntity()).toBe(artist);

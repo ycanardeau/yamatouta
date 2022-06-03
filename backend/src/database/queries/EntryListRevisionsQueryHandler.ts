@@ -12,7 +12,6 @@ import { Entry } from '../../models/Entry';
 import { EntryListRevisionsParams } from '../../models/EntryListRevisionsParams';
 import { Permission } from '../../models/Permission';
 import { PermissionContext } from '../../services/PermissionContext';
-import { whereNotDeleted, whereNotHidden } from '../../services/filters';
 
 export abstract class EntryListRevisionsQuery {
 	constructor(
@@ -38,10 +37,8 @@ abstract class EntryListRevisionsQueryHandler<
 
 		const revisions = await entry.revisions.matching({
 			where: {
-				$and: [
-					whereNotDeleted(permissionContext),
-					whereNotHidden(permissionContext),
-				],
+				deleted: false,
+				hidden: false,
 			},
 			orderBy: { version: QueryOrder.DESC },
 			populate: ['actor'],

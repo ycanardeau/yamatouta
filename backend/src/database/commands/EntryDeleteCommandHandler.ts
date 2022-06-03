@@ -111,6 +111,7 @@ export class TranslationDeleteCommandHandler
 						populate: [
 							'webLinks',
 							'webLinks.address',
+							'webLinks.address.host',
 							'workLinks',
 							'workLinks.relatedWork',
 						],
@@ -149,7 +150,11 @@ export class ArtistDeleteCommandHandler
 					{ id: id },
 					{
 						// OPTIMIZE
-						populate: ['webLinks', 'webLinks.address'],
+						populate: [
+							'webLinks',
+							'webLinks.address',
+							'webLinks.address.host',
+						],
 					},
 				),
 			(entry, actor, actorIp) =>
@@ -189,6 +194,7 @@ export class QuoteDeleteCommandHandler
 							'artist',
 							'webLinks',
 							'webLinks.address',
+							'webLinks.address.host',
 							'workLinks',
 							'workLinks.relatedWork',
 						],
@@ -230,6 +236,7 @@ export class WorkDeleteCommandHandler
 						populate: [
 							'webLinks',
 							'webLinks.address',
+							'webLinks.address.host',
 							'artistLinks',
 							'artistLinks.relatedArtist',
 						],

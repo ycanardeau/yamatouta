@@ -66,6 +66,7 @@ export class WorkUpdateCommandHandler
 							populate: [
 								'webLinks',
 								'webLinks.address',
+								'webLinks.address.host',
 								'artistLinks',
 								'artistLinks.relatedArtist',
 							],

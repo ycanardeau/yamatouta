@@ -121,7 +121,7 @@ describe('QuoteUpdateCommandHandler', () => {
 
 			const quote = await em.findOneOrFail(Quote, { id: quoteObject.id });
 
-			const revision = quote.revisions[0];
+			const revision = quote.revisions[1];
 
 			expect(revision).toBeInstanceOf(QuoteRevision);
 			expect(revision.quote.getEntity()).toBe(quote);

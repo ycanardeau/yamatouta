@@ -76,6 +76,7 @@ export class QuoteUpdateCommandHandler
 								'artist',
 								'webLinks',
 								'webLinks.address',
+								'webLinks.address.host',
 								'workLinks',
 								'workLinks.relatedWork',
 							],

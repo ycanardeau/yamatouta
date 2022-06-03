@@ -61,7 +61,11 @@ export class ArtistUpdateCommandHandler
 						},
 						{
 							// OPTIMIZE
-							populate: ['webLinks', 'webLinks.address'],
+							populate: [
+								'webLinks',
+								'webLinks.address',
+								'webLinks.address.host',
+							],
 						},
 				  );
 

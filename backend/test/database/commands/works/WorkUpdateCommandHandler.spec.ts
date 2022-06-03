@@ -105,7 +105,7 @@ describe('WorkUpdateCommandHandler', () => {
 
 			const work = await em.findOneOrFail(Work, { id: workObject.id });
 
-			const revision = work.revisions[0];
+			const revision = work.revisions[1];
 
 			expect(revision).toBeInstanceOf(WorkRevision);
 			expect(revision.work.getEntity()).toBe(work);

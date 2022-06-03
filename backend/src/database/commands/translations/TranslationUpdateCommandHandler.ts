@@ -70,6 +70,7 @@ export class TranslationUpdateCommandHandler
 							populate: [
 								'webLinks',
 								'webLinks.address',
+								'webLinks.address.host',
 								'workLinks',
 								'workLinks.relatedWork',
 							],

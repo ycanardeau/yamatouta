@@ -82,7 +82,7 @@ describe('TranslationDeleteCommandHandler', () => {
 				id: translation.id,
 			});
 
-			const revision = translation.revisions[0];
+			const revision = translation.revisions[1];
 
 			expect(revision).toBeInstanceOf(TranslationRevision);
 			expect(revision.translation.getEntity()).toBe(translation);
