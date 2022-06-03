@@ -7,13 +7,7 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-	Navigate,
-	Route,
-	Routes,
-	useLocation,
-	useNavigate,
-} from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { ArtistPage } from '../../components/artists/ArtistPage';
 import { useArtistDetails } from '../../components/artists/useArtistDetails';
@@ -23,6 +17,7 @@ import { ArtistDetailsObject } from '../../dto/ArtistDetailsObject';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { Permission } from '../../models/Permission';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
+import ArtistBasicInfo from './ArtistBasicInfo';
 import ArtistQuotes from './ArtistQuotes';
 
 interface LayoutProps {
@@ -99,6 +94,18 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 						},
 						prepend: <EuiIcon type={MusicNote2Regular} />,
 						isSelected: tab === undefined,
+						label: t('shared.basicInfo'),
+					},
+					{
+						href: `/artists/${artist.id}/quotes`,
+						onClick: (
+							e: React.MouseEvent<HTMLAnchorElement>,
+						): void => {
+							e.preventDefault();
+							navigate(`/artists/${artist.id}/quotes`);
+						},
+						prepend: <EuiIcon type={MusicNote2Regular} />,
+						isSelected: tab === 'quotes',
 						label: t('shared.quotes'),
 					},
 				],
@@ -107,11 +114,11 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 			<Routes>
 				<Route
 					path=""
-					element={<ArtistQuotes artistDetailsStore={store} />}
+					element={<ArtistBasicInfo artistDetailsStore={store} />}
 				/>
 				<Route
 					path="quotes"
-					element={<Navigate to={`/artists/${artist.id}`} replace />}
+					element={<ArtistQuotes artistDetailsStore={store} />}
 				/>
 			</Routes>
 		</ArtistPage>

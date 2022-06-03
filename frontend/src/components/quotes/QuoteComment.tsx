@@ -153,7 +153,7 @@ export const QuoteComment = ({
 				<Link
 					color="text"
 					style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
-					to={`/artists/${quote.artist.id}`}
+					to={`/artists/${quote.artist.id}/quotes`}
 				>
 					{quote.artist.name}
 				</Link>
