@@ -88,9 +88,9 @@ describe('TranslationDeleteCommandHandler', () => {
 			expect(revision.translation).toBe(translation);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Deleted);
-			expect(
-				revision.snapshot.contentEquals(translation.takeSnapshot()),
-			).toBe(true);
+			expect(revision.snapshot).toBe(
+				JSON.stringify(translation.takeSnapshot()),
+			);
 
 			expect(translation.deleted).toBe(true);
 

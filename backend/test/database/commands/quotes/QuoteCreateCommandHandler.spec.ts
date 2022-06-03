@@ -117,7 +117,7 @@ describe('QuoteCreateCommandHandler', () => {
 			expect(revision.quote).toBe(quote);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Created);
-			expect(revision.snapshot.contentEquals(snapshot)).toBe(true);
+			expect(revision.snapshot).toBe(JSON.stringify(snapshot));
 
 			const auditLogEntry = await em.findOneOrFail(QuoteAuditLogEntry, {
 				quote: quote,

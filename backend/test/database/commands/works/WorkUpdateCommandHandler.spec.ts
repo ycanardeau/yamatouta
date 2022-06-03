@@ -110,7 +110,7 @@ describe('WorkUpdateCommandHandler', () => {
 			expect(revision.work).toBe(work);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Updated);
-			expect(revision.snapshot.contentEquals(snapshot)).toBe(true);
+			expect(revision.snapshot).toBe(JSON.stringify(snapshot));
 
 			const auditLogEntry = await em.findOneOrFail(WorkAuditLogEntry, {
 				work: work,

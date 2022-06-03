@@ -82,9 +82,7 @@ describe('WorkDeleteCommandHandler', () => {
 			expect(revision.work).toBe(work);
 			expect(revision.actor).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Deleted);
-			expect(revision.snapshot.contentEquals(work.takeSnapshot())).toBe(
-				true,
-			);
+			expect(revision.snapshot).toBe(JSON.stringify(work.takeSnapshot()));
 
 			expect(work.deleted).toBe(true);
 
