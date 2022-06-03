@@ -86,7 +86,7 @@ export class ArtistUpdateCommandHandler
 				++artist.version,
 			);
 
-			if (revision.snapshot.contentEquals(latestSnapshot)) {
+			if (latestSnapshot?.contentEquals(JSON.parse(revision.snapshot))) {
 				throw new BadRequestException('Nothing has changed.');
 			}
 

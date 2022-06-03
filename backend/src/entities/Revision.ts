@@ -38,8 +38,8 @@ export abstract class Revision<
 	@Property()
 	createdAt = new Date();
 
-	@Property({ type: 'json' })
-	snapshot: TSnapshot;
+	@Property({ columnType: 'text' })
+	snapshot: string;
 
 	@Property()
 	deleted = false;
@@ -73,7 +73,7 @@ export abstract class Revision<
 	}) {
 		this.commit = commit;
 		this.actor = actor;
-		this.snapshot = snapshot;
+		this.snapshot = JSON.stringify(snapshot);
 		this.summary = summary;
 		this.event = event;
 		this.version = version;

@@ -3202,12 +3202,12 @@
         },
         "snapshot": {
           "name": "snapshot",
-          "type": "json",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "json"
+          "mappedType": "text"
         },
         "deleted": {
           "name": "deleted",

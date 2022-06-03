@@ -6,7 +6,7 @@ import { WebLinkSnapshot } from './WebLinkSnapshot';
 export type IArtistSnapshot = Omit<ArtistSnapshot, 'contentEquals'>;
 
 export class ArtistSnapshot implements IContentEquatable<IArtistSnapshot> {
-	private constructor(
+	constructor(
 		readonly name: string,
 		readonly artistType: ArtistType,
 		readonly webLinks: WebLinkSnapshot[],
