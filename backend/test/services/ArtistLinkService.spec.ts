@@ -128,7 +128,7 @@ describe('ArtistLinkService', () => {
 				ended: boolean;
 			},
 		): void => {
-			expect(artistLink.relatedArtist).toBe(relatedArtist);
+			expect(artistLink.relatedArtist.getEntity()).toBe(relatedArtist);
 			expect(artistLink.linkType).toBe(linkType);
 			expect(artistLink.beginDate.year).toBe(beginDate.year);
 			expect(artistLink.beginDate.month).toBe(beginDate.month);

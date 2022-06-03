@@ -95,7 +95,7 @@ export class WebLinkService {
 		const remove = async (oldItem: TWebLink): Promise<void> => {
 			permissionContext.verifyPermission(Permission.WebLink_Delete);
 
-			oldItem.address.decrementReferenceCount();
+			oldItem.address.getEntity().decrementReferenceCount();
 
 			em.remove(oldItem);
 		};

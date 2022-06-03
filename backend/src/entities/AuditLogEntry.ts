@@ -1,4 +1,12 @@
-import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Entity,
+	Enum,
+	IdentifiedReference,
+	ManyToOne,
+	PrimaryKey,
+	Property,
+	Reference,
+} from '@mikro-orm/core';
 
 import { AuditedAction } from '../models/AuditedAction';
 import { EntryType } from '../models/EntryType';
@@ -24,7 +32,7 @@ export abstract class AuditLogEntry {
 	action: AuditedAction;
 
 	@ManyToOne()
-	actor: User;
+	actor: IdentifiedReference<User>;
 
 	@Property()
 	actorIp: string;
@@ -52,7 +60,7 @@ export abstract class AuditLogEntry {
 		newValue: string;
 	}) {
 		this.action = action;
-		this.actor = actor;
+		this.actor = Reference.create(actor);
 		this.actorIp = actorIp;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
@@ -62,7 +70,7 @@ export abstract class AuditLogEntry {
 @Entity({ tableName: 'audit_log_entries', discriminatorValue: EntryType.User })
 export class UserAuditLogEntry extends AuditLogEntry {
 	@ManyToOne()
-	user: User;
+	user: IdentifiedReference<User>;
 
 	constructor({
 		user,
@@ -87,7 +95,7 @@ export class UserAuditLogEntry extends AuditLogEntry {
 			newValue: newValue,
 		});
 
-		this.user = user;
+		this.user = Reference.create(user);
 	}
 }
 
@@ -97,7 +105,7 @@ export class UserAuditLogEntry extends AuditLogEntry {
 })
 export class TranslationAuditLogEntry extends AuditLogEntry {
 	@ManyToOne()
-	translation: Translation;
+	translation: IdentifiedReference<Translation>;
 
 	constructor({
 		translation,
@@ -122,7 +130,7 @@ export class TranslationAuditLogEntry extends AuditLogEntry {
 			newValue: newValue,
 		});
 
-		this.translation = translation;
+		this.translation = Reference.create(translation);
 	}
 }
 
@@ -132,7 +140,7 @@ export class TranslationAuditLogEntry extends AuditLogEntry {
 })
 export class ArtistAuditLogEntry extends AuditLogEntry {
 	@ManyToOne()
-	artist: Artist;
+	artist: IdentifiedReference<Artist>;
 
 	constructor({
 		artist,
@@ -157,7 +165,7 @@ export class ArtistAuditLogEntry extends AuditLogEntry {
 			newValue: newValue,
 		});
 
-		this.artist = artist;
+		this.artist = Reference.create(artist);
 	}
 }
 
@@ -167,7 +175,7 @@ export class ArtistAuditLogEntry extends AuditLogEntry {
 })
 export class QuoteAuditLogEntry extends AuditLogEntry {
 	@ManyToOne()
-	quote: Quote;
+	quote: IdentifiedReference<Quote>;
 
 	constructor({
 		quote,
@@ -192,7 +200,7 @@ export class QuoteAuditLogEntry extends AuditLogEntry {
 			newValue: newValue,
 		});
 
-		this.quote = quote;
+		this.quote = Reference.create(quote);
 	}
 }
 
@@ -202,7 +210,7 @@ export class QuoteAuditLogEntry extends AuditLogEntry {
 })
 export class WorkAuditLogEntry extends AuditLogEntry {
 	@ManyToOne()
-	work: Work;
+	work: IdentifiedReference<Work>;
 
 	constructor({
 		work,
@@ -227,6 +235,6 @@ export class WorkAuditLogEntry extends AuditLogEntry {
 			newValue: newValue,
 		});
 
-		this.work = work;
+		this.work = Reference.create(work);
 	}
 }

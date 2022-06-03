@@ -1,4 +1,4 @@
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, Reference } from '@mikro-orm/core';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { PartialDate } from '../entities/PartialDate';
@@ -54,7 +54,16 @@ export class WorkLinkService {
 
 			permissionContext.verifyPermission(Permission.WorkLink_Update);
 
-			oldItem.relatedWorkId = newItem.relatedWorkId;
+			const relatedWork = await em.findOneOrFail(Work, {
+				id: newItem.relatedWorkId,
+				deleted: false,
+				hidden: false,
+			});
+
+			if (!workLinkTypes[entry.entryType].includes(newItem.linkType))
+				throw new BadRequestException('Invalid link type');
+
+			oldItem.relatedWork = Reference.create(relatedWork);
 			oldItem.linkType = newItem.linkType;
 
 			return true;

@@ -120,8 +120,8 @@ describe('TranslationUpdateCommandHandler', () => {
 			const revision = translation.revisions[0];
 
 			expect(revision).toBeInstanceOf(TranslationRevision);
-			expect(revision.translation).toBe(translation);
-			expect(revision.actor).toBe(existingUser);
+			expect(revision.translation.getEntity()).toBe(translation);
+			expect(revision.actor.getEntity()).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Updated);
 			expect(revision.snapshot).toBe(JSON.stringify(snapshot));
 

@@ -1,4 +1,11 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Entity,
+	IdentifiedReference,
+	ManyToOne,
+	PrimaryKey,
+	Property,
+	Reference,
+} from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
 import { IContentEquatable } from '../models/IContentEquatable';
@@ -24,7 +31,7 @@ export abstract class WorkLink
 	id!: number;
 
 	@ManyToOne()
-	relatedWork: Work;
+	relatedWork: IdentifiedReference<Work>;
 
 	protected constructor({
 		relatedWork,
@@ -32,14 +39,11 @@ export abstract class WorkLink
 	}: { relatedWork: Work } & Link) {
 		super(params);
 
-		this.relatedWork = relatedWork;
+		this.relatedWork = Reference.create(relatedWork);
 	}
 
 	get relatedWorkId(): number {
 		return this.relatedWork.id;
-	}
-	set relatedWorkId(value: number) {
-		this.relatedWork.id = value;
 	}
 
 	contentEquals(other: IWorkLink): boolean {
@@ -53,7 +57,7 @@ export abstract class WorkLink
 @Entity({ tableName: 'work_links', discriminatorValue: EntryType.Quote })
 export class QuoteWorkLink extends WorkLink {
 	@ManyToOne()
-	quote: Quote;
+	quote: IdentifiedReference<Quote>;
 
 	constructor({
 		quote,
@@ -65,14 +69,14 @@ export class QuoteWorkLink extends WorkLink {
 	} & Link) {
 		super({ ...params, relatedWork });
 
-		this.quote = quote;
+		this.quote = Reference.create(quote);
 	}
 }
 
 @Entity({ tableName: 'work_links', discriminatorValue: EntryType.Translation })
 export class TranslationWorkLink extends WorkLink {
 	@ManyToOne()
-	translation: Translation;
+	translation: IdentifiedReference<Translation>;
 
 	constructor({
 		translation,
@@ -84,14 +88,14 @@ export class TranslationWorkLink extends WorkLink {
 	} & Link) {
 		super({ ...params, relatedWork });
 
-		this.translation = translation;
+		this.translation = Reference.create(translation);
 	}
 }
 
 @Entity({ tableName: 'work_links', discriminatorValue: EntryType.Work })
 export class WorkWorkLink extends WorkLink {
 	@ManyToOne()
-	work: Work;
+	work: IdentifiedReference<Work>;
 
 	constructor({
 		work,
@@ -103,6 +107,6 @@ export class WorkWorkLink extends WorkLink {
 	} & Link) {
 		super({ ...params, relatedWork });
 
-		this.work = work;
+		this.work = Reference.create(work);
 	}
 }

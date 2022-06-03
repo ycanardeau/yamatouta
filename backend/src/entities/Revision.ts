@@ -1,4 +1,12 @@
-import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Entity,
+	Enum,
+	IdentifiedReference,
+	ManyToOne,
+	PrimaryKey,
+	Property,
+	Reference,
+} from '@mikro-orm/core';
 
 import { Entry } from '../models/Entry';
 import { EntryType } from '../models/EntryType';
@@ -30,10 +38,10 @@ export abstract class Revision<
 	id!: number;
 
 	@ManyToOne()
-	commit: Commit;
+	commit: IdentifiedReference<Commit>;
 
 	@ManyToOne()
-	actor: User;
+	actor: IdentifiedReference<User>;
 
 	@Property()
 	createdAt = new Date();
@@ -71,8 +79,8 @@ export abstract class Revision<
 		event: RevisionEvent;
 		version: number;
 	}) {
-		this.commit = commit;
-		this.actor = actor;
+		this.commit = Reference.create(commit);
+		this.actor = Reference.create(actor);
 		this.snapshot = JSON.stringify(snapshot);
 		this.summary = summary;
 		this.event = event;
@@ -91,7 +99,7 @@ export class TranslationRevision extends Revision<
 	TranslationSnapshot
 > {
 	@ManyToOne()
-	translation: Translation;
+	translation: IdentifiedReference<Translation>;
 
 	constructor({
 		translation,
@@ -107,18 +115,18 @@ export class TranslationRevision extends Revision<
 	}) {
 		super(params);
 
-		this.translation = translation;
+		this.translation = Reference.create(translation);
 	}
 
 	get entry(): Translation {
-		return this.translation;
+		return this.translation.getEntity();
 	}
 }
 
 @Entity({ tableName: 'revisions', discriminatorValue: EntryType.Artist })
 export class ArtistRevision extends Revision<Artist, ArtistSnapshot> {
 	@ManyToOne()
-	artist: Artist;
+	artist: IdentifiedReference<Artist>;
 
 	constructor({
 		artist,
@@ -134,18 +142,18 @@ export class ArtistRevision extends Revision<Artist, ArtistSnapshot> {
 	}) {
 		super(params);
 
-		this.artist = artist;
+		this.artist = Reference.create(artist);
 	}
 
 	get entry(): Artist {
-		return this.artist;
+		return this.artist.getEntity();
 	}
 }
 
 @Entity({ tableName: 'revisions', discriminatorValue: EntryType.Quote })
 export class QuoteRevision extends Revision<Quote, QuoteSnapshot> {
 	@ManyToOne()
-	quote: Quote;
+	quote: IdentifiedReference<Quote>;
 
 	constructor({
 		quote,
@@ -161,18 +169,18 @@ export class QuoteRevision extends Revision<Quote, QuoteSnapshot> {
 	}) {
 		super(params);
 
-		this.quote = quote;
+		this.quote = Reference.create(quote);
 	}
 
 	get entry(): Quote {
-		return this.quote;
+		return this.quote.getEntity();
 	}
 }
 
 @Entity({ tableName: 'revisions', discriminatorValue: EntryType.Work })
 export class WorkRevision extends Revision<Work, WorkSnapshot> {
 	@ManyToOne()
-	work: Work;
+	work: IdentifiedReference<Work>;
 
 	constructor({
 		work,
@@ -188,10 +196,10 @@ export class WorkRevision extends Revision<Work, WorkSnapshot> {
 	}) {
 		super(params);
 
-		this.work = work;
+		this.work = Reference.create(work);
 	}
 
 	get entry(): Work {
-		return this.work;
+		return this.work.getEntity();
 	}
 }

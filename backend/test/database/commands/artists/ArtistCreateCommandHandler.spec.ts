@@ -102,8 +102,8 @@ describe('ArtistCreateCommandHandler', () => {
 			const revision = artist.revisions[0];
 
 			expect(revision).toBeInstanceOf(ArtistRevision);
-			expect(revision.artist).toBe(artist);
-			expect(revision.actor).toBe(existingUser);
+			expect(revision.artist.getEntity()).toBe(artist);
+			expect(revision.actor.getEntity()).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Created);
 			expect(revision.snapshot).toBe(JSON.stringify(snapshot));
 

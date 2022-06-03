@@ -34,7 +34,7 @@ export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 			quote.text,
 			quote.quoteType,
 			quote.locale,
-			ObjectRefSnapshot.create<Artist>(quote.artist),
+			ObjectRefSnapshot.create<Artist>(quote.artist.getEntity()),
 			webLinks,
 			workLinks,
 			quote.transcription,

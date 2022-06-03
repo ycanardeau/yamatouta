@@ -35,7 +35,7 @@ export class ArtistLinkObject extends LinkObject {
 		permissionContext: PermissionContext,
 	): ArtistLinkObject {
 		const relatedArtist = ArtistObject.create(
-			artistLink.relatedArtist,
+			artistLink.relatedArtist.getEntity(),
 			permissionContext,
 		);
 
@@ -57,7 +57,7 @@ export class WorkLinkObject extends LinkObject {
 		permissionContext: PermissionContext,
 	): WorkLinkObject {
 		const relatedWork = WorkObject.create(
-			workLink.relatedWork,
+			workLink.relatedWork.getEntity(),
 			permissionContext,
 		);
 

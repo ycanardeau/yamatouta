@@ -1,4 +1,12 @@
-import { Entity, Enum, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Entity,
+	Enum,
+	IdentifiedReference,
+	ManyToOne,
+	PrimaryKey,
+	Property,
+	Reference,
+} from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
 import { IContentEquatable } from '../models/IContentEquatable';
@@ -20,7 +28,7 @@ export abstract class WebLink implements IWebLink, IContentEquatable<IWebLink> {
 	id!: number;
 
 	@ManyToOne()
-	address: WebAddress;
+	address: IdentifiedReference<WebAddress>;
 
 	@Property()
 	title: string;
@@ -37,13 +45,13 @@ export abstract class WebLink implements IWebLink, IContentEquatable<IWebLink> {
 		title: string;
 		category: WebLinkCategory;
 	}) {
-		this.address = address;
+		this.address = Reference.create(address);
 		this.title = title;
 		this.category = category;
 	}
 
 	get url(): string {
-		return this.address.url;
+		return this.address.getEntity().url;
 	}
 
 	contentEquals(other: IWebLink): boolean {
@@ -55,18 +63,18 @@ export abstract class WebLink implements IWebLink, IContentEquatable<IWebLink> {
 	}
 
 	setAddress(value: WebAddress): void {
-		this.address.decrementReferenceCount();
+		this.address.getEntity().decrementReferenceCount();
 
-		this.address = value;
+		this.address = Reference.create(value);
 
-		this.address.incrementReferenceCount();
+		this.address.getEntity().incrementReferenceCount();
 	}
 }
 
 @Entity({ tableName: 'web_links', discriminatorValue: EntryType.Translation })
 export class TranslationWebLink extends WebLink {
 	@ManyToOne()
-	translation: Translation;
+	translation: IdentifiedReference<Translation>;
 
 	constructor({
 		translation,
@@ -81,14 +89,14 @@ export class TranslationWebLink extends WebLink {
 	}) {
 		super({ address, title, category });
 
-		this.translation = translation;
+		this.translation = Reference.create(translation);
 	}
 }
 
 @Entity({ tableName: 'web_links', discriminatorValue: EntryType.Artist })
 export class ArtistWebLink extends WebLink {
 	@ManyToOne()
-	artist: Artist;
+	artist: IdentifiedReference<Artist>;
 
 	constructor({
 		artist,
@@ -103,14 +111,14 @@ export class ArtistWebLink extends WebLink {
 	}) {
 		super({ address, title, category });
 
-		this.artist = artist;
+		this.artist = Reference.create(artist);
 	}
 }
 
 @Entity({ tableName: 'web_links', discriminatorValue: EntryType.Quote })
 export class QuoteWebLink extends WebLink {
 	@ManyToOne()
-	quote: Quote;
+	quote: IdentifiedReference<Quote>;
 
 	constructor({
 		quote,
@@ -125,14 +133,14 @@ export class QuoteWebLink extends WebLink {
 	}) {
 		super({ address, title, category });
 
-		this.quote = quote;
+		this.quote = Reference.create(quote);
 	}
 }
 
 @Entity({ tableName: 'web_links', discriminatorValue: EntryType.Work })
 export class WorkWebLink extends WebLink {
 	@ManyToOne()
-	work: Work;
+	work: IdentifiedReference<Work>;
 
 	constructor({
 		work,
@@ -147,6 +155,6 @@ export class WorkWebLink extends WebLink {
 	}) {
 		super({ address, title, category });
 
-		this.work = work;
+		this.work = Reference.create(work);
 	}
 }

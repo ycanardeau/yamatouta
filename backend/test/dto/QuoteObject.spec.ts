@@ -1,21 +1,23 @@
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication, NotFoundException } from '@nestjs/common';
 
-import { ArtistObject } from '../../src/dto/ArtistObject';
+import { QuoteObject } from '../../src/dto/QuoteObject';
 import { Artist } from '../../src/entities/Artist';
+import { Quote } from '../../src/entities/Quote';
 import { ArtistType } from '../../src/models/artists/ArtistType';
-import { PermissionContext } from '../../src/services/PermissionContext';
+import { QuoteType } from '../../src/models/quotes/QuoteType';
 import { FakePermissionContext } from '../FakePermissionContext';
 import { createApplication } from '../createApplication';
-import { createArtist, createUser } from '../createEntry';
+import { createArtist, createQuote, createUser } from '../createEntry';
 
-describe('ArtistObject', () => {
+describe('QuoteObject', () => {
 	let app: INestApplication;
 	let em: EntityManager;
 	let artist: Artist;
-	let deletedArtist: Artist;
-	let hiddenArtist: Artist;
-	let permissionContext: PermissionContext;
+	let quote: Quote;
+	let deletedQuote: Quote;
+	let hiddenQuote: Quote;
+	let permissionContext: FakePermissionContext;
 
 	beforeAll(async () => {
 		app = await createApplication();
@@ -33,15 +35,26 @@ describe('ArtistObject', () => {
 			artistType: ArtistType.Person,
 		});
 
-		deletedArtist = await createArtist(em as any, {
-			name: 'deleted',
-			artistType: ArtistType.Person,
+		quote = await createQuote(em as any, {
+			quoteType: QuoteType.Tanka,
+			text: 'quote',
+			locale: '',
+			artist: artist,
+		});
+
+		deletedQuote = await createQuote(em as any, {
+			quoteType: QuoteType.Tanka,
+			text: 'deleted',
+			locale: '',
+			artist: artist,
 			deleted: true,
 		});
 
-		hiddenArtist = await createArtist(em as any, {
-			name: 'hidden',
-			artistType: ArtistType.Person,
+		hiddenQuote = await createQuote(em as any, {
+			quoteType: QuoteType.Tanka,
+			text: 'hidden',
+			locale: '',
+			artist: artist,
 			hidden: true,
 		});
 
@@ -61,17 +74,18 @@ describe('ArtistObject', () => {
 	});
 
 	test('create', () => {
-		const artistObject = ArtistObject.create(artist, permissionContext);
-		expect(artistObject.id).toBe(artist.id);
-		expect(artistObject.name).toBe(artist.name);
-		expect(artistObject.artistType).toBe(artist.artistType);
+		const quoteObject = QuoteObject.create(quote, permissionContext);
+		expect(quoteObject.id).toBe(quote.id);
+		expect(quoteObject.quoteType).toBe(quote.quoteType);
+		expect(quoteObject.artist.id).toBe(artist.id);
+		expect(quoteObject.artist.name).toBe(artist.name);
 
 		expect(() =>
-			ArtistObject.create(deletedArtist, permissionContext),
+			QuoteObject.create(deletedQuote, permissionContext),
 		).toThrow(NotFoundException);
 
 		expect(() =>
-			ArtistObject.create(hiddenArtist, permissionContext),
+			QuoteObject.create(hiddenQuote, permissionContext),
 		).toThrow(NotFoundException);
 	});
 });

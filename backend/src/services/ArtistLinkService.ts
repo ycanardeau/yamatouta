@@ -1,4 +1,4 @@
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, Reference } from '@mikro-orm/core';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { Artist } from '../entities/Artist';
@@ -54,7 +54,16 @@ export class ArtistLinkService {
 
 			permissionContext.verifyPermission(Permission.ArtistLink_Update);
 
-			oldItem.relatedArtistId = newItem.relatedArtistId;
+			const relatedArtist = await em.findOneOrFail(Artist, {
+				id: newItem.relatedArtistId,
+				deleted: false,
+				hidden: false,
+			});
+
+			if (!artistLinkTypes[entry.entryType].includes(newItem.linkType))
+				throw new BadRequestException('Invalid link type');
+
+			oldItem.relatedArtist = Reference.create(relatedArtist);
 			oldItem.linkType = newItem.linkType;
 
 			return true;

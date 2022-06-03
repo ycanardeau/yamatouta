@@ -1,4 +1,4 @@
-import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository, Reference } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
@@ -70,7 +70,16 @@ export class QuoteUpdateCommandHandler
 							deleted: false,
 							hidden: false,
 						},
-						{ populate: true },
+						{
+							// OPTIMIZE
+							populate: [
+								'artist',
+								'webLinks',
+								'webLinks.address',
+								'workLinks',
+								'workLinks.relatedWork',
+							],
+						},
 				  );
 
 			em.persist(quote);
@@ -82,7 +91,7 @@ export class QuoteUpdateCommandHandler
 					quote.text = params.text;
 					quote.quoteType = params.quoteType;
 					quote.locale = params.locale;
-					quote.artist = artist;
+					quote.artist = Reference.create(artist);
 
 					await this.webLinkService.sync(
 						em,

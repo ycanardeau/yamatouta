@@ -59,7 +59,10 @@ export class ArtistUpdateCommandHandler
 							deleted: false,
 							hidden: false,
 						},
-						{ populate: true },
+						{
+							// OPTIMIZE
+							populate: ['webLinks', 'webLinks.address'],
+						},
 				  );
 
 			em.persist(artist);

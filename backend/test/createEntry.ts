@@ -1,4 +1,4 @@
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, Reference } from '@mikro-orm/core';
 
 import { Artist } from '../src/entities/Artist';
 import { Quote } from '../src/entities/Quote';
@@ -122,7 +122,7 @@ export const createQuote = async (
 	quote.quoteType = quoteType;
 	quote.text = text;
 	quote.locale = locale;
-	quote.artist = artist;
+	quote.artist = Reference.create(artist);
 	quote.deleted = deleted;
 	quote.hidden = hidden;
 

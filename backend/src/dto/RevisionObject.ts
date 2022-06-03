@@ -26,7 +26,7 @@ export class RevisionObject {
 
 		return new RevisionObject(
 			revision.createdAt,
-			UserObject.create(revision.actor, permissionContext),
+			UserObject.create(revision.actor.getEntity(), permissionContext),
 			revision.event,
 		);
 	}

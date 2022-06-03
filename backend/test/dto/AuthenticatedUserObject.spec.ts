@@ -1,22 +1,49 @@
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication } from '@nestjs/common';
+
 import { AuthenticatedUserObject } from '../../src/dto/AuthenticatedUserObject';
-import { FakeEntityManager } from '../FakeEntityManager';
+import { User } from '../../src/entities/User';
+import { createApplication } from '../createApplication';
 import { createUser } from '../createEntry';
 
-test('AuthenticatedUserObject', async () => {
-	const em = new FakeEntityManager();
+describe('AuthenticatedUserObject', () => {
+	let app: INestApplication;
+	let em: EntityManager;
+	let user: User;
 
-	const user = await createUser(em as any, {
-		username: 'user',
-		email: 'user@example.com',
+	beforeAll(async () => {
+		app = await createApplication();
 	});
 
-	const userObject = AuthenticatedUserObject.create(user);
-	expect(userObject.id).toBe(user.id);
-	expect(userObject.avatarUrl).toBe(
-		`https://www.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af`,
-	);
-	expect(userObject.avatarUrl).not.toBe(user.email);
-	expect(userObject.avatarUrl).not.toBe(
-		`https://www.gravatar.com/avatar/${user.email}`,
-	);
+	afterAll(async () => {
+		await app.close();
+	});
+
+	beforeEach(async () => {
+		em = app.get(EntityManager);
+
+		user = await createUser(em as any, {
+			username: 'user',
+			email: 'user@example.com',
+		});
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
+	});
+
+	test('create', () => {
+		const userObject = AuthenticatedUserObject.create(user);
+		expect(userObject.id).toBe(user.id);
+		expect(userObject.avatarUrl).toBe(
+			`https://www.gravatar.com/avatar/b58996c504c5638798eb6b511e6f49af`,
+		);
+		expect(userObject.avatarUrl).not.toBe(user.email);
+		expect(userObject.avatarUrl).not.toBe(
+			`https://www.gravatar.com/avatar/${user.email}`,
+		);
+	});
 });

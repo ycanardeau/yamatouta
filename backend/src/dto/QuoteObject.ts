@@ -48,7 +48,7 @@ export class QuoteObject {
 			quote.quoteType,
 			quote.text,
 			quote.locale,
-			ArtistObject.create(quote.artist, permissionContext),
+			ArtistObject.create(quote.artist.getEntity(), permissionContext),
 			quote.sourceUrl,
 			webLinks,
 			workLinks,

@@ -1,4 +1,11 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Entity,
+	IdentifiedReference,
+	ManyToOne,
+	PrimaryKey,
+	Property,
+	Reference,
+} from '@mikro-orm/core';
 
 import { User } from './User';
 import { WebAddressHost } from './WebAddressHost';
@@ -21,7 +28,7 @@ export class WebAddress {
 	scheme: string;
 
 	@ManyToOne()
-	host: WebAddressHost;
+	host: IdentifiedReference<WebAddressHost>;
 
 	@Property()
 	port: string;
@@ -39,26 +46,26 @@ export class WebAddress {
 	referenceCount = 0;
 
 	@ManyToOne()
-	actor: User;
+	actor: IdentifiedReference<User>;
 
 	constructor(url: URL, host: WebAddressHost, actor: User) {
 		this.url = url.href;
 		this.scheme = url.protocol.split(':')[0];
-		this.host = host;
+		this.host = Reference.create(host);
 		this.port = url.port;
 		this.path = url.pathname;
 		this.query = url.search;
 		this.fragment = url.hash;
-		this.actor = actor;
+		this.actor = Reference.create(actor);
 	}
 
 	incrementReferenceCount(): void {
-		this.host.referenceCount++;
+		this.host.getEntity().referenceCount++;
 		this.referenceCount++;
 	}
 
 	decrementReferenceCount(): void {
-		this.host.referenceCount--;
+		this.host.getEntity().referenceCount--;
 		this.referenceCount--;
 	}
 }

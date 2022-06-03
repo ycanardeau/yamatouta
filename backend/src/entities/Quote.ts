@@ -3,6 +3,7 @@ import {
 	Embedded,
 	Entity,
 	Enum,
+	IdentifiedReference,
 	ManyToOne,
 	OneToMany,
 	PrimaryKey,
@@ -75,7 +76,7 @@ export class Quote
 	locale!: string;
 
 	@ManyToOne()
-	artist!: Artist;
+	artist!: IdentifiedReference<Artist>;
 
 	@Property()
 	sourceUrl = '';

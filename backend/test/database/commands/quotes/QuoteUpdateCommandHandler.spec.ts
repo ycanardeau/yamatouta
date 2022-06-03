@@ -122,8 +122,8 @@ describe('QuoteUpdateCommandHandler', () => {
 			const revision = quote.revisions[0];
 
 			expect(revision).toBeInstanceOf(QuoteRevision);
-			expect(revision.quote).toBe(quote);
-			expect(revision.actor).toBe(existingUser);
+			expect(revision.quote.getEntity()).toBe(quote);
+			expect(revision.actor.getEntity()).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Updated);
 			expect(revision.snapshot).toBe(JSON.stringify(snapshot));
 

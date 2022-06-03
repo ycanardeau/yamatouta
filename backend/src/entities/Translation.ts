@@ -3,11 +3,13 @@ import {
 	Embedded,
 	Entity,
 	Enum,
+	IdentifiedReference,
 	ManyToOne,
 	OneToMany,
 	OneToOne,
 	PrimaryKey,
 	Property,
+	Reference,
 } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
@@ -77,7 +79,7 @@ export class Translation
 	inishienomanabi_tags: string[] = [];
 
 	@ManyToOne()
-	user!: User;
+	user!: IdentifiedReference<User>;
 
 	@OneToOne(
 		() => TranslationSearchIndex,
@@ -106,7 +108,7 @@ export class Translation
 	workLinks = new Collection<TranslationWorkLink>(this);
 
 	constructor(user: User) {
-		this.user = user;
+		this.user = Reference.create(user);
 	}
 
 	get entryType(): EntryType.Translation {

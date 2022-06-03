@@ -61,7 +61,15 @@ export class WorkUpdateCommandHandler
 							deleted: false,
 							hidden: false,
 						},
-						{ populate: true },
+						{
+							// OPTIMIZE
+							populate: [
+								'webLinks',
+								'webLinks.address',
+								'artistLinks',
+								'artistLinks.relatedArtist',
+							],
+						},
 				  );
 
 			em.persist(work);

@@ -31,7 +31,7 @@ export class ArtistLinkSnapshot extends LinkSnapshot {
 
 	static create(artistLink: ArtistLink): ArtistLinkSnapshot {
 		const relatedArtist = ObjectRefSnapshot.create<Artist>(
-			artistLink.relatedArtist,
+			artistLink.relatedArtist.getEntity(),
 		);
 
 		return new ArtistLinkSnapshot(artistLink, relatedArtist);
@@ -48,7 +48,7 @@ export class WorkLinkSnapshot extends LinkSnapshot {
 
 	static create(workLink: WorkLink): WorkLinkSnapshot {
 		const relatedWork = ObjectRefSnapshot.create<Work>(
-			workLink.relatedWork,
+			workLink.relatedWork.getEntity(),
 		);
 
 		return new WorkLinkSnapshot(workLink, relatedWork);

@@ -1,4 +1,11 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Entity,
+	IdentifiedReference,
+	ManyToOne,
+	PrimaryKey,
+	Property,
+	Reference,
+} from '@mikro-orm/core';
 
 import { User } from './User';
 
@@ -20,10 +27,10 @@ export class WebAddressHost {
 	referenceCount = 0;
 
 	@ManyToOne()
-	actor: User;
+	actor: IdentifiedReference<User>;
 
 	constructor(hostname: string, actor: User) {
 		this.hostname = hostname;
-		this.actor = actor;
+		this.actor = Reference.create(actor);
 	}
 }

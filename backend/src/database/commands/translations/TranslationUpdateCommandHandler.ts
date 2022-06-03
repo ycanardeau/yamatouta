@@ -65,7 +65,15 @@ export class TranslationUpdateCommandHandler
 							deleted: false,
 							hidden: false,
 						},
-						{ populate: true },
+						{
+							// OPTIMIZE
+							populate: [
+								'webLinks',
+								'webLinks.address',
+								'workLinks',
+								'workLinks.relatedWork',
+							],
+						},
 				  );
 
 			em.persist(translation);

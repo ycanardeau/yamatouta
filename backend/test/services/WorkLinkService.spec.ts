@@ -146,7 +146,7 @@ describe('WorkLinkService', () => {
 				ended: boolean;
 			},
 		): void => {
-			expect(workLink.relatedWork).toBe(relatedWork);
+			expect(workLink.relatedWork.getEntity()).toBe(relatedWork);
 			expect(workLink.linkType).toBe(linkType);
 			expect(workLink.beginDate.year).toBe(beginDate.year);
 			expect(workLink.beginDate.month).toBe(beginDate.month);

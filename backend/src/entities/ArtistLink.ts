@@ -1,4 +1,11 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Entity,
+	IdentifiedReference,
+	ManyToOne,
+	PrimaryKey,
+	Property,
+	Reference,
+} from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
 import { IArtistLink } from '../models/IArtistLink';
@@ -23,7 +30,7 @@ export abstract class ArtistLink
 	id!: number;
 
 	@ManyToOne()
-	relatedArtist: Artist;
+	relatedArtist: IdentifiedReference<Artist>;
 
 	protected constructor({
 		relatedArtist,
@@ -31,14 +38,11 @@ export abstract class ArtistLink
 	}: { relatedArtist: Artist } & Link) {
 		super(params);
 
-		this.relatedArtist = relatedArtist;
+		this.relatedArtist = Reference.create(relatedArtist);
 	}
 
 	get relatedArtistId(): number {
 		return this.relatedArtist.id;
-	}
-	set relatedArtistId(value: number) {
-		this.relatedArtist.id = value;
 	}
 
 	contentEquals(other: IArtistLink): boolean {
@@ -52,7 +56,7 @@ export abstract class ArtistLink
 @Entity({ tableName: 'artist_links', discriminatorValue: EntryType.Artist })
 export class ArtistArtistLink extends ArtistLink {
 	@ManyToOne()
-	artist: Artist;
+	artist: IdentifiedReference<Artist>;
 
 	constructor({
 		artist,
@@ -64,14 +68,14 @@ export class ArtistArtistLink extends ArtistLink {
 	} & Link) {
 		super({ ...params, relatedArtist });
 
-		this.artist = artist;
+		this.artist = Reference.create(artist);
 	}
 }
 
 @Entity({ tableName: 'artist_links', discriminatorValue: EntryType.Work })
 export class WorkArtistLink extends ArtistLink {
 	@ManyToOne()
-	work: Work;
+	work: IdentifiedReference<Work>;
 
 	constructor({
 		work,
@@ -83,6 +87,6 @@ export class WorkArtistLink extends ArtistLink {
 	} & Link) {
 		super({ ...params, relatedArtist });
 
-		this.work = work;
+		this.work = Reference.create(work);
 	}
 }

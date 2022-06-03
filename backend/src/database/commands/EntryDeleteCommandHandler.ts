@@ -104,7 +104,18 @@ export class TranslationDeleteCommandHandler
 			revisionService,
 			Permission.Translation_Delete,
 			(id) =>
-				translationRepo.findOneOrFail({ id: id }, { populate: true }),
+				translationRepo.findOneOrFail(
+					{ id: id },
+					{
+						// OPTIMIZE
+						populate: [
+							'webLinks',
+							'webLinks.address',
+							'workLinks',
+							'workLinks.relatedWork',
+						],
+					},
+				),
 			(entry, actor, actorIp) =>
 				new TranslationAuditLogEntry({
 					action: AuditedAction.Translation_Delete,
@@ -133,7 +144,14 @@ export class ArtistDeleteCommandHandler
 			em,
 			revisionService,
 			Permission.Artist_Delete,
-			(id) => artistRepo.findOneOrFail({ id: id }, { populate: true }),
+			(id) =>
+				artistRepo.findOneOrFail(
+					{ id: id },
+					{
+						// OPTIMIZE
+						populate: ['webLinks', 'webLinks.address'],
+					},
+				),
 			(entry, actor, actorIp) =>
 				new ArtistAuditLogEntry({
 					action: AuditedAction.Artist_Delete,
@@ -162,7 +180,20 @@ export class QuoteDeleteCommandHandler
 			em,
 			revisionService,
 			Permission.Quote_Delete,
-			(id) => quoteRepo.findOneOrFail({ id: id }, { populate: true }),
+			(id) =>
+				quoteRepo.findOneOrFail(
+					{ id: id },
+					{
+						// OPTIMIZE
+						populate: [
+							'artist',
+							'webLinks',
+							'webLinks.address',
+							'workLinks',
+							'workLinks.relatedWork',
+						],
+					},
+				),
 			(entry, actor, actorIp) =>
 				new QuoteAuditLogEntry({
 					action: AuditedAction.Quote_Delete,
@@ -191,7 +222,19 @@ export class WorkDeleteCommandHandler
 			em,
 			revisionService,
 			Permission.Work_Delete,
-			(id) => workRepo.findOneOrFail({ id: id }, { populate: true }),
+			(id) =>
+				workRepo.findOneOrFail(
+					{ id: id },
+					{
+						// OPTIMIZE
+						populate: [
+							'webLinks',
+							'webLinks.address',
+							'artistLinks',
+							'artistLinks.relatedArtist',
+						],
+					},
+				),
 			(entry, actor, actorIp) =>
 				new WorkAuditLogEntry({
 					action: AuditedAction.Work_Delete,

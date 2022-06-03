@@ -135,8 +135,8 @@ describe('WebLinkService', () => {
 			expect(address.referenceCount).toBe(referenceCount);
 			expect(address.url).toBe(url);
 			expect(address.scheme).toBe(scheme);
-			expect(address.host).toBe(host);
-			expect(address.host.hostname).toBe(host.hostname);
+			expect(address.host.getEntity()).toBe(host);
+			expect(address.host.getEntity().hostname).toBe(host.hostname);
 			expect(address.port).toBe(port);
 			expect(address.path).toBe(path);
 			expect(address.query).toBe(query);

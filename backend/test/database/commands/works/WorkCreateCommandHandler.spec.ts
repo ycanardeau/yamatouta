@@ -101,8 +101,8 @@ describe('WorkCreateCommandHandler', () => {
 			const revision = work.revisions[0];
 
 			expect(revision).toBeInstanceOf(WorkRevision);
-			expect(revision.work).toBe(work);
-			expect(revision.actor).toBe(existingUser);
+			expect(revision.work.getEntity()).toBe(work);
+			expect(revision.actor.getEntity()).toBe(existingUser);
 			expect(revision.event).toBe(RevisionEvent.Created);
 			expect(revision.snapshot).toBe(JSON.stringify(snapshot));
 

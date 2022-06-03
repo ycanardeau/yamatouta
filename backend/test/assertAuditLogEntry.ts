@@ -32,11 +32,11 @@ export const assertUserAuditLogEntry = (
 ): void => {
 	expect(actual).toBeInstanceOf(UserAuditLogEntry);
 	expect(actual.action).toBe(action);
-	expect(actual.actor).toBe(actor);
+	expect(actual.actor.getEntity()).toBe(actor);
 	expect(actual.actorIp).toBe(actorIp);
 	expect(actual.oldValue).toBe(oldValue);
 	expect(actual.newValue).toBe(newValue);
-	expect(actual.user).toBe(user);
+	expect(actual.user.getEntity()).toBe(user);
 };
 
 export const assertTranslationAuditLogEntry = (
@@ -59,11 +59,11 @@ export const assertTranslationAuditLogEntry = (
 ): void => {
 	expect(actual).toBeInstanceOf(TranslationAuditLogEntry);
 	expect(actual.action).toBe(action);
-	expect(actual.actor).toBe(actor);
+	expect(actual.actor.getEntity()).toBe(actor);
 	expect(actual.actorIp).toBe(actorIp);
 	expect(actual.oldValue).toBe(oldValue);
 	expect(actual.newValue).toBe(newValue);
-	expect(actual.translation).toBe(translation);
+	expect(actual.translation.getEntity()).toBe(translation);
 };
 
 export const assertArtistAuditLogEntry = (
@@ -86,11 +86,11 @@ export const assertArtistAuditLogEntry = (
 ): void => {
 	expect(actual).toBeInstanceOf(ArtistAuditLogEntry);
 	expect(actual.action).toBe(action);
-	expect(actual.actor).toBe(actor);
+	expect(actual.actor.getEntity()).toBe(actor);
 	expect(actual.actorIp).toBe(actorIp);
 	expect(actual.oldValue).toBe(oldValue);
 	expect(actual.newValue).toBe(newValue);
-	expect(actual.artist).toBe(artist);
+	expect(actual.artist.getEntity()).toBe(artist);
 };
 
 export const assertQuoteAuditLogEntry = (
@@ -113,11 +113,11 @@ export const assertQuoteAuditLogEntry = (
 ): void => {
 	expect(actual).toBeInstanceOf(QuoteAuditLogEntry);
 	expect(actual.action).toBe(action);
-	expect(actual.actor).toBe(actor);
+	expect(actual.actor.getEntity()).toBe(actor);
 	expect(actual.actorIp).toBe(actorIp);
 	expect(actual.oldValue).toBe(oldValue);
 	expect(actual.newValue).toBe(newValue);
-	expect(actual.quote).toBe(quote);
+	expect(actual.quote.getEntity()).toBe(quote);
 };
 
 export const assertWorkAuditLogEntry = (
@@ -140,9 +140,9 @@ export const assertWorkAuditLogEntry = (
 ): void => {
 	expect(actual).toBeInstanceOf(WorkAuditLogEntry);
 	expect(actual.action).toBe(action);
-	expect(actual.actor).toBe(actor);
+	expect(actual.actor.getEntity()).toBe(actor);
 	expect(actual.actorIp).toBe(actorIp);
 	expect(actual.oldValue).toBe(oldValue);
 	expect(actual.newValue).toBe(newValue);
-	expect(actual.work).toBe(work);
+	expect(actual.work.getEntity()).toBe(work);
 };
