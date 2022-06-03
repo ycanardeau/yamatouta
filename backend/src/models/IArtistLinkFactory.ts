@@ -1,9 +1,14 @@
 import { Artist } from '../entities/Artist';
 import { ArtistLink } from '../entities/ArtistLink';
-import { Link } from '../entities/Link';
+import { PartialDate } from '../entities/PartialDate';
+import { LinkType } from './LinkType';
 
 export interface IArtistLinkFactory<TArtistLink extends ArtistLink> {
-	createArtistLink({
-		relatedArtist,
-	}: { relatedArtist: Artist } & Link): TArtistLink;
+	createArtistLink(
+		relatedArtist: Artist,
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	): TArtistLink;
 }

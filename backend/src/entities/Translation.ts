@@ -18,6 +18,7 @@ import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
+import { LinkType } from '../models/LinkType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
@@ -25,7 +26,7 @@ import { TranslationSnapshot } from '../models/snapshots/TranslationSnapshot';
 import { WordCategory } from '../models/translations/WordCategory';
 import { NgramConverter } from '../services/NgramConverter';
 import { Commit } from './Commit';
-import { Link } from './Link';
+import { PartialDate } from './PartialDate';
 import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
 import { TranslationSearchIndex } from './TranslationSearchIndex';
@@ -159,17 +160,13 @@ export class Translation
 		return TranslationSnapshot.create(this);
 	}
 
-	createRevision({
-		commit,
-		actor,
-		event,
-		summary,
-	}: {
-		commit: Commit;
-		actor: User;
-		event: RevisionEvent;
-		summary: string;
-	}): TranslationRevision {
+	createRevision(
+		commit: Commit,
+		actor: User,
+		event: RevisionEvent,
+		summary: string,
+		version: number,
+	): TranslationRevision {
 		return new TranslationRevision({
 			translation: this,
 			commit: commit,
@@ -177,19 +174,15 @@ export class Translation
 			snapshot: this.takeSnapshot(),
 			summary: summary,
 			event: event,
-			version: ++this.version,
+			version: version,
 		});
 	}
 
-	createWebLink({
-		address,
-		title,
-		category,
-	}: {
-		address: WebAddress;
-		title: string;
-		category: WebLinkCategory;
-	}): TranslationWebLink {
+	createWebLink(
+		address: WebAddress,
+		title: string,
+		category: WebLinkCategory,
+	): TranslationWebLink {
 		return new TranslationWebLink({
 			translation: this,
 			address: address,
@@ -198,14 +191,20 @@ export class Translation
 		});
 	}
 
-	createWorkLink({
-		relatedWork,
-		...params
-	}: { relatedWork: Work } & Link): TranslationWorkLink {
+	createWorkLink(
+		relatedWork: Work,
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	): TranslationWorkLink {
 		return new TranslationWorkLink({
-			...params,
 			translation: this,
 			relatedWork: relatedWork,
+			linkType: linkType,
+			beginDate: beginDate,
+			endDate: endDate,
+			ended: ended,
 		});
 	}
 }

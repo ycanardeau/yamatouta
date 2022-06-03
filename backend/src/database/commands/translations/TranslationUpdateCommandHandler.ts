@@ -98,12 +98,13 @@ export class TranslationUpdateCommandHandler
 
 			const commit = new Commit();
 
-			const revision = translation.createRevision({
-				commit: commit,
-				actor: user,
-				event: isNew ? RevisionEvent.Created : RevisionEvent.Updated,
-				summary: '',
-			});
+			const revision = translation.createRevision(
+				commit,
+				user,
+				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
+				'',
+				++translation.version,
+			);
 
 			if (revision.snapshot.contentEquals(latestSnapshot)) {
 				throw new BadRequestException('Nothing has changed.');

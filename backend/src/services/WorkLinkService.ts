@@ -37,13 +37,13 @@ export class WorkLinkService {
 			if (!workLinkTypes[entry.entryType].includes(newItem.linkType))
 				throw new BadRequestException('Invalid link type');
 
-			return entry.createWorkLink({
-				relatedWork: relatedWork,
-				linkType: newItem.linkType,
-				beginDate: PartialDate.create(newItem.beginDate),
-				endDate: PartialDate.create(newItem.endDate),
-				ended: newItem.ended,
-			});
+			return entry.createWorkLink(
+				relatedWork,
+				newItem.linkType,
+				PartialDate.create(newItem.beginDate),
+				PartialDate.create(newItem.endDate),
+				newItem.ended,
+			);
 		};
 
 		const update = async (

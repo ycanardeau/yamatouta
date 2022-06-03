@@ -78,12 +78,13 @@ export class ArtistUpdateCommandHandler
 
 			const commit = new Commit();
 
-			const revision = artist.createRevision({
-				commit: commit,
-				actor: user,
-				event: isNew ? RevisionEvent.Created : RevisionEvent.Updated,
-				summary: '',
-			});
+			const revision = artist.createRevision(
+				commit,
+				user,
+				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
+				'',
+				++artist.version,
+			);
 
 			if (revision.snapshot.contentEquals(latestSnapshot)) {
 				throw new BadRequestException('Nothing has changed.');

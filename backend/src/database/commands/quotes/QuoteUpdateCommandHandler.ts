@@ -98,12 +98,13 @@ export class QuoteUpdateCommandHandler
 
 			const commit = new Commit();
 
-			const revision = quote.createRevision({
-				commit: commit,
-				actor: user,
-				event: isNew ? RevisionEvent.Created : RevisionEvent.Updated,
-				summary: '',
-			});
+			const revision = quote.createRevision(
+				commit,
+				user,
+				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
+				'',
+				++quote.version,
+			);
 
 			if (revision.snapshot.contentEquals(latestSnapshot)) {
 				throw new BadRequestException('Nothing has changed.');

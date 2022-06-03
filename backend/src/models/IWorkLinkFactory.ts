@@ -1,7 +1,14 @@
-import { Link } from '../entities/Link';
+import { PartialDate } from '../entities/PartialDate';
 import { Work } from '../entities/Work';
 import { WorkLink } from '../entities/WorkLink';
+import { LinkType } from './LinkType';
 
 export interface IWorkLinkFactory<TWorkLink extends WorkLink> {
-	createWorkLink({ relatedWork }: { relatedWork: Work } & Link): TWorkLink;
+	createWorkLink(
+		relatedWork: Work,
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	): TWorkLink;
 }

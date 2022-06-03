@@ -16,6 +16,7 @@ import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
+import { LinkType } from '../models/LinkType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
@@ -23,7 +24,6 @@ import { QuoteType } from '../models/quotes/QuoteType';
 import { QuoteSnapshot } from '../models/snapshots/QuoteSnapshot';
 import { Artist } from './Artist';
 import { Commit } from './Commit';
-import { Link } from './Link';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
 import { User } from './User';
@@ -117,17 +117,13 @@ export class Quote
 		return QuoteSnapshot.create(this);
 	}
 
-	createRevision({
-		commit,
-		actor,
-		event,
-		summary,
-	}: {
-		commit: Commit;
-		actor: User;
-		event: RevisionEvent;
-		summary: string;
-	}): QuoteRevision {
+	createRevision(
+		commit: Commit,
+		actor: User,
+		event: RevisionEvent,
+		summary: string,
+		version: number,
+	): QuoteRevision {
 		return new QuoteRevision({
 			quote: this,
 			commit: commit,
@@ -135,19 +131,15 @@ export class Quote
 			snapshot: this.takeSnapshot(),
 			summary: summary,
 			event: event,
-			version: ++this.version,
+			version: version,
 		});
 	}
 
-	createWebLink({
-		address,
-		title,
-		category,
-	}: {
-		address: WebAddress;
-		title: string;
-		category: WebLinkCategory;
-	}): QuoteWebLink {
+	createWebLink(
+		address: WebAddress,
+		title: string,
+		category: WebLinkCategory,
+	): QuoteWebLink {
 		return new QuoteWebLink({
 			quote: this,
 			address: address,
@@ -156,14 +148,20 @@ export class Quote
 		});
 	}
 
-	createWorkLink({
-		relatedWork,
-		...params
-	}: { relatedWork: Work } & Link): QuoteWorkLink {
+	createWorkLink(
+		relatedWork: Work,
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	): QuoteWorkLink {
 		return new QuoteWorkLink({
-			...params,
 			quote: this,
 			relatedWork: relatedWork,
+			linkType: linkType,
+			beginDate: beginDate,
+			endDate: endDate,
+			ended: ended,
 		});
 	}
 }

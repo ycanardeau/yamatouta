@@ -87,12 +87,13 @@ export class WorkUpdateCommandHandler
 
 			const commit = new Commit();
 
-			const revision = work.createRevision({
-				commit: commit,
-				actor: user,
-				event: isNew ? RevisionEvent.Created : RevisionEvent.Updated,
-				summary: '',
-			});
+			const revision = work.createRevision(
+				commit,
+				user,
+				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
+				'',
+				++work.version,
+			);
 
 			if (revision.snapshot.contentEquals(latestSnapshot)) {
 				throw new BadRequestException('Nothing has changed.');

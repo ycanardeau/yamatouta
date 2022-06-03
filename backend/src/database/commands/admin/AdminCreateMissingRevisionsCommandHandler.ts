@@ -44,12 +44,13 @@ export class AdminCreateMissingRevisionsCommandHandler
 			for (const entry of entries) {
 				const commit = new Commit();
 
-				const revision = entry.createRevision({
-					commit: commit,
-					actor: user,
-					event: RevisionEvent.Created,
-					summary: '',
-				});
+				const revision = entry.createRevision(
+					commit,
+					user,
+					RevisionEvent.Created,
+					'',
+					++entry.version,
+				);
 				revision.createdAt = entry.createdAt;
 
 				em.persist(revision);

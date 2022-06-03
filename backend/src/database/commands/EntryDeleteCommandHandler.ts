@@ -67,12 +67,13 @@ abstract class EntryDeleteCommandHandler<
 
 			const commit = new Commit();
 
-			const revision = entry.createRevision({
-				commit: commit,
-				actor: user,
-				event: RevisionEvent.Deleted,
-				summary: '',
-			});
+			const revision = entry.createRevision(
+				commit,
+				user,
+				RevisionEvent.Deleted,
+				'',
+				++entry.version,
+			);
 
 			em.persist(revision);
 

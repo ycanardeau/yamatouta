@@ -1,3 +1,4 @@
+import { Commit } from '../entities/Commit';
 import { Revision } from '../entities/Revision';
 import { User } from '../entities/User';
 import { Entry } from './Entry';
@@ -11,13 +12,11 @@ export interface IRevisionFactory<
 > {
 	takeSnapshot(): TSnapshot;
 
-	createRevision({
-		actor,
-		event,
-		summary,
-	}: {
-		actor: User;
-		event: RevisionEvent;
-		summary: string;
-	}): TRevision;
+	createRevision(
+		commit: Commit,
+		actor: User,
+		event: RevisionEvent,
+		summary: string,
+		version: number,
+	): TRevision;
 }

@@ -64,11 +64,11 @@ export class WebLinkService {
 
 			address.incrementReferenceCount();
 
-			return entry.createWebLink({
-				address: address,
-				title: newItem.title,
-				category: newItem.category,
-			});
+			return entry.createWebLink(
+				address,
+				newItem.title,
+				newItem.category,
+			);
 		};
 
 		const update = async (

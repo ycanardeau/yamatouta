@@ -14,6 +14,7 @@ import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { IWebLinkFactory } from '../models/IWebLinkFactory';
+import { LinkType } from '../models/LinkType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { WorkSnapshot } from '../models/snapshots/WorkSnapshot';
@@ -21,7 +22,7 @@ import { WorkType } from '../models/works/WorkType';
 import { Artist } from './Artist';
 import { WorkArtistLink } from './ArtistLink';
 import { Commit } from './Commit';
-import { Link } from './Link';
+import { PartialDate } from './PartialDate';
 import { WorkRevision } from './Revision';
 import { User } from './User';
 import { WebAddress } from './WebAddress';
@@ -88,17 +89,13 @@ export class Work
 		return WorkSnapshot.create(this);
 	}
 
-	createRevision({
-		commit,
-		actor,
-		event,
-		summary,
-	}: {
-		commit: Commit;
-		actor: User;
-		event: RevisionEvent;
-		summary: string;
-	}): WorkRevision {
+	createRevision(
+		commit: Commit,
+		actor: User,
+		event: RevisionEvent,
+		summary: string,
+		version: number,
+	): WorkRevision {
 		return new WorkRevision({
 			work: this,
 			commit: commit,
@@ -106,19 +103,15 @@ export class Work
 			snapshot: this.takeSnapshot(),
 			summary: summary,
 			event: event,
-			version: ++this.version,
+			version: version,
 		});
 	}
 
-	createWebLink({
-		address,
-		title,
-		category,
-	}: {
-		address: WebAddress;
-		title: string;
-		category: WebLinkCategory;
-	}): WorkWebLink {
+	createWebLink(
+		address: WebAddress,
+		title: string,
+		category: WebLinkCategory,
+	): WorkWebLink {
 		return new WorkWebLink({
 			work: this,
 			address: address,
@@ -127,14 +120,20 @@ export class Work
 		});
 	}
 
-	createArtistLink({
-		relatedArtist,
-		...params
-	}: { relatedArtist: Artist } & Link): WorkArtistLink {
+	createArtistLink(
+		relatedArtist: Artist,
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	): WorkArtistLink {
 		return new WorkArtistLink({
-			...params,
 			work: this,
 			relatedArtist: relatedArtist,
+			linkType: linkType,
+			beginDate: beginDate,
+			endDate: endDate,
+			ended: ended,
 		});
 	}
 }

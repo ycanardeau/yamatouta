@@ -37,13 +37,13 @@ export class ArtistLinkService {
 			if (!artistLinkTypes[entry.entryType].includes(newItem.linkType))
 				throw new BadRequestException('Invalid link type');
 
-			return entry.createArtistLink({
-				relatedArtist: relatedArtist,
-				linkType: newItem.linkType,
-				beginDate: PartialDate.create(newItem.beginDate),
-				endDate: PartialDate.create(newItem.endDate),
-				ended: newItem.ended,
-			});
+			return entry.createArtistLink(
+				relatedArtist,
+				newItem.linkType,
+				PartialDate.create(newItem.beginDate),
+				PartialDate.create(newItem.endDate),
+				newItem.ended,
+			);
 		};
 
 		const update = async (

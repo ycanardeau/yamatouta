@@ -81,17 +81,13 @@ export class Artist
 		return ArtistSnapshot.create(this);
 	}
 
-	createRevision({
-		commit,
-		actor,
-		event,
-		summary,
-	}: {
-		commit: Commit;
-		actor: User;
-		event: RevisionEvent;
-		summary: string;
-	}): ArtistRevision {
+	createRevision(
+		commit: Commit,
+		actor: User,
+		event: RevisionEvent,
+		summary: string,
+		version: number,
+	): ArtistRevision {
 		return new ArtistRevision({
 			artist: this,
 			commit: commit,
@@ -99,19 +95,15 @@ export class Artist
 			snapshot: this.takeSnapshot(),
 			summary: summary,
 			event: event,
-			version: ++this.version,
+			version: version,
 		});
 	}
 
-	createWebLink({
-		address,
-		title,
-		category,
-	}: {
-		address: WebAddress;
-		title: string;
-		category: WebLinkCategory;
-	}): ArtistWebLink {
+	createWebLink(
+		address: WebAddress,
+		title: string,
+		category: WebLinkCategory,
+	): ArtistWebLink {
 		return new ArtistWebLink({
 			artist: this,
 			address: address,
