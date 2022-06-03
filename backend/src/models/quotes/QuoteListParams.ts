@@ -11,6 +11,7 @@ export class QuoteListParams {
 		readonly limit?: number,
 		readonly getTotalCount?: boolean,
 		readonly artistId?: number,
+		readonly workId?: number,
 	) {}
 
 	static readonly schema = Joi.object<QuoteListParams>({
@@ -21,5 +22,6 @@ export class QuoteListParams {
 		limit: Joi.number().optional(),
 		getTotalCount: Joi.boolean().optional(),
 		artistId: Joi.number().optional(),
+		workId: Joi.number().optional(),
 	});
 }

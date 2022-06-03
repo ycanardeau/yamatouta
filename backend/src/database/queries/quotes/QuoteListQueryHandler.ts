@@ -54,6 +54,9 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 				{ $not: { quoteType: QuoteType.Word } },
 				params.quoteType ? { quoteType: params.quoteType } : {},
 				params.artistId ? { artist: params.artistId } : {},
+				params.workId
+					? { workLinks: { relatedWork: params.workId } }
+					: {},
 			],
 		};
 
