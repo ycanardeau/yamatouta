@@ -162,6 +162,9 @@ describe('QuoteCreateCommandHandler', () => {
 					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
 					workLinks: [],
+					transcription: '',
+					foreword: '',
+					customArtistName: '',
 				},
 			});
 		});

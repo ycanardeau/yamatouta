@@ -187,6 +187,9 @@ describe('QuoteUpdateCommandHandler', () => {
 					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
 					workLinks: [],
+					transcription: '',
+					foreword: '',
+					customArtistName: '',
 				},
 			});
 		});
@@ -206,6 +209,9 @@ describe('QuoteUpdateCommandHandler', () => {
 					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
 					workLinks: [],
+					transcription: '',
+					foreword: '',
+					customArtistName: '',
 				},
 			});
 		});
@@ -224,6 +230,9 @@ describe('QuoteUpdateCommandHandler', () => {
 					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
 					workLinks: [],
+					transcription: '',
+					foreword: '',
+					customArtistName: '',
 				},
 			});
 		});
@@ -239,6 +248,9 @@ describe('QuoteUpdateCommandHandler', () => {
 					artist: ObjectRefSnapshot.create(artist),
 					webLinks: [],
 					workLinks: [],
+					transcription: '',
+					foreword: '',
+					customArtistName: '',
 				},
 			});
 		});
