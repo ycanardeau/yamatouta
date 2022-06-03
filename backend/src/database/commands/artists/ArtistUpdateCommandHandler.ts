@@ -64,7 +64,8 @@ export class ArtistUpdateCommandHandler
 
 			em.persist(artist);
 
-			const revision = await this.revisionService.create(
+			await this.revisionService.create(
+				em,
 				artist,
 				async () => {
 					artist.name = params.name;
@@ -82,8 +83,6 @@ export class ArtistUpdateCommandHandler
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
-
-			em.persist(revision);
 
 			const auditLogEntry = new ArtistAuditLogEntry({
 				action: isNew

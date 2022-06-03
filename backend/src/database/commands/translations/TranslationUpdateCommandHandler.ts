@@ -70,7 +70,8 @@ export class TranslationUpdateCommandHandler
 
 			em.persist(translation);
 
-			const revision = await this.revisionService.create(
+			await this.revisionService.create(
+				em,
 				translation,
 				async () => {
 					translation.headword = params.headword;
@@ -100,8 +101,6 @@ export class TranslationUpdateCommandHandler
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
-
-			em.persist(revision);
 
 			const auditLogEntry = new TranslationAuditLogEntry({
 				action: isNew

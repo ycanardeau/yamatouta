@@ -64,7 +64,8 @@ abstract class EntryDeleteCommandHandler<
 
 			const user = await permissionContext.getCurrentUser(em);
 
-			const revision = await this.revisionService.create(
+			await this.revisionService.create(
+				em,
 				entry,
 				async () => {
 					entry.deleted = true;
@@ -73,8 +74,6 @@ abstract class EntryDeleteCommandHandler<
 				RevisionEvent.Deleted,
 				true,
 			);
-
-			em.persist(revision);
 
 			const auditLogEntry = this.auditLogFunc(
 				entry,

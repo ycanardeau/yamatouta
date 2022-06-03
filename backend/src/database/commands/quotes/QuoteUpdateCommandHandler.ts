@@ -75,7 +75,8 @@ export class QuoteUpdateCommandHandler
 
 			em.persist(quote);
 
-			const revision = await this.revisionService.create(
+			await this.revisionService.create(
+				em,
 				quote,
 				async () => {
 					quote.text = params.text;
@@ -102,8 +103,6 @@ export class QuoteUpdateCommandHandler
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
-
-			em.persist(revision);
 
 			const auditLogEntry = new QuoteAuditLogEntry({
 				action: isNew

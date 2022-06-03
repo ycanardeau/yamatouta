@@ -1,23 +1,23 @@
+import { EntityManager } from '@mikro-orm/core';
 import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { Commit } from '../entities/Commit';
-import { Revision } from '../entities/Revision';
 import { User } from '../entities/User';
 import { Entry } from '../models/Entry';
 import { RevisionEvent } from '../models/RevisionEvent';
-import { Snapshot } from '../models/snapshots/Snapshot';
 
 @Injectable()
 export class RevisionService {
 	constructor() {}
 
 	async create(
+		em: EntityManager,
 		entry: Entry,
 		updateFunc: () => Promise<void>,
 		user: User,
 		event: RevisionEvent,
 		allowUnchanged: boolean,
-	): Promise<Revision<Entry, Snapshot>> {
+	): Promise<void> {
 		const isNew = !entry.id;
 
 		// Take a snapshot before updating the entry.
@@ -42,6 +42,6 @@ export class RevisionService {
 			throw new BadRequestException('Nothing has changed.');
 		}
 
-		return revision;
+		em.persist(revision);
 	}
 }

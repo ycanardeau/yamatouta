@@ -66,7 +66,8 @@ export class WorkUpdateCommandHandler
 
 			em.persist(work);
 
-			const revision = await this.revisionService.create(
+			await this.revisionService.create(
+				em,
 				work,
 				async () => {
 					work.name = params.name;
@@ -91,8 +92,6 @@ export class WorkUpdateCommandHandler
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
-
-			em.persist(revision);
 
 			const auditLogEntry = new WorkAuditLogEntry({
 				action: isNew
