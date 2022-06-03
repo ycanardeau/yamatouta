@@ -5,15 +5,14 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { WorkObject } from '../../../dto/WorkObject';
 import { WorkAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { Commit } from '../../../entities/Commit';
 import { Work } from '../../../entities/Work';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
 import { WorkOptionalField } from '../../../models/works/WorkOptionalField';
 import { WorkUpdateParams } from '../../../models/works/WorkUpdateParams';
 import { ArtistLinkService } from '../../../services/ArtistLinkService';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
 
 export class WorkUpdateCommand {
@@ -33,6 +32,7 @@ export class WorkUpdateCommandHandler
 		private readonly workRepo: EntityRepository<Work>,
 		private readonly webLinkService: WebLinkService,
 		private readonly artistLinkService: ArtistLinkService,
+		private readonly revisionService: RevisionService,
 	) {}
 
 	async execute(command: WorkUpdateCommand): Promise<WorkObject> {
@@ -65,39 +65,29 @@ export class WorkUpdateCommandHandler
 
 			em.persist(work);
 
-			const latestSnapshot = isNew ? undefined : work.takeSnapshot();
-
-			work.name = params.name;
-			work.workType = params.workType;
-
-			await this.webLinkService.sync(
-				em,
+			const revision = await this.revisionService.create(
 				work,
-				params.webLinks,
-				permissionContext,
+				async () => {
+					work.name = params.name;
+					work.workType = params.workType;
+
+					await this.webLinkService.sync(
+						em,
+						work,
+						params.webLinks,
+						permissionContext,
+						user,
+					);
+
+					await this.artistLinkService.sync(
+						em,
+						work,
+						params.artistLinks,
+						permissionContext,
+					);
+				},
 				user,
 			);
-
-			await this.artistLinkService.sync(
-				em,
-				work,
-				params.artistLinks,
-				permissionContext,
-			);
-
-			const commit = new Commit();
-
-			const revision = work.createRevision(
-				commit,
-				user,
-				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
-				'',
-				++work.version,
-			);
-
-			if (latestSnapshot?.contentEquals(JSON.parse(revision.snapshot))) {
-				throw new BadRequestException('Nothing has changed.');
-			}
 
 			em.persist(revision);
 

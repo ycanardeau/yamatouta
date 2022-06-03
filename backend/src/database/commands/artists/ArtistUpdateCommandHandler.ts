@@ -6,13 +6,12 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { ArtistObject } from '../../../dto/ArtistObject';
 import { Artist } from '../../../entities/Artist';
 import { ArtistAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { Commit } from '../../../entities/Commit';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
 import { ArtistOptionalField } from '../../../models/artists/ArtistOptionalField';
 import { ArtistUpdateParams } from '../../../models/artists/ArtistUpdateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
 
 export class ArtistUpdateCommand {
@@ -31,6 +30,7 @@ export class ArtistUpdateCommandHandler
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
 		private readonly webLinkService: WebLinkService,
+		private readonly revisionService: RevisionService,
 	) {}
 
 	async execute(command: ArtistUpdateCommand): Promise<ArtistObject> {
@@ -63,32 +63,22 @@ export class ArtistUpdateCommandHandler
 
 			em.persist(artist);
 
-			const latestSnapshot = isNew ? undefined : artist.takeSnapshot();
-
-			artist.name = params.name;
-			artist.artistType = params.artistType;
-
-			await this.webLinkService.sync(
-				em,
+			const revision = await this.revisionService.create(
 				artist,
-				params.webLinks,
-				permissionContext,
+				async () => {
+					artist.name = params.name;
+					artist.artistType = params.artistType;
+
+					await this.webLinkService.sync(
+						em,
+						artist,
+						params.webLinks,
+						permissionContext,
+						user,
+					);
+				},
 				user,
 			);
-
-			const commit = new Commit();
-
-			const revision = artist.createRevision(
-				commit,
-				user,
-				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
-				'',
-				++artist.version,
-			);
-
-			if (latestSnapshot?.contentEquals(JSON.parse(revision.snapshot))) {
-				throw new BadRequestException('Nothing has changed.');
-			}
 
 			em.persist(revision);
 

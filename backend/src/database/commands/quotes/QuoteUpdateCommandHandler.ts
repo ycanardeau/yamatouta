@@ -6,14 +6,13 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { QuoteObject } from '../../../dto/QuoteObject';
 import { Artist } from '../../../entities/Artist';
 import { QuoteAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
 import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
 import { QuoteUpdateParams } from '../../../models/quotes/QuoteUpdateParams';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
 import { WorkLinkService } from '../../../services/WorkLinkService';
 
@@ -36,6 +35,7 @@ export class QuoteUpdateCommandHandler
 		private readonly quoteRepo: EntityRepository<Quote>,
 		private readonly webLinkService: WebLinkService,
 		private readonly workLinkService: WorkLinkService,
+		private readonly revisionService: RevisionService,
 	) {}
 
 	async execute(command: QuoteUpdateCommand): Promise<QuoteObject> {
@@ -74,41 +74,31 @@ export class QuoteUpdateCommandHandler
 
 			em.persist(quote);
 
-			const latestSnapshot = isNew ? undefined : quote.takeSnapshot();
-
-			quote.text = params.text;
-			quote.quoteType = params.quoteType;
-			quote.locale = params.locale;
-			quote.artist = artist;
-
-			await this.webLinkService.sync(
-				em,
+			const revision = await this.revisionService.create(
 				quote,
-				params.webLinks,
-				permissionContext,
+				async () => {
+					quote.text = params.text;
+					quote.quoteType = params.quoteType;
+					quote.locale = params.locale;
+					quote.artist = artist;
+
+					await this.webLinkService.sync(
+						em,
+						quote,
+						params.webLinks,
+						permissionContext,
+						user,
+					);
+
+					await this.workLinkService.sync(
+						em,
+						quote,
+						params.workLinks,
+						permissionContext,
+					);
+				},
 				user,
 			);
-
-			await this.workLinkService.sync(
-				em,
-				quote,
-				params.workLinks,
-				permissionContext,
-			);
-
-			const commit = new Commit();
-
-			const revision = quote.createRevision(
-				commit,
-				user,
-				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
-				'',
-				++quote.version,
-			);
-
-			if (latestSnapshot?.contentEquals(JSON.parse(revision.snapshot))) {
-				throw new BadRequestException('Nothing has changed.');
-			}
 
 			em.persist(revision);
 

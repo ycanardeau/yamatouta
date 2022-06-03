@@ -10,4 +10,5 @@ export interface IEntryWithRevisions<
 	TSnapshot extends Snapshot,
 > {
 	revisions: Collection<TRevision>;
+	version: number;
 }

@@ -5,15 +5,14 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { TranslationObject } from '../../../dto/TranslationObject';
 import { TranslationAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { Commit } from '../../../entities/Commit';
 import { Translation } from '../../../entities/Translation';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
 import { TranslationOptionalField } from '../../../models/translations/TranslationOptionalField';
 import { TranslationUpdateParams } from '../../../models/translations/TranslationUpdateParams';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
 import { WorkLinkService } from '../../../services/WorkLinkService';
 
@@ -35,6 +34,7 @@ export class TranslationUpdateCommandHandler
 		private readonly translationRepo: EntityRepository<Translation>,
 		private readonly webLinkService: WebLinkService,
 		private readonly workLinkService: WorkLinkService,
+		private readonly revisionService: RevisionService,
 	) {}
 
 	async execute(
@@ -69,46 +69,34 @@ export class TranslationUpdateCommandHandler
 
 			em.persist(translation);
 
-			const latestSnapshot = isNew
-				? undefined
-				: translation.takeSnapshot();
-
-			translation.headword = params.headword;
-			translation.locale = params.locale;
-			translation.reading = params.reading;
-			translation.yamatokotoba = params.yamatokotoba;
-			translation.category = params.category;
-
-			translation.updateSearchIndex(this.ngramConverter);
-
-			await this.webLinkService.sync(
-				em,
+			const revision = await this.revisionService.create(
 				translation,
-				params.webLinks,
-				permissionContext,
+				async () => {
+					translation.headword = params.headword;
+					translation.locale = params.locale;
+					translation.reading = params.reading;
+					translation.yamatokotoba = params.yamatokotoba;
+					translation.category = params.category;
+
+					translation.updateSearchIndex(this.ngramConverter);
+
+					await this.webLinkService.sync(
+						em,
+						translation,
+						params.webLinks,
+						permissionContext,
+						user,
+					);
+
+					await this.workLinkService.sync(
+						em,
+						translation,
+						params.workLinks,
+						permissionContext,
+					);
+				},
 				user,
 			);
-
-			await this.workLinkService.sync(
-				em,
-				translation,
-				params.workLinks,
-				permissionContext,
-			);
-
-			const commit = new Commit();
-
-			const revision = translation.createRevision(
-				commit,
-				user,
-				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
-				'',
-				++translation.version,
-			);
-
-			if (latestSnapshot?.contentEquals(JSON.parse(revision.snapshot))) {
-				throw new BadRequestException('Nothing has changed.');
-			}
 
 			em.persist(revision);
 
