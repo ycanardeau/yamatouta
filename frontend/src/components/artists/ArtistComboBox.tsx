@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { artistApi } from '../../api/artistApi';
@@ -15,21 +16,23 @@ export const ArtistComboBox = ({
 }: ArtistComboBoxProps): React.ReactElement => {
 	const { t } = useTranslation();
 
+	const handleSearchChange = React.useCallback(
+		(searchValue): Promise<ISearchResultObject<IArtistObject>> =>
+			artistApi.list({
+				pagination: {
+					offset: 0,
+					limit: 20,
+					getTotalCount: false,
+				},
+				query: searchValue,
+			}),
+		[],
+	);
+
 	return (
 		<EntryComboBox
 			store={store}
-			onSearchChange={(
-				searchValue,
-			): Promise<ISearchResultObject<IArtistObject>> =>
-				artistApi.list({
-					pagination: {
-						offset: 0,
-						limit: 20,
-						getTotalCount: false,
-					},
-					query: searchValue,
-				})
-			}
+			onSearchChange={handleSearchChange}
 			placeholder={t('shared.selectArtist')}
 		/>
 	);

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { workApi } from '../../api/workApi';
@@ -15,21 +16,23 @@ export const WorkComboBox = ({
 }: WorkComboBoxProps): React.ReactElement => {
 	const { t } = useTranslation();
 
+	const handleSearchChange = React.useCallback(
+		(searchValue): Promise<ISearchResultObject<IWorkObject>> =>
+			workApi.list({
+				pagination: {
+					offset: 0,
+					limit: 20,
+					getTotalCount: false,
+				},
+				query: searchValue,
+			}),
+		[],
+	);
+
 	return (
 		<EntryComboBox
 			store={store}
-			onSearchChange={(
-				searchValue,
-			): Promise<ISearchResultObject<IWorkObject>> =>
-				workApi.list({
-					pagination: {
-						offset: 0,
-						limit: 20,
-						getTotalCount: false,
-					},
-					query: searchValue,
-				})
-			}
+			onSearchChange={handleSearchChange}
 			placeholder={t('shared.selectWork')}
 		/>
 	);
