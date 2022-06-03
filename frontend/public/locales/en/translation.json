@@ -65,7 +65,8 @@
 		"year": "Year",
 		"month": "Month",
 		"day": "Day",
-		"selectMonth": "Select a month..."
+		"selectMonth": "Select a month...",
+		"unknownDate": "on an unknown date"
 	},
 	"translations": {
 		"addWord": "Add word",

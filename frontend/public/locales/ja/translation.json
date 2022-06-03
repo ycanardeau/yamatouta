@@ -63,7 +63,8 @@
 		"year": "とし",
 		"month": "つき",
 		"day": "ひ",
-		"selectMonth": "つきをえらぶ..."
+		"selectMonth": "つきをえらぶ...",
+		"unknownDate": "あるひ"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",

@@ -147,6 +147,8 @@ export const QuoteComment = ({
 	store,
 	quote,
 }: QuoteCommentProps): React.ReactElement => {
+	const { t } = useTranslation();
+
 	return (
 		<EuiComment
 			username={
@@ -156,6 +158,15 @@ export const QuoteComment = ({
 					to={`/artists/${quote.artist.id}`}
 				>
 					{quote.artist.name}
+				</Link>
+			}
+			timestamp={
+				<Link
+					color="text"
+					style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
+					to={`/quotes/${quote.id}`}
+				>
+					{t('shared.unknownDate')}
 				</Link>
 			}
 			timelineIcon={<Avatar size="l" name={quote.artist.name} />}
