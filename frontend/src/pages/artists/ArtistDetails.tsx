@@ -2,6 +2,7 @@ import { EuiButton, EuiIcon } from '@elastic/eui';
 import {
 	EditRegular,
 	HistoryRegular,
+	InfoRegular,
 	MusicNote2Regular,
 } from '@fluentui/react-icons';
 import { observer } from 'mobx-react-lite';
@@ -92,7 +93,7 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 							e.preventDefault();
 							navigate(`/artists/${artist.id}`);
 						},
-						prepend: <EuiIcon type={MusicNote2Regular} />,
+						prepend: <EuiIcon type={InfoRegular} />,
 						isSelected: tab === undefined,
 						label: t('shared.basicInfo'),
 					},

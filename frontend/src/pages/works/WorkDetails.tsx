@@ -3,6 +3,7 @@ import {
 	EditRegular,
 	HistoryRegular,
 	InfoRegular,
+	MusicNote2Regular,
 } from '@fluentui/react-icons';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -104,7 +105,7 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 							e.preventDefault();
 							navigate(`/works/${work.id}/quotes`);
 						},
-						prepend: <EuiIcon type={InfoRegular} />,
+						prepend: <EuiIcon type={MusicNote2Regular} />,
 						isSelected: tab === 'quotes',
 						label: t('shared.quotes'),
 					},
