@@ -42,6 +42,58 @@ export class Migration20220604035130 extends Migration {
 		this.addSql(
 			'alter table `quotes` add index `quotes_actor_id_index`(`actor_id`);',
 		);
+
+		this.addSql(`
+			update artists a
+			left join revisions r on r.artist_id = a.id
+			set a.actor_id = r.actor_id
+			where r.entry_type = 'Artist' and r.version = 1;
+		`);
+		this.addSql(`
+			update quotes q
+			left join revisions r on r.quote_id = q.id
+			set q.actor_id = r.actor_id
+			where r.entry_type = 'Quote' and r.version = 1;
+		`);
+		this.addSql(`
+			update works w
+			left join revisions r on r.work_id = w.id
+			set w.actor_id = r.actor_id
+			where r.entry_type = 'Work' and r.version = 1;
+		`);
+
+		this.addSql(
+			'alter table `works` drop foreign key `works_actor_id_foreign`;',
+		);
+
+		this.addSql(
+			'alter table `artists` drop foreign key `artists_actor_id_foreign`;',
+		);
+
+		this.addSql(
+			'alter table `quotes` drop foreign key `quotes_actor_id_foreign`;',
+		);
+
+		this.addSql(
+			'alter table `works` modify `actor_id` int unsigned not null;',
+		);
+		this.addSql(
+			'alter table `works` add constraint `works_actor_id_foreign` foreign key (`actor_id`) references `users` (`id`) on update cascade;',
+		);
+
+		this.addSql(
+			'alter table `artists` modify `actor_id` int unsigned not null;',
+		);
+		this.addSql(
+			'alter table `artists` add constraint `artists_actor_id_foreign` foreign key (`actor_id`) references `users` (`id`) on update cascade;',
+		);
+
+		this.addSql(
+			'alter table `quotes` modify `actor_id` int unsigned not null;',
+		);
+		this.addSql(
+			'alter table `quotes` add constraint `quotes_actor_id_foreign` foreign key (`actor_id`) references `users` (`id`) on update cascade;',
+		);
 	}
 
 	async down(): Promise<void> {

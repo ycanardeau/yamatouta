@@ -76,9 +76,8 @@ export class Artist
 	@OneToMany(() => WorkArtistLink, (workLink) => workLink.relatedArtist)
 	workLinks = new Collection<WorkArtistLink>(this);
 
-	// TODO: Make this non-nullable.
 	@ManyToOne()
-	actor?: IdentifiedReference<User>;
+	actor: IdentifiedReference<User>;
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);

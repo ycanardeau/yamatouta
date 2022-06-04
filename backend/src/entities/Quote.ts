@@ -111,9 +111,8 @@ export class Quote
 	@Property()
 	customArtistName = '';
 
-	// TODO: Make this non-nullable.
 	@ManyToOne()
-	actor?: IdentifiedReference<User>;
+	actor: IdentifiedReference<User>;
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);

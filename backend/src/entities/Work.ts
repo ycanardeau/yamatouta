@@ -84,9 +84,8 @@ export class Work
 	)
 	translationLinks = new Collection<TranslationWorkLink>(this);
 
-	// TODO: Make this non-nullable.
 	@ManyToOne()
-	actor?: IdentifiedReference<User>;
+	actor: IdentifiedReference<User>;
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);

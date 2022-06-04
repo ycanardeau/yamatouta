@@ -615,7 +615,7 @@
           "unsigned": true,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "integer"
         }
       },
@@ -652,7 +652,6 @@
             "id"
           ],
           "referencedTableName": "users",
-          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }
@@ -2165,7 +2164,7 @@
           "unsigned": true,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "integer"
         }
       },
@@ -2202,7 +2201,6 @@
             "id"
           ],
           "referencedTableName": "users",
-          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }
@@ -2622,7 +2620,7 @@
           "unsigned": true,
           "autoincrement": false,
           "primary": false,
-          "nullable": true,
+          "nullable": false,
           "mappedType": "integer"
         }
       },
@@ -2680,7 +2678,6 @@
             "id"
           ],
           "referencedTableName": "users",
-          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }
