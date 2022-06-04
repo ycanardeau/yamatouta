@@ -30,9 +30,15 @@ describe('QuoteObject', () => {
 	beforeEach(async () => {
 		em = app.get(EntityManager);
 
+		const user = await createUser(em as any, {
+			username: 'user',
+			email: 'user@example.com',
+		});
+
 		artist = await createArtist(em as any, {
 			name: 'artist',
 			artistType: ArtistType.Person,
+			actor: user,
 		});
 
 		quote = await createQuote(em as any, {
@@ -40,6 +46,7 @@ describe('QuoteObject', () => {
 			text: 'quote',
 			locale: '',
 			artist: artist,
+			actor: user,
 		});
 
 		deletedQuote = await createQuote(em as any, {
@@ -47,6 +54,7 @@ describe('QuoteObject', () => {
 			text: 'deleted',
 			locale: '',
 			artist: artist,
+			actor: user,
 			deleted: true,
 		});
 
@@ -55,6 +63,7 @@ describe('QuoteObject', () => {
 			text: 'hidden',
 			locale: '',
 			artist: artist,
+			actor: user,
 			hidden: true,
 		});
 

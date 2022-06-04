@@ -38,7 +38,7 @@ describe('TranslationObject', () => {
 			reading: 'ほんやく',
 			yamatokotoba: 'いいかえ',
 			category: WordCategory.Noun,
-			user: user,
+			actor: user,
 		});
 
 		deletedTranslation = await createTranslation(em as any, {
@@ -46,7 +46,7 @@ describe('TranslationObject', () => {
 			locale: 'ja',
 			reading: 'けされた',
 			yamatokotoba: 'けされた',
-			user: user,
+			actor: user,
 			deleted: true,
 		});
 
@@ -55,7 +55,7 @@ describe('TranslationObject', () => {
 			locale: 'ja',
 			reading: 'かくされた',
 			yamatokotoba: 'かくされた',
-			user: user,
+			actor: user,
 			hidden: true,
 		});
 

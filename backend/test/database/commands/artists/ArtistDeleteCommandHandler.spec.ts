@@ -49,6 +49,7 @@ describe('ArtistDeleteCommandHandler', () => {
 		artist = await createArtist(em, {
 			name: 'うたよみ',
 			artistType: ArtistType.Person,
+			actor: existingUser,
 		});
 
 		permissionContext = new FakePermissionContext(existingUser);

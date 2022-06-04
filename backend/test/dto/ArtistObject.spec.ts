@@ -28,20 +28,28 @@ describe('ArtistObject', () => {
 	beforeEach(async () => {
 		em = app.get(EntityManager);
 
+		const user = await createUser(em as any, {
+			username: 'user',
+			email: 'user@example.com',
+		});
+
 		artist = await createArtist(em as any, {
 			name: 'artist',
 			artistType: ArtistType.Person,
+			actor: user,
 		});
 
 		deletedArtist = await createArtist(em as any, {
 			name: 'deleted',
 			artistType: ArtistType.Person,
+			actor: user,
 			deleted: true,
 		});
 
 		hiddenArtist = await createArtist(em as any, {
 			name: 'hidden',
 			artistType: ArtistType.Person,
+			actor: user,
 			hidden: true,
 		});
 

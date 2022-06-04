@@ -62,6 +62,7 @@ describe('WorkLinkService', () => {
 			artist = await createArtist(em, {
 				name: 'よるしか',
 				artistType: ArtistType.Group,
+				actor: existingUser,
 			});
 
 			quote = await createQuote(em, {
@@ -69,18 +70,28 @@ describe('WorkLinkService', () => {
 				text: '絶えず君のいこふ 記憶に夏野の石一つ',
 				locale: 'ja',
 				artist: artist,
+				actor: existingUser,
 			});
 
 			permissionContext = new FakePermissionContext(existingUser);
 
 			[kiminihare, yunagi, usotsuki] = await Promise.all(
 				[
-					{ name: 'ただきみにはれ', workType: WorkType.Song },
+					{
+						name: 'ただきみにはれ',
+						workType: WorkType.Song,
+						actor: existingUser,
+					},
 					{
 						name: 'ゆうなぎ、なにがし、はなまどい',
 						workType: WorkType.Song,
+						actor: existingUser,
 					},
-					{ name: 'うそつき', workType: WorkType.Song },
+					{
+						name: 'うそつき',
+						workType: WorkType.Song,
+						actor: existingUser,
+					},
 				].map((work) => createWork(em, work)),
 			);
 

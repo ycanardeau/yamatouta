@@ -50,7 +50,7 @@ describe('TranslationDeleteCommandHandler', () => {
 			locale: 'ojp',
 			reading: 'やまとことば',
 			yamatokotoba: 'やまとことば',
-			user: existingUser,
+			actor: existingUser,
 		});
 
 		permissionContext = new FakePermissionContext(existingUser);

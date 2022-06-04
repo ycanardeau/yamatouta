@@ -68,7 +68,7 @@ export const createTranslation = async (
 		reading,
 		yamatokotoba,
 		category = WordCategory.Unspecified,
-		user,
+		actor,
 		deleted = false,
 		hidden = false,
 	}: {
@@ -77,12 +77,12 @@ export const createTranslation = async (
 		reading: string;
 		yamatokotoba: string;
 		category?: WordCategory;
-		user: User;
+		actor: User;
 		deleted?: boolean;
 		hidden?: boolean;
 	},
 ): Promise<Translation> => {
-	const translation = new Translation(user);
+	const translation = new Translation(actor);
 	translation.headword = headword;
 	translation.locale = locale;
 	translation.reading = reading;
@@ -107,18 +107,20 @@ export const createQuote = async (
 		text,
 		locale,
 		artist,
+		actor,
 		deleted = false,
 		hidden = false,
 	}: {
 		quoteType: QuoteType;
 		text: string;
 		locale: string;
+		actor: User;
 		artist: Artist;
 		deleted?: boolean;
 		hidden?: boolean;
 	},
 ): Promise<Quote> => {
-	const quote = new Quote();
+	const quote = new Quote(actor);
 	quote.quoteType = quoteType;
 	quote.text = text;
 	quote.locale = locale;
@@ -138,16 +140,18 @@ export const createArtist = async (
 	{
 		name,
 		artistType,
+		actor,
 		deleted = false,
 		hidden = false,
 	}: {
 		name: string;
 		artistType: ArtistType;
+		actor: User;
 		deleted?: boolean;
 		hidden?: boolean;
 	},
 ): Promise<Artist> => {
-	const artist = new Artist();
+	const artist = new Artist(actor);
 	artist.name = name;
 	artist.artistType = artistType;
 	artist.deleted = deleted;
@@ -165,16 +169,18 @@ export const createWork = async (
 	{
 		name,
 		workType,
+		actor,
 		deleted = false,
 		hidden = false,
 	}: {
 		name: string;
 		workType: WorkType;
+		actor: User;
 		deleted?: boolean;
 		hidden?: boolean;
 	},
 ): Promise<Work> => {
-	const work = new Work();
+	const work = new Work(actor);
 	work.name = name;
 	work.workType = workType;
 	work.deleted = deleted;

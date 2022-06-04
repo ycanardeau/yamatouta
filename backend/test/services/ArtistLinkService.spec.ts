@@ -54,15 +54,28 @@ describe('ArtistLinkService', () => {
 			work = await createWork(em, {
 				name: '日本神話',
 				workType: WorkType.Book,
+				actor: existingUser,
 			});
 
 			permissionContext = new FakePermissionContext(existingUser);
 
 			[amaterasu, izanami, izanagi] = await Promise.all(
 				[
-					{ name: 'あまてらす', artistType: ArtistType.Character },
-					{ name: 'いざなみ', artistType: ArtistType.Character },
-					{ name: 'いざなぎ', artistType: ArtistType.Character },
+					{
+						name: 'あまてらす',
+						artistType: ArtistType.Character,
+						actor: existingUser,
+					},
+					{
+						name: 'いざなみ',
+						artistType: ArtistType.Character,
+						actor: existingUser,
+					},
+					{
+						name: 'いざなぎ',
+						artistType: ArtistType.Character,
+						actor: existingUser,
+					},
 				].map((artist) => createArtist(em, artist)),
 			);
 

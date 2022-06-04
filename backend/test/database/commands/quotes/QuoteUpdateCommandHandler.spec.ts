@@ -60,6 +60,7 @@ describe('QuoteUpdateCommandHandler', () => {
 		artist = await createArtist(em, {
 			name: 'うたよみ',
 			artistType: ArtistType.Person,
+			actor: existingUser,
 		});
 
 		quote = await createQuote(em, {
@@ -67,6 +68,7 @@ describe('QuoteUpdateCommandHandler', () => {
 			quoteType: QuoteType.Tanka,
 			locale: 'ja',
 			artist: artist,
+			actor: existingUser,
 		});
 
 		permissionContext = new FakePermissionContext(existingUser);

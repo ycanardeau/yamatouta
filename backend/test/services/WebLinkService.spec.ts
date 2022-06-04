@@ -76,7 +76,7 @@ describe('WebLinkService', () => {
 				reading: 'やまとことば',
 				yamatokotoba: 'やまとことば',
 				category: WordCategory.Noun,
-				user: existingUser,
+				actor: existingUser,
 			});
 
 			permissionContext = new FakePermissionContext(existingUser);

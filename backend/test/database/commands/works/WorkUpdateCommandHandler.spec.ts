@@ -56,6 +56,7 @@ describe('WorkUpdateCommandHandler', () => {
 		work = await createWork(em, {
 			name: 'よみもの',
 			workType: WorkType.Book,
+			actor: existingUser,
 		});
 
 		permissionContext = new FakePermissionContext(existingUser);
