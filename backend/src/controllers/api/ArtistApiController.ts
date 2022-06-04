@@ -1,25 +1,25 @@
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { ArtistDeleteCommand } from '../database/commands/EntryDeleteCommandHandler';
-import { ArtistUpdateCommand } from '../database/commands/artists/ArtistUpdateCommandHandler';
-import { ArtistListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
-import { ArtistGetQuery } from '../database/queries/artists/ArtistGetQueryHandler';
-import { ArtistListQuery } from '../database/queries/artists/ArtistListQueryHandler';
-import { ArtistObject } from '../dto/ArtistObject';
-import { RevisionObject } from '../dto/RevisionObject';
-import { SearchResultObject } from '../dto/SearchResultObject';
-import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { JoiValidationPipe } from '../framework/pipes/JoiValidationPipe';
-import { EntryDeleteParams } from '../models/EntryDeleteParams';
-import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
-import { ArtistGetParams } from '../models/artists/ArtistGetParams';
-import { ArtistListParams } from '../models/artists/ArtistListParams';
-import { ArtistUpdateParams } from '../models/artists/ArtistUpdateParams';
-import { PermissionContext } from '../services/PermissionContext';
+import { ArtistDeleteCommand } from '../../database/commands/EntryDeleteCommandHandler';
+import { ArtistUpdateCommand } from '../../database/commands/artists/ArtistUpdateCommandHandler';
+import { ArtistListRevisionsQuery } from '../../database/queries/EntryListRevisionsQueryHandler';
+import { ArtistGetQuery } from '../../database/queries/artists/ArtistGetQueryHandler';
+import { ArtistListQuery } from '../../database/queries/artists/ArtistListQueryHandler';
+import { ArtistObject } from '../../dto/ArtistObject';
+import { RevisionObject } from '../../dto/RevisionObject';
+import { SearchResultObject } from '../../dto/SearchResultObject';
+import { GetPermissionContext } from '../../framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '../../framework/pipes/JoiValidationPipe';
+import { EntryDeleteParams } from '../../models/EntryDeleteParams';
+import { EntryListRevisionsParams } from '../../models/EntryListRevisionsParams';
+import { ArtistGetParams } from '../../models/artists/ArtistGetParams';
+import { ArtistListParams } from '../../models/artists/ArtistListParams';
+import { ArtistUpdateParams } from '../../models/artists/ArtistUpdateParams';
+import { PermissionContext } from '../../services/PermissionContext';
 
-@Controller('artists')
-export class ArtistController {
+@Controller('api/artists')
+export class ArtistApiController {
 	constructor(
 		private readonly queryBus: QueryBus,
 		private readonly commandBus: CommandBus,

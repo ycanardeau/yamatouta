@@ -2,10 +2,10 @@ import { Controller, Get, Res } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Response } from 'express';
 
-import { SitemapGenerateQuery } from '../database/queries/sitemap/SitemapGenerateQueryHandler';
+import { SitemapGenerateQuery } from '../../database/queries/sitemap/SitemapGenerateQueryHandler';
 
-@Controller('sitemap')
-export class SitemapController {
+@Controller('api/sitemap')
+export class SitemapApiController {
 	constructor(private readonly queryBus: QueryBus) {}
 
 	@Get('generate')

@@ -1,25 +1,25 @@
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { WorkDeleteCommand } from '../database/commands/EntryDeleteCommandHandler';
-import { WorkUpdateCommand } from '../database/commands/works/WorkUpdateCommandHandler';
-import { WorkListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
-import { WorkGetQuery } from '../database/queries/works/WorkGetQueryHandler';
-import { WorkListQuery } from '../database/queries/works/WorkListQueryHandler';
-import { RevisionObject } from '../dto/RevisionObject';
-import { SearchResultObject } from '../dto/SearchResultObject';
-import { WorkObject } from '../dto/WorkObject';
-import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { JoiValidationPipe } from '../framework/pipes/JoiValidationPipe';
-import { EntryDeleteParams } from '../models/EntryDeleteParams';
-import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
-import { WorkGetParams } from '../models/works/WorkGetParams';
-import { WorkListParams } from '../models/works/WorkListParams';
-import { WorkUpdateParams } from '../models/works/WorkUpdateParams';
-import { PermissionContext } from '../services/PermissionContext';
+import { WorkDeleteCommand } from '../../database/commands/EntryDeleteCommandHandler';
+import { WorkUpdateCommand } from '../../database/commands/works/WorkUpdateCommandHandler';
+import { WorkListRevisionsQuery } from '../../database/queries/EntryListRevisionsQueryHandler';
+import { WorkGetQuery } from '../../database/queries/works/WorkGetQueryHandler';
+import { WorkListQuery } from '../../database/queries/works/WorkListQueryHandler';
+import { RevisionObject } from '../../dto/RevisionObject';
+import { SearchResultObject } from '../../dto/SearchResultObject';
+import { WorkObject } from '../../dto/WorkObject';
+import { GetPermissionContext } from '../../framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '../../framework/pipes/JoiValidationPipe';
+import { EntryDeleteParams } from '../../models/EntryDeleteParams';
+import { EntryListRevisionsParams } from '../../models/EntryListRevisionsParams';
+import { WorkGetParams } from '../../models/works/WorkGetParams';
+import { WorkListParams } from '../../models/works/WorkListParams';
+import { WorkUpdateParams } from '../../models/works/WorkUpdateParams';
+import { PermissionContext } from '../../services/PermissionContext';
 
-@Controller('works')
-export class WorkController {
+@Controller('api/works')
+export class WorkApiController {
 	constructor(
 		private readonly queryBus: QueryBus,
 		private readonly commandBus: CommandBus,

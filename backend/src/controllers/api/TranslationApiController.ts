@@ -1,25 +1,25 @@
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { TranslationDeleteCommand } from '../database/commands/EntryDeleteCommandHandler';
-import { TranslationUpdateCommand } from '../database/commands/translations/TranslationUpdateCommandHandler';
-import { TranslationListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
-import { TranslationGetQuery } from '../database/queries/translations/TranslationGetQueryHandler';
-import { TranslationListQuery } from '../database/queries/translations/TranslationListQueryHandler';
-import { RevisionObject } from '../dto/RevisionObject';
-import { SearchResultObject } from '../dto/SearchResultObject';
-import { TranslationObject } from '../dto/TranslationObject';
-import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { JoiValidationPipe } from '../framework/pipes/JoiValidationPipe';
-import { EntryDeleteParams } from '../models/EntryDeleteParams';
-import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
-import { TranslationGetParams } from '../models/translations/TranslationGetParams';
-import { TranslationListParams } from '../models/translations/TranslationListParams';
-import { TranslationUpdateParams } from '../models/translations/TranslationUpdateParams';
-import { PermissionContext } from '../services/PermissionContext';
+import { TranslationDeleteCommand } from '../../database/commands/EntryDeleteCommandHandler';
+import { TranslationUpdateCommand } from '../../database/commands/translations/TranslationUpdateCommandHandler';
+import { TranslationListRevisionsQuery } from '../../database/queries/EntryListRevisionsQueryHandler';
+import { TranslationGetQuery } from '../../database/queries/translations/TranslationGetQueryHandler';
+import { TranslationListQuery } from '../../database/queries/translations/TranslationListQueryHandler';
+import { RevisionObject } from '../../dto/RevisionObject';
+import { SearchResultObject } from '../../dto/SearchResultObject';
+import { TranslationObject } from '../../dto/TranslationObject';
+import { GetPermissionContext } from '../../framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '../../framework/pipes/JoiValidationPipe';
+import { EntryDeleteParams } from '../../models/EntryDeleteParams';
+import { EntryListRevisionsParams } from '../../models/EntryListRevisionsParams';
+import { TranslationGetParams } from '../../models/translations/TranslationGetParams';
+import { TranslationListParams } from '../../models/translations/TranslationListParams';
+import { TranslationUpdateParams } from '../../models/translations/TranslationUpdateParams';
+import { PermissionContext } from '../../services/PermissionContext';
 
-@Controller('translations')
-export class TranslationController {
+@Controller('api/translations')
+export class TranslationApiController {
 	constructor(
 		private readonly queryBus: QueryBus,
 		private readonly commandBus: CommandBus,

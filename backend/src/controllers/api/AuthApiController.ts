@@ -9,12 +9,12 @@ import {
 import { CommandBus } from '@nestjs/cqrs';
 import { Request } from 'express';
 
-import { AuthenticatedUserObject } from '../dto/AuthenticatedUserObject';
-import { LocalAuthGuard } from '../framework/guards/LocalAuthGuard';
-import { AuthService } from '../services/auth/AuthService';
+import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
+import { LocalAuthGuard } from '../../framework/guards/LocalAuthGuard';
+import { AuthService } from '../../services/auth/AuthService';
 
-@Controller('auth')
-export class AuthController {
+@Controller('api/auth')
+export class AuthApiController {
 	constructor(
 		private readonly commandBus: CommandBus,
 		private readonly authService: AuthService,
