@@ -11,6 +11,28 @@ import { Snapshot } from '../models/snapshots/Snapshot';
 
 @Injectable()
 export class RevisionService {
+	private async getLatestRevision(
+		entry: Entry,
+	): Promise<Revision<Entry, Snapshot> | undefined> {
+		// FIXME: For some reason, this doesn't work in unit tests.
+		// const revisions = await entry.revisions.matching({
+		// 	where: { deleted: false },
+		// 	orderBy: { version: QueryOrder.desc },
+		// });
+		//
+		// return revisions[0] /* NOTE: Do not use .at(0) for now. */;
+
+		const revisions = (await entry.revisions.loadItems()) as Revision<
+			Entry,
+			Snapshot
+		>[];
+
+		return _.chain(revisions)
+			.filter((revision) => !revision.deleted)
+			.orderBy((revision) => revision.version, 'desc')
+			.value()[0] /* NOTE: Do not use .at(0) for now. */;
+	}
+
 	async create(
 		em: EntityManager,
 		entry: Entry,
@@ -27,17 +49,7 @@ export class RevisionService {
 		if (!isNew) {
 			// Create missing revisions.
 
-			// OPTIMIZE
-			const latestRevision = _.chain(
-				(await entry.revisions.loadItems()) as Revision<
-					Entry,
-					Snapshot
-				>[],
-			)
-				.filter((revision) => !revision.deleted)
-				.orderBy((revision) => revision.version, 'desc')
-				.value()
-				.at(0);
+			const latestRevision = await this.getLatestRevision(entry);
 
 			if (!latestRevision) {
 				// The initial revision is missing (e.g. imported from a file).
