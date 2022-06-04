@@ -585,6 +585,15 @@
           "nullable": false,
           "mappedType": "string"
         },
+        "sort_name": {
+          "name": "sort_name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
         "work_type": {
           "name": "work_type",
           "type": "enum('Unspecified', 'Book', 'Song', 'Other')",

@@ -60,6 +60,9 @@ export class Work
 	@Property()
 	name!: string;
 
+	@Property()
+	sortName = '';
+
 	@Enum()
 	workType!: WorkType;
 

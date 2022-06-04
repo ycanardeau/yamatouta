@@ -9,6 +9,7 @@ export type IWorkSnapshot = Omit<WorkSnapshot, 'contentEquals'>;
 export class WorkSnapshot implements IContentEquatable<IWorkSnapshot> {
 	private constructor(
 		readonly name: string,
+		readonly sortName: string,
 		readonly workType: WorkType,
 		readonly webLinks: WebLinkSnapshot[],
 		readonly artistLinks: ArtistLinkSnapshot[],
@@ -25,6 +26,7 @@ export class WorkSnapshot implements IContentEquatable<IWorkSnapshot> {
 
 		return new WorkSnapshot(
 			work.name,
+			work.sortName,
 			work.workType,
 			webLinks,
 			artistLinks,
