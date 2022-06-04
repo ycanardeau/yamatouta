@@ -2,9 +2,12 @@ import {
 	Collection,
 	Entity,
 	Enum,
+	IdentifiedReference,
+	ManyToOne,
 	OneToMany,
 	PrimaryKey,
 	Property,
+	Reference,
 } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
@@ -80,6 +83,14 @@ export class Work
 		(translationLink) => translationLink.relatedWork,
 	)
 	translationLinks = new Collection<TranslationWorkLink>(this);
+
+	// TODO: Make this non-nullable.
+	@ManyToOne()
+	actor?: IdentifiedReference<User>;
+
+	constructor(actor: User) {
+		this.actor = Reference.create(actor);
+	}
 
 	get entryType(): EntryType.Work {
 		return EntryType.Work;

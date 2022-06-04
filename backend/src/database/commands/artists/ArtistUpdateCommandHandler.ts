@@ -52,7 +52,7 @@ export class ArtistUpdateCommandHandler
 			const user = await permissionContext.getCurrentUser(em);
 
 			const artist = isNew
-				? new Artist()
+				? new Artist(user)
 				: await this.artistRepo.findOneOrFail(
 						{
 							id: params.id,

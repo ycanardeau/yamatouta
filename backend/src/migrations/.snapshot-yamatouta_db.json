@@ -96,104 +96,6 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "work_type": {
-          "name": "work_type",
-          "type": "enum('Unspecified', 'Book', 'Song', 'Other')",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "enumItems": [
-            "Unspecified",
-            "Book",
-            "Song",
-            "Other"
-          ],
-          "mappedType": "enum"
-        },
-        "version": {
-          "name": "version",
-          "type": "int",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "integer"
-        }
-      },
-      "name": "works",
-      "indexes": [
-        {
-          "keyName": "PRIMARY",
-          "columnNames": [
-            "id"
-          ],
-          "composite": false,
-          "primary": true,
-          "unique": true
-        }
-      ],
-      "checks": [],
-      "foreignKeys": {}
-    },
-    {
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "datetime",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "datetime",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "length": 0,
-          "mappedType": "datetime"
-        },
-        "deleted": {
-          "name": "deleted",
-          "type": "tinyint(1)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "boolean"
-        },
-        "hidden": {
-          "name": "hidden",
-          "type": "tinyint(1)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "boolean"
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
         "email": {
           "name": "email",
           "type": "varchar(255)",
@@ -621,6 +523,136 @@
             "id"
           ],
           "referencedTableName": "users",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "deleted": {
+          "name": "deleted",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
+        "work_type": {
+          "name": "work_type",
+          "type": "enum('Unspecified', 'Book', 'Song', 'Other')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Unspecified",
+            "Book",
+            "Song",
+            "Other"
+          ],
+          "mappedType": "enum"
+        },
+        "version": {
+          "name": "version",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        }
+      },
+      "name": "works",
+      "indexes": [
+        {
+          "columnNames": [
+            "actor_id"
+          ],
+          "composite": false,
+          "keyName": "works_actor_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "works_actor_id_foreign": {
+          "constraintName": "works_actor_id_foreign",
+          "columnNames": [
+            "actor_id"
+          ],
+          "localTableName": "works",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }
@@ -1773,8 +1805,8 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "user_id": {
-          "name": "user_id",
+        "actor_id": {
+          "name": "actor_id",
           "type": "int",
           "unsigned": true,
           "autoincrement": false,
@@ -1796,10 +1828,10 @@
       "indexes": [
         {
           "columnNames": [
-            "user_id"
+            "actor_id"
           ],
           "composite": false,
-          "keyName": "translations_user_id_index",
+          "keyName": "translations_actor_id_index",
           "primary": false,
           "unique": false
         },
@@ -1815,10 +1847,10 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "translations_user_id_foreign": {
-          "constraintName": "translations_user_id_foreign",
+        "translations_actor_id_foreign": {
+          "constraintName": "translations_actor_id_foreign",
           "columnNames": [
-            "user_id"
+            "actor_id"
           ],
           "localTableName": "translations",
           "referencedColumnNames": [
@@ -2126,10 +2158,28 @@
           "primary": false,
           "nullable": false,
           "mappedType": "integer"
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
         }
       },
       "name": "artists",
       "indexes": [
+        {
+          "columnNames": [
+            "actor_id"
+          ],
+          "composite": false,
+          "keyName": "artists_actor_id_index",
+          "primary": false,
+          "unique": false
+        },
         {
           "keyName": "PRIMARY",
           "columnNames": [
@@ -2141,7 +2191,21 @@
         }
       ],
       "checks": [],
-      "foreignKeys": {}
+      "foreignKeys": {
+        "artists_actor_id_foreign": {
+          "constraintName": "artists_actor_id_foreign",
+          "columnNames": [
+            "actor_id"
+          ],
+          "localTableName": "artists",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
     },
     {
       "columns": {
@@ -2551,6 +2615,15 @@
           "primary": false,
           "nullable": false,
           "mappedType": "string"
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
         }
       },
       "name": "quotes",
@@ -2561,6 +2634,15 @@
           ],
           "composite": false,
           "keyName": "quotes_artist_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "actor_id"
+          ],
+          "composite": false,
+          "keyName": "quotes_actor_id_index",
           "primary": false,
           "unique": false
         },
@@ -2586,6 +2668,19 @@
             "id"
           ],
           "referencedTableName": "artists",
+          "updateRule": "cascade"
+        },
+        "quotes_actor_id_foreign": {
+          "constraintName": "quotes_actor_id_foreign",
+          "columnNames": [
+            "actor_id"
+          ],
+          "localTableName": "quotes",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "deleteRule": "set null",
           "updateRule": "cascade"
         }
       }

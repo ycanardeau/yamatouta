@@ -79,7 +79,7 @@ export class Translation
 	inishienomanabi_tags: string[] = [];
 
 	@ManyToOne()
-	user!: IdentifiedReference<User>;
+	actor!: IdentifiedReference<User>;
 
 	@OneToOne(
 		() => TranslationSearchIndex,
@@ -107,8 +107,8 @@ export class Translation
 	@OneToMany(() => TranslationWorkLink, (workLink) => workLink.translation)
 	workLinks = new Collection<TranslationWorkLink>(this);
 
-	constructor(user: User) {
-		this.user = Reference.create(user);
+	constructor(actor: User) {
+		this.actor = Reference.create(actor);
 	}
 
 	get entryType(): EntryType.Translation {

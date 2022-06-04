@@ -63,7 +63,7 @@ export class QuoteUpdateCommandHandler
 			});
 
 			const quote = isNew
-				? new Quote()
+				? new Quote(user)
 				: await this.quoteRepo.findOneOrFail(
 						{
 							id: params.id,

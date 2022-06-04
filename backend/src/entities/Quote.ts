@@ -8,6 +8,7 @@ import {
 	OneToMany,
 	PrimaryKey,
 	Property,
+	Reference,
 } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
@@ -109,6 +110,14 @@ export class Quote
 
 	@Property()
 	customArtistName = '';
+
+	// TODO: Make this non-nullable.
+	@ManyToOne()
+	actor?: IdentifiedReference<User>;
+
+	constructor(actor: User) {
+		this.actor = Reference.create(actor);
+	}
 
 	get entryType(): EntryType.Quote {
 		return EntryType.Quote;

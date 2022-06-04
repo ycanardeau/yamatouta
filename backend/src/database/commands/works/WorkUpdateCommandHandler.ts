@@ -54,7 +54,7 @@ export class WorkUpdateCommandHandler
 			const user = await permissionContext.getCurrentUser(em);
 
 			const work = isNew
-				? new Work()
+				? new Work(user)
 				: await this.workRepo.findOneOrFail(
 						{
 							id: params.id,
