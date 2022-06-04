@@ -164,6 +164,7 @@ describe('WorkUpdateCommandHandler', () => {
 				},
 				snapshot: {
 					name: defaultParams.name,
+					sortName: '',
 					workType: work.workType,
 					webLinks: [],
 					artistLinks: [],
@@ -177,6 +178,7 @@ describe('WorkUpdateCommandHandler', () => {
 				params: defaultParams,
 				snapshot: {
 					name: defaultParams.name,
+					sortName: '',
 					workType: defaultParams.workType,
 					webLinks: [],
 					artistLinks: [],

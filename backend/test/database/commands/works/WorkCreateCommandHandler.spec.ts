@@ -144,6 +144,7 @@ describe('WorkCreateCommandHandler', () => {
 				params: defaultParams,
 				snapshot: {
 					name: defaultParams.name,
+					sortName: '',
 					workType: defaultParams.workType,
 					webLinks: [],
 					artistLinks: [],
