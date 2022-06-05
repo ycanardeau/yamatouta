@@ -64,7 +64,10 @@
 		"month": "つき",
 		"day": "ひ",
 		"selectMonth": "つきをえらぶ...",
-		"unknownDate": "あるひ"
+		"unknownDate": "あるひ",
+		"quote": "やまとうた",
+		"word": "やまとことば",
+		"user": "つかいて"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",

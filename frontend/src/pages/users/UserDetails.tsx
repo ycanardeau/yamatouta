@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { UserPage } from '../../components/users/UserPage';
 import { useUserDetails } from '../../components/users/useUserDetails';
 import { IUserObject } from '../../dto/IUserObject';
@@ -12,9 +14,22 @@ interface LayoutProps {
 }
 
 const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
+	const { t, ready } = useTranslation();
+
 	const user = store.user;
 
-	return <UserPage user={user}></UserPage>;
+	const userName = user.name;
+
+	useYamatoutaTitle(`${t('shared.user')} "${userName}"`, ready);
+
+	return (
+		<UserPage
+			user={user}
+			pageHeaderProps={{
+				pageTitle: userName,
+			}}
+		></UserPage>
+	);
 });
 
 const UserDetails = (): React.ReactElement | null => {

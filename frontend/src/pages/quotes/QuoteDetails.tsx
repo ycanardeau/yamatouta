@@ -24,7 +24,7 @@ interface LayoutProps {
 }
 
 const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
-	const { t } = useTranslation();
+	const { t, ready } = useTranslation();
 
 	const quote = store.quote;
 
@@ -35,15 +35,18 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const title = quote.text.replaceAll('\n', '');
+	const quoteText = quote.text.replaceAll('\n', '');
 
-	useYamatoutaTitle(title, true);
+	useYamatoutaTitle(
+		`${t('shared.quote')} "${quoteText}" by ${quote.artist.name}`,
+		ready,
+	);
 
 	return (
 		<QuotePage
 			quote={quote}
 			pageHeaderProps={{
-				pageTitle: title,
+				pageTitle: quoteText,
 				rightSideItems: [
 					<EuiButton
 						size="s"

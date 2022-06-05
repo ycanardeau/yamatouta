@@ -1,6 +1,7 @@
 import { MikroORM, RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/mariadb';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import connectSessionKnex from 'connect-session-knex';
 import cookieParser from 'cookie-parser';
 import csurf from 'csurf';
@@ -8,6 +9,7 @@ import { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
 import passport from 'passport';
+import { join } from 'path';
 
 import { AppModule } from './AppModule';
 import config from './config';
@@ -16,9 +18,13 @@ import './i18n';
 const KnexSessionStore = connectSessionKnex(session);
 
 async function bootstrap(): Promise<void> {
-	const app = await NestFactory.create(AppModule);
+	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
 	app.use(helmet());
+
+	app.useStaticAssets(config.clientBuildPath);
+	app.setBaseViewsDir(join(__dirname, '..', 'views'));
+	app.setViewEngine('hbs');
 
 	app.enableCors({
 		origin: config.cors.allowedOrigins,
