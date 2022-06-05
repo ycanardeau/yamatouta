@@ -9,7 +9,7 @@ import session from 'express-session';
 import helmet from 'helmet';
 import passport from 'passport';
 
-import { AppModule } from './app.module';
+import { AppModule } from './AppModule';
 import config from './config';
 
 const KnexSessionStore = connectSessionKnex(session);
