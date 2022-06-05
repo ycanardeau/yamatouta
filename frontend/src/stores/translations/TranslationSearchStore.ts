@@ -7,73 +7,13 @@ import {
 	runInAction,
 } from 'mobx';
 
-import { ajv } from '../../ajv';
 import { translationApi } from '../../api/translationApi';
 import { ITranslationObject } from '../../dto/ITranslationObject';
+import { ITranslationSearchRouteParams } from '../../models/translations/ITranslationSearchRouteParams';
 import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
 import { WordCategory } from '../../models/translations/WordCategory';
+import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
-
-interface ITranslationSearchRouteParams {
-	page?: number;
-	pageSize?: number;
-	sort?: TranslationSortRule;
-	query?: string;
-	category?: WordCategory;
-}
-
-const translationSearchRouteParamsSchema = {
-	$schema: 'http://json-schema.org/draft-07/schema#',
-	properties: {
-		category: {
-			enum: [
-				'AdjectivalNoun',
-				'Adjective',
-				'Adverb',
-				'Attributive',
-				'AuxiliaryVerb',
-				'Conjunction',
-				'Interjection',
-				'Noun',
-				'Other',
-				'PostpositionalParticle',
-				'Prefix',
-				'Pronoun',
-				'Suffix',
-				'Unspecified',
-				'Verb',
-			],
-			type: 'string',
-		},
-		page: {
-			type: 'number',
-		},
-		pageSize: {
-			type: 'number',
-		},
-		query: {
-			type: 'string',
-		},
-		sort: {
-			enum: [
-				'CreatedAsc',
-				'CreatedDesc',
-				'HeadwordAsc',
-				'HeadwordDesc',
-				'UpdatedAsc',
-				'UpdatedDesc',
-				'YamatokotobaAsc',
-				'YamatokotobaDesc',
-			],
-			type: 'string',
-		},
-	},
-	type: 'object',
-};
-
-const validate = ajv.compile<ITranslationSearchRouteParams>(
-	translationSearchRouteParamsSchema,
-);
 
 export class TranslationSearchStore
 	implements StoreWithPagination<ITranslationSearchRouteParams>
@@ -161,7 +101,7 @@ export class TranslationSearchStore
 	validateRouteParams = (
 		data: any,
 	): data is ITranslationSearchRouteParams => {
-		return validate(data);
+		return validators.translationSearchRouteParams(data);
 	};
 
 	onClearResults = (): void => {

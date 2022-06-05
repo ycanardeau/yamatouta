@@ -1,32 +1,11 @@
 import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
-import { ajv } from '../../ajv';
 import { userApi } from '../../api/userApi';
 import { IUserObject } from '../../dto/IUserObject';
+import { IUserSearchRouteParams } from '../../models/users/IUserSearchRouteParams';
+import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
-
-interface IUserSearchRouteParams {
-	page?: number;
-	pageSize?: number;
-}
-
-const userSearchRouteParamsSchema = {
-	$schema: 'http://json-schema.org/draft-07/schema#',
-	properties: {
-		page: {
-			type: 'number',
-		},
-		pageSize: {
-			type: 'number',
-		},
-	},
-	type: 'object',
-};
-
-const validate = ajv.compile<IUserSearchRouteParams>(
-	userSearchRouteParamsSchema,
-);
 
 export class UserSearchStore
 	implements StoreWithPagination<IUserSearchRouteParams>
@@ -81,7 +60,7 @@ export class UserSearchStore
 	}
 
 	validateRouteParams = (data: any): data is IUserSearchRouteParams => {
-		return validate(data);
+		return validators.userSearchRouteParams(data);
 	};
 
 	onClearResults = (): void => {

@@ -18,5 +18,10 @@
 		"experimentalDecorators": true,
 		"useDefineForClassFields": true
 	},
-	"include": ["src"]
+	"include": ["src", "scripts"],
+	"ts-node": {
+		"compilerOptions": {
+			"module": "commonjs"
+		}
+	}
 }
