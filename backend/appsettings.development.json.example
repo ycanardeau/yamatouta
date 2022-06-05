@@ -1,6 +1,7 @@
 {
 	"port": 5000,
 	"disableAccountCreation": false,
+	"clientBuildPath": "../frontend/build",
 	"cors": {
 		"allowedOrigins": ["http://localhost:3000"]
 	},

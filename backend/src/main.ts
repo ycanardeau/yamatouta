@@ -11,6 +11,7 @@ import passport from 'passport';
 
 import { AppModule } from './AppModule';
 import config from './config';
+import './i18n';
 
 const KnexSessionStore = connectSessionKnex(session);
 
