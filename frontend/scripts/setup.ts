@@ -16,6 +16,7 @@ const schema = createGenerator(config).createSchema('*');
 const ajv = new Ajv({
 	schemas: [schema],
 	code: { source: true, esm: true },
+	coerceTypes: true,
 });
 
 const moduleCode = standaloneCode(ajv, {
