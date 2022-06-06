@@ -1,93 +1,43 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { Controller, Get, Param, ParseIntPipe, Res } from '@nestjs/common';
+import { QueryBus } from '@nestjs/cqrs';
+import { Response } from 'express';
+import { t } from 'i18next';
 
-import { WorkDeleteCommand } from '../database/commands/EntryDeleteCommandHandler';
-import { WorkUpdateCommand } from '../database/commands/works/WorkUpdateCommandHandler';
-import { WorkListRevisionsQuery } from '../database/queries/EntryListRevisionsQueryHandler';
 import { WorkGetQuery } from '../database/queries/works/WorkGetQueryHandler';
-import { WorkListQuery } from '../database/queries/works/WorkListQueryHandler';
-import { RevisionObject } from '../dto/RevisionObject';
-import { SearchResultObject } from '../dto/SearchResultObject';
 import { WorkObject } from '../dto/WorkObject';
 import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { JoiValidationPipe } from '../framework/pipes/JoiValidationPipe';
-import { EntryDeleteParams } from '../models/EntryDeleteParams';
-import { EntryListRevisionsParams } from '../models/EntryListRevisionsParams';
 import { WorkGetParams } from '../models/works/WorkGetParams';
-import { WorkListParams } from '../models/works/WorkListParams';
-import { WorkUpdateParams } from '../models/works/WorkUpdateParams';
 import { PermissionContext } from '../services/PermissionContext';
+import { renderReact } from './renderReact';
 
 @Controller('works')
 export class WorkController {
-	constructor(
-		private readonly queryBus: QueryBus,
-		private readonly commandBus: CommandBus,
-	) {}
+	constructor(private readonly queryBus: QueryBus) {}
 
-	@Post('create')
-	create(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Body(new JoiValidationPipe(WorkUpdateParams.schema))
-		params: WorkUpdateParams,
-	): Promise<WorkObject> {
-		return this.commandBus.execute(
-			new WorkUpdateCommand(permissionContext, params),
-		);
+	@Get('')
+	index(@Res() response: Response): void {
+		return renderReact(response, {
+			title: t('shared.works'),
+		});
 	}
 
-	@Delete('delete')
-	delete(
+	@Get('create')
+	create(@Res() response: Response): void {
+		return renderReact(response);
+	}
+
+	@Get(':id*')
+	async details(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Body(new JoiValidationPipe(EntryDeleteParams.schema))
-		params: EntryDeleteParams,
+		@Param('id', ParseIntPipe) id: number,
+		@Res() response: Response,
 	): Promise<void> {
-		return this.commandBus.execute(
-			new WorkDeleteCommand(permissionContext, params),
+		const work = await this.queryBus.execute<WorkGetQuery, WorkObject>(
+			new WorkGetQuery(permissionContext, new WorkGetParams(id)),
 		);
-	}
 
-	@Get('get')
-	get(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Query(new JoiValidationPipe(WorkGetParams.schema))
-		params: WorkGetParams,
-	): Promise<WorkObject> {
-		return this.queryBus.execute(
-			new WorkGetQuery(permissionContext, params),
-		);
-	}
-
-	@Get('list')
-	list(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Query(new JoiValidationPipe(WorkListParams.schema))
-		params: WorkListParams,
-	): Promise<SearchResultObject<WorkObject>> {
-		return this.queryBus.execute(
-			new WorkListQuery(permissionContext, params),
-		);
-	}
-
-	@Get('list-revisions')
-	listRevisions(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Query(new JoiValidationPipe(EntryListRevisionsParams.schema))
-		params: EntryListRevisionsParams,
-	): Promise<SearchResultObject<RevisionObject>> {
-		return this.queryBus.execute(
-			new WorkListRevisionsQuery(permissionContext, params),
-		);
-	}
-
-	@Post('update')
-	update(
-		@GetPermissionContext() permissionContext: PermissionContext,
-		@Body(new JoiValidationPipe(WorkUpdateParams.schema))
-		params: WorkUpdateParams,
-	): Promise<WorkObject> {
-		return this.commandBus.execute(
-			new WorkUpdateCommand(permissionContext, params),
-		);
+		return renderReact(response, {
+			title: `${t('shared.work')} "${work.name}"`,
+		});
 	}
 }

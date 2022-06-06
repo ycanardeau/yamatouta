@@ -1,32 +1,11 @@
 import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
-import { ajv } from '../../ajv';
 import { quoteApi } from '../../api/quoteApi';
 import { IQuoteObject } from '../../dto/IQuoteObject';
+import { IQuoteSearchRouteParams } from '../../models/quotes/IQuoteSearchRouteParams';
+import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
-
-interface IQuoteSearchRouteParams {
-	page?: number;
-	pageSize?: number;
-}
-
-const quoteSearchRouteParamsSchema = {
-	$schema: 'http://json-schema.org/draft-07/schema#',
-	properties: {
-		page: {
-			type: 'number',
-		},
-		pageSize: {
-			type: 'number',
-		},
-	},
-	type: 'object',
-};
-
-const validate = ajv.compile<IQuoteSearchRouteParams>(
-	quoteSearchRouteParamsSchema,
-);
 
 export class QuoteSearchStore
 	implements StoreWithPagination<IQuoteSearchRouteParams>
@@ -85,7 +64,7 @@ export class QuoteSearchStore
 	}
 
 	validateRouteParams = (data: any): data is IQuoteSearchRouteParams => {
-		return validate(data);
+		return validators.quoteSearchRouteParams(data);
 	};
 
 	onClearResults = (): void => {

@@ -26,7 +26,7 @@ interface LayoutProps {
 }
 
 const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
-	const { t } = useTranslation();
+	const { t, ready } = useTranslation();
 
 	const artist = store.artist;
 
@@ -37,15 +37,15 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const title = artist.name;
+	const artistName = artist.name;
 
-	useYamatoutaTitle(title, true);
+	useYamatoutaTitle(`${t('shared.artist')} "${artistName}"`, ready);
 
 	return (
 		<ArtistPage
 			artist={artist}
 			pageHeaderProps={{
-				pageTitle: title,
+				pageTitle: artistName,
 				rightSideItems: [
 					<EuiButton
 						size="s"

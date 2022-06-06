@@ -47,9 +47,9 @@
 		"web-vitals": "^2.1.2"
 	},
 	"scripts": {
-		"start": "craco start",
-		"build": "craco build",
-		"test": "craco test",
+		"start": "ts-node ./scripts/setup.ts && craco start",
+		"build": "ts-node ./scripts/setup.ts && craco build",
+		"test": "ts-node ./scripts/setup.ts && craco test",
 		"eject": "react-scripts eject"
 	},
 	"browserslist": {
@@ -73,6 +73,7 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"prettier": "^2.2.1",
 		"sass": "^1.49.9",
+		"ts-json-schema-generator": "^1.0.0",
 		"typescript-json-schema": "^0.53.0",
 		"webpack-retry-chunk-load-plugin": "^3.0.0"
 	}

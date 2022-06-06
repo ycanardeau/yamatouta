@@ -26,7 +26,7 @@ interface LayoutProps {
 }
 
 const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
-	const { t } = useTranslation();
+	const { t, ready } = useTranslation();
 
 	const work = store.work;
 
@@ -37,15 +37,17 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const title = work.name;
+	const workName = work.name;
 
-	useYamatoutaTitle(title, true);
+	const title = `${t('shared.work')} "${workName}"`;
+
+	useYamatoutaTitle(title, ready);
 
 	return (
 		<WorkPage
 			work={work}
 			pageHeaderProps={{
-				pageTitle: title,
+				pageTitle: workName,
 				rightSideItems: [
 					<EuiButton
 						size="s"

@@ -8,7 +8,6 @@ import {
 } from '@elastic/eui';
 
 import { IUserObject } from '../../dto/IUserObject';
-import { useYamatoutaTitle } from '../useYamatoutaTitle';
 import { UserBreadcrumbs } from './UserBreadcrumbs';
 
 interface UserPageProps {
@@ -22,15 +21,11 @@ export const UserPage = ({
 	pageHeaderProps,
 	children,
 }: UserPageProps): React.ReactElement => {
-	const title = user.name;
-
-	useYamatoutaTitle(title, true);
-
 	return (
 		<>
 			<UserBreadcrumbs user={user} />
 			<EuiSpacer size="xs" />
-			<EuiPageHeader pageTitle={title} {...pageHeaderProps} />
+			<EuiPageHeader {...pageHeaderProps} />
 
 			<EuiPageContent
 				hasBorder={false}

@@ -1,32 +1,11 @@
 import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
-import { ajv } from '../../ajv';
 import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
+import { IWorkSearchRouteParams } from '../../models/works/IWorkSearchRouteParams';
+import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
-
-interface IWorkSearchRouteParams {
-	page?: number;
-	pageSize?: number;
-}
-
-const workSearchRouteParamsSchema = {
-	$schema: 'http://json-schema.org/draft-07/schema#',
-	properties: {
-		page: {
-			type: 'number',
-		},
-		pageSize: {
-			type: 'number',
-		},
-	},
-	type: 'object',
-};
-
-const validate = ajv.compile<IWorkSearchRouteParams>(
-	workSearchRouteParamsSchema,
-);
 
 export class WorkSearchStore
 	implements StoreWithPagination<IWorkSearchRouteParams>
@@ -81,7 +60,7 @@ export class WorkSearchStore
 	}
 
 	validateRouteParams = (data: any): data is IWorkSearchRouteParams => {
-		return validate(data);
+		return validators.workSearchRouteParams(data);
 	};
 
 	onClearResults = (): void => {

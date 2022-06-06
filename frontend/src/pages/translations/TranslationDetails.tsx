@@ -24,7 +24,7 @@ interface LayoutProps {
 }
 
 const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
-	const { t } = useTranslation();
+	const { t, ready } = useTranslation();
 
 	const translation = store.translation;
 
@@ -39,15 +39,17 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const title = `${translation.headword} ↔ ${translation.yamatokotoba}`;
+	const translationText = `${translation.headword} ↔ ${translation.yamatokotoba}`;
 
-	useYamatoutaTitle(title, true);
+	const title = `${t('shared.word')} "${translationText}"`;
+
+	useYamatoutaTitle(title, ready);
 
 	return (
 		<TranslationPage
 			translation={translation}
 			pageHeaderProps={{
-				pageTitle: title,
+				pageTitle: translationText,
 				rightSideItems: [
 					<EuiButton
 						size="s"

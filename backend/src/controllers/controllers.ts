@@ -1,18 +1,18 @@
 import { AdminController } from './AdminController';
 import { ArtistController } from './ArtistController';
-import { AuthController } from './AuthController';
 import { QuoteController } from './QuoteController';
-import { SitemapController } from './SitemapController';
+import { SettingsController } from './SettingsController';
 import { TranslationController } from './TranslationController';
 import { UserController } from './UserController';
 import { WorkController } from './WorkController';
+import { apiControllers } from './api/apiControllers';
 
 export const controllers = [
+	...apiControllers,
 	AdminController,
-	AuthController,
 	ArtistController,
 	QuoteController,
-	SitemapController,
+	SettingsController,
 	TranslationController,
 	UserController,
 	WorkController,

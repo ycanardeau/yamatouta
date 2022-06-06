@@ -3,8 +3,8 @@ import { Response } from 'express';
 
 import { renderReact } from './renderReact';
 
-@Controller('admin')
-export class AdminController {
+@Controller('settings')
+export class SettingsController {
 	@Get('')
 	index(@Res() response: Response): void {
 		return renderReact(response);

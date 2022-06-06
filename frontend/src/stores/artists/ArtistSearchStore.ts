@@ -1,32 +1,11 @@
 import { StoreWithPagination } from '@vocadb/route-sphere';
 import { computed, makeObservable, observable, runInAction } from 'mobx';
 
-import { ajv } from '../../ajv';
 import { artistApi } from '../../api/artistApi';
 import { IArtistObject } from '../../dto/IArtistObject';
+import { IArtistSearchRouteParams } from '../../models/artists/IArtistSearchRouteParams';
+import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
-
-interface IArtistSearchRouteParams {
-	page?: number;
-	pageSize?: number;
-}
-
-const artistSearchRouteParamsSchema = {
-	$schema: 'http://json-schema.org/draft-07/schema#',
-	properties: {
-		page: {
-			type: 'number',
-		},
-		pageSize: {
-			type: 'number',
-		},
-	},
-	type: 'object',
-};
-
-const validate = ajv.compile<IArtistSearchRouteParams>(
-	artistSearchRouteParamsSchema,
-);
 
 export class ArtistSearchStore
 	implements StoreWithPagination<IArtistSearchRouteParams>
@@ -81,7 +60,7 @@ export class ArtistSearchStore
 	}
 
 	validateRouteParams = (data: any): data is IArtistSearchRouteParams => {
-		return validate(data);
+		return validators.artistSearchRouteParams(data);
 	};
 
 	onClearResults = (): void => {
