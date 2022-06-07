@@ -252,6 +252,58 @@ const TranslationPopover = ({
 	);
 };
 
+interface WordLinkProps {
+	store: TranslationSearchStore;
+	part: string;
+	sort: TranslationSortRule;
+}
+
+const WordLink = observer(
+	({ store, part, sort }: WordLinkProps): React.ReactElement => {
+		return (
+			<EuiLink
+				onClick={(e: React.MouseEvent<HTMLAnchorElement>): void => {
+					e.preventDefault();
+					runInAction(() => {
+						store.query = part;
+						store.sort = sort;
+					});
+				}}
+			>
+				<HighlightedText text={part} searchWords={store.searchWords} />
+			</EuiLink>
+		);
+	},
+);
+
+interface WordLinkListProps {
+	store: TranslationSearchStore;
+	parts: string[];
+	sort?: TranslationSortRule;
+}
+
+const WordLinkList = observer(
+	({ store, parts, sort }: WordLinkListProps): React.ReactElement => {
+		return (
+			<>
+				{parts.map((part, index) => (
+					<React.Fragment key={index}>
+						{index > 0 && ' '}
+						{sort ? (
+							<WordLink store={store} part={part} sort={sort} />
+						) : (
+							<HighlightedText
+								text={part}
+								searchWords={store.searchWords}
+							/>
+						)}
+					</React.Fragment>
+				))}
+			</>
+		);
+	},
+);
+
 interface TranslationSearchTableRowProps {
 	store: TranslationSearchStore;
 	translation: ITranslationObject;
@@ -264,8 +316,6 @@ const TranslationSearchTableRow = observer(
 	}: TranslationSearchTableRowProps): React.ReactElement => {
 		const { t } = useTranslation();
 
-		const searchWords = store.query.trim().split(/\s+/);
-
 		return (
 			<EuiTableRow hasActions={true}>
 				<EuiTableRowCell
@@ -274,42 +324,18 @@ const TranslationSearchTableRow = observer(
 						width: '100%',
 					}}
 				>
-					{translation.headword.split(/\s/).map((part, index) => (
-						<React.Fragment key={index}>
-							{index > 0 && ' '}
-							<EuiLink
-								onClick={(
-									e: React.MouseEvent<HTMLAnchorElement>,
-								): void => {
-									e.preventDefault();
-									runInAction(() => {
-										store.query = part;
-										store.sort =
-											TranslationSortRule.HeadwordAsc;
-									});
-								}}
-							>
-								<HighlightedText
-									text={part}
-									searchWords={searchWords}
-								/>
-							</EuiLink>
-						</React.Fragment>
-					))}
+					<WordLinkList
+						store={store}
+						parts={translation.headword.split(/\s/)}
+						sort={TranslationSortRule.HeadwordAsc}
+					/>
 					{translation.reading && (
 						<small>
 							【
-							{translation.reading
-								.split(/\s/)
-								.map((part, index) => (
-									<React.Fragment key={index}>
-										{index > 0 && ' '}
-										<HighlightedText
-											text={part}
-											searchWords={searchWords}
-										/>
-									</React.Fragment>
-								))}
+							<WordLinkList
+								store={store}
+								parts={translation.reading.split(/\s/)}
+							/>
 							】
 						</small>
 					)}
@@ -320,28 +346,11 @@ const TranslationSearchTableRow = observer(
 						width: '100%',
 					}}
 				>
-					{translation.yamatokotoba.split(/\s/).map((part, index) => (
-						<React.Fragment key={index}>
-							{index > 0 && ' '}
-							<EuiLink
-								onClick={(
-									e: React.MouseEvent<HTMLAnchorElement>,
-								): void => {
-									e.preventDefault();
-									runInAction(() => {
-										store.query = part;
-										store.sort =
-											TranslationSortRule.YamatokotobaAsc;
-									});
-								}}
-							>
-								<HighlightedText
-									text={part}
-									searchWords={searchWords}
-								/>
-							</EuiLink>
-						</React.Fragment>
-					))}
+					<WordLinkList
+						store={store}
+						parts={translation.yamatokotoba.split(/\s/)}
+						sort={TranslationSortRule.YamatokotobaAsc}
+					/>
 				</EuiTableRowCell>
 				<EuiTableRowCell
 					mobileOptions={{

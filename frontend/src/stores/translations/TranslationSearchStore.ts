@@ -28,6 +28,10 @@ export class TranslationSearchStore
 		makeObservable(this);
 	}
 
+	@computed get searchWords(): string[] {
+		return this.query.trim().split(/\s+/);
+	}
+
 	@action setSort = (value: TranslationSortRule): void => {
 		this.sort = value;
 	};
