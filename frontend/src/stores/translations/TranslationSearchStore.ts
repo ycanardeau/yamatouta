@@ -28,12 +28,40 @@ export class TranslationSearchStore
 		makeObservable(this);
 	}
 
+	@computed get isSortedByHeadword(): boolean {
+		return (
+			this.sort === TranslationSortRule.HeadwordAsc ||
+			this.sort === TranslationSortRule.HeadwordDesc
+		);
+	}
+
+	@computed get isSortedByYamatokotoba(): boolean {
+		return (
+			this.sort === TranslationSortRule.YamatokotobaAsc ||
+			this.sort === TranslationSortRule.YamatokotobaDesc
+		);
+	}
+
 	@computed get searchWords(): string[] {
 		return this.query.trim().split(/\s+/);
 	}
 
 	@action setSort = (value: TranslationSortRule): void => {
 		this.sort = value;
+	};
+
+	@action toggleSortHeadword = (): void => {
+		this.sort =
+			this.sort === TranslationSortRule.HeadwordAsc
+				? TranslationSortRule.HeadwordDesc
+				: TranslationSortRule.HeadwordAsc;
+	};
+
+	@action toggleSortYamatokotoba = (): void => {
+		this.sort =
+			this.sort === TranslationSortRule.YamatokotobaAsc
+				? TranslationSortRule.YamatokotobaDesc
+				: TranslationSortRule.YamatokotobaAsc;
 	};
 
 	@action setQuery = (value: string): void => {

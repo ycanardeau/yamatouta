@@ -54,17 +54,8 @@ const TranslationSearchTableHeader = observer(
 		return (
 			<EuiTableHeader>
 				<EuiTableHeaderCell
-					onSort={(): void =>
-						store.setSort(
-							store.sort === TranslationSortRule.HeadwordAsc
-								? TranslationSortRule.HeadwordDesc
-								: TranslationSortRule.HeadwordAsc,
-						)
-					}
-					isSorted={
-						store.sort === TranslationSortRule.HeadwordAsc ||
-						store.sort === TranslationSortRule.HeadwordDesc
-					}
+					onSort={store.toggleSortHeadword}
+					isSorted={store.isSortedByHeadword}
 					isSortAscending={
 						store.sort === TranslationSortRule.HeadwordAsc
 					}
@@ -72,17 +63,8 @@ const TranslationSearchTableHeader = observer(
 					{t('translations.headword')}
 				</EuiTableHeaderCell>
 				<EuiTableHeaderCell
-					onSort={(): void =>
-						store.setSort(
-							store.sort === TranslationSortRule.YamatokotobaAsc
-								? TranslationSortRule.YamatokotobaDesc
-								: TranslationSortRule.YamatokotobaAsc,
-						)
-					}
-					isSorted={
-						store.sort === TranslationSortRule.YamatokotobaAsc ||
-						store.sort === TranslationSortRule.YamatokotobaDesc
-					}
+					onSort={store.toggleSortYamatokotoba}
+					isSorted={store.isSortedByYamatokotoba}
 					isSortAscending={
 						store.sort === TranslationSortRule.YamatokotobaAsc
 					}
