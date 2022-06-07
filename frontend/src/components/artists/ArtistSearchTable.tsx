@@ -34,6 +34,18 @@ import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import { ArtistDeleteDialog } from './ArtistDeleteDialog';
 
+const ArtistSearchTableHeader = React.memo((): React.ReactElement => {
+	const { t } = useTranslation();
+
+	return (
+		<EuiTableHeader>
+			<EuiTableHeaderCell width={40} />
+			<EuiTableHeaderCell>{t('artists.name')}</EuiTableHeaderCell>
+			<EuiTableHeaderCell width={32} />
+		</EuiTableHeader>
+	);
+});
+
 interface ArtistPopoverProps {
 	store: ArtistSearchStore;
 	artist: IArtistObject;
@@ -146,63 +158,80 @@ const ArtistPopover = ({
 	);
 };
 
+interface ArtistSearchTableRowProps {
+	store: ArtistSearchStore;
+	artist: IArtistObject;
+}
+
+const ArtistSearchTableRow = React.memo(
+	({ store, artist }: ArtistSearchTableRowProps): React.ReactElement => {
+		const { t } = useTranslation();
+
+		return (
+			<EuiTableRow>
+				<EuiTableRowCell>
+					<Avatar
+						size="m"
+						name={artist.name}
+						imageUrl={artist.avatarUrl ?? ''}
+					/>
+				</EuiTableRowCell>
+				<EuiTableRowCell
+					mobileOptions={{
+						header: t('artists.name'),
+					}}
+				>
+					<Link to={`/artists/${artist.id}`}>{artist.name}</Link>
+				</EuiTableRowCell>
+				<EuiTableRowCell
+					textOnly={false}
+					hasActions={true}
+					align="right"
+				>
+					<ArtistPopover store={store} artist={artist} />
+				</EuiTableRowCell>
+			</EuiTableRow>
+		);
+	},
+);
+
+interface ArtistSearchTableBodyProps {
+	store: ArtistSearchStore;
+}
+
+const ArtistSearchTableBody = observer(
+	({ store }: ArtistSearchTableBodyProps): React.ReactElement => {
+		return (
+			<EuiTableBody>
+				{store.artists.map((artist) => (
+					<ArtistSearchTableRow
+						store={store}
+						artist={artist}
+						key={artist.id}
+					/>
+				))}
+			</EuiTableBody>
+		);
+	},
+);
+
 interface ArtistSearchTableProps {
 	store: ArtistSearchStore;
 }
 
-export const ArtistSearchTable = observer(
-	({ store }: ArtistSearchTableProps): React.ReactElement => {
-		const { t } = useTranslation();
+export const ArtistSearchTable = ({
+	store,
+}: ArtistSearchTableProps): React.ReactElement => {
+	return (
+		<>
+			<EuiTable>
+				<ArtistSearchTableHeader />
+				<ArtistSearchTableBody store={store} />
+			</EuiTable>
 
-		return (
-			<>
-				<EuiTable>
-					<EuiTableHeader>
-						<EuiTableHeaderCell width={40} />
-						<EuiTableHeaderCell>
-							{t('artists.name')}
-						</EuiTableHeaderCell>
-						<EuiTableHeaderCell width={32} />
-					</EuiTableHeader>
+			<EuiSpacer size="m" />
 
-					<EuiTableBody>
-						{store.artists.map((artist) => (
-							<EuiTableRow key={artist.id}>
-								<EuiTableRowCell>
-									<Avatar
-										size="m"
-										name={artist.name}
-										imageUrl={artist.avatarUrl ?? ''}
-									/>
-								</EuiTableRowCell>
-								<EuiTableRowCell
-									mobileOptions={{
-										header: t('artists.name'),
-									}}
-								>
-									<Link to={`/artists/${artist.id}`}>
-										{artist.name}
-									</Link>
-								</EuiTableRowCell>
-								<EuiTableRowCell
-									textOnly={false}
-									hasActions={true}
-									align="right"
-								>
-									<ArtistPopover
-										store={store}
-										artist={artist}
-									/>
-								</EuiTableRowCell>
-							</EuiTableRow>
-						))}
-					</EuiTableBody>
-				</EuiTable>
-
-				<EuiSpacer size="m" />
-
-				<Pagination store={store.pagination} />
-			</>
-		);
-	},
-);
+			<Pagination store={store.pagination} />
+		</>
+	);
+};

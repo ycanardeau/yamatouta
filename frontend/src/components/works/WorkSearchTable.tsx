@@ -34,6 +34,18 @@ import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import { WorkDeleteDialog } from './WorkDeleteDialog';
 
+const WorkSearchTableHeader = React.memo((): React.ReactElement => {
+	const { t } = useTranslation();
+
+	return (
+		<EuiTableHeader>
+			<EuiTableHeaderCell width={40} />
+			<EuiTableHeaderCell>{t('works.name')}</EuiTableHeaderCell>
+			<EuiTableHeaderCell width={32} />
+		</EuiTableHeader>
+	);
+});
+
 interface WorkPopoverProps {
 	store: WorkSearchStore;
 	work: IWorkObject;
@@ -143,56 +155,76 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 	);
 };
 
+interface WorkSearchTableRowProps {
+	store: WorkSearchStore;
+	work: IWorkObject;
+}
+
+const WorkSearchTableRow = React.memo(
+	({ store, work }: WorkSearchTableRowProps): React.ReactElement => {
+		const { t } = useTranslation();
+
+		return (
+			<EuiTableRow>
+				<EuiTableRowCell>
+					<Avatar size="m" name={work.name} />
+				</EuiTableRowCell>
+				<EuiTableRowCell
+					mobileOptions={{
+						header: t('works.name'),
+					}}
+				>
+					<Link to={`/works/${work.id}`}>{work.name}</Link>
+				</EuiTableRowCell>
+				<EuiTableRowCell
+					textOnly={false}
+					hasActions={true}
+					align="right"
+				>
+					<WorkPopover store={store} work={work} />
+				</EuiTableRowCell>
+			</EuiTableRow>
+		);
+	},
+);
+
+interface WorkSearchTableBodyProps {
+	store: WorkSearchStore;
+}
+
+const WorkSearchTableBody = observer(
+	({ store }: WorkSearchTableBodyProps): React.ReactElement => {
+		return (
+			<EuiTableBody>
+				{store.works.map((work) => (
+					<WorkSearchTableRow
+						store={store}
+						work={work}
+						key={work.id}
+					/>
+				))}
+			</EuiTableBody>
+		);
+	},
+);
+
 interface WorkSearchTableProps {
 	store: WorkSearchStore;
 }
 
-export const WorkSearchTable = observer(
-	({ store }: WorkSearchTableProps): React.ReactElement => {
-		const { t } = useTranslation();
+export const WorkSearchTable = ({
+	store,
+}: WorkSearchTableProps): React.ReactElement => {
+	return (
+		<>
+			<EuiTable>
+				<WorkSearchTableHeader />
+				<WorkSearchTableBody store={store} />
+			</EuiTable>
 
-		return (
-			<>
-				<EuiTable>
-					<EuiTableHeader>
-						<EuiTableHeaderCell width={40} />
-						<EuiTableHeaderCell>
-							{t('works.name')}
-						</EuiTableHeaderCell>
-						<EuiTableHeaderCell width={32} />
-					</EuiTableHeader>
+			<EuiSpacer size="m" />
 
-					<EuiTableBody>
-						{store.works.map((work) => (
-							<EuiTableRow key={work.id}>
-								<EuiTableRowCell>
-									<Avatar size="m" name={work.name} />
-								</EuiTableRowCell>
-								<EuiTableRowCell
-									mobileOptions={{
-										header: t('works.name'),
-									}}
-								>
-									<Link to={`/works/${work.id}`}>
-										{work.name}
-									</Link>
-								</EuiTableRowCell>
-								<EuiTableRowCell
-									textOnly={false}
-									hasActions={true}
-									align="right"
-								>
-									<WorkPopover store={store} work={work} />
-								</EuiTableRowCell>
-							</EuiTableRow>
-						))}
-					</EuiTableBody>
-				</EuiTable>
-
-				<EuiSpacer size="m" />
-
-				<Pagination store={store.pagination} />
-			</>
-		);
-	},
-);
+			<Pagination store={store.pagination} />
+		</>
+	);
+};
