@@ -1,5 +1,11 @@
 import { StoreWithPagination } from '@vocadb/route-sphere';
-import { computed, makeObservable, observable, runInAction } from 'mobx';
+import {
+	action,
+	computed,
+	makeObservable,
+	observable,
+	runInAction,
+} from 'mobx';
 
 import { quoteApi } from '../../api/quoteApi';
 import { IQuoteObject } from '../../dto/IQuoteObject';
@@ -23,12 +29,13 @@ export class QuoteSearchStore
 
 	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = ['pageSize'];
 
-	private pauseNotifications = false;
+	@observable loading = false;
 
-	updateResults = async (clearResults: boolean): Promise<void> => {
-		if (this.pauseNotifications) return;
+	@action updateResults = async (clearResults: boolean): Promise<void> => {
+		if (this.loading) return;
 
-		this.pauseNotifications = true;
+		this.loading = true;
+		this.quotes = [];
 
 		try {
 			const paginationParams = this.pagination.toParams(clearResults);
@@ -48,7 +55,9 @@ export class QuoteSearchStore
 
 			return;
 		} finally {
-			this.pauseNotifications = false;
+			runInAction(() => {
+				this.loading = false;
+			});
 		}
 	};
 

@@ -51,12 +51,13 @@ export class TranslationSearchStore
 		'category',
 	];
 
-	private pauseNotifications = false;
+	@observable loading = false;
 
-	updateResults = async (clearResults: boolean): Promise<void> => {
-		if (this.pauseNotifications) return;
+	@action updateResults = async (clearResults: boolean): Promise<void> => {
+		if (this.loading) return;
 
-		this.pauseNotifications = true;
+		this.loading = true;
+		this.translations = [];
 
 		try {
 			const paginationParams = this.pagination.toParams(clearResults);
@@ -77,7 +78,9 @@ export class TranslationSearchStore
 
 			return;
 		} finally {
-			this.pauseNotifications = false;
+			runInAction(() => {
+				this.loading = false;
+			});
 		}
 	};
 

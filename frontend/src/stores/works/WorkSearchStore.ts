@@ -1,5 +1,11 @@
 import { StoreWithPagination } from '@vocadb/route-sphere';
-import { computed, makeObservable, observable, runInAction } from 'mobx';
+import {
+	action,
+	computed,
+	makeObservable,
+	observable,
+	runInAction,
+} from 'mobx';
 
 import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
@@ -21,12 +27,13 @@ export class WorkSearchStore
 
 	clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = ['pageSize'];
 
-	private pauseNotifications = false;
+	@observable loading = false;
 
-	updateResults = async (clearResults: boolean): Promise<void> => {
-		if (this.pauseNotifications) return;
+	@action updateResults = async (clearResults: boolean): Promise<void> => {
+		if (this.loading) return;
 
-		this.pauseNotifications = true;
+		this.loading = true;
+		this.works = [];
 
 		try {
 			const paginationParams = this.pagination.toParams(clearResults);
@@ -44,7 +51,9 @@ export class WorkSearchStore
 
 			return;
 		} finally {
-			this.pauseNotifications = false;
+			runInAction(() => {
+				this.loading = false;
+			});
 		}
 	};
 

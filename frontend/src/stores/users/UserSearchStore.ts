@@ -1,5 +1,11 @@
 import { StoreWithPagination } from '@vocadb/route-sphere';
-import { computed, makeObservable, observable, runInAction } from 'mobx';
+import {
+	action,
+	computed,
+	makeObservable,
+	observable,
+	runInAction,
+} from 'mobx';
 
 import { userApi } from '../../api/userApi';
 import { IUserObject } from '../../dto/IUserObject';
@@ -21,12 +27,13 @@ export class UserSearchStore
 
 	clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = ['pageSize'];
 
-	private pauseNotifications = false;
+	@observable loading = false;
 
-	updateResults = async (clearResults: boolean): Promise<void> => {
-		if (this.pauseNotifications) return;
+	@action updateResults = async (clearResults: boolean): Promise<void> => {
+		if (this.loading) return;
 
-		this.pauseNotifications = true;
+		this.loading = true;
+		this.users = [];
 
 		try {
 			const paginationParams = this.pagination.toParams(clearResults);
@@ -44,7 +51,9 @@ export class UserSearchStore
 
 			return;
 		} finally {
-			this.pauseNotifications = false;
+			runInAction(() => {
+				this.loading = false;
+			});
 		}
 	};
 
