@@ -24,6 +24,7 @@ import {
 	MoreHorizontalRegular,
 	OpenRegular,
 } from '@fluentui/react-icons';
+import classNames from 'classnames';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -37,6 +38,7 @@ import { TranslationSortRule } from '../../models/translations/TranslationSortRu
 import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
 import { Pagination } from '../Pagination';
+import { TableEmptyBody } from '../TableEmptyBody';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import { TranslationDeleteDialog } from './TranslationDeleteDialog';
@@ -374,7 +376,18 @@ interface TranslationSearchTableBodyProps {
 
 const TranslationSearchTableBody = observer(
 	({ store }: TranslationSearchTableBodyProps): React.ReactElement => {
-		return (
+		const { t } = useTranslation();
+
+		return store.translations.length === 0 ? (
+			<TableEmptyBody
+				noItemsMessage={
+					store.loading
+						? t('shared.loading')
+						: t('shared.noItemsFound')
+				}
+				colSpan={4}
+			/>
+		) : (
 			<EuiTableBody>
 				{store.translations.map((translation) => (
 					<TranslationSearchTableRow
@@ -392,20 +405,24 @@ interface TranslationSearchTableProps {
 	store: TranslationSearchStore;
 }
 
-export const TranslationSearchTable = ({
-	store,
-}: TranslationSearchTableProps): React.ReactElement => {
-	return (
-		<>
-			<EuiTable>
-				<TranslationSearchTableHeader store={store} />
-				<TranslationSearchTableBody store={store} />
-				<EuiTableFooter></EuiTableFooter>
-			</EuiTable>
+export const TranslationSearchTable = observer(
+	({ store }: TranslationSearchTableProps): React.ReactElement => {
+		return (
+			<>
+				<EuiTable
+					className={classNames({
+						'euiBasicTable-loading': store.loading,
+					})}
+				>
+					<TranslationSearchTableHeader store={store} />
+					<TranslationSearchTableBody store={store} />
+					<EuiTableFooter></EuiTableFooter>
+				</EuiTable>
 
-			<EuiSpacer size="m" />
+				<EuiSpacer size="m" />
 
-			<Pagination store={store.pagination} />
-		</>
-	);
-};
+				<Pagination store={store.pagination} />
+			</>
+		);
+	},
+);

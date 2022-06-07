@@ -19,6 +19,7 @@ import {
 	InfoRegular,
 	MoreHorizontalRegular,
 } from '@fluentui/react-icons';
+import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +31,7 @@ import { IArtistObject } from '../../dto/IArtistObject';
 import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 import { Link } from '../Link';
+import { TableEmptyBody } from '../TableEmptyBody';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import { ArtistDeleteDialog } from './ArtistDeleteDialog';
@@ -200,7 +202,18 @@ interface ArtistSearchTableBodyProps {
 
 const ArtistSearchTableBody = observer(
 	({ store }: ArtistSearchTableBodyProps): React.ReactElement => {
-		return (
+		const { t } = useTranslation();
+
+		return store.artists.length === 0 ? (
+			<TableEmptyBody
+				noItemsMessage={
+					store.loading
+						? t('shared.loading')
+						: t('shared.noItemsFound')
+				}
+				colSpan={2}
+			/>
+		) : (
 			<EuiTableBody>
 				{store.artists.map((artist) => (
 					<ArtistSearchTableRow
@@ -218,19 +231,23 @@ interface ArtistSearchTableProps {
 	store: ArtistSearchStore;
 }
 
-export const ArtistSearchTable = ({
-	store,
-}: ArtistSearchTableProps): React.ReactElement => {
-	return (
-		<>
-			<EuiTable>
-				<ArtistSearchTableHeader />
-				<ArtistSearchTableBody store={store} />
-			</EuiTable>
+export const ArtistSearchTable = observer(
+	({ store }: ArtistSearchTableProps): React.ReactElement => {
+		return (
+			<>
+				<EuiTable
+					className={classNames({
+						'euiBasicTable-loading': store.loading,
+					})}
+				>
+					<ArtistSearchTableHeader />
+					<ArtistSearchTableBody store={store} />
+				</EuiTable>
 
-			<EuiSpacer size="m" />
+				<EuiSpacer size="m" />
 
-			<Pagination store={store.pagination} />
-		</>
-	);
-};
+				<Pagination store={store.pagination} />
+			</>
+		);
+	},
+);
