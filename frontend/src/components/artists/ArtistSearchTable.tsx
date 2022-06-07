@@ -39,7 +39,6 @@ const ArtistSearchTableHeader = React.memo((): React.ReactElement => {
 
 	return (
 		<EuiTableHeader>
-			<EuiTableHeaderCell width={40} />
 			<EuiTableHeaderCell>{t('artists.name')}</EuiTableHeaderCell>
 			<EuiTableHeaderCell width={32} />
 		</EuiTableHeader>
@@ -168,20 +167,20 @@ const ArtistSearchTableRow = React.memo(
 		const { t } = useTranslation();
 
 		return (
-			<EuiTableRow>
-				<EuiTableRowCell>
-					<Avatar
-						size="m"
-						name={artist.name}
-						imageUrl={artist.avatarUrl ?? ''}
-					/>
-				</EuiTableRowCell>
+			<EuiTableRow hasActions={true}>
 				<EuiTableRowCell
 					mobileOptions={{
 						header: t('artists.name'),
 					}}
 				>
-					<Link to={`/artists/${artist.id}`}>{artist.name}</Link>
+					<span>
+						<Avatar
+							size="m"
+							name={artist.name}
+							imageUrl={artist.avatarUrl ?? ''}
+						/>{' '}
+						<Link to={`/artists/${artist.id}`}>{artist.name}</Link>
+					</span>
 				</EuiTableRowCell>
 				<EuiTableRowCell
 					textOnly={false}

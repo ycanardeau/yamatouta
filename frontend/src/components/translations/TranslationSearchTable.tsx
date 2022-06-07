@@ -269,6 +269,7 @@ const TranslationSearchTableRow = observer(
 				<EuiTableRowCell
 					mobileOptions={{
 						header: t('translations.headword'),
+						width: '100%',
 					}}
 				>
 					{translation.headword.split(/\s/).map((part, index) => (
@@ -314,6 +315,7 @@ const TranslationSearchTableRow = observer(
 				<EuiTableRowCell
 					mobileOptions={{
 						header: t('translations.yamatokotoba'),
+						width: '100%',
 					}}
 				>
 					{translation.yamatokotoba.split(/\s/).map((part, index) => (
@@ -342,6 +344,7 @@ const TranslationSearchTableRow = observer(
 				<EuiTableRowCell
 					mobileOptions={{
 						header: t('translations.category'),
+						width: '100%',
 					}}
 				>
 					{translation.category !== WordCategory.Unspecified && (

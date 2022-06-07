@@ -22,7 +22,6 @@ const UserSearchTableHeader = React.memo((): React.ReactElement => {
 
 	return (
 		<EuiTableHeader>
-			<EuiTableHeaderCell width={40} />
 			<EuiTableHeaderCell>{t('auth.username')}</EuiTableHeaderCell>
 		</EuiTableHeader>
 	);
@@ -38,19 +37,19 @@ const UserSearchTableRow = React.memo(
 
 		return (
 			<EuiTableRow>
-				<EuiTableRowCell>
-					<Avatar
-						size="m"
-						name={user.name}
-						imageUrl={user.avatarUrl}
-					/>
-				</EuiTableRowCell>
 				<EuiTableRowCell
 					mobileOptions={{
 						header: t('auth.username'),
 					}}
 				>
-					<Link to={`/users/${user.id}`}>{user.name}</Link>
+					<span>
+						<Avatar
+							size="m"
+							name={user.name}
+							imageUrl={user.avatarUrl}
+						/>{' '}
+						<Link to={`/users/${user.id}`}>{user.name}</Link>
+					</span>
 				</EuiTableRowCell>
 			</EuiTableRow>
 		);

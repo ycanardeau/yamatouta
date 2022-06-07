@@ -69,7 +69,9 @@
 		"unknownDate": "on an unknown date",
 		"quote": "Quote",
 		"word": "Word",
-		"user": "User"
+		"user": "User",
+		"loading": "Loading...",
+		"noItemsFound": "No items found"
 	},
 	"translations": {
 		"addWord": "Add word",

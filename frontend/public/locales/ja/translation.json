@@ -67,7 +67,9 @@
 		"unknownDate": "あるひ",
 		"quote": "やまとうた",
 		"word": "やまとことば",
-		"user": "つかいて"
+		"user": "つかいて",
+		"loading": "よみこんでいます...",
+		"noItemsFound": "みつかりませんでした"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
