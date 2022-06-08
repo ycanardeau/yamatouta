@@ -6,6 +6,7 @@ interface IConfig {
 	readonly port: number;
 	readonly disableAccountCreation: boolean;
 	readonly clientBuildPath: string;
+	readonly gaMeasurementId: string;
 	readonly cors: {
 		readonly allowedOrigins: string[];
 	};
@@ -22,12 +23,18 @@ interface IConfig {
 	readonly cookie: {
 		readonly domain: string;
 	};
+	readonly contentSecurityPolicy: {
+		readonly scriptSrc: string[];
+		readonly imgSrc: string[];
+		readonly connectSrc: string[];
+	};
 }
 
 const schema = Joi.object<IConfig>({
 	port: Joi.number().required(),
 	disableAccountCreation: Joi.boolean().required(),
 	clientBuildPath: Joi.string().required(),
+	gaMeasurementId: Joi.string().required(),
 	cors: Joi.object({
 		allowedOrigins: Joi.array().items(Joi.string().required()),
 	}),
@@ -45,6 +52,11 @@ const schema = Joi.object<IConfig>({
 	}),
 	cookie: Joi.object({
 		domain: Joi.string().required().allow(''),
+	}),
+	contentSecurityPolicy: Joi.object({
+		scriptSrc: Joi.array().items(Joi.string().required()),
+		imgSrc: Joi.array().items(Joi.string().required()),
+		connectSrc: Joi.array().items(Joi.string().required()),
 	}),
 });
 

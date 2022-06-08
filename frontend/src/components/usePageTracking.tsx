@@ -11,11 +11,11 @@ export const usePageTracking = (ready: boolean): void => {
 	const location = useLocation();
 
 	React.useEffect(() => {
-		if (ready) {
-			ReactGA.send({
-				hitType: 'pageview',
-				page: `${location.pathname}${location.search}`,
-			});
-		}
+		if (!ready) return;
+
+		ReactGA.send({
+			hitType: 'pageview',
+			page: `${location.pathname}${location.search}`,
+		});
 	}, [ready, location]);
 };

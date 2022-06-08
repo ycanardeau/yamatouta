@@ -2,6 +2,7 @@
 	"port": 5000,
 	"disableAccountCreation": true,
 	"clientBuildPath": "../frontend/build",
+	"gaMeasurementId": "",
 	"cors": {
 		"allowedOrigins": ["https://yamatouta.net"]
 	},
@@ -17,5 +18,10 @@
 	},
 	"cookie": {
 		"domain": ".yamatouta.net"
+	},
+	"contentSecurityPolicy": {
+		"scriptSrc": [],
+		"imgSrc": [],
+		"connectSrc": []
 	}
 }

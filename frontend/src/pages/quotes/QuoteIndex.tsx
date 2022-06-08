@@ -20,11 +20,11 @@ import { Permission } from '../../models/Permission';
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 
 const QuoteIndex = observer((): React.ReactElement => {
-	const { t } = useTranslation();
+	const { t, ready } = useTranslation();
 
 	const [store] = React.useState(() => new QuoteSearchStore());
 
-	useYamatoutaTitle(t('shared.quotes'), true);
+	useYamatoutaTitle(t('shared.quotes'), ready);
 
 	useStoreWithPagination(store);
 

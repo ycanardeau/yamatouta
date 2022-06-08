@@ -1,5 +1,6 @@
 import { AdminController } from './AdminController';
 import { ArtistController } from './ArtistController';
+import { HomeController } from './HomeController';
 import { QuoteController } from './QuoteController';
 import { SettingsController } from './SettingsController';
 import { TranslationController } from './TranslationController';
@@ -11,6 +12,7 @@ export const controllers = [
 	...apiControllers,
 	AdminController,
 	ArtistController,
+	HomeController,
 	QuoteController,
 	SettingsController,
 	TranslationController,

@@ -27,5 +27,6 @@ export const renderReact = (
 		image: pageMetadata.image,
 		script: assetManifest.files['main.js'],
 		style: assetManifest.files['main.css'],
+		gaMeasurementId: config.gaMeasurementId,
 	});
 };

@@ -4,10 +4,12 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import connectSessionKnex from 'connect-session-knex';
 import cookieParser from 'cookie-parser';
+import crypto from 'crypto';
 import csurf from 'csurf';
 import { NextFunction, Request, Response } from 'express';
 import session from 'express-session';
 import helmet from 'helmet';
+import { IncomingMessage, ServerResponse } from 'http';
 import passport from 'passport';
 import { join } from 'path';
 
@@ -20,9 +22,39 @@ const KnexSessionStore = connectSessionKnex(session);
 async function bootstrap(): Promise<void> {
 	const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-	app.use(helmet());
+	app.use((req: Request, res: Response, next: NextFunction) => {
+		// Code from: https://github.com/TheBrenny/nonce-express/blob/8794bb436046b858d7c8761871dc90c6cd541640/nonce.js#L16.
+		res.locals['nonce'] = crypto.randomBytes(16).toString('base64');
 
-	app.useStaticAssets(config.clientBuildPath);
+		next();
+	});
+
+	app.use(
+		helmet({
+			contentSecurityPolicy: {
+				useDefaults: true,
+				directives: {
+					scriptSrc: [
+						"'self'",
+						(req: IncomingMessage, res: ServerResponse): string =>
+							`'nonce-${(res as Response).locals['nonce']}'`,
+						...config.contentSecurityPolicy.scriptSrc,
+					],
+					imgSrc: [
+						"'self'",
+						'data:',
+						...config.contentSecurityPolicy.imgSrc,
+					],
+					connectSrc: [
+						"'self'",
+						...config.contentSecurityPolicy.connectSrc,
+					],
+				},
+			},
+		}),
+	);
+
+	app.useStaticAssets(config.clientBuildPath, { index: false });
 	app.setBaseViewsDir(join(__dirname, '..', 'views'));
 	app.setViewEngine('hbs');
 
