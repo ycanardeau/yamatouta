@@ -1,10 +1,5 @@
 import { EuiIcon, EuiListGroup, EuiListGroupItem } from '@elastic/eui';
-import {
-	CameraRegular,
-	KeyRegular,
-	MailRegular,
-	PersonRegular,
-} from '@fluentui/react-icons';
+import { KeyRegular, MailRegular, PersonRegular } from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
@@ -30,17 +25,6 @@ const SettingsIndex = (): React.ReactElement => {
 	return auth.user ? (
 		<>
 			<EuiListGroup>
-				<EuiListGroupItem
-					icon={<EuiIcon type={CameraRegular} />}
-					label={t('users.photo')}
-					href="https://gravatar.com/emails/"
-					target="_blank"
-					isActive
-					extraAction={{
-						iconType: 'popout',
-						alwaysShow: true,
-					}}
-				/>
 				<EuiListGroupItem
 					icon={<EuiIcon type={PersonRegular} />}
 					label={t('auth.username')}

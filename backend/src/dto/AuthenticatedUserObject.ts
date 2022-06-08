@@ -2,7 +2,6 @@ import { NotFoundException } from '@nestjs/common';
 
 import { User } from '../entities/User';
 import { Permission } from '../models/Permission';
-import { generateGravatarUrl } from '../utils/generateGravatarUrl';
 
 export class AuthenticatedUserObject {
 	private constructor(
@@ -22,7 +21,7 @@ export class AuthenticatedUserObject {
 			user.deleted,
 			user.hidden,
 			user.name,
-			generateGravatarUrl(user.email),
+			'' /* TODO */,
 			user.effectivePermissions,
 		);
 	}

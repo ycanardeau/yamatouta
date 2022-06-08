@@ -1,6 +1,5 @@
 import { User } from '../entities/User';
 import { PermissionContext } from '../services/PermissionContext';
-import { generateGravatarUrl } from '../utils/generateGravatarUrl';
 
 export class UserObject {
 	private constructor(
@@ -22,7 +21,7 @@ export class UserObject {
 			user.deleted,
 			user.hidden,
 			user.name,
-			generateGravatarUrl(user.email),
+			'' /* TODO */,
 		);
 	}
 }
