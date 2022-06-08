@@ -1,13 +1,15 @@
-import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Enum, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
+import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { PasswordHashAlgorithm } from '../models/PasswordHashAlgorithm';
 import { Permission, userGroupPermissions } from '../models/Permission';
 import { UserGroup } from '../models/UserGroup';
+import { NgramConverter } from '../services/NgramConverter';
 import { IPasswordHasher } from '../services/passwordHashers/IPasswordHasher';
 
 @Entity({ tableName: 'users' })
-export class User {
+export class User implements IEntryWithSearchIndex<UserSearchIndex> {
 	@PrimaryKey()
 	id!: number;
 
@@ -71,6 +73,9 @@ export class User {
 	@Enum()
 	userGroup = UserGroup.User;
 
+	@OneToOne(() => UserSearchIndex, (searchIndex) => searchIndex.user)
+	searchIndex = new UserSearchIndex(this);
+
 	constructor({
 		name,
 		email,
@@ -120,5 +125,25 @@ export class User {
 			password,
 			this.salt,
 		);
+	}
+
+	updateSearchIndex(ngramConverter: NgramConverter): void {
+		this.searchIndex.name = ngramConverter.toFullText(this.name, 2);
+	}
+}
+
+@Entity({ tableName: 'user_search_index' })
+export class UserSearchIndex {
+	@PrimaryKey()
+	id!: number;
+
+	@OneToOne()
+	user: User;
+
+	@Property({ columnType: 'text', lazy: true })
+	name!: string;
+
+	constructor(user: User) {
+		this.user = user;
 	}
 }

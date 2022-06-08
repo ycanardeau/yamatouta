@@ -5,6 +5,7 @@ import {
 	IdentifiedReference,
 	ManyToOne,
 	OneToMany,
+	OneToOne,
 	PrimaryKey,
 	Property,
 	Reference,
@@ -12,6 +13,7 @@ import {
 
 import { EntryType } from '../models/EntryType';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { IWebLinkFactory } from '../models/IWebLinkFactory';
@@ -20,6 +22,7 @@ import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { ArtistType } from '../models/artists/ArtistType';
 import { ArtistSnapshot } from '../models/snapshots/ArtistSnapshot';
+import { NgramConverter } from '../services/NgramConverter';
 import { WorkArtistLink } from './ArtistLink';
 import { Commit } from './Commit';
 import { ArtistRevision } from './Revision';
@@ -30,6 +33,7 @@ import { ArtistWebLink } from './WebLink';
 @Entity({ tableName: 'artists' })
 export class Artist
 	implements
+		IEntryWithSearchIndex<ArtistSearchIndex>,
 		IEntryWithRevisions<Artist, ArtistRevision, ArtistSnapshot>,
 		IRevisionFactory<Artist, ArtistRevision, ArtistSnapshot>,
 		IEntryWithWebLinks<ArtistWebLink>,
@@ -55,6 +59,9 @@ export class Artist
 
 	@Enum(() => ArtistType)
 	artistType!: ArtistType;
+
+	@OneToOne(() => ArtistSearchIndex, (searchIndex) => searchIndex.artist)
+	searchIndex = new ArtistSearchIndex(this);
 
 	@Property()
 	version = 0;
@@ -85,6 +92,10 @@ export class Artist
 
 	get entryType(): EntryType.Artist {
 		return EntryType.Artist;
+	}
+
+	updateSearchIndex(ngramConverter: NgramConverter): void {
+		this.searchIndex.name = ngramConverter.toFullText(this.name, 2);
 	}
 
 	takeSnapshot(): ArtistSnapshot {
@@ -120,5 +131,21 @@ export class Artist
 			title: title,
 			category: category,
 		});
+	}
+}
+
+@Entity({ tableName: 'artist_search_index' })
+export class ArtistSearchIndex {
+	@PrimaryKey()
+	id!: number;
+
+	@OneToOne()
+	artist: Artist;
+
+	@Property({ columnType: 'text', lazy: true })
+	name!: string;
+
+	constructor(artist: Artist) {
+		this.artist = artist;
 	}
 }

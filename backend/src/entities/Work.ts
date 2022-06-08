@@ -5,6 +5,7 @@ import {
 	IdentifiedReference,
 	ManyToOne,
 	OneToMany,
+	OneToOne,
 	PrimaryKey,
 	Property,
 	Reference,
@@ -14,6 +15,7 @@ import { EntryType } from '../models/EntryType';
 import { IArtistLinkFactory } from '../models/IArtistLinkFactory';
 import { IEntryWithArtistLinks } from '../models/IEntryWithArtistLinks';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
 import { IWebLinkFactory } from '../models/IWebLinkFactory';
@@ -22,6 +24,7 @@ import { RevisionEvent } from '../models/RevisionEvent';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { WorkSnapshot } from '../models/snapshots/WorkSnapshot';
 import { WorkType } from '../models/works/WorkType';
+import { NgramConverter } from '../services/NgramConverter';
 import { Artist } from './Artist';
 import { WorkArtistLink } from './ArtistLink';
 import { Commit } from './Commit';
@@ -35,6 +38,7 @@ import { QuoteWorkLink, TranslationWorkLink } from './WorkLink';
 @Entity({ tableName: 'works' })
 export class Work
 	implements
+		IEntryWithSearchIndex<WorkSearchIndex>,
 		IEntryWithRevisions<Work, WorkRevision, WorkSnapshot>,
 		IRevisionFactory<Work, WorkRevision, WorkSnapshot>,
 		IEntryWithWebLinks<WorkWebLink>,
@@ -66,6 +70,9 @@ export class Work
 	@Enum()
 	workType!: WorkType;
 
+	@OneToOne(() => WorkSearchIndex, (searchIndex) => searchIndex.work)
+	searchIndex = new WorkSearchIndex(this);
+
 	@Property()
 	version = 0;
 
@@ -96,6 +103,10 @@ export class Work
 
 	get entryType(): EntryType.Work {
 		return EntryType.Work;
+	}
+
+	updateSearchIndex(ngramConverter: NgramConverter): void {
+		this.searchIndex.name = ngramConverter.toFullText(this.name, 2);
 	}
 
 	takeSnapshot(): WorkSnapshot {
@@ -148,5 +159,21 @@ export class Work
 			endDate: endDate,
 			ended: ended,
 		});
+	}
+}
+
+@Entity({ tableName: 'work_search_index' })
+export class WorkSearchIndex {
+	@PrimaryKey()
+	id!: number;
+
+	@OneToOne()
+	work: Work;
+
+	@Property({ columnType: 'text', lazy: true })
+	name!: string;
+
+	constructor(work: Work) {
+		this.work = work;
 	}
 }

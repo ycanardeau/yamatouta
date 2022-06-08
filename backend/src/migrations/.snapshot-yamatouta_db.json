@@ -271,6 +271,73 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "user_id": {
+          "name": "user_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        }
+      },
+      "name": "user_search_index",
+      "indexes": [
+        {
+          "columnNames": [
+            "user_id"
+          ],
+          "composite": false,
+          "keyName": "user_search_index_user_id_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "user_search_index_user_id_foreign": {
+          "constraintName": "user_search_index_user_id_foreign",
+          "columnNames": [
+            "user_id"
+          ],
+          "localTableName": "user_search_index",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
         "created_at": {
           "name": "created_at",
           "type": "datetime",
@@ -661,6 +728,73 @@
             "id"
           ],
           "referencedTableName": "users",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "work_id": {
+          "name": "work_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        }
+      },
+      "name": "work_search_index",
+      "indexes": [
+        {
+          "columnNames": [
+            "work_id"
+          ],
+          "composite": false,
+          "keyName": "work_search_index_work_id_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "work_search_index_work_id_foreign": {
+          "constraintName": "work_search_index_work_id_foreign",
+          "columnNames": [
+            "work_id"
+          ],
+          "localTableName": "work_search_index",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "works",
           "updateRule": "cascade"
         }
       }
@@ -2225,6 +2359,73 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "artist_id": {
+          "name": "artist_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        }
+      },
+      "name": "artist_search_index",
+      "indexes": [
+        {
+          "columnNames": [
+            "artist_id"
+          ],
+          "composite": false,
+          "keyName": "artist_search_index_artist_id_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "artist_search_index_artist_id_foreign": {
+          "constraintName": "artist_search_index_artist_id_foreign",
+          "columnNames": [
+            "artist_id"
+          ],
+          "localTableName": "artist_search_index",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "artists",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
         "link_type": {
           "name": "link_type",
           "type": "enum('Unspecified', 'Quote_Work_Source', 'Translation_Work_Source', 'Work_Artist_Author', 'Work_Artist_Contributor', 'Work_Artist_Editor', 'Work_Artist_Foreword', 'Work_Artist_Publisher', 'Work_Artist_Translator')",
@@ -2991,6 +3192,73 @@
           ],
           "referencedTableName": "works",
           "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "quote_id": {
+          "name": "quote_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "text": {
+          "name": "text",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        }
+      },
+      "name": "quote_search_index",
+      "indexes": [
+        {
+          "columnNames": [
+            "quote_id"
+          ],
+          "composite": false,
+          "keyName": "quote_search_index_quote_id_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "quote_search_index_quote_id_foreign": {
+          "constraintName": "quote_search_index_quote_id_foreign",
+          "columnNames": [
+            "quote_id"
+          ],
+          "localTableName": "quote_search_index",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "quotes",
           "updateRule": "cascade"
         }
       }

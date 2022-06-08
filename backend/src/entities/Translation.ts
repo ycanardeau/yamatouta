@@ -4,6 +4,7 @@ import {
 	Entity,
 	Enum,
 	IdentifiedReference,
+	Index,
 	ManyToOne,
 	OneToMany,
 	OneToOne,
@@ -15,6 +16,7 @@ import {
 import { EntryType } from '../models/EntryType';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
 import { IRevisionFactory } from '../models/IRevisionFactory';
@@ -31,7 +33,6 @@ import { Commit } from './Commit';
 import { PartialDate } from './PartialDate';
 import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
-import { TranslationSearchIndex } from './TranslationSearchIndex';
 import { User } from './User';
 import { WebAddress } from './WebAddress';
 import { TranslationWebLink } from './WebLink';
@@ -42,6 +43,7 @@ import { TranslationWorkLink } from './WorkLink';
 export class Translation
 	implements
 		IEntryWithDeletedAndHidden,
+		IEntryWithSearchIndex<TranslationSearchIndex>,
 		IEntryWithRevisions<
 			Translation,
 			TranslationRevision,
@@ -85,7 +87,7 @@ export class Translation
 		() => TranslationSearchIndex,
 		(searchIndex) => searchIndex.translation,
 	)
-	searchIndex = new TranslationSearchIndex({ translation: this });
+	searchIndex = new TranslationSearchIndex(this);
 
 	@Property()
 	version = 0;
@@ -208,5 +210,31 @@ export class Translation
 			endDate: endDate,
 			ended: ended,
 		});
+	}
+}
+
+@Entity({ tableName: 'translation_search_index' })
+@Index({
+	properties: ['headword', 'reading', 'yamatokotoba'],
+	type: 'fulltext',
+})
+export class TranslationSearchIndex {
+	@PrimaryKey()
+	id!: number;
+
+	@OneToOne()
+	translation: Translation;
+
+	@Property({ columnType: 'text', lazy: true })
+	headword!: string;
+
+	@Property({ columnType: 'text', lazy: true })
+	reading!: string;
+
+	@Property({ columnType: 'text', lazy: true })
+	yamatokotoba!: string;
+
+	constructor(translation: Translation) {
+		this.translation = translation;
 	}
 }
