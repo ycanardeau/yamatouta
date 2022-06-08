@@ -17,5 +17,5 @@ export const usePageTracking = (ready: boolean): void => {
 			hitType: 'pageview',
 			page: `${location.pathname}${location.search}`,
 		});
-	}, [ready, location]);
+	}, [ready, location.pathname, location.search]);
 };
