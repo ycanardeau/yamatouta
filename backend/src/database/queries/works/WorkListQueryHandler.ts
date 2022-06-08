@@ -6,6 +6,7 @@ import {
 	QueryOrderMap,
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { BadRequestException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
@@ -45,6 +46,13 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 		query: WorkListQuery,
 	): Promise<SearchResultObject<WorkObject>> {
 		const { permissionContext, params } = query;
+
+		const result = WorkListParams.schema.validate(params, {
+			convert: true,
+		});
+
+		if (result.error)
+			throw new BadRequestException(result.error.details[0].message);
 
 		const where: FilterQuery<Work> = {
 			$and: [

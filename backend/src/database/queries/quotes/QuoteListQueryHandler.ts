@@ -6,6 +6,7 @@ import {
 } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { BadRequestException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { QuoteObject } from '../../../dto/QuoteObject';
@@ -46,6 +47,13 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		query: QuoteListQuery,
 	): Promise<SearchResultObject<QuoteObject>> {
 		const { permissionContext, params } = query;
+
+		const result = QuoteListParams.schema.validate(params, {
+			convert: true,
+		});
+
+		if (result.error)
+			throw new BadRequestException(result.error.details[0].message);
 
 		const where: FilterQuery<Quote> = {
 			$and: [

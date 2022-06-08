@@ -6,6 +6,7 @@ import {
 	QueryOrderMap,
 } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
+import { BadRequestException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
@@ -45,6 +46,13 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 		query: UserListQuery,
 	): Promise<SearchResultObject<UserObject>> {
 		const { permissionContext, params } = query;
+
+		const result = UserListParams.schema.validate(params, {
+			convert: true,
+		});
+
+		if (result.error)
+			throw new BadRequestException(result.error.details[0].message);
 
 		const where: FilterQuery<User> = {
 			$and: [

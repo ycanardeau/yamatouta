@@ -1,4 +1,5 @@
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
+import { BadRequestException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import _ from 'lodash';
 
@@ -269,6 +270,13 @@ export class TranslationListQueryHandler
 		query: TranslationListQuery,
 	): Promise<SearchResultObject<TranslationObject>> {
 		const { permissionContext, params } = query;
+
+		const result = TranslationListParams.schema.validate(params, {
+			convert: true,
+		});
+
+		if (result.error)
+			throw new BadRequestException(result.error.details[0].message);
 
 		const [translations, count] = await Promise.all([
 			/*params.offset && params.offset > TranslationListService.maxOffset
