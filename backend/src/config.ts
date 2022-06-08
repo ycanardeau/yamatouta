@@ -28,10 +28,10 @@ const schema = Joi.object<IConfig>({
 	port: Joi.number().required(),
 	disableAccountCreation: Joi.boolean().required(),
 	clientBuildPath: Joi.string().required(),
-	cors: {
+	cors: Joi.object({
 		allowedOrigins: Joi.array().items(Joi.string().required()),
-	},
-	db: {
+	}),
+	db: Joi.object({
 		connection: Joi.string()
 			.required()
 			.valid(...Object.keys(Configuration.PLATFORMS)),
@@ -39,13 +39,13 @@ const schema = Joi.object<IConfig>({
 		debug: Joi.boolean().required(),
 		username: Joi.string().required(),
 		password: Joi.string().required(),
-	},
-	session: {
+	}),
+	session: Joi.object({
 		secret: Joi.string().required().trim(),
-	},
-	cookie: {
+	}),
+	cookie: Joi.object({
 		domain: Joi.string().required().allow(''),
-	},
+	}),
 });
 
 const config = ((): IConfig => {
