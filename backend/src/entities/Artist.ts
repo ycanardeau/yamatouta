@@ -148,4 +148,8 @@ export class ArtistSearchIndex {
 	constructor(artist: Artist) {
 		this.artist = artist;
 	}
+
+	get entry(): IEntryWithSearchIndex<ArtistSearchIndex> {
+		return this.artist;
+	}
 }

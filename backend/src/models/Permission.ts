@@ -2,6 +2,7 @@ import { UserGroup } from './UserGroup';
 
 export enum Permission {
 	Admin_CreateMissingRevisions = 'Admin_CreateMissingRevisions',
+	Admin_UpdateSearchIndex = 'Admin_UpdateSearchIndex',
 	Admin_ViewDeletedEntries = 'Admin_ViewDeletedEntries',
 	Admin_ViewHiddenEntries = 'Admin_ViewHiddenEntries',
 	Artist_Create = 'Artist_Create',
@@ -44,6 +45,7 @@ const seniorModPermissions: Permission[] = [...modPermissions];
 const adminPermissions: Permission[] = [
 	...seniorModPermissions,
 	Permission.Admin_CreateMissingRevisions,
+	Permission.Admin_UpdateSearchIndex,
 	Permission.Admin_ViewDeletedEntries,
 	Permission.Admin_ViewHiddenEntries,
 	Permission.Artist_Create,

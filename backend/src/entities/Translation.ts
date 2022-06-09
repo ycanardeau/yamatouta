@@ -237,4 +237,8 @@ export class TranslationSearchIndex {
 	constructor(translation: Translation) {
 		this.translation = translation;
 	}
+
+	get entry(): IEntryWithSearchIndex<TranslationSearchIndex> {
+		return this.translation;
+	}
 }

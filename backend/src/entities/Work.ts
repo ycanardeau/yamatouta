@@ -176,4 +176,8 @@ export class WorkSearchIndex {
 	constructor(work: Work) {
 		this.work = work;
 	}
+
+	get entry(): IEntryWithSearchIndex<WorkSearchIndex> {
+		return this.work;
+	}
 }

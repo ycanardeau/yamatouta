@@ -1,5 +1,5 @@
 import { EuiIcon, EuiListGroup, EuiListGroupItem } from '@elastic/eui';
-import { HistoryRegular } from '@fluentui/react-icons';
+import { DatabaseSearchRegular, HistoryRegular } from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
@@ -20,6 +20,14 @@ const AdminIndex = (): React.ReactElement => {
 					label={t('admin.createMissingRevisions')}
 					onClick={(): Promise<void> =>
 						adminApi.createMissingRevisions()
+					}
+					isActive
+				/>
+				<EuiListGroupItem
+					icon={<EuiIcon type={DatabaseSearchRegular} />}
+					label={t('admin.updateSearchIndex')}
+					onClick={(): Promise<void> =>
+						adminApi.updateSearchIndex({ forceUpdate: false })
 					}
 					isActive
 				/>

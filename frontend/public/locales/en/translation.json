@@ -149,7 +149,8 @@
 		"Other": "Other"
 	},
 	"admin": {
-		"createMissingRevisions": "Create missing revisions"
+		"createMissingRevisions": "Create missing revisions",
+		"updateSearchIndex": "Update search index"
 	},
 	"works": {
 		"addWork": "Add work",

@@ -203,4 +203,8 @@ export class QuoteSearchIndex {
 	constructor(quote: Quote) {
 		this.quote = quote;
 	}
+
+	get entry(): IEntryWithSearchIndex<QuoteSearchIndex> {
+		return this.quote;
+	}
 }

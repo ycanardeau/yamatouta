@@ -146,4 +146,8 @@ export class UserSearchIndex {
 	constructor(user: User) {
 		this.user = user;
 	}
+
+	get entry(): IEntryWithSearchIndex<UserSearchIndex> {
+		return this.user;
+	}
 }
