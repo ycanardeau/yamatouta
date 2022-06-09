@@ -22,7 +22,7 @@ export class UserSearchStore
 	@observable users: IUserObject[] = [];
 	@observable sort = UserSortRule.CreatedAsc;
 	@observable query = '';
-	@observable userGroup?: UserGroup;
+	@observable userGroup: UserGroup | '' = '';
 
 	constructor() {
 		makeObservable(this);
@@ -36,7 +36,7 @@ export class UserSearchStore
 		this.query = value;
 	};
 
-	@action setUserGroup = (value?: UserGroup): void => {
+	@action setUserGroup = (value: UserGroup | ''): void => {
 		this.userGroup = value;
 	};
 
@@ -64,7 +64,7 @@ export class UserSearchStore
 				pagination: paginationParams,
 				sort: this.sort,
 				query: this.query,
-				userGroup: this.userGroup,
+				userGroup: this.userGroup ? this.userGroup : undefined,
 			});
 
 			runInAction(() => {
@@ -96,7 +96,7 @@ export class UserSearchStore
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? UserSortRule.CreatedAsc;
 		this.query = value.query ?? '';
-		this.userGroup = value.userGroup;
+		this.userGroup = value.userGroup ?? '';
 	}
 
 	validateRouteParams = (data: any): data is IUserSearchRouteParams => {

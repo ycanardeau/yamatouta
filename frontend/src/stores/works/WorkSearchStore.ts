@@ -22,7 +22,7 @@ export class WorkSearchStore
 	@observable works: IWorkObject[] = [];
 	@observable sort = WorkSortRule.CreatedAsc;
 	@observable query = '';
-	@observable workType?: WorkType;
+	@observable workType: WorkType | '' = '';
 
 	constructor() {
 		makeObservable(this);
@@ -36,7 +36,7 @@ export class WorkSearchStore
 		this.query = value;
 	};
 
-	@action setWorkType = (value?: WorkType): void => {
+	@action setWorkType = (value: WorkType | ''): void => {
 		this.workType = value;
 	};
 
@@ -64,7 +64,7 @@ export class WorkSearchStore
 				pagination: paginationParams,
 				sort: this.sort,
 				query: this.query,
-				workType: this.workType,
+				workType: this.workType ? this.workType : undefined,
 			});
 
 			runInAction(() => {
@@ -96,7 +96,7 @@ export class WorkSearchStore
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? WorkSortRule.CreatedAsc;
 		this.query = value.query ?? '';
-		this.workType = value.workType;
+		this.workType = value.workType ?? '';
 	}
 
 	validateRouteParams = (data: any): data is IWorkSearchRouteParams => {

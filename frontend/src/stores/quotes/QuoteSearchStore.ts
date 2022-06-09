@@ -22,7 +22,7 @@ export class QuoteSearchStore
 	@observable quotes: IQuoteObject[] = [];
 	@observable sort = QuoteSortRule.CreatedAsc;
 	@observable query = '';
-	@observable quoteType?: QuoteType;
+	@observable quoteType: QuoteType | '' = '';
 	@observable artistId?: number;
 	@observable workId?: number;
 
@@ -38,7 +38,7 @@ export class QuoteSearchStore
 		this.query = value;
 	};
 
-	@action setQuoteType = (value?: QuoteType): void => {
+	@action setQuoteType = (value: QuoteType | ''): void => {
 		this.quoteType = value;
 	};
 
@@ -66,7 +66,7 @@ export class QuoteSearchStore
 				pagination: paginationParams,
 				sort: this.sort,
 				query: this.query,
-				quoteType: this.quoteType,
+				quoteType: this.quoteType ? this.quoteType : undefined,
 				artistId: this.artistId,
 				workId: this.workId,
 			});
@@ -100,7 +100,7 @@ export class QuoteSearchStore
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? QuoteSortRule.CreatedAsc;
 		this.query = value.query ?? '';
-		this.quoteType = value.quoteType;
+		this.quoteType = value.quoteType ?? '';
 	}
 
 	validateRouteParams = (data: any): data is IQuoteSearchRouteParams => {

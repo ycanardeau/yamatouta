@@ -22,7 +22,7 @@ export class ArtistSearchStore
 	@observable artists: IArtistObject[] = [];
 	@observable sort = ArtistSortRule.CreatedAsc;
 	@observable query = '';
-	@observable artistType?: ArtistType;
+	@observable artistType: ArtistType | '' = '';
 
 	constructor() {
 		makeObservable(this);
@@ -36,7 +36,7 @@ export class ArtistSearchStore
 		this.query = value;
 	};
 
-	@action setArtistType = (value?: ArtistType): void => {
+	@action setArtistType = (value: ArtistType | ''): void => {
 		this.artistType = value;
 	};
 
@@ -64,7 +64,7 @@ export class ArtistSearchStore
 				pagination: paginationParams,
 				sort: this.sort,
 				query: this.query,
-				artistType: this.artistType,
+				artistType: this.artistType ? this.artistType : undefined,
 			});
 
 			runInAction(() => {
@@ -96,7 +96,7 @@ export class ArtistSearchStore
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? ArtistSortRule.CreatedAsc;
 		this.query = value.query ?? '';
-		this.artistType = value.artistType;
+		this.artistType = value.artistType ?? '';
 	}
 
 	validateRouteParams = (data: any): data is IArtistSearchRouteParams => {

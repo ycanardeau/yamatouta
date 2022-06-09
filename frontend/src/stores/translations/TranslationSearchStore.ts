@@ -22,7 +22,7 @@ export class TranslationSearchStore
 	@observable translations: ITranslationObject[] = [];
 	@observable sort = TranslationSortRule.HeadwordAsc;
 	@observable query = '';
-	@observable category?: WordCategory;
+	@observable category: WordCategory | '' = '';
 
 	constructor() {
 		makeObservable(this);
@@ -70,7 +70,7 @@ export class TranslationSearchStore
 
 	clearQuery = (): void => this.setQuery('');
 
-	@action setCategory = (value?: WordCategory): void => {
+	@action setCategory = (value: WordCategory | ''): void => {
 		this.category = value;
 	};
 
@@ -98,7 +98,7 @@ export class TranslationSearchStore
 				pagination: paginationParams,
 				sort: this.sort,
 				query: this.query,
-				category: this.category,
+				category: this.category ? this.category : undefined,
 			});
 
 			runInAction(() => {
@@ -130,7 +130,7 @@ export class TranslationSearchStore
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? TranslationSortRule.HeadwordAsc;
 		this.query = value.query ?? '';
-		this.category = value.category;
+		this.category = value.category ?? '';
 	}
 
 	validateRouteParams = (
