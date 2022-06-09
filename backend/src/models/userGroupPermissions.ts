@@ -1,5 +1,5 @@
 import { Permission } from './Permission';
-import { UserGroup } from './UserGroup';
+import { UserGroup } from './users/UserGroup';
 
 const limitedUserPermissions: Permission[] = [];
 

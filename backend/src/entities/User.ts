@@ -4,8 +4,8 @@ import { EntryType } from '../models/EntryType';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { PasswordHashAlgorithm } from '../models/PasswordHashAlgorithm';
 import { Permission } from '../models/Permission';
-import { UserGroup } from '../models/UserGroup';
 import { userGroupPermissions } from '../models/userGroupPermissions';
+import { UserGroup } from '../models/users/UserGroup';
 import { NgramConverter } from '../services/NgramConverter';
 import { IPasswordHasher } from '../services/passwordHashers/IPasswordHasher';
 

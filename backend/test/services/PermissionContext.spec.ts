@@ -2,8 +2,8 @@ import { UnauthorizedException } from '@nestjs/common';
 import _ from 'lodash';
 
 import { Permission } from '../../src/models/Permission';
-import { UserGroup } from '../../src/models/UserGroup';
 import { userGroupPermissions } from '../../src/models/userGroupPermissions';
+import { UserGroup } from '../../src/models/users/UserGroup';
 import { FakeEntityManager } from '../FakeEntityManager';
 import { FakePermissionContext } from '../FakePermissionContext';
 import { createUser } from '../createEntry';
