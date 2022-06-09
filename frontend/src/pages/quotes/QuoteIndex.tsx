@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { QuoteBreadcrumbs } from '../../components/quotes/QuoteBreadcrumbs';
 import { QuoteSearchList } from '../../components/quotes/QuoteSearchList';
+import { QuoteSearchOptions } from '../../components/quotes/QuoteSearchOptions';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { Permission } from '../../models/Permission';
@@ -66,6 +67,10 @@ const QuoteIndex = observer((): React.ReactElement => {
 				borderRadius="none"
 			>
 				<EuiPageContentBody>
+					<QuoteSearchOptions store={store} />
+
+					<EuiSpacer size="m" />
+
 					<QuoteSearchList store={store} />
 				</EuiPageContentBody>
 			</EuiPageContent>

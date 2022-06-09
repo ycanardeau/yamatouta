@@ -7,20 +7,19 @@ import {
 	EuiSelect,
 } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import { useTranslation } from 'react-i18next';
 
-import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
-import { WordCategory } from '../../models/translations/WordCategory';
-import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
+import { QuoteSortRule } from '../../models/quotes/QuoteSortRule';
+import { QuoteType } from '../../models/quotes/QuoteType';
+import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 
-interface TranslationSearchOptionsProps {
-	store: TranslationSearchStore;
+interface QuoteSearchOptionsProps {
+	store: QuoteSearchStore;
 }
 
-export const TranslationSearchOptions = observer(
-	({ store }: TranslationSearchOptionsProps): React.ReactElement => {
+export const QuoteSearchOptions = observer(
+	({ store }: QuoteSearchOptionsProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (
@@ -31,7 +30,7 @@ export const TranslationSearchOptions = observer(
 						fullWidth
 						element={EuiFieldSearch as any}
 						debounceTimeout={300}
-						placeholder={t('translations.search')}
+						placeholder={t('quotes.search')}
 						value={store.query}
 						onChange={(e): void => store.setQuery(e.target.value)}
 					/>
@@ -42,29 +41,27 @@ export const TranslationSearchOptions = observer(
 						compressed
 						fullWidth
 						prepend={
-							<EuiFormLabel htmlFor="category">
-								{t('translations.category')}
+							<EuiFormLabel htmlFor="quoteType">
+								{t('quotes.quoteType')}
 							</EuiFormLabel>
 						}
 					>
 						<EuiSelect
 							compressed
-							id="category"
+							id="quoteType"
 							options={[
 								{
 									value: '',
 									text: t('shared.all'),
 								},
-								...Object.values(WordCategory).map((value) => ({
+								...Object.values(QuoteType).map((value) => ({
 									value: value,
-									text: t(`wordCategoryNames.${value}`),
+									text: t(`quoteTypeNames.${value}`),
 								})),
 							]}
-							value={store.category}
+							value={store.quoteType}
 							onChange={(e): void =>
-								store.setCategory(
-									e.target.value as WordCategory,
-								)
+								store.setQuoteType(e.target.value as QuoteType)
 							}
 						/>
 					</EuiFormControlLayout>
@@ -83,19 +80,15 @@ export const TranslationSearchOptions = observer(
 						<EuiSelect
 							compressed
 							id="sort"
-							options={Object.values(TranslationSortRule).map(
+							options={Object.values(QuoteSortRule).map(
 								(value) => ({
 									value: value,
-									text: t(
-										`translationSortRuleNames.${value}`,
-									),
+									text: t(`quoteSortRuleNames.${value}`),
 								}),
 							)}
 							value={store.sort}
 							onChange={(e): void =>
-								store.setSort(
-									e.target.value as TranslationSortRule,
-								)
+								store.setSort(e.target.value as QuoteSortRule)
 							}
 						/>
 					</EuiFormControlLayout>

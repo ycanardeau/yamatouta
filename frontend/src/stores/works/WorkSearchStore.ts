@@ -10,6 +10,8 @@ import {
 import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
 import { IWorkSearchRouteParams } from '../../models/works/IWorkSearchRouteParams';
+import { WorkSortRule } from '../../models/works/WorkSortRule';
+import { WorkType } from '../../models/works/WorkType';
 import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
 
@@ -18,10 +20,25 @@ export class WorkSearchStore
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable works: IWorkObject[] = [];
+	@observable sort = WorkSortRule.CreatedAsc;
+	@observable query = '';
+	@observable workType?: WorkType;
 
 	constructor() {
 		makeObservable(this);
 	}
+
+	@action setSort = (value: WorkSortRule): void => {
+		this.sort = value;
+	};
+
+	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setWorkType = (value?: WorkType): void => {
+		this.workType = value;
+	};
 
 	popState = false;
 

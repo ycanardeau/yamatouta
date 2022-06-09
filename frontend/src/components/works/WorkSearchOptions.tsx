@@ -11,16 +11,16 @@ import React from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import { useTranslation } from 'react-i18next';
 
-import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
-import { WordCategory } from '../../models/translations/WordCategory';
-import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
+import { WorkSortRule } from '../../models/works/WorkSortRule';
+import { WorkType } from '../../models/works/WorkType';
+import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
 
-interface TranslationSearchOptionsProps {
-	store: TranslationSearchStore;
+interface WorkSearchOptionsProps {
+	store: WorkSearchStore;
 }
 
-export const TranslationSearchOptions = observer(
-	({ store }: TranslationSearchOptionsProps): React.ReactElement => {
+export const WorkSearchOptions = observer(
+	({ store }: WorkSearchOptionsProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (
@@ -31,7 +31,7 @@ export const TranslationSearchOptions = observer(
 						fullWidth
 						element={EuiFieldSearch as any}
 						debounceTimeout={300}
-						placeholder={t('translations.search')}
+						placeholder={t('works.search')}
 						value={store.query}
 						onChange={(e): void => store.setQuery(e.target.value)}
 					/>
@@ -42,29 +42,27 @@ export const TranslationSearchOptions = observer(
 						compressed
 						fullWidth
 						prepend={
-							<EuiFormLabel htmlFor="category">
-								{t('translations.category')}
+							<EuiFormLabel htmlFor="workType">
+								{t('works.workType')}
 							</EuiFormLabel>
 						}
 					>
 						<EuiSelect
 							compressed
-							id="category"
+							id="workType"
 							options={[
 								{
 									value: '',
 									text: t('shared.all'),
 								},
-								...Object.values(WordCategory).map((value) => ({
+								...Object.values(WorkType).map((value) => ({
 									value: value,
-									text: t(`wordCategoryNames.${value}`),
+									text: t(`workTypeNames.${value}`),
 								})),
 							]}
-							value={store.category}
+							value={store.workType}
 							onChange={(e): void =>
-								store.setCategory(
-									e.target.value as WordCategory,
-								)
+								store.setWorkType(e.target.value as WorkType)
 							}
 						/>
 					</EuiFormControlLayout>
@@ -83,19 +81,15 @@ export const TranslationSearchOptions = observer(
 						<EuiSelect
 							compressed
 							id="sort"
-							options={Object.values(TranslationSortRule).map(
+							options={Object.values(WorkSortRule).map(
 								(value) => ({
 									value: value,
-									text: t(
-										`translationSortRuleNames.${value}`,
-									),
+									text: t(`workSortRuleNames.${value}`),
 								}),
 							)}
 							value={store.sort}
 							onChange={(e): void =>
-								store.setSort(
-									e.target.value as TranslationSortRule,
-								)
+								store.setSort(e.target.value as WorkSortRule)
 							}
 						/>
 					</EuiFormControlLayout>

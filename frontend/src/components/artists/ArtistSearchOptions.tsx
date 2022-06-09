@@ -11,16 +11,16 @@ import React from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import { useTranslation } from 'react-i18next';
 
-import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
-import { WordCategory } from '../../models/translations/WordCategory';
-import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
+import { ArtistSortRule } from '../../models/artists/ArtistSortRule';
+import { ArtistType } from '../../models/artists/ArtistType';
+import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 
-interface TranslationSearchOptionsProps {
-	store: TranslationSearchStore;
+interface ArtistSearchOptionsProps {
+	store: ArtistSearchStore;
 }
 
-export const TranslationSearchOptions = observer(
-	({ store }: TranslationSearchOptionsProps): React.ReactElement => {
+export const ArtistSearchOptions = observer(
+	({ store }: ArtistSearchOptionsProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (
@@ -31,7 +31,7 @@ export const TranslationSearchOptions = observer(
 						fullWidth
 						element={EuiFieldSearch as any}
 						debounceTimeout={300}
-						placeholder={t('translations.search')}
+						placeholder={t('artists.search')}
 						value={store.query}
 						onChange={(e): void => store.setQuery(e.target.value)}
 					/>
@@ -42,28 +42,28 @@ export const TranslationSearchOptions = observer(
 						compressed
 						fullWidth
 						prepend={
-							<EuiFormLabel htmlFor="category">
-								{t('translations.category')}
+							<EuiFormLabel htmlFor="artistType">
+								{t('artists.artistType')}
 							</EuiFormLabel>
 						}
 					>
 						<EuiSelect
 							compressed
-							id="category"
+							id="artistType"
 							options={[
 								{
 									value: '',
 									text: t('shared.all'),
 								},
-								...Object.values(WordCategory).map((value) => ({
+								...Object.values(ArtistType).map((value) => ({
 									value: value,
-									text: t(`wordCategoryNames.${value}`),
+									text: t(`artistTypeNames.${value}`),
 								})),
 							]}
-							value={store.category}
+							value={store.artistType}
 							onChange={(e): void =>
-								store.setCategory(
-									e.target.value as WordCategory,
+								store.setArtistType(
+									e.target.value as ArtistType,
 								)
 							}
 						/>
@@ -83,19 +83,15 @@ export const TranslationSearchOptions = observer(
 						<EuiSelect
 							compressed
 							id="sort"
-							options={Object.values(TranslationSortRule).map(
+							options={Object.values(ArtistSortRule).map(
 								(value) => ({
 									value: value,
-									text: t(
-										`translationSortRuleNames.${value}`,
-									),
+									text: t(`artistSortRuleNames.${value}`),
 								}),
 							)}
 							value={store.sort}
 							onChange={(e): void =>
-								store.setSort(
-									e.target.value as TranslationSortRule,
-								)
+								store.setSort(e.target.value as ArtistSortRule)
 							}
 						/>
 					</EuiFormControlLayout>

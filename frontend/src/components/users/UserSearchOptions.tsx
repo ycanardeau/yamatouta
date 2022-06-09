@@ -11,16 +11,16 @@ import React from 'react';
 import { DebounceInput } from 'react-debounce-input';
 import { useTranslation } from 'react-i18next';
 
-import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
-import { WordCategory } from '../../models/translations/WordCategory';
-import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
+import { UserGroup } from '../../models/users/UserGroup';
+import { UserSortRule } from '../../models/users/UserSortRule';
+import { UserSearchStore } from '../../stores/users/UserSearchStore';
 
-interface TranslationSearchOptionsProps {
-	store: TranslationSearchStore;
+interface UserSearchOptionsProps {
+	store: UserSearchStore;
 }
 
-export const TranslationSearchOptions = observer(
-	({ store }: TranslationSearchOptionsProps): React.ReactElement => {
+export const UserSearchOptions = observer(
+	({ store }: UserSearchOptionsProps): React.ReactElement => {
 		const { t } = useTranslation();
 
 		return (
@@ -31,7 +31,7 @@ export const TranslationSearchOptions = observer(
 						fullWidth
 						element={EuiFieldSearch as any}
 						debounceTimeout={300}
-						placeholder={t('translations.search')}
+						placeholder={t('users.search')}
 						value={store.query}
 						onChange={(e): void => store.setQuery(e.target.value)}
 					/>
@@ -42,29 +42,27 @@ export const TranslationSearchOptions = observer(
 						compressed
 						fullWidth
 						prepend={
-							<EuiFormLabel htmlFor="category">
-								{t('translations.category')}
+							<EuiFormLabel htmlFor="userGroup">
+								{t('users.userGroup')}
 							</EuiFormLabel>
 						}
 					>
 						<EuiSelect
 							compressed
-							id="category"
+							id="userGroup"
 							options={[
 								{
 									value: '',
 									text: t('shared.all'),
 								},
-								...Object.values(WordCategory).map((value) => ({
+								...Object.values(UserGroup).map((value) => ({
 									value: value,
-									text: t(`wordCategoryNames.${value}`),
+									text: t(`userGroupNames.${value}`),
 								})),
 							]}
-							value={store.category}
+							value={store.userGroup}
 							onChange={(e): void =>
-								store.setCategory(
-									e.target.value as WordCategory,
-								)
+								store.setUserGroup(e.target.value as UserGroup)
 							}
 						/>
 					</EuiFormControlLayout>
@@ -83,19 +81,15 @@ export const TranslationSearchOptions = observer(
 						<EuiSelect
 							compressed
 							id="sort"
-							options={Object.values(TranslationSortRule).map(
+							options={Object.values(UserSortRule).map(
 								(value) => ({
 									value: value,
-									text: t(
-										`translationSortRuleNames.${value}`,
-									),
+									text: t(`userSortRuleNames.${value}`),
 								}),
 							)}
 							value={store.sort}
 							onChange={(e): void =>
-								store.setSort(
-									e.target.value as TranslationSortRule,
-								)
+								store.setSort(e.target.value as UserSortRule)
 							}
 						/>
 					</EuiFormControlLayout>

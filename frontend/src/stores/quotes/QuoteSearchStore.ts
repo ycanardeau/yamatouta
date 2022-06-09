@@ -10,6 +10,8 @@ import {
 import { quoteApi } from '../../api/quoteApi';
 import { IQuoteObject } from '../../dto/IQuoteObject';
 import { IQuoteSearchRouteParams } from '../../models/quotes/IQuoteSearchRouteParams';
+import { QuoteSortRule } from '../../models/quotes/QuoteSortRule';
+import { QuoteType } from '../../models/quotes/QuoteType';
 import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
 
@@ -18,12 +20,27 @@ export class QuoteSearchStore
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteObject[] = [];
+	@observable sort = QuoteSortRule.CreatedAsc;
+	@observable query = '';
+	@observable quoteType?: QuoteType;
 	@observable artistId?: number;
 	@observable workId?: number;
 
 	constructor() {
 		makeObservable(this);
 	}
+
+	@action setSort = (value: QuoteSortRule): void => {
+		this.sort = value;
+	};
+
+	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setQuoteType = (value?: QuoteType): void => {
+		this.quoteType = value;
+	};
 
 	popState = false;
 

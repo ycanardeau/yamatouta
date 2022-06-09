@@ -5,7 +5,8 @@
 		"artistType": "Type",
 		"name": "Name",
 		"deleteArtist": "Delete artist",
-		"deleteDialogSubtitle": "Are you sure you want to delete this artist?"
+		"deleteDialogSubtitle": "Are you sure you want to delete this artist?",
+		"search": "Search"
 	},
 	"artistTypeNames": {
 		"Person": "Person",
@@ -71,7 +72,8 @@
 		"word": "Word",
 		"user": "User",
 		"loading": "Loading...",
-		"noItemsFound": "No items found"
+		"noItemsFound": "No items found",
+		"sortBy": "Sort by"
 	},
 	"translations": {
 		"addWord": "Add word",
@@ -82,7 +84,6 @@
 		"yamatokotoba": "Yamato-kotoba",
 		"category": "Part of speech",
 		"search": "Search",
-		"sortBy": "Sort by",
 		"viewOnInishienomanabi": "View on Inishienomanabi",
 		"editWord": "Edit word",
 		"deleteWord": "Delete word",
@@ -109,7 +110,9 @@
 	"users": {
 		"profile": "Profile",
 		"settings": "Settings",
-		"photo": "Photo"
+		"photo": "Photo",
+		"search": "Search",
+		"userGroup": "Group"
 	},
 	"translationSortRuleNames": {
 		"HeadwordAsc": "Headword (ascending)",
@@ -139,7 +142,8 @@
 		"quoteType": "Type",
 		"deleteQuote": "Delete quote",
 		"deleteDialogSubtitle": "Are you sure you want to delete this quote?",
-		"sources": "Sources"
+		"sources": "Sources",
+		"search": "Search"
 	},
 	"quoteTypeNames": {
 		"Word": "Word",
@@ -162,7 +166,8 @@
 		"authors": "Authors",
 		"editors": "Editors",
 		"publishers": "Publishers",
-		"translators": "Translators"
+		"translators": "Translators",
+		"search": "Search"
 	},
 	"workTypeNames": {
 		"Unspecified": "Unspecified",
@@ -212,5 +217,41 @@
 		"Work_Artist_Foreword": "Foreword",
 		"Work_Artist_Publisher": "Publisher",
 		"Work_Artist_Translator": "Translator"
+	},
+	"artistSortRuleNames": {
+		"NameAsc": "Name (ascending)",
+		"NameDesc": "Name (descending)",
+		"CreatedAsc": "Oldest",
+		"CreatedDesc": "Newest",
+		"UpdatedAsc": "Least recently updated",
+		"UpdatedDesc": "Recently updated"
+	},
+	"quoteSortRuleNames": {
+		"CreatedAsc": "Oldest",
+		"CreatedDesc": "Newest",
+		"UpdatedAsc": "Least recently updated",
+		"UpdatedDesc": "Recently updated"
+	},
+	"userGroupNames": {
+		"LimitedUser": "Limited user",
+		"User": "User",
+		"AdvancedUser": "Advanced user",
+		"Mod": "Mod",
+		"SeniorMod": "Senior mod",
+		"Admin": "Admin"
+	},
+	"userSortRuleNames": {
+		"NameAsc": "Name (ascending)",
+		"NameDesc": "Name (descending)",
+		"CreatedAsc": "Oldest",
+		"CreatedDesc": "Newest"
+	},
+	"workSortRuleNames": {
+		"NameAsc": "Name (ascending)",
+		"NameDesc": "Name (descending)",
+		"CreatedAsc": "Oldest",
+		"CreatedDesc": "Newest",
+		"UpdatedAsc": "Least recently updated",
+		"UpdatedDesc": "Recently updated"
 	}
 }

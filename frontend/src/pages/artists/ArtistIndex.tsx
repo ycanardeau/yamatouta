@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ArtistBreadcrumbs } from '../../components/artists/ArtistBreadcrumbs';
+import { ArtistSearchOptions } from '../../components/artists/ArtistSearchOptions';
 import { ArtistSearchTable } from '../../components/artists/ArtistSearchTable';
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
@@ -66,6 +67,10 @@ const ArtistIndex = observer((): React.ReactElement => {
 				borderRadius="none"
 			>
 				<EuiPageContentBody>
+					<ArtistSearchOptions store={store} />
+
+					<EuiSpacer size="m" />
+
 					<ArtistSearchTable store={store} />
 				</EuiPageContentBody>
 			</EuiPageContent>
