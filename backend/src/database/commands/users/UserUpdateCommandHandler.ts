@@ -9,6 +9,7 @@ import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../framework/exceptions/UserEmailAlreadyExistsException';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { UserUpdateParams } from '../../../models/users/UserUpdateParams';
+import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
@@ -29,6 +30,7 @@ export class UserUpdateCommandHandler
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	async execute(
@@ -74,6 +76,8 @@ export class UserUpdateCommandHandler
 				em.persist(auditLogEntry);
 
 				user.name = params.username;
+
+				user.updateSearchIndex(this.ngramConverter);
 			}
 
 			if (params.email && params.email !== user.email) {

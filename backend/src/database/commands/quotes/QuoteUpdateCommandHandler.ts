@@ -12,6 +12,7 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
 import { QuoteUpdateParams } from '../../../models/quotes/QuoteUpdateParams';
+import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
@@ -37,6 +38,7 @@ export class QuoteUpdateCommandHandler
 		private readonly webLinkService: WebLinkService,
 		private readonly workLinkService: WorkLinkService,
 		private readonly revisionService: RevisionService,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	async execute(command: QuoteUpdateCommand): Promise<QuoteObject> {
@@ -73,6 +75,7 @@ export class QuoteUpdateCommandHandler
 						{
 							// OPTIMIZE
 							populate: [
+								'searchIndex',
 								'artist',
 								'webLinks',
 								'webLinks.address',
@@ -93,6 +96,8 @@ export class QuoteUpdateCommandHandler
 					quote.quoteType = params.quoteType;
 					quote.locale = params.locale;
 					quote.artist = Reference.create(artist);
+
+					quote.updateSearchIndex(this.ngramConverter);
 
 					await this.webLinkService.sync(
 						em,

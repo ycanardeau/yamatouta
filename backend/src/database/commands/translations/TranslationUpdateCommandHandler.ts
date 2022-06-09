@@ -68,6 +68,7 @@ export class TranslationUpdateCommandHandler
 						{
 							// OPTIMIZE
 							populate: [
+								'searchIndex',
 								'webLinks',
 								'webLinks.address',
 								'webLinks.address.host',

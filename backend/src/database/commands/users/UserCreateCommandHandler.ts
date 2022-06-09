@@ -10,6 +10,7 @@ import { User } from '../../../entities/User';
 import { UserEmailAlreadyExistsException } from '../../../framework/exceptions/UserEmailAlreadyExistsException';
 import { AuditedAction } from '../../../models/AuditedAction';
 import { UserCreateParams } from '../../../models/users/UserCreateParams';
+import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 import { normalizeEmail } from '../../../utils/normalizeEmail';
@@ -30,6 +31,7 @@ export class UserCreateCommandHandler
 		@InjectRepository(User)
 		private readonly userRepo: EntityRepository<User>,
 		private readonly passwordHasherFactory: PasswordHasherFactory,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	// TODO: Use CAPTCHA.
@@ -76,6 +78,8 @@ export class UserCreateCommandHandler
 				passwordHashAlgorithm: passwordHasher.algorithm,
 				passwordHash: passwordHash,
 			});
+
+			user.updateSearchIndex(this.ngramConverter);
 
 			this.userRepo.persist(user);
 

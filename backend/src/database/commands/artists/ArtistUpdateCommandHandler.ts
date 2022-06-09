@@ -11,6 +11,7 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { ArtistOptionalField } from '../../../models/artists/ArtistOptionalField';
 import { ArtistUpdateParams } from '../../../models/artists/ArtistUpdateParams';
+import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
@@ -32,6 +33,7 @@ export class ArtistUpdateCommandHandler
 		private readonly artistRepo: EntityRepository<Artist>,
 		private readonly webLinkService: WebLinkService,
 		private readonly revisionService: RevisionService,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	async execute(command: ArtistUpdateCommand): Promise<ArtistObject> {
@@ -62,6 +64,7 @@ export class ArtistUpdateCommandHandler
 						{
 							// OPTIMIZE
 							populate: [
+								'searchIndex',
 								'webLinks',
 								'webLinks.address',
 								'webLinks.address.host',
@@ -77,6 +80,8 @@ export class ArtistUpdateCommandHandler
 				async () => {
 					artist.name = params.name;
 					artist.artistType = params.artistType;
+
+					artist.updateSearchIndex(this.ngramConverter);
 
 					await this.webLinkService.sync(
 						em,

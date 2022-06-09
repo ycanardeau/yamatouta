@@ -12,6 +12,7 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { WorkOptionalField } from '../../../models/works/WorkOptionalField';
 import { WorkUpdateParams } from '../../../models/works/WorkUpdateParams';
 import { ArtistLinkService } from '../../../services/ArtistLinkService';
+import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
@@ -34,6 +35,7 @@ export class WorkUpdateCommandHandler
 		private readonly webLinkService: WebLinkService,
 		private readonly artistLinkService: ArtistLinkService,
 		private readonly revisionService: RevisionService,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	async execute(command: WorkUpdateCommand): Promise<WorkObject> {
@@ -64,6 +66,7 @@ export class WorkUpdateCommandHandler
 						{
 							// OPTIMIZE
 							populate: [
+								'searchIndex',
 								'webLinks',
 								'webLinks.address',
 								'webLinks.address.host',
@@ -81,6 +84,8 @@ export class WorkUpdateCommandHandler
 				async () => {
 					work.name = params.name;
 					work.workType = params.workType;
+
+					work.updateSearchIndex(this.ngramConverter);
 
 					await this.webLinkService.sync(
 						em,
