@@ -20,6 +20,7 @@ import { ArtistType } from '../../../../src/models/artists/ArtistType';
 import { ArtistUpdateParams } from '../../../../src/models/artists/ArtistUpdateParams';
 import { IArtistSnapshot } from '../../../../src/models/snapshots/ArtistSnapshot';
 import { UserGroup } from '../../../../src/models/users/UserGroup';
+import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertArtistAuditLogEntry } from '../../../assertAuditLogEntry';
@@ -105,6 +106,11 @@ describe('ArtistUpdateCommandHandler', () => {
 			const artist = await em.findOneOrFail(Artist, {
 				id: artistObject.id,
 			});
+
+			const ngramConverter = app.get(NgramConverter);
+			expect(artist.searchIndex.name).toBe(
+				ngramConverter.toFullText(params.name, 2),
+			);
 
 			const revision = artist.revisions[1];
 

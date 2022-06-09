@@ -20,6 +20,7 @@ import { ITranslationSnapshot } from '../../../../src/models/snapshots/Translati
 import { TranslationUpdateParams } from '../../../../src/models/translations/TranslationUpdateParams';
 import { WordCategory } from '../../../../src/models/translations/WordCategory';
 import { UserGroup } from '../../../../src/models/users/UserGroup';
+import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';
@@ -116,6 +117,17 @@ describe('TranslationUpdateCommandHandler', () => {
 			const translation = await em.findOneOrFail(Translation, {
 				id: translationObject.id,
 			});
+
+			const ngramConverter = app.get(NgramConverter);
+			expect(translation.searchIndex.headword).toBe(
+				ngramConverter.toFullText(params.headword, 2),
+			);
+			expect(translation.searchIndex.reading).toBe(
+				ngramConverter.toFullText(params.reading, 2),
+			);
+			expect(translation.searchIndex.yamatokotoba).toBe(
+				ngramConverter.toFullText(params.yamatokotoba, 2),
+			);
 
 			const revision = translation.revisions[1];
 

@@ -20,6 +20,7 @@ import { IWorkSnapshot } from '../../../../src/models/snapshots/WorkSnapshot';
 import { UserGroup } from '../../../../src/models/users/UserGroup';
 import { WorkType } from '../../../../src/models/works/WorkType';
 import { WorkUpdateParams } from '../../../../src/models/works/WorkUpdateParams';
+import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertWorkAuditLogEntry } from '../../../assertAuditLogEntry';
@@ -104,6 +105,11 @@ describe('WorkUpdateCommandHandler', () => {
 			expect(workObject.workType).toBe(params.workType);
 
 			const work = await em.findOneOrFail(Work, { id: workObject.id });
+
+			const ngramConverter = app.get(NgramConverter);
+			expect(work.searchIndex.name).toBe(
+				ngramConverter.toFullText(params.name, 2),
+			);
 
 			const revision = work.revisions[1];
 

@@ -10,6 +10,7 @@ import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { UserUpdateParams } from '../../../../src/models/users/UserUpdateParams';
+import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { normalizeEmail } from '../../../../src/utils/normalizeEmail';
 import { FakePermissionContext } from '../../../FakePermissionContext';
@@ -98,6 +99,11 @@ describe('UserUpdateCommandHandler', () => {
 			expect(user.normalizedEmail).toBe(normalizedEmail);
 			expect(user.salt).toBe(salt);
 			expect(user.passwordHash).toBe(passwordHash);
+
+			const ngramConverter = app.get(NgramConverter);
+			expect(user.searchIndex.name).toBe(
+				ngramConverter.toFullText(newUsername, 2),
+			);
 
 			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
 				user: user,

@@ -23,6 +23,7 @@ import { QuoteUpdateParams } from '../../../../src/models/quotes/QuoteUpdatePara
 import { ObjectRefSnapshot } from '../../../../src/models/snapshots/ObjectRefSnapshot';
 import { IQuoteSnapshot } from '../../../../src/models/snapshots/QuoteSnapshot';
 import { UserGroup } from '../../../../src/models/users/UserGroup';
+import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertQuoteAuditLogEntry } from '../../../assertAuditLogEntry';
@@ -120,6 +121,14 @@ describe('QuoteUpdateCommandHandler', () => {
 			expect(quoteObject.artist.id).toBe(params.artistId);
 
 			const quote = await em.findOneOrFail(Quote, { id: quoteObject.id });
+
+			const ngramConverter = app.get(NgramConverter);
+			expect(quote.searchIndex.text).toBe(
+				ngramConverter.toFullText(
+					[params.text, quote /* TODO */.transcription].join(' '),
+					2,
+				),
+			);
 
 			const revision = quote.revisions[1];
 
