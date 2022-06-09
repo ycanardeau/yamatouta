@@ -12,13 +12,10 @@ import {
 } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
-import { IArtistLinkFactory } from '../models/IArtistLinkFactory';
 import { IEntryWithArtistLinks } from '../models/IEntryWithArtistLinks';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
-import { IRevisionFactory } from '../models/IRevisionFactory';
-import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { LinkType } from '../models/LinkType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { WebLinkCategory } from '../models/WebLinkCategory';
@@ -40,11 +37,8 @@ export class Work
 	implements
 		IEntryWithSearchIndex<WorkSearchIndex>,
 		IEntryWithRevisions<Work, WorkSnapshot, WorkRevision>,
-		IRevisionFactory<Work, WorkSnapshot, WorkRevision>,
 		IEntryWithWebLinks<WorkWebLink>,
-		IWebLinkFactory<WorkWebLink>,
-		IEntryWithArtistLinks<WorkArtistLink>,
-		IArtistLinkFactory<WorkArtistLink>
+		IEntryWithArtistLinks<EntryType.Work, WorkArtistLink>
 {
 	@PrimaryKey()
 	id!: number;

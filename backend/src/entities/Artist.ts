@@ -15,8 +15,6 @@ import { EntryType } from '../models/EntryType';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
-import { IRevisionFactory } from '../models/IRevisionFactory';
-import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
@@ -35,9 +33,7 @@ export class Artist
 	implements
 		IEntryWithSearchIndex<ArtistSearchIndex>,
 		IEntryWithRevisions<Artist, ArtistSnapshot, ArtistRevision>,
-		IRevisionFactory<Artist, ArtistSnapshot, ArtistRevision>,
-		IEntryWithWebLinks<ArtistWebLink>,
-		IWebLinkFactory<ArtistWebLink>
+		IEntryWithWebLinks<ArtistWebLink>
 {
 	@PrimaryKey()
 	id!: number;

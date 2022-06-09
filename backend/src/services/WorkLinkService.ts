@@ -5,7 +5,6 @@ import { PartialDate } from '../entities/PartialDate';
 import { Work } from '../entities/Work';
 import { WorkLink } from '../entities/WorkLink';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
-import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
 import { LinkType, workLinkTypes } from '../models/LinkType';
 import { Permission } from '../models/Permission';
 import { WorkLinkUpdateParams } from '../models/WorkLinkUpdateParams';
@@ -14,12 +13,12 @@ import { PermissionContext } from './PermissionContext';
 
 @Injectable()
 export class WorkLinkService {
-	async sync<TWorkLink extends WorkLink>(
+	async sync<
+		TEntryType extends keyof typeof workLinkTypes,
+		TWorkLink extends WorkLink,
+	>(
 		em: EntityManager,
-		entry: {
-			entryType: keyof typeof workLinkTypes;
-		} & IEntryWithWorkLinks<TWorkLink> &
-			IWorkLinkFactory<TWorkLink>,
+		entry: IEntryWithWorkLinks<TEntryType, TWorkLink>,
 		newItems: WorkLinkUpdateParams[],
 		permissionContext: PermissionContext,
 	): Promise<void> {

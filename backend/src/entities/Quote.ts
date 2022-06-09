@@ -17,9 +17,6 @@ import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
-import { IRevisionFactory } from '../models/IRevisionFactory';
-import { IWebLinkFactory } from '../models/IWebLinkFactory';
-import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
 import { LinkType } from '../models/LinkType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
@@ -44,11 +41,8 @@ export class Quote
 	implements
 		IEntryWithSearchIndex<QuoteSearchIndex>,
 		IEntryWithRevisions<Quote, QuoteSnapshot, QuoteRevision>,
-		IRevisionFactory<Quote, QuoteSnapshot, QuoteRevision>,
 		IEntryWithWebLinks<QuoteWebLink>,
-		IWebLinkFactory<QuoteWebLink>,
-		IEntryWithWorkLinks<QuoteWorkLink>,
-		IWorkLinkFactory<QuoteWorkLink>
+		IEntryWithWorkLinks<EntryType.Quote, QuoteWorkLink>
 {
 	@PrimaryKey()
 	id!: number;

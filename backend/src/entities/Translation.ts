@@ -19,9 +19,6 @@ import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
-import { IRevisionFactory } from '../models/IRevisionFactory';
-import { IWebLinkFactory } from '../models/IWebLinkFactory';
-import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
 import { LinkType } from '../models/LinkType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
@@ -49,11 +46,8 @@ export class Translation
 			TranslationSnapshot,
 			TranslationRevision
 		>,
-		IRevisionFactory<Translation, TranslationSnapshot, TranslationRevision>,
 		IEntryWithWebLinks<TranslationWebLink>,
-		IWebLinkFactory<TranslationWebLink>,
-		IEntryWithWorkLinks<TranslationWorkLink>,
-		IWorkLinkFactory<TranslationWorkLink>
+		IEntryWithWorkLinks<EntryType.Translation, TranslationWorkLink>
 {
 	@PrimaryKey()
 	id!: number;

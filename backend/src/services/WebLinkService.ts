@@ -6,7 +6,6 @@ import { WebAddress } from '../entities/WebAddress';
 import { WebAddressHost } from '../entities/WebAddressHost';
 import { WebLink } from '../entities/WebLink';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
-import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { Permission } from '../models/Permission';
 import { WebLinkUpdateParams } from '../models/WebLinkUpdateParams';
 import { collectionSyncWithContent } from '../utils/collectionDiff';
@@ -46,7 +45,7 @@ export class WebLinkService {
 
 	async sync<TWebLink extends WebLink>(
 		em: EntityManager,
-		entry: IEntryWithWebLinks<TWebLink> & IWebLinkFactory<TWebLink>,
+		entry: IEntryWithWebLinks<TWebLink>,
 		newItems: WebLinkUpdateParams[],
 		permissionContext: PermissionContext,
 		actor: User,
