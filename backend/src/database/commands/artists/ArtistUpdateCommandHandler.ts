@@ -51,10 +51,10 @@ export class ArtistUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const artist = await this.em.transactional(async (em) => {
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
 
 			const artist = isNew
-				? new Artist(user)
+				? new Artist(actor)
 				: await this.artistRepo.findOneOrFail(
 						{
 							id: params.id,
@@ -88,10 +88,10 @@ export class ArtistUpdateCommandHandler
 						artist,
 						params.webLinks,
 						permissionContext,
-						user,
+						actor,
 					);
 				},
-				user,
+				actor,
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
@@ -101,7 +101,7 @@ export class ArtistUpdateCommandHandler
 					? AuditedAction.Artist_Create
 					: AuditedAction.Artist_Update,
 				artist: artist,
-				actor: user,
+				actor: actor,
 				actorIp: permissionContext.clientIp,
 			});
 

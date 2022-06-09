@@ -55,10 +55,10 @@ export class TranslationUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const translation = await this.em.transactional(async (em) => {
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
 
 			const translation = isNew
-				? new Translation(user)
+				? new Translation(actor)
 				: await this.translationRepo.findOneOrFail(
 						{
 							id: params.id,
@@ -97,7 +97,7 @@ export class TranslationUpdateCommandHandler
 						translation,
 						params.webLinks,
 						permissionContext,
-						user,
+						actor,
 					);
 
 					await this.workLinkService.sync(
@@ -107,7 +107,7 @@ export class TranslationUpdateCommandHandler
 						permissionContext,
 					);
 				},
-				user,
+				actor,
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
@@ -117,7 +117,7 @@ export class TranslationUpdateCommandHandler
 					? AuditedAction.Translation_Create
 					: AuditedAction.Translation_Update,
 				translation: translation,
-				actor: user,
+				actor: actor,
 				actorIp: permissionContext.clientIp,
 			});
 

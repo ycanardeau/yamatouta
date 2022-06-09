@@ -62,7 +62,7 @@ abstract class EntryDeleteCommandHandler<
 				);
 			}
 
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
 
 			await this.revisionService.create(
 				em,
@@ -70,14 +70,14 @@ abstract class EntryDeleteCommandHandler<
 				async () => {
 					entry.deleted = true;
 				},
-				user,
+				actor,
 				RevisionEvent.Deleted,
 				true,
 			);
 
 			const auditLogEntry = this.auditLogFunc(
 				entry,
-				user,
+				actor,
 				permissionContext.clientIp,
 			);
 

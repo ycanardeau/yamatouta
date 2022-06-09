@@ -26,7 +26,7 @@ export class AdminCreateMissingRevisionsCommandHandler
 		permissionContext.verifyPermission(Permission.CreateMissingRevisions);
 
 		return this.em.transactional(async (em) => {
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
 
 			const [translations, artists, quotes] = await Promise.all([
 				em.find(Translation, { version: 0 }),
@@ -44,7 +44,7 @@ export class AdminCreateMissingRevisionsCommandHandler
 
 				const revision = entry.createRevision(
 					commit,
-					user,
+					actor,
 					RevisionEvent.Created,
 					'',
 					++entry.version,

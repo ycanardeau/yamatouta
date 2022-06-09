@@ -53,10 +53,10 @@ export class WorkUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const work = await this.em.transactional(async (em) => {
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
 
 			const work = isNew
-				? new Work(user)
+				? new Work(actor)
 				: await this.workRepo.findOneOrFail(
 						{
 							id: params.id,
@@ -92,7 +92,7 @@ export class WorkUpdateCommandHandler
 						work,
 						params.webLinks,
 						permissionContext,
-						user,
+						actor,
 					);
 
 					await this.artistLinkService.sync(
@@ -102,7 +102,7 @@ export class WorkUpdateCommandHandler
 						permissionContext,
 					);
 				},
-				user,
+				actor,
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
@@ -112,7 +112,7 @@ export class WorkUpdateCommandHandler
 					? AuditedAction.Work_Create
 					: AuditedAction.Work_Update,
 				work: work,
-				actor: user,
+				actor: actor,
 				actorIp: permissionContext.clientIp,
 			});
 

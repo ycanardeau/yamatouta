@@ -56,7 +56,7 @@ export class QuoteUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const quote = await this.em.transactional(async (em) => {
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
 
 			const artist = await this.artistRepo.findOneOrFail({
 				id: params.artistId,
@@ -65,7 +65,7 @@ export class QuoteUpdateCommandHandler
 			});
 
 			const quote = isNew
-				? new Quote(user)
+				? new Quote(actor)
 				: await this.quoteRepo.findOneOrFail(
 						{
 							id: params.id,
@@ -104,7 +104,7 @@ export class QuoteUpdateCommandHandler
 						quote,
 						params.webLinks,
 						permissionContext,
-						user,
+						actor,
 					);
 
 					await this.workLinkService.sync(
@@ -114,7 +114,7 @@ export class QuoteUpdateCommandHandler
 						permissionContext,
 					);
 				},
-				user,
+				actor,
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
@@ -124,7 +124,7 @@ export class QuoteUpdateCommandHandler
 					? AuditedAction.Quote_Create
 					: AuditedAction.Quote_Update,
 				quote: quote,
-				actor: user,
+				actor: actor,
 				actorIp: permissionContext.clientIp,
 			});
 

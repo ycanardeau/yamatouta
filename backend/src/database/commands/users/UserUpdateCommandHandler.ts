@@ -46,7 +46,18 @@ export class UserUpdateCommandHandler
 			throw new BadRequestException(result.error.details[0].message);
 
 		return this.em.transactional(async (em) => {
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
+
+			const user = await this.userRepo.findOneOrFail(
+				{
+					id: actor.id,
+					deleted: false,
+					hidden: false,
+				},
+				{
+					populate: ['searchIndex'],
+				},
+			);
 
 			const passwordHasher = this.passwordHasherFactory.create(
 				user.passwordHashAlgorithm,
@@ -67,7 +78,7 @@ export class UserUpdateCommandHandler
 				const auditLogEntry = new UserAuditLogEntry({
 					action: AuditedAction.User_Rename,
 					user: user,
-					actor: user,
+					actor: actor,
 					actorIp: permissionContext.clientIp,
 					oldValue: user.name,
 					newValue: params.username,
@@ -95,7 +106,7 @@ export class UserUpdateCommandHandler
 				const auditLogEntry = new UserAuditLogEntry({
 					action: AuditedAction.User_ChangeEmail,
 					user: user,
-					actor: user,
+					actor: actor,
 					actorIp: permissionContext.clientIp,
 					oldValue: user.email,
 					newValue: params.email,
@@ -111,7 +122,7 @@ export class UserUpdateCommandHandler
 				const auditLogEntry = new UserAuditLogEntry({
 					action: AuditedAction.User_ChangePassword,
 					user: user,
-					actor: user,
+					actor: actor,
 					actorIp: permissionContext.clientIp,
 				});
 
