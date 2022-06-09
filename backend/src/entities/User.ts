@@ -142,7 +142,7 @@ export class UserSearchIndex {
 	user: User;
 
 	@Property({ columnType: 'text', lazy: true })
-	name!: string;
+	name = '';
 
 	constructor(user: User) {
 		this.user = user;

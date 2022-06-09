@@ -226,13 +226,13 @@ export class TranslationSearchIndex {
 	translation: Translation;
 
 	@Property({ columnType: 'text', lazy: true })
-	headword!: string;
+	headword = '';
 
 	@Property({ columnType: 'text', lazy: true })
-	reading!: string;
+	reading = '';
 
 	@Property({ columnType: 'text', lazy: true })
-	yamatokotoba!: string;
+	yamatokotoba = '';
 
 	constructor(translation: Translation) {
 		this.translation = translation;

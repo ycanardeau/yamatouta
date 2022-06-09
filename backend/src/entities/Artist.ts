@@ -143,7 +143,7 @@ export class ArtistSearchIndex {
 	artist: Artist;
 
 	@Property({ columnType: 'text', lazy: true })
-	name!: string;
+	name = '';
 
 	constructor(artist: Artist) {
 		this.artist = artist;

@@ -171,7 +171,7 @@ export class WorkSearchIndex {
 	work: Work;
 
 	@Property({ columnType: 'text', lazy: true })
-	name!: string;
+	name = '';
 
 	constructor(work: Work) {
 		this.work = work;

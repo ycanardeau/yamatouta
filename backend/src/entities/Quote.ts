@@ -198,7 +198,7 @@ export class QuoteSearchIndex {
 	quote: Quote;
 
 	@Property({ columnType: 'text', lazy: true })
-	text!: string;
+	text = '';
 
 	constructor(quote: Quote) {
 		this.quote = quote;
