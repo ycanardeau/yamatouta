@@ -42,7 +42,7 @@ export class QuoteUpdateCommandHandler
 	async execute(command: QuoteUpdateCommand): Promise<QuoteObject> {
 		const { permissionContext, params } = command;
 
-		permissionContext.verifyPermission(Permission.Quote_Update);
+		permissionContext.verifyPermission(Permission.UpdateQuotes);
 
 		const result = QuoteUpdateParams.schema.validate(params, {
 			convert: true,

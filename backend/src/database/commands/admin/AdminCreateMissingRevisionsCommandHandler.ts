@@ -23,9 +23,7 @@ export class AdminCreateMissingRevisionsCommandHandler
 	execute(command: AdminCreateMissingRevisionsCommand): Promise<void> {
 		const { permissionContext } = command;
 
-		permissionContext.verifyPermission(
-			Permission.Admin_CreateMissingRevisions,
-		);
+		permissionContext.verifyPermission(Permission.CreateMissingRevisions);
 
 		return this.em.transactional(async (em) => {
 			const user = await permissionContext.getCurrentUser(em);

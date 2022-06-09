@@ -48,7 +48,7 @@ const QuoteIndex = observer((): React.ReactElement => {
 						}}
 						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Quote_Create,
+								Permission.CreateQuotes,
 							)
 						}
 						iconType={AddRegular}

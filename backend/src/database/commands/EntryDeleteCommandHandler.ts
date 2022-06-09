@@ -102,7 +102,7 @@ export class TranslationDeleteCommandHandler
 		super(
 			em,
 			revisionService,
-			Permission.Translation_Delete,
+			Permission.DeleteTranslations,
 			(id) =>
 				translationRepo.findOneOrFail(
 					{ id: id },
@@ -144,7 +144,7 @@ export class ArtistDeleteCommandHandler
 		super(
 			em,
 			revisionService,
-			Permission.Artist_Delete,
+			Permission.DeleteArtists,
 			(id) =>
 				artistRepo.findOneOrFail(
 					{ id: id },
@@ -184,7 +184,7 @@ export class QuoteDeleteCommandHandler
 		super(
 			em,
 			revisionService,
-			Permission.Quote_Delete,
+			Permission.DeleteQuotes,
 			(id) =>
 				quoteRepo.findOneOrFail(
 					{ id: id },
@@ -227,7 +227,7 @@ export class WorkDeleteCommandHandler
 		super(
 			em,
 			revisionService,
-			Permission.Work_Delete,
+			Permission.DeleteWorks,
 			(id) =>
 				workRepo.findOneOrFail(
 					{ id: id },

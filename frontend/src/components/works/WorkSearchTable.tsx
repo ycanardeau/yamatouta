@@ -104,7 +104,7 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Work_Update,
+								Permission.UpdateWorks,
 							)
 						}
 					>
@@ -120,7 +120,7 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Revision_View,
+								Permission.ViewRevisions,
 							)
 						}
 					>
@@ -134,7 +134,7 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Work_Delete,
+								Permission.DeleteWorks,
 							)
 						}
 					>

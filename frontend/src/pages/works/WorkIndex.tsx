@@ -47,7 +47,7 @@ const WorkIndex = (): React.ReactElement => {
 						}}
 						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Work_Create,
+								Permission.CreateWorks,
 							)
 						}
 						iconType={AddRegular}

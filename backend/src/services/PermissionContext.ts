@@ -27,11 +27,11 @@ export class PermissionContext {
 	}
 
 	get canViewDeletedEntries(): boolean {
-		return this.hasPermission(Permission.Admin_ViewDeletedEntries);
+		return this.hasPermission(Permission.ViewDeletedEntries);
 	}
 
 	get canViewHiddenEntries(): boolean {
-		return this.hasPermission(Permission.Admin_ViewHiddenEntries);
+		return this.hasPermission(Permission.ViewHiddenEntries);
 	}
 
 	verifyPermission(permission: Permission): void {

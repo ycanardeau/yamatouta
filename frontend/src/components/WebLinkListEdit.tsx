@@ -64,7 +64,7 @@ const WebLinkEdit = observer(
 						}
 						readOnly={
 							!auth.permissionContext.hasPermission(
-								Permission.WebLink_Update,
+								Permission.UpdateWebLinks,
 							)
 						}
 					/>
@@ -77,7 +77,7 @@ const WebLinkEdit = observer(
 					}}
 				>
 					{auth.permissionContext.hasPermission(
-						Permission.WebLink_Update,
+						Permission.UpdateWebLinks,
 					) ? (
 						<EuiSelect
 							compressed
@@ -105,7 +105,7 @@ const WebLinkEdit = observer(
 							fullWidth
 							readOnly={
 								!auth.permissionContext.hasPermission(
-									Permission.WebLink_Update,
+									Permission.UpdateWebLinks,
 								)
 							}
 						/>
@@ -124,7 +124,7 @@ const WebLinkEdit = observer(
 						aria-label={t(`shared.remove`)}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.WebLink_Delete,
+								Permission.DeleteWebLinks,
 							)
 						}
 					/>
@@ -176,7 +176,7 @@ export const WebLinkListEdit = observer(
 					iconType={AddRegular}
 					disabled={
 						!auth.permissionContext.hasPermission(
-							Permission.WebLink_Create,
+							Permission.CreateWebLinks,
 						)
 					}
 				>

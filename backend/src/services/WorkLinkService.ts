@@ -26,7 +26,7 @@ export class WorkLinkService {
 		const create = async (
 			newItem: WorkLinkUpdateParams,
 		): Promise<TWorkLink> => {
-			permissionContext.verifyPermission(Permission.WorkLink_Create);
+			permissionContext.verifyPermission(Permission.CreateWorkLinks);
 
 			const relatedWork = await em.findOneOrFail(Work, {
 				id: newItem.relatedWorkId,
@@ -52,7 +52,7 @@ export class WorkLinkService {
 		): Promise<boolean> => {
 			if (oldItem.contentEquals(newItem)) return false;
 
-			permissionContext.verifyPermission(Permission.WorkLink_Update);
+			permissionContext.verifyPermission(Permission.UpdateWorkLinks);
 
 			const relatedWork = await em.findOneOrFail(Work, {
 				id: newItem.relatedWorkId,
@@ -70,7 +70,7 @@ export class WorkLinkService {
 		};
 
 		const remove = async (oldItem: TWorkLink): Promise<void> => {
-			permissionContext.verifyPermission(Permission.WorkLink_Delete);
+			permissionContext.verifyPermission(Permission.DeleteWorkLinks);
 
 			em.remove(oldItem);
 		};

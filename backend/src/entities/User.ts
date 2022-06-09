@@ -3,8 +3,9 @@ import { Entity, Enum, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { EntryType } from '../models/EntryType';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { PasswordHashAlgorithm } from '../models/PasswordHashAlgorithm';
-import { Permission, userGroupPermissions } from '../models/Permission';
+import { Permission } from '../models/Permission';
 import { UserGroup } from '../models/UserGroup';
+import { userGroupPermissions } from '../models/userGroupPermissions';
 import { NgramConverter } from '../services/NgramConverter';
 import { IPasswordHasher } from '../services/passwordHashers/IPasswordHasher';
 

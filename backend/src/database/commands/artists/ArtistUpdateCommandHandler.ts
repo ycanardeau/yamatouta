@@ -37,7 +37,7 @@ export class ArtistUpdateCommandHandler
 	async execute(command: ArtistUpdateCommand): Promise<ArtistObject> {
 		const { permissionContext, params } = command;
 
-		permissionContext.verifyPermission(Permission.Artist_Update);
+		permissionContext.verifyPermission(Permission.UpdateArtists);
 
 		const result = ArtistUpdateParams.schema.validate(params, {
 			convert: true,

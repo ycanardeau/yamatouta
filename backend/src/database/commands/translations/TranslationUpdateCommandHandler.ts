@@ -43,7 +43,7 @@ export class TranslationUpdateCommandHandler
 	): Promise<TranslationObject> {
 		const { permissionContext, params } = command;
 
-		permissionContext.verifyPermission(Permission.Translation_Update);
+		permissionContext.verifyPermission(Permission.UpdateTranslations);
 
 		const result = TranslationUpdateParams.schema.validate(params, {
 			convert: true,

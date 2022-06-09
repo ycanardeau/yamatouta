@@ -54,7 +54,7 @@ export class WebLinkService {
 		const create = async (
 			newItem: WebLinkUpdateParams,
 		): Promise<TWebLink> => {
-			permissionContext.verifyPermission(Permission.WebLink_Create);
+			permissionContext.verifyPermission(Permission.CreateWebLinks);
 
 			const address = await this.getOrCreateWebAddress(
 				em,
@@ -77,7 +77,7 @@ export class WebLinkService {
 		): Promise<boolean> => {
 			if (oldItem.contentEquals(newItem)) return false;
 
-			permissionContext.verifyPermission(Permission.WebLink_Update);
+			permissionContext.verifyPermission(Permission.UpdateWebLinks);
 
 			const address = await this.getOrCreateWebAddress(
 				em,
@@ -93,7 +93,7 @@ export class WebLinkService {
 		};
 
 		const remove = async (oldItem: TWebLink): Promise<void> => {
-			permissionContext.verifyPermission(Permission.WebLink_Delete);
+			permissionContext.verifyPermission(Permission.DeleteWebLinks);
 
 			oldItem.address.getEntity().decrementReferenceCount();
 

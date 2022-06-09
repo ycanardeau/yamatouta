@@ -166,7 +166,7 @@ const TranslationPopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Translation_Update,
+								Permission.UpdateTranslations,
 							)
 						}
 					>
@@ -184,7 +184,7 @@ const TranslationPopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Revision_View,
+								Permission.ViewRevisions,
 							)
 						}
 					>
@@ -198,7 +198,7 @@ const TranslationPopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Translation_Delete,
+								Permission.DeleteTranslations,
 							)
 						}
 					>

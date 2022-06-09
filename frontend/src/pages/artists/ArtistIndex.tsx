@@ -48,7 +48,7 @@ const ArtistIndex = observer((): React.ReactElement => {
 						}}
 						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Artist_Create,
+								Permission.CreateArtists,
 							)
 						}
 						iconType={AddRegular}

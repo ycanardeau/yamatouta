@@ -26,7 +26,7 @@ export class ArtistLinkService {
 		const create = async (
 			newItem: ArtistLinkUpdateParams,
 		): Promise<TArtistLink> => {
-			permissionContext.verifyPermission(Permission.ArtistLink_Create);
+			permissionContext.verifyPermission(Permission.CreateArtistLinks);
 
 			const relatedArtist = await em.findOneOrFail(Artist, {
 				id: newItem.relatedArtistId,
@@ -52,7 +52,7 @@ export class ArtistLinkService {
 		): Promise<boolean> => {
 			if (oldItem.contentEquals(newItem)) return false;
 
-			permissionContext.verifyPermission(Permission.ArtistLink_Update);
+			permissionContext.verifyPermission(Permission.UpdateArtistLinks);
 
 			const relatedArtist = await em.findOneOrFail(Artist, {
 				id: newItem.relatedArtistId,
@@ -70,7 +70,7 @@ export class ArtistLinkService {
 		};
 
 		const remove = async (oldItem: TArtistLink): Promise<void> => {
-			permissionContext.verifyPermission(Permission.ArtistLink_Delete);
+			permissionContext.verifyPermission(Permission.DeleteArtistLinks);
 
 			em.remove(oldItem);
 		};

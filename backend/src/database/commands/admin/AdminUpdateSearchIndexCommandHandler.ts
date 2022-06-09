@@ -33,7 +33,7 @@ export class AdminUpdateSearchIndexCommandHandler
 	async execute(command: AdminUpdateSearchIndexCommand): Promise<void> {
 		const { permissionContext, params } = command;
 
-		permissionContext.verifyPermission(Permission.Admin_UpdateSearchIndex);
+		permissionContext.verifyPermission(Permission.UpdateSearchIndex);
 
 		let entryId = 1;
 

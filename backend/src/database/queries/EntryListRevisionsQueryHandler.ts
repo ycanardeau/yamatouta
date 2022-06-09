@@ -29,7 +29,7 @@ abstract class EntryListRevisionsQueryHandler<
 	async execute(query: TQuery): Promise<SearchResultObject<RevisionObject>> {
 		const { permissionContext, params } = query;
 
-		permissionContext.verifyPermission(Permission.Revision_View);
+		permissionContext.verifyPermission(Permission.ViewRevisions);
 
 		const entry = await this.entryFunc(params.id);
 

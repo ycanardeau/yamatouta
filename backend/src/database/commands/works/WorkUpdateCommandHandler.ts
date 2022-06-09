@@ -39,7 +39,7 @@ export class WorkUpdateCommandHandler
 	async execute(command: WorkUpdateCommand): Promise<WorkObject> {
 		const { permissionContext, params } = command;
 
-		permissionContext.verifyPermission(Permission.Work_Update);
+		permissionContext.verifyPermission(Permission.UpdateWorks);
 
 		const result = WorkUpdateParams.schema.validate(params, {
 			convert: true,
