@@ -123,7 +123,8 @@ describe('QuoteUpdateCommandHandler', () => {
 			const quote = await em.findOneOrFail(Quote, { id: quoteObject.id });
 
 			const ngramConverter = app.get(NgramConverter);
-			expect(quote.searchIndex.text).toBe(
+			const searchIndex = quote.searchIndex.getEntity();
+			expect(searchIndex.text).toBe(
 				ngramConverter.toFullText(
 					[params.text, quote /* TODO */.transcription].join(' '),
 					2,

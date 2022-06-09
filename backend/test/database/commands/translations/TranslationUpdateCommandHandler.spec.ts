@@ -119,13 +119,14 @@ describe('TranslationUpdateCommandHandler', () => {
 			});
 
 			const ngramConverter = app.get(NgramConverter);
-			expect(translation.searchIndex.headword).toBe(
+			const searchIndex = translation.searchIndex.getEntity();
+			expect(searchIndex.headword).toBe(
 				ngramConverter.toFullText(params.headword, 2),
 			);
-			expect(translation.searchIndex.reading).toBe(
+			expect(searchIndex.reading).toBe(
 				ngramConverter.toFullText(params.reading, 2),
 			);
-			expect(translation.searchIndex.yamatokotoba).toBe(
+			expect(searchIndex.yamatokotoba).toBe(
 				ngramConverter.toFullText(params.yamatokotoba, 2),
 			);
 

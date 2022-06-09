@@ -101,7 +101,8 @@ describe('UserUpdateCommandHandler', () => {
 			expect(user.passwordHash).toBe(passwordHash);
 
 			const ngramConverter = app.get(NgramConverter);
-			expect(user.searchIndex.name).toBe(
+			const searchIndex = user.searchIndex.getEntity();
+			expect(searchIndex.name).toBe(
 				ngramConverter.toFullText(newUsername, 2),
 			);
 

@@ -84,10 +84,11 @@ export class Artist
 	actor: IdentifiedReference<User>;
 
 	@OneToOne(() => ArtistSearchIndex, (searchIndex) => searchIndex.artist)
-	searchIndex = new ArtistSearchIndex(this);
+	searchIndex: IdentifiedReference<ArtistSearchIndex>;
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
+		this.searchIndex = Reference.create(new ArtistSearchIndex(this));
 	}
 
 	get entryType(): EntryType.Artist {
@@ -95,7 +96,8 @@ export class Artist
 	}
 
 	updateSearchIndex(ngramConverter: NgramConverter): void {
-		this.searchIndex.name = ngramConverter.toFullText(this.name, 2);
+		const searchIndex = this.searchIndex.getEntity();
+		searchIndex.name = ngramConverter.toFullText(this.name, 2);
 	}
 
 	takeSnapshot(): ArtistSnapshot {

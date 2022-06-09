@@ -119,10 +119,11 @@ export class Quote
 	actor: IdentifiedReference<User>;
 
 	@OneToOne(() => QuoteSearchIndex, (searchIndex) => searchIndex.quote)
-	searchIndex = new QuoteSearchIndex(this);
+	searchIndex: IdentifiedReference<QuoteSearchIndex>;
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
+		this.searchIndex = Reference.create(new QuoteSearchIndex(this));
 	}
 
 	get entryType(): EntryType.Quote {
@@ -130,7 +131,8 @@ export class Quote
 	}
 
 	updateSearchIndex(ngramConverter: NgramConverter): void {
-		this.searchIndex.text = ngramConverter.toFullText(
+		const searchIndex = this.searchIndex.getEntity();
+		searchIndex.text = ngramConverter.toFullText(
 			[this.text, this.transcription].join(' '),
 			2,
 		);

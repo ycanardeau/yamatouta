@@ -1,4 +1,12 @@
-import { Entity, Enum, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Entity,
+	Enum,
+	IdentifiedReference,
+	OneToOne,
+	PrimaryKey,
+	Property,
+	Reference,
+} from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
@@ -75,7 +83,7 @@ export class User implements IEntryWithSearchIndex<UserSearchIndex> {
 	userGroup = UserGroup.User;
 
 	@OneToOne(() => UserSearchIndex, (searchIndex) => searchIndex.user)
-	searchIndex = new UserSearchIndex(this);
+	searchIndex: IdentifiedReference<UserSearchIndex>;
 
 	constructor({
 		name,
@@ -98,6 +106,7 @@ export class User implements IEntryWithSearchIndex<UserSearchIndex> {
 		this.passwordHashAlgorithm = passwordHashAlgorithm;
 		this.salt = salt;
 		this.passwordHash = passwordHash;
+		this.searchIndex = Reference.create(new UserSearchIndex(this));
 	}
 
 	get entryType(): EntryType.User {
@@ -129,7 +138,8 @@ export class User implements IEntryWithSearchIndex<UserSearchIndex> {
 	}
 
 	updateSearchIndex(ngramConverter: NgramConverter): void {
-		this.searchIndex.name = ngramConverter.toFullText(this.name, 2);
+		const searchIndex = this.searchIndex.getEntity();
+		searchIndex.name = ngramConverter.toFullText(this.name, 2);
 	}
 }
 

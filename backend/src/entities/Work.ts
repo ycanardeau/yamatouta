@@ -95,10 +95,11 @@ export class Work
 	actor: IdentifiedReference<User>;
 
 	@OneToOne(() => WorkSearchIndex, (searchIndex) => searchIndex.work)
-	searchIndex = new WorkSearchIndex(this);
+	searchIndex: IdentifiedReference<WorkSearchIndex>;
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
+		this.searchIndex = Reference.create(new WorkSearchIndex(this));
 	}
 
 	get entryType(): EntryType.Work {
@@ -106,7 +107,8 @@ export class Work
 	}
 
 	updateSearchIndex(ngramConverter: NgramConverter): void {
-		this.searchIndex.name = ngramConverter.toFullText(this.name, 2);
+		const searchIndex = this.searchIndex.getEntity();
+		searchIndex.name = ngramConverter.toFullText(this.name, 2);
 	}
 
 	takeSnapshot(): WorkSnapshot {

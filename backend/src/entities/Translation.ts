@@ -87,7 +87,7 @@ export class Translation
 		() => TranslationSearchIndex,
 		(searchIndex) => searchIndex.translation,
 	)
-	searchIndex = new TranslationSearchIndex(this);
+	searchIndex: IdentifiedReference<TranslationSearchIndex>;
 
 	@Property()
 	version = 0;
@@ -111,6 +111,7 @@ export class Translation
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
+		this.searchIndex = Reference.create(new TranslationSearchIndex(this));
 	}
 
 	get entryType(): EntryType.Translation {
@@ -146,15 +147,16 @@ export class Translation
 	}
 
 	updateSearchIndex(ngramConverter: NgramConverter): void {
-		this.searchIndex.headword = ngramConverter.toFullText(
+		const searchIndex = this.searchIndex.getEntity();
+		searchIndex.headword = ngramConverter.toFullText(
 			this.translatedString.headword,
 			2,
 		);
-		this.searchIndex.reading = ngramConverter.toFullText(
+		searchIndex.reading = ngramConverter.toFullText(
 			this.translatedString.reading ?? '',
 			2,
 		);
-		this.searchIndex.yamatokotoba = ngramConverter.toFullText(
+		searchIndex.yamatokotoba = ngramConverter.toFullText(
 			this.translatedString.yamatokotoba,
 			2,
 		);

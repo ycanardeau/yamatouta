@@ -107,7 +107,8 @@ describe('WorkUpdateCommandHandler', () => {
 			const work = await em.findOneOrFail(Work, { id: workObject.id });
 
 			const ngramConverter = app.get(NgramConverter);
-			expect(work.searchIndex.name).toBe(
+			const searchIndex = work.searchIndex.getEntity();
+			expect(searchIndex.name).toBe(
 				ngramConverter.toFullText(params.name, 2),
 			);
 

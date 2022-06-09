@@ -108,7 +108,8 @@ describe('ArtistUpdateCommandHandler', () => {
 			});
 
 			const ngramConverter = app.get(NgramConverter);
-			expect(artist.searchIndex.name).toBe(
+			const searchIndex = artist.searchIndex.getEntity();
+			expect(searchIndex.name).toBe(
 				ngramConverter.toFullText(params.name, 2),
 			);
 
