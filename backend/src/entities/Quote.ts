@@ -43,8 +43,8 @@ import { QuoteWorkLink } from './WorkLink';
 export class Quote
 	implements
 		IEntryWithSearchIndex<QuoteSearchIndex>,
-		IEntryWithRevisions<Quote, QuoteRevision, QuoteSnapshot>,
-		IRevisionFactory<Quote, QuoteRevision, QuoteSnapshot>,
+		IEntryWithRevisions<Quote, QuoteSnapshot, QuoteRevision>,
+		IRevisionFactory<Quote, QuoteSnapshot, QuoteRevision>,
 		IEntryWithWebLinks<QuoteWebLink>,
 		IWebLinkFactory<QuoteWebLink>,
 		IEntryWithWorkLinks<QuoteWorkLink>,
@@ -97,8 +97,8 @@ export class Quote
 
 	get revisionManager(): RevisionManager<
 		Quote,
-		QuoteRevision,
-		QuoteSnapshot
+		QuoteSnapshot,
+		QuoteRevision
 	> {
 		return new RevisionManager(this);
 	}

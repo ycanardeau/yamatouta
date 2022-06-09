@@ -7,8 +7,8 @@ import { Snapshot } from './snapshots/Snapshot';
 
 export interface IRevisionFactory<
 	TEntry extends Entry,
-	TRevision extends Revision<TEntry, TSnapshot>,
 	TSnapshot extends Snapshot,
+	TRevision extends Revision<TEntry, TSnapshot>,
 > {
 	takeSnapshot(): TSnapshot;
 

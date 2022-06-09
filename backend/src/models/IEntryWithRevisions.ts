@@ -6,8 +6,8 @@ import { Snapshot } from './snapshots/Snapshot';
 
 export interface IEntryWithRevisions<
 	TEntry extends Entry,
-	TRevision extends Revision<TEntry, TSnapshot>,
 	TSnapshot extends Snapshot,
+	TRevision extends Revision<TEntry, TSnapshot>,
 > {
 	revisions: Collection<TRevision>;
 	version: number;

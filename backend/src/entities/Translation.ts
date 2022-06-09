@@ -46,10 +46,10 @@ export class Translation
 		IEntryWithSearchIndex<TranslationSearchIndex>,
 		IEntryWithRevisions<
 			Translation,
-			TranslationRevision,
-			TranslationSnapshot
+			TranslationSnapshot,
+			TranslationRevision
 		>,
-		IRevisionFactory<Translation, TranslationRevision, TranslationSnapshot>,
+		IRevisionFactory<Translation, TranslationSnapshot, TranslationRevision>,
 		IEntryWithWebLinks<TranslationWebLink>,
 		IWebLinkFactory<TranslationWebLink>,
 		IEntryWithWorkLinks<TranslationWorkLink>,
@@ -97,8 +97,8 @@ export class Translation
 
 	get revisionManager(): RevisionManager<
 		Translation,
-		TranslationRevision,
-		TranslationSnapshot
+		TranslationSnapshot,
+		TranslationRevision
 	> {
 		return new RevisionManager(this);
 	}

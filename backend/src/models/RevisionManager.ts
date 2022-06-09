@@ -8,14 +8,14 @@ import { Snapshot } from './snapshots/Snapshot';
 // Code from https://github.com/VocaDB/vocadb/blob/05c2737b6a26d57613dbb9ee50271b7756dc81da/VocaDbModel/Domain/Versioning/ArchivedVersionManager.cs.
 export class RevisionManager<
 	TEntry extends Entry,
-	TRevision extends Revision<TEntry, TSnapshot>,
 	TSnapshot extends Snapshot,
+	TRevision extends Revision<TEntry, TSnapshot>,
 > {
 	constructor(
 		private readonly entry: IEntryWithRevisions<
 			TEntry,
-			TRevision,
-			TSnapshot
+			TSnapshot,
+			TRevision
 		>,
 	) {}
 

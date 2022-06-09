@@ -39,8 +39,8 @@ import { QuoteWorkLink, TranslationWorkLink } from './WorkLink';
 export class Work
 	implements
 		IEntryWithSearchIndex<WorkSearchIndex>,
-		IEntryWithRevisions<Work, WorkRevision, WorkSnapshot>,
-		IRevisionFactory<Work, WorkRevision, WorkSnapshot>,
+		IEntryWithRevisions<Work, WorkSnapshot, WorkRevision>,
+		IRevisionFactory<Work, WorkSnapshot, WorkRevision>,
 		IEntryWithWebLinks<WorkWebLink>,
 		IWebLinkFactory<WorkWebLink>,
 		IEntryWithArtistLinks<WorkArtistLink>,

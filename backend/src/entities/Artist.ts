@@ -34,8 +34,8 @@ import { ArtistWebLink } from './WebLink';
 export class Artist
 	implements
 		IEntryWithSearchIndex<ArtistSearchIndex>,
-		IEntryWithRevisions<Artist, ArtistRevision, ArtistSnapshot>,
-		IRevisionFactory<Artist, ArtistRevision, ArtistSnapshot>,
+		IEntryWithRevisions<Artist, ArtistSnapshot, ArtistRevision>,
+		IRevisionFactory<Artist, ArtistSnapshot, ArtistRevision>,
 		IEntryWithWebLinks<ArtistWebLink>,
 		IWebLinkFactory<ArtistWebLink>
 {
@@ -68,8 +68,8 @@ export class Artist
 
 	get revisionManager(): RevisionManager<
 		Artist,
-		ArtistRevision,
-		ArtistSnapshot
+		ArtistSnapshot,
+		ArtistRevision
 	> {
 		return new RevisionManager(this);
 	}
