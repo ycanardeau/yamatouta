@@ -60,9 +60,6 @@ export class Artist
 	@Enum(() => ArtistType)
 	artistType!: ArtistType;
 
-	@OneToOne(() => ArtistSearchIndex, (searchIndex) => searchIndex.artist)
-	searchIndex = new ArtistSearchIndex(this);
-
 	@Property()
 	version = 0;
 
@@ -85,6 +82,9 @@ export class Artist
 
 	@ManyToOne()
 	actor: IdentifiedReference<User>;
+
+	@OneToOne(() => ArtistSearchIndex, (searchIndex) => searchIndex.artist)
+	searchIndex = new ArtistSearchIndex(this);
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);

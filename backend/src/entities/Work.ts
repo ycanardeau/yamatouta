@@ -70,9 +70,6 @@ export class Work
 	@Enum()
 	workType!: WorkType;
 
-	@OneToOne(() => WorkSearchIndex, (searchIndex) => searchIndex.work)
-	searchIndex = new WorkSearchIndex(this);
-
 	@Property()
 	version = 0;
 
@@ -96,6 +93,9 @@ export class Work
 
 	@ManyToOne()
 	actor: IdentifiedReference<User>;
+
+	@OneToOne(() => WorkSearchIndex, (searchIndex) => searchIndex.work)
+	searchIndex = new WorkSearchIndex(this);
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);

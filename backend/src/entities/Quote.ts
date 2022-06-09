@@ -89,9 +89,6 @@ export class Quote
 	@Embedded({ prefix: false })
 	date = new PartialDate();
 
-	@OneToOne(() => QuoteSearchIndex, (searchIndex) => searchIndex.quote)
-	searchIndex = new QuoteSearchIndex(this);
-
 	@Property()
 	version = 0;
 
@@ -120,6 +117,9 @@ export class Quote
 
 	@ManyToOne()
 	actor: IdentifiedReference<User>;
+
+	@OneToOne(() => QuoteSearchIndex, (searchIndex) => searchIndex.quote)
+	searchIndex = new QuoteSearchIndex(this);
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
