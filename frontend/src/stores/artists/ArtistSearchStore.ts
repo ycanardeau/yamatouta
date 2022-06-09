@@ -42,7 +42,12 @@ export class ArtistSearchStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = ['pageSize'];
+	clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = [
+		'pageSize',
+		'sort',
+		'query',
+		'artistType',
+	];
 
 	@observable loading = false;
 
@@ -57,6 +62,9 @@ export class ArtistSearchStore
 
 			const result = await artistApi.list({
 				pagination: paginationParams,
+				sort: this.sort,
+				query: this.query,
+				artistType: this.artistType,
 			});
 
 			runInAction(() => {
@@ -78,11 +86,17 @@ export class ArtistSearchStore
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
+			sort: this.sort,
+			query: this.query,
+			artistType: this.artistType ? this.artistType : undefined,
 		};
 	}
 	set routeParams(value: IArtistSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
+		this.sort = value.sort ?? ArtistSortRule.CreatedAsc;
+		this.query = value.query ?? '';
+		this.artistType = value.artistType;
 	}
 
 	validateRouteParams = (data: any): data is IArtistSearchRouteParams => {

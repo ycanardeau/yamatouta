@@ -4,6 +4,8 @@ import { IArtistObject } from '../dto/IArtistObject';
 import { IRevisionObject } from '../dto/IRevisionObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { ArtistOptionalField } from '../models/artists/ArtistOptionalField';
+import { ArtistSortRule } from '../models/artists/ArtistSortRule';
+import { ArtistType } from '../models/artists/ArtistType';
 import { IArtistUpdateParams } from '../models/artists/IArtistUpdateParams';
 import { IPaginationParams } from '../stores/PaginationStore';
 
@@ -43,14 +45,18 @@ class ArtistApi {
 
 	list = async ({
 		pagination,
+		sort,
 		query,
+		artistType,
 	}: {
 		pagination: IPaginationParams;
+		sort?: ArtistSortRule;
 		query?: string;
+		artistType?: ArtistType;
 	}): Promise<ISearchResultObject<IArtistObject>> => {
 		const response = await axios.get<ISearchResultObject<IArtistObject>>(
 			'/artists/list',
-			{ params: { ...pagination, query } },
+			{ params: { ...pagination, sort, query, artistType } },
 		);
 
 		return response.data;

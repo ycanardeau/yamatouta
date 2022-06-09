@@ -42,7 +42,12 @@ export class WorkSearchStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = ['pageSize'];
+	clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = [
+		'pageSize',
+		'sort',
+		'query',
+		'workType',
+	];
 
 	@observable loading = false;
 
@@ -57,6 +62,9 @@ export class WorkSearchStore
 
 			const result = await workApi.list({
 				pagination: paginationParams,
+				sort: this.sort,
+				query: this.query,
+				workType: this.workType,
 			});
 
 			runInAction(() => {
@@ -78,11 +86,17 @@ export class WorkSearchStore
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
+			sort: this.sort,
+			query: this.query,
+			workType: this.workType ? this.workType : undefined,
 		};
 	}
 	set routeParams(value: IWorkSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
+		this.sort = value.sort ?? WorkSortRule.CreatedAsc;
+		this.query = value.query ?? '';
+		this.workType = value.workType;
 	}
 
 	validateRouteParams = (data: any): data is IWorkSearchRouteParams => {

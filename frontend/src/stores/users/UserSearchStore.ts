@@ -42,7 +42,12 @@ export class UserSearchStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = ['pageSize'];
+	clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = [
+		'pageSize',
+		'sort',
+		'query',
+		'userGroup',
+	];
 
 	@observable loading = false;
 
@@ -57,6 +62,9 @@ export class UserSearchStore
 
 			const result = await userApi.list({
 				pagination: paginationParams,
+				sort: this.sort,
+				query: this.query,
+				userGroup: this.userGroup,
 			});
 
 			runInAction(() => {
@@ -78,11 +86,17 @@ export class UserSearchStore
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
+			sort: this.sort,
+			query: this.query,
+			userGroup: this.userGroup ? this.userGroup : undefined,
 		};
 	}
 	set routeParams(value: IUserSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
+		this.sort = value.sort ?? UserSortRule.CreatedAsc;
+		this.query = value.query ?? '';
+		this.userGroup = value.userGroup;
 	}
 
 	validateRouteParams = (data: any): data is IUserSearchRouteParams => {

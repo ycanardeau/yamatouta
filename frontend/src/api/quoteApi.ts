@@ -5,6 +5,8 @@ import { IRevisionObject } from '../dto/IRevisionObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IQuoteUpdateParams } from '../models/quotes/IQuoteUpdateParams';
 import { QuoteOptionalField } from '../models/quotes/QuoteOptionalField';
+import { QuoteSortRule } from '../models/quotes/QuoteSortRule';
+import { QuoteType } from '../models/quotes/QuoteType';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 class QuoteApi {
@@ -49,16 +51,31 @@ class QuoteApi {
 
 	list = async ({
 		pagination,
+		sort,
+		query,
+		quoteType,
 		artistId,
 		workId,
 	}: {
 		pagination: IPaginationParams;
+		sort?: QuoteSortRule;
+		query?: string;
+		quoteType?: QuoteType;
 		artistId?: number;
 		workId?: number;
 	}): Promise<ISearchResultObject<IQuoteObject>> => {
 		const response = await axios.get<ISearchResultObject<IQuoteObject>>(
 			'/quotes/list',
-			{ params: { ...pagination, artistId, workId } },
+			{
+				params: {
+					...pagination,
+					sort,
+					query,
+					quoteType,
+					artistId,
+					workId,
+				},
+			},
 		);
 
 		return response.data;

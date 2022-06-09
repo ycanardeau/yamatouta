@@ -44,7 +44,12 @@ export class QuoteSearchStore
 
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = ['pageSize'];
+	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = [
+		'pageSize',
+		'sort',
+		'query',
+		'quoteType',
+	];
 
 	@observable loading = false;
 
@@ -59,6 +64,9 @@ export class QuoteSearchStore
 
 			const result = await quoteApi.list({
 				pagination: paginationParams,
+				sort: this.sort,
+				query: this.query,
+				quoteType: this.quoteType,
 				artistId: this.artistId,
 				workId: this.workId,
 			});
@@ -82,11 +90,17 @@ export class QuoteSearchStore
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
+			sort: this.sort,
+			query: this.query,
+			quoteType: this.quoteType ? this.quoteType : undefined,
 		};
 	}
 	set routeParams(value: IQuoteSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
+		this.sort = value.sort ?? QuoteSortRule.CreatedAsc;
+		this.query = value.query ?? '';
+		this.quoteType = value.quoteType;
 	}
 
 	validateRouteParams = (data: any): data is IQuoteSearchRouteParams => {
