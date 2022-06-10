@@ -12,8 +12,8 @@ export interface IEntryWithRevisions<
 	TSnapshot extends Snapshot,
 	TRevision extends Revision<TEntry, TSnapshot>,
 > {
-	revisions: Collection<TRevision>;
 	version: number;
+	revisions: Collection<TRevision>;
 
 	takeSnapshot(): TSnapshot;
 

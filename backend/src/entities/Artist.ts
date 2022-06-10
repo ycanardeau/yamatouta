@@ -16,7 +16,6 @@ import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { RevisionEvent } from '../models/RevisionEvent';
-import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { ArtistType } from '../models/artists/ArtistType';
 import { ArtistSnapshot } from '../models/snapshots/ArtistSnapshot';
@@ -61,14 +60,6 @@ export class Artist
 
 	@OneToMany(() => ArtistRevision, (revision) => revision.artist)
 	revisions = new Collection<ArtistRevision>(this);
-
-	get revisionManager(): RevisionManager<
-		Artist,
-		ArtistSnapshot,
-		ArtistRevision
-	> {
-		return new RevisionManager(this);
-	}
 
 	@OneToMany(() => ArtistWebLink, (webLink) => webLink.artist)
 	webLinks = new Collection<ArtistWebLink>(this);
