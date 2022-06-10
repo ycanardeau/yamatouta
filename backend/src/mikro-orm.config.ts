@@ -24,6 +24,8 @@ const options: Options = {
 	forceUndefined: true,
 	forceUtcTimezone: true,
 	allowGlobalContext: process.env.NODE_ENV === 'test',
+	// See: https://github.com/mikro-orm/mikro-orm/issues/248#issuecomment-560148997.
+	autoJoinOneToOneOwner: false,
 };
 
 export default options;
