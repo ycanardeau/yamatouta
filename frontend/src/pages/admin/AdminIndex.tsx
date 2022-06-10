@@ -25,9 +25,17 @@ const AdminIndex = (): React.ReactElement => {
 				/>
 				<EuiListGroupItem
 					icon={<EuiIcon type={DatabaseSearchRegular} />}
-					label={t('admin.updateSearchIndex')}
+					label={t('admin.populateIndex')}
 					onClick={(): Promise<void> =>
 						adminApi.updateSearchIndex({ forceUpdate: false })
+					}
+					isActive
+				/>
+				<EuiListGroupItem
+					icon={<EuiIcon type={DatabaseSearchRegular} />}
+					label={t('admin.rebuildIndex')}
+					onClick={(): Promise<void> =>
+						adminApi.updateSearchIndex({ forceUpdate: true })
 					}
 					isActive
 				/>

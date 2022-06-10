@@ -154,7 +154,8 @@
 	},
 	"admin": {
 		"createMissingRevisions": "Create missing revisions",
-		"updateSearchIndex": "Update search index"
+		"populateIndex": "Populate index",
+		"rebuildIndex": "Rebuild index"
 	},
 	"works": {
 		"addWork": "Add work",

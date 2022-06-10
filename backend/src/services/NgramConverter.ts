@@ -8,7 +8,7 @@ export class NgramConverter {
 
 	// See: https://atsumu-t2.hatenadiary.org/entry/20091231/1262252080.
 	padEnd(text: string): string {
-		return text.padEnd(NgramConverter.FT_MIN_WORD_LEN, '豔');
+		return text.padEnd(NgramConverter.FT_MIN_WORD_LEN, '妛');
 	}
 
 	toNgramFullTextArray(text: string, n: number): string[] {
