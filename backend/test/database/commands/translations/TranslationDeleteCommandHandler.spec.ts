@@ -12,7 +12,7 @@ import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { EntryDeleteParams } from '../../../../src/models/EntryDeleteParams';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { UserGroup } from '../../../../src/models/UserGroup';
+import { UserGroup } from '../../../../src/models/users/UserGroup';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';

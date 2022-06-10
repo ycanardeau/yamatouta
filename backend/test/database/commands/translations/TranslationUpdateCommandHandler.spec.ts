@@ -16,10 +16,11 @@ import { Translation } from '../../../../src/entities/Translation';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { UserGroup } from '../../../../src/models/UserGroup';
 import { ITranslationSnapshot } from '../../../../src/models/snapshots/TranslationSnapshot';
 import { TranslationUpdateParams } from '../../../../src/models/translations/TranslationUpdateParams';
 import { WordCategory } from '../../../../src/models/translations/WordCategory';
+import { UserGroup } from '../../../../src/models/users/UserGroup';
+import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';
@@ -116,6 +117,18 @@ describe('TranslationUpdateCommandHandler', () => {
 			const translation = await em.findOneOrFail(Translation, {
 				id: translationObject.id,
 			});
+
+			const ngramConverter = app.get(NgramConverter);
+			const searchIndex = translation.searchIndex.getEntity();
+			expect(searchIndex.headword).toBe(
+				ngramConverter.toFullText(params.headword, 2),
+			);
+			expect(searchIndex.reading).toBe(
+				ngramConverter.toFullText(params.reading, 2),
+			);
+			expect(searchIndex.yamatokotoba).toBe(
+				ngramConverter.toFullText(params.yamatokotoba, 2),
+			);
 
 			const revision = translation.revisions[1];
 

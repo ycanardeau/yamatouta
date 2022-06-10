@@ -1,16 +1,38 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication, UnauthorizedException } from '@nestjs/common';
 import _ from 'lodash';
 
-import { Permission, userGroupPermissions } from '../../src/models/Permission';
-import { UserGroup } from '../../src/models/UserGroup';
-import { FakeEntityManager } from '../FakeEntityManager';
+import { Permission } from '../../src/models/Permission';
+import { userGroupPermissions } from '../../src/models/userGroupPermissions';
+import { UserGroup } from '../../src/models/users/UserGroup';
 import { FakePermissionContext } from '../FakePermissionContext';
+import { createApplication } from '../createApplication';
 import { createUser } from '../createEntry';
 
 describe('PermissionContext', () => {
-	test('hasPermission', async () => {
-		const em = new FakeEntityManager();
+	let app: INestApplication;
+	let em: EntityManager;
 
+	beforeAll(async () => {
+		app = await createApplication();
+	});
+
+	afterAll(async () => {
+		await app.close();
+	});
+
+	beforeEach(async () => {
+		em = app.get(EntityManager);
+	});
+
+	afterEach(async () => {
+		const orm = app.get(MikroORM);
+		const generator = orm.getSchemaGenerator();
+
+		await generator.clearDatabase();
+	});
+
+	test('hasPermission', async () => {
 		const users = await Promise.all([
 			createUser(em as any, {
 				username: 'limited',

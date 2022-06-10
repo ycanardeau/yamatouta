@@ -16,10 +16,11 @@ import { User } from '../../../../src/entities/User';
 import { Work } from '../../../../src/entities/Work';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { UserGroup } from '../../../../src/models/UserGroup';
 import { IWorkSnapshot } from '../../../../src/models/snapshots/WorkSnapshot';
+import { UserGroup } from '../../../../src/models/users/UserGroup';
 import { WorkType } from '../../../../src/models/works/WorkType';
 import { WorkUpdateParams } from '../../../../src/models/works/WorkUpdateParams';
+import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertWorkAuditLogEntry } from '../../../assertAuditLogEntry';
@@ -104,6 +105,12 @@ describe('WorkUpdateCommandHandler', () => {
 			expect(workObject.workType).toBe(params.workType);
 
 			const work = await em.findOneOrFail(Work, { id: workObject.id });
+
+			const ngramConverter = app.get(NgramConverter);
+			const searchIndex = work.searchIndex.getEntity();
+			expect(searchIndex.name).toBe(
+				ngramConverter.toFullText(params.name, 2),
+			);
 
 			const revision = work.revisions[1];
 

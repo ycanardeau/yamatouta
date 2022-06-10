@@ -19,7 +19,7 @@ export class RevisionObject {
 		revision: Revision<Entry, Snapshot>,
 		permissionContext: PermissionContext,
 	): RevisionObject {
-		if (!permissionContext.hasPermission(Permission.Revision_View))
+		if (!permissionContext.hasPermission(Permission.ViewRevisions))
 			throw new NotFoundException();
 
 		permissionContext.verifyDeletedAndHidden(revision.entry);

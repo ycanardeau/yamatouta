@@ -3,6 +3,8 @@ import axios from 'axios';
 import { IAuthenticatedUserObject } from '../dto/IAuthenticatedUserObject';
 import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IUserObject } from '../dto/IUserObject';
+import { UserGroup } from '../models/users/UserGroup';
+import { UserSortRule } from '../models/users/UserSortRule';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 class UserApi {
@@ -45,12 +47,18 @@ class UserApi {
 
 	list = async ({
 		pagination,
+		sort,
+		query,
+		userGroup,
 	}: {
 		pagination: IPaginationParams;
+		sort?: UserSortRule;
+		query?: string;
+		userGroup?: UserGroup;
 	}): Promise<ISearchResultObject<IUserObject>> => {
 		const response = await axios.get<ISearchResultObject<IUserObject>>(
 			'/users/list',
-			{ params: { ...pagination } },
+			{ params: { ...pagination, sort, query, userGroup } },
 		);
 
 		return response.data;

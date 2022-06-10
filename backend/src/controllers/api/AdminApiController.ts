@@ -1,8 +1,11 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
 import { AdminCreateMissingRevisionsCommand } from '../../database/commands/admin/AdminCreateMissingRevisionsCommandHandler';
+import { AdminUpdateSearchIndexCommand } from '../../database/commands/admin/AdminUpdateSearchIndexCommandHandler';
 import { GetPermissionContext } from '../../framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '../../framework/pipes/JoiValidationPipe';
+import { AdminUpdateSearchIndexParams } from '../../models/admin/AdminUpdateSearchIndexParams';
 import { PermissionContext } from '../../services/PermissionContext';
 
 @Controller('api/admin')
@@ -15,6 +18,17 @@ export class AdminApiController {
 	): Promise<void> {
 		return this.commandBus.execute(
 			new AdminCreateMissingRevisionsCommand(permissionContext),
+		);
+	}
+
+	@Post('update-search-index')
+	updateSearchIndex(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Body(new JoiValidationPipe(AdminUpdateSearchIndexParams.schema))
+		params: AdminUpdateSearchIndexParams,
+	): Promise<void> {
+		return this.commandBus.execute(
+			new AdminUpdateSearchIndexCommand(permissionContext, params),
 		);
 	}
 }

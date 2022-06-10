@@ -11,6 +11,7 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { ArtistOptionalField } from '../../../models/artists/ArtistOptionalField';
 import { ArtistUpdateParams } from '../../../models/artists/ArtistUpdateParams';
+import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
@@ -32,12 +33,13 @@ export class ArtistUpdateCommandHandler
 		private readonly artistRepo: EntityRepository<Artist>,
 		private readonly webLinkService: WebLinkService,
 		private readonly revisionService: RevisionService,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	async execute(command: ArtistUpdateCommand): Promise<ArtistObject> {
 		const { permissionContext, params } = command;
 
-		permissionContext.verifyPermission(Permission.Artist_Update);
+		permissionContext.verifyPermission(Permission.UpdateArtists);
 
 		const result = ArtistUpdateParams.schema.validate(params, {
 			convert: true,
@@ -49,10 +51,10 @@ export class ArtistUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const artist = await this.em.transactional(async (em) => {
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
 
 			const artist = isNew
-				? new Artist(user)
+				? new Artist(actor)
 				: await this.artistRepo.findOneOrFail(
 						{
 							id: params.id,
@@ -62,6 +64,7 @@ export class ArtistUpdateCommandHandler
 						{
 							// OPTIMIZE
 							populate: [
+								'searchIndex',
 								'webLinks',
 								'webLinks.address',
 								'webLinks.address.host',
@@ -78,15 +81,17 @@ export class ArtistUpdateCommandHandler
 					artist.name = params.name;
 					artist.artistType = params.artistType;
 
+					artist.updateSearchIndex(this.ngramConverter);
+
 					await this.webLinkService.sync(
 						em,
 						artist,
 						params.webLinks,
 						permissionContext,
-						user,
+						actor,
 					);
 				},
-				user,
+				actor,
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
@@ -96,7 +101,7 @@ export class ArtistUpdateCommandHandler
 					? AuditedAction.Artist_Create
 					: AuditedAction.Artist_Update,
 				artist: artist,
-				actor: user,
+				actor: actor,
 				actorIp: permissionContext.clientIp,
 			});
 

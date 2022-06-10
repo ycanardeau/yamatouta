@@ -17,12 +17,13 @@ import { QuoteRevision } from '../../../../src/entities/Revision';
 import { User } from '../../../../src/entities/User';
 import { AuditedAction } from '../../../../src/models/AuditedAction';
 import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { UserGroup } from '../../../../src/models/UserGroup';
 import { ArtistType } from '../../../../src/models/artists/ArtistType';
 import { QuoteType } from '../../../../src/models/quotes/QuoteType';
 import { QuoteUpdateParams } from '../../../../src/models/quotes/QuoteUpdateParams';
 import { ObjectRefSnapshot } from '../../../../src/models/snapshots/ObjectRefSnapshot';
 import { IQuoteSnapshot } from '../../../../src/models/snapshots/QuoteSnapshot';
+import { UserGroup } from '../../../../src/models/users/UserGroup';
+import { NgramConverter } from '../../../../src/services/NgramConverter';
 import { PermissionContext } from '../../../../src/services/PermissionContext';
 import { FakePermissionContext } from '../../../FakePermissionContext';
 import { assertQuoteAuditLogEntry } from '../../../assertAuditLogEntry';
@@ -120,6 +121,15 @@ describe('QuoteUpdateCommandHandler', () => {
 			expect(quoteObject.artist.id).toBe(params.artistId);
 
 			const quote = await em.findOneOrFail(Quote, { id: quoteObject.id });
+
+			const ngramConverter = app.get(NgramConverter);
+			const searchIndex = quote.searchIndex.getEntity();
+			expect(searchIndex.text).toBe(
+				ngramConverter.toFullText(
+					[params.text, quote /* TODO */.transcription].join(' '),
+					2,
+				),
+			);
 
 			const revision = quote.revisions[1];
 

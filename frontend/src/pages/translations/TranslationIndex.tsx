@@ -49,7 +49,7 @@ const TranslationIndex = observer((): React.ReactElement => {
 						}}
 						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Translation_Create,
+								Permission.CreateTranslations,
 							)
 						}
 						iconType={AddRegular}

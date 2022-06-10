@@ -12,6 +12,7 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
 import { QuoteUpdateParams } from '../../../models/quotes/QuoteUpdateParams';
+import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
@@ -37,12 +38,13 @@ export class QuoteUpdateCommandHandler
 		private readonly webLinkService: WebLinkService,
 		private readonly workLinkService: WorkLinkService,
 		private readonly revisionService: RevisionService,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	async execute(command: QuoteUpdateCommand): Promise<QuoteObject> {
 		const { permissionContext, params } = command;
 
-		permissionContext.verifyPermission(Permission.Quote_Update);
+		permissionContext.verifyPermission(Permission.UpdateQuotes);
 
 		const result = QuoteUpdateParams.schema.validate(params, {
 			convert: true,
@@ -54,7 +56,7 @@ export class QuoteUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const quote = await this.em.transactional(async (em) => {
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
 
 			const artist = await this.artistRepo.findOneOrFail({
 				id: params.artistId,
@@ -63,7 +65,7 @@ export class QuoteUpdateCommandHandler
 			});
 
 			const quote = isNew
-				? new Quote(user)
+				? new Quote(actor)
 				: await this.quoteRepo.findOneOrFail(
 						{
 							id: params.id,
@@ -73,6 +75,7 @@ export class QuoteUpdateCommandHandler
 						{
 							// OPTIMIZE
 							populate: [
+								'searchIndex',
 								'artist',
 								'webLinks',
 								'webLinks.address',
@@ -94,12 +97,14 @@ export class QuoteUpdateCommandHandler
 					quote.locale = params.locale;
 					quote.artist = Reference.create(artist);
 
+					quote.updateSearchIndex(this.ngramConverter);
+
 					await this.webLinkService.sync(
 						em,
 						quote,
 						params.webLinks,
 						permissionContext,
-						user,
+						actor,
 					);
 
 					await this.workLinkService.sync(
@@ -109,7 +114,7 @@ export class QuoteUpdateCommandHandler
 						permissionContext,
 					);
 				},
-				user,
+				actor,
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
@@ -119,7 +124,7 @@ export class QuoteUpdateCommandHandler
 					? AuditedAction.Quote_Create
 					: AuditedAction.Quote_Update,
 				quote: quote,
-				actor: user,
+				actor: actor,
 				actorIp: permissionContext.clientIp,
 			});
 

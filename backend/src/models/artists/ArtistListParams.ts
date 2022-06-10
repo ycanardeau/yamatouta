@@ -17,6 +17,9 @@ export class ArtistListParams {
 		artistType: Joi.string()
 			.optional()
 			.valid(...Object.values(ArtistType)),
+		sort: Joi.string()
+			.optional()
+			.valid(...Object.values(ArtistSortRule)),
 		offset: Joi.number().optional(),
 		limit: Joi.number().optional(),
 		getTotalCount: Joi.boolean().optional(),

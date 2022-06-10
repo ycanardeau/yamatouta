@@ -1,4 +1,4 @@
-import { EuiCommentList } from '@elastic/eui';
+import { EuiCommentList, EuiProgress } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 
@@ -12,7 +12,9 @@ interface QuoteSearchListProps {
 
 export const QuoteSearchList = observer(
 	({ store }: QuoteSearchListProps): React.ReactElement => {
-		return (
+		return store.loading ? (
+			<EuiProgress size="xs" color="primary" />
+		) : (
 			<>
 				{store.quotes.map((quote) => (
 					<EuiCommentList key={quote.id}>

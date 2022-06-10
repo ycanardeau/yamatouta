@@ -10,6 +10,8 @@ import {
 import { workApi } from '../../api/workApi';
 import { IWorkObject } from '../../dto/IWorkObject';
 import { IWorkSearchRouteParams } from '../../models/works/IWorkSearchRouteParams';
+import { WorkSortRule } from '../../models/works/WorkSortRule';
+import { WorkType } from '../../models/works/WorkType';
 import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
 
@@ -18,14 +20,34 @@ export class WorkSearchStore
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable works: IWorkObject[] = [];
+	@observable sort = WorkSortRule.CreatedAsc;
+	@observable query = '';
+	@observable workType: WorkType | '' = '';
 
 	constructor() {
 		makeObservable(this);
 	}
 
+	@action setSort = (value: WorkSortRule): void => {
+		this.sort = value;
+	};
+
+	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setWorkType = (value: WorkType | ''): void => {
+		this.workType = value;
+	};
+
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = ['pageSize'];
+	clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = [
+		'pageSize',
+		'sort',
+		'query',
+		'workType',
+	];
 
 	@observable loading = false;
 
@@ -40,6 +62,9 @@ export class WorkSearchStore
 
 			const result = await workApi.list({
 				pagination: paginationParams,
+				sort: this.sort,
+				query: this.query,
+				workType: this.workType ? this.workType : undefined,
 			});
 
 			runInAction(() => {
@@ -61,11 +86,17 @@ export class WorkSearchStore
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
+			sort: this.sort,
+			query: this.query,
+			workType: this.workType ? this.workType : undefined,
 		};
 	}
 	set routeParams(value: IWorkSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
+		this.sort = value.sort ?? WorkSortRule.CreatedAsc;
+		this.query = value.query ?? '';
+		this.workType = value.workType ?? '';
 	}
 
 	validateRouteParams = (data: any): data is IWorkSearchRouteParams => {

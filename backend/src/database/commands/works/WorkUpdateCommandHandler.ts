@@ -12,6 +12,7 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { WorkOptionalField } from '../../../models/works/WorkOptionalField';
 import { WorkUpdateParams } from '../../../models/works/WorkUpdateParams';
 import { ArtistLinkService } from '../../../services/ArtistLinkService';
+import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
 import { WebLinkService } from '../../../services/WebLinkService';
@@ -34,12 +35,13 @@ export class WorkUpdateCommandHandler
 		private readonly webLinkService: WebLinkService,
 		private readonly artistLinkService: ArtistLinkService,
 		private readonly revisionService: RevisionService,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
 	async execute(command: WorkUpdateCommand): Promise<WorkObject> {
 		const { permissionContext, params } = command;
 
-		permissionContext.verifyPermission(Permission.Work_Update);
+		permissionContext.verifyPermission(Permission.UpdateWorks);
 
 		const result = WorkUpdateParams.schema.validate(params, {
 			convert: true,
@@ -51,10 +53,10 @@ export class WorkUpdateCommandHandler
 		const isNew = params.id === 0;
 
 		const work = await this.em.transactional(async (em) => {
-			const user = await permissionContext.getCurrentUser(em);
+			const actor = await permissionContext.getCurrentUser(em);
 
 			const work = isNew
-				? new Work(user)
+				? new Work(actor)
 				: await this.workRepo.findOneOrFail(
 						{
 							id: params.id,
@@ -64,6 +66,7 @@ export class WorkUpdateCommandHandler
 						{
 							// OPTIMIZE
 							populate: [
+								'searchIndex',
 								'webLinks',
 								'webLinks.address',
 								'webLinks.address.host',
@@ -82,12 +85,14 @@ export class WorkUpdateCommandHandler
 					work.name = params.name;
 					work.workType = params.workType;
 
+					work.updateSearchIndex(this.ngramConverter);
+
 					await this.webLinkService.sync(
 						em,
 						work,
 						params.webLinks,
 						permissionContext,
-						user,
+						actor,
 					);
 
 					await this.artistLinkService.sync(
@@ -97,7 +102,7 @@ export class WorkUpdateCommandHandler
 						permissionContext,
 					);
 				},
-				user,
+				actor,
 				isNew ? RevisionEvent.Created : RevisionEvent.Updated,
 				false,
 			);
@@ -107,7 +112,7 @@ export class WorkUpdateCommandHandler
 					? AuditedAction.Work_Create
 					: AuditedAction.Work_Update,
 				work: work,
-				actor: user,
+				actor: actor,
 				actorIp: permissionContext.clientIp,
 			});
 

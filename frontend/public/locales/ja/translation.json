@@ -5,7 +5,8 @@
 		"artistType": "くさわい",
 		"name": "なまえ",
 		"deleteArtist": "うたよみをけす",
-		"deleteDialogSubtitle": "このうたよみをけしてもよろしいですか?"
+		"deleteDialogSubtitle": "このうたよみをけしてもよろしいですか?",
+		"search": "うたよみをさがす"
 	},
 	"artistTypeNames": {
 		"Person": "ひと",
@@ -69,7 +70,8 @@
 		"word": "やまとことば",
 		"user": "つかいて",
 		"loading": "よみこんでいます...",
-		"noItemsFound": "みつかりませんでした"
+		"noItemsFound": "みつかりませんでした",
+		"sortBy": "ならべかえ"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -80,7 +82,6 @@
 		"yamatokotoba": "やまとことば",
 		"category": "くさわい",
 		"search": "やまとことばをさがす",
-		"sortBy": "ならべかえ",
 		"viewOnInishienomanabi": "いにしえのまなびでみる",
 		"editWord": "やまとことばをかきかえる",
 		"deleteWord": "やまとことばをけす",
@@ -105,7 +106,9 @@
 	"users": {
 		"profile": "ひととなり",
 		"settings": "あつらえ",
-		"photo": "おもかげ"
+		"photo": "おもかげ",
+		"search": "つかいてをさがす",
+		"userGroup": "くさわい"
 	},
 	"translationSortRuleNames": {
 		"HeadwordAsc": "みだしことば (のぼり)",
@@ -135,7 +138,8 @@
 		"quoteType": "くさわい",
 		"deleteQuote": "やまとうたをけす",
 		"deleteDialogSubtitle": "このやまとうたをけしてもよろしいですか?",
-		"sources": "でどころ"
+		"sources": "でどころ",
+		"search": "やまとうたをさがす"
 	},
 	"quoteTypeNames": {
 		"Word": "ことば",
@@ -152,7 +156,8 @@
 		"workType": "くさわい",
 		"authors": "かきて",
 		"editors": "えらびて",
-		"publishers": "くばりて"
+		"publishers": "くばりて",
+		"search": "しながきをさがす"
 	},
 	"workTypeNames": {
 		"Unspecified": "なし",
@@ -200,5 +205,33 @@
 		"Work_Artist_Editor": "えらびて",
 		"Work_Artist_Foreword": "はしがき",
 		"Work_Artist_Publisher": "くばりて"
+	},
+	"artistSortRuleNames": {
+		"NameAsc": "なまえ (のぼり)",
+		"NameDesc": "なまえ (くだり)",
+		"CreatedAsc": "ふるい",
+		"CreatedDesc": "あたらしい",
+		"UpdatedAsc": "あらためられていない",
+		"UpdatedDesc": "あらためられた"
+	},
+	"quoteSortRuleNames": {
+		"CreatedAsc": "ふるい",
+		"CreatedDesc": "あたらしい",
+		"UpdatedAsc": "あらためられていない",
+		"UpdatedDesc": "あらためられた"
+	},
+	"userSortRuleNames": {
+		"NameAsc": "なまえ (のぼり)",
+		"NameDesc": "なまえ (くだり)",
+		"CreatedAsc": "ふるい",
+		"CreatedDesc": "あたらしい"
+	},
+	"workSortRuleNames": {
+		"NameAsc": "なまえ (のぼり)",
+		"NameDesc": "なまえ (くだり)",
+		"CreatedAsc": "ふるい",
+		"CreatedDesc": "あたらしい",
+		"UpdatedAsc": "あらためられていない",
+		"UpdatedDesc": "あらためられた"
 	}
 }

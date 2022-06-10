@@ -46,6 +46,9 @@ export abstract class Revision<
 	@Property()
 	createdAt = new Date();
 
+	@Property({ onUpdate: () => new Date() })
+	updatedAt = new Date();
+
 	@Property({ columnType: 'text' })
 	snapshot: string;
 

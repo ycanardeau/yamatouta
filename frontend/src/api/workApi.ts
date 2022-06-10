@@ -5,6 +5,8 @@ import { ISearchResultObject } from '../dto/ISearchResultObject';
 import { IWorkObject } from '../dto/IWorkObject';
 import { IWorkUpdateParams } from '../models/works/IWorkUpdateParams';
 import { WorkOptionalField } from '../models/works/WorkOptionalField';
+import { WorkSortRule } from '../models/works/WorkSortRule';
+import { WorkType } from '../models/works/WorkType';
 import { IPaginationParams } from '../stores/PaginationStore';
 
 class WorkApi {
@@ -45,14 +47,18 @@ class WorkApi {
 
 	list = async ({
 		pagination,
+		sort,
 		query,
+		workType,
 	}: {
 		pagination: IPaginationParams;
+		sort?: WorkSortRule;
 		query?: string;
+		workType?: WorkType;
 	}): Promise<ISearchResultObject<IWorkObject>> => {
 		const response = await axios.get<ISearchResultObject<IWorkObject>>(
 			'/works/list',
-			{ params: { ...pagination, query } },
+			{ params: { ...pagination, sort, query, workType } },
 		);
 
 		return response.data;

@@ -4,6 +4,7 @@ import {
 	Entity,
 	Enum,
 	IdentifiedReference,
+	Index,
 	ManyToOne,
 	OneToMany,
 	OneToOne,
@@ -15,11 +16,9 @@ import {
 import { EntryType } from '../models/EntryType';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
-import { IRevisionFactory } from '../models/IRevisionFactory';
-import { IWebLinkFactory } from '../models/IWebLinkFactory';
-import { IWorkLinkFactory } from '../models/IWorkLinkFactory';
 import { LinkType } from '../models/LinkType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
@@ -31,7 +30,6 @@ import { Commit } from './Commit';
 import { PartialDate } from './PartialDate';
 import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
-import { TranslationSearchIndex } from './TranslationSearchIndex';
 import { User } from './User';
 import { WebAddress } from './WebAddress';
 import { TranslationWebLink } from './WebLink';
@@ -42,16 +40,14 @@ import { TranslationWorkLink } from './WorkLink';
 export class Translation
 	implements
 		IEntryWithDeletedAndHidden,
+		IEntryWithSearchIndex<TranslationSearchIndex>,
 		IEntryWithRevisions<
 			Translation,
-			TranslationRevision,
-			TranslationSnapshot
+			TranslationSnapshot,
+			TranslationRevision
 		>,
-		IRevisionFactory<Translation, TranslationRevision, TranslationSnapshot>,
 		IEntryWithWebLinks<TranslationWebLink>,
-		IWebLinkFactory<TranslationWebLink>,
-		IEntryWithWorkLinks<TranslationWorkLink>,
-		IWorkLinkFactory<TranslationWorkLink>
+		IEntryWithWorkLinks<EntryType.Translation, TranslationWorkLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -85,7 +81,7 @@ export class Translation
 		() => TranslationSearchIndex,
 		(searchIndex) => searchIndex.translation,
 	)
-	searchIndex = new TranslationSearchIndex({ translation: this });
+	searchIndex: IdentifiedReference<TranslationSearchIndex>;
 
 	@Property()
 	version = 0;
@@ -95,8 +91,8 @@ export class Translation
 
 	get revisionManager(): RevisionManager<
 		Translation,
-		TranslationRevision,
-		TranslationSnapshot
+		TranslationSnapshot,
+		TranslationRevision
 	> {
 		return new RevisionManager(this);
 	}
@@ -109,6 +105,7 @@ export class Translation
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
+		this.searchIndex = Reference.create(new TranslationSearchIndex(this));
 	}
 
 	get entryType(): EntryType.Translation {
@@ -144,15 +141,16 @@ export class Translation
 	}
 
 	updateSearchIndex(ngramConverter: NgramConverter): void {
-		this.searchIndex.headword = ngramConverter.toFullText(
+		const searchIndex = this.searchIndex.getEntity();
+		searchIndex.headword = ngramConverter.toFullText(
 			this.translatedString.headword,
 			2,
 		);
-		this.searchIndex.reading = ngramConverter.toFullText(
+		searchIndex.reading = ngramConverter.toFullText(
 			this.translatedString.reading ?? '',
 			2,
 		);
-		this.searchIndex.yamatokotoba = ngramConverter.toFullText(
+		searchIndex.yamatokotoba = ngramConverter.toFullText(
 			this.translatedString.yamatokotoba,
 			2,
 		);
@@ -208,5 +206,35 @@ export class Translation
 			endDate: endDate,
 			ended: ended,
 		});
+	}
+}
+
+@Entity({ tableName: 'translation_search_index' })
+@Index({
+	properties: ['headword', 'reading', 'yamatokotoba'],
+	type: 'fulltext',
+})
+export class TranslationSearchIndex {
+	@PrimaryKey()
+	id!: number;
+
+	@OneToOne()
+	translation: Translation;
+
+	@Property({ columnType: 'text', lazy: true })
+	headword = '';
+
+	@Property({ columnType: 'text', lazy: true })
+	reading = '';
+
+	@Property({ columnType: 'text', lazy: true })
+	yamatokotoba = '';
+
+	constructor(translation: Translation) {
+		this.translation = translation;
+	}
+
+	get entry(): IEntryWithSearchIndex<TranslationSearchIndex> {
+		return this.translation;
 	}
 }

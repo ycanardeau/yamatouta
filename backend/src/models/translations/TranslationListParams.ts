@@ -23,7 +23,6 @@ export class TranslationListParams {
 		query: Joi.string().optional().allow(''),
 		category: Joi.string()
 			.optional()
-			.allow('')
 			.valid(...Object.values(WordCategory)),
 	});
 }

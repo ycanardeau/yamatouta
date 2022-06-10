@@ -17,6 +17,9 @@ export class WorkListParams {
 		workType: Joi.string()
 			.optional()
 			.valid(...Object.values(WorkType)),
+		sort: Joi.string()
+			.optional()
+			.valid(...Object.values(WorkSortRule)),
 		offset: Joi.number().optional(),
 		limit: Joi.number().optional(),
 		getTotalCount: Joi.boolean().optional(),

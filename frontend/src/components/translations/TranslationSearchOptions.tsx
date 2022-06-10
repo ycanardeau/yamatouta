@@ -76,7 +76,7 @@ export const TranslationSearchOptions = observer(
 						fullWidth
 						prepend={
 							<EuiFormLabel htmlFor="sort">
-								{t('translations.sortBy')}
+								{t('shared.sortBy')}
 							</EuiFormLabel>
 						}
 					>

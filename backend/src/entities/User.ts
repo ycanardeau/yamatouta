@@ -1,13 +1,24 @@
-import { Entity, Enum, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	Entity,
+	Enum,
+	IdentifiedReference,
+	OneToOne,
+	PrimaryKey,
+	Property,
+	Reference,
+} from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
+import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { PasswordHashAlgorithm } from '../models/PasswordHashAlgorithm';
-import { Permission, userGroupPermissions } from '../models/Permission';
-import { UserGroup } from '../models/UserGroup';
+import { Permission } from '../models/Permission';
+import { userGroupPermissions } from '../models/userGroupPermissions';
+import { UserGroup } from '../models/users/UserGroup';
+import { NgramConverter } from '../services/NgramConverter';
 import { IPasswordHasher } from '../services/passwordHashers/IPasswordHasher';
 
 @Entity({ tableName: 'users' })
-export class User {
+export class User implements IEntryWithSearchIndex<UserSearchIndex> {
 	@PrimaryKey()
 	id!: number;
 
@@ -71,6 +82,9 @@ export class User {
 	@Enum()
 	userGroup = UserGroup.User;
 
+	@OneToOne(() => UserSearchIndex, (searchIndex) => searchIndex.user)
+	searchIndex: IdentifiedReference<UserSearchIndex>;
+
 	constructor({
 		name,
 		email,
@@ -92,6 +106,7 @@ export class User {
 		this.passwordHashAlgorithm = passwordHashAlgorithm;
 		this.salt = salt;
 		this.passwordHash = passwordHash;
+		this.searchIndex = Reference.create(new UserSearchIndex(this));
 	}
 
 	get entryType(): EntryType.User {
@@ -120,5 +135,30 @@ export class User {
 			password,
 			this.salt,
 		);
+	}
+
+	updateSearchIndex(ngramConverter: NgramConverter): void {
+		const searchIndex = this.searchIndex.getEntity();
+		searchIndex.name = ngramConverter.toFullText(this.name, 2);
+	}
+}
+
+@Entity({ tableName: 'user_search_index' })
+export class UserSearchIndex {
+	@PrimaryKey()
+	id!: number;
+
+	@OneToOne()
+	user: User;
+
+	@Property({ columnType: 'text', lazy: true })
+	name = '';
+
+	constructor(user: User) {
+		this.user = user;
+	}
+
+	get entry(): IEntryWithSearchIndex<UserSearchIndex> {
+		return this.user;
 	}
 }

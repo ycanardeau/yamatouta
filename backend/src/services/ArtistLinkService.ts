@@ -5,7 +5,6 @@ import { Artist } from '../entities/Artist';
 import { ArtistLink } from '../entities/ArtistLink';
 import { PartialDate } from '../entities/PartialDate';
 import { ArtistLinkUpdateParams } from '../models/ArtistLinkUpdateParams';
-import { IArtistLinkFactory } from '../models/IArtistLinkFactory';
 import { IEntryWithArtistLinks } from '../models/IEntryWithArtistLinks';
 import { artistLinkTypes, LinkType } from '../models/LinkType';
 import { Permission } from '../models/Permission';
@@ -14,19 +13,19 @@ import { PermissionContext } from './PermissionContext';
 
 @Injectable()
 export class ArtistLinkService {
-	async sync<TArtistLink extends ArtistLink>(
+	async sync<
+		TEntryType extends keyof typeof artistLinkTypes,
+		TArtistLink extends ArtistLink,
+	>(
 		em: EntityManager,
-		entry: {
-			entryType: keyof typeof artistLinkTypes;
-		} & IEntryWithArtistLinks<TArtistLink> &
-			IArtistLinkFactory<TArtistLink>,
+		entry: IEntryWithArtistLinks<TEntryType, TArtistLink>,
 		newItems: ArtistLinkUpdateParams[],
 		permissionContext: PermissionContext,
 	): Promise<void> {
 		const create = async (
 			newItem: ArtistLinkUpdateParams,
 		): Promise<TArtistLink> => {
-			permissionContext.verifyPermission(Permission.ArtistLink_Create);
+			permissionContext.verifyPermission(Permission.CreateArtistLinks);
 
 			const relatedArtist = await em.findOneOrFail(Artist, {
 				id: newItem.relatedArtistId,
@@ -52,7 +51,7 @@ export class ArtistLinkService {
 		): Promise<boolean> => {
 			if (oldItem.contentEquals(newItem)) return false;
 
-			permissionContext.verifyPermission(Permission.ArtistLink_Update);
+			permissionContext.verifyPermission(Permission.UpdateArtistLinks);
 
 			const relatedArtist = await em.findOneOrFail(Artist, {
 				id: newItem.relatedArtistId,
@@ -70,7 +69,7 @@ export class ArtistLinkService {
 		};
 
 		const remove = async (oldItem: TArtistLink): Promise<void> => {
-			permissionContext.verifyPermission(Permission.ArtistLink_Delete);
+			permissionContext.verifyPermission(Permission.DeleteArtistLinks);
 
 			em.remove(oldItem);
 		};

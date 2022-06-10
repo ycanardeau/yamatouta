@@ -10,6 +10,8 @@ import {
 import { quoteApi } from '../../api/quoteApi';
 import { IQuoteObject } from '../../dto/IQuoteObject';
 import { IQuoteSearchRouteParams } from '../../models/quotes/IQuoteSearchRouteParams';
+import { QuoteSortRule } from '../../models/quotes/QuoteSortRule';
+import { QuoteType } from '../../models/quotes/QuoteType';
 import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
 
@@ -18,6 +20,9 @@ export class QuoteSearchStore
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteObject[] = [];
+	@observable sort = QuoteSortRule.CreatedAsc;
+	@observable query = '';
+	@observable quoteType: QuoteType | '' = '';
 	@observable artistId?: number;
 	@observable workId?: number;
 
@@ -25,9 +30,26 @@ export class QuoteSearchStore
 		makeObservable(this);
 	}
 
+	@action setSort = (value: QuoteSortRule): void => {
+		this.sort = value;
+	};
+
+	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setQuoteType = (value: QuoteType | ''): void => {
+		this.quoteType = value;
+	};
+
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = ['pageSize'];
+	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = [
+		'pageSize',
+		'sort',
+		'query',
+		'quoteType',
+	];
 
 	@observable loading = false;
 
@@ -42,6 +64,9 @@ export class QuoteSearchStore
 
 			const result = await quoteApi.list({
 				pagination: paginationParams,
+				sort: this.sort,
+				query: this.query,
+				quoteType: this.quoteType ? this.quoteType : undefined,
 				artistId: this.artistId,
 				workId: this.workId,
 			});
@@ -65,11 +90,17 @@ export class QuoteSearchStore
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
+			sort: this.sort,
+			query: this.query,
+			quoteType: this.quoteType ? this.quoteType : undefined,
 		};
 	}
 	set routeParams(value: IQuoteSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
+		this.sort = value.sort ?? QuoteSortRule.CreatedAsc;
+		this.query = value.query ?? '';
+		this.quoteType = value.quoteType ?? '';
 	}
 
 	validateRouteParams = (data: any): data is IQuoteSearchRouteParams => {

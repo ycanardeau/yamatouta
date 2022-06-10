@@ -9,6 +9,8 @@ import {
 
 import { artistApi } from '../../api/artistApi';
 import { IArtistObject } from '../../dto/IArtistObject';
+import { ArtistSortRule } from '../../models/artists/ArtistSortRule';
+import { ArtistType } from '../../models/artists/ArtistType';
 import { IArtistSearchRouteParams } from '../../models/artists/IArtistSearchRouteParams';
 import * as validators from '../../utils/validate';
 import { PaginationStore } from '../PaginationStore';
@@ -18,14 +20,34 @@ export class ArtistSearchStore
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable artists: IArtistObject[] = [];
+	@observable sort = ArtistSortRule.CreatedAsc;
+	@observable query = '';
+	@observable artistType: ArtistType | '' = '';
 
 	constructor() {
 		makeObservable(this);
 	}
 
+	@action setSort = (value: ArtistSortRule): void => {
+		this.sort = value;
+	};
+
+	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setArtistType = (value: ArtistType | ''): void => {
+		this.artistType = value;
+	};
+
 	popState = false;
 
-	clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = ['pageSize'];
+	clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = [
+		'pageSize',
+		'sort',
+		'query',
+		'artistType',
+	];
 
 	@observable loading = false;
 
@@ -40,6 +62,9 @@ export class ArtistSearchStore
 
 			const result = await artistApi.list({
 				pagination: paginationParams,
+				sort: this.sort,
+				query: this.query,
+				artistType: this.artistType ? this.artistType : undefined,
 			});
 
 			runInAction(() => {
@@ -61,11 +86,17 @@ export class ArtistSearchStore
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
+			sort: this.sort,
+			query: this.query,
+			artistType: this.artistType ? this.artistType : undefined,
 		};
 	}
 	set routeParams(value: IArtistSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
+		this.sort = value.sort ?? ArtistSortRule.CreatedAsc;
+		this.query = value.query ?? '';
+		this.artistType = value.artistType ?? '';
 	}
 
 	validateRouteParams = (data: any): data is IArtistSearchRouteParams => {

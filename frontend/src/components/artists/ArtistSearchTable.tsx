@@ -107,7 +107,7 @@ const ArtistPopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Artist_Update,
+								Permission.UpdateArtists,
 							)
 						}
 					>
@@ -123,7 +123,7 @@ const ArtistPopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Revision_View,
+								Permission.ViewRevisions,
 							)
 						}
 					>
@@ -137,7 +137,7 @@ const ArtistPopover = ({
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Artist_Delete,
+								Permission.DeleteArtists,
 							)
 						}
 					>

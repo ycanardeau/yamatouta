@@ -5,6 +5,7 @@ import {
 	IdentifiedReference,
 	ManyToOne,
 	OneToMany,
+	OneToOne,
 	PrimaryKey,
 	Property,
 	Reference,
@@ -12,14 +13,14 @@ import {
 
 import { EntryType } from '../models/EntryType';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
+import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
-import { IRevisionFactory } from '../models/IRevisionFactory';
-import { IWebLinkFactory } from '../models/IWebLinkFactory';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { ArtistType } from '../models/artists/ArtistType';
 import { ArtistSnapshot } from '../models/snapshots/ArtistSnapshot';
+import { NgramConverter } from '../services/NgramConverter';
 import { WorkArtistLink } from './ArtistLink';
 import { Commit } from './Commit';
 import { ArtistRevision } from './Revision';
@@ -30,10 +31,9 @@ import { ArtistWebLink } from './WebLink';
 @Entity({ tableName: 'artists' })
 export class Artist
 	implements
-		IEntryWithRevisions<Artist, ArtistRevision, ArtistSnapshot>,
-		IRevisionFactory<Artist, ArtistRevision, ArtistSnapshot>,
-		IEntryWithWebLinks<ArtistWebLink>,
-		IWebLinkFactory<ArtistWebLink>
+		IEntryWithSearchIndex<ArtistSearchIndex>,
+		IEntryWithRevisions<Artist, ArtistSnapshot, ArtistRevision>,
+		IEntryWithWebLinks<ArtistWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -64,8 +64,8 @@ export class Artist
 
 	get revisionManager(): RevisionManager<
 		Artist,
-		ArtistRevision,
-		ArtistSnapshot
+		ArtistSnapshot,
+		ArtistRevision
 	> {
 		return new RevisionManager(this);
 	}
@@ -79,12 +79,21 @@ export class Artist
 	@ManyToOne()
 	actor: IdentifiedReference<User>;
 
+	@OneToOne(() => ArtistSearchIndex, (searchIndex) => searchIndex.artist)
+	searchIndex: IdentifiedReference<ArtistSearchIndex>;
+
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
+		this.searchIndex = Reference.create(new ArtistSearchIndex(this));
 	}
 
 	get entryType(): EntryType.Artist {
 		return EntryType.Artist;
+	}
+
+	updateSearchIndex(ngramConverter: NgramConverter): void {
+		const searchIndex = this.searchIndex.getEntity();
+		searchIndex.name = ngramConverter.toFullText(this.name, 2);
 	}
 
 	takeSnapshot(): ArtistSnapshot {
@@ -120,5 +129,25 @@ export class Artist
 			title: title,
 			category: category,
 		});
+	}
+}
+
+@Entity({ tableName: 'artist_search_index' })
+export class ArtistSearchIndex {
+	@PrimaryKey()
+	id!: number;
+
+	@OneToOne()
+	artist: Artist;
+
+	@Property({ columnType: 'text', lazy: true })
+	name = '';
+
+	constructor(artist: Artist) {
+		this.artist = artist;
+	}
+
+	get entry(): IEntryWithSearchIndex<ArtistSearchIndex> {
+		return this.artist;
 	}
 }

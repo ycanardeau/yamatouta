@@ -60,7 +60,7 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 						iconType={EditRegular}
 						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Quote_Update,
+								Permission.UpdateQuotes,
 							)
 						}
 					>
@@ -78,7 +78,7 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 						iconType={HistoryRegular}
 						isDisabled={
 							!auth.permissionContext.hasPermission(
-								Permission.Revision_View,
+								Permission.ViewRevisions,
 							)
 						}
 					>

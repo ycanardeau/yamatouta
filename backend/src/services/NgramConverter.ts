@@ -7,8 +7,9 @@ export class NgramConverter {
 	private static readonly FT_MIN_WORD_LEN = 4;
 
 	// See: https://atsumu-t2.hatenadiary.org/entry/20091231/1262252080.
+	// See also: https://turingcomplete.fm/12#t=43:41 and https://dic.nicovideo.jp/a/%E5%BD%81.
 	padEnd(text: string): string {
-		return text.padEnd(NgramConverter.FT_MIN_WORD_LEN, '豔');
+		return text.padEnd(NgramConverter.FT_MIN_WORD_LEN, '妛');
 	}
 
 	toNgramFullTextArray(text: string, n: number): string[] {
