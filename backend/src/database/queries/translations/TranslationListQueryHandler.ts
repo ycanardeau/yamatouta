@@ -11,6 +11,7 @@ import { TranslationSortRule } from '../../../models/translations/TranslationSor
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { escapeWildcardCharacters } from '../../../utils/escapeWildcardCharacters';
+import { orderByIds } from '../orderByIds';
 
 export class TranslationListQuery {
 	constructor(
@@ -162,7 +163,7 @@ export class TranslationListQueryHandler
 
 		switch (params.sort) {
 			case TranslationSortRule.HeadwordAsc:
-			default:
+			case undefined:
 				this.orderByHeadword(knex, 'asc');
 				this.orderByYamatokotoba(knex, 'asc');
 				return knex;
@@ -204,18 +205,6 @@ export class TranslationListQueryHandler
 		}
 	}
 
-	private orderByIds(
-		knex: Knex.QueryBuilder,
-		ids: number[],
-	): Knex.QueryBuilder {
-		if (ids.length === 0) return knex;
-
-		// Yields `field(id, ?, ?, ..., ?)`.
-		const sql = `field(id, ${Array(ids.length).fill('?').join(', ')})`;
-
-		return knex.orderByRaw(sql, ids);
-	}
-
 	private async getIds(params: TranslationListParams): Promise<number[]> {
 		const knex = this.createKnex(params)
 			.select('translations.id')
@@ -247,13 +236,11 @@ export class TranslationListQueryHandler
 			.getKnex()
 			.whereIn('id', ids);
 
-		this.orderByIds(knex, ids);
+		orderByIds(knex, ids);
 
 		const results = await this.em.execute(knex);
 
-		return results.map((translation) =>
-			this.em.map(Translation, translation),
-		);
+		return results.map((result) => this.em.map(Translation, result));
 	}
 
 	private async getCount(params: TranslationListParams): Promise<number> {

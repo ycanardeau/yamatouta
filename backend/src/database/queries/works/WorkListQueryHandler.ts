@@ -1,21 +1,16 @@
-import {
-	EntityRepository,
-	FilterQuery,
-	FindOptions,
-	QueryOrder,
-	QueryOrderMap,
-} from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs';
+import { EntityManager, Knex } from '@mikro-orm/mariadb';
 import { BadRequestException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import _ from 'lodash';
 
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { WorkObject } from '../../../dto/WorkObject';
 import { Work } from '../../../entities/Work';
 import { WorkListParams } from '../../../models/works/WorkListParams';
 import { WorkSortRule } from '../../../models/works/WorkSortRule';
+import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
-import { whereNotHidden } from '../../../services/filters';
+import { orderByIds } from '../orderByIds';
 
 export class WorkListQuery {
 	constructor(
@@ -31,15 +26,109 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 	private static readonly maxOffset = 5000;
 
 	constructor(
-		@InjectRepository(Work)
-		private readonly workRepo: EntityRepository<Work>,
+		private readonly em: EntityManager,
+		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	private orderBy(sort?: WorkSortRule): QueryOrderMap<{ id: QueryOrder }> {
-		switch (sort) {
-			default:
-				return { id: QueryOrder.ASC };
+	private createKnex(params: WorkListParams): Knex.QueryBuilder {
+		const knex = this.em
+			.createQueryBuilder(Work)
+			.getKnex()
+			.join('work_search_index', 'works.id', 'work_search_index.work_id')
+			.andWhere('works.deleted', false)
+			.andWhere('works.hidden', false);
+
+		if (params.query) {
+			knex.andWhereRaw(
+				'MATCH(work_search_index.name) AGAINST(? IN BOOLEAN MODE)',
+				this.ngramConverter.toQuery(params.query, 2),
+			);
 		}
+
+		if (params.workType) knex.andWhere('works.work_type', params.workType);
+
+		return knex;
+	}
+
+	private orderBy(
+		knex: Knex.QueryBuilder,
+		params: WorkListParams,
+	): Knex.QueryBuilder {
+		switch (params.sort) {
+			case WorkSortRule.NameAsc:
+				return knex
+					.orderBy('works.sort_name', 'asc')
+					.orderBy('works.name', 'asc')
+					.orderBy('works.id', 'asc');
+
+			case WorkSortRule.NameDesc:
+				return knex
+					.orderBy('works.sort_name', 'desc')
+					.orderBy('works.name', 'desc')
+					.orderBy('works.id', 'desc');
+
+			case WorkSortRule.CreatedAsc:
+			case undefined:
+				return knex
+					.orderBy('works.created_at', 'asc')
+					.orderBy('works.id', 'asc');
+
+			case WorkSortRule.CreatedDesc:
+				return knex
+					.orderBy('works.created_at', 'desc')
+					.orderBy('works.id', 'desc');
+
+			case WorkSortRule.UpdatedAsc:
+				return knex
+					.orderBy('works.updated_at', 'asc')
+					.orderBy('works.id', 'asc');
+
+			case WorkSortRule.UpdatedDesc:
+				return knex
+					.orderBy('works.updated_at', 'desc')
+					.orderBy('works.id', 'desc');
+		}
+	}
+
+	private async getIds(params: WorkListParams): Promise<number[]> {
+		const knex = this.createKnex(params)
+			.select('works.id')
+			.limit(
+				params.limit
+					? Math.min(params.limit, WorkListQueryHandler.maxLimit)
+					: WorkListQueryHandler.defaultLimit,
+			);
+
+		if (params.offset) knex.offset(params.offset);
+
+		this.orderBy(knex, params);
+
+		const ids = _.map(await this.em.execute(knex), 'id');
+
+		return ids;
+	}
+
+	private async getItems(params: WorkListParams): Promise<Work[]> {
+		const ids = await this.getIds(params);
+
+		const knex = this.em
+			.createQueryBuilder(Work)
+			.getKnex()
+			.whereIn('id', ids);
+
+		orderByIds(knex, ids);
+
+		const results = await this.em.execute(knex);
+
+		return results.map((result) => this.em.map(Work, result));
+	}
+
+	private async getCount(params: WorkListParams): Promise<number> {
+		const knex = this.createKnex(params).countDistinct('works.id as count');
+
+		const count = _.map(await this.em.execute(knex), 'count')[0];
+
+		return count;
 	}
 
 	async execute(
@@ -54,32 +143,11 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 		if (result.error)
 			throw new BadRequestException(result.error.details[0].message);
 
-		const where: FilterQuery<Work> = {
-			$and: [
-				{ deleted: false },
-				whereNotHidden(permissionContext),
-				params.workType ? { workType: params.workType } : {},
-				params.query ? { name: { $like: `%${params.query}%` } } : {},
-			],
-		};
-
-		const options: FindOptions<Work> = {
-			limit: params.limit
-				? Math.min(params.limit, WorkListQueryHandler.maxLimit)
-				: WorkListQueryHandler.defaultLimit,
-			offset: params.offset,
-		};
-
 		const [works, count] = await Promise.all([
 			params.offset && params.offset > WorkListQueryHandler.maxOffset
 				? Promise.resolve([])
-				: this.workRepo.find(where, {
-						...options,
-						orderBy: this.orderBy(params.sort),
-				  }),
-			params.getTotalCount
-				? this.workRepo.count(where, options)
-				: Promise.resolve(0),
+				: this.getItems(params),
+			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
 		]);
 
 		return SearchResultObject.create<WorkObject>(
