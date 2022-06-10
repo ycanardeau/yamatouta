@@ -7,8 +7,10 @@ import {
 import {
 	BookRegular,
 	CalligraphyPenRegular,
+	ContentSettingsRegular,
 	MusicNote2Regular,
 	PersonAddRegular,
+	PersonArrowLeftRegular,
 	PersonRegular,
 	SettingsRegular,
 	SignOutRegular,
@@ -26,6 +28,7 @@ import { useDialog } from './components/useDialog';
 import config from './config';
 import logoDiscord from './images/Discord-Logo-White.svg';
 import logoTwitter from './images/Twitter-Logo-White.svg';
+import { UserGroup } from './models/users/UserGroup';
 
 const SideNav = (): React.ReactElement => {
 	const { t } = useTranslation();
@@ -51,63 +54,79 @@ const SideNav = (): React.ReactElement => {
 			{
 				name: t('shared.content'),
 				id: htmlIdGenerator()(),
-				items: [
-					{
-						icon: <EuiIcon type={TranslateRegular} />,
-						name: t('shared.words'),
-						id: htmlIdGenerator()(),
-						href: '/translations',
-						onClick: (e): void => {
-							e.preventDefault();
-							navigate('/translations');
+				items: (
+					[
+						{
+							icon: <EuiIcon type={TranslateRegular} />,
+							name: t('shared.words'),
+							id: htmlIdGenerator()(),
+							href: '/translations',
+							onClick: (e): void => {
+								e.preventDefault();
+								navigate('/translations');
+							},
+							isSelected: tab === 'translations',
 						},
-						isSelected: tab === 'translations',
-					},
-					{
-						icon: <EuiIcon type={MusicNote2Regular} />,
-						name: t('shared.quotes'),
-						id: htmlIdGenerator()(),
-						href: '/quotes',
-						onClick: (e): void => {
-							e.preventDefault();
-							navigate('/quotes');
+						{
+							icon: <EuiIcon type={MusicNote2Regular} />,
+							name: t('shared.quotes'),
+							id: htmlIdGenerator()(),
+							href: '/quotes',
+							onClick: (e): void => {
+								e.preventDefault();
+								navigate('/quotes');
+							},
+							isSelected: tab === 'quotes',
 						},
-						isSelected: tab === 'quotes',
-					},
-					{
-						icon: <EuiIcon type={CalligraphyPenRegular} />,
-						name: t('shared.artists'),
-						id: htmlIdGenerator()(),
-						href: '/artists',
-						onClick: (e): void => {
-							e.preventDefault();
-							navigate('/artists');
+						{
+							icon: <EuiIcon type={CalligraphyPenRegular} />,
+							name: t('shared.artists'),
+							id: htmlIdGenerator()(),
+							href: '/artists',
+							onClick: (e): void => {
+								e.preventDefault();
+								navigate('/artists');
+							},
+							isSelected: tab === 'artists',
 						},
-						isSelected: tab === 'artists',
-					},
-					{
-						icon: <EuiIcon type={BookRegular} />,
-						name: t('shared.works'),
-						id: htmlIdGenerator()(),
-						href: '/works',
-						onClick: (e): void => {
-							e.preventDefault();
-							navigate('/works');
+						{
+							icon: <EuiIcon type={BookRegular} />,
+							name: t('shared.works'),
+							id: htmlIdGenerator()(),
+							href: '/works',
+							onClick: (e): void => {
+								e.preventDefault();
+								navigate('/works');
+							},
+							isSelected: tab === 'works',
 						},
-						isSelected: tab === 'works',
-					},
-					{
-						icon: <EuiIcon type={PersonRegular} />,
-						name: t('shared.users'),
-						id: htmlIdGenerator()(),
-						href: '/users',
-						onClick: (e): void => {
-							e.preventDefault();
-							navigate('/users');
+						{
+							icon: <EuiIcon type={PersonRegular} />,
+							name: t('shared.users'),
+							id: htmlIdGenerator()(),
+							href: '/users',
+							onClick: (e): void => {
+								e.preventDefault();
+								navigate('/users');
+							},
+							isSelected: tab === 'users',
 						},
-						isSelected: tab === 'users',
-					},
-				],
+					] as EuiSideNavItemType<any>[]
+				).concat(
+					auth.user?.userGroup === UserGroup.Admin
+						? {
+								icon: <EuiIcon type={ContentSettingsRegular} />,
+								name: t('shared.manage'),
+								id: htmlIdGenerator()(),
+								href: '/admin',
+								onClick: (e): void => {
+									e.preventDefault();
+									navigate('/admin');
+								},
+								isSelected: tab === 'admin',
+						  }
+						: [],
+				),
 			},
 			{
 				name: t('shared.account'),
@@ -142,7 +161,7 @@ const SideNav = (): React.ReactElement => {
 					  ]
 					: [
 							{
-								icon: <EuiIcon type="" />,
+								icon: <EuiIcon type={PersonArrowLeftRegular} />,
 								name: t('auth.logIn'),
 								id: htmlIdGenerator()(),
 								onClick: loginDialog.show,

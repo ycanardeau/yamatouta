@@ -71,7 +71,8 @@
 		"user": "つかいて",
 		"loading": "よみこんでいます...",
 		"noItemsFound": "みつかりませんでした",
-		"sortBy": "ならべかえ"
+		"sortBy": "ならべかえ",
+		"manage": "つかさどり"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",

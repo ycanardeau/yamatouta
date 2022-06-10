@@ -30,6 +30,7 @@ const adminPermissions: Permission[] = [
 	Permission.DeleteWebLinks,
 	Permission.DeleteWorkLinks,
 	Permission.DeleteWorks,
+	Permission.GenerateSitemaps,
 	Permission.UpdateArtistLinks,
 	Permission.UpdateArtists,
 	Permission.UpdateQuotes,

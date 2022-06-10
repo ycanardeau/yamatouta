@@ -14,6 +14,7 @@ export enum Permission {
 	DeleteWebLinks = 'DeleteWebLinks',
 	DeleteWorkLinks = 'DeleteWorkLinks',
 	DeleteWorks = 'DeleteWorks',
+	GenerateSitemaps = 'GenerateSitemaps',
 	UpdateArtistLinks = 'UpdateArtistLinks',
 	UpdateArtists = 'UpdateArtists',
 	UpdateQuotes = 'UpdateQuotes',
