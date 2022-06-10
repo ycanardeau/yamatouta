@@ -3569,6 +3569,16 @@
           "length": 0,
           "mappedType": "datetime"
         },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
         "snapshot": {
           "name": "snapshot",
           "type": "text",
