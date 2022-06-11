@@ -1,6 +1,5 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { Response } from 'express';
 
 import { AdminCreateMissingRevisionsCommand } from '../../database/commands/admin/AdminCreateMissingRevisionsCommandHandler';
 import { AdminUpdateSearchIndexCommand } from '../../database/commands/admin/AdminUpdateSearchIndexCommandHandler';
@@ -27,14 +26,10 @@ export class AdminApiController {
 	}
 
 	@Post('generate-sitemaps')
-	async sitemap(
+	sitemap(
 		@GetPermissionContext() permissionContext: PermissionContext,
-		@Res() response: Response,
 	): Promise<void> {
-		const xml = await this.sitemapService.generate(permissionContext);
-
-		response.set('Content-Type', 'text/xml');
-		response.send(xml);
+		return this.sitemapService.generate(permissionContext);
 	}
 
 	@Post('update-search-index')
