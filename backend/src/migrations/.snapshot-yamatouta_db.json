@@ -2202,6 +2202,121 @@
           "primary": true,
           "nullable": false,
           "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "deleted": {
+          "name": "deleted",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "hidden": {
+          "name": "hidden",
+          "type": "tinyint(1)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "boolean"
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 100,
+          "mappedType": "string"
+        },
+        "actor_id": {
+          "name": "actor_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "hashtags",
+      "indexes": [
+        {
+          "columnNames": [
+            "name"
+          ],
+          "composite": false,
+          "keyName": "hashtags_name_unique",
+          "primary": false,
+          "unique": true
+        },
+        {
+          "columnNames": [
+            "actor_id"
+          ],
+          "composite": false,
+          "keyName": "hashtags_actor_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "hashtags_actor_id_foreign": {
+          "constraintName": "hashtags_actor_id_foreign",
+          "columnNames": [
+            "actor_id"
+          ],
+          "localTableName": "hashtags",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "users",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
         }
       },
       "name": "commits",
@@ -3187,6 +3302,222 @@
             "work_id"
           ],
           "localTableName": "audit_log_entries",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "works",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        }
+      }
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "datetime",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 0,
+          "mappedType": "datetime"
+        },
+        "related_hashtag_id": {
+          "name": "related_hashtag_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "entry_type": {
+          "name": "entry_type",
+          "type": "enum('Artist', 'Quote', 'Translation', 'Work')",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "enumItems": [
+            "Artist",
+            "Quote",
+            "Translation",
+            "Work"
+          ],
+          "mappedType": "enum"
+        },
+        "artist_id": {
+          "name": "artist_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "quote_id": {
+          "name": "quote_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "translation_id": {
+          "name": "translation_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "work_id": {
+          "name": "work_id",
+          "type": "int",
+          "unsigned": true,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        }
+      },
+      "name": "hashtag_links",
+      "indexes": [
+        {
+          "columnNames": [
+            "related_hashtag_id"
+          ],
+          "composite": false,
+          "keyName": "hashtag_links_related_hashtag_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "entry_type"
+          ],
+          "composite": false,
+          "keyName": "hashtag_links_entry_type_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "artist_id"
+          ],
+          "composite": false,
+          "keyName": "hashtag_links_artist_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "quote_id"
+          ],
+          "composite": false,
+          "keyName": "hashtag_links_quote_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "translation_id"
+          ],
+          "composite": false,
+          "keyName": "hashtag_links_translation_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "work_id"
+          ],
+          "composite": false,
+          "keyName": "hashtag_links_work_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "PRIMARY",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "hashtag_links_related_hashtag_id_foreign": {
+          "constraintName": "hashtag_links_related_hashtag_id_foreign",
+          "columnNames": [
+            "related_hashtag_id"
+          ],
+          "localTableName": "hashtag_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "hashtags",
+          "updateRule": "cascade"
+        },
+        "hashtag_links_artist_id_foreign": {
+          "constraintName": "hashtag_links_artist_id_foreign",
+          "columnNames": [
+            "artist_id"
+          ],
+          "localTableName": "hashtag_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "artists",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "hashtag_links_quote_id_foreign": {
+          "constraintName": "hashtag_links_quote_id_foreign",
+          "columnNames": [
+            "quote_id"
+          ],
+          "localTableName": "hashtag_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "quotes",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "hashtag_links_translation_id_foreign": {
+          "constraintName": "hashtag_links_translation_id_foreign",
+          "columnNames": [
+            "translation_id"
+          ],
+          "localTableName": "hashtag_links",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "translations",
+          "deleteRule": "set null",
+          "updateRule": "cascade"
+        },
+        "hashtag_links_work_id_foreign": {
+          "constraintName": "hashtag_links_work_id_foreign",
+          "columnNames": [
+            "work_id"
+          ],
+          "localTableName": "hashtag_links",
           "referencedColumnNames": [
             "id"
           ],

@@ -13,6 +13,7 @@ import {
 } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
+import { IEntryWithHashtagLinks } from '../models/IEntryWithHashtagLinks';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
@@ -25,6 +26,7 @@ import { QuoteSnapshot } from '../models/snapshots/QuoteSnapshot';
 import { NgramConverter } from '../services/NgramConverter';
 import { Artist } from './Artist';
 import { Commit } from './Commit';
+import { QuoteHashtagLink } from './HashtagLink';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
 import { User } from './User';
@@ -41,7 +43,8 @@ export class Quote
 		IEntryWithSearchIndex<QuoteSearchIndex>,
 		IEntryWithRevisions<Quote, QuoteSnapshot, QuoteRevision>,
 		IEntryWithWebLinks<QuoteWebLink>,
-		IEntryWithWorkLinks<EntryType.Quote, QuoteWorkLink>
+		IEntryWithWorkLinks<EntryType.Quote, QuoteWorkLink>,
+		IEntryWithHashtagLinks<QuoteHashtagLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -105,6 +108,9 @@ export class Quote
 
 	@OneToOne(() => QuoteSearchIndex, (searchIndex) => searchIndex.quote)
 	searchIndex: IdentifiedReference<QuoteSearchIndex>;
+
+	@OneToMany(() => QuoteHashtagLink, (hashtagLink) => hashtagLink.quote)
+	hashtagLinks = new Collection<QuoteHashtagLink>(this);
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
