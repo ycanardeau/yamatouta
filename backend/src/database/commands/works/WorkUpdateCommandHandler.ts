@@ -28,6 +28,15 @@ export class WorkUpdateCommand {
 export class WorkUpdateCommandHandler
 	implements ICommandHandler<WorkUpdateCommand>
 {
+	static readonly populate = [
+		'searchIndex',
+		'webLinks',
+		'webLinks.address',
+		'webLinks.address.host',
+		'artistLinks',
+		'artistLinks.relatedArtist',
+	] as const;
+
 	constructor(
 		private readonly em: EntityManager,
 		@InjectRepository(Work)
@@ -63,17 +72,7 @@ export class WorkUpdateCommandHandler
 							deleted: false,
 							hidden: false,
 						},
-						{
-							// OPTIMIZE
-							populate: [
-								'searchIndex',
-								'webLinks',
-								'webLinks.address',
-								'webLinks.address.host',
-								'artistLinks',
-								'artistLinks.relatedArtist',
-							],
-						},
+						{ populate: WorkUpdateCommandHandler.populate },
 				  );
 
 			em.persist(work);

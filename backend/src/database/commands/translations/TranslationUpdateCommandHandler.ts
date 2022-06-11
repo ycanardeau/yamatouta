@@ -28,6 +28,15 @@ export class TranslationUpdateCommand {
 export class TranslationUpdateCommandHandler
 	implements ICommandHandler<TranslationUpdateCommand>
 {
+	static readonly populate = [
+		'searchIndex',
+		'webLinks',
+		'webLinks.address',
+		'webLinks.address.host',
+		'workLinks',
+		'workLinks.relatedWork',
+	] as const;
+
 	constructor(
 		private readonly em: EntityManager,
 		private readonly ngramConverter: NgramConverter,
@@ -65,17 +74,7 @@ export class TranslationUpdateCommandHandler
 							deleted: false,
 							hidden: false,
 						},
-						{
-							// OPTIMIZE
-							populate: [
-								'searchIndex',
-								'webLinks',
-								'webLinks.address',
-								'webLinks.address.host',
-								'workLinks',
-								'workLinks.relatedWork',
-							],
-						},
+						{ populate: TranslationUpdateCommandHandler.populate },
 				  );
 
 			em.persist(translation);

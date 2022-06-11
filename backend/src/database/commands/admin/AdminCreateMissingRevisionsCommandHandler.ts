@@ -10,6 +10,10 @@ import { EntryWithRevisions } from '../../../models/Entry';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
+import { ArtistUpdateCommandHandler } from '../artists/ArtistUpdateCommandHandler';
+import { QuoteUpdateCommandHandler } from '../quotes/QuoteUpdateCommandHandler';
+import { TranslationUpdateCommandHandler } from '../translations/TranslationUpdateCommandHandler';
+import { WorkUpdateCommandHandler } from '../works/WorkUpdateCommandHandler';
 
 export class AdminCreateMissingRevisionsCommand {
 	constructor(readonly permissionContext: PermissionContext) {}
@@ -42,11 +46,8 @@ export class AdminCreateMissingRevisionsCommandHandler
 							{ id: { $gte: entryId }, version: 0 },
 							{
 								populate: [
+									...ArtistUpdateCommandHandler.populate,
 									'actor',
-									'searchIndex',
-									'webLinks',
-									'webLinks.address',
-									'webLinks.address.host',
 								],
 								limit: AdminCreateMissingRevisionsCommandHandler.chunkSize,
 								orderBy: { id: QueryOrder.asc },
@@ -57,14 +58,8 @@ export class AdminCreateMissingRevisionsCommandHandler
 							{ id: { $gte: entryId }, version: 0 },
 							{
 								populate: [
+									...QuoteUpdateCommandHandler.populate,
 									'actor',
-									'searchIndex',
-									'artist',
-									'webLinks',
-									'webLinks.address',
-									'webLinks.address.host',
-									'workLinks',
-									'workLinks.relatedWork',
 								],
 								limit: AdminCreateMissingRevisionsCommandHandler.chunkSize,
 								orderBy: { id: QueryOrder.asc },
@@ -75,13 +70,8 @@ export class AdminCreateMissingRevisionsCommandHandler
 							{ id: { $gte: entryId }, version: 0 },
 							{
 								populate: [
+									...TranslationUpdateCommandHandler.populate,
 									'actor',
-									'searchIndex',
-									'webLinks',
-									'webLinks.address',
-									'webLinks.address.host',
-									'workLinks',
-									'workLinks.relatedWork',
 								],
 								limit: AdminCreateMissingRevisionsCommandHandler.chunkSize,
 								orderBy: { id: QueryOrder.asc },
@@ -92,13 +82,8 @@ export class AdminCreateMissingRevisionsCommandHandler
 							{ id: { $gte: entryId }, version: 0 },
 							{
 								populate: [
+									...WorkUpdateCommandHandler.populate,
 									'actor',
-									'searchIndex',
-									'webLinks',
-									'webLinks.address',
-									'webLinks.address.host',
-									'artistLinks',
-									'artistLinks.relatedArtist',
 								],
 								limit: AdminCreateMissingRevisionsCommandHandler.chunkSize,
 								orderBy: { id: QueryOrder.asc },

@@ -29,6 +29,16 @@ export class QuoteUpdateCommand {
 export class QuoteUpdateCommandHandler
 	implements ICommandHandler<QuoteUpdateCommand>
 {
+	static readonly populate = [
+		'searchIndex',
+		'artist',
+		'webLinks',
+		'webLinks.address',
+		'webLinks.address.host',
+		'workLinks',
+		'workLinks.relatedWork',
+	] as const;
+
 	constructor(
 		private readonly em: EntityManager,
 		@InjectRepository(Artist)
@@ -72,18 +82,7 @@ export class QuoteUpdateCommandHandler
 							deleted: false,
 							hidden: false,
 						},
-						{
-							// OPTIMIZE
-							populate: [
-								'searchIndex',
-								'artist',
-								'webLinks',
-								'webLinks.address',
-								'webLinks.address.host',
-								'workLinks',
-								'workLinks.relatedWork',
-							],
-						},
+						{ populate: QuoteUpdateCommandHandler.populate },
 				  );
 
 			em.persist(quote);

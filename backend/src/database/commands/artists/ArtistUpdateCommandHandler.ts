@@ -27,6 +27,13 @@ export class ArtistUpdateCommand {
 export class ArtistUpdateCommandHandler
 	implements ICommandHandler<ArtistUpdateCommand>
 {
+	static readonly populate = [
+		'searchIndex',
+		'webLinks',
+		'webLinks.address',
+		'webLinks.address.host',
+	] as const;
+
 	constructor(
 		private readonly em: EntityManager,
 		@InjectRepository(Artist)
@@ -61,15 +68,7 @@ export class ArtistUpdateCommandHandler
 							deleted: false,
 							hidden: false,
 						},
-						{
-							// OPTIMIZE
-							populate: [
-								'searchIndex',
-								'webLinks',
-								'webLinks.address',
-								'webLinks.address.host',
-							],
-						},
+						{ populate: ArtistUpdateCommandHandler.populate },
 				  );
 
 			em.persist(artist);

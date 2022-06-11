@@ -22,6 +22,10 @@ import { Permission } from '../../models/Permission';
 import { RevisionEvent } from '../../models/RevisionEvent';
 import { PermissionContext } from '../../services/PermissionContext';
 import { RevisionService } from '../../services/RevisionService';
+import { ArtistUpdateCommandHandler } from './artists/ArtistUpdateCommandHandler';
+import { QuoteUpdateCommandHandler } from './quotes/QuoteUpdateCommandHandler';
+import { TranslationUpdateCommandHandler } from './translations/TranslationUpdateCommandHandler';
+import { WorkUpdateCommandHandler } from './works/WorkUpdateCommandHandler';
 
 abstract class EntryDeleteCommand {
 	constructor(
@@ -106,16 +110,7 @@ export class TranslationDeleteCommandHandler
 			(id) =>
 				translationRepo.findOneOrFail(
 					{ id: id },
-					{
-						// OPTIMIZE
-						populate: [
-							'webLinks',
-							'webLinks.address',
-							'webLinks.address.host',
-							'workLinks',
-							'workLinks.relatedWork',
-						],
-					},
+					{ populate: TranslationUpdateCommandHandler.populate },
 				),
 			(entry, actor, actorIp) =>
 				new TranslationAuditLogEntry({
@@ -148,14 +143,7 @@ export class ArtistDeleteCommandHandler
 			(id) =>
 				artistRepo.findOneOrFail(
 					{ id: id },
-					{
-						// OPTIMIZE
-						populate: [
-							'webLinks',
-							'webLinks.address',
-							'webLinks.address.host',
-						],
-					},
+					{ populate: ArtistUpdateCommandHandler.populate },
 				),
 			(entry, actor, actorIp) =>
 				new ArtistAuditLogEntry({
@@ -188,17 +176,7 @@ export class QuoteDeleteCommandHandler
 			(id) =>
 				quoteRepo.findOneOrFail(
 					{ id: id },
-					{
-						// OPTIMIZE
-						populate: [
-							'artist',
-							'webLinks',
-							'webLinks.address',
-							'webLinks.address.host',
-							'workLinks',
-							'workLinks.relatedWork',
-						],
-					},
+					{ populate: QuoteUpdateCommandHandler.populate },
 				),
 			(entry, actor, actorIp) =>
 				new QuoteAuditLogEntry({
@@ -231,16 +209,7 @@ export class WorkDeleteCommandHandler
 			(id) =>
 				workRepo.findOneOrFail(
 					{ id: id },
-					{
-						// OPTIMIZE
-						populate: [
-							'webLinks',
-							'webLinks.address',
-							'webLinks.address.host',
-							'artistLinks',
-							'artistLinks.relatedArtist',
-						],
-					},
+					{ populate: WorkUpdateCommandHandler.populate },
 				),
 			(entry, actor, actorIp) =>
 				new WorkAuditLogEntry({
