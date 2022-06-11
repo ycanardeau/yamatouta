@@ -1,6 +1,6 @@
 import { Collection, Entity, OneToMany, PrimaryKey } from '@mikro-orm/core';
 
-import { Entry } from '../models/Entry';
+import { EntryWithRevisions } from '../models/Entry';
 import { Snapshot } from '../models/snapshots/Snapshot';
 import { Revision } from './Revision';
 
@@ -14,5 +14,5 @@ export class Commit {
 	id!: number;
 
 	@OneToMany(() => Revision, (revision) => revision.commit)
-	revisions = new Collection<Revision<Entry, Snapshot>>(this);
+	revisions = new Collection<Revision<EntryWithRevisions, Snapshot>>(this);
 }

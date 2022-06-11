@@ -8,7 +8,7 @@ import {
 	Reference,
 } from '@mikro-orm/core';
 
-import { Entry } from '../models/Entry';
+import { EntryWithRevisions } from '../models/Entry';
 import { EntryType } from '../models/EntryType';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { ArtistSnapshot } from '../models/snapshots/ArtistSnapshot';
@@ -31,7 +31,7 @@ import { Work } from './Work';
 	discriminatorColumn: 'entryType',
 })
 export abstract class Revision<
-	TEntry extends Entry,
+	TEntry extends EntryWithRevisions,
 	TSnapshot extends Snapshot,
 > {
 	@PrimaryKey()

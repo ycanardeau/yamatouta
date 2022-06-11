@@ -5,15 +5,15 @@ import _ from 'lodash';
 import { Commit } from '../entities/Commit';
 import { Revision } from '../entities/Revision';
 import { User } from '../entities/User';
-import { Entry } from '../models/Entry';
+import { EntryWithRevisions } from '../models/Entry';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { Snapshot } from '../models/snapshots/Snapshot';
 
 @Injectable()
 export class RevisionService {
 	private async getLatestRevision(
-		entry: Entry,
-	): Promise<Revision<Entry, Snapshot> | undefined> {
+		entry: EntryWithRevisions,
+	): Promise<Revision<EntryWithRevisions, Snapshot> | undefined> {
 		// FIXME: For some reason, this doesn't work in unit tests.
 		// const revisions = await entry.revisions.matching({
 		// 	where: { deleted: false },
@@ -23,7 +23,7 @@ export class RevisionService {
 		// return revisions[0] /* NOTE: Do not use .at(0) for now. */;
 
 		const revisions = (await entry.revisions.loadItems()) as Revision<
-			Entry,
+			EntryWithRevisions,
 			Snapshot
 		>[];
 
@@ -35,7 +35,7 @@ export class RevisionService {
 
 	async create(
 		em: EntityManager,
-		entry: Entry,
+		entry: EntryWithRevisions,
 		updateFunc: () => Promise<void>,
 		actor: User,
 		event: RevisionEvent,

@@ -6,7 +6,7 @@ import { Commit } from '../../../entities/Commit';
 import { Quote } from '../../../entities/Quote';
 import { Translation } from '../../../entities/Translation';
 import { Work } from '../../../entities/Work';
-import { Entry } from '../../../models/Entry';
+import { EntryWithRevisions } from '../../../models/Entry';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { PermissionContext } from '../../../services/PermissionContext';
@@ -106,7 +106,7 @@ export class AdminCreateMissingRevisionsCommandHandler
 						),
 					]);
 
-				const entries = ([] as Entry[])
+				const entries = ([] as EntryWithRevisions[])
 					.concat(artists)
 					.concat(quotes)
 					.concat(translations)
