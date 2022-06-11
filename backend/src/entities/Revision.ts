@@ -67,21 +67,14 @@ export abstract class Revision<
 	@Property()
 	version: number;
 
-	protected constructor({
-		commit,
-		actor,
-		snapshot,
-		summary,
-		event,
-		version,
-	}: {
-		commit: Commit;
-		actor: User;
-		snapshot: TSnapshot;
-		summary: string;
-		event: RevisionEvent;
-		version: number;
-	}) {
+	protected constructor(
+		commit: Commit,
+		actor: User,
+		snapshot: TSnapshot,
+		summary: string,
+		event: RevisionEvent,
+		version: number,
+	) {
 		this.commit = Reference.create(commit);
 		this.actor = Reference.create(actor);
 		this.snapshot = JSON.stringify(snapshot);
@@ -104,19 +97,16 @@ export class TranslationRevision extends Revision<
 	@ManyToOne()
 	translation: IdentifiedReference<Translation>;
 
-	constructor({
-		translation,
-		...params
-	}: {
-		translation: Translation;
-		commit: Commit;
-		actor: User;
-		snapshot: TranslationSnapshot;
-		summary: string;
-		event: RevisionEvent;
-		version: number;
-	}) {
-		super(params);
+	constructor(
+		translation: Translation,
+		commit: Commit,
+		actor: User,
+		snapshot: TranslationSnapshot,
+		summary: string,
+		event: RevisionEvent,
+		version: number,
+	) {
+		super(commit, actor, snapshot, summary, event, version);
 
 		this.translation = Reference.create(translation);
 	}
@@ -131,19 +121,16 @@ export class ArtistRevision extends Revision<Artist, ArtistSnapshot> {
 	@ManyToOne()
 	artist: IdentifiedReference<Artist>;
 
-	constructor({
-		artist,
-		...params
-	}: {
-		artist: Artist;
-		commit: Commit;
-		actor: User;
-		snapshot: ArtistSnapshot;
-		summary: string;
-		event: RevisionEvent;
-		version: number;
-	}) {
-		super(params);
+	constructor(
+		artist: Artist,
+		commit: Commit,
+		actor: User,
+		snapshot: ArtistSnapshot,
+		summary: string,
+		event: RevisionEvent,
+		version: number,
+	) {
+		super(commit, actor, snapshot, summary, event, version);
 
 		this.artist = Reference.create(artist);
 	}
@@ -158,19 +145,16 @@ export class QuoteRevision extends Revision<Quote, QuoteSnapshot> {
 	@ManyToOne()
 	quote: IdentifiedReference<Quote>;
 
-	constructor({
-		quote,
-		...params
-	}: {
-		quote: Quote;
-		commit: Commit;
-		actor: User;
-		snapshot: QuoteSnapshot;
-		summary: string;
-		event: RevisionEvent;
-		version: number;
-	}) {
-		super(params);
+	constructor(
+		quote: Quote,
+		commit: Commit,
+		actor: User,
+		snapshot: QuoteSnapshot,
+		summary: string,
+		event: RevisionEvent,
+		version: number,
+	) {
+		super(commit, actor, snapshot, summary, event, version);
 
 		this.quote = Reference.create(quote);
 	}
@@ -185,19 +169,16 @@ export class WorkRevision extends Revision<Work, WorkSnapshot> {
 	@ManyToOne()
 	work: IdentifiedReference<Work>;
 
-	constructor({
-		work,
-		...params
-	}: {
-		work: Work;
-		commit: Commit;
-		actor: User;
-		snapshot: WorkSnapshot;
-		summary: string;
-		event: RevisionEvent;
-		version: number;
-	}) {
-		super(params);
+	constructor(
+		work: Work,
+		commit: Commit,
+		actor: User,
+		snapshot: WorkSnapshot,
+		summary: string,
+		event: RevisionEvent,
+		version: number,
+	) {
+		super(commit, actor, snapshot, summary, event, version);
 
 		this.work = Reference.create(work);
 	}

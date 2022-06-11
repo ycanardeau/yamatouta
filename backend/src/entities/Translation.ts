@@ -158,15 +158,15 @@ export class Translation
 		summary: string,
 		version: number,
 	): TranslationRevision {
-		return new TranslationRevision({
-			translation: this,
-			commit: commit,
-			actor: actor,
-			snapshot: this.takeSnapshot(),
-			summary: summary,
-			event: event,
-			version: version,
-		});
+		return new TranslationRevision(
+			this,
+			commit,
+			actor,
+			this.takeSnapshot(),
+			summary,
+			event,
+			version,
+		);
 	}
 
 	createWebLink(
@@ -174,12 +174,7 @@ export class Translation
 		title: string,
 		category: WebLinkCategory,
 	): TranslationWebLink {
-		return new TranslationWebLink({
-			translation: this,
-			address: address,
-			title: title,
-			category: category,
-		});
+		return new TranslationWebLink(this, address, title, category);
 	}
 
 	createWorkLink(
@@ -189,14 +184,14 @@ export class Translation
 		endDate: PartialDate,
 		ended: boolean,
 	): TranslationWorkLink {
-		return new TranslationWorkLink({
-			translation: this,
-			relatedWork: relatedWork,
-			linkType: linkType,
-			beginDate: beginDate,
-			endDate: endDate,
-			ended: ended,
-		});
+		return new TranslationWorkLink(
+			this,
+			relatedWork,
+			linkType,
+			beginDate,
+			endDate,
+			ended,
+		);
 	}
 }
 

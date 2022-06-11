@@ -18,17 +18,12 @@ export abstract class Link {
 	@Property()
 	ended: boolean;
 
-	protected constructor({
-		linkType,
-		beginDate,
-		endDate,
-		ended,
-	}: {
-		linkType: LinkType;
-		beginDate: PartialDate;
-		endDate: PartialDate;
-		ended: boolean;
-	}) {
+	protected constructor(
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	) {
 		this.linkType = linkType;
 		this.beginDate = beginDate;
 		this.endDate = endDate;

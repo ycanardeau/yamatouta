@@ -10,7 +10,9 @@ import {
 import { EntryType } from '../models/EntryType';
 import { IContentEquatable } from '../models/IContentEquatable';
 import { IWorkLink } from '../models/IWorkLink';
+import { LinkType } from '../models/LinkType';
 import { Link } from './Link';
+import { PartialDate } from './PartialDate';
 import { Quote } from './Quote';
 import { Translation } from './Translation';
 import { Work } from './Work';
@@ -33,11 +35,14 @@ export abstract class WorkLink
 	@ManyToOne()
 	relatedWork: IdentifiedReference<Work>;
 
-	protected constructor({
-		relatedWork,
-		...params
-	}: { relatedWork: Work } & Link) {
-		super(params);
+	protected constructor(
+		relatedWork: Work,
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	) {
+		super(linkType, beginDate, endDate, ended);
 
 		this.relatedWork = Reference.create(relatedWork);
 	}
@@ -59,15 +64,15 @@ export class QuoteWorkLink extends WorkLink {
 	@ManyToOne()
 	quote: IdentifiedReference<Quote>;
 
-	constructor({
-		quote,
-		relatedWork,
-		...params
-	}: {
-		quote: Quote;
-		relatedWork: Work;
-	} & Link) {
-		super({ ...params, relatedWork });
+	constructor(
+		quote: Quote,
+		relatedWork: Work,
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	) {
+		super(relatedWork, linkType, beginDate, endDate, ended);
 
 		this.quote = Reference.create(quote);
 	}
@@ -78,15 +83,15 @@ export class TranslationWorkLink extends WorkLink {
 	@ManyToOne()
 	translation: IdentifiedReference<Translation>;
 
-	constructor({
-		translation,
-		relatedWork,
-		...params
-	}: {
-		translation: Translation;
-		relatedWork: Work;
-	} & Link) {
-		super({ ...params, relatedWork });
+	constructor(
+		translation: Translation,
+		relatedWork: Work,
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	) {
+		super(relatedWork, linkType, beginDate, endDate, ended);
 
 		this.translation = Reference.create(translation);
 	}
@@ -97,15 +102,15 @@ export class WorkWorkLink extends WorkLink {
 	@ManyToOne()
 	work: IdentifiedReference<Work>;
 
-	constructor({
-		work,
-		relatedWork,
-		...params
-	}: {
-		work: Work;
-		relatedWork: Work;
-	} & Link) {
-		super({ ...params, relatedWork });
+	constructor(
+		work: Work,
+		relatedWork: Work,
+		linkType: LinkType,
+		beginDate: PartialDate,
+		endDate: PartialDate,
+		ended: boolean,
+	) {
+		super(relatedWork, linkType, beginDate, endDate, ended);
 
 		this.work = Reference.create(work);
 	}

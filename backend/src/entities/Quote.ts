@@ -134,15 +134,15 @@ export class Quote
 		summary: string,
 		version: number,
 	): QuoteRevision {
-		return new QuoteRevision({
-			quote: this,
-			commit: commit,
-			actor: actor,
-			snapshot: this.takeSnapshot(),
-			summary: summary,
-			event: event,
-			version: version,
-		});
+		return new QuoteRevision(
+			this,
+			commit,
+			actor,
+			this.takeSnapshot(),
+			summary,
+			event,
+			version,
+		);
 	}
 
 	createWebLink(
@@ -150,12 +150,7 @@ export class Quote
 		title: string,
 		category: WebLinkCategory,
 	): QuoteWebLink {
-		return new QuoteWebLink({
-			quote: this,
-			address: address,
-			title: title,
-			category: category,
-		});
+		return new QuoteWebLink(this, address, title, category);
 	}
 
 	createWorkLink(
@@ -165,14 +160,14 @@ export class Quote
 		endDate: PartialDate,
 		ended: boolean,
 	): QuoteWorkLink {
-		return new QuoteWorkLink({
-			quote: this,
-			relatedWork: relatedWork,
-			linkType: linkType,
-			beginDate: beginDate,
-			endDate: endDate,
-			ended: ended,
-		});
+		return new QuoteWorkLink(
+			this,
+			relatedWork,
+			linkType,
+			beginDate,
+			endDate,
+			ended,
+		);
 	}
 }
 

@@ -36,15 +36,11 @@ export abstract class WebLink implements IWebLink, IContentEquatable<IWebLink> {
 	@Enum()
 	category: WebLinkCategory;
 
-	protected constructor({
-		address,
-		title,
-		category,
-	}: {
-		address: WebAddress;
-		title: string;
-		category: WebLinkCategory;
-	}) {
+	protected constructor(
+		address: WebAddress,
+		title: string,
+		category: WebLinkCategory,
+	) {
 		this.address = Reference.create(address);
 		this.title = title;
 		this.category = category;
@@ -76,18 +72,13 @@ export class TranslationWebLink extends WebLink {
 	@ManyToOne()
 	translation: IdentifiedReference<Translation>;
 
-	constructor({
-		translation,
-		address,
-		title,
-		category,
-	}: {
-		translation: Translation;
-		address: WebAddress;
-		title: string;
-		category: WebLinkCategory;
-	}) {
-		super({ address, title, category });
+	constructor(
+		translation: Translation,
+		address: WebAddress,
+		title: string,
+		category: WebLinkCategory,
+	) {
+		super(address, title, category);
 
 		this.translation = Reference.create(translation);
 	}
@@ -98,18 +89,13 @@ export class ArtistWebLink extends WebLink {
 	@ManyToOne()
 	artist: IdentifiedReference<Artist>;
 
-	constructor({
-		artist,
-		address,
-		title,
-		category,
-	}: {
-		artist: Artist;
-		address: WebAddress;
-		title: string;
-		category: WebLinkCategory;
-	}) {
-		super({ address, title, category });
+	constructor(
+		artist: Artist,
+		address: WebAddress,
+		title: string,
+		category: WebLinkCategory,
+	) {
+		super(address, title, category);
 
 		this.artist = Reference.create(artist);
 	}
@@ -120,18 +106,13 @@ export class QuoteWebLink extends WebLink {
 	@ManyToOne()
 	quote: IdentifiedReference<Quote>;
 
-	constructor({
-		quote,
-		address,
-		title,
-		category,
-	}: {
-		quote: Quote;
-		address: WebAddress;
-		title: string;
-		category: WebLinkCategory;
-	}) {
-		super({ address, title, category });
+	constructor(
+		quote: Quote,
+		address: WebAddress,
+		title: string,
+		category: WebLinkCategory,
+	) {
+		super(address, title, category);
 
 		this.quote = Reference.create(quote);
 	}
@@ -142,18 +123,13 @@ export class WorkWebLink extends WebLink {
 	@ManyToOne()
 	work: IdentifiedReference<Work>;
 
-	constructor({
-		work,
-		address,
-		title,
-		category,
-	}: {
-		work: Work;
-		address: WebAddress;
-		title: string;
-		category: WebLinkCategory;
-	}) {
-		super({ address, title, category });
+	constructor(
+		work: Work,
+		address: WebAddress,
+		title: string,
+		category: WebLinkCategory,
+	) {
+		super(address, title, category);
 
 		this.work = Reference.create(work);
 	}

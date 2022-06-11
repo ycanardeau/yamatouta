@@ -116,15 +116,15 @@ export class Work
 		summary: string,
 		version: number,
 	): WorkRevision {
-		return new WorkRevision({
-			work: this,
-			commit: commit,
-			actor: actor,
-			snapshot: this.takeSnapshot(),
-			summary: summary,
-			event: event,
-			version: version,
-		});
+		return new WorkRevision(
+			this,
+			commit,
+			actor,
+			this.takeSnapshot(),
+			summary,
+			event,
+			version,
+		);
 	}
 
 	createWebLink(
@@ -132,12 +132,7 @@ export class Work
 		title: string,
 		category: WebLinkCategory,
 	): WorkWebLink {
-		return new WorkWebLink({
-			work: this,
-			address: address,
-			title: title,
-			category: category,
-		});
+		return new WorkWebLink(this, address, title, category);
 	}
 
 	createArtistLink(
@@ -147,14 +142,14 @@ export class Work
 		endDate: PartialDate,
 		ended: boolean,
 	): WorkArtistLink {
-		return new WorkArtistLink({
-			work: this,
-			relatedArtist: relatedArtist,
-			linkType: linkType,
-			beginDate: beginDate,
-			endDate: endDate,
-			ended: ended,
-		});
+		return new WorkArtistLink(
+			this,
+			relatedArtist,
+			linkType,
+			beginDate,
+			endDate,
+			ended,
+		);
 	}
 }
 

@@ -98,15 +98,15 @@ export class Artist
 		summary: string,
 		version: number,
 	): ArtistRevision {
-		return new ArtistRevision({
-			artist: this,
-			commit: commit,
-			actor: actor,
-			snapshot: this.takeSnapshot(),
-			summary: summary,
-			event: event,
-			version: version,
-		});
+		return new ArtistRevision(
+			this,
+			commit,
+			actor,
+			this.takeSnapshot(),
+			summary,
+			event,
+			version,
+		);
 	}
 
 	createWebLink(
@@ -114,12 +114,7 @@ export class Artist
 		title: string,
 		category: WebLinkCategory,
 	): ArtistWebLink {
-		return new ArtistWebLink({
-			artist: this,
-			address: address,
-			title: title,
-			category: category,
-		});
+		return new ArtistWebLink(this, address, title, category);
 	}
 }
 
