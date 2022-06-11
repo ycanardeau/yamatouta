@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 
 import { User } from '../entities/User';
 import { Permission } from '../models/Permission';
+import { UserGroup } from '../models/users/UserGroup';
 
 export class AuthenticatedUserObject {
 	private constructor(
@@ -11,6 +12,7 @@ export class AuthenticatedUserObject {
 		readonly name: string,
 		readonly avatarUrl: string,
 		readonly effectivePermissions: Permission[],
+		readonly userGroup: UserGroup,
 	) {}
 
 	static create(user: User): AuthenticatedUserObject {
@@ -23,6 +25,7 @@ export class AuthenticatedUserObject {
 			user.name,
 			'' /* TODO */,
 			user.effectivePermissions,
+			user.userGroup,
 		);
 	}
 }

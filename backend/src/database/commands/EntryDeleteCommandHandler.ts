@@ -16,7 +16,7 @@ import { Translation } from '../../entities/Translation';
 import { User } from '../../entities/User';
 import { Work } from '../../entities/Work';
 import { AuditedAction } from '../../models/AuditedAction';
-import { Entry } from '../../models/Entry';
+import { EntryWithRevisions } from '../../models/Entry';
 import { EntryDeleteParams } from '../../models/EntryDeleteParams';
 import { Permission } from '../../models/Permission';
 import { RevisionEvent } from '../../models/RevisionEvent';
@@ -31,7 +31,7 @@ abstract class EntryDeleteCommand {
 }
 
 abstract class EntryDeleteCommandHandler<
-	TEntry extends Entry,
+	TEntry extends EntryWithRevisions,
 	TCommand extends EntryDeleteCommand,
 > {
 	constructor(

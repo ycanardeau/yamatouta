@@ -73,7 +73,8 @@
 		"user": "User",
 		"loading": "Loading...",
 		"noItemsFound": "No items found",
-		"sortBy": "Sort by"
+		"sortBy": "Sort by",
+		"manage": "Manage"
 	},
 	"translations": {
 		"addWord": "Add word",
@@ -155,7 +156,8 @@
 	"admin": {
 		"createMissingRevisions": "Create missing revisions",
 		"populateIndex": "Populate index",
-		"rebuildIndex": "Rebuild index"
+		"rebuildIndex": "Rebuild index",
+		"generateSitemaps": "Generate sitemaps"
 	},
 	"works": {
 		"addWork": "Add work",

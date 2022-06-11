@@ -7,10 +7,14 @@ import { GetPermissionContext } from '../../framework/decorators/GetPermissionCo
 import { JoiValidationPipe } from '../../framework/pipes/JoiValidationPipe';
 import { AdminUpdateSearchIndexParams } from '../../models/admin/AdminUpdateSearchIndexParams';
 import { PermissionContext } from '../../services/PermissionContext';
+import { SitemapService } from '../../services/SitemapService';
 
 @Controller('api/admin')
 export class AdminApiController {
-	constructor(private readonly commandBus: CommandBus) {}
+	constructor(
+		private readonly commandBus: CommandBus,
+		private readonly sitemapService: SitemapService,
+	) {}
 
 	@Post('create-missing-revisions')
 	createMissingRevisions(
@@ -19,6 +23,13 @@ export class AdminApiController {
 		return this.commandBus.execute(
 			new AdminCreateMissingRevisionsCommand(permissionContext),
 		);
+	}
+
+	@Post('generate-sitemaps')
+	sitemap(
+		@GetPermissionContext() permissionContext: PermissionContext,
+	): Promise<void> {
+		return this.sitemapService.generate(permissionContext);
 	}
 
 	@Post('update-search-index')

@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 
 import { Revision } from '../entities/Revision';
-import { Entry } from '../models/Entry';
+import { EntryWithRevisions } from '../models/Entry';
 import { Permission } from '../models/Permission';
 import { RevisionEvent } from '../models/RevisionEvent';
 import { Snapshot } from '../models/snapshots/Snapshot';
@@ -16,7 +16,7 @@ export class RevisionObject {
 	) {}
 
 	static create(
-		revision: Revision<Entry, Snapshot>,
+		revision: Revision<EntryWithRevisions, Snapshot>,
 		permissionContext: PermissionContext,
 	): RevisionObject {
 		if (!permissionContext.hasPermission(Permission.ViewRevisions))

@@ -21,7 +21,6 @@ import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
 import { LinkType } from '../models/LinkType';
 import { RevisionEvent } from '../models/RevisionEvent';
-import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { TranslationSnapshot } from '../models/snapshots/TranslationSnapshot';
 import { WordCategory } from '../models/translations/WordCategory';
@@ -88,14 +87,6 @@ export class Translation
 
 	@OneToMany(() => TranslationRevision, (revision) => revision.translation)
 	revisions = new Collection<TranslationRevision>(this);
-
-	get revisionManager(): RevisionManager<
-		Translation,
-		TranslationSnapshot,
-		TranslationRevision
-	> {
-		return new RevisionManager(this);
-	}
 
 	@OneToMany(() => TranslationWebLink, (webLink) => webLink.translation)
 	webLinks = new Collection<TranslationWebLink>(this);

@@ -19,7 +19,6 @@ import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
 import { LinkType } from '../models/LinkType';
 import { RevisionEvent } from '../models/RevisionEvent';
-import { RevisionManager } from '../models/RevisionManager';
 import { WebLinkCategory } from '../models/WebLinkCategory';
 import { QuoteType } from '../models/quotes/QuoteType';
 import { QuoteSnapshot } from '../models/snapshots/QuoteSnapshot';
@@ -88,14 +87,6 @@ export class Quote
 
 	@OneToMany(() => QuoteRevision, (revision) => revision.quote)
 	revisions = new Collection<QuoteRevision>(this);
-
-	get revisionManager(): RevisionManager<
-		Quote,
-		QuoteSnapshot,
-		QuoteRevision
-	> {
-		return new RevisionManager(this);
-	}
 
 	@OneToMany(() => QuoteWebLink, (webLink) => webLink.quote)
 	webLinks = new Collection<QuoteWebLink>(this);

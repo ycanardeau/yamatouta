@@ -9,6 +9,12 @@ class AdminApi {
 		return response.data;
 	};
 
+	generateSitemaps = async (): Promise<void> => {
+		const response = await axios.post<void>('/admin/generate-sitemaps');
+
+		return response.data;
+	};
+
 	updateSearchIndex = async ({
 		forceUpdate,
 	}: {

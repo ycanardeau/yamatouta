@@ -1,16 +1,23 @@
 import { EuiIcon, EuiListGroup, EuiListGroupItem } from '@elastic/eui';
-import { DatabaseSearchRegular, HistoryRegular } from '@fluentui/react-icons';
+import {
+	DatabaseSearchRegular,
+	HistoryRegular,
+	TextBulletListTreeRegular,
+} from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
 import { adminApi } from '../../api/adminApi';
 import { useAuth } from '../../components/useAuth';
+import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 
 const AdminIndex = (): React.ReactElement => {
-	const { t } = useTranslation();
+	const { t, ready } = useTranslation();
 
 	const auth = useAuth();
+
+	useYamatoutaTitle(t('shared.manage'), ready);
 
 	return auth.user ? (
 		<>
@@ -37,6 +44,12 @@ const AdminIndex = (): React.ReactElement => {
 					onClick={(): Promise<void> =>
 						adminApi.updateSearchIndex({ forceUpdate: true })
 					}
+					isActive
+				/>
+				<EuiListGroupItem
+					icon={<EuiIcon type={TextBulletListTreeRegular} />}
+					label={t('admin.generateSitemaps')}
+					onClick={(): Promise<void> => adminApi.generateSitemaps()}
 					isActive
 				/>
 			</EuiListGroup>

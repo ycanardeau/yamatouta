@@ -1,6 +1,7 @@
 import { ArtistLinkService } from './ArtistLinkService';
 import { NgramConverter } from './NgramConverter';
 import { RevisionService } from './RevisionService';
+import { SitemapService } from './SitemapService';
 import { WebLinkService } from './WebLinkService';
 import { WorkLinkService } from './WorkLinkService';
 import { AuthService } from './auth/AuthService';
@@ -16,6 +17,7 @@ export const services = [
 	NgramConverter,
 	PasswordHasherFactory,
 	RevisionService,
+	SitemapService,
 	WebLinkService,
 	WorkLinkService,
 ];
