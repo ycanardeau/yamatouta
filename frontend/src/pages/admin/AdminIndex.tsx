@@ -2,7 +2,7 @@ import { EuiIcon, EuiListGroup, EuiListGroupItem } from '@elastic/eui';
 import {
 	DatabaseSearchRegular,
 	HistoryRegular,
-	TextBulletListTreeRegular,
+	OrganizationRegular,
 } from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -47,7 +47,7 @@ const AdminIndex = (): React.ReactElement => {
 					isActive
 				/>
 				<EuiListGroupItem
-					icon={<EuiIcon type={TextBulletListTreeRegular} />}
+					icon={<EuiIcon type={OrganizationRegular} />}
 					label={t('admin.generateSitemaps')}
 					onClick={(): Promise<void> => adminApi.generateSitemaps()}
 					isActive
