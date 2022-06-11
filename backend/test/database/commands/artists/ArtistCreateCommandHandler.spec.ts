@@ -147,6 +147,7 @@ describe('ArtistCreateCommandHandler', () => {
 					name: defaultParams.name,
 					artistType: defaultParams.artistType,
 					webLinks: [],
+					hashtags: [],
 				},
 			});
 		});

@@ -148,6 +148,7 @@ describe('WorkCreateCommandHandler', () => {
 					workType: defaultParams.workType,
 					webLinks: [],
 					artistLinks: [],
+					hashtags: [],
 				},
 			});
 		});

@@ -32,6 +32,8 @@ export class ArtistUpdateCommandHandler
 		'webLinks',
 		'webLinks.address',
 		'webLinks.address.host',
+		'hashtagLinks',
+		'hashtagLinks.relatedHashtag',
 	] as const;
 
 	constructor(

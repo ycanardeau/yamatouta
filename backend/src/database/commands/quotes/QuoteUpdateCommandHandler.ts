@@ -37,6 +37,8 @@ export class QuoteUpdateCommandHandler
 		'webLinks.address.host',
 		'workLinks',
 		'workLinks.relatedWork',
+		'hashtagLinks',
+		'hashtagLinks.relatedHashtag',
 	] as const;
 
 	constructor(

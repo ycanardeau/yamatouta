@@ -205,6 +205,7 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
+					hashtags: [],
 				},
 			});
 		});
@@ -227,6 +228,7 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
+					hashtags: [],
 				},
 			});
 		});
@@ -248,6 +250,7 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
+					hashtags: [],
 				},
 			});
 		});
@@ -268,6 +271,7 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
+					hashtags: [],
 				},
 			});
 		});
@@ -285,6 +289,7 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
+					hashtags: [],
 				},
 			});
 		});

@@ -2,13 +2,23 @@ import { Artist } from '../../entities/Artist';
 import { Quote } from '../../entities/Quote';
 import { IContentEquatable } from '../IContentEquatable';
 import { QuoteType } from '../quotes/QuoteType';
+import { HashtagSnapshot } from './HashtagSnapshot';
+import { ISnapshotWithHashtags } from './ISnapshotWithHashtags';
+import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
+import { ISnapshotWithWorkLinks } from './ISnapshotWithWorkLinks';
 import { WorkLinkSnapshot } from './LinkSnapshot';
 import { ObjectRefSnapshot } from './ObjectRefSnapshot';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 
 export type IQuoteSnapshot = Omit<QuoteSnapshot, 'contentEquals'>;
 
-export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
+export class QuoteSnapshot
+	implements
+		IContentEquatable<IQuoteSnapshot>,
+		ISnapshotWithWebLinks,
+		ISnapshotWithWorkLinks,
+		ISnapshotWithHashtags
+{
 	private constructor(
 		readonly text: string,
 		readonly quoteType: QuoteType,
@@ -19,6 +29,7 @@ export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 		readonly transcription: string,
 		readonly foreword: string,
 		readonly customArtistName: string,
+		readonly hashtags: HashtagSnapshot[],
 	) {}
 
 	static create(quote: Quote): QuoteSnapshot {
@@ -30,6 +41,12 @@ export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 			.getItems()
 			.map((workLink) => WorkLinkSnapshot.create(workLink));
 
+		const hashtags = quote.hashtagLinks
+			.getItems()
+			.map((hashtagLink) =>
+				HashtagSnapshot.create(hashtagLink.relatedHashtag.getEntity()),
+			);
+
 		return new QuoteSnapshot(
 			quote.text,
 			quote.quoteType,
@@ -40,6 +57,7 @@ export class QuoteSnapshot implements IContentEquatable<IQuoteSnapshot> {
 			quote.transcription,
 			quote.foreword,
 			quote.customArtistName,
+			hashtags,
 		);
 	}
 

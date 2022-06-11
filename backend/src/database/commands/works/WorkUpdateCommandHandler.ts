@@ -35,6 +35,8 @@ export class WorkUpdateCommandHandler
 		'webLinks.address.host',
 		'artistLinks',
 		'artistLinks.relatedArtist',
+		'hashtagLinks',
+		'hashtagLinks.relatedHashtag',
 	] as const;
 
 	constructor(

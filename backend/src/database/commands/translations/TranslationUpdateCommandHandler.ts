@@ -35,6 +35,8 @@ export class TranslationUpdateCommandHandler
 		'webLinks.address.host',
 		'workLinks',
 		'workLinks.relatedWork',
+		'hashtagLinks',
+		'hashtagLinks.relatedHashtag',
 	] as const;
 
 	constructor(

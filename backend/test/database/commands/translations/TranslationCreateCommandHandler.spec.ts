@@ -158,6 +158,7 @@ describe('TranslationCreateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
+					hashtags: [],
 				},
 			});
 		});

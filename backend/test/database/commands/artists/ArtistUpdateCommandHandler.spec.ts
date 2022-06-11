@@ -174,6 +174,7 @@ describe('ArtistUpdateCommandHandler', () => {
 					name: defaultParams.name,
 					artistType: artist.artistType,
 					webLinks: [],
+					hashtags: [],
 				},
 			});
 		});
@@ -186,6 +187,7 @@ describe('ArtistUpdateCommandHandler', () => {
 					name: defaultParams.name,
 					artistType: defaultParams.artistType,
 					webLinks: [],
+					hashtags: [],
 				},
 			});
 		});

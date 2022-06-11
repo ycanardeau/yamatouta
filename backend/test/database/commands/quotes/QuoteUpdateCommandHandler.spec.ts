@@ -202,6 +202,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
+					hashtags: [],
 				},
 			});
 		});
@@ -224,6 +225,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
+					hashtags: [],
 				},
 			});
 		});
@@ -245,6 +247,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
+					hashtags: [],
 				},
 			});
 		});
@@ -263,6 +266,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
+					hashtags: [],
 				},
 			});
 		});
