@@ -52,12 +52,12 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 				rightSideItems: [
 					<EuiButton
 						size="s"
-						href={`/works/${work.id}/edit`}
+						href={EntryUrlMapper.edit(work)}
 						onClick={(
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(`/works/${work.id}/edit`);
+							navigate(EntryUrlMapper.edit(work));
 						}}
 						iconType={EditRegular}
 						isDisabled={
@@ -70,12 +70,12 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 					</EuiButton>,
 					<EuiButton
 						size="s"
-						href={`/works/${work.id}/revisions`}
+						href={EntryUrlMapper.revisions(work)}
 						onClick={(
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(`/works/${work.id}/revisions`);
+							navigate(EntryUrlMapper.revisions(work));
 						}}
 						iconType={HistoryRegular}
 						isDisabled={

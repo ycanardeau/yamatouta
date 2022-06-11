@@ -100,11 +100,11 @@ const ArtistPopover = ({
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={EditRegular} />}
-						href={`/artists/${artist.id}/edit`}
+						href={EntryUrlMapper.edit(artist)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/artists/${artist.id}/edit`);
+							navigate(EntryUrlMapper.edit(artist));
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
@@ -116,11 +116,11 @@ const ArtistPopover = ({
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={HistoryRegular} />}
-						href={`/artists/${artist.id}/revisions`}
+						href={EntryUrlMapper.revisions(artist)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/artists/${artist.id}/revisions`);
+							navigate(EntryUrlMapper.revisions(artist));
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(

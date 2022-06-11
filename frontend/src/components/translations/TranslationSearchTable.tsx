@@ -159,11 +159,11 @@ const TranslationPopover = ({
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={EditRegular} />}
-						href={`/translations/${translation.id}/edit`}
+						href={EntryUrlMapper.edit(translation)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/translations/${translation.id}/edit`);
+							navigate(EntryUrlMapper.edit(translation));
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
@@ -175,13 +175,11 @@ const TranslationPopover = ({
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={HistoryRegular} />}
-						href={`/translations/${translation.id}/revisions`}
+						href={EntryUrlMapper.revisions(translation)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(
-								`/translations/${translation.id}/revisions`,
-							);
+							navigate(EntryUrlMapper.revisions(translation));
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(

@@ -20,4 +20,12 @@ export class EntryUrlMapper {
 				return `/works/${entry.id}`;
 		}
 	}
+
+	static edit(entry: IEntryWithEntryType<EntryType>): string {
+		return `${EntryUrlMapper.details(entry)}/edit`;
+	}
+
+	static revisions(entry: IEntryWithEntryType<EntryType>): string {
+		return `${EntryUrlMapper.details(entry)}/revisions`;
+	}
 }

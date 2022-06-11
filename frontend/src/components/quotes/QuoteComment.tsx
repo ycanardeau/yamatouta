@@ -79,11 +79,11 @@ const QuotePopover = ({
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={EditRegular} />}
-						href={`/quotes/${quote.id}/edit`}
+						href={EntryUrlMapper.edit(quote)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/quotes/${quote.id}/edit`);
+							navigate(EntryUrlMapper.edit(quote));
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
@@ -95,11 +95,11 @@ const QuotePopover = ({
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={HistoryRegular} />}
-						href={`/quotes/${quote.id}/revisions`}
+						href={EntryUrlMapper.revisions(quote)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/quotes/${quote.id}/revisions`);
+							navigate(EntryUrlMapper.revisions(quote));
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(

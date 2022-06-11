@@ -97,11 +97,11 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={EditRegular} />}
-						href={`/works/${work.id}/edit`}
+						href={EntryUrlMapper.edit(work)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/works/${work.id}/edit`);
+							navigate(EntryUrlMapper.edit(work));
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
@@ -113,11 +113,11 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 					</EuiContextMenuItem>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={HistoryRegular} />}
-						href={`/works/${work.id}/revisions`}
+						href={EntryUrlMapper.revisions(work)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/works/${work.id}/revisions`);
+							navigate(EntryUrlMapper.revisions(work));
 						}}
 						disabled={
 							!auth.permissionContext.hasPermission(
