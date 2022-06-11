@@ -1,4 +1,5 @@
 import { Quote } from '../entities/Quote';
+import { EntryType } from '../models/EntryType';
 import { QuoteOptionalField } from '../models/quotes/QuoteOptionalField';
 import { QuoteType } from '../models/quotes/QuoteType';
 import { PermissionContext } from '../services/PermissionContext';
@@ -9,6 +10,7 @@ import { WebLinkObject } from './WebLinkObject';
 export class QuoteObject {
 	private constructor(
 		readonly id: number,
+		readonly entryType: EntryType.Quote,
 		readonly deleted: boolean,
 		readonly hidden: boolean,
 		readonly quoteType: QuoteType,
@@ -43,6 +45,7 @@ export class QuoteObject {
 
 		return new QuoteObject(
 			quote.id,
+			quote.entryType,
 			quote.deleted,
 			quote.hidden,
 			quote.quoteType,

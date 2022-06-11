@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { WebLinkListEdit } from '../../components/WebLinkListEdit';
 import { TranslationEditObject } from '../../dto/TranslationEditObject';
 import { EntryType } from '../../models/EntryType';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { workLinkTypes } from '../../models/LinkType';
 import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
@@ -47,7 +48,7 @@ export const TranslationEditForm = observer(
 
 						const translation = await store.submit();
 
-						navigate(`/translations/${translation.id}`);
+						navigate(EntryUrlMapper.details(translation));
 					}}
 				>
 					<EuiFormRow label={t('translations.headword')}>
@@ -134,7 +135,7 @@ export const TranslationEditForm = observer(
 						size="s"
 						href={
 							translation
-								? `/translations/${translation.id}`
+								? EntryUrlMapper.details(translation)
 								: '/translations'
 						}
 						onClick={(
@@ -143,7 +144,7 @@ export const TranslationEditForm = observer(
 							e.preventDefault();
 							navigate(
 								translation
-									? `/translations/${translation.id}`
+									? EntryUrlMapper.details(translation)
 									: '/translations',
 							);
 						}}

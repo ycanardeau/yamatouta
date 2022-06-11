@@ -1,3 +1,4 @@
+import { EntryType } from '../models/EntryType';
 import { LinkType } from '../models/LinkType';
 import { QuoteType } from '../models/quotes/QuoteType';
 import { IArtistObject } from './IArtistObject';
@@ -8,6 +9,7 @@ import { IWebLinkObject } from './IWebLinkObject';
 export class QuoteDetailsObject {
 	private constructor(
 		readonly id: number,
+		readonly entryType: EntryType.Quote,
 		readonly createdAt: string,
 		readonly text: string,
 		readonly quoteType: QuoteType,
@@ -21,6 +23,7 @@ export class QuoteDetailsObject {
 	static create(quote: Required<IQuoteObject>): QuoteDetailsObject {
 		return new QuoteDetailsObject(
 			quote.id,
+			quote.entryType,
 			quote.createdAt,
 			quote.text,
 			quote.quoteType,

@@ -1,3 +1,4 @@
+import { EntryType } from '../models/EntryType';
 import { LinkType } from '../models/LinkType';
 import { WordCategory } from '../models/translations/WordCategory';
 import { IWorkLinkObject } from './ILinkObject';
@@ -7,6 +8,7 @@ import { IWebLinkObject } from './IWebLinkObject';
 export class TranslationDetailsObject {
 	private constructor(
 		readonly id: number,
+		readonly entryType: EntryType.Translation,
 		readonly createdAt: string,
 		readonly headword: string,
 		readonly locale: string,
@@ -22,6 +24,7 @@ export class TranslationDetailsObject {
 	): TranslationDetailsObject {
 		return new TranslationDetailsObject(
 			translation.id,
+			translation.entryType,
 			translation.createdAt,
 			translation.headword,
 			translation.locale,

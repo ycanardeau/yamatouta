@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { IWorkObject } from '../../dto/IWorkObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface WorkBreadcrumbsProps {
-	work?: Pick<IWorkObject, 'id' | 'name'>;
+	work?: Pick<IWorkObject, 'id' | 'entryType' | 'name'>;
 }
 
 export const WorkBreadcrumbs = ({
@@ -28,10 +29,10 @@ export const WorkBreadcrumbs = ({
 			work
 				? {
 						text: work.name,
-						href: `/works/${work.id}`,
+						href: EntryUrlMapper.details(work),
 						onClick: (e): void => {
 							e.preventDefault();
-							navigate(`/works/${work.id}`);
+							navigate(EntryUrlMapper.details(work));
 						},
 				  }
 				: [],

@@ -33,6 +33,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ITranslationObject } from '../../dto/ITranslationObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { Permission } from '../../models/Permission';
 import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
 import { WordCategory } from '../../models/translations/WordCategory';
@@ -147,11 +148,11 @@ const TranslationPopover = ({
 				<EuiContextMenuPanel>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={InfoRegular} />}
-						href={`/translations/${translation.id}`}
+						href={EntryUrlMapper.details(translation)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/translations/${translation.id}`);
+							navigate(EntryUrlMapper.details(translation));
 						}}
 					>
 						{t('shared.viewBasicInfo')}

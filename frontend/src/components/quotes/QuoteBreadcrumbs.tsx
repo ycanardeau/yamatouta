@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { IQuoteObject } from '../../dto/IQuoteObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface QuoteBreadcrumbsProps {
-	quote?: Pick<IQuoteObject, 'id' | 'text'>;
+	quote?: Pick<IQuoteObject, 'id' | 'entryType' | 'text'>;
 }
 
 export const QuoteBreadcrumbs = ({
@@ -28,10 +29,10 @@ export const QuoteBreadcrumbs = ({
 			quote
 				? {
 						text: quote.text.replaceAll('\n', ''),
-						href: `/quotes/${quote.id}`,
+						href: EntryUrlMapper.details(quote),
 						onClick: (e): void => {
 							e.preventDefault();
-							navigate(`/quotes/${quote.id}`);
+							navigate(EntryUrlMapper.details(quote));
 						},
 				  }
 				: [],

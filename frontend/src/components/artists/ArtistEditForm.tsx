@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { WebLinkListEdit } from '../../components/WebLinkListEdit';
 import { ArtistEditObject } from '../../dto/ArtistEditObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { ArtistType } from '../../models/artists/ArtistType';
 import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
 
@@ -42,7 +43,7 @@ export const ArtistEditForm = observer(
 
 						const artist = await store.submit();
 
-						navigate(`/artists/${artist.id}`);
+						navigate(EntryUrlMapper.details(artist));
 					}}
 				>
 					<EuiFormRow label={t('artists.name')}>
@@ -94,13 +95,17 @@ export const ArtistEditForm = observer(
 					&emsp;
 					<EuiButtonEmpty
 						size="s"
-						href={artist ? `/artists/${artist.id}` : '/artists'}
+						href={
+							artist ? EntryUrlMapper.details(artist) : '/artists'
+						}
 						onClick={(
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
 							navigate(
-								artist ? `/artists/${artist.id}` : '/artists',
+								artist
+									? EntryUrlMapper.details(artist)
+									: '/artists',
 							);
 						}}
 					>

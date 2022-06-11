@@ -15,6 +15,7 @@ import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { ITranslationObject } from '../../dto/ITranslationObject';
 import { TranslationDetailsObject } from '../../dto/TranslationDetailsObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { Permission } from '../../models/Permission';
 import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';
 import TranslationBasicInfo from './TranslationBasicInfo';
@@ -92,12 +93,12 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 				],
 				tabs: [
 					{
-						href: `/translations/${translation.id}`,
+						href: EntryUrlMapper.details(translation),
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(`/translations/${translation.id}`);
+							navigate(EntryUrlMapper.details(translation));
 						},
 						prepend: <EuiIcon type={InfoRegular} />,
 						isSelected: tab === undefined,

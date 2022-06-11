@@ -1,4 +1,5 @@
 import { Translation } from '../entities/Translation';
+import { EntryType } from '../models/EntryType';
 import { TranslationOptionalField } from '../models/translations/TranslationOptionalField';
 import { WordCategory } from '../models/translations/WordCategory';
 import { PermissionContext } from '../services/PermissionContext';
@@ -8,6 +9,7 @@ import { WebLinkObject } from './WebLinkObject';
 export class TranslationObject {
 	private constructor(
 		readonly id: number,
+		readonly entryType: EntryType.Translation,
 		readonly createdAt: Date,
 		readonly headword: string,
 		readonly locale: string,
@@ -41,6 +43,7 @@ export class TranslationObject {
 
 		return new TranslationObject(
 			translation.id,
+			translation.entryType,
 			translation.createdAt,
 			translation.translatedString.headword,
 			translation.translatedString.locale,

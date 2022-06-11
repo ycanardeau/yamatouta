@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { IQuoteObject } from '../../dto/IQuoteObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { Permission } from '../../models/Permission';
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 import { Avatar } from '../Avatar';
@@ -67,11 +68,11 @@ const QuotePopover = ({
 				<EuiContextMenuPanel>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={InfoRegular} />}
-						href={`/quotes/${quote.id}`}
+						href={EntryUrlMapper.details(quote)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/quotes/${quote.id}`);
+							navigate(EntryUrlMapper.details(quote));
 						}}
 					>
 						{t('shared.viewBasicInfo')}
@@ -164,7 +165,7 @@ export const QuoteComment = ({
 				<Link
 					color="text"
 					style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
-					to={`/quotes/${quote.id}`}
+					to={EntryUrlMapper.details(quote)}
 				>
 					{t('shared.unknownDate')}
 				</Link>

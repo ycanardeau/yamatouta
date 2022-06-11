@@ -17,6 +17,7 @@ import { WebLinkListEdit } from '../../components/WebLinkListEdit';
 import { ArtistComboBox } from '../../components/artists/ArtistComboBox';
 import { QuoteEditObject } from '../../dto/QuoteEditObject';
 import { EntryType } from '../../models/EntryType';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { workLinkTypes } from '../../models/LinkType';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
@@ -46,7 +47,7 @@ export const QuoteEditForm = observer(
 
 						const quote = await store.submit();
 
-						navigate(`/quotes/${quote.id}`);
+						navigate(EntryUrlMapper.details(quote));
 					}}
 				>
 					<EuiFormRow label={t('quotes.quote')}>
@@ -106,12 +107,16 @@ export const QuoteEditForm = observer(
 					&emsp;
 					<EuiButtonEmpty
 						size="s"
-						href={quote ? `/quotes/${quote.id}` : '/quotes'}
+						href={quote ? EntryUrlMapper.details(quote) : '/quotes'}
 						onClick={(
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(quote ? `/quotes/${quote.id}` : '/quotes');
+							navigate(
+								quote
+									? EntryUrlMapper.details(quote)
+									: '/quotes',
+							);
 						}}
 					>
 						{t('shared.cancel')}

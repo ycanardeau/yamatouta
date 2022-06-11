@@ -15,6 +15,7 @@ import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { IQuoteObject } from '../../dto/IQuoteObject';
 import { QuoteDetailsObject } from '../../dto/QuoteDetailsObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { Permission } from '../../models/Permission';
 import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
 import QuoteBasicInfo from './QuoteBasicInfo';
@@ -87,12 +88,12 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 				],
 				tabs: [
 					{
-						href: `/quotes/${quote.id}`,
+						href: EntryUrlMapper.details(quote),
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(`/quotes/${quote.id}`);
+							navigate(EntryUrlMapper.details(quote));
 						},
 						prepend: <EuiIcon type={InfoRegular} />,
 						isSelected: tab === undefined,

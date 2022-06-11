@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { IUserObject } from '../../dto/IUserObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface UserBreadcrumbsProps {
-	user?: Pick<IUserObject, 'id' | 'name'>;
+	user?: Pick<IUserObject, 'id' | 'entryType' | 'name'>;
 }
 
 export const UserBreadcrumbs = ({
@@ -28,10 +29,10 @@ export const UserBreadcrumbs = ({
 			user
 				? {
 						text: user.name,
-						href: `/users/${user.id}`,
+						href: EntryUrlMapper.details(user),
 						onClick: (e): void => {
 							e.preventDefault();
-							navigate(`/users/${user.id}`);
+							navigate(EntryUrlMapper.details(user));
 						},
 				  }
 				: [],

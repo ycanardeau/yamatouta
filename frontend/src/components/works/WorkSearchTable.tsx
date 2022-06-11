@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { IWorkObject } from '../../dto/IWorkObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { Permission } from '../../models/Permission';
 import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
 import { Avatar } from '../Avatar';
@@ -85,11 +86,11 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 				<EuiContextMenuPanel>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={InfoRegular} />}
-						href={`/works/${work.id}`}
+						href={EntryUrlMapper.details(work)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/works/${work.id}`);
+							navigate(EntryUrlMapper.details(work));
 						}}
 					>
 						{t('shared.viewBasicInfo')}
@@ -174,7 +175,9 @@ const WorkSearchTableRow = React.memo(
 				>
 					<span>
 						<Avatar size="m" name={work.name} />{' '}
-						<Link to={`/works/${work.id}`}>{work.name}</Link>
+						<Link to={EntryUrlMapper.details(work)}>
+							{work.name}
+						</Link>
 					</span>
 				</EuiTableRowCell>
 				<EuiTableRowCell

@@ -3,9 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ITranslationObject } from '../../dto/ITranslationObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface TranslationBreadcrumbsProps {
-	translation?: Pick<ITranslationObject, 'id' | 'headword' | 'yamatokotoba'>;
+	translation?: Pick<
+		ITranslationObject,
+		'id' | 'entryType' | 'headword' | 'yamatokotoba'
+	>;
 }
 
 export const TranslationBreadcrumbs = ({
@@ -28,10 +32,10 @@ export const TranslationBreadcrumbs = ({
 			translation
 				? {
 						text: `${translation.headword} ↔ ${translation.yamatokotoba}`,
-						href: `/translations/${translation.id}`,
+						href: EntryUrlMapper.details(translation),
 						onClick: (e): void => {
 							e.preventDefault();
-							navigate(`/translations/${translation.id}`);
+							navigate(EntryUrlMapper.details(translation));
 						},
 				  }
 				: [],

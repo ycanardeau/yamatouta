@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { IArtistObject } from '../../dto/IArtistObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface ArtistBreadcrumbsProps {
-	artist?: Pick<IArtistObject, 'id' | 'name'>;
+	artist?: Pick<IArtistObject, 'id' | 'entryType' | 'name'>;
 }
 
 export const ArtistBreadcrumbs = ({
@@ -28,10 +29,10 @@ export const ArtistBreadcrumbs = ({
 			artist
 				? {
 						text: artist.name,
-						href: `/artists/${artist.id}`,
+						href: EntryUrlMapper.details(artist),
 						onClick: (e): void => {
 							e.preventDefault();
-							navigate(`/artists/${artist.id}`);
+							navigate(EntryUrlMapper.details(artist));
 						},
 				  }
 				: [],

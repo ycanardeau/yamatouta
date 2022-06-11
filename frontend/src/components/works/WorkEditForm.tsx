@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { WebLinkListEdit } from '../../components/WebLinkListEdit';
 import { WorkEditObject } from '../../dto/WorkEditObject';
 import { EntryType } from '../../models/EntryType';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { artistLinkTypes } from '../../models/LinkType';
 import { WorkType } from '../../models/works/WorkType';
 import { WorkEditStore } from '../../stores/works/WorkEditStore';
@@ -45,7 +46,7 @@ export const WorkEditForm = observer(
 
 						const work = await store.submit();
 
-						navigate(`/works/${work.id}`);
+						navigate(EntryUrlMapper.details(work));
 					}}
 				>
 					<EuiFormRow label={t('works.name')}>
@@ -100,12 +101,14 @@ export const WorkEditForm = observer(
 					&emsp;
 					<EuiButtonEmpty
 						size="s"
-						href={work ? `/works/${work.id}` : '/works'}
+						href={work ? EntryUrlMapper.details(work) : '/works'}
 						onClick={(
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(work ? `/works/${work.id}` : '/works');
+							navigate(
+								work ? EntryUrlMapper.details(work) : '/works',
+							);
 						}}
 					>
 						{t('shared.cancel')}

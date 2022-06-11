@@ -16,6 +16,7 @@ import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { ArtistDetailsObject } from '../../dto/ArtistDetailsObject';
 import { IArtistObject } from '../../dto/IArtistObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { Permission } from '../../models/Permission';
 import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 import ArtistBasicInfo from './ArtistBasicInfo';
@@ -86,12 +87,12 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 				],
 				tabs: [
 					{
-						href: `/artists/${artist.id}`,
+						href: EntryUrlMapper.details(artist),
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(`/artists/${artist.id}`);
+							navigate(EntryUrlMapper.details(artist));
 						},
 						prepend: <EuiIcon type={InfoRegular} />,
 						isSelected: tab === undefined,

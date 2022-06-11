@@ -13,6 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IUserObject } from '../../dto/IUserObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { UserSearchStore } from '../../stores/users/UserSearchStore';
 import { Avatar } from '../Avatar';
 import { Link } from '../Link';
@@ -50,7 +51,9 @@ const UserSearchTableRow = React.memo(
 							name={user.name}
 							imageUrl={user.avatarUrl}
 						/>{' '}
-						<Link to={`/users/${user.id}`}>{user.name}</Link>
+						<Link to={EntryUrlMapper.details(user)}>
+							{user.name}
+						</Link>
 					</span>
 				</EuiTableRowCell>
 			</EuiTableRow>

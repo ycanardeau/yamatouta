@@ -1,3 +1,4 @@
+import { EntryType } from '../models/EntryType';
 import { LinkType } from '../models/LinkType';
 import { WorkType } from '../models/works/WorkType';
 import { IArtistLinkObject } from './ILinkObject';
@@ -7,6 +8,7 @@ import { IWorkObject } from './IWorkObject';
 export class WorkDetailsObject {
 	private constructor(
 		readonly id: number,
+		readonly entryType: EntryType.Work,
 		readonly name: string,
 		readonly workType: WorkType,
 		readonly webLinks: IWebLinkObject[],
@@ -19,6 +21,7 @@ export class WorkDetailsObject {
 	static create(work: Required<IWorkObject>): WorkDetailsObject {
 		return new WorkDetailsObject(
 			work.id,
+			work.entryType,
 			work.name,
 			work.workType,
 			work.webLinks,

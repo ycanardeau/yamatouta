@@ -28,6 +28,7 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar } from '../../components/Avatar';
 import { Pagination } from '../../components/Pagination';
 import { IArtistObject } from '../../dto/IArtistObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { Permission } from '../../models/Permission';
 import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 import { Link } from '../Link';
@@ -88,11 +89,11 @@ const ArtistPopover = ({
 				<EuiContextMenuPanel>
 					<EuiContextMenuItem
 						icon={<EuiIcon type={InfoRegular} />}
-						href={`/artists/${artist.id}`}
+						href={EntryUrlMapper.details(artist)}
 						onClick={(e): void => {
 							e.preventDefault();
 							closePopover();
-							navigate(`/artists/${artist.id}`);
+							navigate(EntryUrlMapper.details(artist));
 						}}
 					>
 						{t('shared.viewBasicInfo')}
@@ -181,7 +182,9 @@ const ArtistSearchTableRow = React.memo(
 							name={artist.name}
 							imageUrl={artist.avatarUrl ?? ''}
 						/>{' '}
-						<Link to={`/artists/${artist.id}`}>{artist.name}</Link>
+						<Link to={EntryUrlMapper.details(artist)}>
+							{artist.name}
+						</Link>
 					</span>
 				</EuiTableRowCell>
 				<EuiTableRowCell

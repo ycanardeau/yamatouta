@@ -16,6 +16,7 @@ import { WorkPage } from '../../components/works/WorkPage';
 import { useWorkDetails } from '../../components/works/useWorkDetails';
 import { IWorkObject } from '../../dto/IWorkObject';
 import { WorkDetailsObject } from '../../dto/WorkDetailsObject';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { Permission } from '../../models/Permission';
 import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
 import WorkBasicInfo from './WorkBasicInfo';
@@ -88,12 +89,12 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 				],
 				tabs: [
 					{
-						href: `/works/${work.id}`,
+						href: EntryUrlMapper.details(work),
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(`/works/${work.id}`);
+							navigate(EntryUrlMapper.details(work));
 						},
 						prepend: <EuiIcon type={InfoRegular} />,
 						isSelected: tab === undefined,
