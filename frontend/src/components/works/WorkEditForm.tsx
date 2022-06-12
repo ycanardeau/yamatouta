@@ -77,7 +77,7 @@ export const WorkEditForm = observer(
 					</EuiFormRow>
 
 					<EuiFormRow label={t('shared.hashtags')}>
-						<HashtagListEdit store={store.hashtags} />
+						<HashtagListEdit store={store.hashtagLinks} />
 					</EuiFormRow>
 
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>

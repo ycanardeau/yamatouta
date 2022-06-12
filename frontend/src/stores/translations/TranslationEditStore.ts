@@ -11,7 +11,7 @@ import { ITranslationObject } from '../../dto/ITranslationObject';
 import { TranslationEditObject } from '../../dto/TranslationEditObject';
 import { ITranslationUpdateParams } from '../../models/translations/ITranslationUpdateParams';
 import { WordCategory } from '../../models/translations/WordCategory';
-import { HashtagListEditStore } from '../HashtagListEditStore';
+import { HashtagLinkListEditStore } from '../HashtagLinkListEditStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 import { WorkLinkListEditStore } from '../WorkLinkListEditStore';
 
@@ -22,7 +22,7 @@ export class TranslationEditStore {
 	@observable reading = '';
 	@observable yamatokotoba = '';
 	@observable category = WordCategory.Unspecified;
-	readonly hashtags: HashtagListEditStore;
+	readonly hashtagLinks: HashtagLinkListEditStore;
 	readonly webLinks: WebLinkListEditStore;
 	readonly workLinks: WorkLinkListEditStore;
 
@@ -35,11 +35,13 @@ export class TranslationEditStore {
 			this.reading = translation.reading;
 			this.yamatokotoba = translation.yamatokotoba;
 			this.category = translation.category;
-			this.hashtags = new HashtagListEditStore([] /* TODO */);
+			this.hashtagLinks = new HashtagLinkListEditStore(
+				translation.hashtagLinks,
+			);
 			this.webLinks = new WebLinkListEditStore(translation.webLinks);
 			this.workLinks = new WorkLinkListEditStore(translation.workLinks);
 		} else {
-			this.hashtags = new HashtagListEditStore([]);
+			this.hashtagLinks = new HashtagLinkListEditStore([]);
 			this.webLinks = new WebLinkListEditStore([]);
 			this.workLinks = new WorkLinkListEditStore([]);
 		}
@@ -85,7 +87,7 @@ export class TranslationEditStore {
 			reading: this.reading,
 			yamatokotoba: this.yamatokotoba,
 			category: this.category,
-			hashtags: this.hashtags.toParams(),
+			hashtagLinks: this.hashtagLinks.toParams(),
 			webLinks: this.webLinks.toParams(),
 			workLinks: this.workLinks.toParams(),
 		};

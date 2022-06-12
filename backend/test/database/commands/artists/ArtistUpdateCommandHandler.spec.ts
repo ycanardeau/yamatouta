@@ -68,6 +68,7 @@ describe('ArtistUpdateCommandHandler', () => {
 			id: artist.id,
 			name: 'くみあい',
 			artistType: ArtistType.Group,
+			hashtagLinks: [],
 			webLinks: [],
 		};
 	});
@@ -174,7 +175,7 @@ describe('ArtistUpdateCommandHandler', () => {
 					name: defaultParams.name,
 					artistType: artist.artistType,
 					webLinks: [],
-					hashtags: [],
+					hashtagLinks: [],
 				},
 			});
 		});
@@ -187,7 +188,7 @@ describe('ArtistUpdateCommandHandler', () => {
 					name: defaultParams.name,
 					artistType: defaultParams.artistType,
 					webLinks: [],
-					hashtags: [],
+					hashtagLinks: [],
 				},
 			});
 		});

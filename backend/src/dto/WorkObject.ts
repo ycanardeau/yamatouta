@@ -3,6 +3,7 @@ import { EntryType } from '../models/EntryType';
 import { WorkOptionalField } from '../models/works/WorkOptionalField';
 import { WorkType } from '../models/works/WorkType';
 import { PermissionContext } from '../services/PermissionContext';
+import { HashtagLinkObject } from './HashtagLinkObject';
 import { ArtistLinkObject } from './LinkObject';
 import { WebLinkObject } from './WebLinkObject';
 
@@ -14,6 +15,7 @@ export class WorkObject {
 		readonly hidden: boolean,
 		readonly name: string,
 		readonly workType: WorkType,
+		readonly hashtagLinks?: HashtagLinkObject[],
 		readonly webLinks?: WebLinkObject[],
 		readonly artistLinks?: ArtistLinkObject[],
 	) {}
@@ -24,6 +26,17 @@ export class WorkObject {
 		fields: WorkOptionalField[] = [],
 	): WorkObject {
 		permissionContext.verifyDeletedAndHidden(work);
+
+		const hashtagLinks = fields.includes(WorkOptionalField.HashtagLinks)
+			? work.hashtagLinks
+					.getItems()
+					.map((hashtagLink) =>
+						HashtagLinkObject.create(
+							hashtagLink,
+							permissionContext,
+						),
+					)
+			: undefined;
 
 		const webLinks = fields.includes(WorkOptionalField.WebLinks)
 			? work.webLinks
@@ -46,6 +59,7 @@ export class WorkObject {
 			work.hidden,
 			work.name,
 			work.workType,
+			hashtagLinks,
 			webLinks,
 			artistLinks,
 		);

@@ -15,13 +15,13 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
 import {
-	HashtagEditStore,
-	HashtagListEditStore,
-} from '../stores/HashtagListEditStore';
+	HashtagLinkEditStore,
+	HashtagLinkListEditStore,
+} from '../stores/HashtagLinkListEditStore';
 
 interface HashtagEditProps {
-	hashtagListEditStore: HashtagListEditStore;
-	store: HashtagEditStore;
+	hashtagListEditStore: HashtagLinkListEditStore;
+	store: HashtagLinkEditStore;
 }
 
 const HashtagEdit = observer(
@@ -70,7 +70,7 @@ const HashtagEdit = observer(
 );
 
 interface HashtagListEditProps {
-	store: HashtagListEditStore;
+	store: HashtagLinkListEditStore;
 }
 
 export const HashtagListEdit = observer(

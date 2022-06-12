@@ -8,6 +8,8 @@ import {
 } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
+import { IContentEquatable } from '../models/IContentEquatable';
+import { IHashtagLink } from '../models/IHashtagLink';
 import { Artist } from './Artist';
 import { Hashtag } from './Hashtag';
 import { Quote } from './Quote';
@@ -19,7 +21,9 @@ import { Work } from './Work';
 	abstract: true,
 	discriminatorColumn: 'entryType',
 })
-export abstract class HashtagLink {
+export abstract class HashtagLink
+	implements IHashtagLink, IContentEquatable<IHashtagLink>
+{
 	@PrimaryKey()
 	id!: number;
 
@@ -31,6 +35,22 @@ export abstract class HashtagLink {
 
 	protected constructor(relatedHashtag: Hashtag) {
 		this.relatedHashtag = Reference.create(relatedHashtag);
+	}
+
+	get name(): string {
+		return this.relatedHashtag.getProperty('name');
+	}
+
+	contentEquals(other: IHashtagLink): boolean {
+		return this.name === other.name;
+	}
+
+	setRelatedHashtag(value: Hashtag): void {
+		this.relatedHashtag.getEntity().decrementReferenceCount();
+
+		this.relatedHashtag = Reference.create(value);
+
+		this.relatedHashtag.getEntity().incrementReferenceCount();
 	}
 }
 

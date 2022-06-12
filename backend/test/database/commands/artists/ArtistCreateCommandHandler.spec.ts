@@ -60,6 +60,7 @@ describe('ArtistCreateCommandHandler', () => {
 			id: 0,
 			name: 'うたよみ',
 			artistType: ArtistType.Person,
+			hashtagLinks: [],
 			webLinks: [],
 		};
 	});
@@ -147,7 +148,7 @@ describe('ArtistCreateCommandHandler', () => {
 					name: defaultParams.name,
 					artistType: defaultParams.artistType,
 					webLinks: [],
-					hashtags: [],
+					hashtagLinks: [],
 				},
 			});
 		});

@@ -2,8 +2,8 @@ import { Artist } from '../../entities/Artist';
 import { Quote } from '../../entities/Quote';
 import { IContentEquatable } from '../IContentEquatable';
 import { QuoteType } from '../quotes/QuoteType';
-import { HashtagSnapshot } from './HashtagSnapshot';
-import { ISnapshotWithHashtags } from './ISnapshotWithHashtags';
+import { HashtagLinkSnapshot } from './HashtagLinkSnapshot';
+import { ISnapshotWithHashtagLinks } from './ISnapshotWithHashtagLinks';
 import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
 import { ISnapshotWithWorkLinks } from './ISnapshotWithWorkLinks';
 import { WorkLinkSnapshot } from './LinkSnapshot';
@@ -17,7 +17,7 @@ export class QuoteSnapshot
 		IContentEquatable<IQuoteSnapshot>,
 		ISnapshotWithWebLinks,
 		ISnapshotWithWorkLinks,
-		ISnapshotWithHashtags
+		ISnapshotWithHashtagLinks
 {
 	private constructor(
 		readonly text: string,
@@ -29,7 +29,7 @@ export class QuoteSnapshot
 		readonly transcription: string,
 		readonly foreword: string,
 		readonly customArtistName: string,
-		readonly hashtags: HashtagSnapshot[],
+		readonly hashtagLinks: HashtagLinkSnapshot[],
 	) {}
 
 	static create(quote: Quote): QuoteSnapshot {
@@ -41,11 +41,9 @@ export class QuoteSnapshot
 			.getItems()
 			.map((workLink) => WorkLinkSnapshot.create(workLink));
 
-		const hashtags = quote.hashtagLinks
+		const hashtagLinks = quote.hashtagLinks
 			.getItems()
-			.map((hashtagLink) =>
-				HashtagSnapshot.create(hashtagLink.relatedHashtag.getEntity()),
-			);
+			.map((hashtagLink) => HashtagLinkSnapshot.create(hashtagLink));
 
 		return new QuoteSnapshot(
 			quote.text,
@@ -57,7 +55,7 @@ export class QuoteSnapshot
 			quote.transcription,
 			quote.foreword,
 			quote.customArtistName,
-			hashtags,
+			hashtagLinks,
 		);
 	}
 

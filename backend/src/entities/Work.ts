@@ -26,6 +26,7 @@ import { NgramConverter } from '../services/NgramConverter';
 import { Artist } from './Artist';
 import { WorkArtistLink } from './ArtistLink';
 import { Commit } from './Commit';
+import { Hashtag } from './Hashtag';
 import { WorkHashtagLink } from './HashtagLink';
 import { PartialDate } from './PartialDate';
 import { WorkRevision } from './Revision';
@@ -156,6 +157,10 @@ export class Work
 			endDate,
 			ended,
 		);
+	}
+
+	createHashtagLink(relatedHashtag: Hashtag): WorkHashtagLink {
+		return new WorkHashtagLink(this, relatedHashtag);
 	}
 }
 

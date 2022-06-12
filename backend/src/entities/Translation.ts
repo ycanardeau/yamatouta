@@ -27,6 +27,7 @@ import { TranslationSnapshot } from '../models/snapshots/TranslationSnapshot';
 import { WordCategory } from '../models/translations/WordCategory';
 import { NgramConverter } from '../services/NgramConverter';
 import { Commit } from './Commit';
+import { Hashtag } from './Hashtag';
 import { TranslationHashtagLink } from './HashtagLink';
 import { PartialDate } from './PartialDate';
 import { TranslationRevision } from './Revision';
@@ -201,6 +202,10 @@ export class Translation
 			endDate,
 			ended,
 		);
+	}
+
+	createHashtagLink(relatedHashtag: Hashtag): TranslationHashtagLink {
+		return new TranslationHashtagLink(this, relatedHashtag);
 	}
 }
 

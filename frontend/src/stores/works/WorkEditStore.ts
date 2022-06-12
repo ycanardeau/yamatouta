@@ -12,14 +12,14 @@ import { WorkEditObject } from '../../dto/WorkEditObject';
 import { IWorkUpdateParams } from '../../models/works/IWorkUpdateParams';
 import { WorkType } from '../../models/works/WorkType';
 import { ArtistLinkListEditStore } from '../ArtistLinkListEditStore';
-import { HashtagListEditStore } from '../HashtagListEditStore';
+import { HashtagLinkListEditStore } from '../HashtagLinkListEditStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class WorkEditStore {
 	@observable submitting = false;
 	@observable name = '';
 	@observable workType = WorkType.Book;
-	readonly hashtags: HashtagListEditStore;
+	readonly hashtagLinks: HashtagLinkListEditStore;
 	readonly webLinks: WebLinkListEditStore;
 	readonly artistLinks: ArtistLinkListEditStore;
 
@@ -29,11 +29,11 @@ export class WorkEditStore {
 		if (work) {
 			this.name = work.name;
 			this.workType = work.workType;
-			this.hashtags = new HashtagListEditStore([] /* TODO */);
+			this.hashtagLinks = new HashtagLinkListEditStore(work.hashtagLinks);
 			this.webLinks = new WebLinkListEditStore(work.webLinks);
 			this.artistLinks = new ArtistLinkListEditStore(work.artistLinks);
 		} else {
-			this.hashtags = new HashtagListEditStore([]);
+			this.hashtagLinks = new HashtagLinkListEditStore([]);
 			this.webLinks = new WebLinkListEditStore([]);
 			this.artistLinks = new ArtistLinkListEditStore([]);
 		}
@@ -56,7 +56,7 @@ export class WorkEditStore {
 			id: this.work?.id ?? 0,
 			name: this.name,
 			workType: this.workType,
-			hashtags: this.hashtags.toParams(),
+			hashtagLinks: this.hashtagLinks.toParams(),
 			webLinks: this.webLinks.toParams(),
 			artistLinks: this.artistLinks.toParams(),
 		};

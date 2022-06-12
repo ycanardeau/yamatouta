@@ -1,4 +1,4 @@
-import { IHashtagUpdateParams } from '../IHashtagUpdateParams';
+import { IHashtagLinkUpdateParams } from '../IHashtagLinkUpdateParams';
 import { IWebLinkUpdateParams } from '../IWebLinkUpdateParams';
 import { IWorkLinkUpdateParams } from '../IWorkLinkUpdateParams';
 import { WordCategory } from './WordCategory';
@@ -10,7 +10,7 @@ export interface ITranslationUpdateParams {
 	reading: string;
 	yamatokotoba: string;
 	category: WordCategory;
-	hashtags: IHashtagUpdateParams[];
+	hashtagLinks: IHashtagLinkUpdateParams[];
 	webLinks: IWebLinkUpdateParams[];
 	workLinks: IWorkLinkUpdateParams[];
 }

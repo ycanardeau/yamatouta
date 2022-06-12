@@ -13,14 +13,14 @@ class ArtistApi {
 	create = async ({
 		name,
 		artistType,
-		hashtags,
+		hashtagLinks,
 		webLinks,
 	}: IArtistUpdateParams): Promise<IArtistObject> => {
 		const response = await axios.post<IArtistObject>('/artists/create', {
 			id: 0,
 			name,
 			artistType,
-			hashtags,
+			hashtagLinks,
 			webLinks,
 		});
 
@@ -81,14 +81,14 @@ class ArtistApi {
 		id,
 		name,
 		artistType,
-		hashtags,
+		hashtagLinks,
 		webLinks,
 	}: IArtistUpdateParams): Promise<IArtistObject> => {
 		const response = await axios.post<IArtistObject>(`/artists/update`, {
 			id: id,
 			name,
 			artistType,
-			hashtags,
+			hashtagLinks,
 			webLinks,
 		});
 

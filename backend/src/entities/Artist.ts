@@ -23,6 +23,7 @@ import { ArtistSnapshot } from '../models/snapshots/ArtistSnapshot';
 import { NgramConverter } from '../services/NgramConverter';
 import { WorkArtistLink } from './ArtistLink';
 import { Commit } from './Commit';
+import { Hashtag } from './Hashtag';
 import { ArtistHashtagLink } from './HashtagLink';
 import { ArtistRevision } from './Revision';
 import { User } from './User';
@@ -121,6 +122,10 @@ export class Artist
 		category: WebLinkCategory,
 	): ArtistWebLink {
 		return new ArtistWebLink(this, address, title, category);
+	}
+
+	createHashtagLink(relatedHashtag: Hashtag): ArtistHashtagLink {
+		return new ArtistHashtagLink(this, relatedHashtag);
 	}
 }
 

@@ -60,6 +60,7 @@ describe('WorkCreateCommandHandler', () => {
 			id: 0,
 			name: 'よみもの',
 			workType: WorkType.Book,
+			hashtagLinks: [],
 			webLinks: [],
 			artistLinks: [],
 		};
@@ -148,7 +149,7 @@ describe('WorkCreateCommandHandler', () => {
 					workType: defaultParams.workType,
 					webLinks: [],
 					artistLinks: [],
-					hashtags: [],
+					hashtagLinks: [],
 				},
 			});
 		});

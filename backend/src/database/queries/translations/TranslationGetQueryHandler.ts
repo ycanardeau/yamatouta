@@ -37,7 +37,10 @@ export class TranslationGetQueryHandler
 				],
 			},
 			{
+				// OPTIMIZE
 				populate: [
+					'hashtagLinks',
+					'hashtagLinks.relatedHashtag',
 					'webLinks',
 					'webLinks.address',
 					'workLinks',

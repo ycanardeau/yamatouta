@@ -27,6 +27,6 @@ export class QuoteListParams {
 		getTotalCount: Joi.boolean().optional(),
 		artistId: Joi.number().optional(),
 		workId: Joi.number().optional(),
-		query: Joi.string().optional().allow(''),
+		query: Joi.string().optional().trim().allow(''),
 	});
 }

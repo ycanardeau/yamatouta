@@ -26,6 +26,7 @@ import { QuoteSnapshot } from '../models/snapshots/QuoteSnapshot';
 import { NgramConverter } from '../services/NgramConverter';
 import { Artist } from './Artist';
 import { Commit } from './Commit';
+import { Hashtag } from './Hashtag';
 import { QuoteHashtagLink } from './HashtagLink';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
@@ -174,6 +175,10 @@ export class Quote
 			endDate,
 			ended,
 		);
+	}
+
+	createHashtagLink(relatedHashtag: Hashtag): QuoteHashtagLink {
+		return new QuoteHashtagLink(this, relatedHashtag);
 	}
 }
 

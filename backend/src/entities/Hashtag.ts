@@ -11,7 +11,7 @@ import { IReferenceCount } from '../models/IReferenceCount';
 import { User } from './User';
 
 @Entity({ tableName: 'hashtags' })
-export abstract class Hashtag implements IReferenceCount {
+export class Hashtag implements IReferenceCount {
 	@PrimaryKey()
 	id!: number;
 
@@ -28,7 +28,7 @@ export abstract class Hashtag implements IReferenceCount {
 	hidden = false;
 
 	@Property({ length: 100, unique: true })
-	name!: string;
+	name: string;
 
 	@Property()
 	referenceCount = 0;
@@ -36,7 +36,8 @@ export abstract class Hashtag implements IReferenceCount {
 	@ManyToOne()
 	actor: IdentifiedReference<User>;
 
-	constructor(actor: User) {
+	constructor(name: string, actor: User) {
+		this.name = name;
 		this.actor = Reference.create(actor);
 	}
 

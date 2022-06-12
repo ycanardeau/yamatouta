@@ -20,7 +20,7 @@ export class UserListParams {
 		offset: Joi.number().optional(),
 		limit: Joi.number().optional(),
 		getTotalCount: Joi.boolean().optional(),
-		query: Joi.string().optional().allow(''),
+		query: Joi.string().optional().trim().allow(''),
 		userGroup: Joi.string()
 			.optional()
 			.valid(...Object.values(UserGroup)),

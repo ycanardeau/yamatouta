@@ -1,9 +1,9 @@
 import { Work } from '../../entities/Work';
 import { IContentEquatable } from '../IContentEquatable';
 import { WorkType } from '../works/WorkType';
-import { HashtagSnapshot } from './HashtagSnapshot';
+import { HashtagLinkSnapshot } from './HashtagLinkSnapshot';
 import { ISnapshotWithArtistLinks } from './ISnapshotWithArtistLinks';
-import { ISnapshotWithHashtags } from './ISnapshotWithHashtags';
+import { ISnapshotWithHashtagLinks } from './ISnapshotWithHashtagLinks';
 import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
 import { ArtistLinkSnapshot } from './LinkSnapshot';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
@@ -15,7 +15,7 @@ export class WorkSnapshot
 		IContentEquatable<IWorkSnapshot>,
 		ISnapshotWithWebLinks,
 		ISnapshotWithArtistLinks,
-		ISnapshotWithHashtags
+		ISnapshotWithHashtagLinks
 {
 	private constructor(
 		readonly name: string,
@@ -23,7 +23,7 @@ export class WorkSnapshot
 		readonly workType: WorkType,
 		readonly webLinks: WebLinkSnapshot[],
 		readonly artistLinks: ArtistLinkSnapshot[],
-		readonly hashtags: HashtagSnapshot[],
+		readonly hashtagLinks: HashtagLinkSnapshot[],
 	) {}
 
 	static create(work: Work): WorkSnapshot {
@@ -35,11 +35,9 @@ export class WorkSnapshot
 			.getItems()
 			.map((artistLink) => ArtistLinkSnapshot.create(artistLink));
 
-		const hashtags = work.hashtagLinks
+		const hashtagLinks = work.hashtagLinks
 			.getItems()
-			.map((hashtagLink) =>
-				HashtagSnapshot.create(hashtagLink.relatedHashtag.getEntity()),
-			);
+			.map((hashtagLink) => HashtagLinkSnapshot.create(hashtagLink));
 
 		return new WorkSnapshot(
 			work.name,
@@ -47,7 +45,7 @@ export class WorkSnapshot
 			work.workType,
 			webLinks,
 			artistLinks,
-			hashtags,
+			hashtagLinks,
 		);
 	}
 

@@ -72,6 +72,7 @@ describe('QuoteCreateCommandHandler', () => {
 			quoteType: QuoteType.Tanka,
 			locale: 'ja',
 			artistId: 2,
+			hashtagLinks: [],
 			webLinks: [],
 			workLinks: [],
 		};
@@ -166,7 +167,7 @@ describe('QuoteCreateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
-					hashtags: [],
+					hashtagLinks: [],
 				},
 			});
 		});

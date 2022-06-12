@@ -13,7 +13,7 @@ class WorkApi {
 	create = async ({
 		name,
 		workType,
-		hashtags,
+		hashtagLinks,
 		webLinks,
 		artistLinks,
 	}: IWorkUpdateParams): Promise<IWorkObject> => {
@@ -21,7 +21,7 @@ class WorkApi {
 			id: 0,
 			name,
 			workType,
-			hashtags,
+			hashtagLinks,
 			webLinks,
 			artistLinks,
 		});
@@ -83,7 +83,7 @@ class WorkApi {
 		id,
 		name,
 		workType,
-		hashtags,
+		hashtagLinks,
 		webLinks,
 		artistLinks,
 	}: IWorkUpdateParams): Promise<IWorkObject> => {
@@ -91,7 +91,7 @@ class WorkApi {
 			id: id,
 			name,
 			workType,
-			hashtags,
+			hashtagLinks,
 			webLinks,
 			artistLinks,
 		});

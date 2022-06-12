@@ -3,6 +3,7 @@ import { EntryType } from '../models/EntryType';
 import { TranslationOptionalField } from '../models/translations/TranslationOptionalField';
 import { WordCategory } from '../models/translations/WordCategory';
 import { PermissionContext } from '../services/PermissionContext';
+import { HashtagLinkObject } from './HashtagLinkObject';
 import { WorkLinkObject } from './LinkObject';
 import { WebLinkObject } from './WebLinkObject';
 
@@ -16,6 +17,7 @@ export class TranslationObject {
 		readonly reading: string,
 		readonly yamatokotoba: string,
 		readonly category?: WordCategory,
+		readonly hashtagLinks?: HashtagLinkObject[],
 		readonly webLinks?: WebLinkObject[],
 		readonly workLinks?: WorkLinkObject[],
 	) {}
@@ -26,6 +28,19 @@ export class TranslationObject {
 		fields: TranslationOptionalField[] = [],
 	): TranslationObject {
 		permissionContext.verifyDeletedAndHidden(translation);
+
+		const hashtagLinks = fields.includes(
+			TranslationOptionalField.HashtagLinks,
+		)
+			? translation.hashtagLinks
+					.getItems()
+					.map((hashtagLink) =>
+						HashtagLinkObject.create(
+							hashtagLink,
+							permissionContext,
+						),
+					)
+			: undefined;
 
 		const webLinks = fields.includes(TranslationOptionalField.WebLinks)
 			? translation.webLinks
@@ -50,6 +65,7 @@ export class TranslationObject {
 			translation.translatedString.reading,
 			translation.translatedString.yamatokotoba,
 			translation.category,
+			hashtagLinks,
 			webLinks,
 			workLinks,
 		);

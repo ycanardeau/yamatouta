@@ -12,6 +12,7 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
 import { QuoteUpdateParams } from '../../../models/quotes/QuoteUpdateParams';
+import { HashtagLinkService } from '../../../services/HashtagLinkService';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
@@ -47,6 +48,7 @@ export class QuoteUpdateCommandHandler
 		private readonly artistRepo: EntityRepository<Artist>,
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
+		private readonly hashtagLinkService: HashtagLinkService,
 		private readonly webLinkService: WebLinkService,
 		private readonly workLinkService: WorkLinkService,
 		private readonly revisionService: RevisionService,
@@ -99,6 +101,14 @@ export class QuoteUpdateCommandHandler
 					quote.artist = Reference.create(artist);
 
 					quote.updateSearchIndex(this.ngramConverter);
+
+					await this.hashtagLinkService.sync(
+						em,
+						quote,
+						params.hashtagLinks,
+						permissionContext,
+						actor,
+					);
 
 					await this.webLinkService.sync(
 						em,

@@ -82,6 +82,7 @@ describe('QuoteUpdateCommandHandler', () => {
 			quoteType: QuoteType.Lyrics,
 			locale: 'ojp',
 			artistId: artist.id,
+			hashtagLinks: [],
 			webLinks: [],
 			workLinks: [],
 		};
@@ -202,7 +203,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
-					hashtags: [],
+					hashtagLinks: [],
 				},
 			});
 		});
@@ -225,7 +226,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
-					hashtags: [],
+					hashtagLinks: [],
 				},
 			});
 		});
@@ -247,7 +248,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
-					hashtags: [],
+					hashtagLinks: [],
 				},
 			});
 		});
@@ -266,7 +267,7 @@ describe('QuoteUpdateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
-					hashtags: [],
+					hashtagLinks: [],
 				},
 			});
 		});

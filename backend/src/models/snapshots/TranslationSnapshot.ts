@@ -1,8 +1,8 @@
 import { Translation } from '../../entities/Translation';
 import { IContentEquatable } from '../IContentEquatable';
 import { WordCategory } from '../translations/WordCategory';
-import { HashtagSnapshot } from './HashtagSnapshot';
-import { ISnapshotWithHashtags } from './ISnapshotWithHashtags';
+import { HashtagLinkSnapshot } from './HashtagLinkSnapshot';
+import { ISnapshotWithHashtagLinks } from './ISnapshotWithHashtagLinks';
 import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
 import { ISnapshotWithWorkLinks } from './ISnapshotWithWorkLinks';
 import { WorkLinkSnapshot } from './LinkSnapshot';
@@ -15,7 +15,7 @@ export class TranslationSnapshot
 		IContentEquatable<ITranslationSnapshot>,
 		ISnapshotWithWebLinks,
 		ISnapshotWithWorkLinks,
-		ISnapshotWithHashtags
+		ISnapshotWithHashtagLinks
 {
 	private constructor(
 		readonly headword: string,
@@ -26,7 +26,7 @@ export class TranslationSnapshot
 		readonly inishienomanabi_tags: string[],
 		readonly webLinks: WebLinkSnapshot[],
 		readonly workLinks: WorkLinkSnapshot[],
-		readonly hashtags: HashtagSnapshot[],
+		readonly hashtagLinks: HashtagLinkSnapshot[],
 	) {}
 
 	static create(translation: Translation): TranslationSnapshot {
@@ -38,11 +38,9 @@ export class TranslationSnapshot
 			.getItems()
 			.map((workLink) => WorkLinkSnapshot.create(workLink));
 
-		const hashtags = translation.hashtagLinks
+		const hashtagLinks = translation.hashtagLinks
 			.getItems()
-			.map((hashtagLink) =>
-				HashtagSnapshot.create(hashtagLink.relatedHashtag.getEntity()),
-			);
+			.map((hashtagLink) => HashtagLinkSnapshot.create(hashtagLink));
 
 		return new TranslationSnapshot(
 			translation.headword,
@@ -53,7 +51,7 @@ export class TranslationSnapshot
 			translation.inishienomanabi_tags,
 			webLinks,
 			workLinks,
-			hashtags,
+			hashtagLinks,
 		);
 	}
 

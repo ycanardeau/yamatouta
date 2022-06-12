@@ -11,14 +11,14 @@ import { ArtistEditObject } from '../../dto/ArtistEditObject';
 import { IArtistObject } from '../../dto/IArtistObject';
 import { ArtistType } from '../../models/artists/ArtistType';
 import { IArtistUpdateParams } from '../../models/artists/IArtistUpdateParams';
-import { HashtagListEditStore } from '../HashtagListEditStore';
+import { HashtagLinkListEditStore } from '../HashtagLinkListEditStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class ArtistEditStore {
 	@observable submitting = false;
 	@observable name = '';
 	@observable artistType = ArtistType.Person;
-	readonly hashtags: HashtagListEditStore;
+	readonly hashtagLinks: HashtagLinkListEditStore;
 	readonly webLinks: WebLinkListEditStore;
 
 	constructor(private readonly artist?: ArtistEditObject) {
@@ -27,10 +27,12 @@ export class ArtistEditStore {
 		if (artist) {
 			this.name = artist.name;
 			this.artistType = artist.artistType;
-			this.hashtags = new HashtagListEditStore([] /* TODO */);
+			this.hashtagLinks = new HashtagLinkListEditStore(
+				artist.hashtagLinks,
+			);
 			this.webLinks = new WebLinkListEditStore(artist.webLinks);
 		} else {
-			this.hashtags = new HashtagListEditStore([]);
+			this.hashtagLinks = new HashtagLinkListEditStore([]);
 			this.webLinks = new WebLinkListEditStore([]);
 		}
 	}
@@ -52,7 +54,7 @@ export class ArtistEditStore {
 			id: this.artist?.id ?? 0,
 			name: this.name,
 			artistType: this.artistType,
-			hashtags: this.hashtags.toParams(),
+			hashtagLinks: this.hashtagLinks.toParams(),
 			webLinks: this.webLinks.toParams(),
 		};
 	};
