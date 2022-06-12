@@ -79,6 +79,7 @@ const ArtistLinkEdit = observer(
 							artistLinkListEditStore.remove(store)
 						}
 						aria-label={t(`shared.remove`)}
+						tabIndex={-1}
 					/>
 				</EuiTableRowCell>
 			</EuiTableRow>

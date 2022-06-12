@@ -79,6 +79,7 @@ const WorkLinkEdit = observer(
 							workLinkListEditStore.remove(store)
 						}
 						aria-label={t(`shared.remove`)}
+						tabIndex={-1}
 					/>
 				</EuiTableRowCell>
 			</EuiTableRow>

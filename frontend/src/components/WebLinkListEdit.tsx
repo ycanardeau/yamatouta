@@ -60,6 +60,7 @@ const WebLinkEdit = observer(
 								target="_blank"
 								isDisabled={!store.url}
 								aria-label={t('shared.externalLink')}
+								tabIndex={-1}
 							/>
 						}
 						readOnly={
@@ -122,6 +123,7 @@ const WebLinkEdit = observer(
 						color="danger"
 						onClick={(): void => webLinkListEditStore.remove(store)}
 						aria-label={t(`shared.remove`)}
+						tabIndex={-1}
 						disabled={
 							!auth.permissionContext.hasPermission(
 								Permission.DeleteWebLinks,
