@@ -85,6 +85,7 @@ export class TranslationEditStore {
 			reading: this.reading,
 			yamatokotoba: this.yamatokotoba,
 			category: this.category,
+			hashtags: this.hashtags.toParams(),
 			webLinks: this.webLinks.toParams(),
 			workLinks: this.workLinks.toParams(),
 		};

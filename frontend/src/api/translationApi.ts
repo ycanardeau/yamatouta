@@ -16,6 +16,7 @@ class TranslationApi {
 		reading,
 		yamatokotoba,
 		category,
+		hashtags,
 		webLinks,
 		workLinks,
 	}: ITranslationUpdateParams): Promise<ITranslationObject> => {
@@ -28,6 +29,7 @@ class TranslationApi {
 				reading,
 				yamatokotoba,
 				category,
+				hashtags,
 				webLinks,
 				workLinks,
 			},
@@ -102,6 +104,7 @@ class TranslationApi {
 		reading,
 		yamatokotoba,
 		category,
+		hashtags,
 		webLinks,
 		workLinks,
 	}: ITranslationUpdateParams): Promise<ITranslationObject> => {
@@ -114,6 +117,7 @@ class TranslationApi {
 				reading,
 				yamatokotoba,
 				category,
+				hashtags,
 				webLinks,
 				workLinks,
 			},

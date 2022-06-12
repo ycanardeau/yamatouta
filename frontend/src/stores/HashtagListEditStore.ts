@@ -1,24 +1,14 @@
 import { action, makeObservable, observable } from 'mobx';
 
+import { IHashtagObject } from '../dto/IHashtagObject';
+import { IHashtagUpdateParams } from '../models/IHashtagUpdateParams';
 import { BasicListEditStore } from './BasicListEditStore';
-
-// TODO: Move.
-interface IHashtagObject {
-	id: number;
-	name: string;
-}
-
-// TODO: Move.
-interface IHashtagUpdateParams {
-	id: number;
-	name: string;
-}
 
 export class HashtagEditStore {
 	@observable id = 0;
 	@observable name = '';
 
-	constructor(private readonly hashtag?: IHashtagObject) {
+	constructor(hashtag?: IHashtagObject) {
 		makeObservable(this);
 
 		if (hashtag) {

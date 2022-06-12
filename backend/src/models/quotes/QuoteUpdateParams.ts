@@ -1,5 +1,6 @@
 import Joi from 'joi';
 
+import { HashtagUpdateParams } from '../HashtagUpdateParams';
 import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
 import { WorkLinkUpdateParams } from '../WorkLinkUpdateParams';
 import { QuoteType } from './QuoteType';
@@ -11,6 +12,7 @@ export class QuoteUpdateParams {
 		readonly quoteType: QuoteType,
 		readonly locale: string,
 		readonly artistId: number,
+		readonly hashtags: HashtagUpdateParams[],
 		readonly webLinks: WebLinkUpdateParams[],
 		readonly workLinks: WorkLinkUpdateParams[],
 	) {}
@@ -24,6 +26,7 @@ export class QuoteUpdateParams {
 			.valid(...Object.values(QuoteType)),
 		locale: Joi.string().required().trim(),
 		artistId: Joi.number().required(),
+		hashtags: Joi.array().items(HashtagUpdateParams.schema).required(),
 		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
 		workLinks: Joi.array().items(WorkLinkUpdateParams.schema).required(),
 	});

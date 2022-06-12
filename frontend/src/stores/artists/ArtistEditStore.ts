@@ -52,6 +52,7 @@ export class ArtistEditStore {
 			id: this.artist?.id ?? 0,
 			name: this.name,
 			artistType: this.artistType,
+			hashtags: this.hashtags.toParams(),
 			webLinks: this.webLinks.toParams(),
 		};
 	};

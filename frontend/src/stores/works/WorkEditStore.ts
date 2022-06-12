@@ -56,6 +56,7 @@ export class WorkEditStore {
 			id: this.work?.id ?? 0,
 			name: this.name,
 			workType: this.workType,
+			hashtags: this.hashtags.toParams(),
 			webLinks: this.webLinks.toParams(),
 			artistLinks: this.artistLinks.toParams(),
 		};

@@ -67,6 +67,7 @@ export class QuoteEditStore {
 			quoteType: this.quoteType,
 			locale: this.locale,
 			artistId: this.artist.entry?.id ?? 0,
+			hashtags: this.hashtags.toParams(),
 			webLinks: this.webLinks.toParams(),
 			workLinks: this.workLinks.toParams(),
 		};
