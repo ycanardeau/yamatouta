@@ -3,6 +3,7 @@ import {
 	Entity,
 	Enum,
 	IdentifiedReference,
+	Index,
 	ManyToOne,
 	OneToMany,
 	OneToOne,
@@ -102,7 +103,10 @@ export class Work
 
 	updateSearchIndex(ngramConverter: NgramConverter): void {
 		const searchIndex = this.searchIndex.getEntity();
-		searchIndex.name = ngramConverter.toFullText(this.name, 2);
+		searchIndex.name = ngramConverter.toFullText(
+			[this.name, this.sortName].join(' '),
+			2,
+		);
 	}
 
 	takeSnapshot(): WorkSnapshot {
@@ -154,6 +158,7 @@ export class Work
 }
 
 @Entity({ tableName: 'work_search_index' })
+@Index({ properties: ['name'], type: 'fulltext' })
 export class WorkSearchIndex {
 	@PrimaryKey()
 	id!: number;

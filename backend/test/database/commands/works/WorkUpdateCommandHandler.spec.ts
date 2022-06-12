@@ -109,7 +109,10 @@ describe('WorkUpdateCommandHandler', () => {
 			const ngramConverter = app.get(NgramConverter);
 			const searchIndex = work.searchIndex.getEntity();
 			expect(searchIndex.name).toBe(
-				ngramConverter.toFullText(params.name, 2),
+				ngramConverter.toFullText(
+					[params.name, work /* TODO */.sortName].join(' '),
+					2,
+				),
 			);
 
 			const revision = work.revisions[1];

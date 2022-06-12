@@ -3,6 +3,7 @@ import {
 	Entity,
 	Enum,
 	IdentifiedReference,
+	Index,
 	ManyToOne,
 	OneToMany,
 	OneToOne,
@@ -119,6 +120,7 @@ export class Artist
 }
 
 @Entity({ tableName: 'artist_search_index' })
+@Index({ properties: ['name'], type: 'fulltext' })
 export class ArtistSearchIndex {
 	@PrimaryKey()
 	id!: number;

@@ -2,6 +2,7 @@ import {
 	Entity,
 	Enum,
 	IdentifiedReference,
+	Index,
 	OneToOne,
 	PrimaryKey,
 	Property,
@@ -144,6 +145,7 @@ export class User implements IEntryWithSearchIndex<UserSearchIndex> {
 }
 
 @Entity({ tableName: 'user_search_index' })
+@Index({ properties: ['name'], type: 'fulltext' })
 export class UserSearchIndex {
 	@PrimaryKey()
 	id!: number;

@@ -302,6 +302,16 @@
           "unique": true
         },
         {
+          "keyName": "user_search_index_name_index",
+          "columnNames": [
+            "name"
+          ],
+          "composite": false,
+          "primary": false,
+          "unique": false,
+          "type": "fulltext"
+        },
+        {
           "keyName": "PRIMARY",
           "columnNames": [
             "id"
@@ -772,6 +782,16 @@
           "keyName": "work_search_index_work_id_unique",
           "primary": false,
           "unique": true
+        },
+        {
+          "keyName": "work_search_index_name_index",
+          "columnNames": [
+            "name"
+          ],
+          "composite": false,
+          "primary": false,
+          "unique": false,
+          "type": "fulltext"
         },
         {
           "keyName": "PRIMARY",
@@ -2390,6 +2410,16 @@
           "unique": true
         },
         {
+          "keyName": "artist_search_index_name_index",
+          "columnNames": [
+            "name"
+          ],
+          "composite": false,
+          "primary": false,
+          "unique": false,
+          "type": "fulltext"
+        },
+        {
           "keyName": "PRIMARY",
           "columnNames": [
             "id"
@@ -3236,6 +3266,16 @@
           "keyName": "quote_search_index_quote_id_unique",
           "primary": false,
           "unique": true
+        },
+        {
+          "keyName": "quote_search_index_text_index",
+          "columnNames": [
+            "text"
+          ],
+          "composite": false,
+          "primary": false,
+          "unique": false,
+          "type": "fulltext"
         },
         {
           "keyName": "PRIMARY",

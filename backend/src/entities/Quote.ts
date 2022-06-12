@@ -4,6 +4,7 @@ import {
 	Entity,
 	Enum,
 	IdentifiedReference,
+	Index,
 	ManyToOne,
 	OneToMany,
 	OneToOne,
@@ -172,6 +173,7 @@ export class Quote
 }
 
 @Entity({ tableName: 'quote_search_index' })
+@Index({ properties: ['text'], type: 'fulltext' })
 export class QuoteSearchIndex {
 	@PrimaryKey()
 	id!: number;
