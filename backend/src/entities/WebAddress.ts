@@ -7,11 +7,12 @@ import {
 	Reference,
 } from '@mikro-orm/core';
 
+import { IReferenceCount } from '../models/IReferenceCount';
 import { User } from './User';
 import { WebAddressHost } from './WebAddressHost';
 
 @Entity({ tableName: 'web_addresses' })
-export class WebAddress {
+export class WebAddress implements IReferenceCount {
 	@PrimaryKey()
 	id!: number;
 
@@ -60,12 +61,12 @@ export class WebAddress {
 	}
 
 	incrementReferenceCount(): void {
-		this.host.getEntity().referenceCount++;
+		this.host.getEntity().incrementReferenceCount();
 		this.referenceCount++;
 	}
 
 	decrementReferenceCount(): void {
-		this.host.getEntity().referenceCount--;
+		this.host.getEntity().decrementReferenceCount();
 		this.referenceCount--;
 	}
 }

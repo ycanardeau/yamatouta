@@ -1,9 +1,9 @@
 import { Migration } from '@mikro-orm/migrations';
 
-export class Migration20220611060205 extends Migration {
+export class Migration20220612024818 extends Migration {
 	async up(): Promise<void> {
 		this.addSql(
-			'create table `hashtags` (`id` int unsigned not null auto_increment primary key, `created_at` datetime not null, `updated_at` datetime not null, `deleted` tinyint(1) not null, `hidden` tinyint(1) not null, `name` varchar(100) not null, `actor_id` int unsigned not null) default character set utf8mb4 engine = InnoDB;',
+			'create table `hashtags` (`id` int unsigned not null auto_increment primary key, `created_at` datetime not null, `updated_at` datetime not null, `deleted` tinyint(1) not null, `hidden` tinyint(1) not null, `name` varchar(100) not null, `reference_count` int not null, `actor_id` int unsigned not null) default character set utf8mb4 engine = InnoDB;',
 		);
 		this.addSql(
 			'alter table `hashtags` add unique `hashtags_name_unique`(`name`);',
