@@ -20,6 +20,7 @@ import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { workLinkTypes } from '../../models/LinkType';
 import { WordCategory } from '../../models/translations/WordCategory';
 import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
+import { HashtagListEdit } from '../HashtagListEdit';
 import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface TranslationEditFormProps {
@@ -101,6 +102,10 @@ export const TranslationEditForm = observer(
 								)
 							}
 						/>
+					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.hashtags')}>
+						<HashtagListEdit store={store.hashtags} />
 					</EuiFormRow>
 
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>

@@ -21,6 +21,7 @@ import { artistLinkTypes } from '../../models/LinkType';
 import { WorkType } from '../../models/works/WorkType';
 import { WorkEditStore } from '../../stores/works/WorkEditStore';
 import { ArtistLinkListEdit } from '../ArtistLinkListEdit';
+import { HashtagListEdit } from '../HashtagListEdit';
 
 interface WorkEditFormProps {
 	work?: WorkEditObject;
@@ -73,6 +74,10 @@ export const WorkEditForm = observer(
 								store.setWorkType(e.target.value as WorkType)
 							}
 						/>
+					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.hashtags')}>
+						<HashtagListEdit store={store.hashtags} />
 					</EuiFormRow>
 
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>

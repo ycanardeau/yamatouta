@@ -18,6 +18,7 @@ import { ArtistEditObject } from '../../dto/ArtistEditObject';
 import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { ArtistType } from '../../models/artists/ArtistType';
 import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
+import { HashtagListEdit } from '../HashtagListEdit';
 
 interface ArtistEditFormProps {
 	artist?: ArtistEditObject;
@@ -72,6 +73,10 @@ export const ArtistEditForm = observer(
 								)
 							}
 						/>
+					</EuiFormRow>
+
+					<EuiFormRow label={t('shared.hashtags')}>
+						<HashtagListEdit store={store.hashtags} />
 					</EuiFormRow>
 
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>

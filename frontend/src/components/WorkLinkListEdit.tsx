@@ -36,7 +36,7 @@ const WorkLinkEdit = observer(
 		const { t } = useTranslation();
 
 		return (
-			<EuiTableRow>
+			<EuiTableRow hasActions={true}>
 				<EuiTableRowCell
 					textOnly={false}
 					mobileOptions={{

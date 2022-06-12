@@ -12,12 +12,14 @@ import { WorkEditObject } from '../../dto/WorkEditObject';
 import { IWorkUpdateParams } from '../../models/works/IWorkUpdateParams';
 import { WorkType } from '../../models/works/WorkType';
 import { ArtistLinkListEditStore } from '../ArtistLinkListEditStore';
+import { HashtagListEditStore } from '../HashtagListEditStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class WorkEditStore {
 	@observable submitting = false;
 	@observable name = '';
 	@observable workType = WorkType.Book;
+	readonly hashtags: HashtagListEditStore;
 	readonly webLinks: WebLinkListEditStore;
 	readonly artistLinks: ArtistLinkListEditStore;
 
@@ -27,9 +29,11 @@ export class WorkEditStore {
 		if (work) {
 			this.name = work.name;
 			this.workType = work.workType;
+			this.hashtags = new HashtagListEditStore([] /* TODO */);
 			this.webLinks = new WebLinkListEditStore(work.webLinks);
 			this.artistLinks = new ArtistLinkListEditStore(work.artistLinks);
 		} else {
+			this.hashtags = new HashtagListEditStore([]);
 			this.webLinks = new WebLinkListEditStore([]);
 			this.artistLinks = new ArtistLinkListEditStore([]);
 		}

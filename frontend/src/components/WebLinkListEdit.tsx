@@ -42,7 +42,7 @@ const WebLinkEdit = observer(
 		const auth = useAuth();
 
 		return (
-			<EuiTableRow>
+			<EuiTableRow hasActions={true}>
 				<EuiTableRowCell
 					textOnly={false}
 					mobileOptions={{ header: t('webLinks.url'), width: '100%' }}

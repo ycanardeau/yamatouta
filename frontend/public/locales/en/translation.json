@@ -74,7 +74,8 @@
 		"loading": "Loading...",
 		"noItemsFound": "No items found",
 		"sortBy": "Sort by",
-		"manage": "Manage"
+		"manage": "Manage",
+		"hashtags": "Hashtags"
 	},
 	"translations": {
 		"addWord": "Add word",
