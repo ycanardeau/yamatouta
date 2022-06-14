@@ -15,4 +15,5 @@ export const hostnameTitlePairs: Record<string, string> = {
 	'www.amazon.com': 'Amazon.com',
 	'twitter.com': 'Twitter',
 	'www.youtube.com': 'YouTube',
+	'www.genji-monogatari.net': '源氏物語の世界　再編集版',
 };
