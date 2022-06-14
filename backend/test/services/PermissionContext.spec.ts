@@ -1,17 +1,33 @@
 import { EntityManager, MikroORM } from '@mikro-orm/core';
-import { INestApplication, UnauthorizedException } from '@nestjs/common';
+import {
+	INestApplication,
+	NotFoundException,
+	UnauthorizedException,
+} from '@nestjs/common';
 import _ from 'lodash';
 
+import { User } from '../../src/entities/User';
 import { Permission } from '../../src/models/Permission';
+import { ArtistType } from '../../src/models/artists/ArtistType';
+import { QuoteType } from '../../src/models/quotes/QuoteType';
+import { WordCategory } from '../../src/models/translations/WordCategory';
 import { userGroupPermissions } from '../../src/models/userGroupPermissions';
 import { UserGroup } from '../../src/models/users/UserGroup';
+import { WorkType } from '../../src/models/works/WorkType';
 import { FakePermissionContext } from '../FakePermissionContext';
 import { createApplication } from '../createApplication';
-import { createUser } from '../createEntry';
+import {
+	createArtist,
+	createQuote,
+	createTranslation,
+	createUser,
+	createWork,
+} from '../createEntry';
 
 describe('PermissionContext', () => {
 	let app: INestApplication;
 	let em: EntityManager;
+	let users: User[];
 
 	beforeAll(async () => {
 		app = await createApplication();
@@ -23,6 +39,45 @@ describe('PermissionContext', () => {
 
 	beforeEach(async () => {
 		em = app.get(EntityManager);
+
+		users = await Promise.all([
+			createUser(em, {
+				username: 'limited',
+				email: 'limited@example.com',
+				password: 'P@$$w0rd',
+				userGroup: UserGroup.LimitedUser,
+			}),
+			createUser(em, {
+				username: 'user',
+				email: 'user@example.com',
+				password: 'P@$$w0rd',
+				userGroup: UserGroup.User,
+			}),
+			createUser(em, {
+				username: 'advanced',
+				email: 'advanced@example.com',
+				password: 'P@$$w0rd',
+				userGroup: UserGroup.AdvancedUser,
+			}),
+			createUser(em, {
+				username: 'mod',
+				email: 'mod@example.com',
+				password: 'P@$$w0rd',
+				userGroup: UserGroup.Mod,
+			}),
+			createUser(em, {
+				username: 'senior',
+				email: 'senior@example.com',
+				password: 'P@$$w0rd',
+				userGroup: UserGroup.SeniorMod,
+			}),
+			createUser(em, {
+				username: 'admin',
+				email: 'admin@example.com',
+				password: 'P@$$w0rd',
+				userGroup: UserGroup.Admin,
+			}),
+		]);
 	});
 
 	afterEach(async () => {
@@ -33,45 +88,6 @@ describe('PermissionContext', () => {
 	});
 
 	test('hasPermission', async () => {
-		const users = await Promise.all([
-			createUser(em as any, {
-				username: 'limited',
-				email: 'limited@example.com',
-				password: 'P@$$w0rd',
-				userGroup: UserGroup.LimitedUser,
-			}),
-			createUser(em as any, {
-				username: 'user',
-				email: 'user@example.com',
-				password: 'P@$$w0rd',
-				userGroup: UserGroup.User,
-			}),
-			createUser(em as any, {
-				username: 'advanced',
-				email: 'advanced@example.com',
-				password: 'P@$$w0rd',
-				userGroup: UserGroup.AdvancedUser,
-			}),
-			createUser(em as any, {
-				username: 'mod',
-				email: 'mod@example.com',
-				password: 'P@$$w0rd',
-				userGroup: UserGroup.Mod,
-			}),
-			createUser(em as any, {
-				username: 'senior',
-				email: 'senior@example.com',
-				password: 'P@$$w0rd',
-				userGroup: UserGroup.SeniorMod,
-			}),
-			createUser(em as any, {
-				username: 'admin',
-				email: 'admin@example.com',
-				password: 'P@$$w0rd',
-				userGroup: UserGroup.Admin,
-			}),
-		]);
-
 		for (const user of users) {
 			const allowedPermissions = userGroupPermissions[user.userGroup];
 			const disallowedPermissions = _.difference(
@@ -102,6 +118,115 @@ describe('PermissionContext', () => {
 				expect(() =>
 					permissionContext.verifyPermission(permission),
 				).toThrow(UnauthorizedException);
+			}
+		}
+	});
+
+	test('verifyDeletedAndHidden', async () => {
+		const artist = await createArtist(em, {
+			name: '',
+			artistType: ArtistType.Person,
+			actor: users[5],
+		});
+		const quote = await createQuote(em, {
+			quoteType: QuoteType.Tanka,
+			text: '',
+			locale: 'ja',
+			artist: artist,
+			actor: users[5],
+		});
+		const translation = await createTranslation(em, {
+			headword: '',
+			locale: 'ja',
+			reading: '',
+			yamatokotoba: '',
+			category: WordCategory.Noun,
+			actor: users[5],
+		});
+		const user = await createUser(em, {
+			username: '',
+			email: '',
+			password: '',
+			userGroup: UserGroup.User,
+		});
+		const work = await createWork(em, {
+			name: '',
+			workType: WorkType.Book,
+			actor: users[5],
+		});
+
+		const entries = [artist, quote, translation, user, work];
+
+		for (const entry of entries) {
+			entry.deleted = false;
+			entry.hidden = false;
+
+			for (const user of users) {
+				const permissionContext = new FakePermissionContext(user);
+
+				expect(() =>
+					permissionContext.verifyDeletedAndHidden(entry),
+				).not.toThrow();
+			}
+		}
+
+		for (const entry of entries) {
+			entry.deleted = true;
+			entry.hidden = false;
+
+			for (const user of users) {
+				const permissionContext = new FakePermissionContext(user);
+
+				if (permissionContext.canViewHiddenEntries) {
+					expect(() =>
+						permissionContext.verifyDeletedAndHidden(entry),
+					).not.toThrow();
+				} else {
+					expect(() =>
+						permissionContext.verifyDeletedAndHidden(entry),
+					).toThrow(NotFoundException);
+				}
+			}
+		}
+
+		for (const entry of entries) {
+			entry.deleted = false;
+			entry.hidden = true;
+
+			for (const user of users) {
+				const permissionContext = new FakePermissionContext(user);
+
+				if (permissionContext.canViewHiddenEntries) {
+					expect(() =>
+						permissionContext.verifyDeletedAndHidden(entry),
+					).not.toThrow();
+				} else {
+					expect(() =>
+						permissionContext.verifyDeletedAndHidden(entry),
+					).toThrow(NotFoundException);
+				}
+			}
+		}
+
+		for (const entry of entries) {
+			entry.deleted = true;
+			entry.hidden = true;
+
+			for (const user of users) {
+				const permissionContext = new FakePermissionContext(user);
+
+				if (
+					permissionContext.canViewDeletedEntries &&
+					permissionContext.canViewHiddenEntries
+				) {
+					expect(() =>
+						permissionContext.verifyDeletedAndHidden(entry),
+					).not.toThrow();
+				} else {
+					expect(() =>
+						permissionContext.verifyDeletedAndHidden(entry),
+					).toThrow(NotFoundException);
+				}
 			}
 		}
 	});
