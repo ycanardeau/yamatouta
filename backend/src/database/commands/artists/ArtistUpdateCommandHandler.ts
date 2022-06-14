@@ -63,13 +63,11 @@ export class ArtistUpdateCommandHandler
 			const artist = isNew
 				? new Artist(actor)
 				: await this.artistRepo.findOneOrFail(
-						{
-							id: params.id,
-							deleted: false,
-							hidden: false,
-						},
+						{ id: params.id },
 						{ populate: ArtistUpdateCommandHandler.populate },
 				  );
+
+			permissionContext.verifyDeletedAndHidden(artist);
 
 			em.persist(artist);
 

@@ -69,13 +69,11 @@ export class TranslationUpdateCommandHandler
 			const translation = isNew
 				? new Translation(actor)
 				: await this.translationRepo.findOneOrFail(
-						{
-							id: params.id,
-							deleted: false,
-							hidden: false,
-						},
+						{ id: params.id },
 						{ populate: TranslationUpdateCommandHandler.populate },
 				  );
+
+			permissionContext.verifyDeletedAndHidden(translation);
 
 			em.persist(translation);
 

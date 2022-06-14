@@ -70,20 +70,18 @@ export class QuoteUpdateCommandHandler
 
 			const artist = await this.artistRepo.findOneOrFail({
 				id: params.artistId,
-				deleted: false,
-				hidden: false,
 			});
+
+			permissionContext.verifyDeletedAndHidden(artist);
 
 			const quote = isNew
 				? new Quote(actor)
 				: await this.quoteRepo.findOneOrFail(
-						{
-							id: params.id,
-							deleted: false,
-							hidden: false,
-						},
+						{ id: params.id },
 						{ populate: QuoteUpdateCommandHandler.populate },
 				  );
+
+			permissionContext.verifyDeletedAndHidden(quote);
 
 			em.persist(quote);
 

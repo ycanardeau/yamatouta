@@ -67,13 +67,11 @@ export class WorkUpdateCommandHandler
 			const work = isNew
 				? new Work(actor)
 				: await this.workRepo.findOneOrFail(
-						{
-							id: params.id,
-							deleted: false,
-							hidden: false,
-						},
+						{ id: params.id },
 						{ populate: WorkUpdateCommandHandler.populate },
 				  );
+
+			permissionContext.verifyDeletedAndHidden(work);
 
 			em.persist(work);
 

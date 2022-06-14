@@ -29,9 +29,9 @@ export class WorkLinkService {
 
 			const relatedWork = await em.findOneOrFail(Work, {
 				id: newItem.relatedWorkId,
-				deleted: false,
-				hidden: false,
 			});
+
+			permissionContext.verifyDeletedAndHidden(relatedWork);
 
 			if (!workLinkTypes[entry.entryType].includes(newItem.linkType))
 				throw new BadRequestException('Invalid link type');
@@ -55,9 +55,9 @@ export class WorkLinkService {
 
 			const relatedWork = await em.findOneOrFail(Work, {
 				id: newItem.relatedWorkId,
-				deleted: false,
-				hidden: false,
 			});
+
+			permissionContext.verifyDeletedAndHidden(relatedWork);
 
 			if (!workLinkTypes[entry.entryType].includes(newItem.linkType))
 				throw new BadRequestException('Invalid link type');

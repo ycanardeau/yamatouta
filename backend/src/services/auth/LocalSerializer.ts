@@ -1,6 +1,6 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
 
 import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
@@ -22,9 +22,9 @@ export class LocalSerializer extends PassportSerializer {
 	async deserializeUser(payload: any, done: CallableFunction): Promise<void> {
 		const user = await this.userRepo.findOneOrFail({
 			id: Number(payload),
-			deleted: false,
-			hidden: false,
 		});
+
+		if (user.deleted || user.hidden) throw new UnauthorizedException();
 
 		done(null, AuthenticatedUserObject.create(user));
 	}

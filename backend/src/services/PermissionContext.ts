@@ -49,10 +49,10 @@ export class PermissionContext {
 	getCurrentUser = async (em: EntityManager): Promise<User> => {
 		if (!this.user) throw new UnauthorizedException();
 
-		return em.findOneOrFail(User, {
-			id: this.user.id,
-			deleted: false,
-			hidden: false,
-		});
+		const user = await em.findOneOrFail(User, { id: this.user.id });
+
+		if (user.deleted || user.hidden) throw new UnauthorizedException();
+
+		return user;
 	};
 }

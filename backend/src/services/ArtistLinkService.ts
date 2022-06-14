@@ -29,9 +29,9 @@ export class ArtistLinkService {
 
 			const relatedArtist = await em.findOneOrFail(Artist, {
 				id: newItem.relatedArtistId,
-				deleted: false,
-				hidden: false,
 			});
+
+			permissionContext.verifyDeletedAndHidden(relatedArtist);
 
 			if (!artistLinkTypes[entry.entryType].includes(newItem.linkType))
 				throw new BadRequestException('Invalid link type');
@@ -55,9 +55,9 @@ export class ArtistLinkService {
 
 			const relatedArtist = await em.findOneOrFail(Artist, {
 				id: newItem.relatedArtistId,
-				deleted: false,
-				hidden: false,
 			});
+
+			permissionContext.verifyDeletedAndHidden(relatedArtist);
 
 			if (!artistLinkTypes[entry.entryType].includes(newItem.linkType))
 				throw new BadRequestException('Invalid link type');
