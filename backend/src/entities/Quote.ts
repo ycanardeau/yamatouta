@@ -177,8 +177,11 @@ export class Quote
 		);
 	}
 
-	createHashtagLink(relatedHashtag: Hashtag): QuoteHashtagLink {
-		return new QuoteHashtagLink(this, relatedHashtag);
+	createHashtagLink(
+		relatedHashtag: Hashtag,
+		label: string,
+	): QuoteHashtagLink {
+		return new QuoteHashtagLink(this, relatedHashtag, label);
 	}
 }
 

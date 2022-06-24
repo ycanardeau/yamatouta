@@ -204,8 +204,11 @@ export class Translation
 		);
 	}
 
-	createHashtagLink(relatedHashtag: Hashtag): TranslationHashtagLink {
-		return new TranslationHashtagLink(this, relatedHashtag);
+	createHashtagLink(
+		relatedHashtag: Hashtag,
+		label: string,
+	): TranslationHashtagLink {
+		return new TranslationHashtagLink(this, relatedHashtag, label);
 	}
 }
 

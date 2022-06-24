@@ -124,8 +124,11 @@ export class Artist
 		return new ArtistWebLink(this, address, title, category);
 	}
 
-	createHashtagLink(relatedHashtag: Hashtag): ArtistHashtagLink {
-		return new ArtistHashtagLink(this, relatedHashtag);
+	createHashtagLink(
+		relatedHashtag: Hashtag,
+		label: string,
+	): ArtistHashtagLink {
+		return new ArtistHashtagLink(this, relatedHashtag, label);
 	}
 }
 

@@ -159,8 +159,8 @@ export class Work
 		);
 	}
 
-	createHashtagLink(relatedHashtag: Hashtag): WorkHashtagLink {
-		return new WorkHashtagLink(this, relatedHashtag);
+	createHashtagLink(relatedHashtag: Hashtag, label: string): WorkHashtagLink {
+		return new WorkHashtagLink(this, relatedHashtag, label);
 	}
 }
 

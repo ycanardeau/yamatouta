@@ -33,8 +33,12 @@ export abstract class HashtagLink
 	@ManyToOne()
 	relatedHashtag: IdentifiedReference<Hashtag>;
 
-	protected constructor(relatedHashtag: Hashtag) {
+	@Property({ length: 100 })
+	label: string;
+
+	protected constructor(relatedHashtag: Hashtag, label: string) {
 		this.relatedHashtag = Reference.create(relatedHashtag);
+		this.label = label;
 	}
 
 	get name(): string {
@@ -59,8 +63,8 @@ export class ArtistHashtagLink extends HashtagLink {
 	@ManyToOne()
 	artist: Artist;
 
-	constructor(artist: Artist, relatedHashtag: Hashtag) {
-		super(relatedHashtag);
+	constructor(artist: Artist, relatedHashtag: Hashtag, label: string) {
+		super(relatedHashtag, label);
 
 		this.artist = artist;
 	}
@@ -71,8 +75,8 @@ export class QuoteHashtagLink extends HashtagLink {
 	@ManyToOne()
 	quote: Quote;
 
-	constructor(quote: Quote, relatedHashtag: Hashtag) {
-		super(relatedHashtag);
+	constructor(quote: Quote, relatedHashtag: Hashtag, label: string) {
+		super(relatedHashtag, label);
 
 		this.quote = quote;
 	}
@@ -86,8 +90,12 @@ export class TranslationHashtagLink extends HashtagLink {
 	@ManyToOne()
 	translation: Translation;
 
-	constructor(translation: Translation, relatedHashtag: Hashtag) {
-		super(relatedHashtag);
+	constructor(
+		translation: Translation,
+		relatedHashtag: Hashtag,
+		label: string,
+	) {
+		super(relatedHashtag, label);
 
 		this.translation = translation;
 	}
@@ -98,8 +106,8 @@ export class WorkHashtagLink extends HashtagLink {
 	@ManyToOne()
 	work: Work;
 
-	constructor(work: Work, relatedHashtag: Hashtag) {
-		super(relatedHashtag);
+	constructor(work: Work, relatedHashtag: Hashtag, label: string) {
+		super(relatedHashtag, label);
 
 		this.work = work;
 	}

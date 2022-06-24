@@ -5,5 +5,5 @@ import { HashtagLink } from '../entities/HashtagLink';
 
 export interface IEntryWithHashtagLinks<THashtagLink extends HashtagLink> {
 	hashtagLinks: Collection<THashtagLink>;
-	createHashtagLink(relatedHashtag: Hashtag): THashtagLink;
+	createHashtagLink(relatedHashtag: Hashtag, label: string): THashtagLink;
 }

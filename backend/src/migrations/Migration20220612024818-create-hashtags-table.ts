@@ -13,7 +13,7 @@ export class Migration20220612024818 extends Migration {
 		);
 
 		this.addSql(
-			"create table `hashtag_links` (`id` int unsigned not null auto_increment primary key, `created_at` datetime not null, `related_hashtag_id` int unsigned not null, `entry_type` enum('Artist', 'Quote', 'Translation', 'Work') not null, `artist_id` int unsigned null, `quote_id` int unsigned null, `translation_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
+			"create table `hashtag_links` (`id` int unsigned not null auto_increment primary key, `created_at` datetime not null, `related_hashtag_id` int unsigned not null, `label` varchar(100) not null, `entry_type` enum('Artist', 'Quote', 'Translation', 'Work') not null, `artist_id` int unsigned null, `quote_id` int unsigned null, `translation_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
 		);
 		this.addSql(
 			'alter table `hashtag_links` add index `hashtag_links_related_hashtag_id_index`(`related_hashtag_id`);',

@@ -3350,6 +3350,16 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "label": {
+          "name": "label",
+          "type": "varchar(100)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 100,
+          "mappedType": "string"
+        },
         "entry_type": {
           "name": "entry_type",
           "type": "enum('Artist', 'Quote', 'Translation', 'Work')",

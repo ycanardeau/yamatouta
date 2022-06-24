@@ -50,7 +50,7 @@ export class HashtagLinkService {
 
 			hashtag.incrementReferenceCount();
 
-			return entry.createHashtagLink(hashtag);
+			return entry.createHashtagLink(hashtag, '' /* TODO */);
 		};
 
 		const update = async (
