@@ -2,6 +2,8 @@ import { EntityManager, EntityRepository, Reference } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import remark from 'remark';
+import strip from 'strip-markdown';
 
 import { QuoteObject } from '../../../dto/QuoteObject';
 import { Artist } from '../../../entities/Artist';
@@ -96,8 +98,9 @@ export class QuoteUpdateCommandHandler
 				quote,
 				async () => {
 					quote.text = params.text;
-					quote.plainText =
-						params.text /* TODO: Remove markdown formatting. */;
+					quote.plainText = String(
+						await remark().use(strip).process(params.text),
+					);
 					quote.quoteType = params.quoteType;
 					quote.locale = params.locale;
 					quote.artist = Reference.create(artist);
