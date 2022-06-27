@@ -5,24 +5,25 @@ import {
 	EuiPageHeaderProps,
 	EuiSpacer,
 } from '@elastic/eui';
+import React from 'react';
 
-import { IArtistObject } from '../../dto/IArtistObject';
-import { ArtistBreadcrumbs } from './ArtistBreadcrumbs';
+import { IHashtagObject } from '../../dto/IHashtagObject';
+import { HashtagBreadcrumbs } from './HashtagBreadcrumbs';
 
-interface ArtistPageProps {
-	artist?: IArtistObject;
+interface HashtagPageProps {
+	hashtag: IHashtagObject;
 	pageHeaderProps?: EuiPageHeaderProps;
 	children?: React.ReactNode;
 }
 
-export const ArtistPage = ({
-	artist,
+export const HashtagPage = ({
+	hashtag,
 	pageHeaderProps,
 	children,
-}: ArtistPageProps): React.ReactElement => {
+}: HashtagPageProps): React.ReactElement => {
 	return (
 		<>
-			<ArtistBreadcrumbs artist={artist} />
+			<HashtagBreadcrumbs hashtag={hashtag} />
 			<EuiSpacer size="xs" />
 			<EuiPageHeader {...pageHeaderProps} />
 

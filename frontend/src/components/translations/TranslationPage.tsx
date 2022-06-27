@@ -1,5 +1,4 @@
 import {
-	EuiCommentList,
 	EuiPageContent,
 	EuiPageContentBody,
 	EuiPageHeader,
@@ -34,9 +33,7 @@ export const TranslationPage = ({
 				color="transparent"
 				borderRadius="none"
 			>
-				<EuiPageContentBody>
-					<EuiCommentList>{children}</EuiCommentList>
-				</EuiPageContentBody>
+				<EuiPageContentBody>{children}</EuiPageContentBody>
 			</EuiPageContent>
 		</>
 	);
