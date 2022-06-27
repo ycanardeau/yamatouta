@@ -53,6 +53,10 @@ export class Migration20220612024818 extends Migration {
 		this.addSql(
 			'alter table `hashtag_links` add constraint `hashtag_links_work_id_foreign` foreign key (`work_id`) references `works` (`id`) on update cascade on delete set null;',
 		);
+
+		this.addSql('alter table `quotes` add `plain_text` text not null;');
+
+		this.addSql('update quotes set plain_text = text;');
 	}
 
 	async down(): Promise<void> {
@@ -63,5 +67,7 @@ export class Migration20220612024818 extends Migration {
 		this.addSql('drop table if exists `hashtags`;');
 
 		this.addSql('drop table if exists `hashtag_links`;');
+
+		this.addSql('alter table `quotes` drop `plain_text`;');
 	}
 }

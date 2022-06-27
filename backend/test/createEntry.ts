@@ -123,6 +123,7 @@ export const createQuote = async (
 	const quote = new Quote(actor);
 	quote.quoteType = quoteType;
 	quote.text = text;
+	quote.plainText = text; /* TODO: Remove markdown formatting. */
 	quote.locale = locale;
 	quote.artist = Reference.create(artist);
 	quote.deleted = deleted;

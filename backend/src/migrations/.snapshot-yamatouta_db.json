@@ -2848,6 +2848,15 @@
           "nullable": false,
           "mappedType": "text"
         },
+        "plain_text": {
+          "name": "plain_text",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
         "phrase_count": {
           "name": "phrase_count",
           "type": "int",

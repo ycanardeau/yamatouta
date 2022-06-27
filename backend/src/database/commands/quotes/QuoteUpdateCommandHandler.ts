@@ -96,6 +96,8 @@ export class QuoteUpdateCommandHandler
 				quote,
 				async () => {
 					quote.text = params.text;
+					quote.plainText =
+						params.text /* TODO: Remove markdown formatting. */;
 					quote.quoteType = params.quoteType;
 					quote.locale = params.locale;
 					quote.artist = Reference.create(artist);

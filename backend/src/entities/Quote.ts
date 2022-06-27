@@ -68,6 +68,9 @@ export class Quote
 	@Property({ columnType: 'text' })
 	text!: string;
 
+	@Property({ columnType: 'text' })
+	plainText!: string;
+
 	@Property()
 	phraseCount = 0;
 
