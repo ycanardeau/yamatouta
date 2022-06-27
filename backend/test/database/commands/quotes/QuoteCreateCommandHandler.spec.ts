@@ -72,7 +72,6 @@ describe('QuoteCreateCommandHandler', () => {
 			quoteType: QuoteType.Tanka,
 			locale: 'ja',
 			artistId: 2,
-			hashtagLinks: [],
 			webLinks: [],
 			workLinks: [],
 		};

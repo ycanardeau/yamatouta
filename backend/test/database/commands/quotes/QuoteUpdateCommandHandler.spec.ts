@@ -82,7 +82,6 @@ describe('QuoteUpdateCommandHandler', () => {
 			quoteType: QuoteType.Lyrics,
 			locale: 'ojp',
 			artistId: artist.id,
-			hashtagLinks: [],
 			webLinks: [],
 			workLinks: [],
 		};
