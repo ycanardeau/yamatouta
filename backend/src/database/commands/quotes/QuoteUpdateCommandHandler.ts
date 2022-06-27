@@ -10,6 +10,7 @@ import { Artist } from '../../../entities/Artist';
 import { QuoteAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Quote } from '../../../entities/Quote';
 import { AuditedAction } from '../../../models/AuditedAction';
+import { HashtagLinkUpdateParams } from '../../../models/HashtagLinkUpdateParams';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
@@ -56,6 +57,17 @@ export class QuoteUpdateCommandHandler
 		private readonly revisionService: RevisionService,
 		private readonly ngramConverter: NgramConverter,
 	) {}
+
+	private extractHashtags(text: string): { name: string; label: string }[] {
+		const matches = text.matchAll(/\[(.*?)\]\(#([あ-ん]+)\)/g);
+
+		if (!matches) return [];
+
+		return Array.from(matches).map((match) => ({
+			name: match[2],
+			label: match[1],
+		}));
+	}
 
 	async execute(command: QuoteUpdateCommand): Promise<QuoteObject> {
 		const { permissionContext, params } = command;
@@ -107,10 +119,19 @@ export class QuoteUpdateCommandHandler
 
 					quote.updateSearchIndex(this.ngramConverter);
 
+					const hashtags = this.extractHashtags(params.text);
+
+					const hashtagLinks: HashtagLinkUpdateParams[] =
+						hashtags.map(({ name, label }) => ({
+							id: 0,
+							name: name,
+							label: label,
+						}));
+
 					await this.hashtagLinkService.sync(
 						em,
 						quote,
-						params.hashtagLinks,
+						hashtagLinks,
 						permissionContext,
 						actor,
 					);

@@ -21,7 +21,6 @@ import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { workLinkTypes } from '../../models/LinkType';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
-import { HashtagListEdit } from '../HashtagListEdit';
 import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface QuoteEditFormProps {
@@ -80,10 +79,6 @@ export const QuoteEditForm = observer(
 
 					<EuiFormRow label={t('shared.artist')}>
 						<ArtistComboBox store={store.artist} />
-					</EuiFormRow>
-
-					<EuiFormRow label={t('shared.hashtags')}>
-						<HashtagListEdit store={store.hashtagLinks} />
 					</EuiFormRow>
 
 					<EuiFormRow label={t('shared.externalLinks')} fullWidth>

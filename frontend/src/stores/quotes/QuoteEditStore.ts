@@ -14,7 +14,6 @@ import { QuoteEditObject } from '../../dto/QuoteEditObject';
 import { IQuoteUpdateParams } from '../../models/quotes/IQuoteUpdateParams';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
-import { HashtagLinkListEditStore } from '../HashtagLinkListEditStore';
 import { WebLinkListEditStore } from '../WebLinkListEditStore';
 import { WorkLinkListEditStore } from '../WorkLinkListEditStore';
 
@@ -26,7 +25,6 @@ export class QuoteEditStore {
 	readonly artist = new BasicEntryLinkStore<IArtistObject>((id) =>
 		artistApi.get({ id: id }),
 	);
-	readonly hashtagLinks: HashtagLinkListEditStore;
 	readonly webLinks: WebLinkListEditStore;
 	readonly workLinks: WorkLinkListEditStore;
 
@@ -38,13 +36,9 @@ export class QuoteEditStore {
 			this.quoteType = quote.quoteType;
 			this.locale = quote.locale;
 			this.artist.loadEntryById(quote.artist.id);
-			this.hashtagLinks = new HashtagLinkListEditStore(
-				quote.hashtagLinks,
-			);
 			this.webLinks = new WebLinkListEditStore(quote.webLinks);
 			this.workLinks = new WorkLinkListEditStore(quote.workLinks);
 		} else {
-			this.hashtagLinks = new HashtagLinkListEditStore([]);
 			this.webLinks = new WebLinkListEditStore([]);
 			this.workLinks = new WorkLinkListEditStore([]);
 		}
@@ -69,7 +63,6 @@ export class QuoteEditStore {
 			quoteType: this.quoteType,
 			locale: this.locale,
 			artistId: this.artist.entry?.id ?? 0,
-			hashtagLinks: this.hashtagLinks.toParams(),
 			webLinks: this.webLinks.toParams(),
 			workLinks: this.workLinks.toParams(),
 		};

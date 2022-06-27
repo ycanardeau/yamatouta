@@ -50,7 +50,7 @@ export class HashtagLinkService {
 
 			hashtag.incrementReferenceCount();
 
-			return entry.createHashtagLink(hashtag, '' /* TODO */);
+			return entry.createHashtagLink(hashtag, newItem.label);
 		};
 
 		const update = async (
@@ -68,6 +68,7 @@ export class HashtagLinkService {
 			);
 
 			oldItem.setRelatedHashtag(hashtag);
+			oldItem.label = newItem.label;
 
 			return true;
 		};

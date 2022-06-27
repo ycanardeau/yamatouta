@@ -15,7 +15,6 @@ class QuoteApi {
 		quoteType,
 		locale,
 		artistId,
-		hashtagLinks,
 		webLinks,
 		workLinks,
 	}: IQuoteUpdateParams): Promise<IQuoteObject> => {
@@ -25,7 +24,6 @@ class QuoteApi {
 			quoteType,
 			locale,
 			artistId,
-			hashtagLinks,
 			webLinks,
 			workLinks,
 		});
@@ -102,7 +100,6 @@ class QuoteApi {
 		quoteType,
 		locale,
 		artistId,
-		hashtagLinks,
 		webLinks,
 		workLinks,
 	}: IQuoteUpdateParams): Promise<IQuoteObject> => {
@@ -112,7 +109,6 @@ class QuoteApi {
 			quoteType,
 			locale,
 			artistId,
-			hashtagLinks,
 			webLinks,
 			workLinks,
 		});
