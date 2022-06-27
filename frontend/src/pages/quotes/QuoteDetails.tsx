@@ -36,10 +36,10 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 
 	const auth = useAuth();
 
-	const quoteText = quote.text.replaceAll('\n', '');
+	const quotePlainText = quote.plainText.replaceAll('\n', '');
 
 	useYamatoutaTitle(
-		`${t('shared.quote')} "${quoteText}" by ${quote.artist.name}`,
+		`${t('shared.quote')} "${quotePlainText}" by ${quote.artist.name}`,
 		ready,
 	);
 
@@ -47,7 +47,7 @@ const Layout = observer(({ store }: LayoutProps): React.ReactElement => {
 		<QuotePage
 			quote={quote}
 			pageHeaderProps={{
-				pageTitle: quoteText,
+				pageTitle: quotePlainText,
 				rightSideItems: [
 					<EuiButton
 						size="s"

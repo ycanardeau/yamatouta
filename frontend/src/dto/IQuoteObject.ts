@@ -10,6 +10,7 @@ export interface IQuoteObject extends IEntryWithEntryType<EntryType.Quote> {
 	id: number;
 	createdAt: string;
 	text: string;
+	plainText: string;
 	quoteType: QuoteType;
 	locale: string;
 	artist: IArtistObject;

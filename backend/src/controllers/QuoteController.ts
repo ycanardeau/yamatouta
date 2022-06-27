@@ -37,10 +37,10 @@ export class QuoteController {
 		);
 
 		// TODO: Use replaceAll.
-		const quoteText = quote.text.replace(/\n/g, '');
+		const quotePlainText = quote.plainText.replace(/\n/g, '');
 
 		return renderReact(response, {
-			title: `${t('shared.quote')} "${quoteText}" by ${
+			title: `${t('shared.quote')} "${quotePlainText}" by ${
 				quote.artist.name
 			}`,
 		});
