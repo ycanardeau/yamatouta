@@ -33,9 +33,6 @@ export const workLinkTypes: Record<
 	EntryType.Quote | EntryType.Translation,
 	LinkType[]
 > = {
-	[EntryType.Quote]: [LinkType.Unspecified, LinkType.Quote_Work_Source],
-	[EntryType.Translation]: [
-		LinkType.Unspecified,
-		LinkType.Translation_Work_Source,
-	],
+	[EntryType.Quote]: [LinkType.Quote_Work_Source],
+	[EntryType.Translation]: [LinkType.Translation_Work_Source],
 };
