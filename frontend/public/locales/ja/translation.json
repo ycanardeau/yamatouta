@@ -72,7 +72,9 @@
 		"loading": "よみこんでいます...",
 		"noItemsFound": "みつかりませんでした",
 		"sortBy": "ならべかえ",
-		"manage": "つかさどり"
+		"manage": "つかさどり",
+		"hashtags": "いげたふだ",
+		"hashtag": "いげたふだ"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
