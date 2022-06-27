@@ -1,9 +1,11 @@
-import { EuiText } from '@elastic/eui';
+import { EuiLink, EuiText } from '@elastic/eui';
 import React from 'react';
 import ReactMarkdown, { uriTransformer } from 'react-markdown';
 import { ElementContent } from 'react-markdown/lib/ast-to-react';
 import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
+
+import { Link } from './Link';
 
 const remarkPlugins = [remarkGfm, remarkBreaks];
 
@@ -25,6 +27,17 @@ const transformLinkUri = (
 	return transformHashtagLinkUri(href) ?? uriTransformer(href);
 };
 
+// Code from: https://github.com/remarkjs/react-markdown/issues/29#issuecomment-231556543.
+const RouterLink = (props: any): React.ReactElement => {
+	return props.href.match(/^(https?:)?\/\//) ? (
+		<EuiLink href={props.href} target="_blank">
+			{props.children}
+		</EuiLink>
+	) : (
+		<Link to={props.href}>{props.children}</Link>
+	);
+};
+
 interface MarkdownProps {
 	children: string;
 }
@@ -36,6 +49,7 @@ export const Markdown = ({ children }: MarkdownProps): React.ReactElement => {
 				children={children}
 				remarkPlugins={remarkPlugins}
 				transformLinkUri={transformLinkUri}
+				components={{ a: RouterLink }}
 			/>
 		</EuiText>
 	);
