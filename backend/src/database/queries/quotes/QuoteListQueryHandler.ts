@@ -36,17 +36,16 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		const knex = this.em
 			.createQueryBuilder(Quote)
 			.getKnex()
-			.join(
-				'quote_search_index',
-				'quotes.id',
-				'quote_search_index.quote_id',
-			)
 			.andWhere('quotes.deleted', false)
 			.andWhere('quotes.hidden', false)
 			.andWhereNot('quotes.quote_type', QuoteType.Word);
 
 		if (params.query) {
-			knex.andWhereRaw(
+			knex.join(
+				'quote_search_index',
+				'quotes.id',
+				'quote_search_index.quote_id',
+			).andWhereRaw(
 				'MATCH(quote_search_index.text) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(params.query, 2),
 			);

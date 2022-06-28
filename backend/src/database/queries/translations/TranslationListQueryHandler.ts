@@ -37,16 +37,15 @@ export class TranslationListQueryHandler
 		const knex = this.em
 			.createQueryBuilder(Translation)
 			.getKnex()
-			.join(
-				'translation_search_index',
-				'translations.id',
-				'translation_search_index.translation_id',
-			)
 			.andWhere('translations.deleted', false)
 			.andWhere('translations.hidden', false);
 
 		if (params.query) {
-			knex.andWhereRaw(
+			knex.join(
+				'translation_search_index',
+				'translations.id',
+				'translation_search_index.translation_id',
+			).andWhereRaw(
 				'MATCH(translation_search_index.headword, translation_search_index.reading, translation_search_index.yamatokotoba) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(params.query, 2),
 			);

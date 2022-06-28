@@ -2,7 +2,10 @@ import { Hashtag } from '../entities/Hashtag';
 import { PermissionContext } from '../services/PermissionContext';
 
 export class HashtagObject {
-	private constructor(readonly name: string) {}
+	private constructor(
+		readonly name: string,
+		readonly referenceCount: number,
+	) {}
 
 	static create(
 		hashtag: Hashtag,
@@ -10,6 +13,6 @@ export class HashtagObject {
 	): HashtagObject {
 		permissionContext.verifyDeletedAndHidden(hashtag);
 
-		return new HashtagObject(hashtag.name);
+		return new HashtagObject(hashtag.name, hashtag.referenceCount);
 	}
 }

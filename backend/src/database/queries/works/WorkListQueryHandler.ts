@@ -34,12 +34,15 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 		const knex = this.em
 			.createQueryBuilder(Work)
 			.getKnex()
-			.join('work_search_index', 'works.id', 'work_search_index.work_id')
 			.andWhere('works.deleted', false)
 			.andWhere('works.hidden', false);
 
 		if (params.query) {
-			knex.andWhereRaw(
+			knex.join(
+				'work_search_index',
+				'works.id',
+				'work_search_index.work_id',
+			).andWhereRaw(
 				'MATCH(work_search_index.name) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(params.query, 2),
 			);

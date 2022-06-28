@@ -34,16 +34,15 @@ export class ArtistListQueryHandler implements IQueryHandler<ArtistListQuery> {
 		const knex = this.em
 			.createQueryBuilder(Artist)
 			.getKnex()
-			.join(
-				'artist_search_index',
-				'artists.id',
-				'artist_search_index.artist_id',
-			)
 			.andWhere('artists.deleted', false)
 			.andWhere('artists.hidden', false);
 
 		if (params.query) {
-			knex.andWhereRaw(
+			knex.join(
+				'artist_search_index',
+				'artists.id',
+				'artist_search_index.artist_id',
+			).andWhereRaw(
 				'MATCH(artist_search_index.name) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(params.query, 2),
 			);

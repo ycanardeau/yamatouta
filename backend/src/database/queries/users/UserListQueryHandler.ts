@@ -34,12 +34,15 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 		const knex = this.em
 			.createQueryBuilder(User)
 			.getKnex()
-			.join('user_search_index', 'users.id', 'user_search_index.user_id')
 			.andWhere('users.deleted', false)
 			.andWhere('users.hidden', false);
 
 		if (params.query) {
-			knex.andWhereRaw(
+			knex.join(
+				'user_search_index',
+				'users.id',
+				'user_search_index.user_id',
+			).andWhereRaw(
 				'MATCH(user_search_index.name) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(params.query, 2),
 			);
