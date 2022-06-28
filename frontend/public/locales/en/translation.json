@@ -24,8 +24,8 @@
 		"loginDialogTitle": "Welcome back!",
 		"username": "Username"
 	},
-	"layout": {
-		"siteDescription": "Yamatouta is an open-source online database for yamato-kotoba and yamato-uta."
+	"meta": {
+		"description": "Yamatouta is an open-source online database for yamato-kotoba and yamato-uta."
 	},
 	"shared": {
 		"artists": "Artists",

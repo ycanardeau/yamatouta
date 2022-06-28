@@ -11,6 +11,7 @@ const assetManifest: {
 
 interface IPageMetadata {
 	title?: string;
+	keywords?: string;
 	description?: string;
 	image?: string;
 }
@@ -23,7 +24,8 @@ export const renderReact = (
 		title: pageMetadata.title
 			? `${pageMetadata.title} - やまとうた`
 			: 'やまとうた',
-		description: pageMetadata.description || t('layout.siteDescription'),
+		keywords: pageMetadata.keywords || t('meta.keywords'),
+		description: pageMetadata.description || t('meta.description'),
 		image: pageMetadata.image,
 		script: assetManifest.files['main.js'],
 		style: assetManifest.files['main.css'],
