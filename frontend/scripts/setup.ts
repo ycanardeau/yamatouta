@@ -21,6 +21,7 @@ const ajv = new Ajv({
 
 const moduleCode = standaloneCode(ajv, {
 	IArtistSearchRouteParams: '#/definitions/IArtistSearchRouteParams',
+	IHashtagSearchRouteParams: '#/definitions/IHashtagSearchRouteParams',
 	IQuoteSearchRouteParams: '#/definitions/IQuoteSearchRouteParams',
 	ITranslationSearchRouteParams:
 		'#/definitions/ITranslationSearchRouteParams',

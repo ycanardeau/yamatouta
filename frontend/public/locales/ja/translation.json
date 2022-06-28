@@ -236,5 +236,9 @@
 		"CreatedDesc": "あたらしい",
 		"UpdatedAsc": "あらためられていない",
 		"UpdatedDesc": "あらためられた"
+	},
+	"hashtags": {
+		"name": "なまえ",
+		"referenceCount": "かず"
 	}
 }

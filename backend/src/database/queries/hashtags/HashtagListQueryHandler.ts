@@ -60,12 +60,14 @@ export class HashtagListQueryHandler
 			case HashtagSortRule.ReferenceCountAsc:
 				return knex
 					.orderBy('hashtags.reference_count', 'asc')
+					.orderBy('hashtags.name', 'asc')
 					.orderBy('hashtags.id', 'asc');
 
 			case HashtagSortRule.ReferenceCountDesc:
 			case undefined:
 				return knex
 					.orderBy('hashtags.reference_count', 'desc')
+					.orderBy('hashtags.name', 'asc')
 					.orderBy('hashtags.id', 'desc');
 		}
 	}

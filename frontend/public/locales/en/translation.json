@@ -258,5 +258,9 @@
 		"CreatedDesc": "Newest",
 		"UpdatedAsc": "Least recently updated",
 		"UpdatedDesc": "Recently updated"
+	},
+	"hashtags": {
+		"name": "Name",
+		"referenceCount": "Count"
 	}
 }

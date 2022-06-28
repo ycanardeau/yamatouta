@@ -55,7 +55,7 @@ const TranslationSearchTableHeader = observer(
 		return (
 			<EuiTableHeader>
 				<EuiTableHeaderCell
-					onSort={store.toggleSortHeadword}
+					onSort={store.toggleSortByHeadword}
 					isSorted={store.isSortedByHeadword}
 					isSortAscending={
 						store.sort === TranslationSortRule.HeadwordAsc
@@ -64,7 +64,7 @@ const TranslationSearchTableHeader = observer(
 					{t('translations.headword')}
 				</EuiTableHeaderCell>
 				<EuiTableHeaderCell
-					onSort={store.toggleSortYamatokotoba}
+					onSort={store.toggleSortByYamatokotoba}
 					isSorted={store.isSortedByYamatokotoba}
 					isSortAscending={
 						store.sort === TranslationSortRule.YamatokotobaAsc
