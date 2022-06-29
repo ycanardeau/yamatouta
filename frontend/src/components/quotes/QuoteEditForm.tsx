@@ -3,9 +3,9 @@ import {
 	EuiButtonEmpty,
 	EuiForm,
 	EuiFormRow,
+	EuiMarkdownEditor,
 	EuiSelect,
 	EuiSpacer,
-	EuiTextArea,
 	useGeneratedHtmlId,
 } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
@@ -50,15 +50,14 @@ export const QuoteEditForm = observer(
 						navigate(EntryUrlMapper.details(quote));
 					}}
 				>
-					<EuiFormRow label={t('quotes.quote')}>
-						<EuiTextArea
-							compressed
-							name="text"
+					<EuiFormRow label={t('quotes.quote')} fullWidth>
+						<EuiMarkdownEditor
+							aria-label={t('quotes.quote')}
 							value={store.text}
-							onChange={(e): void =>
-								store.setText(e.target.value)
-							}
-							rows={5}
+							onChange={(value): void => store.setText(value)}
+							readOnly={store.submitting}
+							initialViewMode="editing"
+							markdownFormatProps={{ textSize: 's' }}
 						/>
 					</EuiFormRow>
 
@@ -66,11 +65,13 @@ export const QuoteEditForm = observer(
 						<EuiSelect
 							compressed
 							name="quoteType"
-							options={Object.values(QuoteType).map((value) => ({
-								value: value,
-								text: t(`quoteTypeNames.${value}`),
-							}))}
-							value={store.quoteType ?? ''}
+							options={[{ value: '', text: '' }].concat(
+								Object.values(QuoteType).map((value) => ({
+									value: value,
+									text: t(`quoteTypeNames.${value}`),
+								})),
+							)}
+							value={store.quoteType}
 							onChange={(e): void =>
 								store.setQuoteType(e.target.value as QuoteType)
 							}
