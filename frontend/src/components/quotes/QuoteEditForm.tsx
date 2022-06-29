@@ -3,7 +3,6 @@ import {
 	EuiButtonEmpty,
 	EuiForm,
 	EuiFormRow,
-	EuiMarkdownEditor,
 	EuiSelect,
 	EuiSpacer,
 	useGeneratedHtmlId,
@@ -21,6 +20,7 @@ import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { workLinkTypes } from '../../models/LinkType';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
+import { MarkdownEditor } from '../MarkdownEditor';
 import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface QuoteEditFormProps {
@@ -51,7 +51,7 @@ export const QuoteEditForm = observer(
 					}}
 				>
 					<EuiFormRow label={t('quotes.quote')} fullWidth>
-						<EuiMarkdownEditor
+						<MarkdownEditor
 							aria-label={t('quotes.quote')}
 							value={store.text}
 							onChange={(value): void => store.setText(value)}

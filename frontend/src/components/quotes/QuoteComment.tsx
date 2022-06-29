@@ -174,7 +174,7 @@ export const QuoteComment = ({
 			timelineIcon={<Avatar size="l" name={quote.artist.name} />}
 			actions={<QuotePopover store={store} quote={quote} />}
 		>
-			<Markdown>{quote.text}</Markdown>
+			<Markdown textSize="s">{quote.text}</Markdown>
 		</EuiComment>
 	);
 };
