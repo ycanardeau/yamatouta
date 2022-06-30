@@ -10,7 +10,7 @@ const HashtagRoutes = (): React.ReactElement => {
 	return (
 		<Routes>
 			<Route path="" element={<HashtagIndex />} />
-			<Route path=":name" element={<HashtagDetails />} />
+			<Route path=":name/*" element={<HashtagDetails />} />
 		</Routes>
 	);
 };
