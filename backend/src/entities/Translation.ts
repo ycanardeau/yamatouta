@@ -15,7 +15,6 @@ import {
 
 import { EntryType } from '../models/EntryType';
 import { IEntryWithDeletedAndHidden } from '../models/IEntryWithDeletedAndHidden';
-import { IEntryWithHashtagLinks } from '../models/IEntryWithHashtagLinks';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
@@ -27,8 +26,6 @@ import { TranslationSnapshot } from '../models/snapshots/TranslationSnapshot';
 import { WordCategory } from '../models/translations/WordCategory';
 import { NgramConverter } from '../services/NgramConverter';
 import { Commit } from './Commit';
-import { Hashtag } from './Hashtag';
-import { TranslationHashtagLink } from './HashtagLink';
 import { PartialDate } from './PartialDate';
 import { TranslationRevision } from './Revision';
 import { TranslatedString } from './TranslatedString';
@@ -49,8 +46,7 @@ export class Translation
 			TranslationRevision
 		>,
 		IEntryWithWebLinks<TranslationWebLink>,
-		IEntryWithWorkLinks<EntryType.Translation, TranslationWorkLink>,
-		IEntryWithHashtagLinks<TranslationHashtagLink>
+		IEntryWithWorkLinks<EntryType.Translation, TranslationWorkLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -97,12 +93,6 @@ export class Translation
 
 	@OneToMany(() => TranslationWorkLink, (workLink) => workLink.translation)
 	workLinks = new Collection<TranslationWorkLink>(this);
-
-	@OneToMany(
-		() => TranslationHashtagLink,
-		(hashtagLink) => hashtagLink.translation,
-	)
-	hashtagLinks = new Collection<TranslationHashtagLink>(this);
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
@@ -202,13 +192,6 @@ export class Translation
 			endDate,
 			ended,
 		);
-	}
-
-	createHashtagLink(
-		relatedHashtag: Hashtag,
-		label: string,
-	): TranslationHashtagLink {
-		return new TranslationHashtagLink(this, relatedHashtag, label);
 	}
 }
 

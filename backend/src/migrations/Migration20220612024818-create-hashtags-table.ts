@@ -57,9 +57,60 @@ export class Migration20220612024818 extends Migration {
 		this.addSql('alter table `quotes` add `plain_text` text not null;');
 
 		this.addSql('update quotes set plain_text = text;');
+
+		this.addSql(
+			'alter table `hashtag_links` drop foreign key `hashtag_links_artist_id_foreign`;',
+		);
+		this.addSql(
+			'alter table `hashtag_links` drop foreign key `hashtag_links_translation_id_foreign`;',
+		);
+		this.addSql(
+			'alter table `hashtag_links` drop foreign key `hashtag_links_work_id_foreign`;',
+		);
+
+		this.addSql(
+			"alter table `hashtag_links` modify `entry_type` enum('Quote') not null;",
+		);
+		this.addSql(
+			'alter table `hashtag_links` drop index `hashtag_links_artist_id_index`;',
+		);
+		this.addSql(
+			'alter table `hashtag_links` drop index `hashtag_links_translation_id_index`;',
+		);
+		this.addSql(
+			'alter table `hashtag_links` drop index `hashtag_links_work_id_index`;',
+		);
+		this.addSql('alter table `hashtag_links` drop `artist_id`;');
+		this.addSql('alter table `hashtag_links` drop `translation_id`;');
+		this.addSql('alter table `hashtag_links` drop `work_id`;');
 	}
 
 	async down(): Promise<void> {
+		this.addSql(
+			'alter table `hashtag_links` add `artist_id` int unsigned null, add `translation_id` int unsigned null, add `work_id` int unsigned null;',
+		);
+		this.addSql(
+			"alter table `hashtag_links` modify `entry_type` enum('Artist', 'Quote', 'Translation', 'Work') not null;",
+		);
+		this.addSql(
+			'alter table `hashtag_links` add constraint `hashtag_links_artist_id_foreign` foreign key (`artist_id`) references `artists` (`id`) on update cascade on delete set null;',
+		);
+		this.addSql(
+			'alter table `hashtag_links` add constraint `hashtag_links_translation_id_foreign` foreign key (`translation_id`) references `translations` (`id`) on update cascade on delete set null;',
+		);
+		this.addSql(
+			'alter table `hashtag_links` add constraint `hashtag_links_work_id_foreign` foreign key (`work_id`) references `works` (`id`) on update cascade on delete set null;',
+		);
+		this.addSql(
+			'alter table `hashtag_links` add index `hashtag_links_artist_id_index`(`artist_id`);',
+		);
+		this.addSql(
+			'alter table `hashtag_links` add index `hashtag_links_translation_id_index`(`translation_id`);',
+		);
+		this.addSql(
+			'alter table `hashtag_links` add index `hashtag_links_work_id_index`(`work_id`);',
+		);
+
 		this.addSql(
 			'alter table `hashtag_links` drop foreign key `hashtag_links_related_hashtag_id_foreign`;',
 		);

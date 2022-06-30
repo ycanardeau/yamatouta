@@ -1,6 +1,5 @@
 import Joi from 'joi';
 
-import { HashtagLinkUpdateParams } from '../HashtagLinkUpdateParams';
 import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
 import { WorkLinkUpdateParams } from '../WorkLinkUpdateParams';
 import { WordCategory } from './WordCategory';
@@ -13,7 +12,6 @@ export class TranslationUpdateParams {
 		readonly reading: string,
 		readonly yamatokotoba: string,
 		readonly category: WordCategory,
-		readonly hashtagLinks: HashtagLinkUpdateParams[],
 		readonly webLinks: WebLinkUpdateParams[],
 		readonly workLinks: WorkLinkUpdateParams[],
 	) {}
@@ -36,9 +34,6 @@ export class TranslationUpdateParams {
 			.required()
 			.trim()
 			.valid(...Object.values(WordCategory)),
-		hashtagLinks: Joi.array()
-			.required()
-			.items(HashtagLinkUpdateParams.schema),
 		webLinks: Joi.array().required().items(WebLinkUpdateParams.schema),
 		workLinks: Joi.array().required().items(WorkLinkUpdateParams.schema),
 	});

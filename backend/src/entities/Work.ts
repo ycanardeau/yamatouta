@@ -13,7 +13,6 @@ import {
 
 import { EntryType } from '../models/EntryType';
 import { IEntryWithArtistLinks } from '../models/IEntryWithArtistLinks';
-import { IEntryWithHashtagLinks } from '../models/IEntryWithHashtagLinks';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
@@ -26,8 +25,6 @@ import { NgramConverter } from '../services/NgramConverter';
 import { Artist } from './Artist';
 import { WorkArtistLink } from './ArtistLink';
 import { Commit } from './Commit';
-import { Hashtag } from './Hashtag';
-import { WorkHashtagLink } from './HashtagLink';
 import { PartialDate } from './PartialDate';
 import { WorkRevision } from './Revision';
 import { User } from './User';
@@ -41,8 +38,7 @@ export class Work
 		IEntryWithSearchIndex<WorkSearchIndex>,
 		IEntryWithRevisions<Work, WorkSnapshot, WorkRevision>,
 		IEntryWithWebLinks<WorkWebLink>,
-		IEntryWithArtistLinks<EntryType.Work, WorkArtistLink>,
-		IEntryWithHashtagLinks<WorkHashtagLink>
+		IEntryWithArtistLinks<EntryType.Work, WorkArtistLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -94,9 +90,6 @@ export class Work
 
 	@OneToOne(() => WorkSearchIndex, (searchIndex) => searchIndex.work)
 	searchIndex: IdentifiedReference<WorkSearchIndex>;
-
-	@OneToMany(() => WorkHashtagLink, (hashtagLink) => hashtagLink.work)
-	hashtagLinks = new Collection<WorkHashtagLink>(this);
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
@@ -157,10 +150,6 @@ export class Work
 			endDate,
 			ended,
 		);
-	}
-
-	createHashtagLink(relatedHashtag: Hashtag, label: string): WorkHashtagLink {
-		return new WorkHashtagLink(this, relatedHashtag, label);
 	}
 }
 

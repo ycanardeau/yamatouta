@@ -1,9 +1,7 @@
 import { Work } from '../../entities/Work';
 import { IContentEquatable } from '../IContentEquatable';
 import { WorkType } from '../works/WorkType';
-import { HashtagLinkSnapshot } from './HashtagLinkSnapshot';
 import { ISnapshotWithArtistLinks } from './ISnapshotWithArtistLinks';
-import { ISnapshotWithHashtagLinks } from './ISnapshotWithHashtagLinks';
 import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
 import { ArtistLinkSnapshot } from './LinkSnapshot';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
@@ -14,8 +12,7 @@ export class WorkSnapshot
 	implements
 		IContentEquatable<IWorkSnapshot>,
 		ISnapshotWithWebLinks,
-		ISnapshotWithArtistLinks,
-		ISnapshotWithHashtagLinks
+		ISnapshotWithArtistLinks
 {
 	private constructor(
 		readonly name: string,
@@ -23,7 +20,6 @@ export class WorkSnapshot
 		readonly workType: WorkType,
 		readonly webLinks: WebLinkSnapshot[],
 		readonly artistLinks: ArtistLinkSnapshot[],
-		readonly hashtagLinks: HashtagLinkSnapshot[],
 	) {}
 
 	static create(work: Work): WorkSnapshot {
@@ -35,17 +31,12 @@ export class WorkSnapshot
 			.getItems()
 			.map((artistLink) => ArtistLinkSnapshot.create(artistLink));
 
-		const hashtagLinks = work.hashtagLinks
-			.getItems()
-			.map((hashtagLink) => HashtagLinkSnapshot.create(hashtagLink));
-
 		return new WorkSnapshot(
 			work.name,
 			work.sortName,
 			work.workType,
 			webLinks,
 			artistLinks,
-			hashtagLinks,
 		);
 	}
 

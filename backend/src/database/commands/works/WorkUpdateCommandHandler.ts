@@ -12,7 +12,6 @@ import { RevisionEvent } from '../../../models/RevisionEvent';
 import { WorkOptionalField } from '../../../models/works/WorkOptionalField';
 import { WorkUpdateParams } from '../../../models/works/WorkUpdateParams';
 import { ArtistLinkService } from '../../../services/ArtistLinkService';
-import { HashtagLinkService } from '../../../services/HashtagLinkService';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
@@ -36,15 +35,12 @@ export class WorkUpdateCommandHandler
 		'webLinks.address.host',
 		'artistLinks',
 		'artistLinks.relatedArtist',
-		'hashtagLinks',
-		'hashtagLinks.relatedHashtag',
 	] as const;
 
 	constructor(
 		private readonly em: EntityManager,
 		@InjectRepository(Work)
 		private readonly workRepo: EntityRepository<Work>,
-		private readonly hashtagLinkService: HashtagLinkService,
 		private readonly webLinkService: WebLinkService,
 		private readonly artistLinkService: ArtistLinkService,
 		private readonly revisionService: RevisionService,
@@ -89,14 +85,6 @@ export class WorkUpdateCommandHandler
 					work.workType = params.workType;
 
 					work.updateSearchIndex(this.ngramConverter);
-
-					await this.hashtagLinkService.sync(
-						em,
-						work,
-						params.hashtagLinks,
-						permissionContext,
-						actor,
-					);
 
 					await this.webLinkService.sync(
 						em,

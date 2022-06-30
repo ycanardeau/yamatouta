@@ -1,24 +1,18 @@
 import { Artist } from '../../entities/Artist';
 import { IContentEquatable } from '../IContentEquatable';
 import { ArtistType } from '../artists/ArtistType';
-import { HashtagLinkSnapshot } from './HashtagLinkSnapshot';
-import { ISnapshotWithHashtagLinks } from './ISnapshotWithHashtagLinks';
 import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 
 export type IArtistSnapshot = Omit<ArtistSnapshot, 'contentEquals'>;
 
 export class ArtistSnapshot
-	implements
-		IContentEquatable<IArtistSnapshot>,
-		ISnapshotWithWebLinks,
-		ISnapshotWithHashtagLinks
+	implements IContentEquatable<IArtistSnapshot>, ISnapshotWithWebLinks
 {
 	constructor(
 		readonly name: string,
 		readonly artistType: ArtistType,
 		readonly webLinks: WebLinkSnapshot[],
-		readonly hashtagLinks: HashtagLinkSnapshot[],
 	) {}
 
 	static create(artist: Artist): ArtistSnapshot {
@@ -26,16 +20,7 @@ export class ArtistSnapshot
 			.getItems()
 			.map((webLink) => WebLinkSnapshot.create(webLink));
 
-		const hashtagLinks = artist.hashtagLinks
-			.getItems()
-			.map((hashtagLink) => HashtagLinkSnapshot.create(hashtagLink));
-
-		return new ArtistSnapshot(
-			artist.name,
-			artist.artistType,
-			webLinks,
-			hashtagLinks,
-		);
+		return new ArtistSnapshot(artist.name, artist.artistType, webLinks);
 	}
 
 	contentEquals(other?: IArtistSnapshot): boolean {

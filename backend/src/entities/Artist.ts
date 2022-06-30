@@ -12,7 +12,6 @@ import {
 } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
-import { IEntryWithHashtagLinks } from '../models/IEntryWithHashtagLinks';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
@@ -23,8 +22,6 @@ import { ArtistSnapshot } from '../models/snapshots/ArtistSnapshot';
 import { NgramConverter } from '../services/NgramConverter';
 import { WorkArtistLink } from './ArtistLink';
 import { Commit } from './Commit';
-import { Hashtag } from './Hashtag';
-import { ArtistHashtagLink } from './HashtagLink';
 import { ArtistRevision } from './Revision';
 import { User } from './User';
 import { WebAddress } from './WebAddress';
@@ -35,8 +32,7 @@ export class Artist
 	implements
 		IEntryWithSearchIndex<ArtistSearchIndex>,
 		IEntryWithRevisions<Artist, ArtistSnapshot, ArtistRevision>,
-		IEntryWithWebLinks<ArtistWebLink>,
-		IEntryWithHashtagLinks<ArtistHashtagLink>
+		IEntryWithWebLinks<ArtistWebLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -76,9 +72,6 @@ export class Artist
 
 	@OneToOne(() => ArtistSearchIndex, (searchIndex) => searchIndex.artist)
 	searchIndex: IdentifiedReference<ArtistSearchIndex>;
-
-	@OneToMany(() => ArtistHashtagLink, (hashtagLink) => hashtagLink.artist)
-	hashtagLinks = new Collection<ArtistHashtagLink>(this);
 
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
@@ -122,13 +115,6 @@ export class Artist
 		category: WebLinkCategory,
 	): ArtistWebLink {
 		return new ArtistWebLink(this, address, title, category);
-	}
-
-	createHashtagLink(
-		relatedHashtag: Hashtag,
-		label: string,
-	): ArtistHashtagLink {
-		return new ArtistHashtagLink(this, relatedHashtag, label);
 	}
 }
 

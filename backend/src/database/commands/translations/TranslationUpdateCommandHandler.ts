@@ -11,7 +11,6 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { TranslationOptionalField } from '../../../models/translations/TranslationOptionalField';
 import { TranslationUpdateParams } from '../../../models/translations/TranslationUpdateParams';
-import { HashtagLinkService } from '../../../services/HashtagLinkService';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
@@ -36,8 +35,6 @@ export class TranslationUpdateCommandHandler
 		'webLinks.address.host',
 		'workLinks',
 		'workLinks.relatedWork',
-		'hashtagLinks',
-		'hashtagLinks.relatedHashtag',
 	] as const;
 
 	constructor(
@@ -45,7 +42,6 @@ export class TranslationUpdateCommandHandler
 		private readonly ngramConverter: NgramConverter,
 		@InjectRepository(Translation)
 		private readonly translationRepo: EntityRepository<Translation>,
-		private readonly hashtagLinkService: HashtagLinkService,
 		private readonly webLinkService: WebLinkService,
 		private readonly workLinkService: WorkLinkService,
 		private readonly revisionService: RevisionService,
@@ -94,14 +90,6 @@ export class TranslationUpdateCommandHandler
 					translation.category = params.category;
 
 					translation.updateSearchIndex(this.ngramConverter);
-
-					await this.hashtagLinkService.sync(
-						em,
-						translation,
-						params.hashtagLinks,
-						permissionContext,
-						actor,
-					);
 
 					await this.webLinkService.sync(
 						em,

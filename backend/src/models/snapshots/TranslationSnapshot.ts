@@ -1,8 +1,6 @@
 import { Translation } from '../../entities/Translation';
 import { IContentEquatable } from '../IContentEquatable';
 import { WordCategory } from '../translations/WordCategory';
-import { HashtagLinkSnapshot } from './HashtagLinkSnapshot';
-import { ISnapshotWithHashtagLinks } from './ISnapshotWithHashtagLinks';
 import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
 import { ISnapshotWithWorkLinks } from './ISnapshotWithWorkLinks';
 import { WorkLinkSnapshot } from './LinkSnapshot';
@@ -14,8 +12,7 @@ export class TranslationSnapshot
 	implements
 		IContentEquatable<ITranslationSnapshot>,
 		ISnapshotWithWebLinks,
-		ISnapshotWithWorkLinks,
-		ISnapshotWithHashtagLinks
+		ISnapshotWithWorkLinks
 {
 	private constructor(
 		readonly headword: string,
@@ -26,7 +23,6 @@ export class TranslationSnapshot
 		readonly inishienomanabi_tags: string[],
 		readonly webLinks: WebLinkSnapshot[],
 		readonly workLinks: WorkLinkSnapshot[],
-		readonly hashtagLinks: HashtagLinkSnapshot[],
 	) {}
 
 	static create(translation: Translation): TranslationSnapshot {
@@ -38,10 +34,6 @@ export class TranslationSnapshot
 			.getItems()
 			.map((workLink) => WorkLinkSnapshot.create(workLink));
 
-		const hashtagLinks = translation.hashtagLinks
-			.getItems()
-			.map((hashtagLink) => HashtagLinkSnapshot.create(hashtagLink));
-
 		return new TranslationSnapshot(
 			translation.headword,
 			translation.locale,
@@ -51,7 +43,6 @@ export class TranslationSnapshot
 			translation.inishienomanabi_tags,
 			webLinks,
 			workLinks,
-			hashtagLinks,
 		);
 	}
 

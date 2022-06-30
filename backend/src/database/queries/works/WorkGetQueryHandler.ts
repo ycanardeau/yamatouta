@@ -37,8 +37,6 @@ export class WorkGetQueryHandler implements IQueryHandler<WorkGetQuery> {
 			{
 				// OPTIMIZE
 				populate: [
-					'hashtagLinks',
-					'hashtagLinks.relatedHashtag',
 					'webLinks',
 					'webLinks.address',
 					'artistLinks',

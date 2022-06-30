@@ -36,12 +36,7 @@ export class ArtistGetQueryHandler implements IQueryHandler<ArtistGetQuery> {
 			},
 			{
 				// OPTIMIZE
-				populate: [
-					'hashtagLinks',
-					'hashtagLinks.relatedHashtag',
-					'webLinks',
-					'webLinks.address',
-				],
+				populate: ['webLinks', 'webLinks.address'],
 			},
 		);
 

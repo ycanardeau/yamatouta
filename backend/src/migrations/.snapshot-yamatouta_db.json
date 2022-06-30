@@ -3371,48 +3371,18 @@
         },
         "entry_type": {
           "name": "entry_type",
-          "type": "enum('Artist', 'Quote', 'Translation', 'Work')",
+          "type": "enum('Quote')",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "enumItems": [
-            "Artist",
-            "Quote",
-            "Translation",
-            "Work"
+            "Quote"
           ],
           "mappedType": "enum"
         },
-        "artist_id": {
-          "name": "artist_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
-        },
         "quote_id": {
           "name": "quote_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
-        },
-        "translation_id": {
-          "name": "translation_id",
-          "type": "int",
-          "unsigned": true,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "mappedType": "integer"
-        },
-        "work_id": {
-          "name": "work_id",
           "type": "int",
           "unsigned": true,
           "autoincrement": false,
@@ -3443,37 +3413,10 @@
         },
         {
           "columnNames": [
-            "artist_id"
-          ],
-          "composite": false,
-          "keyName": "hashtag_links_artist_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
             "quote_id"
           ],
           "composite": false,
           "keyName": "hashtag_links_quote_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "translation_id"
-          ],
-          "composite": false,
-          "keyName": "hashtag_links_translation_id_index",
-          "primary": false,
-          "unique": false
-        },
-        {
-          "columnNames": [
-            "work_id"
-          ],
-          "composite": false,
-          "keyName": "hashtag_links_work_id_index",
           "primary": false,
           "unique": false
         },
@@ -3501,19 +3444,6 @@
           "referencedTableName": "hashtags",
           "updateRule": "cascade"
         },
-        "hashtag_links_artist_id_foreign": {
-          "constraintName": "hashtag_links_artist_id_foreign",
-          "columnNames": [
-            "artist_id"
-          ],
-          "localTableName": "hashtag_links",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "artists",
-          "deleteRule": "set null",
-          "updateRule": "cascade"
-        },
         "hashtag_links_quote_id_foreign": {
           "constraintName": "hashtag_links_quote_id_foreign",
           "columnNames": [
@@ -3524,32 +3454,6 @@
             "id"
           ],
           "referencedTableName": "quotes",
-          "deleteRule": "set null",
-          "updateRule": "cascade"
-        },
-        "hashtag_links_translation_id_foreign": {
-          "constraintName": "hashtag_links_translation_id_foreign",
-          "columnNames": [
-            "translation_id"
-          ],
-          "localTableName": "hashtag_links",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "translations",
-          "deleteRule": "set null",
-          "updateRule": "cascade"
-        },
-        "hashtag_links_work_id_foreign": {
-          "constraintName": "hashtag_links_work_id_foreign",
-          "columnNames": [
-            "work_id"
-          ],
-          "localTableName": "hashtag_links",
-          "referencedColumnNames": [
-            "id"
-          ],
-          "referencedTableName": "works",
           "deleteRule": "set null",
           "updateRule": "cascade"
         }

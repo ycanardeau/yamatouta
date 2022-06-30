@@ -11,7 +11,6 @@ import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { ArtistOptionalField } from '../../../models/artists/ArtistOptionalField';
 import { ArtistUpdateParams } from '../../../models/artists/ArtistUpdateParams';
-import { HashtagLinkService } from '../../../services/HashtagLinkService';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
@@ -33,15 +32,12 @@ export class ArtistUpdateCommandHandler
 		'webLinks',
 		'webLinks.address',
 		'webLinks.address.host',
-		'hashtagLinks',
-		'hashtagLinks.relatedHashtag',
 	] as const;
 
 	constructor(
 		private readonly em: EntityManager,
 		@InjectRepository(Artist)
 		private readonly artistRepo: EntityRepository<Artist>,
-		private readonly hashtagLinkService: HashtagLinkService,
 		private readonly webLinkService: WebLinkService,
 		private readonly revisionService: RevisionService,
 		private readonly ngramConverter: NgramConverter,
@@ -85,14 +81,6 @@ export class ArtistUpdateCommandHandler
 					artist.artistType = params.artistType;
 
 					artist.updateSearchIndex(this.ngramConverter);
-
-					await this.hashtagLinkService.sync(
-						em,
-						artist,
-						params.hashtagLinks,
-						permissionContext,
-						actor,
-					);
 
 					await this.webLinkService.sync(
 						em,

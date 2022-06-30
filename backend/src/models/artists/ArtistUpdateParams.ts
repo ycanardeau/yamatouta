@@ -1,6 +1,5 @@
 import Joi from 'joi';
 
-import { HashtagLinkUpdateParams } from '../HashtagLinkUpdateParams';
 import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
 import { ArtistType } from './ArtistType';
 
@@ -9,7 +8,6 @@ export class ArtistUpdateParams {
 		readonly id: number,
 		readonly name: string,
 		readonly artistType: ArtistType,
-		readonly hashtagLinks: HashtagLinkUpdateParams[],
 		readonly webLinks: WebLinkUpdateParams[],
 	) {}
 
@@ -20,9 +18,6 @@ export class ArtistUpdateParams {
 			.required()
 			.trim()
 			.valid(...Object.values(ArtistType)),
-		hashtagLinks: Joi.array()
-			.required()
-			.items(HashtagLinkUpdateParams.schema),
 		webLinks: Joi.array().required().items(WebLinkUpdateParams.schema),
 	});
 }
