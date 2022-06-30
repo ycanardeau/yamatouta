@@ -56,6 +56,7 @@ class QuoteApi {
 		quoteType,
 		artistId,
 		workId,
+		hashtags,
 	}: {
 		pagination: IPaginationParams;
 		sort?: QuoteSortRule;
@@ -63,6 +64,7 @@ class QuoteApi {
 		quoteType?: QuoteType;
 		artistId?: number;
 		workId?: number;
+		hashtags: string[];
 	}): Promise<ISearchResultObject<IQuoteObject>> => {
 		const response = await axios.get<ISearchResultObject<IQuoteObject>>(
 			'/quotes/list',
@@ -74,6 +76,7 @@ class QuoteApi {
 					quoteType,
 					artistId,
 					workId,
+					hashtags,
 				},
 			},
 		);

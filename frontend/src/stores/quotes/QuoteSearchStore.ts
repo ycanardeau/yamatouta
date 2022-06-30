@@ -25,6 +25,7 @@ export class QuoteSearchStore
 	@observable quoteType: QuoteType | '' = '';
 	@observable artistId?: number;
 	@observable workId?: number;
+	@observable hashtags: string[] = [];
 
 	constructor() {
 		makeObservable(this);
@@ -69,6 +70,7 @@ export class QuoteSearchStore
 				quoteType: this.quoteType ? this.quoteType : undefined,
 				artistId: this.artistId,
 				workId: this.workId,
+				hashtags: this.hashtags,
 			});
 
 			runInAction(() => {

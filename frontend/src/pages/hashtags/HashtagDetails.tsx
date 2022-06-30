@@ -2,7 +2,7 @@ import { EuiIcon } from '@elastic/eui';
 import { InfoRegular, MusicNote2Regular } from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { HashtagPage } from '../../components/hashtags/HashtagPage';
 import { useHashtagDetails } from '../../components/hashtags/useHashtagDetails';
@@ -10,6 +10,7 @@ import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { HashtagDetailsObject } from '../../dto/HashtagDetailsObject';
 import { IHashtagObject } from '../../dto/IHashtagObject';
 import { HashtagDetailsStore } from '../../stores/hashtags/HashtagDetailsStore';
+import HashtagQuotes from './HashtagQuotes';
 
 interface LayoutProps {
 	store: HashtagDetailsStore;
@@ -61,21 +62,30 @@ const Layout = ({ store }: LayoutProps): React.ReactElement => {
 					},
 				],
 			}}
-		></HashtagPage>
+		>
+			<Routes>
+				<Route path="" element={<></>} />
+				<Route
+					path="quotes"
+					element={<HashtagQuotes hashtagDetailsStore={store} />}
+				/>
+			</Routes>
+		</HashtagPage>
 	);
 };
 
 const HashtagDetails = (): React.ReactElement | null => {
 	const [store] = useHashtagDetails(
-		React.useCallback(
-			(hashtag) =>
-				new HashtagDetailsStore(
-					HashtagDetailsObject.create(
-						hashtag as Required<IHashtagObject>,
-					),
+		React.useCallback((hashtag) => {
+			const hashtagDetailsStore = new HashtagDetailsStore(
+				HashtagDetailsObject.create(
+					hashtag as Required<IHashtagObject>,
 				),
-			[],
-		),
+			);
+			hashtagDetailsStore.quoteSearchStore.hashtags = [hashtag.name];
+
+			return hashtagDetailsStore;
+		}, []),
 	);
 
 	return store ? <Layout store={store} /> : null;
