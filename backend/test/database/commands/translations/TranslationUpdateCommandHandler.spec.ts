@@ -75,7 +75,6 @@ describe('TranslationUpdateCommandHandler', () => {
 			reading: 'わご',
 			yamatokotoba: 'やまとことのは',
 			category: WordCategory.Noun,
-			hashtagLinks: [],
 			webLinks: [],
 			workLinks: [],
 		};
@@ -206,7 +205,6 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
-					hashtagLinks: [],
 				},
 			});
 		});
@@ -229,7 +227,6 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
-					hashtagLinks: [],
 				},
 			});
 		});
@@ -251,7 +248,6 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
-					hashtagLinks: [],
 				},
 			});
 		});
@@ -272,7 +268,6 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
-					hashtagLinks: [],
 				},
 			});
 		});
@@ -290,7 +285,6 @@ describe('TranslationUpdateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
-					hashtagLinks: [],
 				},
 			});
 		});

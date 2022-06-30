@@ -68,7 +68,6 @@ describe('WorkUpdateCommandHandler', () => {
 			id: work.id,
 			name: 'うた',
 			workType: WorkType.Song,
-			hashtagLinks: [],
 			webLinks: [],
 			artistLinks: [],
 		};
@@ -176,7 +175,6 @@ describe('WorkUpdateCommandHandler', () => {
 					workType: work.workType,
 					webLinks: [],
 					artistLinks: [],
-					hashtagLinks: [],
 				},
 			});
 		});
@@ -191,7 +189,6 @@ describe('WorkUpdateCommandHandler', () => {
 					workType: defaultParams.workType,
 					webLinks: [],
 					artistLinks: [],
-					hashtagLinks: [],
 				},
 			});
 		});

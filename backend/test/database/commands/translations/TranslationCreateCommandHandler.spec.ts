@@ -65,7 +65,6 @@ describe('TranslationCreateCommandHandler', () => {
 			reading: 'やまとことば',
 			yamatokotoba: 'やまとことのは',
 			category: WordCategory.Noun,
-			hashtagLinks: [],
 			webLinks: [],
 			workLinks: [],
 		};
@@ -159,7 +158,6 @@ describe('TranslationCreateCommandHandler', () => {
 					inishienomanabi_tags: [],
 					webLinks: [],
 					workLinks: [],
-					hashtagLinks: [],
 				},
 			});
 		});
