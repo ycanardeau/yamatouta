@@ -13,7 +13,7 @@ export class Migration20220612024818 extends Migration {
 		);
 
 		this.addSql(
-			"create table `hashtag_links` (`id` int unsigned not null auto_increment primary key, `created_at` datetime not null, `related_hashtag_id` int unsigned not null, `label` varchar(100) not null, `entry_type` enum('Artist', 'Quote', 'Translation', 'Work') not null, `artist_id` int unsigned null, `quote_id` int unsigned null, `translation_id` int unsigned null, `work_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
+			"create table `hashtag_links` (`id` int unsigned not null auto_increment primary key, `created_at` datetime not null, `related_hashtag_id` int unsigned not null, `label` varchar(100) not null, `entry_type` enum('Quote') not null, `quote_id` int unsigned null) default character set utf8mb4 engine = InnoDB;",
 		);
 		this.addSql(
 			'alter table `hashtag_links` add index `hashtag_links_related_hashtag_id_index`(`related_hashtag_id`);',
@@ -22,16 +22,7 @@ export class Migration20220612024818 extends Migration {
 			'alter table `hashtag_links` add index `hashtag_links_entry_type_index`(`entry_type`);',
 		);
 		this.addSql(
-			'alter table `hashtag_links` add index `hashtag_links_artist_id_index`(`artist_id`);',
-		);
-		this.addSql(
 			'alter table `hashtag_links` add index `hashtag_links_quote_id_index`(`quote_id`);',
-		);
-		this.addSql(
-			'alter table `hashtag_links` add index `hashtag_links_translation_id_index`(`translation_id`);',
-		);
-		this.addSql(
-			'alter table `hashtag_links` add index `hashtag_links_work_id_index`(`work_id`);',
 		);
 
 		this.addSql(
@@ -42,75 +33,13 @@ export class Migration20220612024818 extends Migration {
 			'alter table `hashtag_links` add constraint `hashtag_links_related_hashtag_id_foreign` foreign key (`related_hashtag_id`) references `hashtags` (`id`) on update cascade;',
 		);
 		this.addSql(
-			'alter table `hashtag_links` add constraint `hashtag_links_artist_id_foreign` foreign key (`artist_id`) references `artists` (`id`) on update cascade on delete set null;',
-		);
-		this.addSql(
 			'alter table `hashtag_links` add constraint `hashtag_links_quote_id_foreign` foreign key (`quote_id`) references `quotes` (`id`) on update cascade on delete set null;',
-		);
-		this.addSql(
-			'alter table `hashtag_links` add constraint `hashtag_links_translation_id_foreign` foreign key (`translation_id`) references `translations` (`id`) on update cascade on delete set null;',
-		);
-		this.addSql(
-			'alter table `hashtag_links` add constraint `hashtag_links_work_id_foreign` foreign key (`work_id`) references `works` (`id`) on update cascade on delete set null;',
 		);
 
 		this.addSql('alter table `quotes` add `plain_text` text not null;');
-
-		this.addSql('update quotes set plain_text = text;');
-
-		this.addSql(
-			'alter table `hashtag_links` drop foreign key `hashtag_links_artist_id_foreign`;',
-		);
-		this.addSql(
-			'alter table `hashtag_links` drop foreign key `hashtag_links_translation_id_foreign`;',
-		);
-		this.addSql(
-			'alter table `hashtag_links` drop foreign key `hashtag_links_work_id_foreign`;',
-		);
-
-		this.addSql(
-			"alter table `hashtag_links` modify `entry_type` enum('Quote') not null;",
-		);
-		this.addSql(
-			'alter table `hashtag_links` drop index `hashtag_links_artist_id_index`;',
-		);
-		this.addSql(
-			'alter table `hashtag_links` drop index `hashtag_links_translation_id_index`;',
-		);
-		this.addSql(
-			'alter table `hashtag_links` drop index `hashtag_links_work_id_index`;',
-		);
-		this.addSql('alter table `hashtag_links` drop `artist_id`;');
-		this.addSql('alter table `hashtag_links` drop `translation_id`;');
-		this.addSql('alter table `hashtag_links` drop `work_id`;');
 	}
 
 	async down(): Promise<void> {
-		this.addSql(
-			'alter table `hashtag_links` add `artist_id` int unsigned null, add `translation_id` int unsigned null, add `work_id` int unsigned null;',
-		);
-		this.addSql(
-			"alter table `hashtag_links` modify `entry_type` enum('Artist', 'Quote', 'Translation', 'Work') not null;",
-		);
-		this.addSql(
-			'alter table `hashtag_links` add constraint `hashtag_links_artist_id_foreign` foreign key (`artist_id`) references `artists` (`id`) on update cascade on delete set null;',
-		);
-		this.addSql(
-			'alter table `hashtag_links` add constraint `hashtag_links_translation_id_foreign` foreign key (`translation_id`) references `translations` (`id`) on update cascade on delete set null;',
-		);
-		this.addSql(
-			'alter table `hashtag_links` add constraint `hashtag_links_work_id_foreign` foreign key (`work_id`) references `works` (`id`) on update cascade on delete set null;',
-		);
-		this.addSql(
-			'alter table `hashtag_links` add index `hashtag_links_artist_id_index`(`artist_id`);',
-		);
-		this.addSql(
-			'alter table `hashtag_links` add index `hashtag_links_translation_id_index`(`translation_id`);',
-		);
-		this.addSql(
-			'alter table `hashtag_links` add index `hashtag_links_work_id_index`(`work_id`);',
-		);
-
 		this.addSql(
 			'alter table `hashtag_links` drop foreign key `hashtag_links_related_hashtag_id_foreign`;',
 		);
