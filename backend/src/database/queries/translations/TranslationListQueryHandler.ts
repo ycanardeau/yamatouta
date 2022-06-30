@@ -37,16 +37,15 @@ export class TranslationListQueryHandler
 		const knex = this.em
 			.createQueryBuilder(Translation)
 			.getKnex()
-			.join(
-				'translation_search_index',
-				'translations.id',
-				'translation_search_index.translation_id',
-			)
 			.andWhere('translations.deleted', false)
 			.andWhere('translations.hidden', false);
 
 		if (params.query) {
-			knex.andWhereRaw(
+			knex.join(
+				'translation_search_index',
+				'translations.id',
+				'translation_search_index.translation_id',
+			).andWhereRaw(
 				'MATCH(translation_search_index.headword, translation_search_index.reading, translation_search_index.yamatokotoba) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(params.query, 2),
 			);
@@ -229,6 +228,13 @@ export class TranslationListQueryHandler
 	private async getItems(
 		params: TranslationListParams,
 	): Promise<Translation[]> {
+		/*if (
+			params.offset &&
+			params.offset > TranslationListQueryHandler.maxOffset
+		) {
+			return [];
+		}*/
+
 		const ids = await this.getIds(params);
 
 		const knex = this.em
@@ -244,6 +250,8 @@ export class TranslationListQueryHandler
 	}
 
 	private async getCount(params: TranslationListParams): Promise<number> {
+		if (!params.getTotalCount) return 0;
+
 		const knex = this.createKnex(params).countDistinct(
 			'translations.id as count',
 		);
@@ -266,10 +274,8 @@ export class TranslationListQueryHandler
 			throw new BadRequestException(result.error.details[0].message);
 
 		const [translations, count] = await Promise.all([
-			/*params.offset && params.offset > TranslationListService.maxOffset
-				? Promise.resolve([])
-				: */ this.getItems(params),
-			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
+			this.getItems(params),
+			this.getCount(params),
 		]);
 
 		return SearchResultObject.create(

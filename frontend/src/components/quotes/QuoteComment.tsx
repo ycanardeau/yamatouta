@@ -23,6 +23,7 @@ import { Permission } from '../../models/Permission';
 import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 import { Avatar } from '../Avatar';
 import { Link } from '../Link';
+import { Markdown } from '../Markdown';
 import { useAuth } from '../useAuth';
 import { useDialog } from '../useDialog';
 import { QuoteDeleteDialog } from './QuoteDeleteDialog';
@@ -173,7 +174,7 @@ export const QuoteComment = ({
 			timelineIcon={<Avatar size="l" name={quote.artist.name} />}
 			actions={<QuotePopover store={store} quote={quote} />}
 		>
-			{quote.text.replaceAll('\n', '')}
+			<Markdown textSize="s">{quote.text}</Markdown>
 		</EuiComment>
 	);
 };

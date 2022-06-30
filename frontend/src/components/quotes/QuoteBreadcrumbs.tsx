@@ -6,7 +6,7 @@ import { IQuoteObject } from '../../dto/IQuoteObject';
 import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface QuoteBreadcrumbsProps {
-	quote?: Pick<IQuoteObject, 'id' | 'entryType' | 'text'>;
+	quote?: Pick<IQuoteObject, 'id' | 'entryType' | 'plainText'>;
 }
 
 export const QuoteBreadcrumbs = ({
@@ -28,7 +28,7 @@ export const QuoteBreadcrumbs = ({
 		.concat(
 			quote
 				? {
-						text: quote.text.replaceAll('\n', ''),
+						text: quote.plainText.replaceAll('\n', ''),
 						href: EntryUrlMapper.details(quote),
 						onClick: (e): void => {
 							e.preventDefault();

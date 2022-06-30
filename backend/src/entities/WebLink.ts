@@ -47,7 +47,7 @@ export abstract class WebLink implements IWebLink, IContentEquatable<IWebLink> {
 	}
 
 	get url(): string {
-		return this.address.getEntity().url;
+		return this.address.getProperty('url');
 	}
 
 	contentEquals(other: IWebLink): boolean {

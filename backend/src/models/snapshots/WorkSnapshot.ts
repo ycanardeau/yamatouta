@@ -1,12 +1,19 @@
 import { Work } from '../../entities/Work';
 import { IContentEquatable } from '../IContentEquatable';
 import { WorkType } from '../works/WorkType';
+import { ISnapshotWithArtistLinks } from './ISnapshotWithArtistLinks';
+import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
 import { ArtistLinkSnapshot } from './LinkSnapshot';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 
 export type IWorkSnapshot = Omit<WorkSnapshot, 'contentEquals'>;
 
-export class WorkSnapshot implements IContentEquatable<IWorkSnapshot> {
+export class WorkSnapshot
+	implements
+		IContentEquatable<IWorkSnapshot>,
+		ISnapshotWithWebLinks,
+		ISnapshotWithArtistLinks
+{
 	private constructor(
 		readonly name: string,
 		readonly sortName: string,

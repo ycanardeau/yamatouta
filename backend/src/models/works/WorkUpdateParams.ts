@@ -20,9 +20,9 @@ export class WorkUpdateParams {
 			.required()
 			.trim()
 			.valid(...Object.values(WorkType)),
-		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
+		webLinks: Joi.array().required().items(WebLinkUpdateParams.schema),
 		artistLinks: Joi.array()
-			.items(ArtistLinkUpdateParams.schema)
-			.required(),
+			.required()
+			.items(ArtistLinkUpdateParams.schema),
 	});
 }

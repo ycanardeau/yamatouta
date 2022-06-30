@@ -36,7 +36,7 @@ const WorkLinkEdit = observer(
 		const { t } = useTranslation();
 
 		return (
-			<EuiTableRow>
+			<EuiTableRow hasActions={true}>
 				<EuiTableRowCell
 					textOnly={false}
 					mobileOptions={{
@@ -79,6 +79,7 @@ const WorkLinkEdit = observer(
 							workLinkListEditStore.remove(store)
 						}
 						aria-label={t(`shared.remove`)}
+						tabIndex={-1}
 					/>
 				</EuiTableRowCell>
 			</EuiTableRow>

@@ -5,6 +5,9 @@ import { lazyImport } from './components/lazyImport';
 
 const AdminRoutes = lazyImport(() => import('./pages/admin/AdminRoutes'));
 const ArtistRoutes = lazyImport(() => import('./pages/artists/ArtistRoutes'));
+const HashtagRoutes = lazyImport(
+	() => import('./pages/hashtags/HashtagRoutes'),
+);
 const QuoteRoutes = lazyImport(() => import('./pages/quotes/QuoteRoutes'));
 const SettingsRoutes = lazyImport(
 	() => import('./pages/settings/SettingsRoutes'),
@@ -21,6 +24,7 @@ const AppRoutes = (): React.ReactElement => {
 		<Routes>
 			<Route path="admin/*" element={<AdminRoutes />} />
 			<Route path="artists/*" element={<ArtistRoutes />} />
+			<Route path="hashtags/*" element={<HashtagRoutes />} />
 			<Route path="quotes/*" element={<QuoteRoutes />} />
 			<Route path="settings/*" element={<SettingsRoutes />} />
 			<Route path="translations/*" element={<TranslationRoutes />} />

@@ -5,7 +5,6 @@ import {
 	EuiFormRow,
 	EuiSelect,
 	EuiSpacer,
-	EuiTextArea,
 	useGeneratedHtmlId,
 } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
@@ -21,6 +20,7 @@ import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 import { workLinkTypes } from '../../models/LinkType';
 import { QuoteType } from '../../models/quotes/QuoteType';
 import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
+import { MarkdownEditor } from '../MarkdownEditor';
 import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface QuoteEditFormProps {
@@ -50,15 +50,14 @@ export const QuoteEditForm = observer(
 						navigate(EntryUrlMapper.details(quote));
 					}}
 				>
-					<EuiFormRow label={t('quotes.quote')}>
-						<EuiTextArea
-							compressed
-							name="text"
+					<EuiFormRow label={t('quotes.quote')} fullWidth>
+						<MarkdownEditor
+							aria-label={t('quotes.quote')}
 							value={store.text}
-							onChange={(e): void =>
-								store.setText(e.target.value)
-							}
-							rows={5}
+							onChange={(value): void => store.setText(value)}
+							readOnly={store.submitting}
+							initialViewMode="editing"
+							markdownFormatProps={{ textSize: 's' }}
 						/>
 					</EuiFormRow>
 
@@ -66,11 +65,13 @@ export const QuoteEditForm = observer(
 						<EuiSelect
 							compressed
 							name="quoteType"
-							options={Object.values(QuoteType).map((value) => ({
-								value: value,
-								text: t(`quoteTypeNames.${value}`),
-							}))}
-							value={store.quoteType ?? ''}
+							options={[{ value: '', text: '' }].concat(
+								Object.values(QuoteType).map((value) => ({
+									value: value,
+									text: t(`quoteTypeNames.${value}`),
+								})),
+							)}
+							value={store.quoteType}
 							onChange={(e): void =>
 								store.setQuoteType(e.target.value as QuoteType)
 							}

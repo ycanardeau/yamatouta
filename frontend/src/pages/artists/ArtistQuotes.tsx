@@ -2,6 +2,7 @@ import { EuiSpacer } from '@elastic/eui';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { QuoteSearchList } from '../../components/quotes/QuoteSearchList';
 import { QuoteSearchOptions } from '../../components/quotes/QuoteSearchOptions';
@@ -14,9 +15,14 @@ interface ArtistQuotesProps {
 
 const ArtistQuotes = observer(
 	({ artistDetailsStore }: ArtistQuotesProps): React.ReactElement => {
+		const { t, ready } = useTranslation();
+
 		const artist = artistDetailsStore.artist;
 
-		useYamatoutaTitle(artist.name, true);
+		useYamatoutaTitle(
+			`${t('shared.artist')} "${artist.name}" - ${t('shared.quotes')}`,
+			ready,
+		);
 
 		useStoreWithPagination(artistDetailsStore.quoteSearchStore);
 

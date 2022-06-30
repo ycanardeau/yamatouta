@@ -1,13 +1,18 @@
 import { Translation } from '../../entities/Translation';
 import { IContentEquatable } from '../IContentEquatable';
 import { WordCategory } from '../translations/WordCategory';
+import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
+import { ISnapshotWithWorkLinks } from './ISnapshotWithWorkLinks';
 import { WorkLinkSnapshot } from './LinkSnapshot';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 
 export type ITranslationSnapshot = Omit<TranslationSnapshot, 'contentEquals'>;
 
 export class TranslationSnapshot
-	implements IContentEquatable<ITranslationSnapshot>
+	implements
+		IContentEquatable<ITranslationSnapshot>,
+		ISnapshotWithWebLinks,
+		ISnapshotWithWorkLinks
 {
 	private constructor(
 		readonly headword: string,

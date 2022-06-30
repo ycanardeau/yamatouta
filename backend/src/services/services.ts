@@ -1,4 +1,5 @@
 import { ArtistLinkService } from './ArtistLinkService';
+import { HashtagLinkService } from './HashtagLinkService';
 import { NgramConverter } from './NgramConverter';
 import { RevisionService } from './RevisionService';
 import { SitemapService } from './SitemapService';
@@ -12,6 +13,7 @@ import { PasswordHasherFactory } from './passwordHashers/PasswordHasherFactory';
 export const services = [
 	ArtistLinkService,
 	AuthService,
+	HashtagLinkService,
 	LocalSerializer,
 	LocalStrategy,
 	NgramConverter,

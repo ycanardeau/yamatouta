@@ -1,11 +1,14 @@
 import { Artist } from '../../entities/Artist';
 import { IContentEquatable } from '../IContentEquatable';
 import { ArtistType } from '../artists/ArtistType';
+import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
 import { WebLinkSnapshot } from './WebLinkSnapshot';
 
 export type IArtistSnapshot = Omit<ArtistSnapshot, 'contentEquals'>;
 
-export class ArtistSnapshot implements IContentEquatable<IArtistSnapshot> {
+export class ArtistSnapshot
+	implements IContentEquatable<IArtistSnapshot>, ISnapshotWithWebLinks
+{
 	constructor(
 		readonly name: string,
 		readonly artistType: ArtistType,

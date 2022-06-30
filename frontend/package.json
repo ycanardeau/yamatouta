@@ -5,7 +5,7 @@
 	"dependencies": {
 		"@craco/craco": "^6.4.3",
 		"@elastic/datemath": "^5.0.3",
-		"@elastic/eui": "56.0.0",
+		"@elastic/eui": "^60.1.0",
 		"@emotion/react": "^11.8.1",
 		"@emotion/styled": "^11.6.0",
 		"@fluentui/react-icons": "2.0.167-rc.4",
@@ -44,7 +44,8 @@
 		"react-router-dom": "6.3.0",
 		"react-scripts": "5.0.1",
 		"react-use": "^17.3.1",
-		"typescript": "^4.1.2",
+		"typescript": "^4.7.4",
+		"unist-util-visit": "2.0.3",
 		"web-vitals": "^2.1.2"
 	},
 	"scripts": {

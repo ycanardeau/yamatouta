@@ -1,5 +1,6 @@
 import { AdminController } from './AdminController';
 import { ArtistController } from './ArtistController';
+import { HashtagController } from './HashtagController';
 import { HomeController } from './HomeController';
 import { QuoteController } from './QuoteController';
 import { SettingsController } from './SettingsController';
@@ -12,6 +13,7 @@ export const controllers = [
 	...apiControllers,
 	AdminController,
 	ArtistController,
+	HashtagController,
 	HomeController,
 	QuoteController,
 	SettingsController,

@@ -14,6 +14,7 @@ import {
 } from '@mikro-orm/core';
 
 import { EntryType } from '../models/EntryType';
+import { IEntryWithHashtagLinks } from '../models/IEntryWithHashtagLinks';
 import { IEntryWithRevisions } from '../models/IEntryWithRevisions';
 import { IEntryWithSearchIndex } from '../models/IEntryWithSearchIndex';
 import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
@@ -26,6 +27,8 @@ import { QuoteSnapshot } from '../models/snapshots/QuoteSnapshot';
 import { NgramConverter } from '../services/NgramConverter';
 import { Artist } from './Artist';
 import { Commit } from './Commit';
+import { Hashtag } from './Hashtag';
+import { QuoteHashtagLink } from './HashtagLink';
 import { PartialDate } from './PartialDate';
 import { QuoteRevision } from './Revision';
 import { User } from './User';
@@ -42,7 +45,8 @@ export class Quote
 		IEntryWithSearchIndex<QuoteSearchIndex>,
 		IEntryWithRevisions<Quote, QuoteSnapshot, QuoteRevision>,
 		IEntryWithWebLinks<QuoteWebLink>,
-		IEntryWithWorkLinks<EntryType.Quote, QuoteWorkLink>
+		IEntryWithWorkLinks<EntryType.Quote, QuoteWorkLink>,
+		IEntryWithHashtagLinks<QuoteHashtagLink>
 {
 	@PrimaryKey()
 	id!: number;
@@ -64,6 +68,9 @@ export class Quote
 
 	@Property({ columnType: 'text' })
 	text!: string;
+
+	@Property({ columnType: 'text' })
+	plainText!: string;
 
 	@Property()
 	phraseCount = 0;
@@ -107,6 +114,9 @@ export class Quote
 	@OneToOne(() => QuoteSearchIndex, (searchIndex) => searchIndex.quote)
 	searchIndex: IdentifiedReference<QuoteSearchIndex>;
 
+	@OneToMany(() => QuoteHashtagLink, (hashtagLink) => hashtagLink.quote)
+	hashtagLinks = new Collection<QuoteHashtagLink>(this);
+
 	constructor(actor: User) {
 		this.actor = Reference.create(actor);
 		this.searchIndex = Reference.create(new QuoteSearchIndex(this));
@@ -119,7 +129,7 @@ export class Quote
 	updateSearchIndex(ngramConverter: NgramConverter): void {
 		const searchIndex = this.searchIndex.getEntity();
 		searchIndex.text = ngramConverter.toFullText(
-			[this.text, this.transcription].join(' '),
+			[this.plainText, this.transcription].join(' '),
 			2,
 		);
 	}
@@ -169,6 +179,13 @@ export class Quote
 			endDate,
 			ended,
 		);
+	}
+
+	createHashtagLink(
+		relatedHashtag: Hashtag,
+		label: string,
+	): QuoteHashtagLink {
+		return new QuoteHashtagLink(this, relatedHashtag, label);
 	}
 }
 

@@ -18,6 +18,6 @@ export class ArtistUpdateParams {
 			.required()
 			.trim()
 			.valid(...Object.values(ArtistType)),
-		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
+		webLinks: Joi.array().required().items(WebLinkUpdateParams.schema),
 	});
 }

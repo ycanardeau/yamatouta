@@ -35,8 +35,11 @@ export class QuoteGetQueryHandler implements IQueryHandler<QuoteGetQuery> {
 				],
 			},
 			{
+				// OPTIMIZE
 				populate: [
 					'artist',
+					'hashtagLinks',
+					'hashtagLinks.relatedHashtag',
 					'webLinks',
 					'webLinks.address',
 					'workLinks',

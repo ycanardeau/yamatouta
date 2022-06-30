@@ -34,7 +34,7 @@ export class TranslationUpdateParams {
 			.required()
 			.trim()
 			.valid(...Object.values(WordCategory)),
-		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
-		workLinks: Joi.array().items(WorkLinkUpdateParams.schema).required(),
+		webLinks: Joi.array().required().items(WebLinkUpdateParams.schema),
+		workLinks: Joi.array().required().items(WorkLinkUpdateParams.schema),
 	});
 }

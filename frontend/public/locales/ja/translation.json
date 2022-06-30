@@ -73,7 +73,9 @@
 		"loading": "よみこんでいます...",
 		"noItemsFound": "みつかりませんでした",
 		"sortBy": "ならべかえ",
-		"manage": "つかさどり"
+		"manage": "つかさどり",
+		"hashtags": "いげたふだ",
+		"hashtag": "いげたふだ"
 	},
 	"translations": {
 		"addWord": "やまとことばをかきたす",
@@ -235,5 +237,9 @@
 		"CreatedDesc": "あたらしい",
 		"UpdatedAsc": "あらためられていない",
 		"UpdatedDesc": "あらためられた"
+	},
+	"hashtags": {
+		"name": "なまえ",
+		"referenceCount": "かず"
 	}
 }

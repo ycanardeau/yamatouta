@@ -4,6 +4,7 @@ import { QuoteOptionalField } from '../models/quotes/QuoteOptionalField';
 import { QuoteType } from '../models/quotes/QuoteType';
 import { PermissionContext } from '../services/PermissionContext';
 import { ArtistObject } from './ArtistObject';
+import { HashtagLinkObject } from './HashtagLinkObject';
 import { WorkLinkObject } from './LinkObject';
 import { WebLinkObject } from './WebLinkObject';
 
@@ -15,9 +16,11 @@ export class QuoteObject {
 		readonly hidden: boolean,
 		readonly quoteType: QuoteType,
 		readonly text: string,
+		readonly plainText: string,
 		readonly locale: string,
 		readonly artist: ArtistObject,
 		readonly sourceUrl: string,
+		readonly hashtagLinks?: HashtagLinkObject[],
 		readonly webLinks?: WebLinkObject[],
 		readonly workLinks?: WorkLinkObject[],
 	) {}
@@ -28,6 +31,17 @@ export class QuoteObject {
 		fields: QuoteOptionalField[] = [],
 	): QuoteObject {
 		permissionContext.verifyDeletedAndHidden(quote);
+
+		const hashtagLinks = fields.includes(QuoteOptionalField.HashtagLinks)
+			? quote.hashtagLinks
+					.getItems()
+					.map((hashtagLink) =>
+						HashtagLinkObject.create(
+							hashtagLink,
+							permissionContext,
+						),
+					)
+			: undefined;
 
 		const webLinks = fields.includes(QuoteOptionalField.WebLinks)
 			? quote.webLinks
@@ -50,9 +64,11 @@ export class QuoteObject {
 			quote.hidden,
 			quote.quoteType,
 			quote.text,
+			quote.plainText,
 			quote.locale,
 			ArtistObject.create(quote.artist.getEntity(), permissionContext),
 			quote.sourceUrl,
+			hashtagLinks,
 			webLinks,
 			workLinks,
 		);

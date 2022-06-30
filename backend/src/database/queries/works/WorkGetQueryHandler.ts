@@ -35,6 +35,7 @@ export class WorkGetQueryHandler implements IQueryHandler<WorkGetQuery> {
 				],
 			},
 			{
+				// OPTIMIZE
 				populate: [
 					'webLinks',
 					'webLinks.address',

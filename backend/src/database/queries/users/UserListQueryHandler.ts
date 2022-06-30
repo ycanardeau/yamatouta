@@ -34,12 +34,15 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 		const knex = this.em
 			.createQueryBuilder(User)
 			.getKnex()
-			.join('user_search_index', 'users.id', 'user_search_index.user_id')
 			.andWhere('users.deleted', false)
 			.andWhere('users.hidden', false);
 
 		if (params.query) {
-			knex.andWhereRaw(
+			knex.join(
+				'user_search_index',
+				'users.id',
+				'user_search_index.user_id',
+			).andWhereRaw(
 				'MATCH(user_search_index.name) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(params.query, 2),
 			);
@@ -98,6 +101,9 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 	}
 
 	private async getItems(params: UserListParams): Promise<User[]> {
+		if (params.offset && params.offset > UserListQueryHandler.maxOffset)
+			return [];
+
 		const ids = await this.getIds(params);
 
 		const knex = this.em
@@ -113,6 +119,8 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 	}
 
 	private async getCount(params: UserListParams): Promise<number> {
+		if (!params.getTotalCount) return 0;
+
 		const knex = this.createKnex(params).countDistinct('users.id as count');
 
 		const count = _.map(await this.em.execute(knex), 'count')[0];
@@ -133,10 +141,8 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 			throw new BadRequestException(result.error.details[0].message);
 
 		const [users, count] = await Promise.all([
-			params.offset && params.offset > UserListQueryHandler.maxOffset
-				? Promise.resolve([])
-				: this.getItems(params),
-			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
+			this.getItems(params),
+			this.getCount(params),
 		]);
 
 		return SearchResultObject.create<UserObject>(

@@ -1,6 +1,7 @@
 import { ValidateFunction } from 'ajv';
 
 import { IArtistSearchRouteParams } from '../models/artists/IArtistSearchRouteParams';
+import { IHashtagSearchRouteParams } from '../models/hashtags/IHashtagSearchRouteParams';
 import { IQuoteSearchRouteParams } from '../models/quotes/IQuoteSearchRouteParams';
 import { ITranslationSearchRouteParams } from '../models/translations/ITranslationSearchRouteParams';
 import { IUserSearchRouteParams } from '../models/users/IUserSearchRouteParams';
@@ -9,6 +10,8 @@ import * as fns from './validate-fns';
 
 export const artistSearchRouteParams =
 	fns.IArtistSearchRouteParams as ValidateFunction<IArtistSearchRouteParams>;
+export const hashtagSearchRouteParams =
+	fns.IHashtagSearchRouteParams as ValidateFunction<IHashtagSearchRouteParams>;
 export const quoteSearchRouteParams =
 	fns.IQuoteSearchRouteParams as ValidateFunction<IQuoteSearchRouteParams>;
 export const translationSearchRouteParams =

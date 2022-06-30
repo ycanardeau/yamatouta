@@ -36,7 +36,7 @@ const ArtistLinkEdit = observer(
 		const { t } = useTranslation();
 
 		return (
-			<EuiTableRow>
+			<EuiTableRow hasActions={true}>
 				<EuiTableRowCell
 					textOnly={false}
 					mobileOptions={{
@@ -79,6 +79,7 @@ const ArtistLinkEdit = observer(
 							artistLinkListEditStore.remove(store)
 						}
 						aria-label={t(`shared.remove`)}
+						tabIndex={-1}
 					/>
 				</EuiTableRowCell>
 			</EuiTableRow>

@@ -15,7 +15,7 @@ interface LayoutProps {
 }
 
 const Layout = ({ quote, revisions }: LayoutProps): React.ReactElement => {
-	const title = quote.text.replaceAll('\n', '');
+	const title = quote.plainText.replaceAll('\n', '');
 
 	useYamatoutaTitle(title, true);
 

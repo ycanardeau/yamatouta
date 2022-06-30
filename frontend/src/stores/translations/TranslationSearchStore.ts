@@ -50,14 +50,14 @@ export class TranslationSearchStore
 		this.sort = value;
 	};
 
-	@action toggleSortHeadword = (): void => {
+	@action toggleSortByHeadword = (): void => {
 		this.sort =
 			this.sort === TranslationSortRule.HeadwordAsc
 				? TranslationSortRule.HeadwordDesc
 				: TranslationSortRule.HeadwordAsc;
 	};
 
-	@action toggleSortYamatokotoba = (): void => {
+	@action toggleSortByYamatokotoba = (): void => {
 		this.sort =
 			this.sort === TranslationSortRule.YamatokotobaAsc
 				? TranslationSortRule.YamatokotobaDesc

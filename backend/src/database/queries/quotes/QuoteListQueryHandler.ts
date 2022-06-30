@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { QuoteObject } from '../../../dto/QuoteObject';
 import { SearchResultObject } from '../../../dto/SearchResultObject';
 import { Artist } from '../../../entities/Artist';
+import { Hashtag } from '../../../entities/Hashtag';
 import { Quote } from '../../../entities/Quote';
 import { QuoteListParams } from '../../../models/quotes/QuoteListParams';
 import { QuoteSortRule } from '../../../models/quotes/QuoteSortRule';
@@ -32,21 +33,39 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	private createKnex(params: QuoteListParams): Knex.QueryBuilder {
+	private async getHashtagIds(names?: string[]): Promise<number[]> {
+		if (!names) return [];
+
+		const hashtags = await this.em.find(
+			Hashtag,
+			{
+				deleted: false,
+				hidden: false,
+				name: { $in: names },
+			},
+			{ fields: ['id'] },
+		);
+
+		return hashtags.map((hashtag) => hashtag.id);
+	}
+
+	private createKnex(
+		params: QuoteListParams,
+		hashtagIds: number[],
+	): Knex.QueryBuilder {
 		const knex = this.em
 			.createQueryBuilder(Quote)
 			.getKnex()
-			.join(
-				'quote_search_index',
-				'quotes.id',
-				'quote_search_index.quote_id',
-			)
 			.andWhere('quotes.deleted', false)
 			.andWhere('quotes.hidden', false)
 			.andWhereNot('quotes.quote_type', QuoteType.Word);
 
 		if (params.query) {
-			knex.andWhereRaw(
+			knex.join(
+				'quote_search_index',
+				'quotes.id',
+				'quote_search_index.quote_id',
+			).andWhereRaw(
 				'MATCH(quote_search_index.text) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(params.query, 2),
 			);
@@ -63,6 +82,16 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 				'quotes.id',
 				'work_links.quote_id',
 			).andWhere('work_links.related_work_id', params.workId);
+		}
+
+		for (const hashtagId of hashtagIds) {
+			knex.whereExists((qb) =>
+				qb
+					.select('hashtag_links.id')
+					.from('hashtag_links')
+					.andWhereRaw('quotes.id = hashtag_links.quote_id')
+					.andWhere('hashtag_links.related_hashtag_id', hashtagId),
+			);
 		}
 
 		return knex;
@@ -96,8 +125,11 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		}
 	}
 
-	private async getIds(params: QuoteListParams): Promise<number[]> {
-		const knex = this.createKnex(params)
+	private async getIds(
+		params: QuoteListParams,
+		hashtagIds: number[],
+	): Promise<number[]> {
+		const knex = this.createKnex(params, hashtagIds)
 			.select('quotes.id')
 			.limit(
 				params.limit
@@ -114,8 +146,14 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		return ids;
 	}
 
-	private async getItems(params: QuoteListParams): Promise<Quote[]> {
-		const ids = await this.getIds(params);
+	private async getItems(
+		params: QuoteListParams,
+		hashtagIds: number[],
+	): Promise<Quote[]> {
+		if (params.offset && params.offset > QuoteListQueryHandler.maxOffset)
+			return [];
+
+		const ids = await this.getIds(params, hashtagIds);
 
 		const knex = this.em
 			.createQueryBuilder(Quote)
@@ -129,9 +167,15 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		return results.map((result) => this.em.map(Quote, result));
 	}
 
-	private async getCount(params: QuoteListParams): Promise<number> {
-		const knex =
-			this.createKnex(params).countDistinct('quotes.id as count');
+	private async getCount(
+		params: QuoteListParams,
+		hashtagIds: number[],
+	): Promise<number> {
+		if (!params.getTotalCount) return 0;
+
+		const knex = this.createKnex(params, hashtagIds).countDistinct(
+			'quotes.id as count',
+		);
 
 		const count = _.map(await this.em.execute(knex), 'count')[0];
 
@@ -150,11 +194,11 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		if (result.error)
 			throw new BadRequestException(result.error.details[0].message);
 
+		const hashtagIds = await this.getHashtagIds(params.hashtags);
+
 		const [quotes, count] = await Promise.all([
-			params.offset && params.offset > QuoteListQueryHandler.maxOffset
-				? Promise.resolve([])
-				: this.getItems(params),
-			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
+			this.getItems(params, hashtagIds),
+			this.getCount(params, hashtagIds),
 		]);
 
 		// Populate artists.

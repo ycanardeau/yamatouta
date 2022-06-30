@@ -74,7 +74,9 @@
 		"loading": "Loading...",
 		"noItemsFound": "No items found",
 		"sortBy": "Sort by",
-		"manage": "Manage"
+		"manage": "Manage",
+		"hashtags": "Hashtags",
+		"hashtag": "Hashtag"
 	},
 	"translations": {
 		"addWord": "Add word",
@@ -256,5 +258,9 @@
 		"CreatedDesc": "Newest",
 		"UpdatedAsc": "Least recently updated",
 		"UpdatedDesc": "Recently updated"
+	},
+	"hashtags": {
+		"name": "Name",
+		"referenceCount": "Count"
 	}
 }

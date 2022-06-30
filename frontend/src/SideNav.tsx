@@ -9,6 +9,7 @@ import {
 	CalligraphyPenRegular,
 	ContentSettingsRegular,
 	MusicNote2Regular,
+	NumberSymbolRegular,
 	PersonAddRegular,
 	PersonArrowLeftRegular,
 	PersonRegular,
@@ -77,6 +78,17 @@ const SideNav = (): React.ReactElement => {
 								navigate('/quotes');
 							},
 							isSelected: tab === 'quotes',
+						},
+						{
+							icon: <EuiIcon type={NumberSymbolRegular} />,
+							name: t('shared.hashtags'),
+							id: htmlIdGenerator()(),
+							href: '/hashtags',
+							onClick: (e): void => {
+								e.preventDefault();
+								navigate('/hashtags');
+							},
+							isSelected: tab === 'hashtags',
 						},
 						{
 							icon: <EuiIcon type={CalligraphyPenRegular} />,

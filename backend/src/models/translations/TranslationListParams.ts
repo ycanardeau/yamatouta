@@ -20,7 +20,7 @@ export class TranslationListParams {
 		offset: Joi.number().optional(),
 		limit: Joi.number().optional(),
 		getTotalCount: Joi.boolean().optional(),
-		query: Joi.string().optional().allow(''),
+		query: Joi.string().optional().trim().allow(''),
 		category: Joi.string()
 			.optional()
 			.valid(...Object.values(WordCategory)),

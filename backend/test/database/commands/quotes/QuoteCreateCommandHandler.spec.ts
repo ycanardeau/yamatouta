@@ -166,6 +166,7 @@ describe('QuoteCreateCommandHandler', () => {
 					transcription: '',
 					foreword: '',
 					customArtistName: '',
+					hashtagLinks: [],
 				},
 			});
 		});

@@ -2,16 +2,20 @@ import { EntityManager, EntityRepository, Reference } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import remark from 'remark';
+import strip from 'strip-markdown';
 
 import { QuoteObject } from '../../../dto/QuoteObject';
 import { Artist } from '../../../entities/Artist';
 import { QuoteAuditLogEntry } from '../../../entities/AuditLogEntry';
 import { Quote } from '../../../entities/Quote';
 import { AuditedAction } from '../../../models/AuditedAction';
+import { HashtagLinkUpdateParams } from '../../../models/HashtagLinkUpdateParams';
 import { Permission } from '../../../models/Permission';
 import { RevisionEvent } from '../../../models/RevisionEvent';
 import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
 import { QuoteUpdateParams } from '../../../models/quotes/QuoteUpdateParams';
+import { HashtagLinkService } from '../../../services/HashtagLinkService';
 import { NgramConverter } from '../../../services/NgramConverter';
 import { PermissionContext } from '../../../services/PermissionContext';
 import { RevisionService } from '../../../services/RevisionService';
@@ -37,6 +41,8 @@ export class QuoteUpdateCommandHandler
 		'webLinks.address.host',
 		'workLinks',
 		'workLinks.relatedWork',
+		'hashtagLinks',
+		'hashtagLinks.relatedHashtag',
 	] as const;
 
 	constructor(
@@ -45,11 +51,23 @@ export class QuoteUpdateCommandHandler
 		private readonly artistRepo: EntityRepository<Artist>,
 		@InjectRepository(Quote)
 		private readonly quoteRepo: EntityRepository<Quote>,
+		private readonly hashtagLinkService: HashtagLinkService,
 		private readonly webLinkService: WebLinkService,
 		private readonly workLinkService: WorkLinkService,
 		private readonly revisionService: RevisionService,
 		private readonly ngramConverter: NgramConverter,
 	) {}
+
+	private extractHashtags(text: string): { name: string; label: string }[] {
+		const matches = text.matchAll(/\[(.*?)\]\(#([あ-ん]+)\)/g);
+
+		if (!matches) return [];
+
+		return Array.from(matches).map((match) => ({
+			name: match[2],
+			label: match[1],
+		}));
+	}
 
 	async execute(command: QuoteUpdateCommand): Promise<QuoteObject> {
 		const { permissionContext, params } = command;
@@ -90,11 +108,31 @@ export class QuoteUpdateCommandHandler
 				quote,
 				async () => {
 					quote.text = params.text;
+					quote.plainText = String(
+						await remark().use(strip).process(params.text),
+					);
 					quote.quoteType = params.quoteType;
 					quote.locale = params.locale;
 					quote.artist = Reference.create(artist);
 
 					quote.updateSearchIndex(this.ngramConverter);
+
+					const hashtags = this.extractHashtags(params.text);
+
+					const hashtagLinks: HashtagLinkUpdateParams[] =
+						hashtags.map(({ name, label }) => ({
+							id: 0,
+							name: name,
+							label: label,
+						}));
+
+					await this.hashtagLinkService.sync(
+						em,
+						quote,
+						hashtagLinks,
+						permissionContext,
+						actor,
+					);
 
 					await this.webLinkService.sync(
 						em,

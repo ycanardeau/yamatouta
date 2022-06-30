@@ -34,7 +34,10 @@ export class ArtistGetQueryHandler implements IQueryHandler<ArtistGetQuery> {
 					whereNotHidden(permissionContext),
 				],
 			},
-			{ populate: ['webLinks', 'webLinks.address'] },
+			{
+				// OPTIMIZE
+				populate: ['webLinks', 'webLinks.address'],
+			},
 		);
 
 		if (!artist) throw new NotFoundException();

@@ -20,7 +20,7 @@ import { WorkLinkListEditStore } from '../WorkLinkListEditStore';
 export class QuoteEditStore {
 	@observable submitting = false;
 	@observable text = '';
-	@observable quoteType = QuoteType.Tanka;
+	@observable quoteType: QuoteType | '' = '';
 	@observable locale = 'ja';
 	readonly artist = new BasicEntryLinkStore<IArtistObject>((id) =>
 		artistApi.get({ id: id }),
@@ -57,6 +57,8 @@ export class QuoteEditStore {
 	};
 
 	toParams = (): IQuoteUpdateParams => {
+		if (!this.quoteType) throw new Error('quoteType is empty');
+
 		return {
 			id: this.quote?.id ?? 0,
 			text: this.text,

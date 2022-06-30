@@ -1,6 +1,7 @@
 export enum Permission {
 	CreateArtistLinks = 'CreateArtistLinks',
 	CreateArtists = 'CreateArtists',
+	CreateHashtagLinks = 'CreateHashtagLinks',
 	CreateMissingRevisions = 'CreateMissingRevisions',
 	CreateQuotes = 'CreateQuotes',
 	CreateTranslations = 'CreateTranslations',
@@ -9,6 +10,7 @@ export enum Permission {
 	CreateWorks = 'CreateWorks',
 	DeleteArtistLinks = 'DeleteArtistLinks',
 	DeleteArtists = 'DeleteArtists',
+	DeleteHashtagLinks = 'DeleteHashtagLinks',
 	DeleteQuotes = 'DeleteQuotes',
 	DeleteTranslations = 'DeleteTranslations',
 	DeleteWebLinks = 'DeleteWebLinks',
@@ -17,6 +19,7 @@ export enum Permission {
 	GenerateSitemaps = 'GenerateSitemaps',
 	UpdateArtistLinks = 'UpdateArtistLinks',
 	UpdateArtists = 'UpdateArtists',
+	UpdateHashtagLinks = 'UpdateHashtagLinks',
 	UpdateQuotes = 'UpdateQuotes',
 	UpdateSearchIndex = 'UpdateSearchIndex',
 	UpdateTranslations = 'UpdateTranslations',

@@ -34,12 +34,15 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 		const knex = this.em
 			.createQueryBuilder(Work)
 			.getKnex()
-			.join('work_search_index', 'works.id', 'work_search_index.work_id')
 			.andWhere('works.deleted', false)
 			.andWhere('works.hidden', false);
 
 		if (params.query) {
-			knex.andWhereRaw(
+			knex.join(
+				'work_search_index',
+				'works.id',
+				'work_search_index.work_id',
+			).andWhereRaw(
 				'MATCH(work_search_index.name) AGAINST(? IN BOOLEAN MODE)',
 				this.ngramConverter.toQuery(params.query, 2),
 			);
@@ -109,6 +112,9 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 	}
 
 	private async getItems(params: WorkListParams): Promise<Work[]> {
+		if (params.offset && params.offset > WorkListQueryHandler.maxOffset)
+			return [];
+
 		const ids = await this.getIds(params);
 
 		const knex = this.em
@@ -124,6 +130,8 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 	}
 
 	private async getCount(params: WorkListParams): Promise<number> {
+		if (!params.getTotalCount) return 0;
+
 		const knex = this.createKnex(params).countDistinct('works.id as count');
 
 		const count = _.map(await this.em.execute(knex), 'count')[0];
@@ -144,10 +152,8 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 			throw new BadRequestException(result.error.details[0].message);
 
 		const [works, count] = await Promise.all([
-			params.offset && params.offset > WorkListQueryHandler.maxOffset
-				? Promise.resolve([])
-				: this.getItems(params),
-			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
+			this.getItems(params),
+			this.getCount(params),
 		]);
 
 		return SearchResultObject.create<WorkObject>(
