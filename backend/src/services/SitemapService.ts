@@ -11,6 +11,7 @@ import {
 
 import config from '../config';
 import { Artist } from '../entities/Artist';
+import { Hashtag } from '../entities/Hashtag';
 import { Quote } from '../entities/Quote';
 import { Translation } from '../entities/Translation';
 import { Work } from '../entities/Work';
@@ -62,28 +63,34 @@ export class SitemapService {
 			),
 		);
 
-		const [artists, quotes, translations, works] = await Promise.all([
-			this.em.find(
-				Artist,
-				{ deleted: false, hidden: false },
-				{ fields: ['id', 'updatedAt'] },
-			),
-			this.em.find(
-				Quote,
-				{ deleted: false, hidden: false },
-				{ fields: ['id', 'updatedAt'] },
-			),
-			this.em.find(
-				Translation,
-				{ deleted: false, hidden: false },
-				{ fields: ['id', 'updatedAt'] },
-			),
-			this.em.find(
-				Work,
-				{ deleted: false, hidden: false },
-				{ fields: ['id', 'updatedAt'] },
-			),
-		]);
+		const [artists, hashtags, quotes, translations, works] =
+			await Promise.all([
+				this.em.find(
+					Artist,
+					{ deleted: false, hidden: false },
+					{ fields: ['id', 'updatedAt'] },
+				),
+				this.em.find(
+					Hashtag,
+					{ deleted: false, hidden: false },
+					{ fields: ['name', 'updatedAt'] },
+				),
+				this.em.find(
+					Quote,
+					{ deleted: false, hidden: false },
+					{ fields: ['id', 'updatedAt'] },
+				),
+				this.em.find(
+					Translation,
+					{ deleted: false, hidden: false },
+					{ fields: ['id', 'updatedAt'] },
+				),
+				this.em.find(
+					Work,
+					{ deleted: false, hidden: false },
+					{ fields: ['id', 'updatedAt'] },
+				),
+			]);
 
 		const items: SitemapItemLoose[] = ([] as Entry[])
 			.concat(artists)
@@ -96,6 +103,13 @@ export class SitemapService {
 			}));
 
 		for (const item of items) sms.write(item);
+
+		for (const hashtag of hashtags) {
+			sms.write({
+				url: `/hashtags/${hashtag.name}/quotes`,
+				lastmodISO: hashtag.updatedAt.toISOString(),
+			});
+		}
 
 		sms.end();
 	}
