@@ -40,6 +40,15 @@ const ArtistLinkEdit = observer(
 				<EuiTableRowCell
 					textOnly={false}
 					mobileOptions={{
+						header: t('shared.artist'),
+						width: '100%',
+					}}
+				>
+					<ArtistComboBox store={store.relatedArtist} />
+				</EuiTableRowCell>
+				<EuiTableRowCell
+					textOnly={false}
+					mobileOptions={{
 						header: t('links.linkType'),
 						width: '100%',
 					}}
@@ -56,15 +65,6 @@ const ArtistLinkEdit = observer(
 						}
 						fullWidth
 					/>
-				</EuiTableRowCell>
-				<EuiTableRowCell
-					textOnly={false}
-					mobileOptions={{
-						header: t('shared.artist'),
-						width: '100%',
-					}}
-				>
-					<ArtistComboBox store={store.relatedArtist} />
 				</EuiTableRowCell>
 				<EuiTableRowCell
 					textOnly={false}
@@ -103,10 +103,10 @@ export const ArtistLinkListEdit = observer(
 				<EuiTable>
 					<EuiTableHeader>
 						<EuiTableHeaderCell>
-							{t('links.linkType')}
+							{t('shared.artist')}
 						</EuiTableHeaderCell>
 						<EuiTableHeaderCell>
-							{t('shared.artist')}
+							{t('links.linkType')}
 						</EuiTableHeaderCell>
 						<EuiTableHeaderCell width={32} />
 					</EuiTableHeader>

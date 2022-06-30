@@ -40,6 +40,15 @@ const WorkLinkEdit = observer(
 				<EuiTableRowCell
 					textOnly={false}
 					mobileOptions={{
+						header: t('shared.work'),
+						width: '100%',
+					}}
+				>
+					<WorkComboBox store={store.relatedWork} />
+				</EuiTableRowCell>
+				<EuiTableRowCell
+					textOnly={false}
+					mobileOptions={{
 						header: t('links.linkType'),
 						width: '100%',
 					}}
@@ -56,15 +65,6 @@ const WorkLinkEdit = observer(
 						}
 						fullWidth
 					/>
-				</EuiTableRowCell>
-				<EuiTableRowCell
-					textOnly={false}
-					mobileOptions={{
-						header: t('shared.work'),
-						width: '100%',
-					}}
-				>
-					<WorkComboBox store={store.relatedWork} />
 				</EuiTableRowCell>
 				<EuiTableRowCell
 					textOnly={false}
@@ -103,10 +103,10 @@ export const WorkLinkListEdit = observer(
 				<EuiTable>
 					<EuiTableHeader>
 						<EuiTableHeaderCell>
-							{t('links.linkType')}
+							{t('shared.work')}
 						</EuiTableHeaderCell>
 						<EuiTableHeaderCell>
-							{t('shared.work')}
+							{t('links.linkType')}
 						</EuiTableHeaderCell>
 						<EuiTableHeaderCell width={32} />
 					</EuiTableHeader>
