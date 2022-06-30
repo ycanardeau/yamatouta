@@ -128,7 +128,7 @@ export class Quote
 	updateSearchIndex(ngramConverter: NgramConverter): void {
 		const searchIndex = this.searchIndex.getEntity();
 		searchIndex.text = ngramConverter.toFullText(
-			[this.text, this.transcription].join(' '),
+			[this.plainText, this.transcription].join(' '),
 			2,
 		);
 	}
