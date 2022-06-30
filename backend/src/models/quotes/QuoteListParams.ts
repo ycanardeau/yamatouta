@@ -13,6 +13,7 @@ export class QuoteListParams {
 		readonly artistId?: number,
 		readonly workId?: number,
 		readonly query?: string,
+		readonly hashtags?: string[],
 	) {}
 
 	static readonly schema = Joi.object<QuoteListParams>({
@@ -28,5 +29,6 @@ export class QuoteListParams {
 		artistId: Joi.number().optional(),
 		workId: Joi.number().optional(),
 		query: Joi.string().optional().trim().allow(''),
+		hashtags: Joi.array().optional().items(Joi.string().required().trim()),
 	});
 }
