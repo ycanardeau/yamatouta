@@ -24,7 +24,7 @@ export class QuoteUpdateParams {
 			.valid(...Object.values(QuoteType)),
 		locale: Joi.string().required().trim(),
 		artistId: Joi.number().required(),
-		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
-		workLinks: Joi.array().items(WorkLinkUpdateParams.schema).required(),
+		webLinks: Joi.array().required().items(WebLinkUpdateParams.schema),
+		workLinks: Joi.array().required().items(WorkLinkUpdateParams.schema),
 	});
 }

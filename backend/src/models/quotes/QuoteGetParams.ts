@@ -7,11 +7,13 @@ export class QuoteGetParams {
 
 	static readonly schema = Joi.object<QuoteGetParams>({
 		id: Joi.number().required(),
-		fields: Joi.array().items(
-			Joi.string()
-				.required()
-				.trim()
-				.valid(...Object.values(QuoteOptionalField)),
-		),
+		fields: Joi.array()
+			.optional()
+			.items(
+				Joi.string()
+					.required()
+					.trim()
+					.valid(...Object.values(QuoteOptionalField)),
+			),
 	});
 }

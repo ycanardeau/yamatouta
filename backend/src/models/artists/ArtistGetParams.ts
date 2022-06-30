@@ -7,11 +7,13 @@ export class ArtistGetParams {
 
 	static readonly schema = Joi.object<ArtistGetParams>({
 		id: Joi.number().required(),
-		fields: Joi.array().items(
-			Joi.string()
-				.required()
-				.trim()
-				.valid(...Object.values(ArtistOptionalField)),
-		),
+		fields: Joi.array()
+			.optional()
+			.items(
+				Joi.string()
+					.required()
+					.trim()
+					.valid(...Object.values(ArtistOptionalField)),
+			),
 	});
 }

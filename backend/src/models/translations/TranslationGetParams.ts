@@ -10,11 +10,13 @@ export class TranslationGetParams {
 
 	static readonly schema = Joi.object<TranslationGetParams>({
 		id: Joi.number().required(),
-		fields: Joi.array().items(
-			Joi.string()
-				.required()
-				.trim()
-				.valid(...Object.values(TranslationOptionalField)),
-		),
+		fields: Joi.array()
+			.optional()
+			.items(
+				Joi.string()
+					.required()
+					.trim()
+					.valid(...Object.values(TranslationOptionalField)),
+			),
 	});
 }

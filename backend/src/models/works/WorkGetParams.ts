@@ -7,11 +7,13 @@ export class WorkGetParams {
 
 	static readonly schema = Joi.object<WorkGetParams>({
 		id: Joi.number().required(),
-		fields: Joi.array().items(
-			Joi.string()
-				.required()
-				.trim()
-				.valid(...Object.values(WorkOptionalField)),
-		),
+		fields: Joi.array()
+			.optional()
+			.items(
+				Joi.string()
+					.required()
+					.trim()
+					.valid(...Object.values(WorkOptionalField)),
+			),
 	});
 }

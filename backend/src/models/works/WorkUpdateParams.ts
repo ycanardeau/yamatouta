@@ -23,11 +23,11 @@ export class WorkUpdateParams {
 			.trim()
 			.valid(...Object.values(WorkType)),
 		hashtagLinks: Joi.array()
-			.items(HashtagLinkUpdateParams.schema)
-			.required(),
-		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
+			.required()
+			.items(HashtagLinkUpdateParams.schema),
+		webLinks: Joi.array().required().items(WebLinkUpdateParams.schema),
 		artistLinks: Joi.array()
-			.items(ArtistLinkUpdateParams.schema)
-			.required(),
+			.required()
+			.items(ArtistLinkUpdateParams.schema),
 	});
 }

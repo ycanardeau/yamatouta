@@ -21,8 +21,8 @@ export class ArtistUpdateParams {
 			.trim()
 			.valid(...Object.values(ArtistType)),
 		hashtagLinks: Joi.array()
-			.items(HashtagLinkUpdateParams.schema)
-			.required(),
-		webLinks: Joi.array().items(WebLinkUpdateParams.schema).required(),
+			.required()
+			.items(HashtagLinkUpdateParams.schema),
+		webLinks: Joi.array().required().items(WebLinkUpdateParams.schema),
 	});
 }
