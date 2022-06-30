@@ -64,7 +64,7 @@ class QuoteApi {
 		quoteType?: QuoteType;
 		artistId?: number;
 		workId?: number;
-		hashtags: string[];
+		hashtags?: string[];
 	}): Promise<ISearchResultObject<IQuoteObject>> => {
 		const response = await axios.get<ISearchResultObject<IQuoteObject>>(
 			'/quotes/list',
