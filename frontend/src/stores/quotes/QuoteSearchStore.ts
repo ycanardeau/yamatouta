@@ -20,15 +20,17 @@ export class QuoteSearchStore
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteObject[] = [];
-	@observable sort = QuoteSortRule.CreatedAsc;
+	@observable sort: QuoteSortRule;
 	@observable query = '';
 	@observable quoteType: QuoteType | '' = '';
 	@observable artistId?: number;
 	@observable workId?: number;
 	@observable hashtags: string[] = [];
 
-	constructor() {
+	constructor(private readonly defaultSort = QuoteSortRule.CreatedAsc) {
 		makeObservable(this);
+
+		this.sort = this.defaultSort;
 	}
 
 	@action setSort = (value: QuoteSortRule): void => {
@@ -100,7 +102,7 @@ export class QuoteSearchStore
 	set routeParams(value: IQuoteSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
-		this.sort = value.sort ?? QuoteSortRule.CreatedAsc;
+		this.sort = value.sort ?? this.defaultSort;
 		this.query = value.query ?? '';
 		this.quoteType = value.quoteType ?? '';
 	}
