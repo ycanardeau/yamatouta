@@ -91,6 +91,9 @@ export class HashtagListQueryHandler
 	}
 
 	private async getItems(params: HashtagListParams): Promise<Hashtag[]> {
+		if (params.offset && params.offset > HashtagListQueryHandler.maxOffset)
+			return [];
+
 		const ids = await this.getIds(params);
 
 		const knex = this.em
@@ -106,6 +109,8 @@ export class HashtagListQueryHandler
 	}
 
 	private async getCount(params: HashtagListParams): Promise<number> {
+		if (!params.getTotalCount) return 0;
+
 		const knex = this.createKnex(params).countDistinct(
 			'hashtags.id as count',
 		);
@@ -128,10 +133,8 @@ export class HashtagListQueryHandler
 			throw new BadRequestException(result.error.details[0].message);
 
 		const [hashtags, count] = await Promise.all([
-			params.offset && params.offset > HashtagListQueryHandler.maxOffset
-				? Promise.resolve([])
-				: this.getItems(params),
-			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
+			this.getItems(params),
+			this.getCount(params),
 		]);
 
 		return SearchResultObject.create<HashtagObject>(

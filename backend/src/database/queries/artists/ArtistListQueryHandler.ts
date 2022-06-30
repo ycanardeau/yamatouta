@@ -111,6 +111,9 @@ export class ArtistListQueryHandler implements IQueryHandler<ArtistListQuery> {
 	}
 
 	private async getItems(params: ArtistListParams): Promise<Artist[]> {
+		if (params.offset && params.offset > ArtistListQueryHandler.maxOffset)
+			return [];
+
 		const ids = await this.getIds(params);
 
 		const knex = this.em
@@ -126,6 +129,8 @@ export class ArtistListQueryHandler implements IQueryHandler<ArtistListQuery> {
 	}
 
 	private async getCount(params: ArtistListParams): Promise<number> {
+		if (!params.getTotalCount) return 0;
+
 		const knex = this.createKnex(params).countDistinct(
 			'artists.id as count',
 		);
@@ -148,10 +153,8 @@ export class ArtistListQueryHandler implements IQueryHandler<ArtistListQuery> {
 			throw new BadRequestException(result.error.details[0].message);
 
 		const [artists, count] = await Promise.all([
-			params.offset && params.offset > ArtistListQueryHandler.maxOffset
-				? Promise.resolve([])
-				: this.getItems(params),
-			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
+			this.getItems(params),
+			this.getCount(params),
 		]);
 
 		return SearchResultObject.create<ArtistObject>(

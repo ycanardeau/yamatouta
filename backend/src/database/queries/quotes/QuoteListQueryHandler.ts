@@ -150,6 +150,9 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		params: QuoteListParams,
 		hashtagIds: number[],
 	): Promise<Quote[]> {
+		if (params.offset && params.offset > QuoteListQueryHandler.maxOffset)
+			return [];
+
 		const ids = await this.getIds(params, hashtagIds);
 
 		const knex = this.em
@@ -168,6 +171,8 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		params: QuoteListParams,
 		hashtagIds: number[],
 	): Promise<number> {
+		if (!params.getTotalCount) return 0;
+
 		const knex = this.createKnex(params, hashtagIds).countDistinct(
 			'quotes.id as count',
 		);
@@ -192,12 +197,8 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		const hashtagIds = await this.getHashtagIds(params.hashtags);
 
 		const [quotes, count] = await Promise.all([
-			params.offset && params.offset > QuoteListQueryHandler.maxOffset
-				? Promise.resolve([])
-				: this.getItems(params, hashtagIds),
-			params.getTotalCount
-				? this.getCount(params, hashtagIds)
-				: Promise.resolve(0),
+			this.getItems(params, hashtagIds),
+			this.getCount(params, hashtagIds),
 		]);
 
 		// Populate artists.

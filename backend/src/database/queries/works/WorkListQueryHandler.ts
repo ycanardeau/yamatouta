@@ -112,6 +112,9 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 	}
 
 	private async getItems(params: WorkListParams): Promise<Work[]> {
+		if (params.offset && params.offset > WorkListQueryHandler.maxOffset)
+			return [];
+
 		const ids = await this.getIds(params);
 
 		const knex = this.em
@@ -127,6 +130,8 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 	}
 
 	private async getCount(params: WorkListParams): Promise<number> {
+		if (!params.getTotalCount) return 0;
+
 		const knex = this.createKnex(params).countDistinct('works.id as count');
 
 		const count = _.map(await this.em.execute(knex), 'count')[0];
@@ -147,10 +152,8 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 			throw new BadRequestException(result.error.details[0].message);
 
 		const [works, count] = await Promise.all([
-			params.offset && params.offset > WorkListQueryHandler.maxOffset
-				? Promise.resolve([])
-				: this.getItems(params),
-			params.getTotalCount ? this.getCount(params) : Promise.resolve(0),
+			this.getItems(params),
+			this.getCount(params),
 		]);
 
 		return SearchResultObject.create<WorkObject>(
