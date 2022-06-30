@@ -21,7 +21,25 @@ export class HashtagController {
 		});
 	}
 
-	@Get(':name*')
+	@Get(':name/quotes')
+	async quotes(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Param('name') name: string,
+		@Res() response: Response,
+	): Promise<void> {
+		const hashtag = await this.queryBus.execute<
+			HashtagGetQuery,
+			HashtagObject
+		>(new HashtagGetQuery(permissionContext, new HashtagGetParams(name)));
+
+		return renderReact(response, {
+			title: `${t('shared.hashtag')} "#${hashtag.name}" - ${t(
+				'shared.quotes',
+			)}`,
+		});
+	}
+
+	@Get(':name')
 	async details(
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('name') name: string,

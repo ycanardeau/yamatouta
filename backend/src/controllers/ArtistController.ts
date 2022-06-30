@@ -26,7 +26,25 @@ export class ArtistController {
 		return renderReact(response);
 	}
 
-	@Get(':id*')
+	@Get(':id/quotes')
+	async quotes(
+		@GetPermissionContext() permissionContext: PermissionContext,
+		@Param('id', ParseIntPipe) id: number,
+		@Res() response: Response,
+	): Promise<void> {
+		const artist = await this.queryBus.execute<
+			ArtistGetQuery,
+			ArtistObject
+		>(new ArtistGetQuery(permissionContext, new ArtistGetParams(id)));
+
+		return renderReact(response, {
+			title: `${t('shared.artist')} "${artist.name}" - ${t(
+				'shared.quotes',
+			)}`,
+		});
+	}
+
+	@Get(':id')
 	async details(
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Param('id', ParseIntPipe) id: number,
