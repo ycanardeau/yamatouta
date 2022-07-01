@@ -1,9 +1,4 @@
-import {
-	EuiButton,
-	EuiPageContent,
-	EuiPageContentBody,
-	EuiSpacer,
-} from '@elastic/eui';
+import { EuiButton, EuiSpacer } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
@@ -56,21 +51,11 @@ const QuoteIndex = observer((): React.ReactElement => {
 				],
 			}}
 		>
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody>
-					<QuoteSearchOptions store={store} />
+			<QuoteSearchOptions store={store} />
 
-					<EuiSpacer size="m" />
+			<EuiSpacer size="m" />
 
-					<QuoteSearchList store={store} />
-				</EuiPageContentBody>
-			</EuiPageContent>
+			<QuoteSearchList store={store} />
 		</QuotePage>
 	);
 });

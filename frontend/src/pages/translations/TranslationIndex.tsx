@@ -1,9 +1,4 @@
-import {
-	EuiButton,
-	EuiPageContent,
-	EuiPageContentBody,
-	EuiSpacer,
-} from '@elastic/eui';
+import { EuiButton, EuiSpacer } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
@@ -56,21 +51,11 @@ const TranslationIndex = observer((): React.ReactElement => {
 				],
 			}}
 		>
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody>
-					<TranslationSearchOptions store={store} />
+			<TranslationSearchOptions store={store} />
 
-					<EuiSpacer size="m" />
+			<EuiSpacer size="m" />
 
-					<TranslationSearchTable store={store} />
-				</EuiPageContentBody>
-			</EuiPageContent>
+			<TranslationSearchTable store={store} />
 		</TranslationPage>
 	);
 });

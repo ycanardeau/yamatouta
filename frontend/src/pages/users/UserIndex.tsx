@@ -1,4 +1,4 @@
-import { EuiPageContent, EuiPageContentBody, EuiSpacer } from '@elastic/eui';
+import { EuiSpacer } from '@elastic/eui';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -21,21 +21,11 @@ const UserIndex = observer((): React.ReactElement => {
 
 	return (
 		<UserPage pageHeaderProps={{ pageTitle: t('shared.users') }}>
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody>
-					<UserSearchOptions store={store} />
+			<UserSearchOptions store={store} />
 
-					<EuiSpacer size="m" />
+			<EuiSpacer size="m" />
 
-					<UserSearchTable store={store} />
-				</EuiPageContentBody>
-			</EuiPageContent>
+			<UserSearchTable store={store} />
 		</UserPage>
 	);
 });

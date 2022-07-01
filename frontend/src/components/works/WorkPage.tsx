@@ -30,6 +30,7 @@ export const WorkPage = ({
 		<>
 			<EuiPageHeader
 				{...pageHeaderProps}
+				restrictWidth
 				breadcrumbs={([] as EuiBreadcrumb[])
 					.concat({
 						text: t('shared.works'),
@@ -60,7 +61,9 @@ export const WorkPage = ({
 				color="transparent"
 				borderRadius="none"
 			>
-				<EuiPageContentBody>{children}</EuiPageContentBody>
+				<EuiPageContentBody restrictWidth>
+					{children}
+				</EuiPageContentBody>
 			</EuiPageContent>
 		</>
 	);

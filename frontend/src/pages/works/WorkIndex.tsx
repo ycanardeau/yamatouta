@@ -1,9 +1,4 @@
-import {
-	EuiButton,
-	EuiPageContent,
-	EuiPageContentBody,
-	EuiSpacer,
-} from '@elastic/eui';
+import { EuiButton, EuiSpacer } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import React from 'react';
@@ -55,21 +50,11 @@ const WorkIndex = (): React.ReactElement => {
 				],
 			}}
 		>
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody>
-					<WorkSearchOptions store={store} />
+			<WorkSearchOptions store={store} />
 
-					<EuiSpacer size="m" />
+			<EuiSpacer size="m" />
 
-					<WorkSearchTable store={store} />
-				</EuiPageContentBody>
-			</EuiPageContent>
+			<WorkSearchTable store={store} />
 		</WorkPage>
 	);
 };

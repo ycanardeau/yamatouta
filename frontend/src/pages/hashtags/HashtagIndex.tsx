@@ -1,4 +1,3 @@
-import { EuiPageContent, EuiPageContentBody } from '@elastic/eui';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,17 +18,7 @@ const HashtagIndex = (): React.ReactElement => {
 
 	return (
 		<HashtagPage pageHeaderProps={{ pageTitle: t('shared.hashtags') }}>
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody>
-					<HashtagSearchTable store={store} />
-				</EuiPageContentBody>
-			</EuiPageContent>
+			<HashtagSearchTable store={store} />
 		</HashtagPage>
 	);
 };

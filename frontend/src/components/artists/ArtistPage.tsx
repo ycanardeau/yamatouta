@@ -30,6 +30,7 @@ export const ArtistPage = ({
 		<>
 			<EuiPageHeader
 				{...pageHeaderProps}
+				restrictWidth
 				breadcrumbs={([] as EuiBreadcrumb[])
 					.concat({
 						text: t('shared.artists'),
@@ -62,7 +63,9 @@ export const ArtistPage = ({
 				color="transparent"
 				borderRadius="none"
 			>
-				<EuiPageContentBody>{children}</EuiPageContentBody>
+				<EuiPageContentBody restrictWidth>
+					{children}
+				</EuiPageContentBody>
 			</EuiPageContent>
 		</>
 	);

@@ -30,6 +30,7 @@ export const TranslationPage = ({
 		<>
 			<EuiPageHeader
 				{...pageHeaderProps}
+				restrictWidth
 				breadcrumbs={([] as EuiBreadcrumb[])
 					.concat({
 						text: t('shared.words'),
@@ -62,7 +63,9 @@ export const TranslationPage = ({
 				color="transparent"
 				borderRadius="none"
 			>
-				<EuiPageContentBody>{children}</EuiPageContentBody>
+				<EuiPageContentBody restrictWidth>
+					{children}
+				</EuiPageContentBody>
 			</EuiPageContent>
 		</>
 	);

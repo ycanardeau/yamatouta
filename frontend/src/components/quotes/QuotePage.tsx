@@ -30,6 +30,7 @@ export const QuotePage = ({
 		<>
 			<EuiPageHeader
 				{...pageHeaderProps}
+				restrictWidth
 				breadcrumbs={([] as EuiBreadcrumb[])
 					.concat({
 						text: t('shared.quotes'),
@@ -60,7 +61,9 @@ export const QuotePage = ({
 				color="transparent"
 				borderRadius="none"
 			>
-				<EuiPageContentBody>{children}</EuiPageContentBody>
+				<EuiPageContentBody restrictWidth>
+					{children}
+				</EuiPageContentBody>
 			</EuiPageContent>
 		</>
 	);
