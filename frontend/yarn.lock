@@ -1352,10 +1352,10 @@
     stylis "^4.0.6"
     tslib "^2.1.0"
 
-"@fluentui/react-icons@2.0.167-rc.4":
-  version "2.0.167-rc.4"
-  resolved "https://registry.yarnpkg.com/@fluentui/react-icons/-/react-icons-2.0.167-rc.4.tgz#93df38a75caf70bea2e98842ae70e695882a6ad7"
-  integrity sha512-+cQRVulSJob++8IIPwR5l+akkT3agy54KwdKyHJADFhHuk6QM8f2Kssfa8ORdOIopnHprnOW+b6DZnQ/KUuvwg==
+"@fluentui/react-icons@^2.0.174":
+  version "2.0.174"
+  resolved "https://registry.yarnpkg.com/@fluentui/react-icons/-/react-icons-2.0.174.tgz#eacbb0cdaee877f2d843abb3bbb94023cfb6b169"
+  integrity sha512-PN65EH8vDbHqQ9DJb2CMV37iiR+clFF3Orl4KZN7OW3AjdHc9GVaznWh/kmTfPpg1ScS6i/Fs2F7m9J61WIwYw==
 
 "@fluentui/react-make-styles@^9.0.0-beta.4":
   version "9.0.0-beta.4"

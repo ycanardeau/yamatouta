@@ -8,7 +8,7 @@
 		"@elastic/eui": "^60.1.0",
 		"@emotion/react": "^11.8.1",
 		"@emotion/styled": "^11.6.0",
-		"@fluentui/react-icons": "2.0.167-rc.4",
+		"@fluentui/react-icons": "^2.0.174",
 		"@fluentui/react-make-styles": "^9.0.0-beta.4",
 		"@griffel/react": "^1.0.4",
 		"@testing-library/jest-dom": "^5.11.4",
