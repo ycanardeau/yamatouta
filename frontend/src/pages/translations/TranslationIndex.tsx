@@ -2,7 +2,6 @@ import {
 	EuiButton,
 	EuiPageContent,
 	EuiPageContentBody,
-	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
@@ -12,7 +11,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { TranslationBreadcrumbs } from '../../components/translations/TranslationBreadcrumbs';
+import { TranslationPage } from '../../components/translations/TranslationPage';
 import { TranslationSearchOptions } from '../../components/translations/TranslationSearchOptions';
 import { TranslationSearchTable } from '../../components/translations/TranslationSearchTable';
 import { useAuth } from '../../components/useAuth';
@@ -34,12 +33,10 @@ const TranslationIndex = observer((): React.ReactElement => {
 	const navigate = useNavigate();
 
 	return (
-		<>
-			<TranslationBreadcrumbs />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader
-				pageTitle={t('shared.words')}
-				rightSideItems={[
+		<TranslationPage
+			pageHeaderProps={{
+				pageTitle: t('shared.words'),
+				rightSideItems: [
 					<EuiButton
 						size="s"
 						href="/translations/create"
@@ -56,9 +53,9 @@ const TranslationIndex = observer((): React.ReactElement => {
 					>
 						{t('translations.addWord')}
 					</EuiButton>,
-				]}
-			/>
-
+				],
+			}}
+		>
 			<EuiPageContent
 				hasBorder={false}
 				hasShadow={false}
@@ -74,7 +71,7 @@ const TranslationIndex = observer((): React.ReactElement => {
 					<TranslationSearchTable store={store} />
 				</EuiPageContentBody>
 			</EuiPageContent>
-		</>
+		</TranslationPage>
 	);
 });
 

@@ -2,7 +2,6 @@ import {
 	EuiButton,
 	EuiPageContent,
 	EuiPageContentBody,
-	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
@@ -13,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../components/useAuth';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { WorkBreadcrumbs } from '../../components/works/WorkBreadcrumbs';
+import { WorkPage } from '../../components/works/WorkPage';
 import { WorkSearchOptions } from '../../components/works/WorkSearchOptions';
 import { WorkSearchTable } from '../../components/works/WorkSearchTable';
 import { Permission } from '../../models/Permission';
@@ -33,12 +32,10 @@ const WorkIndex = (): React.ReactElement => {
 	const auth = useAuth();
 
 	return (
-		<>
-			<WorkBreadcrumbs />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader
-				pageTitle={t('shared.works')}
-				rightSideItems={[
+		<WorkPage
+			pageHeaderProps={{
+				pageTitle: t('shared.works'),
+				rightSideItems: [
 					<EuiButton
 						size="s"
 						href="/works/create"
@@ -55,9 +52,9 @@ const WorkIndex = (): React.ReactElement => {
 					>
 						{t('works.addWork')}
 					</EuiButton>,
-				]}
-			/>
-
+				],
+			}}
+		>
 			<EuiPageContent
 				hasBorder={false}
 				hasShadow={false}
@@ -73,7 +70,7 @@ const WorkIndex = (): React.ReactElement => {
 					<WorkSearchTable store={store} />
 				</EuiPageContentBody>
 			</EuiPageContent>
-		</>
+		</WorkPage>
 	);
 };
 

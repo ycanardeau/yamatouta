@@ -1,13 +1,15 @@
 import {
+	EuiBreadcrumb,
 	EuiPageContent,
 	EuiPageContentBody,
 	EuiPageHeader,
 	EuiPageHeaderProps,
-	EuiSpacer,
 } from '@elastic/eui';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { IWorkObject } from '../../dto/IWorkObject';
-import { WorkBreadcrumbs } from './WorkBreadcrumbs';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface WorkPageProps {
 	work?: IWorkObject;
@@ -20,11 +22,36 @@ export const WorkPage = ({
 	pageHeaderProps,
 	children,
 }: WorkPageProps): React.ReactElement => {
+	const { t } = useTranslation();
+
+	const navigate = useNavigate();
+
 	return (
 		<>
-			<WorkBreadcrumbs work={work} />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader {...pageHeaderProps} />
+			<EuiPageHeader
+				{...pageHeaderProps}
+				breadcrumbs={([] as EuiBreadcrumb[])
+					.concat({
+						text: t('shared.works'),
+						href: '/works',
+						onClick: (e): void => {
+							e.preventDefault();
+							navigate('/works');
+						},
+					})
+					.concat(
+						work
+							? {
+									text: work.name,
+									href: EntryUrlMapper.details(work),
+									onClick: (e): void => {
+										e.preventDefault();
+										navigate(EntryUrlMapper.details(work));
+									},
+							  }
+							: [],
+					)}
+			/>
 
 			<EuiPageContent
 				hasBorder={false}

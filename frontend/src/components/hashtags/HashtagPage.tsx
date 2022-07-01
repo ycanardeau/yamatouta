@@ -1,17 +1,18 @@
 import {
+	EuiBreadcrumb,
 	EuiPageContent,
 	EuiPageContentBody,
 	EuiPageHeader,
 	EuiPageHeaderProps,
-	EuiSpacer,
 } from '@elastic/eui';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { IHashtagObject } from '../../dto/IHashtagObject';
-import { HashtagBreadcrumbs } from './HashtagBreadcrumbs';
 
 interface HashtagPageProps {
-	hashtag: IHashtagObject;
+	hashtag?: IHashtagObject;
 	pageHeaderProps?: EuiPageHeaderProps;
 	children?: React.ReactNode;
 }
@@ -21,11 +22,36 @@ export const HashtagPage = ({
 	pageHeaderProps,
 	children,
 }: HashtagPageProps): React.ReactElement => {
+	const { t } = useTranslation();
+
+	const navigate = useNavigate();
+
 	return (
 		<>
-			<HashtagBreadcrumbs hashtag={hashtag} />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader {...pageHeaderProps} />
+			<EuiPageHeader
+				{...pageHeaderProps}
+				breadcrumbs={([] as EuiBreadcrumb[])
+					.concat({
+						text: t('shared.hashtags'),
+						href: '/hashtags',
+						onClick: (e): void => {
+							e.preventDefault();
+							navigate('/hashtags');
+						},
+					})
+					.concat(
+						hashtag
+							? {
+									text: `#${hashtag.name}`,
+									href: `/hashtags/${hashtag.name}`,
+									onClick: (e): void => {
+										e.preventDefault();
+										navigate(`/hashtags/${hashtag.name}`);
+									},
+							  }
+							: [],
+					)}
+			/>
 
 			<EuiPageContent
 				hasBorder={false}

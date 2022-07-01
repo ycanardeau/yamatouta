@@ -1,16 +1,18 @@
 import {
+	EuiBreadcrumb,
 	EuiPageContent,
 	EuiPageContentBody,
 	EuiPageHeader,
 	EuiPageHeaderProps,
-	EuiSpacer,
 } from '@elastic/eui';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { IUserObject } from '../../dto/IUserObject';
-import { UserBreadcrumbs } from './UserBreadcrumbs';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface UserPageProps {
-	user: IUserObject;
+	user?: IUserObject;
 	pageHeaderProps?: EuiPageHeaderProps;
 	children?: React.ReactNode;
 }
@@ -20,11 +22,36 @@ export const UserPage = ({
 	pageHeaderProps,
 	children,
 }: UserPageProps): React.ReactElement => {
+	const { t } = useTranslation();
+
+	const navigate = useNavigate();
+
 	return (
 		<>
-			<UserBreadcrumbs user={user} />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader {...pageHeaderProps} />
+			<EuiPageHeader
+				{...pageHeaderProps}
+				breadcrumbs={([] as EuiBreadcrumb[])
+					.concat({
+						text: t('shared.users'),
+						href: '/users',
+						onClick: (e): void => {
+							e.preventDefault();
+							navigate('/users');
+						},
+					})
+					.concat(
+						user
+							? {
+									text: user.name,
+									href: EntryUrlMapper.details(user),
+									onClick: (e): void => {
+										e.preventDefault();
+										navigate(EntryUrlMapper.details(user));
+									},
+							  }
+							: [],
+					)}
+			/>
 
 			<EuiPageContent
 				hasBorder={false}

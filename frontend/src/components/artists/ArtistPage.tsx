@@ -1,13 +1,15 @@
 import {
+	EuiBreadcrumb,
 	EuiPageContent,
 	EuiPageContentBody,
 	EuiPageHeader,
 	EuiPageHeaderProps,
-	EuiSpacer,
 } from '@elastic/eui';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { IArtistObject } from '../../dto/IArtistObject';
-import { ArtistBreadcrumbs } from './ArtistBreadcrumbs';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface ArtistPageProps {
 	artist?: IArtistObject;
@@ -20,11 +22,38 @@ export const ArtistPage = ({
 	pageHeaderProps,
 	children,
 }: ArtistPageProps): React.ReactElement => {
+	const { t } = useTranslation();
+
+	const navigate = useNavigate();
+
 	return (
 		<>
-			<ArtistBreadcrumbs artist={artist} />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader {...pageHeaderProps} />
+			<EuiPageHeader
+				{...pageHeaderProps}
+				breadcrumbs={([] as EuiBreadcrumb[])
+					.concat({
+						text: t('shared.artists'),
+						href: '/artists',
+						onClick: (e): void => {
+							e.preventDefault();
+							navigate('/artists');
+						},
+					})
+					.concat(
+						artist
+							? {
+									text: artist.name,
+									href: EntryUrlMapper.details(artist),
+									onClick: (e): void => {
+										e.preventDefault();
+										navigate(
+											EntryUrlMapper.details(artist),
+										);
+									},
+							  }
+							: [],
+					)}
+			/>
 
 			<EuiPageContent
 				hasBorder={false}

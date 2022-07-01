@@ -1,14 +1,9 @@
-import {
-	EuiPageContent,
-	EuiPageContentBody,
-	EuiPageHeader,
-	EuiSpacer,
-} from '@elastic/eui';
+import { EuiPageContent, EuiPageContentBody } from '@elastic/eui';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { HashtagBreadcrumbs } from '../../components/hashtags/HashtagBreadcrumbs';
+import { HashtagPage } from '../../components/hashtags/HashtagPage';
 import { HashtagSearchTable } from '../../components/hashtags/HashtagSearchTable';
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 import { HashtagSearchStore } from '../../stores/hashtags/HashtagSearchStore';
@@ -23,11 +18,7 @@ const HashtagIndex = (): React.ReactElement => {
 	useStoreWithPagination(store);
 
 	return (
-		<>
-			<HashtagBreadcrumbs />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader pageTitle={t('shared.hashtags')} />
-
+		<HashtagPage pageHeaderProps={{ pageTitle: t('shared.hashtags') }}>
 			<EuiPageContent
 				hasBorder={false}
 				hasShadow={false}
@@ -39,7 +30,7 @@ const HashtagIndex = (): React.ReactElement => {
 					<HashtagSearchTable store={store} />
 				</EuiPageContentBody>
 			</EuiPageContent>
-		</>
+		</HashtagPage>
 	);
 };
 

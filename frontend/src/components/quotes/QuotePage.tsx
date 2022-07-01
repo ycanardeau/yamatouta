@@ -1,13 +1,15 @@
 import {
+	EuiBreadcrumb,
 	EuiPageContent,
 	EuiPageContentBody,
 	EuiPageHeader,
 	EuiPageHeaderProps,
-	EuiSpacer,
 } from '@elastic/eui';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { IQuoteObject } from '../../dto/IQuoteObject';
-import { QuoteBreadcrumbs } from './QuoteBreadcrumbs';
+import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface QuotePageProps {
 	quote?: IQuoteObject;
@@ -20,11 +22,36 @@ export const QuotePage = ({
 	pageHeaderProps,
 	children,
 }: QuotePageProps): React.ReactElement => {
+	const { t } = useTranslation();
+
+	const navigate = useNavigate();
+
 	return (
 		<>
-			<QuoteBreadcrumbs quote={quote} />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader {...pageHeaderProps} />
+			<EuiPageHeader
+				{...pageHeaderProps}
+				breadcrumbs={([] as EuiBreadcrumb[])
+					.concat({
+						text: t('shared.quotes'),
+						href: '/quotes',
+						onClick: (e): void => {
+							e.preventDefault();
+							navigate('/quotes');
+						},
+					})
+					.concat(
+						quote
+							? {
+									text: quote.plainText.replaceAll('\n', ''),
+									href: EntryUrlMapper.details(quote),
+									onClick: (e): void => {
+										e.preventDefault();
+										navigate(EntryUrlMapper.details(quote));
+									},
+							  }
+							: [],
+					)}
+			/>
 
 			<EuiPageContent
 				hasBorder={false}

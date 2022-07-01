@@ -1,16 +1,11 @@
-import {
-	EuiPageContent,
-	EuiPageContentBody,
-	EuiPageHeader,
-	EuiSpacer,
-} from '@elastic/eui';
+import { EuiPageContent, EuiPageContentBody, EuiSpacer } from '@elastic/eui';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { UserBreadcrumbs } from '../../components/users/UserBreadcrumbs';
+import { UserPage } from '../../components/users/UserPage';
 import { UserSearchOptions } from '../../components/users/UserSearchOptions';
 import UserSearchTable from '../../components/users/UserSearchTable';
 import { UserSearchStore } from '../../stores/users/UserSearchStore';
@@ -25,11 +20,7 @@ const UserIndex = observer((): React.ReactElement => {
 	useStoreWithPagination(store);
 
 	return (
-		<>
-			<UserBreadcrumbs />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader pageTitle={t('shared.users')} />
-
+		<UserPage pageHeaderProps={{ pageTitle: t('shared.users') }}>
 			<EuiPageContent
 				hasBorder={false}
 				hasShadow={false}
@@ -45,7 +36,7 @@ const UserIndex = observer((): React.ReactElement => {
 					<UserSearchTable store={store} />
 				</EuiPageContentBody>
 			</EuiPageContent>
-		</>
+		</UserPage>
 	);
 });
 

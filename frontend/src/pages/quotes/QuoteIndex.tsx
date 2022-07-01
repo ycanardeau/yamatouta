@@ -2,7 +2,6 @@ import {
 	EuiButton,
 	EuiPageContent,
 	EuiPageContentBody,
-	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
@@ -12,7 +11,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { QuoteBreadcrumbs } from '../../components/quotes/QuoteBreadcrumbs';
+import { QuotePage } from '../../components/quotes/QuotePage';
 import { QuoteSearchList } from '../../components/quotes/QuoteSearchList';
 import { QuoteSearchOptions } from '../../components/quotes/QuoteSearchOptions';
 import { useAuth } from '../../components/useAuth';
@@ -34,12 +33,10 @@ const QuoteIndex = observer((): React.ReactElement => {
 	const navigate = useNavigate();
 
 	return (
-		<>
-			<QuoteBreadcrumbs />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader
-				pageTitle={t('shared.quotes')}
-				rightSideItems={[
+		<QuotePage
+			pageHeaderProps={{
+				pageTitle: t('shared.quotes'),
+				rightSideItems: [
 					<EuiButton
 						size="s"
 						href="/quotes/create"
@@ -56,9 +53,9 @@ const QuoteIndex = observer((): React.ReactElement => {
 					>
 						{t('quotes.addQuote')}
 					</EuiButton>,
-				]}
-			/>
-
+				],
+			}}
+		>
 			<EuiPageContent
 				hasBorder={false}
 				hasShadow={false}
@@ -74,7 +71,7 @@ const QuoteIndex = observer((): React.ReactElement => {
 					<QuoteSearchList store={store} />
 				</EuiPageContentBody>
 			</EuiPageContent>
-		</>
+		</QuotePage>
 	);
 });
 

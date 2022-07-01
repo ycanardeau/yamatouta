@@ -2,7 +2,6 @@ import {
 	EuiButton,
 	EuiPageContent,
 	EuiPageContentBody,
-	EuiPageHeader,
 	EuiSpacer,
 } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
@@ -12,7 +11,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { ArtistBreadcrumbs } from '../../components/artists/ArtistBreadcrumbs';
+import { ArtistPage } from '../../components/artists/ArtistPage';
 import { ArtistSearchOptions } from '../../components/artists/ArtistSearchOptions';
 import { ArtistSearchTable } from '../../components/artists/ArtistSearchTable';
 import { useAuth } from '../../components/useAuth';
@@ -34,12 +33,10 @@ const ArtistIndex = observer((): React.ReactElement => {
 	const auth = useAuth();
 
 	return (
-		<>
-			<ArtistBreadcrumbs />
-			<EuiSpacer size="xs" />
-			<EuiPageHeader
-				pageTitle={t('shared.artists')}
-				rightSideItems={[
+		<ArtistPage
+			pageHeaderProps={{
+				pageTitle: t('shared.artists'),
+				rightSideItems: [
 					<EuiButton
 						size="s"
 						href="/artists/create"
@@ -56,9 +53,9 @@ const ArtistIndex = observer((): React.ReactElement => {
 					>
 						{t('artists.addArtist')}
 					</EuiButton>,
-				]}
-			/>
-
+				],
+			}}
+		>
 			<EuiPageContent
 				hasBorder={false}
 				hasShadow={false}
@@ -74,7 +71,7 @@ const ArtistIndex = observer((): React.ReactElement => {
 					<ArtistSearchTable store={store} />
 				</EuiPageContentBody>
 			</EuiPageContent>
-		</>
+		</ArtistPage>
 	);
 });
 
