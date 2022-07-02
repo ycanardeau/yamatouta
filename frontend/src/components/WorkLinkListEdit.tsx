@@ -11,6 +11,7 @@ import {
 	EuiTableRowCell,
 } from '@elastic/eui';
 import { AddRegular, DeleteRegular } from '@fluentui/react-icons';
+import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 
@@ -127,7 +128,12 @@ export const WorkLinkListEdit = observer(
 				<EuiSpacer size="m" />
 
 				<EuiButton
-					onClick={store.add}
+					onClick={(): void => {
+						runInAction(() => {
+							const workLink = store.add();
+							workLink.setLinkType(allowedLinkTypes[0]);
+						});
+					}}
 					size="s"
 					iconType={AddRegular}
 					disabled={false}

@@ -14,8 +14,10 @@ export class BasicListEditStore<TItem, TObject> {
 		this.items = objects.map((object) => new type(object));
 	}
 
-	@action add = (): void => {
-		this.items.push(new this.type());
+	@action add = (): TItem => {
+		const item = new this.type();
+		this.items.push(item);
+		return item;
 	};
 
 	@action remove = (item: TItem): void => {

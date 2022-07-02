@@ -12,7 +12,7 @@ export class WebLinkUpdateParams {
 
 	static readonly schema = Joi.object<WebLinkUpdateParams>({
 		id: Joi.number().required(),
-		url: Joi.string().required().trim().allow('').uri(),
+		url: Joi.string().required().trim().uri(),
 		title: Joi.string().required().trim().allow(''),
 		category: Joi.string()
 			.required()

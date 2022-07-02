@@ -5,7 +5,7 @@ import { PartialDate } from '../entities/PartialDate';
 import { Work } from '../entities/Work';
 import { WorkLink } from '../entities/WorkLink';
 import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
-import { LinkType, workLinkTypes } from '../models/LinkType';
+import { workLinkTypes } from '../models/LinkType';
 import { Permission } from '../models/Permission';
 import { WorkLinkUpdateParams } from '../models/WorkLinkUpdateParams';
 import { collectionSyncWithContent } from '../utils/collectionDiff';
@@ -76,11 +76,7 @@ export class WorkLinkService {
 
 		await collectionSyncWithContent(
 			entry.workLinks.getItems(),
-			newItems.filter(
-				(newItem) =>
-					newItem.relatedWorkId &&
-					newItem.linkType !== LinkType.Unspecified,
-			),
+			newItems,
 			(oldItem, newItem) => oldItem.id === newItem.id,
 			create,
 			update,

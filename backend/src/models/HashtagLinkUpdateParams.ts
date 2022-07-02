@@ -12,7 +12,6 @@ export class HashtagLinkUpdateParams {
 		name: Joi.string()
 			.required()
 			.trim()
-			.allow('')
 			.max(100)
 			.regex(/[あ-ん]/u),
 		label: Joi.string().required().trim().allow('').max(100),

@@ -101,7 +101,7 @@ export class WebLinkService {
 
 		await collectionSyncWithContent(
 			entry.webLinks.getItems(),
-			newItems.filter((newItem) => !!newItem.url.trim()),
+			newItems,
 			(oldItem, newItem) => oldItem.id === newItem.id,
 			create,
 			update,

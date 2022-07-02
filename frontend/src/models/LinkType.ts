@@ -17,9 +17,8 @@ export enum LinkType {
 }
 
 export const artistLinkTypes: Record<EntryType.Work, LinkType[]> = {
-	//[EntryType.Artist]: [LinkType.Unspecified, LinkType.Artist_Artist_Member],
+	//[EntryType.Artist]: [LinkType.Artist_Artist_Member],
 	[EntryType.Work]: [
-		LinkType.Unspecified,
 		LinkType.Work_Artist_Author,
 		LinkType.Work_Artist_Contributor,
 		LinkType.Work_Artist_Editor,

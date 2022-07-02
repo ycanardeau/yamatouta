@@ -83,7 +83,7 @@ export class HashtagLinkService {
 
 		await collectionSyncWithContent(
 			entry.hashtagLinks.getItems(),
-			newItems.filter((newItem) => !!newItem.name.trim()),
+			newItems,
 			(oldItem, newItem) => oldItem.id === newItem.id,
 			create,
 			update,

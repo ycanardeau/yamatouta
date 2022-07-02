@@ -6,7 +6,7 @@ import { ArtistLink } from '../entities/ArtistLink';
 import { PartialDate } from '../entities/PartialDate';
 import { ArtistLinkUpdateParams } from '../models/ArtistLinkUpdateParams';
 import { IEntryWithArtistLinks } from '../models/IEntryWithArtistLinks';
-import { artistLinkTypes, LinkType } from '../models/LinkType';
+import { artistLinkTypes } from '../models/LinkType';
 import { Permission } from '../models/Permission';
 import { collectionSyncWithContent } from '../utils/collectionDiff';
 import { PermissionContext } from './PermissionContext';
@@ -76,11 +76,7 @@ export class ArtistLinkService {
 
 		await collectionSyncWithContent(
 			entry.artistLinks.getItems(),
-			newItems.filter(
-				(newItem) =>
-					newItem.relatedArtistId &&
-					newItem.linkType !== LinkType.Unspecified,
-			),
+			newItems,
 			(oldItem, newItem) => oldItem.id === newItem.id,
 			create,
 			update,
