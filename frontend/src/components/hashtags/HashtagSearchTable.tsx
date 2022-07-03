@@ -42,6 +42,7 @@ const HashtagSearchTableHeader = observer(
 					isSortAscending={
 						store.sort === HashtagSortRule.ReferenceCountAsc
 					}
+					align="right"
 				>
 					{t('hashtags.referenceCount')}
 				</EuiTableHeaderCell>
@@ -71,6 +72,7 @@ const HashtagSearchTableRow = React.memo(
 				</EuiTableRowCell>
 				<EuiTableRowCell
 					mobileOptions={{ header: t('hashtags.referenceCount') }}
+					align="right"
 				>
 					{hashtag.referenceCount}
 				</EuiTableRowCell>
