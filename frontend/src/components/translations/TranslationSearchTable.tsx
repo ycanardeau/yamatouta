@@ -3,6 +3,7 @@ import {
 	EuiButtonIcon,
 	EuiContextMenuItem,
 	EuiContextMenuPanel,
+	EuiHighlight,
 	EuiHorizontalRule,
 	EuiIcon,
 	EuiLink,
@@ -28,7 +29,6 @@ import classNames from 'classnames';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import Highlighter from 'react-highlight-words';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -77,32 +77,6 @@ const TranslationSearchTableHeader = observer(
 				</EuiTableHeaderCell>
 				<EuiTableHeaderCell width={32} />
 			</EuiTableHeader>
-		);
-	},
-);
-
-interface HighlightProps {
-	children: React.ReactNode;
-}
-
-const Highlight = ({ children }: HighlightProps): React.ReactElement => {
-	return <strong className="highlighted-text">{children}</strong>;
-};
-
-interface HighlightedTextProps {
-	text: string;
-	searchWords: string[];
-}
-
-const HighlightedText = React.memo(
-	({ text, searchWords }: HighlightedTextProps): React.ReactElement => {
-		return (
-			<Highlighter
-				searchWords={searchWords}
-				autoEscape={true}
-				textToHighlight={text}
-				highlightTag={Highlight}
-			/>
 		);
 	},
 );
@@ -251,7 +225,9 @@ const WordLink = observer(
 					});
 				}}
 			>
-				<HighlightedText text={part} searchWords={store.searchWords} />
+				<EuiHighlight search={store.query.trim()} highlightAll={true}>
+					{part}
+				</EuiHighlight>
 			</EuiLink>
 		);
 	},
@@ -273,10 +249,12 @@ const WordLinkList = observer(
 						{sort ? (
 							<WordLink store={store} part={part} sort={sort} />
 						) : (
-							<HighlightedText
-								text={part}
-								searchWords={store.searchWords}
-							/>
+							<EuiHighlight
+								search={store.query.trim()}
+								highlightAll={true}
+							>
+								{part}
+							</EuiHighlight>
 						)}
 					</React.Fragment>
 				))}
