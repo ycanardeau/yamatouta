@@ -10,6 +10,9 @@ export const TableEmptyBody = ({
 	noItemsMessage,
 }: TableEmptyBodyProps): React.ReactElement => {
 	return (
+		/* FIXME */
+		/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+		/* @ts-ignore */
 		<EuiTableBody>
 			<EuiTableRow>
 				<EuiTableRowCell

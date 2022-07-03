@@ -85,6 +85,9 @@ export const HashtagListEdit = observer(
 						<EuiTableHeaderCell width={32} />
 					</EuiTableHeader>
 
+					{/* FIXME */}
+					{/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+					{/* @ts-ignore */}
 					<EuiTableBody>
 						{store.items.map((item, index) => (
 							<HashtagEdit

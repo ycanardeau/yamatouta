@@ -78,6 +78,9 @@ const UserSearchTableBody = observer(
 				}
 			/>
 		) : (
+			/* FIXME */
+			/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+			/* @ts-ignore */
 			<EuiTableBody>
 				{store.users.map((user) => (
 					<UserSearchTableRow user={user} key={user.id} />

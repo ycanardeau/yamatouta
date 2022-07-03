@@ -17,7 +17,7 @@ export const WorkComboBox = ({
 	const { t } = useTranslation();
 
 	const handleSearchChange = React.useCallback(
-		(searchValue): Promise<ISearchResultObject<IWorkObject>> =>
+		(searchValue: string): Promise<ISearchResultObject<IWorkObject>> =>
 			workApi.list({
 				pagination: {
 					offset: 0,

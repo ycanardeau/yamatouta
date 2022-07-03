@@ -359,6 +359,9 @@ const TranslationSearchTableBody = observer(
 				colSpan={4}
 			/>
 		) : (
+			/* FIXME */
+			/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+			/* @ts-ignore */
 			<EuiTableBody>
 				{store.translations.map((translation) => (
 					<TranslationSearchTableRow
