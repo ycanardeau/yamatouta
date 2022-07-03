@@ -5,7 +5,6 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
@@ -31,11 +30,9 @@ ReactDOM.render(
 	<React.StrictMode>
 		<AuthProvider>
 			<BrowserRouter>
-				<HelmetProvider>
-					<EuiProvider colorMode="dark" cache={emotionCache}>
-						<App />
-					</EuiProvider>
-				</HelmetProvider>
+				<EuiProvider colorMode="dark" cache={emotionCache}>
+					<App />
+				</EuiProvider>
 			</BrowserRouter>
 		</AuthProvider>
 	</React.StrictMode>,
