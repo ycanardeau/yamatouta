@@ -3,6 +3,8 @@ import {
 	EuiComment,
 	EuiContextMenuItem,
 	EuiContextMenuPanel,
+	EuiFlexGroup,
+	EuiFlexItem,
 	EuiIcon,
 	EuiPopover,
 } from '@elastic/eui';
@@ -174,7 +176,14 @@ export const QuoteComment = ({
 			timelineIcon={<Avatar size="l" name={quote.artist.name} />}
 			actions={<QuotePopover store={store} quote={quote} />}
 		>
-			<Markdown textSize="s">{quote.text}</Markdown>
+			<EuiFlexGroup>
+				<EuiFlexItem>
+					<Markdown textSize="s">{quote.text}</Markdown>
+				</EuiFlexItem>
+				<EuiFlexItem>
+					<Markdown textSize="s">{quote.transcription}</Markdown>
+				</EuiFlexItem>
+			</EuiFlexGroup>
 		</EuiComment>
 	);
 };
