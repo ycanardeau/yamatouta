@@ -77,7 +77,7 @@ const markdownLinkValidator = (options: EuiMarkdownLinkValidatorOptions) => {
 				const fragment = node.url.slice(1);
 
 				if (fragment.match(/^[あ-ん]+$/g)) {
-					node.url = `/hashtags/${fragment}`;
+					node.url = `/hashtags/${fragment}/quotes`;
 					_node = node;
 				}
 			}
