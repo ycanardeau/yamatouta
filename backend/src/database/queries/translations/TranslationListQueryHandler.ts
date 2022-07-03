@@ -280,7 +280,7 @@ export class TranslationListQueryHandler
 
 		return SearchResultObject.create(
 			translations.map((translation) =>
-				TranslationObject.create(translation, permissionContext),
+				TranslationObject.create(permissionContext, translation),
 			),
 			count,
 		);

@@ -16,8 +16,8 @@ export class RevisionObject {
 	) {}
 
 	static create(
-		revision: Revision<EntryWithRevisions, Snapshot>,
 		permissionContext: PermissionContext,
+		revision: Revision<EntryWithRevisions, Snapshot>,
 	): RevisionObject {
 		if (!permissionContext.hasPermission(Permission.ViewRevisions))
 			throw new NotFoundException();
@@ -26,7 +26,7 @@ export class RevisionObject {
 
 		return new RevisionObject(
 			revision.createdAt,
-			UserObject.create(revision.actor.getEntity(), permissionContext),
+			UserObject.create(permissionContext, revision.actor.getEntity()),
 			revision.event,
 		);
 	}

@@ -46,7 +46,7 @@ abstract class EntryListRevisionsQueryHandler<
 
 		return SearchResultObject.create(
 			revisions.map((revision) =>
-				RevisionObject.create(revision, permissionContext),
+				RevisionObject.create(permissionContext, revision),
 			),
 			revisions.length,
 		);

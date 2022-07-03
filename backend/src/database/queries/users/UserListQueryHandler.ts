@@ -146,7 +146,7 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 		]);
 
 		return SearchResultObject.create<UserObject>(
-			users.map((user) => UserObject.create(user, permissionContext)),
+			users.map((user) => UserObject.create(permissionContext, user)),
 			count,
 		);
 	}

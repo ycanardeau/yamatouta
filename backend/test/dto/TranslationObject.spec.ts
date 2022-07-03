@@ -76,8 +76,8 @@ describe('TranslationObject', () => {
 
 	test('create', () => {
 		const translationObject = TranslationObject.create(
-			translation,
 			permissionContext,
+			translation,
 		);
 		expect(translationObject.id).toBe(translation.id);
 		expect(translationObject.headword).toBe(
@@ -95,11 +95,11 @@ describe('TranslationObject', () => {
 		expect(translationObject.category).toBe(translation.category);
 
 		expect(() =>
-			TranslationObject.create(deletedTranslation, permissionContext),
+			TranslationObject.create(permissionContext, deletedTranslation),
 		).toThrow(NotFoundException);
 
 		expect(() =>
-			TranslationObject.create(hiddenTranslation, permissionContext),
+			TranslationObject.create(permissionContext, hiddenTranslation),
 		).toThrow(NotFoundException);
 	});
 });

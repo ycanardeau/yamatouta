@@ -51,8 +51,8 @@ export class TranslationGetQueryHandler
 		if (!translation) throw new NotFoundException();
 
 		return TranslationObject.create(
-			translation,
 			permissionContext,
+			translation,
 			params.fields,
 		);
 	}

@@ -59,16 +59,16 @@ describe('UserObject', () => {
 	});
 
 	test('create', () => {
-		const userObject = UserObject.create(user, permissionContext);
+		const userObject = UserObject.create(permissionContext, user);
 		expect(userObject.id).toBe(user.id);
 		expect(userObject.name).toBe(user.name);
 		expect(userObject.avatarUrl).not.toBe(user.email);
 
-		expect(() => UserObject.create(deletedUser, permissionContext)).toThrow(
+		expect(() => UserObject.create(permissionContext, deletedUser)).toThrow(
 			NotFoundException,
 		);
 
-		expect(() => UserObject.create(hiddenUser, permissionContext)).toThrow(
+		expect(() => UserObject.create(permissionContext, hiddenUser)).toThrow(
 			NotFoundException,
 		);
 	});

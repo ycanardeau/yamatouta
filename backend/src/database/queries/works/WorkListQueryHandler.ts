@@ -157,7 +157,7 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 		]);
 
 		return SearchResultObject.create<WorkObject>(
-			works.map((work) => WorkObject.create(work, permissionContext)),
+			works.map((work) => WorkObject.create(permissionContext, work)),
 			count,
 		);
 	}

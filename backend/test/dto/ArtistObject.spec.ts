@@ -69,17 +69,17 @@ describe('ArtistObject', () => {
 	});
 
 	test('create', () => {
-		const artistObject = ArtistObject.create(artist, permissionContext);
+		const artistObject = ArtistObject.create(permissionContext, artist);
 		expect(artistObject.id).toBe(artist.id);
 		expect(artistObject.name).toBe(artist.name);
 		expect(artistObject.artistType).toBe(artist.artistType);
 
 		expect(() =>
-			ArtistObject.create(deletedArtist, permissionContext),
+			ArtistObject.create(permissionContext, deletedArtist),
 		).toThrow(NotFoundException);
 
 		expect(() =>
-			ArtistObject.create(hiddenArtist, permissionContext),
+			ArtistObject.create(permissionContext, hiddenArtist),
 		).toThrow(NotFoundException);
 	});
 });

@@ -108,8 +108,8 @@ export class ArtistUpdateCommandHandler
 		});
 
 		return ArtistObject.create(
-			artist,
 			permissionContext,
+			artist,
 			Object.values(ArtistOptionalField),
 		);
 	}

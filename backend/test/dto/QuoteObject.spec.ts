@@ -83,18 +83,18 @@ describe('QuoteObject', () => {
 	});
 
 	test('create', () => {
-		const quoteObject = QuoteObject.create(quote, permissionContext);
+		const quoteObject = QuoteObject.create(permissionContext, quote);
 		expect(quoteObject.id).toBe(quote.id);
 		expect(quoteObject.quoteType).toBe(quote.quoteType);
 		expect(quoteObject.artist.id).toBe(artist.id);
 		expect(quoteObject.artist.name).toBe(artist.name);
 
 		expect(() =>
-			QuoteObject.create(deletedQuote, permissionContext),
+			QuoteObject.create(permissionContext, deletedQuote),
 		).toThrow(NotFoundException);
 
 		expect(() =>
-			QuoteObject.create(hiddenQuote, permissionContext),
+			QuoteObject.create(permissionContext, hiddenQuote),
 		).toThrow(NotFoundException);
 	});
 });

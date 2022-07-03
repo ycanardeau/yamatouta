@@ -69,16 +69,16 @@ describe('WorkObject', () => {
 	});
 
 	test('create', () => {
-		const workObject = WorkObject.create(work, permissionContext);
+		const workObject = WorkObject.create(permissionContext, work);
 		expect(workObject.id).toBe(work.id);
 		expect(workObject.name).toBe(work.name);
 		expect(workObject.workType).toBe(work.workType);
 
-		expect(() => WorkObject.create(deletedWork, permissionContext)).toThrow(
+		expect(() => WorkObject.create(permissionContext, deletedWork)).toThrow(
 			NotFoundException,
 		);
 
-		expect(() => WorkObject.create(hiddenWork, permissionContext)).toThrow(
+		expect(() => WorkObject.create(permissionContext, hiddenWork)).toThrow(
 			NotFoundException,
 		);
 	});

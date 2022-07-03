@@ -159,7 +159,7 @@ export class ArtistListQueryHandler implements IQueryHandler<ArtistListQuery> {
 
 		return SearchResultObject.create<ArtistObject>(
 			artists.map((artist) =>
-				ArtistObject.create(artist, permissionContext),
+				ArtistObject.create(permissionContext, artist),
 			),
 			count,
 		);

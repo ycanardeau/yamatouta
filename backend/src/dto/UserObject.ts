@@ -13,8 +13,8 @@ export class UserObject {
 	) {}
 
 	static create(
-		user: User,
 		permissionContext: PermissionContext,
+		user: User,
 	): UserObject {
 		permissionContext.verifyDeletedAndHidden(user);
 

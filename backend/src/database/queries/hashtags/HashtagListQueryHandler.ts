@@ -139,7 +139,7 @@ export class HashtagListQueryHandler
 
 		return SearchResultObject.create<HashtagObject>(
 			hashtags.map((hashtag) =>
-				HashtagObject.create(hashtag, permissionContext),
+				HashtagObject.create(permissionContext, hashtag),
 			),
 			count,
 		);

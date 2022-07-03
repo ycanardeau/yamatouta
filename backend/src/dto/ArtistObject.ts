@@ -18,8 +18,8 @@ export class ArtistObject {
 	) {}
 
 	static create(
-		artist: Artist,
 		permissionContext: PermissionContext,
+		artist: Artist,
 		fields: ArtistOptionalField[] = [],
 	): ArtistObject {
 		permissionContext.verifyDeletedAndHidden(artist);

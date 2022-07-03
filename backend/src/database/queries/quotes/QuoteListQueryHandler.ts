@@ -212,7 +212,7 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		});
 
 		return SearchResultObject.create<QuoteObject>(
-			quotes.map((quote) => QuoteObject.create(quote, permissionContext)),
+			quotes.map((quote) => QuoteObject.create(permissionContext, quote)),
 			count,
 		);
 	}

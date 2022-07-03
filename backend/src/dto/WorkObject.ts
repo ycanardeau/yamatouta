@@ -19,8 +19,8 @@ export class WorkObject {
 	) {}
 
 	static create(
-		work: Work,
 		permissionContext: PermissionContext,
+		work: Work,
 		fields: WorkOptionalField[] = [],
 	): WorkObject {
 		permissionContext.verifyDeletedAndHidden(work);
@@ -35,7 +35,7 @@ export class WorkObject {
 			? work.artistLinks
 					.getItems()
 					.map((artistLink) =>
-						ArtistLinkObject.create(artistLink, permissionContext),
+						ArtistLinkObject.create(permissionContext, artistLink),
 					)
 			: undefined;
 

@@ -169,8 +169,8 @@ export class QuoteUpdateCommandHandler
 		});
 
 		return QuoteObject.create(
-			quote,
 			permissionContext,
+			quote,
 			Object.values(QuoteOptionalField),
 		);
 	}

@@ -8,8 +8,8 @@ export class HashtagObject {
 	) {}
 
 	static create(
-		hashtag: Hashtag,
 		permissionContext: PermissionContext,
+		hashtag: Hashtag,
 	): HashtagObject {
 		permissionContext.verifyDeletedAndHidden(hashtag);
 

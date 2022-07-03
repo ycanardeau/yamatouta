@@ -32,6 +32,6 @@ export class HashtagGetQueryHandler implements IQueryHandler<HashtagGetQuery> {
 
 		if (!hashtag) throw new NotFoundException();
 
-		return HashtagObject.create(hashtag, permissionContext);
+		return HashtagObject.create(permissionContext, hashtag);
 	}
 }

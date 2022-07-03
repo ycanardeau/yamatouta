@@ -27,8 +27,8 @@ export class QuoteObject {
 	) {}
 
 	static create(
-		quote: Quote,
 		permissionContext: PermissionContext,
+		quote: Quote,
 		fields: QuoteOptionalField[] = [],
 	): QuoteObject {
 		permissionContext.verifyDeletedAndHidden(quote);
@@ -38,8 +38,8 @@ export class QuoteObject {
 					.getItems()
 					.map((hashtagLink) =>
 						HashtagLinkObject.create(
-							hashtagLink,
 							permissionContext,
+							hashtagLink,
 						),
 					)
 			: undefined;
@@ -68,7 +68,7 @@ export class QuoteObject {
 			quote.plainText,
 			quote.transcription,
 			quote.locale,
-			ArtistObject.create(quote.artist.getEntity(), permissionContext),
+			ArtistObject.create(permissionContext, quote.artist.getEntity()),
 			quote.sourceUrl,
 			hashtagLinks,
 			webLinks,

@@ -21,8 +21,8 @@ export class TranslationObject {
 	) {}
 
 	static create(
-		translation: Translation,
 		permissionContext: PermissionContext,
+		translation: Translation,
 		fields: TranslationOptionalField[] = [],
 	): TranslationObject {
 		permissionContext.verifyDeletedAndHidden(translation);

@@ -5,8 +5,8 @@ export class HashtagLinkObject {
 	private constructor(readonly id: number, readonly name: string) {}
 
 	static create(
-		hashtagLink: HashtagLink,
 		permissionContext: PermissionContext,
+		hashtagLink: HashtagLink,
 	): HashtagLinkObject {
 		// REVIEW
 		permissionContext.verifyDeletedAndHidden(

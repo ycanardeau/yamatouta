@@ -48,6 +48,6 @@ export class WorkGetQueryHandler implements IQueryHandler<WorkGetQuery> {
 
 		if (!work) throw new NotFoundException();
 
-		return WorkObject.create(work, permissionContext, params.fields);
+		return WorkObject.create(permissionContext, work, params.fields);
 	}
 }

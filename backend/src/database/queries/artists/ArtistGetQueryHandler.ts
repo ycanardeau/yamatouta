@@ -42,6 +42,6 @@ export class ArtistGetQueryHandler implements IQueryHandler<ArtistGetQuery> {
 
 		if (!artist) throw new NotFoundException();
 
-		return ArtistObject.create(artist, permissionContext, params.fields);
+		return ArtistObject.create(permissionContext, artist, params.fields);
 	}
 }
