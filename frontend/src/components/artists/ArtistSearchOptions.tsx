@@ -8,7 +8,6 @@ import {
 } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { DebounceInput } from 'react-debounce-input';
 import { useTranslation } from 'react-i18next';
 
 import { ArtistSortRule } from '../../models/artists/ArtistSortRule';
@@ -26,14 +25,13 @@ export const ArtistSearchOptions = observer(
 		return (
 			<EuiFlexGroup gutterSize="m">
 				<EuiFlexItem>
-					<DebounceInput
+					<EuiFieldSearch
 						compressed
 						fullWidth
-						element={EuiFieldSearch as any}
-						debounceTimeout={300}
 						placeholder={t('artists.search')}
 						value={store.query}
 						onChange={(e): void => store.setQuery(e.target.value)}
+						onSearch={store.submit}
 					/>
 				</EuiFlexItem>
 

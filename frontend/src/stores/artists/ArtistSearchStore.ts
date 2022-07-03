@@ -22,6 +22,7 @@ export class ArtistSearchStore
 	@observable artists: IArtistObject[] = [];
 	@observable sort = ArtistSortRule.CreatedAsc;
 	@observable query = '';
+	@observable submittedQuery = '';
 	@observable artistType: ArtistType | '' = '';
 
 	constructor() {
@@ -33,6 +34,11 @@ export class ArtistSearchStore
 	};
 
 	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setSubmittedQuery = (value: string): void => {
+		this.submittedQuery = value;
 		this.query = value;
 	};
 
@@ -63,7 +69,7 @@ export class ArtistSearchStore
 			const result = await artistApi.list({
 				pagination: paginationParams,
 				sort: this.sort,
-				query: this.query,
+				query: this.submittedQuery,
 				artistType: this.artistType ? this.artistType : undefined,
 			});
 
@@ -87,7 +93,7 @@ export class ArtistSearchStore
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
 			sort: this.sort,
-			query: this.query,
+			query: this.submittedQuery,
 			artistType: this.artistType ? this.artistType : undefined,
 		};
 	}
@@ -95,7 +101,7 @@ export class ArtistSearchStore
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? ArtistSortRule.CreatedAsc;
-		this.query = value.query ?? '';
+		this.setSubmittedQuery(value.query ?? '');
 		this.artistType = value.artistType ?? '';
 	}
 
@@ -105,5 +111,9 @@ export class ArtistSearchStore
 
 	onClearResults = (): void => {
 		this.pagination.goToFirstPage();
+	};
+
+	@action submit = (): void => {
+		this.submittedQuery = this.query;
 	};
 }

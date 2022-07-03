@@ -22,6 +22,7 @@ export class TranslationSearchStore
 	@observable translations: ITranslationObject[] = [];
 	@observable sort = TranslationSortRule.HeadwordAsc;
 	@observable query = '';
+	@observable submittedQuery = '';
 	@observable category: WordCategory | '' = '';
 
 	constructor() {
@@ -64,7 +65,10 @@ export class TranslationSearchStore
 		this.query = value;
 	};
 
-	clearQuery = (): void => this.setQuery('');
+	@action setSubmittedQuery = (value: string): void => {
+		this.submittedQuery = value;
+		this.query = value;
+	};
 
 	@action setCategory = (value: WordCategory | ''): void => {
 		this.category = value;
@@ -93,7 +97,7 @@ export class TranslationSearchStore
 			const result = await translationApi.list({
 				pagination: paginationParams,
 				sort: this.sort,
-				query: this.query,
+				query: this.submittedQuery,
 				category: this.category ? this.category : undefined,
 			});
 
@@ -117,7 +121,7 @@ export class TranslationSearchStore
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
 			sort: this.sort,
-			query: this.query,
+			query: this.submittedQuery,
 			category: this.category ? this.category : undefined,
 		};
 	}
@@ -125,7 +129,7 @@ export class TranslationSearchStore
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? TranslationSortRule.HeadwordAsc;
-		this.query = value.query ?? '';
+		this.setSubmittedQuery(value.query ?? '');
 		this.category = value.category ?? '';
 	}
 
@@ -137,5 +141,9 @@ export class TranslationSearchStore
 
 	onClearResults = (): void => {
 		this.pagination.goToFirstPage();
+	};
+
+	@action submit = (): void => {
+		this.submittedQuery = this.query;
 	};
 }

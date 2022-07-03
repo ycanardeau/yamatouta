@@ -22,6 +22,7 @@ export class QuoteSearchStore
 	@observable quotes: IQuoteObject[] = [];
 	@observable sort: QuoteSortRule;
 	@observable query = '';
+	@observable submittedQuery = '';
 	@observable quoteType: QuoteType | '' = '';
 	@observable artistId?: number;
 	@observable workId?: number;
@@ -38,6 +39,11 @@ export class QuoteSearchStore
 	};
 
 	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setSubmittedQuery = (value: string): void => {
+		this.submittedQuery = value;
 		this.query = value;
 	};
 
@@ -68,7 +74,7 @@ export class QuoteSearchStore
 			const result = await quoteApi.list({
 				pagination: paginationParams,
 				sort: this.sort,
-				query: this.query,
+				query: this.submittedQuery,
 				quoteType: this.quoteType ? this.quoteType : undefined,
 				artistId: this.artistId,
 				workId: this.workId,
@@ -95,7 +101,7 @@ export class QuoteSearchStore
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
 			sort: this.sort,
-			query: this.query,
+			query: this.submittedQuery,
 			quoteType: this.quoteType ? this.quoteType : undefined,
 		};
 	}
@@ -103,7 +109,7 @@ export class QuoteSearchStore
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? this.defaultSort;
-		this.query = value.query ?? '';
+		this.setSubmittedQuery(value.query ?? '');
 		this.quoteType = value.quoteType ?? '';
 	}
 
@@ -113,5 +119,9 @@ export class QuoteSearchStore
 
 	onClearResults = (): void => {
 		this.pagination.goToFirstPage();
+	};
+
+	@action submit = (): void => {
+		this.submittedQuery = this.query;
 	};
 }

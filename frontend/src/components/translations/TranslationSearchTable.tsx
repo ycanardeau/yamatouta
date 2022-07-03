@@ -220,12 +220,15 @@ const WordLink = observer(
 				onClick={(e: React.MouseEvent<HTMLAnchorElement>): void => {
 					e.preventDefault();
 					runInAction(() => {
-						store.query = part;
+						store.submittedQuery = part;
 						store.sort = sort;
 					});
 				}}
 			>
-				<EuiHighlight search={store.query.trim()} highlightAll={true}>
+				<EuiHighlight
+					search={store.submittedQuery.trim()}
+					highlightAll={true}
+				>
 					{part}
 				</EuiHighlight>
 			</EuiLink>
@@ -250,7 +253,7 @@ const WordLinkList = observer(
 							<WordLink store={store} part={part} sort={sort} />
 						) : (
 							<EuiHighlight
-								search={store.query.trim()}
+								search={store.submittedQuery.trim()}
 								highlightAll={true}
 							>
 								{part}

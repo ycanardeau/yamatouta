@@ -22,6 +22,7 @@ export class UserSearchStore
 	@observable users: IUserObject[] = [];
 	@observable sort = UserSortRule.CreatedAsc;
 	@observable query = '';
+	@observable submittedQuery = '';
 	@observable userGroup: UserGroup | '' = '';
 
 	constructor() {
@@ -33,6 +34,11 @@ export class UserSearchStore
 	};
 
 	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setSubmittedQuery = (value: string): void => {
+		this.submittedQuery = value;
 		this.query = value;
 	};
 
@@ -63,7 +69,7 @@ export class UserSearchStore
 			const result = await userApi.list({
 				pagination: paginationParams,
 				sort: this.sort,
-				query: this.query,
+				query: this.submittedQuery,
 				userGroup: this.userGroup ? this.userGroup : undefined,
 			});
 
@@ -87,7 +93,7 @@ export class UserSearchStore
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
 			sort: this.sort,
-			query: this.query,
+			query: this.submittedQuery,
 			userGroup: this.userGroup ? this.userGroup : undefined,
 		};
 	}
@@ -95,7 +101,7 @@ export class UserSearchStore
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? UserSortRule.CreatedAsc;
-		this.query = value.query ?? '';
+		this.setSubmittedQuery(value.query ?? '');
 		this.userGroup = value.userGroup ?? '';
 	}
 
@@ -105,5 +111,9 @@ export class UserSearchStore
 
 	onClearResults = (): void => {
 		this.pagination.goToFirstPage();
+	};
+
+	@action submit = (): void => {
+		this.submittedQuery = this.query;
 	};
 }

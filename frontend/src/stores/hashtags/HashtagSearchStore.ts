@@ -21,6 +21,7 @@ export class HashtagSearchStore
 	@observable hashtags: IHashtagObject[] = [];
 	@observable sort = HashtagSortRule.ReferenceCountDesc;
 	@observable query = '';
+	@observable submittedQuery = '';
 
 	constructor() {
 		makeObservable(this);
@@ -54,6 +55,15 @@ export class HashtagSearchStore
 				: HashtagSortRule.ReferenceCountDesc;
 	};
 
+	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setSubmittedQuery = (value: string): void => {
+		this.submittedQuery = value;
+		this.query = value;
+	};
+
 	popState = false;
 
 	clearResultsByQueryKeys: (keyof IHashtagSearchRouteParams)[] = [
@@ -76,7 +86,7 @@ export class HashtagSearchStore
 			const result = await hashtagApi.list({
 				pagination: paginationParams,
 				sort: this.sort,
-				query: this.query,
+				query: this.submittedQuery,
 			});
 
 			runInAction(() => {
@@ -99,14 +109,14 @@ export class HashtagSearchStore
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
 			sort: this.sort,
-			query: this.query,
+			query: this.submittedQuery,
 		};
 	}
 	set routeParams(value: IHashtagSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? HashtagSortRule.ReferenceCountDesc;
-		this.query = value.query ?? '';
+		this.setSubmittedQuery(value.query ?? '');
 	}
 
 	validateRouteParams = (data: any): data is IHashtagSearchRouteParams => {
@@ -115,5 +125,9 @@ export class HashtagSearchStore
 
 	onClearResults = (): void => {
 		this.pagination.goToFirstPage();
+	};
+
+	@action submit = (): void => {
+		this.submittedQuery = this.query;
 	};
 }

@@ -22,6 +22,7 @@ export class WorkSearchStore
 	@observable works: IWorkObject[] = [];
 	@observable sort = WorkSortRule.CreatedAsc;
 	@observable query = '';
+	@observable submittedQuery = '';
 	@observable workType: WorkType | '' = '';
 
 	constructor() {
@@ -33,6 +34,11 @@ export class WorkSearchStore
 	};
 
 	@action setQuery = (value: string): void => {
+		this.query = value;
+	};
+
+	@action setSubmittedQuery = (value: string): void => {
+		this.submittedQuery = value;
 		this.query = value;
 	};
 
@@ -63,7 +69,7 @@ export class WorkSearchStore
 			const result = await workApi.list({
 				pagination: paginationParams,
 				sort: this.sort,
-				query: this.query,
+				query: this.submittedQuery,
 				workType: this.workType ? this.workType : undefined,
 			});
 
@@ -87,7 +93,7 @@ export class WorkSearchStore
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
 			sort: this.sort,
-			query: this.query,
+			query: this.submittedQuery,
 			workType: this.workType ? this.workType : undefined,
 		};
 	}
@@ -95,7 +101,7 @@ export class WorkSearchStore
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? WorkSortRule.CreatedAsc;
-		this.query = value.query ?? '';
+		this.setSubmittedQuery(value.query ?? '');
 		this.workType = value.workType ?? '';
 	}
 
@@ -105,5 +111,9 @@ export class WorkSearchStore
 
 	onClearResults = (): void => {
 		this.pagination.goToFirstPage();
+	};
+
+	@action submit = (): void => {
+		this.submittedQuery = this.query;
 	};
 }

@@ -7,7 +7,6 @@ import {
 	EuiSelect,
 } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
-import { DebounceInput } from 'react-debounce-input';
 import { useTranslation } from 'react-i18next';
 
 import { QuoteSortRule } from '../../models/quotes/QuoteSortRule';
@@ -25,14 +24,13 @@ export const QuoteSearchOptions = observer(
 		return (
 			<EuiFlexGroup gutterSize="m">
 				<EuiFlexItem>
-					<DebounceInput
+					<EuiFieldSearch
 						compressed
 						fullWidth
-						element={EuiFieldSearch as any}
-						debounceTimeout={300}
 						placeholder={t('quotes.search')}
 						value={store.query}
 						onChange={(e): void => store.setQuery(e.target.value)}
+						onSearch={store.submit}
 					/>
 				</EuiFlexItem>
 
