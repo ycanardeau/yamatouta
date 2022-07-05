@@ -234,8 +234,6 @@ const SideNav = (): React.ReactElement => {
 						auth.setUser(user);
 
 						localStorage.setItem('isAuthenticated', 'true');
-
-						navigate('/');
 					}}
 				/>
 			)}
