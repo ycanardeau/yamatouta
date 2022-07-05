@@ -33,7 +33,8 @@ export class HashtagListQueryHandler
 			.createQueryBuilder(Hashtag)
 			.getKnex()
 			.andWhere('hashtags.deleted', false)
-			.andWhere('hashtags.hidden', false);
+			.andWhere('hashtags.hidden', false)
+			.andWhere('hashtags.reference_count', '>', 0);
 
 		if (params.query) {
 			// TODO

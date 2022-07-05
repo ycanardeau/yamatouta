@@ -24,6 +24,7 @@ export class HashtagGetQueryHandler implements IQueryHandler<HashtagGetQuery> {
 
 		const hashtag = await this.em.findOne<Hashtag>(Hashtag, {
 			name: params.name,
+			referenceCount: { $gt: 0 },
 			$and: [
 				whereNotDeleted(permissionContext),
 				whereNotHidden(permissionContext),
