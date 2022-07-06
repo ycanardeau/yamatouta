@@ -17,7 +17,7 @@ export const ArtistComboBox = ({
 	const { t } = useTranslation();
 
 	const handleSearchChange = React.useCallback(
-		(searchValue): Promise<ISearchResultObject<IArtistObject>> =>
+		(searchValue: string): Promise<ISearchResultObject<IArtistObject>> =>
 			artistApi.list({
 				pagination: {
 					offset: 0,
