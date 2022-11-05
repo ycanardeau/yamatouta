@@ -3,6 +3,8 @@ import { IWebLink } from '@/models/IWebLink';
 import { WebLinkCategory } from '@/models/WebLinkCategory';
 
 export class WebLinkDto implements IWebLink {
+	_webLinkDtoBrand: any;
+
 	private constructor(
 		readonly id: number,
 		readonly url: string,

@@ -9,6 +9,8 @@ import { QuoteType } from '@/models/quotes/QuoteType';
 import { PermissionContext } from '@/services/PermissionContext';
 
 export class QuoteDto {
+	_quoteDtoBrand: any;
+
 	private constructor(
 		readonly id: number,
 		readonly entryType: EntryType.Quote,

@@ -8,6 +8,8 @@ import { PermissionContext } from '@/services/PermissionContext';
 import { NotFoundException } from '@nestjs/common';
 
 export class RevisionDto {
+	_revisionDtoBrand: any;
+
 	private constructor(
 		readonly createdAt: Date,
 		readonly actor: UserDto,

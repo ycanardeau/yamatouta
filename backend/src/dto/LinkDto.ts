@@ -22,6 +22,8 @@ abstract class LinkDto {
 }
 
 export class ArtistLinkDto extends LinkDto {
+	_artistLinkDtoBrand: any;
+
 	private constructor(
 		artistLink: ArtistLink,
 		readonly id: number,
@@ -44,6 +46,8 @@ export class ArtistLinkDto extends LinkDto {
 }
 
 export class WorkLinkDto extends LinkDto {
+	_workLinkDtoBrand: any;
+
 	private constructor(
 		workLink: WorkLink,
 		readonly id: number,

@@ -7,6 +7,8 @@ import { WorkType } from '@/models/works/WorkType';
 import { PermissionContext } from '@/services/PermissionContext';
 
 export class WorkDto {
+	_workDtoBrand: any;
+
 	private constructor(
 		readonly id: number,
 		readonly entryType: EntryType.Work,

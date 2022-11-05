@@ -5,6 +5,8 @@ import { UserGroup } from '@/models/users/UserGroup';
 import { NotFoundException } from '@nestjs/common';
 
 export class AuthenticatedUserDto {
+	_authenticatedUserDtoBrand: any;
+
 	private constructor(
 		readonly id: number,
 		readonly entryType: EntryType.User,

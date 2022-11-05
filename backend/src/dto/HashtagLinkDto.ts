@@ -2,6 +2,8 @@ import { HashtagLink } from '@/entities/HashtagLink';
 import { PermissionContext } from '@/services/PermissionContext';
 
 export class HashtagLinkDto {
+	_hashtagLinkDtoBrand: any;
+
 	private constructor(readonly id: number, readonly name: string) {}
 
 	static create(

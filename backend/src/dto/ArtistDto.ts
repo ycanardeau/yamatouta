@@ -6,6 +6,8 @@ import { ArtistType } from '@/models/artists/ArtistType';
 import { PermissionContext } from '@/services/PermissionContext';
 
 export class ArtistDto {
+	_artistDtoBrand: any;
+
 	private constructor(
 		readonly id: number,
 		readonly entryType: EntryType.Artist,

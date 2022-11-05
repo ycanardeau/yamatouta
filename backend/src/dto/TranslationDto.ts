@@ -7,6 +7,8 @@ import { WordCategory } from '@/models/translations/WordCategory';
 import { PermissionContext } from '@/services/PermissionContext';
 
 export class TranslationDto {
+	_translationDtoBrand: any;
+
 	private constructor(
 		readonly id: number,
 		readonly entryType: EntryType.Translation,

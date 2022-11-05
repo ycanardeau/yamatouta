@@ -3,6 +3,8 @@ import { EntryType } from '@/models/EntryType';
 import { PermissionContext } from '@/services/PermissionContext';
 
 export class UserDto {
+	_userDtoBrand: any;
+
 	private constructor(
 		readonly id: number,
 		readonly entryType: EntryType.User,

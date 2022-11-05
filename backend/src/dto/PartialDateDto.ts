@@ -1,6 +1,8 @@
 import { PartialDate } from '@/entities/PartialDate';
 
 export class PartialDateDto {
+	_partialDateDtoBrand: any;
+
 	private constructor(
 		readonly year?: number,
 		readonly month?: number,
