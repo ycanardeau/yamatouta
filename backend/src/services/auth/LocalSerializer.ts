@@ -1,10 +1,9 @@
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { User } from '@/entities/User';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
-
-import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
-import { User } from '../../entities/User';
 
 @Injectable()
 export class LocalSerializer extends PassportSerializer {

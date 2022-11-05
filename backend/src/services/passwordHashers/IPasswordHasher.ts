@@ -1,4 +1,4 @@
-import { PasswordHashAlgorithm } from '../../models/PasswordHashAlgorithm';
+import { PasswordHashAlgorithm } from '@/models/PasswordHashAlgorithm';
 
 export interface IPasswordHasher {
 	readonly algorithm: PasswordHashAlgorithm;

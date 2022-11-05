@@ -1,5 +1,5 @@
-import { EntryType } from './EntryType';
-import { IEntryWithEntryType } from './IEntryWithEntryType';
+import { EntryType } from '@/models/EntryType';
+import { IEntryWithEntryType } from '@/models/IEntryWithEntryType';
 
 export class EntryUrlMapper {
 	static details(entry: IEntryWithEntryType<EntryType>): string {

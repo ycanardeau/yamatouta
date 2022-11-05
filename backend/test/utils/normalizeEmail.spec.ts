@@ -1,4 +1,4 @@
-import { normalizeEmail } from '../../src/utils/normalizeEmail';
+import { normalizeEmail } from '@/utils/normalizeEmail';
 
 test('normalizeEmail', async () => {
 	await expect(normalizeEmail('username@example.com')).resolves.toBe(

@@ -1,15 +1,14 @@
+import { PartialDate } from '@/entities/PartialDate';
+import { Work } from '@/entities/Work';
+import { WorkLink } from '@/entities/WorkLink';
+import { IEntryWithWorkLinks } from '@/models/IEntryWithWorkLinks';
+import { workLinkTypes } from '@/models/LinkType';
+import { Permission } from '@/models/Permission';
+import { WorkLinkUpdateParams } from '@/models/WorkLinkUpdateParams';
+import { PermissionContext } from '@/services/PermissionContext';
+import { collectionSyncWithContent } from '@/utils/collectionDiff';
 import { EntityManager, Reference } from '@mikro-orm/core';
 import { BadRequestException, Injectable } from '@nestjs/common';
-
-import { PartialDate } from '../entities/PartialDate';
-import { Work } from '../entities/Work';
-import { WorkLink } from '../entities/WorkLink';
-import { IEntryWithWorkLinks } from '../models/IEntryWithWorkLinks';
-import { workLinkTypes } from '../models/LinkType';
-import { Permission } from '../models/Permission';
-import { WorkLinkUpdateParams } from '../models/WorkLinkUpdateParams';
-import { collectionSyncWithContent } from '../utils/collectionDiff';
-import { PermissionContext } from './PermissionContext';
 
 @Injectable()
 export class WorkLinkService {

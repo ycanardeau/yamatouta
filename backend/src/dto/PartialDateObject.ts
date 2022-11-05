@@ -1,4 +1,4 @@
-import { PartialDate } from '../entities/PartialDate';
+import { PartialDate } from '@/entities/PartialDate';
 
 export class PartialDateObject {
 	private constructor(

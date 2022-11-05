@@ -1,6 +1,5 @@
+import { TranslationOptionalField } from '@/models/translations/TranslationOptionalField';
 import Joi from 'joi';
-
-import { TranslationOptionalField } from './TranslationOptionalField';
 
 export class TranslationGetParams {
 	constructor(

@@ -1,6 +1,5 @@
+import { NgramConverter } from '@/services/NgramConverter';
 import { Test, TestingModule } from '@nestjs/testing';
-
-import { NgramConverter } from '../../src/services/NgramConverter';
 
 describe('NgramConverter', () => {
 	let ngramConverter: NgramConverter;

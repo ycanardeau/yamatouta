@@ -1,6 +1,6 @@
-import { WebLink } from '../entities/WebLink';
-import { IWebLink } from '../models/IWebLink';
-import { WebLinkCategory } from '../models/WebLinkCategory';
+import { WebLink } from '@/entities/WebLink';
+import { IWebLink } from '@/models/IWebLink';
+import { WebLinkCategory } from '@/models/WebLinkCategory';
 
 export class WebLinkObject implements IWebLink {
 	private constructor(

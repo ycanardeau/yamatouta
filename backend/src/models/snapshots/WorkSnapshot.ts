@@ -1,10 +1,10 @@
-import { Work } from '../../entities/Work';
-import { IContentEquatable } from '../IContentEquatable';
-import { WorkType } from '../works/WorkType';
-import { ISnapshotWithArtistLinks } from './ISnapshotWithArtistLinks';
-import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
-import { ArtistLinkSnapshot } from './LinkSnapshot';
-import { WebLinkSnapshot } from './WebLinkSnapshot';
+import { Work } from '@/entities/Work';
+import { IContentEquatable } from '@/models/IContentEquatable';
+import { ISnapshotWithArtistLinks } from '@/models/snapshots/ISnapshotWithArtistLinks';
+import { ISnapshotWithWebLinks } from '@/models/snapshots/ISnapshotWithWebLinks';
+import { ArtistLinkSnapshot } from '@/models/snapshots/LinkSnapshot';
+import { WebLinkSnapshot } from '@/models/snapshots/WebLinkSnapshot';
+import { WorkType } from '@/models/works/WorkType';
 
 export type IWorkSnapshot = Omit<WorkSnapshot, 'contentEquals'>;
 

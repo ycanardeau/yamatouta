@@ -1,22 +1,21 @@
-import { EntityManager, MikroORM } from '@mikro-orm/core';
-import { BadRequestException, INestApplication } from '@nestjs/common';
-
 import {
 	UserUpdateCommand,
 	UserUpdateCommandHandler,
-} from '../../../../src/database/commands/users/UserUpdateCommandHandler';
-import { AuthenticatedUserObject } from '../../../../src/dto/AuthenticatedUserObject';
-import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
-import { User } from '../../../../src/entities/User';
-import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { UserUpdateParams } from '../../../../src/models/users/UserUpdateParams';
-import { NgramConverter } from '../../../../src/services/NgramConverter';
-import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { normalizeEmail } from '../../../../src/utils/normalizeEmail';
-import { FakePermissionContext } from '../../../FakePermissionContext';
-import { assertUserAuditLogEntry } from '../../../assertAuditLogEntry';
-import { createApplication } from '../../../createApplication';
-import { createUser } from '../../../createEntry';
+} from '@/database/commands/users/UserUpdateCommandHandler';
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { UserAuditLogEntry } from '@/entities/AuditLogEntry';
+import { User } from '@/entities/User';
+import { AuditedAction } from '@/models/AuditedAction';
+import { UserUpdateParams } from '@/models/users/UserUpdateParams';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
+import { normalizeEmail } from '@/utils/normalizeEmail';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { BadRequestException, INestApplication } from '@nestjs/common';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { assertUserAuditLogEntry } from 'test/assertAuditLogEntry';
+import { createApplication } from 'test/createApplication';
+import { createUser } from 'test/createEntry';
 
 describe('UserUpdateCommandHandler', () => {
 	const existingUsername = 'user';

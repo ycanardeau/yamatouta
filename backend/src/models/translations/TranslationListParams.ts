@@ -1,7 +1,6 @@
+import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
+import { WordCategory } from '@/models/translations/WordCategory';
 import Joi from 'joi';
-
-import { TranslationSortRule } from './TranslationSortRule';
-import { WordCategory } from './WordCategory';
 
 export class TranslationListParams {
 	constructor(

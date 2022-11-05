@@ -1,31 +1,30 @@
-import { EntityManager, EntityRepository } from '@mikro-orm/core';
-import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import { Artist } from '../../entities/Artist';
+import { ArtistUpdateCommandHandler } from '@/database/commands/artists/ArtistUpdateCommandHandler';
+import { QuoteUpdateCommandHandler } from '@/database/commands/quotes/QuoteUpdateCommandHandler';
+import { TranslationUpdateCommandHandler } from '@/database/commands/translations/TranslationUpdateCommandHandler';
+import { WorkUpdateCommandHandler } from '@/database/commands/works/WorkUpdateCommandHandler';
+import { Artist } from '@/entities/Artist';
 import {
 	ArtistAuditLogEntry,
 	AuditLogEntry,
 	QuoteAuditLogEntry,
 	TranslationAuditLogEntry,
 	WorkAuditLogEntry,
-} from '../../entities/AuditLogEntry';
-import { Quote } from '../../entities/Quote';
-import { Translation } from '../../entities/Translation';
-import { User } from '../../entities/User';
-import { Work } from '../../entities/Work';
-import { AuditedAction } from '../../models/AuditedAction';
-import { EntryWithRevisions } from '../../models/Entry';
-import { EntryDeleteParams } from '../../models/EntryDeleteParams';
-import { Permission } from '../../models/Permission';
-import { RevisionEvent } from '../../models/RevisionEvent';
-import { PermissionContext } from '../../services/PermissionContext';
-import { RevisionService } from '../../services/RevisionService';
-import { ArtistUpdateCommandHandler } from './artists/ArtistUpdateCommandHandler';
-import { QuoteUpdateCommandHandler } from './quotes/QuoteUpdateCommandHandler';
-import { TranslationUpdateCommandHandler } from './translations/TranslationUpdateCommandHandler';
-import { WorkUpdateCommandHandler } from './works/WorkUpdateCommandHandler';
+} from '@/entities/AuditLogEntry';
+import { Quote } from '@/entities/Quote';
+import { Translation } from '@/entities/Translation';
+import { User } from '@/entities/User';
+import { Work } from '@/entities/Work';
+import { AuditedAction } from '@/models/AuditedAction';
+import { EntryWithRevisions } from '@/models/Entry';
+import { EntryDeleteParams } from '@/models/EntryDeleteParams';
+import { Permission } from '@/models/Permission';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { PermissionContext } from '@/services/PermissionContext';
+import { RevisionService } from '@/services/RevisionService';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { InjectRepository } from '@mikro-orm/nestjs';
+import { BadRequestException } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 abstract class EntryDeleteCommand {
 	constructor(

@@ -1,12 +1,11 @@
+import { TranslationObject } from '@/dto/TranslationObject';
+import { Translation } from '@/entities/Translation';
+import { WordCategory } from '@/models/translations/WordCategory';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication, NotFoundException } from '@nestjs/common';
-
-import { TranslationObject } from '../../src/dto/TranslationObject';
-import { Translation } from '../../src/entities/Translation';
-import { WordCategory } from '../../src/models/translations/WordCategory';
-import { FakePermissionContext } from '../FakePermissionContext';
-import { createApplication } from '../createApplication';
-import { createTranslation, createUser } from '../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { createApplication } from 'test/createApplication';
+import { createTranslation, createUser } from 'test/createEntry';
 
 describe('TranslationObject', () => {
 	let app: INestApplication;

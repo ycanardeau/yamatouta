@@ -1,4 +1,4 @@
-import { EntryType } from './EntryType';
+import { EntryType } from '@/models/EntryType';
 
 export enum LinkType {
 	Unspecified = 'Unspecified',

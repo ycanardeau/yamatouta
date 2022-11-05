@@ -1,19 +1,18 @@
+import { orderByIds } from '@/database/queries/orderByIds';
+import { QuoteObject } from '@/dto/QuoteObject';
+import { SearchResultObject } from '@/dto/SearchResultObject';
+import { Artist } from '@/entities/Artist';
+import { Hashtag } from '@/entities/Hashtag';
+import { Quote } from '@/entities/Quote';
+import { QuoteListParams } from '@/models/quotes/QuoteListParams';
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
 import { BadRequestException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import _ from 'lodash';
-
-import { QuoteObject } from '../../../dto/QuoteObject';
-import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { Artist } from '../../../entities/Artist';
-import { Hashtag } from '../../../entities/Hashtag';
-import { Quote } from '../../../entities/Quote';
-import { QuoteListParams } from '../../../models/quotes/QuoteListParams';
-import { QuoteSortRule } from '../../../models/quotes/QuoteSortRule';
-import { QuoteType } from '../../../models/quotes/QuoteType';
-import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { orderByIds } from '../orderByIds';
 
 export class QuoteListQuery {
 	constructor(

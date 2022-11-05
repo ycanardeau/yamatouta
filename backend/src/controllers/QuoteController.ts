@@ -1,14 +1,13 @@
+import { renderReact } from '@/controllers/renderReact';
+import { QuoteGetQuery } from '@/database/queries/quotes/QuoteGetQueryHandler';
+import { QuoteObject } from '@/dto/QuoteObject';
+import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
+import { QuoteGetParams } from '@/models/quotes/QuoteGetParams';
+import { PermissionContext } from '@/services/PermissionContext';
 import { Controller, Get, Param, ParseIntPipe, Res } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Response } from 'express';
 import { t } from 'i18next';
-
-import { QuoteGetQuery } from '../database/queries/quotes/QuoteGetQueryHandler';
-import { QuoteObject } from '../dto/QuoteObject';
-import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { QuoteGetParams } from '../models/quotes/QuoteGetParams';
-import { PermissionContext } from '../services/PermissionContext';
-import { renderReact } from './renderReact';
 
 @Controller('quotes')
 export class QuoteController {

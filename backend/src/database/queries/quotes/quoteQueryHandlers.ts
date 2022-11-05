@@ -1,6 +1,6 @@
-import { QuoteListRevisionsQueryHandler } from '../EntryListRevisionsQueryHandler';
-import { QuoteGetQueryHandler } from './QuoteGetQueryHandler';
-import { QuoteListQueryHandler } from './QuoteListQueryHandler';
+import { QuoteListRevisionsQueryHandler } from '@/database/queries/EntryListRevisionsQueryHandler';
+import { QuoteGetQueryHandler } from '@/database/queries/quotes/QuoteGetQueryHandler';
+import { QuoteListQueryHandler } from '@/database/queries/quotes/QuoteListQueryHandler';
 
 export const quoteQueryHandlers = [
 	QuoteGetQueryHandler,

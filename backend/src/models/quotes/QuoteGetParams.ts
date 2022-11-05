@@ -1,6 +1,5 @@
+import { QuoteOptionalField } from '@/models/quotes/QuoteOptionalField';
 import Joi from 'joi';
-
-import { QuoteOptionalField } from './QuoteOptionalField';
 
 export class QuoteGetParams {
 	constructor(readonly id: number, readonly fields?: QuoteOptionalField[]) {}

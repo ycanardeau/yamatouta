@@ -1,9 +1,8 @@
+import { User } from '@/entities/User';
+import { EntryType } from '@/models/EntryType';
+import { Permission } from '@/models/Permission';
+import { UserGroup } from '@/models/users/UserGroup';
 import { NotFoundException } from '@nestjs/common';
-
-import { User } from '../entities/User';
-import { EntryType } from '../models/EntryType';
-import { Permission } from '../models/Permission';
-import { UserGroup } from '../models/users/UserGroup';
 
 export class AuthenticatedUserObject {
 	private constructor(

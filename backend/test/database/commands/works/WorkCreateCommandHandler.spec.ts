@@ -1,30 +1,29 @@
+import {
+	WorkUpdateCommand,
+	WorkUpdateCommandHandler,
+} from '@/database/commands/works/WorkUpdateCommandHandler';
+import { WorkObject } from '@/dto/WorkObject';
+import { WorkAuditLogEntry } from '@/entities/AuditLogEntry';
+import { WorkRevision } from '@/entities/Revision';
+import { User } from '@/entities/User';
+import { Work } from '@/entities/Work';
+import { AuditedAction } from '@/models/AuditedAction';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { IWorkSnapshot } from '@/models/snapshots/WorkSnapshot';
+import { UserGroup } from '@/models/users/UserGroup';
+import { WorkType } from '@/models/works/WorkType';
+import { WorkUpdateParams } from '@/models/works/WorkUpdateParams';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import {
 	BadRequestException,
 	INestApplication,
 	UnauthorizedException,
 } from '@nestjs/common';
-
-import {
-	WorkUpdateCommand,
-	WorkUpdateCommandHandler,
-} from '../../../../src/database/commands/works/WorkUpdateCommandHandler';
-import { WorkObject } from '../../../../src/dto/WorkObject';
-import { WorkAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
-import { WorkRevision } from '../../../../src/entities/Revision';
-import { User } from '../../../../src/entities/User';
-import { Work } from '../../../../src/entities/Work';
-import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { IWorkSnapshot } from '../../../../src/models/snapshots/WorkSnapshot';
-import { UserGroup } from '../../../../src/models/users/UserGroup';
-import { WorkType } from '../../../../src/models/works/WorkType';
-import { WorkUpdateParams } from '../../../../src/models/works/WorkUpdateParams';
-import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakePermissionContext } from '../../../FakePermissionContext';
-import { assertWorkAuditLogEntry } from '../../../assertAuditLogEntry';
-import { createApplication } from '../../../createApplication';
-import { createUser } from '../../../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { assertWorkAuditLogEntry } from 'test/assertAuditLogEntry';
+import { createApplication } from 'test/createApplication';
+import { createUser } from 'test/createEntry';
 
 describe('WorkCreateCommandHandler', () => {
 	let app: INestApplication;

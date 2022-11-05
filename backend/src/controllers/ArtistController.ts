@@ -1,14 +1,13 @@
+import { renderReact } from '@/controllers/renderReact';
+import { ArtistGetQuery } from '@/database/queries/artists/ArtistGetQueryHandler';
+import { ArtistObject } from '@/dto/ArtistObject';
+import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
+import { ArtistGetParams } from '@/models/artists/ArtistGetParams';
+import { PermissionContext } from '@/services/PermissionContext';
 import { Controller, Get, Param, ParseIntPipe, Res } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Response } from 'express';
 import { t } from 'i18next';
-
-import { ArtistGetQuery } from '../database/queries/artists/ArtistGetQueryHandler';
-import { ArtistObject } from '../dto/ArtistObject';
-import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { ArtistGetParams } from '../models/artists/ArtistGetParams';
-import { PermissionContext } from '../services/PermissionContext';
-import { renderReact } from './renderReact';
 
 @Controller('artists')
 export class ArtistController {

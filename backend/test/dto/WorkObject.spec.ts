@@ -1,13 +1,12 @@
+import { WorkObject } from '@/dto/WorkObject';
+import { Work } from '@/entities/Work';
+import { WorkType } from '@/models/works/WorkType';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication, NotFoundException } from '@nestjs/common';
-
-import { WorkObject } from '../../src/dto/WorkObject';
-import { Work } from '../../src/entities/Work';
-import { WorkType } from '../../src/models/works/WorkType';
-import { PermissionContext } from '../../src/services/PermissionContext';
-import { FakePermissionContext } from '../FakePermissionContext';
-import { createApplication } from '../createApplication';
-import { createUser, createWork } from '../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { createApplication } from 'test/createApplication';
+import { createUser, createWork } from 'test/createEntry';
 
 describe('WorkObject', () => {
 	let app: INestApplication;

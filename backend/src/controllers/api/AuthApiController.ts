@@ -1,3 +1,6 @@
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { LocalAuthGuard } from '@/framework/guards/LocalAuthGuard';
+import { AuthService } from '@/services/auth/AuthService';
 import {
 	Controller,
 	HttpCode,
@@ -8,10 +11,6 @@ import {
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { Request } from 'express';
-
-import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
-import { LocalAuthGuard } from '../../framework/guards/LocalAuthGuard';
-import { AuthService } from '../../services/auth/AuthService';
 
 @Controller('api/auth')
 export class AuthApiController {

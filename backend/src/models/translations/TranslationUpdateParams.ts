@@ -1,8 +1,7 @@
+import { WebLinkUpdateParams } from '@/models/WebLinkUpdateParams';
+import { WorkLinkUpdateParams } from '@/models/WorkLinkUpdateParams';
+import { WordCategory } from '@/models/translations/WordCategory';
 import Joi from 'joi';
-
-import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
-import { WorkLinkUpdateParams } from '../WorkLinkUpdateParams';
-import { WordCategory } from './WordCategory';
 
 export class TranslationUpdateParams {
 	constructor(

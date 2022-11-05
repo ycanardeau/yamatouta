@@ -1,15 +1,14 @@
+import { Artist } from '@/entities/Artist';
+import { ArtistLink } from '@/entities/ArtistLink';
+import { PartialDate } from '@/entities/PartialDate';
+import { ArtistLinkUpdateParams } from '@/models/ArtistLinkUpdateParams';
+import { IEntryWithArtistLinks } from '@/models/IEntryWithArtistLinks';
+import { artistLinkTypes } from '@/models/LinkType';
+import { Permission } from '@/models/Permission';
+import { PermissionContext } from '@/services/PermissionContext';
+import { collectionSyncWithContent } from '@/utils/collectionDiff';
 import { EntityManager, Reference } from '@mikro-orm/core';
 import { BadRequestException, Injectable } from '@nestjs/common';
-
-import { Artist } from '../entities/Artist';
-import { ArtistLink } from '../entities/ArtistLink';
-import { PartialDate } from '../entities/PartialDate';
-import { ArtistLinkUpdateParams } from '../models/ArtistLinkUpdateParams';
-import { IEntryWithArtistLinks } from '../models/IEntryWithArtistLinks';
-import { artistLinkTypes } from '../models/LinkType';
-import { Permission } from '../models/Permission';
-import { collectionSyncWithContent } from '../utils/collectionDiff';
-import { PermissionContext } from './PermissionContext';
 
 @Injectable()
 export class ArtistLinkService {

@@ -1,14 +1,13 @@
+import { renderReact } from '@/controllers/renderReact';
+import { WorkGetQuery } from '@/database/queries/works/WorkGetQueryHandler';
+import { WorkObject } from '@/dto/WorkObject';
+import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
+import { WorkGetParams } from '@/models/works/WorkGetParams';
+import { PermissionContext } from '@/services/PermissionContext';
 import { Controller, Get, Param, ParseIntPipe, Res } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Response } from 'express';
 import { t } from 'i18next';
-
-import { WorkGetQuery } from '../database/queries/works/WorkGetQueryHandler';
-import { WorkObject } from '../dto/WorkObject';
-import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { WorkGetParams } from '../models/works/WorkGetParams';
-import { PermissionContext } from '../services/PermissionContext';
-import { renderReact } from './renderReact';
 
 @Controller('works')
 export class WorkController {

@@ -1,9 +1,8 @@
+import config from '@/config';
 import { Options } from '@mikro-orm/core';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { Logger } from '@nestjs/common';
-
-import config from './config';
 
 const logger = new Logger('MikroORM');
 const options: Options = {

@@ -1,7 +1,6 @@
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
+import { QuoteType } from '@/models/quotes/QuoteType';
 import Joi from 'joi';
-
-import { QuoteSortRule } from './QuoteSortRule';
-import { QuoteType } from './QuoteType';
 
 export class QuoteListParams {
 	constructor(

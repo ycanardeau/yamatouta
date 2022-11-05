@@ -98,7 +98,6 @@
 			"json",
 			"ts"
 		],
-		"rootDir": "test",
 		"modulePaths": [
 			"<rootDir>"
 		],
@@ -111,7 +110,10 @@
 		],
 		"coverageDirectory": "../coverage",
 		"testEnvironment": "node",
-		"testTimeout": 20000
+		"testTimeout": 20000,
+		"moduleNameMapper": {
+			"^@/(.*)$": "<rootDir>/src/$1"
+		}
 	},
 	"mikro-orm": {
 		"useTsNode": true,

@@ -1,21 +1,20 @@
+import { UserCreateCommand } from '@/database/commands/users/UserCreateCommandHandler';
+import { UserUpdateCommand } from '@/database/commands/users/UserUpdateCommandHandler';
+import { UserGetCurrentQuery } from '@/database/queries/users/UserGetCurrentQueryHandler';
+import { UserGetQuery } from '@/database/queries/users/UserGetQueryHandler';
+import { UserListQuery } from '@/database/queries/users/UserListQueryHandler';
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { SearchResultObject } from '@/dto/SearchResultObject';
+import { UserObject } from '@/dto/UserObject';
+import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '@/framework/pipes/JoiValidationPipe';
+import { UserCreateParams } from '@/models/users/UserCreateParams';
+import { UserGetParams } from '@/models/users/UserGetParams';
+import { UserListParams } from '@/models/users/UserListParams';
+import { UserUpdateParams } from '@/models/users/UserUpdateParams';
+import { PermissionContext } from '@/services/PermissionContext';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-
-import { UserCreateCommand } from '../../database/commands/users/UserCreateCommandHandler';
-import { UserUpdateCommand } from '../../database/commands/users/UserUpdateCommandHandler';
-import { UserGetCurrentQuery } from '../../database/queries/users/UserGetCurrentQueryHandler';
-import { UserGetQuery } from '../../database/queries/users/UserGetQueryHandler';
-import { UserListQuery } from '../../database/queries/users/UserListQueryHandler';
-import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
-import { SearchResultObject } from '../../dto/SearchResultObject';
-import { UserObject } from '../../dto/UserObject';
-import { GetPermissionContext } from '../../framework/decorators/GetPermissionContext';
-import { JoiValidationPipe } from '../../framework/pipes/JoiValidationPipe';
-import { UserCreateParams } from '../../models/users/UserCreateParams';
-import { UserGetParams } from '../../models/users/UserGetParams';
-import { UserListParams } from '../../models/users/UserListParams';
-import { UserUpdateParams } from '../../models/users/UserUpdateParams';
-import { PermissionContext } from '../../services/PermissionContext';
 
 @Controller('api/users')
 export class UserApiController {

@@ -1,20 +1,19 @@
+import config from '@/config';
+import {
+	UserAuthenticateCommand,
+	UserAuthenticateCommandHandler,
+	LoginError,
+} from '@/database/commands/users/UserAuthenticateCommandHandler';
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { TooManyRequestsException } from '@/framework/exceptions/TooManyRequestsException';
+import { RateLimiterMariaDb } from '@/services/auth/RateLimiterMariaDb';
+import { getClientIp } from '@/utils/getClientIp';
 import { EntityManager } from '@mikro-orm/mariadb';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-local';
 import { RateLimiterMemory } from 'rate-limiter-flexible';
-
-import config from '../../config';
-import {
-	UserAuthenticateCommand,
-	UserAuthenticateCommandHandler,
-	LoginError,
-} from '../../database/commands/users/UserAuthenticateCommandHandler';
-import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
-import { TooManyRequestsException } from '../../framework/exceptions/TooManyRequestsException';
-import { getClientIp } from '../../utils/getClientIp';
-import { RateLimiterMariaDb } from './RateLimiterMariaDb';
 
 // Code from: https://gist.github.com/animir/dc59b9da82494437f0a6009589e427f6.
 @Injectable()

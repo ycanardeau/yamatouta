@@ -1,8 +1,8 @@
-import { Artist } from '../../entities/Artist';
-import { IContentEquatable } from '../IContentEquatable';
-import { ArtistType } from '../artists/ArtistType';
-import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
-import { WebLinkSnapshot } from './WebLinkSnapshot';
+import { Artist } from '@/entities/Artist';
+import { IContentEquatable } from '@/models/IContentEquatable';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { ISnapshotWithWebLinks } from '@/models/snapshots/ISnapshotWithWebLinks';
+import { WebLinkSnapshot } from '@/models/snapshots/WebLinkSnapshot';
 
 export type IArtistSnapshot = Omit<ArtistSnapshot, 'contentEquals'>;
 

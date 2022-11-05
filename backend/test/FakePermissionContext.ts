@@ -1,6 +1,6 @@
-import { AuthenticatedUserObject } from '../src/dto/AuthenticatedUserObject';
-import { User } from '../src/entities/User';
-import { PermissionContext } from '../src/services/PermissionContext';
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { User } from '@/entities/User';
+import { PermissionContext } from '@/services/PermissionContext';
 
 export class FakePermissionContext extends PermissionContext {
 	constructor(user?: User) {

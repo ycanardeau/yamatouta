@@ -1,14 +1,13 @@
+import { renderReact } from '@/controllers/renderReact';
+import { HashtagGetQuery } from '@/database/queries/hashtags/HashtagGetQueryHandler';
+import { HashtagObject } from '@/dto/HashtagObject';
+import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
+import { HashtagGetParams } from '@/models/hashtags/HashtagGetParams';
+import { PermissionContext } from '@/services/PermissionContext';
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Response } from 'express';
 import { t } from 'i18next';
-
-import { HashtagGetQuery } from '../database/queries/hashtags/HashtagGetQueryHandler';
-import { HashtagObject } from '../dto/HashtagObject';
-import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { HashtagGetParams } from '../models/hashtags/HashtagGetParams';
-import { PermissionContext } from '../services/PermissionContext';
-import { renderReact } from './renderReact';
 
 @Controller('hashtags')
 export class HashtagController {

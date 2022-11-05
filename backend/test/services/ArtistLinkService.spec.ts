@@ -1,21 +1,20 @@
+import { Artist } from '@/entities/Artist';
+import { ArtistLink } from '@/entities/ArtistLink';
+import { User } from '@/entities/User';
+import { Work } from '@/entities/Work';
+import { ArtistLinkUpdateParams } from '@/models/ArtistLinkUpdateParams';
+import { EntryType } from '@/models/EntryType';
+import { artistLinkTypes, LinkType } from '@/models/LinkType';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { UserGroup } from '@/models/users/UserGroup';
+import { WorkType } from '@/models/works/WorkType';
+import { ArtistLinkService } from '@/services/ArtistLinkService';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { BadRequestException, INestApplication } from '@nestjs/common';
 import _ from 'lodash';
-
-import { Artist } from '../../src/entities/Artist';
-import { ArtistLink } from '../../src/entities/ArtistLink';
-import { User } from '../../src/entities/User';
-import { Work } from '../../src/entities/Work';
-import { ArtistLinkUpdateParams } from '../../src/models/ArtistLinkUpdateParams';
-import { EntryType } from '../../src/models/EntryType';
-import { artistLinkTypes, LinkType } from '../../src/models/LinkType';
-import { ArtistType } from '../../src/models/artists/ArtistType';
-import { UserGroup } from '../../src/models/users/UserGroup';
-import { WorkType } from '../../src/models/works/WorkType';
-import { ArtistLinkService } from '../../src/services/ArtistLinkService';
-import { FakePermissionContext } from '../FakePermissionContext';
-import { createApplication } from '../createApplication';
-import { createArtist, createUser, createWork } from '../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { createApplication } from 'test/createApplication';
+import { createArtist, createUser, createWork } from 'test/createEntry';
 
 describe('ArtistLinkService', () => {
 	describe('sync', () => {

@@ -1,10 +1,10 @@
-import { Translation } from '../../entities/Translation';
-import { IContentEquatable } from '../IContentEquatable';
-import { WordCategory } from '../translations/WordCategory';
-import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
-import { ISnapshotWithWorkLinks } from './ISnapshotWithWorkLinks';
-import { WorkLinkSnapshot } from './LinkSnapshot';
-import { WebLinkSnapshot } from './WebLinkSnapshot';
+import { Translation } from '@/entities/Translation';
+import { IContentEquatable } from '@/models/IContentEquatable';
+import { ISnapshotWithWebLinks } from '@/models/snapshots/ISnapshotWithWebLinks';
+import { ISnapshotWithWorkLinks } from '@/models/snapshots/ISnapshotWithWorkLinks';
+import { WorkLinkSnapshot } from '@/models/snapshots/LinkSnapshot';
+import { WebLinkSnapshot } from '@/models/snapshots/WebLinkSnapshot';
+import { WordCategory } from '@/models/translations/WordCategory';
 
 export type ITranslationSnapshot = Omit<TranslationSnapshot, 'contentEquals'>;
 

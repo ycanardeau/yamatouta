@@ -1,23 +1,22 @@
-import { EntityManager, MikroORM } from '@mikro-orm/core';
-import { INestApplication, UnauthorizedException } from '@nestjs/common';
-
 import {
 	TranslationDeleteCommand,
 	TranslationDeleteCommandHandler,
-} from '../../../../src/database/commands/EntryDeleteCommandHandler';
-import { TranslationAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
-import { TranslationRevision } from '../../../../src/entities/Revision';
-import { Translation } from '../../../../src/entities/Translation';
-import { User } from '../../../../src/entities/User';
-import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { EntryDeleteParams } from '../../../../src/models/EntryDeleteParams';
-import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { UserGroup } from '../../../../src/models/users/UserGroup';
-import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakePermissionContext } from '../../../FakePermissionContext';
-import { assertTranslationAuditLogEntry } from '../../../assertAuditLogEntry';
-import { createApplication } from '../../../createApplication';
-import { createTranslation, createUser } from '../../../createEntry';
+} from '@/database/commands/EntryDeleteCommandHandler';
+import { TranslationAuditLogEntry } from '@/entities/AuditLogEntry';
+import { TranslationRevision } from '@/entities/Revision';
+import { Translation } from '@/entities/Translation';
+import { User } from '@/entities/User';
+import { AuditedAction } from '@/models/AuditedAction';
+import { EntryDeleteParams } from '@/models/EntryDeleteParams';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { UserGroup } from '@/models/users/UserGroup';
+import { PermissionContext } from '@/services/PermissionContext';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication, UnauthorizedException } from '@nestjs/common';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { assertTranslationAuditLogEntry } from 'test/assertAuditLogEntry';
+import { createApplication } from 'test/createApplication';
+import { createTranslation, createUser } from 'test/createEntry';
 
 describe('TranslationDeleteCommandHandler', () => {
 	let app: INestApplication;

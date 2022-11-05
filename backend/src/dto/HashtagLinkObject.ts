@@ -1,5 +1,5 @@
-import { HashtagLink } from '../entities/HashtagLink';
-import { PermissionContext } from '../services/PermissionContext';
+import { HashtagLink } from '@/entities/HashtagLink';
+import { PermissionContext } from '@/services/PermissionContext';
 
 export class HashtagLinkObject {
 	private constructor(readonly id: number, readonly name: string) {}

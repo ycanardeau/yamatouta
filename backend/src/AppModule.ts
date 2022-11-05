@@ -1,18 +1,17 @@
+import { controllers } from '@/controllers/controllers';
+import { commandHandlers } from '@/database/commands/commandHandlers';
+import { queryHandlers } from '@/database/queries/queryHandlers';
+import { Artist } from '@/entities/Artist';
+import { Quote } from '@/entities/Quote';
+import { TranslationRevision } from '@/entities/Revision';
+import { Translation } from '@/entities/Translation';
+import { User } from '@/entities/User';
+import { Work } from '@/entities/Work';
+import { services } from '@/services/services';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { PassportModule } from '@nestjs/passport';
-
-import { controllers } from './controllers/controllers';
-import { commandHandlers } from './database/commands/commandHandlers';
-import { queryHandlers } from './database/queries/queryHandlers';
-import { Artist } from './entities/Artist';
-import { Quote } from './entities/Quote';
-import { TranslationRevision } from './entities/Revision';
-import { Translation } from './entities/Translation';
-import { User } from './entities/User';
-import { Work } from './entities/Work';
-import { services } from './services/services';
 
 @Module({
 	imports: [

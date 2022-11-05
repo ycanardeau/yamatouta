@@ -1,5 +1,5 @@
-import { Hashtag } from '../entities/Hashtag';
-import { PermissionContext } from '../services/PermissionContext';
+import { Hashtag } from '@/entities/Hashtag';
+import { PermissionContext } from '@/services/PermissionContext';
 
 export class HashtagObject {
 	private constructor(

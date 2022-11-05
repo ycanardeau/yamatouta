@@ -1,13 +1,12 @@
+import { ArtistObject } from '@/dto/ArtistObject';
+import { Artist } from '@/entities/Artist';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication, NotFoundException } from '@nestjs/common';
-
-import { ArtistObject } from '../../src/dto/ArtistObject';
-import { Artist } from '../../src/entities/Artist';
-import { ArtistType } from '../../src/models/artists/ArtistType';
-import { PermissionContext } from '../../src/services/PermissionContext';
-import { FakePermissionContext } from '../FakePermissionContext';
-import { createApplication } from '../createApplication';
-import { createArtist, createUser } from '../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { createApplication } from 'test/createApplication';
+import { createArtist, createUser } from 'test/createEntry';
 
 describe('ArtistObject', () => {
 	let app: INestApplication;

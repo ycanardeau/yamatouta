@@ -1,6 +1,5 @@
+import { WebLinkCategory } from '@/models/WebLinkCategory';
 import Joi from 'joi';
-
-import { WebLinkCategory } from './WebLinkCategory';
 
 export class WebLinkUpdateParams {
 	constructor(

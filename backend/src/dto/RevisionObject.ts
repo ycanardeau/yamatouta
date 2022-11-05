@@ -1,12 +1,11 @@
+import { UserObject } from '@/dto/UserObject';
+import { Revision } from '@/entities/Revision';
+import { EntryWithRevisions } from '@/models/Entry';
+import { Permission } from '@/models/Permission';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { Snapshot } from '@/models/snapshots/Snapshot';
+import { PermissionContext } from '@/services/PermissionContext';
 import { NotFoundException } from '@nestjs/common';
-
-import { Revision } from '../entities/Revision';
-import { EntryWithRevisions } from '../models/Entry';
-import { Permission } from '../models/Permission';
-import { RevisionEvent } from '../models/RevisionEvent';
-import { Snapshot } from '../models/snapshots/Snapshot';
-import { PermissionContext } from '../services/PermissionContext';
-import { UserObject } from './UserObject';
 
 export class RevisionObject {
 	private constructor(

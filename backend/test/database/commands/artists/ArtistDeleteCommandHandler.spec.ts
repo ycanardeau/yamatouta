@@ -1,24 +1,23 @@
-import { EntityManager, MikroORM } from '@mikro-orm/core';
-import { INestApplication, UnauthorizedException } from '@nestjs/common';
-
 import {
 	ArtistDeleteCommand,
 	ArtistDeleteCommandHandler,
-} from '../../../../src/database/commands/EntryDeleteCommandHandler';
-import { Artist } from '../../../../src/entities/Artist';
-import { ArtistAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
-import { ArtistRevision } from '../../../../src/entities/Revision';
-import { User } from '../../../../src/entities/User';
-import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { EntryDeleteParams } from '../../../../src/models/EntryDeleteParams';
-import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { ArtistType } from '../../../../src/models/artists/ArtistType';
-import { UserGroup } from '../../../../src/models/users/UserGroup';
-import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakePermissionContext } from '../../../FakePermissionContext';
-import { assertArtistAuditLogEntry } from '../../../assertAuditLogEntry';
-import { createApplication } from '../../../createApplication';
-import { createArtist, createUser } from '../../../createEntry';
+} from '@/database/commands/EntryDeleteCommandHandler';
+import { Artist } from '@/entities/Artist';
+import { ArtistAuditLogEntry } from '@/entities/AuditLogEntry';
+import { ArtistRevision } from '@/entities/Revision';
+import { User } from '@/entities/User';
+import { AuditedAction } from '@/models/AuditedAction';
+import { EntryDeleteParams } from '@/models/EntryDeleteParams';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { UserGroup } from '@/models/users/UserGroup';
+import { PermissionContext } from '@/services/PermissionContext';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication, UnauthorizedException } from '@nestjs/common';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { assertArtistAuditLogEntry } from 'test/assertAuditLogEntry';
+import { createApplication } from 'test/createApplication';
+import { createArtist, createUser } from 'test/createEntry';
 
 describe('ArtistDeleteCommandHandler', () => {
 	let app: INestApplication;

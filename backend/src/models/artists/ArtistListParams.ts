@@ -1,7 +1,6 @@
+import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
+import { ArtistType } from '@/models/artists/ArtistType';
 import Joi from 'joi';
-
-import { ArtistSortRule } from './ArtistSortRule';
-import { ArtistType } from './ArtistType';
 
 export class ArtistListParams {
 	constructor(

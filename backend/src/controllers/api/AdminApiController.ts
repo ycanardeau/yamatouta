@@ -1,13 +1,12 @@
+import { AdminCreateMissingRevisionsCommand } from '@/database/commands/admin/AdminCreateMissingRevisionsCommandHandler';
+import { AdminUpdateSearchIndexCommand } from '@/database/commands/admin/AdminUpdateSearchIndexCommandHandler';
+import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '@/framework/pipes/JoiValidationPipe';
+import { AdminUpdateSearchIndexParams } from '@/models/admin/AdminUpdateSearchIndexParams';
+import { PermissionContext } from '@/services/PermissionContext';
+import { SitemapService } from '@/services/SitemapService';
 import { Body, Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-
-import { AdminCreateMissingRevisionsCommand } from '../../database/commands/admin/AdminCreateMissingRevisionsCommandHandler';
-import { AdminUpdateSearchIndexCommand } from '../../database/commands/admin/AdminUpdateSearchIndexCommandHandler';
-import { GetPermissionContext } from '../../framework/decorators/GetPermissionContext';
-import { JoiValidationPipe } from '../../framework/pipes/JoiValidationPipe';
-import { AdminUpdateSearchIndexParams } from '../../models/admin/AdminUpdateSearchIndexParams';
-import { PermissionContext } from '../../services/PermissionContext';
-import { SitemapService } from '../../services/SitemapService';
 
 @Controller('api/admin')
 export class AdminApiController {

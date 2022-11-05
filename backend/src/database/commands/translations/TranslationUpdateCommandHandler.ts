@@ -1,21 +1,20 @@
+import { TranslationObject } from '@/dto/TranslationObject';
+import { TranslationAuditLogEntry } from '@/entities/AuditLogEntry';
+import { Translation } from '@/entities/Translation';
+import { AuditedAction } from '@/models/AuditedAction';
+import { Permission } from '@/models/Permission';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { TranslationOptionalField } from '@/models/translations/TranslationOptionalField';
+import { TranslationUpdateParams } from '@/models/translations/TranslationUpdateParams';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
+import { RevisionService } from '@/services/RevisionService';
+import { WebLinkService } from '@/services/WebLinkService';
+import { WorkLinkService } from '@/services/WorkLinkService';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import { TranslationObject } from '../../../dto/TranslationObject';
-import { TranslationAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { Translation } from '../../../entities/Translation';
-import { AuditedAction } from '../../../models/AuditedAction';
-import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
-import { TranslationOptionalField } from '../../../models/translations/TranslationOptionalField';
-import { TranslationUpdateParams } from '../../../models/translations/TranslationUpdateParams';
-import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { RevisionService } from '../../../services/RevisionService';
-import { WebLinkService } from '../../../services/WebLinkService';
-import { WorkLinkService } from '../../../services/WorkLinkService';
 
 export class TranslationUpdateCommand {
 	constructor(

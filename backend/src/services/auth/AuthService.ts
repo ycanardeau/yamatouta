@@ -1,8 +1,7 @@
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { getUser } from '@/utils/getUser';
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
-
-import { AuthenticatedUserObject } from '../../dto/AuthenticatedUserObject';
-import { getUser } from '../../utils/getUser';
 
 @Injectable()
 export class AuthService {

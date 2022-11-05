@@ -1,6 +1,5 @@
+import { WorkOptionalField } from '@/models/works/WorkOptionalField';
 import Joi from 'joi';
-
-import { WorkOptionalField } from './WorkOptionalField';
 
 export class WorkGetParams {
 	constructor(readonly id: number, readonly fields?: WorkOptionalField[]) {}

@@ -1,7 +1,6 @@
+import { WorkSortRule } from '@/models/works/WorkSortRule';
+import { WorkType } from '@/models/works/WorkType';
 import Joi from 'joi';
-
-import { WorkSortRule } from './WorkSortRule';
-import { WorkType } from './WorkType';
 
 export class WorkListParams {
 	constructor(

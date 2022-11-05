@@ -1,7 +1,6 @@
+import { PasswordHashAlgorithm } from '@/models/PasswordHashAlgorithm';
+import { IPasswordHasher } from '@/services/passwordHashers/IPasswordHasher';
 import bcrypt from 'bcrypt';
-
-import { PasswordHashAlgorithm } from '../../models/PasswordHashAlgorithm';
-import { IPasswordHasher } from './IPasswordHasher';
 
 export class BcryptPasswordHasher implements IPasswordHasher {
 	readonly algorithm = PasswordHashAlgorithm.Bcrypt;

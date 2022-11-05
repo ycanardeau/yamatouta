@@ -1,5 +1,5 @@
-import { ArtistDeleteCommandHandler } from '../EntryDeleteCommandHandler';
-import { ArtistUpdateCommandHandler } from './ArtistUpdateCommandHandler';
+import { ArtistDeleteCommandHandler } from '@/database/commands/EntryDeleteCommandHandler';
+import { ArtistUpdateCommandHandler } from '@/database/commands/artists/ArtistUpdateCommandHandler';
 
 export const artistCommandHandlers = [
 	ArtistDeleteCommandHandler,

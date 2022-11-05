@@ -1,22 +1,21 @@
+import { QuoteDeleteCommand } from '@/database/commands/EntryDeleteCommandHandler';
+import { QuoteUpdateCommand } from '@/database/commands/quotes/QuoteUpdateCommandHandler';
+import { QuoteListRevisionsQuery } from '@/database/queries/EntryListRevisionsQueryHandler';
+import { QuoteGetQuery } from '@/database/queries/quotes/QuoteGetQueryHandler';
+import { QuoteListQuery } from '@/database/queries/quotes/QuoteListQueryHandler';
+import { QuoteObject } from '@/dto/QuoteObject';
+import { RevisionObject } from '@/dto/RevisionObject';
+import { SearchResultObject } from '@/dto/SearchResultObject';
+import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
+import { JoiValidationPipe } from '@/framework/pipes/JoiValidationPipe';
+import { EntryDeleteParams } from '@/models/EntryDeleteParams';
+import { EntryListRevisionsParams } from '@/models/EntryListRevisionsParams';
+import { QuoteGetParams } from '@/models/quotes/QuoteGetParams';
+import { QuoteListParams } from '@/models/quotes/QuoteListParams';
+import { QuoteUpdateParams } from '@/models/quotes/QuoteUpdateParams';
+import { PermissionContext } from '@/services/PermissionContext';
 import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-
-import { QuoteDeleteCommand } from '../../database/commands/EntryDeleteCommandHandler';
-import { QuoteUpdateCommand } from '../../database/commands/quotes/QuoteUpdateCommandHandler';
-import { QuoteListRevisionsQuery } from '../../database/queries/EntryListRevisionsQueryHandler';
-import { QuoteGetQuery } from '../../database/queries/quotes/QuoteGetQueryHandler';
-import { QuoteListQuery } from '../../database/queries/quotes/QuoteListQueryHandler';
-import { QuoteObject } from '../../dto/QuoteObject';
-import { RevisionObject } from '../../dto/RevisionObject';
-import { SearchResultObject } from '../../dto/SearchResultObject';
-import { GetPermissionContext } from '../../framework/decorators/GetPermissionContext';
-import { JoiValidationPipe } from '../../framework/pipes/JoiValidationPipe';
-import { EntryDeleteParams } from '../../models/EntryDeleteParams';
-import { EntryListRevisionsParams } from '../../models/EntryListRevisionsParams';
-import { QuoteGetParams } from '../../models/quotes/QuoteGetParams';
-import { QuoteListParams } from '../../models/quotes/QuoteListParams';
-import { QuoteUpdateParams } from '../../models/quotes/QuoteUpdateParams';
-import { PermissionContext } from '../../services/PermissionContext';
 
 @Controller('api/quotes')
 export class QuoteApiController {

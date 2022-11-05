@@ -1,3 +1,13 @@
+import config from '@/config';
+import { Artist } from '@/entities/Artist';
+import { Hashtag } from '@/entities/Hashtag';
+import { Quote } from '@/entities/Quote';
+import { Translation } from '@/entities/Translation';
+import { Work } from '@/entities/Work';
+import { Entry } from '@/models/Entry';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { Permission } from '@/models/Permission';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
 import { createWriteStream, promises, WriteStream } from 'fs';
@@ -8,17 +18,6 @@ import {
 	SitemapItemLoose,
 	SitemapStream,
 } from 'sitemap';
-
-import config from '../config';
-import { Artist } from '../entities/Artist';
-import { Hashtag } from '../entities/Hashtag';
-import { Quote } from '../entities/Quote';
-import { Translation } from '../entities/Translation';
-import { Work } from '../entities/Work';
-import { Entry } from '../models/Entry';
-import { EntryUrlMapper } from '../models/EntryUrlMapper';
-import { Permission } from '../models/Permission';
-import { PermissionContext } from './PermissionContext';
 
 @Injectable()
 export class SitemapService {

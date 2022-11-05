@@ -1,7 +1,6 @@
+import { UserGroup } from '@/models/users/UserGroup';
+import { UserSortRule } from '@/models/users/UserSortRule';
 import Joi from 'joi';
-
-import { UserGroup } from './UserGroup';
-import { UserSortRule } from './UserSortRule';
 
 export class UserListParams {
 	constructor(

@@ -1,8 +1,7 @@
+import { AppModule } from '@/AppModule';
 import { MikroORM } from '@mikro-orm/core';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-
-import { AppModule } from '../src/AppModule';
 
 export const createApplication = async (): Promise<INestApplication> => {
 	const module = await Test.createTestingModule({

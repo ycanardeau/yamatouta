@@ -1,14 +1,14 @@
-import { ArtistLinkService } from './ArtistLinkService';
-import { HashtagLinkService } from './HashtagLinkService';
-import { NgramConverter } from './NgramConverter';
-import { RevisionService } from './RevisionService';
-import { SitemapService } from './SitemapService';
-import { WebLinkService } from './WebLinkService';
-import { WorkLinkService } from './WorkLinkService';
-import { AuthService } from './auth/AuthService';
-import { LocalSerializer } from './auth/LocalSerializer';
-import { LocalStrategy } from './auth/LocalStrategy';
-import { PasswordHasherFactory } from './passwordHashers/PasswordHasherFactory';
+import { ArtistLinkService } from '@/services/ArtistLinkService';
+import { HashtagLinkService } from '@/services/HashtagLinkService';
+import { NgramConverter } from '@/services/NgramConverter';
+import { RevisionService } from '@/services/RevisionService';
+import { SitemapService } from '@/services/SitemapService';
+import { WebLinkService } from '@/services/WebLinkService';
+import { WorkLinkService } from '@/services/WorkLinkService';
+import { AuthService } from '@/services/auth/AuthService';
+import { LocalSerializer } from '@/services/auth/LocalSerializer';
+import { LocalStrategy } from '@/services/auth/LocalStrategy';
+import { PasswordHasherFactory } from '@/services/passwordHashers/PasswordHasherFactory';
 
 export const services = [
 	ArtistLinkService,

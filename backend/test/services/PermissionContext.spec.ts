@@ -1,3 +1,11 @@
+import { User } from '@/entities/User';
+import { Permission } from '@/models/Permission';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { userGroupPermissions } from '@/models/userGroupPermissions';
+import { UserGroup } from '@/models/users/UserGroup';
+import { WorkType } from '@/models/works/WorkType';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import {
 	INestApplication,
@@ -5,24 +13,15 @@ import {
 	UnauthorizedException,
 } from '@nestjs/common';
 import _ from 'lodash';
-
-import { User } from '../../src/entities/User';
-import { Permission } from '../../src/models/Permission';
-import { ArtistType } from '../../src/models/artists/ArtistType';
-import { QuoteType } from '../../src/models/quotes/QuoteType';
-import { WordCategory } from '../../src/models/translations/WordCategory';
-import { userGroupPermissions } from '../../src/models/userGroupPermissions';
-import { UserGroup } from '../../src/models/users/UserGroup';
-import { WorkType } from '../../src/models/works/WorkType';
-import { FakePermissionContext } from '../FakePermissionContext';
-import { createApplication } from '../createApplication';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { createApplication } from 'test/createApplication';
 import {
 	createArtist,
 	createQuote,
 	createTranslation,
 	createUser,
 	createWork,
-} from '../createEntry';
+} from 'test/createEntry';
 
 describe('PermissionContext', () => {
 	let app: INestApplication;

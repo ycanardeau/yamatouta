@@ -1,8 +1,8 @@
 import {
 	IEntryWithDeleted,
 	IEntryWithHidden,
-} from '../models/IEntryWithDeletedAndHidden';
-import { PermissionContext } from './PermissionContext';
+} from '@/models/IEntryWithDeletedAndHidden';
+import { PermissionContext } from '@/services/PermissionContext';
 
 export const whereNotDeleted = (
 	permissionContext: PermissionContext,

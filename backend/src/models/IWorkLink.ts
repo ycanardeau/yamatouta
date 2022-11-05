@@ -1,4 +1,4 @@
-import { LinkType } from './LinkType';
+import { LinkType } from '@/models/LinkType';
 
 export interface IWorkLink {
 	relatedWorkId: number;

@@ -1,12 +1,11 @@
+import { HashtagObject } from '@/dto/HashtagObject';
+import { Hashtag } from '@/entities/Hashtag';
+import { HashtagGetParams } from '@/models/hashtags/HashtagGetParams';
+import { PermissionContext } from '@/services/PermissionContext';
+import { whereNotDeleted, whereNotHidden } from '@/services/filters';
 import { EntityManager } from '@mikro-orm/core';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-
-import { HashtagObject } from '../../../dto/HashtagObject';
-import { Hashtag } from '../../../entities/Hashtag';
-import { HashtagGetParams } from '../../../models/hashtags/HashtagGetParams';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class HashtagGetQuery {
 	constructor(

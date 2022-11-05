@@ -1,18 +1,17 @@
+import { Artist } from '@/entities/Artist';
+import { Quote } from '@/entities/Quote';
+import { Translation } from '@/entities/Translation';
+import { User } from '@/entities/User';
+import { Work } from '@/entities/Work';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { UserGroup } from '@/models/users/UserGroup';
+import { WorkType } from '@/models/works/WorkType';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PasswordHasherFactory } from '@/services/passwordHashers/PasswordHasherFactory';
+import { normalizeEmail } from '@/utils/normalizeEmail';
 import { EntityManager, Reference } from '@mikro-orm/core';
-
-import { Artist } from '../src/entities/Artist';
-import { Quote } from '../src/entities/Quote';
-import { Translation } from '../src/entities/Translation';
-import { User } from '../src/entities/User';
-import { Work } from '../src/entities/Work';
-import { ArtistType } from '../src/models/artists/ArtistType';
-import { QuoteType } from '../src/models/quotes/QuoteType';
-import { WordCategory } from '../src/models/translations/WordCategory';
-import { UserGroup } from '../src/models/users/UserGroup';
-import { WorkType } from '../src/models/works/WorkType';
-import { NgramConverter } from '../src/services/NgramConverter';
-import { PasswordHasherFactory } from '../src/services/passwordHashers/PasswordHasherFactory';
-import { normalizeEmail } from '../src/utils/normalizeEmail';
 
 const passwordHasherFactory = new PasswordHasherFactory();
 const passwordHasher = passwordHasherFactory.default;

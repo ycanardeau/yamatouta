@@ -1,13 +1,12 @@
+import { ArtistObject } from '@/dto/ArtistObject';
+import { Artist } from '@/entities/Artist';
+import { ArtistGetParams } from '@/models/artists/ArtistGetParams';
+import { PermissionContext } from '@/services/PermissionContext';
+import { whereNotDeleted, whereNotHidden } from '@/services/filters';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-
-import { ArtistObject } from '../../../dto/ArtistObject';
-import { Artist } from '../../../entities/Artist';
-import { ArtistGetParams } from '../../../models/artists/ArtistGetParams';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class ArtistGetQuery {
 	constructor(

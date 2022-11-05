@@ -1,19 +1,18 @@
-import { EntityManager, MikroORM } from '@mikro-orm/core';
-import { INestApplication } from '@nestjs/common';
-
 import {
 	UserAuthenticateCommand,
 	UserAuthenticateCommandHandler,
 	LoginError,
 	LoginResult,
-} from '../../../../src/database/commands/users/UserAuthenticateCommandHandler';
-import { UserAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
-import { User } from '../../../../src/entities/User';
-import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { UserAuthenticateParams } from '../../../../src/models/users/UserAuthenticateParams';
-import { assertUserAuditLogEntry } from '../../../assertAuditLogEntry';
-import { createApplication } from '../../../createApplication';
-import { createUser } from '../../../createEntry';
+} from '@/database/commands/users/UserAuthenticateCommandHandler';
+import { UserAuditLogEntry } from '@/entities/AuditLogEntry';
+import { User } from '@/entities/User';
+import { AuditedAction } from '@/models/AuditedAction';
+import { UserAuthenticateParams } from '@/models/users/UserAuthenticateParams';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication } from '@nestjs/common';
+import { assertUserAuditLogEntry } from 'test/assertAuditLogEntry';
+import { createApplication } from 'test/createApplication';
+import { createUser } from 'test/createEntry';
 
 describe('UserAuthenticateCommandHandler', () => {
 	const existingUsername = 'existing';

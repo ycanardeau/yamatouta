@@ -1,30 +1,29 @@
+import {
+	ArtistUpdateCommand,
+	ArtistUpdateCommandHandler,
+} from '@/database/commands/artists/ArtistUpdateCommandHandler';
+import { ArtistObject } from '@/dto/ArtistObject';
+import { Artist } from '@/entities/Artist';
+import { ArtistAuditLogEntry } from '@/entities/AuditLogEntry';
+import { ArtistRevision } from '@/entities/Revision';
+import { User } from '@/entities/User';
+import { AuditedAction } from '@/models/AuditedAction';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { ArtistUpdateParams } from '@/models/artists/ArtistUpdateParams';
+import { IArtistSnapshot } from '@/models/snapshots/ArtistSnapshot';
+import { UserGroup } from '@/models/users/UserGroup';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import {
 	BadRequestException,
 	INestApplication,
 	UnauthorizedException,
 } from '@nestjs/common';
-
-import {
-	ArtistUpdateCommand,
-	ArtistUpdateCommandHandler,
-} from '../../../../src/database/commands/artists/ArtistUpdateCommandHandler';
-import { ArtistObject } from '../../../../src/dto/ArtistObject';
-import { Artist } from '../../../../src/entities/Artist';
-import { ArtistAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
-import { ArtistRevision } from '../../../../src/entities/Revision';
-import { User } from '../../../../src/entities/User';
-import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { ArtistType } from '../../../../src/models/artists/ArtistType';
-import { ArtistUpdateParams } from '../../../../src/models/artists/ArtistUpdateParams';
-import { IArtistSnapshot } from '../../../../src/models/snapshots/ArtistSnapshot';
-import { UserGroup } from '../../../../src/models/users/UserGroup';
-import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakePermissionContext } from '../../../FakePermissionContext';
-import { assertArtistAuditLogEntry } from '../../../assertAuditLogEntry';
-import { createApplication } from '../../../createApplication';
-import { createUser } from '../../../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { assertArtistAuditLogEntry } from 'test/assertAuditLogEntry';
+import { createApplication } from 'test/createApplication';
+import { createUser } from 'test/createEntry';
 
 describe('ArtistCreateCommandHandler', () => {
 	let app: INestApplication;

@@ -1,4 +1,4 @@
-import { escapeWildcardCharacters } from '../../src/utils/escapeWildcardCharacters';
+import { escapeWildcardCharacters } from '@/utils/escapeWildcardCharacters';
 
 test('escapeWildcardCharacters', () => {
 	expect(escapeWildcardCharacters('%%大__和__言__葉%%')).toBe(

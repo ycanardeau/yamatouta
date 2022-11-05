@@ -1,5 +1,5 @@
-import { TranslationDeleteCommandHandler } from '../EntryDeleteCommandHandler';
-import { TranslationUpdateCommandHandler } from './TranslationUpdateCommandHandler';
+import { TranslationDeleteCommandHandler } from '@/database/commands/EntryDeleteCommandHandler';
+import { TranslationUpdateCommandHandler } from '@/database/commands/translations/TranslationUpdateCommandHandler';
 
 export const translationCommandHandlers = [
 	TranslationDeleteCommandHandler,

@@ -1,19 +1,18 @@
+import { ArtistUpdateCommandHandler } from '@/database/commands/artists/ArtistUpdateCommandHandler';
+import { QuoteUpdateCommandHandler } from '@/database/commands/quotes/QuoteUpdateCommandHandler';
+import { TranslationUpdateCommandHandler } from '@/database/commands/translations/TranslationUpdateCommandHandler';
+import { WorkUpdateCommandHandler } from '@/database/commands/works/WorkUpdateCommandHandler';
+import { Artist } from '@/entities/Artist';
+import { Commit } from '@/entities/Commit';
+import { Quote } from '@/entities/Quote';
+import { Translation } from '@/entities/Translation';
+import { Work } from '@/entities/Work';
+import { EntryWithRevisions } from '@/models/Entry';
+import { Permission } from '@/models/Permission';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, QueryOrder } from '@mikro-orm/core';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import { Artist } from '../../../entities/Artist';
-import { Commit } from '../../../entities/Commit';
-import { Quote } from '../../../entities/Quote';
-import { Translation } from '../../../entities/Translation';
-import { Work } from '../../../entities/Work';
-import { EntryWithRevisions } from '../../../models/Entry';
-import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { ArtistUpdateCommandHandler } from '../artists/ArtistUpdateCommandHandler';
-import { QuoteUpdateCommandHandler } from '../quotes/QuoteUpdateCommandHandler';
-import { TranslationUpdateCommandHandler } from '../translations/TranslationUpdateCommandHandler';
-import { WorkUpdateCommandHandler } from '../works/WorkUpdateCommandHandler';
 
 export class AdminCreateMissingRevisionsCommand {
 	constructor(readonly permissionContext: PermissionContext) {}

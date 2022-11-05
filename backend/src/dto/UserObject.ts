@@ -1,6 +1,6 @@
-import { User } from '../entities/User';
-import { EntryType } from '../models/EntryType';
-import { PermissionContext } from '../services/PermissionContext';
+import { User } from '@/entities/User';
+import { EntryType } from '@/models/EntryType';
+import { PermissionContext } from '@/services/PermissionContext';
 
 export class UserObject {
 	private constructor(

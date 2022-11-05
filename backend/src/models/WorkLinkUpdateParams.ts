@@ -1,7 +1,6 @@
+import { LinkType } from '@/models/LinkType';
+import { PartialDateUpdateParams } from '@/models/PartialDateUpdateParams';
 import Joi from 'joi';
-
-import { LinkType } from './LinkType';
-import { PartialDateUpdateParams } from './PartialDateUpdateParams';
 
 export class WorkLinkUpdateParams {
 	constructor(

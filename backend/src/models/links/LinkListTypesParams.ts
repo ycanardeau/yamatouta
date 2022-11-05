@@ -1,6 +1,5 @@
+import { EntryType } from '@/models/EntryType';
 import Joi from 'joi';
-
-import { EntryType } from '../EntryType';
 
 export class LinkListTypesParams {
 	static readonly schema = Joi.object<LinkListTypesParams>({

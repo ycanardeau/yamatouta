@@ -1,11 +1,11 @@
-import { Artist } from '../../entities/Artist';
-import { ArtistLink } from '../../entities/ArtistLink';
-import { Link } from '../../entities/Link';
-import { Work } from '../../entities/Work';
-import { WorkLink } from '../../entities/WorkLink';
-import { LinkType } from '../LinkType';
-import { ObjectRefSnapshot } from './ObjectRefSnapshot';
-import { PartialDateSnapshot } from './PartialDateSnapshot';
+import { Artist } from '@/entities/Artist';
+import { ArtistLink } from '@/entities/ArtistLink';
+import { Link } from '@/entities/Link';
+import { Work } from '@/entities/Work';
+import { WorkLink } from '@/entities/WorkLink';
+import { LinkType } from '@/models//LinkType';
+import { ObjectRefSnapshot } from '@/models/snapshots/ObjectRefSnapshot';
+import { PartialDateSnapshot } from '@/models/snapshots/PartialDateSnapshot';
 
 abstract class LinkSnapshot {
 	readonly linkType: LinkType;

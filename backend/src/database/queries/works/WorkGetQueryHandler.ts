@@ -1,13 +1,12 @@
+import { WorkObject } from '@/dto/WorkObject';
+import { Work } from '@/entities/Work';
+import { WorkGetParams } from '@/models/works/WorkGetParams';
+import { PermissionContext } from '@/services/PermissionContext';
+import { whereNotDeleted, whereNotHidden } from '@/services/filters';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-
-import { WorkObject } from '../../../dto/WorkObject';
-import { Work } from '../../../entities/Work';
-import { WorkGetParams } from '../../../models/works/WorkGetParams';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { whereNotDeleted, whereNotHidden } from '../../../services/filters';
 
 export class WorkGetQuery {
 	constructor(

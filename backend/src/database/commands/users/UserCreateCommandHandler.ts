@@ -1,19 +1,18 @@
+import config from '@/config';
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { UserAuditLogEntry } from '@/entities/AuditLogEntry';
+import { User } from '@/entities/User';
+import { UserEmailAlreadyExistsException } from '@/framework/exceptions/UserEmailAlreadyExistsException';
+import { AuditedAction } from '@/models/AuditedAction';
+import { UserCreateParams } from '@/models/users/UserCreateParams';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
+import { PasswordHasherFactory } from '@/services/passwordHashers/PasswordHasherFactory';
+import { normalizeEmail } from '@/utils/normalizeEmail';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import config from '../../../config';
-import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
-import { UserAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { User } from '../../../entities/User';
-import { UserEmailAlreadyExistsException } from '../../../framework/exceptions/UserEmailAlreadyExistsException';
-import { AuditedAction } from '../../../models/AuditedAction';
-import { UserCreateParams } from '../../../models/users/UserCreateParams';
-import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
-import { normalizeEmail } from '../../../utils/normalizeEmail';
 
 export class UserCreateCommand {
 	constructor(

@@ -1,21 +1,20 @@
+import { WorkObject } from '@/dto/WorkObject';
+import { WorkAuditLogEntry } from '@/entities/AuditLogEntry';
+import { Work } from '@/entities/Work';
+import { AuditedAction } from '@/models/AuditedAction';
+import { Permission } from '@/models/Permission';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { WorkOptionalField } from '@/models/works/WorkOptionalField';
+import { WorkUpdateParams } from '@/models/works/WorkUpdateParams';
+import { ArtistLinkService } from '@/services/ArtistLinkService';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
+import { RevisionService } from '@/services/RevisionService';
+import { WebLinkService } from '@/services/WebLinkService';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import { WorkObject } from '../../../dto/WorkObject';
-import { WorkAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { Work } from '../../../entities/Work';
-import { AuditedAction } from '../../../models/AuditedAction';
-import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
-import { WorkOptionalField } from '../../../models/works/WorkOptionalField';
-import { WorkUpdateParams } from '../../../models/works/WorkUpdateParams';
-import { ArtistLinkService } from '../../../services/ArtistLinkService';
-import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { RevisionService } from '../../../services/RevisionService';
-import { WebLinkService } from '../../../services/WebLinkService';
 
 export class WorkUpdateCommand {
 	constructor(

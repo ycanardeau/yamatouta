@@ -1,10 +1,10 @@
-import { Translation } from '../entities/Translation';
-import { EntryType } from '../models/EntryType';
-import { TranslationOptionalField } from '../models/translations/TranslationOptionalField';
-import { WordCategory } from '../models/translations/WordCategory';
-import { PermissionContext } from '../services/PermissionContext';
-import { WorkLinkObject } from './LinkObject';
-import { WebLinkObject } from './WebLinkObject';
+import { WorkLinkObject } from '@/dto/LinkObject';
+import { WebLinkObject } from '@/dto/WebLinkObject';
+import { Translation } from '@/entities/Translation';
+import { EntryType } from '@/models/EntryType';
+import { TranslationOptionalField } from '@/models/translations/TranslationOptionalField';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { PermissionContext } from '@/services/PermissionContext';
 
 export class TranslationObject {
 	private constructor(

@@ -1,5 +1,5 @@
-import { WebLink } from '../../entities/WebLink';
-import { WebLinkCategory } from '../WebLinkCategory';
+import { WebLink } from '@/entities/WebLink';
+import { WebLinkCategory } from '@/models/WebLinkCategory';
 
 export class WebLinkSnapshot {
 	private constructor(

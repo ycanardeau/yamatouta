@@ -1,15 +1,14 @@
+import { User } from '@/entities/User';
+import { WebAddress } from '@/entities/WebAddress';
+import { WebAddressHost } from '@/entities/WebAddressHost';
+import { WebLink } from '@/entities/WebLink';
+import { IEntryWithWebLinks } from '@/models/IEntryWithWebLinks';
+import { Permission } from '@/models/Permission';
+import { WebLinkUpdateParams } from '@/models/WebLinkUpdateParams';
+import { PermissionContext } from '@/services/PermissionContext';
+import { collectionSyncWithContent } from '@/utils/collectionDiff';
 import { EntityManager } from '@mikro-orm/core';
 import { Injectable } from '@nestjs/common';
-
-import { User } from '../entities/User';
-import { WebAddress } from '../entities/WebAddress';
-import { WebAddressHost } from '../entities/WebAddressHost';
-import { WebLink } from '../entities/WebLink';
-import { IEntryWithWebLinks } from '../models/IEntryWithWebLinks';
-import { Permission } from '../models/Permission';
-import { WebLinkUpdateParams } from '../models/WebLinkUpdateParams';
-import { collectionSyncWithContent } from '../utils/collectionDiff';
-import { PermissionContext } from './PermissionContext';
 
 @Injectable()
 export class WebLinkService {

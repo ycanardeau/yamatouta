@@ -1,10 +1,10 @@
-import { Work } from '../entities/Work';
-import { EntryType } from '../models/EntryType';
-import { WorkOptionalField } from '../models/works/WorkOptionalField';
-import { WorkType } from '../models/works/WorkType';
-import { PermissionContext } from '../services/PermissionContext';
-import { ArtistLinkObject } from './LinkObject';
-import { WebLinkObject } from './WebLinkObject';
+import { ArtistLinkObject } from '@/dto/LinkObject';
+import { WebLinkObject } from '@/dto/WebLinkObject';
+import { Work } from '@/entities/Work';
+import { EntryType } from '@/models/EntryType';
+import { WorkOptionalField } from '@/models/works/WorkOptionalField';
+import { WorkType } from '@/models/works/WorkType';
+import { PermissionContext } from '@/services/PermissionContext';
 
 export class WorkObject {
 	private constructor(

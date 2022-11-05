@@ -1,11 +1,10 @@
+import { UserObject } from '@/dto/UserObject';
+import { User } from '@/entities/User';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication, NotFoundException } from '@nestjs/common';
-
-import { UserObject } from '../../src/dto/UserObject';
-import { User } from '../../src/entities/User';
-import { FakePermissionContext } from '../FakePermissionContext';
-import { createApplication } from '../createApplication';
-import { createUser } from '../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { createApplication } from 'test/createApplication';
+import { createUser } from 'test/createEntry';
 
 describe('UserObject', () => {
 	let app: INestApplication;

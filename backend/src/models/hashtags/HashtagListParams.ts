@@ -1,6 +1,5 @@
+import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
 import Joi from 'joi';
-
-import { HashtagSortRule } from './HashtagSortRule';
 
 export class HashtagListParams {
 	constructor(

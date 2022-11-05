@@ -1,16 +1,15 @@
+import { orderByIds } from '@/database/queries/orderByIds';
+import { SearchResultObject } from '@/dto/SearchResultObject';
+import { WorkObject } from '@/dto/WorkObject';
+import { Work } from '@/entities/Work';
+import { WorkListParams } from '@/models/works/WorkListParams';
+import { WorkSortRule } from '@/models/works/WorkSortRule';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
 import { BadRequestException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import _ from 'lodash';
-
-import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { WorkObject } from '../../../dto/WorkObject';
-import { Work } from '../../../entities/Work';
-import { WorkListParams } from '../../../models/works/WorkListParams';
-import { WorkSortRule } from '../../../models/works/WorkSortRule';
-import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { orderByIds } from '../orderByIds';
 
 export class WorkListQuery {
 	constructor(

@@ -1,14 +1,13 @@
+import { QuoteObject } from '@/dto/QuoteObject';
+import { Artist } from '@/entities/Artist';
+import { Quote } from '@/entities/Quote';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { QuoteType } from '@/models/quotes/QuoteType';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication, NotFoundException } from '@nestjs/common';
-
-import { QuoteObject } from '../../src/dto/QuoteObject';
-import { Artist } from '../../src/entities/Artist';
-import { Quote } from '../../src/entities/Quote';
-import { ArtistType } from '../../src/models/artists/ArtistType';
-import { QuoteType } from '../../src/models/quotes/QuoteType';
-import { FakePermissionContext } from '../FakePermissionContext';
-import { createApplication } from '../createApplication';
-import { createArtist, createQuote, createUser } from '../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { createApplication } from 'test/createApplication';
+import { createArtist, createQuote, createUser } from 'test/createEntry';
 
 describe('QuoteObject', () => {
 	let app: INestApplication;

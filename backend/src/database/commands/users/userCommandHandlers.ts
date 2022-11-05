@@ -1,6 +1,6 @@
-import { UserAuthenticateCommandHandler } from './UserAuthenticateCommandHandler';
-import { UserCreateCommandHandler } from './UserCreateCommandHandler';
-import { UserUpdateCommandHandler } from './UserUpdateCommandHandler';
+import { UserAuthenticateCommandHandler } from '@/database/commands/users/UserAuthenticateCommandHandler';
+import { UserCreateCommandHandler } from '@/database/commands/users/UserCreateCommandHandler';
+import { UserUpdateCommandHandler } from '@/database/commands/users/UserUpdateCommandHandler';
 
 export const userCommandHandlers = [
 	UserAuthenticateCommandHandler,

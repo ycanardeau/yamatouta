@@ -1,13 +1,12 @@
+import { Commit } from '@/entities/Commit';
+import { Revision } from '@/entities/Revision';
+import { User } from '@/entities/User';
+import { EntryWithRevisions } from '@/models/Entry';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { Snapshot } from '@/models/snapshots/Snapshot';
 import { EntityManager } from '@mikro-orm/core';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import _ from 'lodash';
-
-import { Commit } from '../entities/Commit';
-import { Revision } from '../entities/Revision';
-import { User } from '../entities/User';
-import { EntryWithRevisions } from '../models/Entry';
-import { RevisionEvent } from '../models/RevisionEvent';
-import { Snapshot } from '../models/snapshots/Snapshot';
 
 @Injectable()
 export class RevisionService {

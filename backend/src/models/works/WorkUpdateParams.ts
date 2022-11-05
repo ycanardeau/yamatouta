@@ -1,8 +1,7 @@
+import { ArtistLinkUpdateParams } from '@/models/ArtistLinkUpdateParams';
+import { WebLinkUpdateParams } from '@/models/WebLinkUpdateParams';
+import { WorkType } from '@/models/works/WorkType';
 import Joi from 'joi';
-
-import { ArtistLinkUpdateParams } from '../ArtistLinkUpdateParams';
-import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
-import { WorkType } from './WorkType';
 
 export class WorkUpdateParams {
 	constructor(

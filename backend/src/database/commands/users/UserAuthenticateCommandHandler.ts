@@ -1,13 +1,12 @@
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { UserAuditLogEntry } from '@/entities/AuditLogEntry';
+import { User } from '@/entities/User';
+import { AuditedAction } from '@/models/AuditedAction';
+import { UserAuthenticateParams } from '@/models/users/UserAuthenticateParams';
+import { PasswordHasherFactory } from '@/services/passwordHashers/PasswordHasherFactory';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import { AuthenticatedUserObject } from '../../../dto/AuthenticatedUserObject';
-import { UserAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { User } from '../../../entities/User';
-import { AuditedAction } from '../../../models/AuditedAction';
-import { UserAuthenticateParams } from '../../../models/users/UserAuthenticateParams';
-import { PasswordHasherFactory } from '../../../services/passwordHashers/PasswordHasherFactory';
 
 export enum LoginError {
 	None = 'None',

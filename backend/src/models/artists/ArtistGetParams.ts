@@ -1,6 +1,5 @@
+import { ArtistOptionalField } from '@/models/artists/ArtistOptionalField';
 import Joi from 'joi';
-
-import { ArtistOptionalField } from './ArtistOptionalField';
 
 export class ArtistGetParams {
 	constructor(readonly id: number, readonly fields?: ArtistOptionalField[]) {}

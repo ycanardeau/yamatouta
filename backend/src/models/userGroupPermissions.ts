@@ -1,5 +1,5 @@
-import { Permission } from './Permission';
-import { UserGroup } from './users/UserGroup';
+import { Permission } from '@/models/Permission';
+import { UserGroup } from '@/models/users/UserGroup';
 
 const limitedUserPermissions: Permission[] = [];
 

@@ -1,17 +1,16 @@
+import { orderByIds } from '@/database/queries/orderByIds';
+import { SearchResultObject } from '@/dto/SearchResultObject';
+import { TranslationObject } from '@/dto/TranslationObject';
+import { Translation } from '@/entities/Translation';
+import { TranslationListParams } from '@/models/translations/TranslationListParams';
+import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
+import { escapeWildcardCharacters } from '@/utils/escapeWildcardCharacters';
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
 import { BadRequestException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import _ from 'lodash';
-
-import { SearchResultObject } from '../../../dto/SearchResultObject';
-import { TranslationObject } from '../../../dto/TranslationObject';
-import { Translation } from '../../../entities/Translation';
-import { TranslationListParams } from '../../../models/translations/TranslationListParams';
-import { TranslationSortRule } from '../../../models/translations/TranslationSortRule';
-import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { escapeWildcardCharacters } from '../../../utils/escapeWildcardCharacters';
-import { orderByIds } from '../orderByIds';
 
 export class TranslationListQuery {
 	constructor(

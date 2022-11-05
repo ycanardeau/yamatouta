@@ -1,4 +1,4 @@
-import { WebLinkSnapshot } from './WebLinkSnapshot';
+import { WebLinkSnapshot } from '@/models/snapshots/WebLinkSnapshot';
 
 export interface ISnapshotWithWebLinks {
 	webLinks: WebLinkSnapshot[];

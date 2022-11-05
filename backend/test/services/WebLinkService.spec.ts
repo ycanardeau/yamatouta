@@ -1,19 +1,18 @@
+import { Translation } from '@/entities/Translation';
+import { User } from '@/entities/User';
+import { WebAddress } from '@/entities/WebAddress';
+import { WebAddressHost } from '@/entities/WebAddressHost';
+import { WebLink } from '@/entities/WebLink';
+import { WebLinkCategory } from '@/models/WebLinkCategory';
+import { WebLinkUpdateParams } from '@/models/WebLinkUpdateParams';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { UserGroup } from '@/models/users/UserGroup';
+import { WebLinkService } from '@/services/WebLinkService';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication } from '@nestjs/common';
-
-import { Translation } from '../../src/entities/Translation';
-import { User } from '../../src/entities/User';
-import { WebAddress } from '../../src/entities/WebAddress';
-import { WebAddressHost } from '../../src/entities/WebAddressHost';
-import { WebLink } from '../../src/entities/WebLink';
-import { WebLinkCategory } from '../../src/models/WebLinkCategory';
-import { WebLinkUpdateParams } from '../../src/models/WebLinkUpdateParams';
-import { WordCategory } from '../../src/models/translations/WordCategory';
-import { UserGroup } from '../../src/models/users/UserGroup';
-import { WebLinkService } from '../../src/services/WebLinkService';
-import { FakePermissionContext } from '../FakePermissionContext';
-import { createApplication } from '../createApplication';
-import { createTranslation, createUser } from '../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { createApplication } from 'test/createApplication';
+import { createTranslation, createUser } from 'test/createEntry';
 
 describe('WebLinkService', () => {
 	describe('sync', () => {

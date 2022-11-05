@@ -1,25 +1,24 @@
-import { EntityManager, MikroORM } from '@mikro-orm/core';
-import { INestApplication, UnauthorizedException } from '@nestjs/common';
-
 import {
 	QuoteDeleteCommand,
 	QuoteDeleteCommandHandler,
-} from '../../../../src/database/commands/EntryDeleteCommandHandler';
-import { QuoteAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
-import { Quote } from '../../../../src/entities/Quote';
-import { QuoteRevision } from '../../../../src/entities/Revision';
-import { User } from '../../../../src/entities/User';
-import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { EntryDeleteParams } from '../../../../src/models/EntryDeleteParams';
-import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { ArtistType } from '../../../../src/models/artists/ArtistType';
-import { QuoteType } from '../../../../src/models/quotes/QuoteType';
-import { UserGroup } from '../../../../src/models/users/UserGroup';
-import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakePermissionContext } from '../../../FakePermissionContext';
-import { assertQuoteAuditLogEntry } from '../../../assertAuditLogEntry';
-import { createApplication } from '../../../createApplication';
-import { createArtist, createQuote, createUser } from '../../../createEntry';
+} from '@/database/commands/EntryDeleteCommandHandler';
+import { QuoteAuditLogEntry } from '@/entities/AuditLogEntry';
+import { Quote } from '@/entities/Quote';
+import { QuoteRevision } from '@/entities/Revision';
+import { User } from '@/entities/User';
+import { AuditedAction } from '@/models/AuditedAction';
+import { EntryDeleteParams } from '@/models/EntryDeleteParams';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { UserGroup } from '@/models/users/UserGroup';
+import { PermissionContext } from '@/services/PermissionContext';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication, UnauthorizedException } from '@nestjs/common';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { assertQuoteAuditLogEntry } from 'test/assertAuditLogEntry';
+import { createApplication } from 'test/createApplication';
+import { createArtist, createQuote, createUser } from 'test/createEntry';
 
 describe('QuoteDeleteCommandHandler', () => {
 	let app: INestApplication;

@@ -1,24 +1,23 @@
-import { EntityManager, MikroORM } from '@mikro-orm/core';
-import { INestApplication, UnauthorizedException } from '@nestjs/common';
-
 import {
 	WorkDeleteCommand,
 	WorkDeleteCommandHandler,
-} from '../../../../src/database/commands/EntryDeleteCommandHandler';
-import { WorkAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
-import { WorkRevision } from '../../../../src/entities/Revision';
-import { User } from '../../../../src/entities/User';
-import { Work } from '../../../../src/entities/Work';
-import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { EntryDeleteParams } from '../../../../src/models/EntryDeleteParams';
-import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { UserGroup } from '../../../../src/models/users/UserGroup';
-import { WorkType } from '../../../../src/models/works/WorkType';
-import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakePermissionContext } from '../../../FakePermissionContext';
-import { assertWorkAuditLogEntry } from '../../../assertAuditLogEntry';
-import { createApplication } from '../../../createApplication';
-import { createUser, createWork } from '../../../createEntry';
+} from '@/database/commands/EntryDeleteCommandHandler';
+import { WorkAuditLogEntry } from '@/entities/AuditLogEntry';
+import { WorkRevision } from '@/entities/Revision';
+import { User } from '@/entities/User';
+import { Work } from '@/entities/Work';
+import { AuditedAction } from '@/models/AuditedAction';
+import { EntryDeleteParams } from '@/models/EntryDeleteParams';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { UserGroup } from '@/models/users/UserGroup';
+import { WorkType } from '@/models/works/WorkType';
+import { PermissionContext } from '@/services/PermissionContext';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
+import { INestApplication, UnauthorizedException } from '@nestjs/common';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { assertWorkAuditLogEntry } from 'test/assertAuditLogEntry';
+import { createApplication } from 'test/createApplication';
+import { createUser, createWork } from 'test/createEntry';
 
 describe('WorkDeleteCommandHandler', () => {
 	let app: INestApplication;

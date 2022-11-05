@@ -1,14 +1,13 @@
+import { renderReact } from '@/controllers/renderReact';
+import { UserGetQuery } from '@/database/queries/users/UserGetQueryHandler';
+import { UserObject } from '@/dto/UserObject';
+import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
+import { UserGetParams } from '@/models/users/UserGetParams';
+import { PermissionContext } from '@/services/PermissionContext';
 import { Controller, Get, Param, ParseIntPipe, Res } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Response } from 'express';
 import { t } from 'i18next';
-
-import { UserGetQuery } from '../database/queries/users/UserGetQueryHandler';
-import { UserObject } from '../dto/UserObject';
-import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { UserGetParams } from '../models/users/UserGetParams';
-import { PermissionContext } from '../services/PermissionContext';
-import { renderReact } from './renderReact';
 
 @Controller('users')
 export class UserController {

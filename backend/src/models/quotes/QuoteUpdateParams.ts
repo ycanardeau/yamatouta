@@ -1,8 +1,7 @@
+import { WebLinkUpdateParams } from '@/models/WebLinkUpdateParams';
+import { WorkLinkUpdateParams } from '@/models/WorkLinkUpdateParams';
+import { QuoteType } from '@/models/quotes/QuoteType';
 import Joi from 'joi';
-
-import { WebLinkUpdateParams } from '../WebLinkUpdateParams';
-import { WorkLinkUpdateParams } from '../WorkLinkUpdateParams';
-import { QuoteType } from './QuoteType';
 
 export class QuoteUpdateParams {
 	constructor(

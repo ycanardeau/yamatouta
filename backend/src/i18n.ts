@@ -1,6 +1,5 @@
+import config from '@/config';
 import i18n from 'i18next';
-
-import config from './config';
 
 const locales = ['en', 'ja'];
 

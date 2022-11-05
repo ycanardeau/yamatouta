@@ -1,16 +1,15 @@
+import { ArtistSearchIndex } from '@/entities/Artist';
+import { QuoteSearchIndex } from '@/entities/Quote';
+import { TranslationSearchIndex } from '@/entities/Translation';
+import { UserSearchIndex } from '@/entities/User';
+import { WorkSearchIndex } from '@/entities/Work';
+import { EntrySearchIndex } from '@/models/Entry';
+import { Permission } from '@/models/Permission';
+import { AdminUpdateSearchIndexParams } from '@/models/admin/AdminUpdateSearchIndexParams';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, FilterQuery, QueryOrder } from '@mikro-orm/core';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import { ArtistSearchIndex } from '../../../entities/Artist';
-import { QuoteSearchIndex } from '../../../entities/Quote';
-import { TranslationSearchIndex } from '../../../entities/Translation';
-import { UserSearchIndex } from '../../../entities/User';
-import { WorkSearchIndex } from '../../../entities/Work';
-import { EntrySearchIndex } from '../../../models/Entry';
-import { Permission } from '../../../models/Permission';
-import { AdminUpdateSearchIndexParams } from '../../../models/admin/AdminUpdateSearchIndexParams';
-import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
 
 export class AdminUpdateSearchIndexCommand {
 	constructor(

@@ -1,16 +1,16 @@
-import { Artist } from '../src/entities/Artist';
+import { Artist } from '@/entities/Artist';
 import {
 	ArtistAuditLogEntry,
 	QuoteAuditLogEntry,
 	TranslationAuditLogEntry,
 	UserAuditLogEntry,
 	WorkAuditLogEntry,
-} from '../src/entities/AuditLogEntry';
-import { Quote } from '../src/entities/Quote';
-import { Translation } from '../src/entities/Translation';
-import { User } from '../src/entities/User';
-import { Work } from '../src/entities/Work';
-import { AuditedAction } from '../src/models/AuditedAction';
+} from '@/entities/AuditLogEntry';
+import { Quote } from '@/entities/Quote';
+import { Translation } from '@/entities/Translation';
+import { User } from '@/entities/User';
+import { Work } from '@/entities/Work';
+import { AuditedAction } from '@/models/AuditedAction';
 
 export const assertUserAuditLogEntry = (
 	actual: UserAuditLogEntry,

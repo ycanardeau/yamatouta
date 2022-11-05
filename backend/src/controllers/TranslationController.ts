@@ -1,14 +1,13 @@
+import { renderReact } from '@/controllers/renderReact';
+import { TranslationGetQuery } from '@/database/queries/translations/TranslationGetQueryHandler';
+import { TranslationObject } from '@/dto/TranslationObject';
+import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
+import { TranslationGetParams } from '@/models/translations/TranslationGetParams';
+import { PermissionContext } from '@/services/PermissionContext';
 import { Controller, Get, Param, ParseIntPipe, Res } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { Response } from 'express';
 import { t } from 'i18next';
-
-import { TranslationGetQuery } from '../database/queries/translations/TranslationGetQueryHandler';
-import { TranslationObject } from '../dto/TranslationObject';
-import { GetPermissionContext } from '../framework/decorators/GetPermissionContext';
-import { TranslationGetParams } from '../models/translations/TranslationGetParams';
-import { PermissionContext } from '../services/PermissionContext';
-import { renderReact } from './renderReact';
 
 @Controller('translations')
 export class TranslationController {

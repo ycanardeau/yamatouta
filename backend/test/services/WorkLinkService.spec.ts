@@ -1,28 +1,27 @@
+import { Artist } from '@/entities/Artist';
+import { Quote } from '@/entities/Quote';
+import { User } from '@/entities/User';
+import { Work } from '@/entities/Work';
+import { WorkLink } from '@/entities/WorkLink';
+import { EntryType } from '@/models/EntryType';
+import { LinkType, workLinkTypes } from '@/models/LinkType';
+import { WorkLinkUpdateParams } from '@/models/WorkLinkUpdateParams';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { UserGroup } from '@/models/users/UserGroup';
+import { WorkType } from '@/models/works/WorkType';
+import { WorkLinkService } from '@/services/WorkLinkService';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { BadRequestException, INestApplication } from '@nestjs/common';
 import _ from 'lodash';
-
-import { Artist } from '../../src/entities/Artist';
-import { Quote } from '../../src/entities/Quote';
-import { User } from '../../src/entities/User';
-import { Work } from '../../src/entities/Work';
-import { WorkLink } from '../../src/entities/WorkLink';
-import { EntryType } from '../../src/models/EntryType';
-import { LinkType, workLinkTypes } from '../../src/models/LinkType';
-import { WorkLinkUpdateParams } from '../../src/models/WorkLinkUpdateParams';
-import { ArtistType } from '../../src/models/artists/ArtistType';
-import { QuoteType } from '../../src/models/quotes/QuoteType';
-import { UserGroup } from '../../src/models/users/UserGroup';
-import { WorkType } from '../../src/models/works/WorkType';
-import { WorkLinkService } from '../../src/services/WorkLinkService';
-import { FakePermissionContext } from '../FakePermissionContext';
-import { createApplication } from '../createApplication';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { createApplication } from 'test/createApplication';
 import {
 	createArtist,
 	createQuote,
 	createUser,
 	createWork,
-} from '../createEntry';
+} from 'test/createEntry';
 
 describe('WorkLinkService', () => {
 	describe('sync', () => {

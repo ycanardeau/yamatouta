@@ -1,14 +1,14 @@
-import { Artist } from '../../entities/Artist';
-import { Quote } from '../../entities/Quote';
-import { IContentEquatable } from '../IContentEquatable';
-import { QuoteType } from '../quotes/QuoteType';
-import { HashtagLinkSnapshot } from './HashtagLinkSnapshot';
-import { ISnapshotWithHashtagLinks } from './ISnapshotWithHashtagLinks';
-import { ISnapshotWithWebLinks } from './ISnapshotWithWebLinks';
-import { ISnapshotWithWorkLinks } from './ISnapshotWithWorkLinks';
-import { WorkLinkSnapshot } from './LinkSnapshot';
-import { ObjectRefSnapshot } from './ObjectRefSnapshot';
-import { WebLinkSnapshot } from './WebLinkSnapshot';
+import { Artist } from '@/entities/Artist';
+import { Quote } from '@/entities/Quote';
+import { IContentEquatable } from '@/models/IContentEquatable';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { HashtagLinkSnapshot } from '@/models/snapshots/HashtagLinkSnapshot';
+import { ISnapshotWithHashtagLinks } from '@/models/snapshots/ISnapshotWithHashtagLinks';
+import { ISnapshotWithWebLinks } from '@/models/snapshots/ISnapshotWithWebLinks';
+import { ISnapshotWithWorkLinks } from '@/models/snapshots/ISnapshotWithWorkLinks';
+import { WorkLinkSnapshot } from '@/models/snapshots/LinkSnapshot';
+import { ObjectRefSnapshot } from '@/models/snapshots/ObjectRefSnapshot';
+import { WebLinkSnapshot } from '@/models/snapshots/WebLinkSnapshot';
 
 export type IQuoteSnapshot = Omit<QuoteSnapshot, 'contentEquals'>;
 

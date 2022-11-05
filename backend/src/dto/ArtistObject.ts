@@ -1,9 +1,9 @@
-import { Artist } from '../entities/Artist';
-import { EntryType } from '../models/EntryType';
-import { ArtistOptionalField } from '../models/artists/ArtistOptionalField';
-import { ArtistType } from '../models/artists/ArtistType';
-import { PermissionContext } from '../services/PermissionContext';
-import { WebLinkObject } from './WebLinkObject';
+import { WebLinkObject } from '@/dto/WebLinkObject';
+import { Artist } from '@/entities/Artist';
+import { EntryType } from '@/models/EntryType';
+import { ArtistOptionalField } from '@/models/artists/ArtistOptionalField';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { PermissionContext } from '@/services/PermissionContext';
 
 export class ArtistObject {
 	private constructor(

@@ -1,7 +1,6 @@
+import config from '@/config';
 import { Response } from 'express';
 import { t } from 'i18next';
-
-import config from '../config';
 
 const assetManifest: {
 	files: { 'main.css': string; 'main.js': string };

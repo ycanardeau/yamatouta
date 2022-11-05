@@ -1,12 +1,12 @@
-import { Quote } from '../entities/Quote';
-import { EntryType } from '../models/EntryType';
-import { QuoteOptionalField } from '../models/quotes/QuoteOptionalField';
-import { QuoteType } from '../models/quotes/QuoteType';
-import { PermissionContext } from '../services/PermissionContext';
-import { ArtistObject } from './ArtistObject';
-import { HashtagLinkObject } from './HashtagLinkObject';
-import { WorkLinkObject } from './LinkObject';
-import { WebLinkObject } from './WebLinkObject';
+import { ArtistObject } from '@/dto/ArtistObject';
+import { HashtagLinkObject } from '@/dto/HashtagLinkObject';
+import { WorkLinkObject } from '@/dto/LinkObject';
+import { WebLinkObject } from '@/dto/WebLinkObject';
+import { Quote } from '@/entities/Quote';
+import { EntryType } from '@/models/EntryType';
+import { QuoteOptionalField } from '@/models/quotes/QuoteOptionalField';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { PermissionContext } from '@/services/PermissionContext';
 
 export class QuoteObject {
 	private constructor(

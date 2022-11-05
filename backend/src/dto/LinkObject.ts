@@ -1,11 +1,11 @@
-import { ArtistLink } from '../entities/ArtistLink';
-import { Link } from '../entities/Link';
-import { WorkLink } from '../entities/WorkLink';
-import { LinkType } from '../models/LinkType';
-import { PermissionContext } from '../services/PermissionContext';
-import { ArtistObject } from './ArtistObject';
-import { PartialDateObject } from './PartialDateObject';
-import { WorkObject } from './WorkObject';
+import { ArtistObject } from '@/dto/ArtistObject';
+import { PartialDateObject } from '@/dto/PartialDateObject';
+import { WorkObject } from '@/dto/WorkObject';
+import { ArtistLink } from '@/entities/ArtistLink';
+import { Link } from '@/entities/Link';
+import { WorkLink } from '@/entities/WorkLink';
+import { LinkType } from '@/models/LinkType';
+import { PermissionContext } from '@/services/PermissionContext';
 
 abstract class LinkObject {
 	readonly linkType: LinkType;

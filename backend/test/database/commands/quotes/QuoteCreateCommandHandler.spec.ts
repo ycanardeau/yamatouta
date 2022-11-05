@@ -1,33 +1,32 @@
+import {
+	QuoteUpdateCommand,
+	QuoteUpdateCommandHandler,
+} from '@/database/commands/quotes/QuoteUpdateCommandHandler';
+import { QuoteObject } from '@/dto/QuoteObject';
+import { Artist } from '@/entities/Artist';
+import { QuoteAuditLogEntry } from '@/entities/AuditLogEntry';
+import { Quote } from '@/entities/Quote';
+import { QuoteRevision } from '@/entities/Revision';
+import { User } from '@/entities/User';
+import { AuditedAction } from '@/models/AuditedAction';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { QuoteUpdateParams } from '@/models/quotes/QuoteUpdateParams';
+import { ObjectRefSnapshot } from '@/models/snapshots/ObjectRefSnapshot';
+import { IQuoteSnapshot } from '@/models/snapshots/QuoteSnapshot';
+import { UserGroup } from '@/models/users/UserGroup';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import {
 	BadRequestException,
 	INestApplication,
 	UnauthorizedException,
 } from '@nestjs/common';
-
-import {
-	QuoteUpdateCommand,
-	QuoteUpdateCommandHandler,
-} from '../../../../src/database/commands/quotes/QuoteUpdateCommandHandler';
-import { QuoteObject } from '../../../../src/dto/QuoteObject';
-import { Artist } from '../../../../src/entities/Artist';
-import { QuoteAuditLogEntry } from '../../../../src/entities/AuditLogEntry';
-import { Quote } from '../../../../src/entities/Quote';
-import { QuoteRevision } from '../../../../src/entities/Revision';
-import { User } from '../../../../src/entities/User';
-import { AuditedAction } from '../../../../src/models/AuditedAction';
-import { RevisionEvent } from '../../../../src/models/RevisionEvent';
-import { ArtistType } from '../../../../src/models/artists/ArtistType';
-import { QuoteType } from '../../../../src/models/quotes/QuoteType';
-import { QuoteUpdateParams } from '../../../../src/models/quotes/QuoteUpdateParams';
-import { ObjectRefSnapshot } from '../../../../src/models/snapshots/ObjectRefSnapshot';
-import { IQuoteSnapshot } from '../../../../src/models/snapshots/QuoteSnapshot';
-import { UserGroup } from '../../../../src/models/users/UserGroup';
-import { PermissionContext } from '../../../../src/services/PermissionContext';
-import { FakePermissionContext } from '../../../FakePermissionContext';
-import { assertQuoteAuditLogEntry } from '../../../assertAuditLogEntry';
-import { createApplication } from '../../../createApplication';
-import { createArtist, createUser } from '../../../createEntry';
+import { FakePermissionContext } from 'test/FakePermissionContext';
+import { assertQuoteAuditLogEntry } from 'test/assertAuditLogEntry';
+import { createApplication } from 'test/createApplication';
+import { createArtist, createUser } from 'test/createEntry';
 
 describe('QuoteCreateCommandHandler', () => {
 	let app: INestApplication;

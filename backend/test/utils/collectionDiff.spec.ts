@@ -3,7 +3,7 @@ import {
 	CollectionDiffWithValue,
 	collectionSync,
 	collectionSyncWithContent,
-} from '../../src/utils/collectionDiff';
+} from '@/utils/collectionDiff';
 
 describe('collectionSync', () => {
 	const equalityFunc = (oldItem: string, newItem: number): boolean =>

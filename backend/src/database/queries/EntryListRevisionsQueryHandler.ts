@@ -1,17 +1,16 @@
+import { RevisionObject } from '@/dto/RevisionObject';
+import { SearchResultObject } from '@/dto/SearchResultObject';
+import { Artist } from '@/entities/Artist';
+import { Quote } from '@/entities/Quote';
+import { Translation } from '@/entities/Translation';
+import { Work } from '@/entities/Work';
+import { EntryWithRevisions } from '@/models/Entry';
+import { EntryListRevisionsParams } from '@/models/EntryListRevisionsParams';
+import { Permission } from '@/models/Permission';
+import { PermissionContext } from '@/services/PermissionContext';
 import { EntityRepository, QueryOrder } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-
-import { RevisionObject } from '../../dto/RevisionObject';
-import { SearchResultObject } from '../../dto/SearchResultObject';
-import { Artist } from '../../entities/Artist';
-import { Quote } from '../../entities/Quote';
-import { Translation } from '../../entities/Translation';
-import { Work } from '../../entities/Work';
-import { EntryWithRevisions } from '../../models/Entry';
-import { EntryListRevisionsParams } from '../../models/EntryListRevisionsParams';
-import { Permission } from '../../models/Permission';
-import { PermissionContext } from '../../services/PermissionContext';
 
 export abstract class EntryListRevisionsQuery {
 	constructor(

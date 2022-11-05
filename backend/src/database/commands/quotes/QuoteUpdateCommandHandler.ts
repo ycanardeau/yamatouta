@@ -1,26 +1,25 @@
+import { QuoteObject } from '@/dto/QuoteObject';
+import { Artist } from '@/entities/Artist';
+import { QuoteAuditLogEntry } from '@/entities/AuditLogEntry';
+import { Quote } from '@/entities/Quote';
+import { AuditedAction } from '@/models/AuditedAction';
+import { HashtagLinkUpdateParams } from '@/models/HashtagLinkUpdateParams';
+import { Permission } from '@/models/Permission';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { QuoteOptionalField } from '@/models/quotes/QuoteOptionalField';
+import { QuoteUpdateParams } from '@/models/quotes/QuoteUpdateParams';
+import { HashtagLinkService } from '@/services/HashtagLinkService';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
+import { RevisionService } from '@/services/RevisionService';
+import { WebLinkService } from '@/services/WebLinkService';
+import { WorkLinkService } from '@/services/WorkLinkService';
 import { EntityManager, EntityRepository, Reference } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import remark from 'remark';
 import strip from 'strip-markdown';
-
-import { QuoteObject } from '../../../dto/QuoteObject';
-import { Artist } from '../../../entities/Artist';
-import { QuoteAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { Quote } from '../../../entities/Quote';
-import { AuditedAction } from '../../../models/AuditedAction';
-import { HashtagLinkUpdateParams } from '../../../models/HashtagLinkUpdateParams';
-import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
-import { QuoteOptionalField } from '../../../models/quotes/QuoteOptionalField';
-import { QuoteUpdateParams } from '../../../models/quotes/QuoteUpdateParams';
-import { HashtagLinkService } from '../../../services/HashtagLinkService';
-import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { RevisionService } from '../../../services/RevisionService';
-import { WebLinkService } from '../../../services/WebLinkService';
-import { WorkLinkService } from '../../../services/WorkLinkService';
 
 export class QuoteUpdateCommand {
 	constructor(

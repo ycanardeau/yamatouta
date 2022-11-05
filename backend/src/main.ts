@@ -1,3 +1,6 @@
+import { AppModule } from '@/AppModule';
+import config from '@/config';
+import '@/i18n';
 import { MikroORM, RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/mariadb';
 import { NestFactory } from '@nestjs/core';
@@ -12,10 +15,6 @@ import helmet from 'helmet';
 import { IncomingMessage, ServerResponse } from 'http';
 import passport from 'passport';
 import { join } from 'path';
-
-import { AppModule } from './AppModule';
-import config from './config';
-import './i18n';
 
 const KnexSessionStore = connectSessionKnex(session);
 

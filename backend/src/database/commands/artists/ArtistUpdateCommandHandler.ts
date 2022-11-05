@@ -1,20 +1,19 @@
+import { ArtistObject } from '@/dto/ArtistObject';
+import { Artist } from '@/entities/Artist';
+import { ArtistAuditLogEntry } from '@/entities/AuditLogEntry';
+import { AuditedAction } from '@/models/AuditedAction';
+import { Permission } from '@/models/Permission';
+import { RevisionEvent } from '@/models/RevisionEvent';
+import { ArtistOptionalField } from '@/models/artists/ArtistOptionalField';
+import { ArtistUpdateParams } from '@/models/artists/ArtistUpdateParams';
+import { NgramConverter } from '@/services/NgramConverter';
+import { PermissionContext } from '@/services/PermissionContext';
+import { RevisionService } from '@/services/RevisionService';
+import { WebLinkService } from '@/services/WebLinkService';
 import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-
-import { ArtistObject } from '../../../dto/ArtistObject';
-import { Artist } from '../../../entities/Artist';
-import { ArtistAuditLogEntry } from '../../../entities/AuditLogEntry';
-import { AuditedAction } from '../../../models/AuditedAction';
-import { Permission } from '../../../models/Permission';
-import { RevisionEvent } from '../../../models/RevisionEvent';
-import { ArtistOptionalField } from '../../../models/artists/ArtistOptionalField';
-import { ArtistUpdateParams } from '../../../models/artists/ArtistUpdateParams';
-import { NgramConverter } from '../../../services/NgramConverter';
-import { PermissionContext } from '../../../services/PermissionContext';
-import { RevisionService } from '../../../services/RevisionService';
-import { WebLinkService } from '../../../services/WebLinkService';
 
 export class ArtistUpdateCommand {
 	constructor(

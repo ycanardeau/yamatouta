@@ -1,4 +1,4 @@
-import { HashtagLink } from '../../entities/HashtagLink';
+import { HashtagLink } from '@/entities/HashtagLink';
 
 export class HashtagLinkSnapshot {
 	private constructor(readonly name: string) {}

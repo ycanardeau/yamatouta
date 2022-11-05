@@ -1,10 +1,9 @@
+import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { User } from '@/entities/User';
 import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { INestApplication } from '@nestjs/common';
-
-import { AuthenticatedUserObject } from '../../src/dto/AuthenticatedUserObject';
-import { User } from '../../src/entities/User';
-import { createApplication } from '../createApplication';
-import { createUser } from '../createEntry';
+import { createApplication } from 'test/createApplication';
+import { createUser } from 'test/createEntry';
 
 describe('AuthenticatedUserObject', () => {
 	let app: INestApplication;
