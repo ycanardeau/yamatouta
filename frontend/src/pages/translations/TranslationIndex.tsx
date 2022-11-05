@@ -7,7 +7,7 @@ import { Permission } from '@/models/Permission';
 import { TranslationSearchStore } from '@/stores/translations/TranslationSearchStore';
 import { EuiButton, EuiSpacer } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
-import { useStoreWithPagination } from '@vocadb/route-sphere';
+import { useLocationStateStore } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +20,7 @@ const TranslationIndex = observer((): React.ReactElement => {
 
 	useYamatoutaTitle(t('shared.words'), ready);
 
-	useStoreWithPagination(store);
+	useLocationStateStore(store);
 
 	const auth = useAuth();
 

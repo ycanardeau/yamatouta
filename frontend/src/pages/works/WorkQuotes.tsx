@@ -3,7 +3,7 @@ import { QuoteSearchOptions } from '@/components/quotes/QuoteSearchOptions';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import { WorkDetailsStore } from '@/stores/works/WorkDetailsStore';
 import { EuiSpacer } from '@elastic/eui';
-import { useStoreWithPagination } from '@vocadb/route-sphere';
+import { useLocationStateStore } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +23,7 @@ const WorkQuotes = observer(
 			ready,
 		);
 
-		useStoreWithPagination(workDetailsStore.quoteSearchStore);
+		useLocationStateStore(workDetailsStore.quoteSearchStore);
 
 		return (
 			<>

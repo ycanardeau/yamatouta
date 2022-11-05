@@ -3,7 +3,7 @@ import { QuoteSearchOptions } from '@/components/quotes/QuoteSearchOptions';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import { HashtagDetailsStore } from '@/stores/hashtags/HashtagDetailsStore';
 import { EuiSpacer } from '@elastic/eui';
-import { useStoreWithPagination } from '@vocadb/route-sphere';
+import { useLocationStateStore } from '@vocadb/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -23,7 +23,7 @@ const HashtagQuotes = ({
 		ready,
 	);
 
-	useStoreWithPagination(hashtagDetailsStore.quoteSearchStore);
+	useLocationStateStore(hashtagDetailsStore.quoteSearchStore);
 
 	return (
 		<>

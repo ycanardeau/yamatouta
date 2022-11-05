@@ -5,7 +5,11 @@ import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
 import { WordCategory } from '@/models/translations/WordCategory';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
-import { StoreWithPagination } from '@vocadb/route-sphere';
+import {
+	includesAny,
+	LocationStateStore,
+	StateChangeEvent,
+} from '@vocadb/route-sphere';
 import {
 	action,
 	computed,
@@ -14,8 +18,15 @@ import {
 	runInAction,
 } from 'mobx';
 
+const clearResultsByQueryKeys: (keyof ITranslationSearchRouteParams)[] = [
+	'pageSize',
+	'sort',
+	'query',
+	'category',
+];
+
 export class TranslationSearchStore
-	implements StoreWithPagination<ITranslationSearchRouteParams>
+	implements LocationStateStore<ITranslationSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable translations: ITranslationObject[] = [];
@@ -73,15 +84,6 @@ export class TranslationSearchStore
 		this.category = value;
 	};
 
-	popState = false;
-
-	clearResultsByQueryKeys: (keyof ITranslationSearchRouteParams)[] = [
-		'pageSize',
-		'sort',
-		'query',
-		'category',
-	];
-
 	@observable loading = false;
 
 	@action updateResults = async (clearResults: boolean): Promise<void> => {
@@ -115,7 +117,7 @@ export class TranslationSearchStore
 		}
 	};
 
-	@computed.struct get routeParams(): ITranslationSearchRouteParams {
+	@computed.struct get locationState(): ITranslationSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -124,7 +126,7 @@ export class TranslationSearchStore
 			category: this.category ? this.category : undefined,
 		};
 	}
-	set routeParams(value: ITranslationSearchRouteParams) {
+	set locationState(value: ITranslationSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? TranslationSortRule.HeadwordAsc;
@@ -132,14 +134,20 @@ export class TranslationSearchStore
 		this.category = value.category ?? '';
 	}
 
-	validateRouteParams = (
+	validateLocationState = (
 		data: any,
 	): data is ITranslationSearchRouteParams => {
 		return validators.translationSearchRouteParams(data);
 	};
 
-	onClearResults = (): void => {
-		this.pagination.goToFirstPage();
+	onLocationStateChange = (
+		event: StateChangeEvent<ITranslationSearchRouteParams>,
+	): void => {
+		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
+
+		if (!event.popState && clearResults) this.pagination.goToFirstPage();
+
+		this.updateResults(clearResults);
 	};
 
 	@action submit = (): void => {

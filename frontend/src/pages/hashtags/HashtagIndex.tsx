@@ -2,7 +2,7 @@ import { HashtagPage } from '@/components/hashtags/HashtagPage';
 import { HashtagSearchTable } from '@/components/hashtags/HashtagSearchTable';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import { HashtagSearchStore } from '@/stores/hashtags/HashtagSearchStore';
-import { useStoreWithPagination } from '@vocadb/route-sphere';
+import { useLocationStateStore } from '@vocadb/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -13,7 +13,7 @@ const HashtagIndex = (): React.ReactElement => {
 
 	useYamatoutaTitle(t('shared.hashtags'), ready);
 
-	useStoreWithPagination(store);
+	useLocationStateStore(store);
 
 	return (
 		<HashtagPage pageHeaderProps={{ pageTitle: t('shared.hashtags') }}>

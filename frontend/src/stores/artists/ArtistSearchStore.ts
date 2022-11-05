@@ -5,7 +5,11 @@ import { ArtistType } from '@/models/artists/ArtistType';
 import { IArtistSearchRouteParams } from '@/models/artists/IArtistSearchRouteParams';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
-import { StoreWithPagination } from '@vocadb/route-sphere';
+import {
+	includesAny,
+	LocationStateStore,
+	StateChangeEvent,
+} from '@vocadb/route-sphere';
 import {
 	action,
 	computed,
@@ -14,8 +18,15 @@ import {
 	runInAction,
 } from 'mobx';
 
+const clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = [
+	'pageSize',
+	'sort',
+	'query',
+	'artistType',
+];
+
 export class ArtistSearchStore
-	implements StoreWithPagination<IArtistSearchRouteParams>
+	implements LocationStateStore<IArtistSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable artists: IArtistObject[] = [];
@@ -44,15 +55,6 @@ export class ArtistSearchStore
 	@action setArtistType = (value: ArtistType | ''): void => {
 		this.artistType = value;
 	};
-
-	popState = false;
-
-	clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = [
-		'pageSize',
-		'sort',
-		'query',
-		'artistType',
-	];
 
 	@observable loading = false;
 
@@ -87,7 +89,7 @@ export class ArtistSearchStore
 		}
 	};
 
-	@computed.struct get routeParams(): IArtistSearchRouteParams {
+	@computed.struct get locationState(): IArtistSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -96,7 +98,7 @@ export class ArtistSearchStore
 			artistType: this.artistType ? this.artistType : undefined,
 		};
 	}
-	set routeParams(value: IArtistSearchRouteParams) {
+	set locationState(value: IArtistSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? ArtistSortRule.CreatedAsc;
@@ -104,12 +106,18 @@ export class ArtistSearchStore
 		this.artistType = value.artistType ?? '';
 	}
 
-	validateRouteParams = (data: any): data is IArtistSearchRouteParams => {
+	validateLocationState = (data: any): data is IArtistSearchRouteParams => {
 		return validators.artistSearchRouteParams(data);
 	};
 
-	onClearResults = (): void => {
-		this.pagination.goToFirstPage();
+	onLocationStateChange = (
+		event: StateChangeEvent<IArtistSearchRouteParams>,
+	): void => {
+		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
+
+		if (!event.popState && clearResults) this.pagination.goToFirstPage();
+
+		this.updateResults(clearResults);
 	};
 
 	@action submit = (): void => {

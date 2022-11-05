@@ -7,7 +7,7 @@ import { Permission } from '@/models/Permission';
 import { ArtistSearchStore } from '@/stores/artists/ArtistSearchStore';
 import { EuiButton, EuiSpacer } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
-import { useStoreWithPagination } from '@vocadb/route-sphere';
+import { useLocationStateStore } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +20,7 @@ const ArtistIndex = observer((): React.ReactElement => {
 
 	useYamatoutaTitle(t('shared.artists'), ready);
 
-	useStoreWithPagination(store);
+	useLocationStateStore(store);
 
 	const navigate = useNavigate();
 

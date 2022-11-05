@@ -4,7 +4,7 @@ import { UserSearchOptions } from '@/components/users/UserSearchOptions';
 import UserSearchTable from '@/components/users/UserSearchTable';
 import { UserSearchStore } from '@/stores/users/UserSearchStore';
 import { EuiSpacer } from '@elastic/eui';
-import { useStoreWithPagination } from '@vocadb/route-sphere';
+import { useLocationStateStore } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ const UserIndex = observer((): React.ReactElement => {
 
 	useYamatoutaTitle(t('shared.users'), ready);
 
-	useStoreWithPagination(store);
+	useLocationStateStore(store);
 
 	return (
 		<UserPage pageHeaderProps={{ pageTitle: t('shared.users') }}>

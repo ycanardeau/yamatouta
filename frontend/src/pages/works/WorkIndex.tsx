@@ -7,7 +7,7 @@ import { Permission } from '@/models/Permission';
 import { WorkSearchStore } from '@/stores/works/WorkSearchStore';
 import { EuiButton, EuiSpacer } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
-import { useStoreWithPagination } from '@vocadb/route-sphere';
+import { useLocationStateStore } from '@vocadb/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ const WorkIndex = (): React.ReactElement => {
 
 	useYamatoutaTitle(t('shared.works'), ready);
 
-	useStoreWithPagination(store);
+	useLocationStateStore(store);
 
 	const navigate = useNavigate();
 

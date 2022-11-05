@@ -4,7 +4,11 @@ import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
 import { IHashtagSearchRouteParams } from '@/models/hashtags/IHashtagSearchRouteParams';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
-import { StoreWithPagination } from '@vocadb/route-sphere';
+import {
+	includesAny,
+	LocationStateStore,
+	StateChangeEvent,
+} from '@vocadb/route-sphere';
 import {
 	action,
 	computed,
@@ -13,8 +17,14 @@ import {
 	runInAction,
 } from 'mobx';
 
+const clearResultsByQueryKeys: (keyof IHashtagSearchRouteParams)[] = [
+	'pageSize',
+	'sort',
+	'query',
+];
+
 export class HashtagSearchStore
-	implements StoreWithPagination<IHashtagSearchRouteParams>
+	implements LocationStateStore<IHashtagSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable hashtags: IHashtagObject[] = [];
@@ -63,14 +73,6 @@ export class HashtagSearchStore
 		this.query = value;
 	};
 
-	popState = false;
-
-	clearResultsByQueryKeys: (keyof IHashtagSearchRouteParams)[] = [
-		'pageSize',
-		'sort',
-		'query',
-	];
-
 	@observable loading = false;
 
 	@action updateResults = async (clearResults: boolean): Promise<void> => {
@@ -103,7 +105,7 @@ export class HashtagSearchStore
 		}
 	};
 
-	@computed.struct get routeParams(): IHashtagSearchRouteParams {
+	@computed.struct get locationState(): IHashtagSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -111,19 +113,25 @@ export class HashtagSearchStore
 			query: this.submittedQuery,
 		};
 	}
-	set routeParams(value: IHashtagSearchRouteParams) {
+	set locationState(value: IHashtagSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? HashtagSortRule.ReferenceCountDesc;
 		this.setSubmittedQuery(value.query ?? '');
 	}
 
-	validateRouteParams = (data: any): data is IHashtagSearchRouteParams => {
+	validateLocationState = (data: any): data is IHashtagSearchRouteParams => {
 		return validators.hashtagSearchRouteParams(data);
 	};
 
-	onClearResults = (): void => {
-		this.pagination.goToFirstPage();
+	onLocationStateChange = (
+		event: StateChangeEvent<IHashtagSearchRouteParams>,
+	): void => {
+		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
+
+		if (!event.popState && clearResults) this.pagination.goToFirstPage();
+
+		this.updateResults(clearResults);
 	};
 
 	@action submit = (): void => {

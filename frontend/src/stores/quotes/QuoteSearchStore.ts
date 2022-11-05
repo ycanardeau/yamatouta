@@ -5,7 +5,11 @@ import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
 import { QuoteType } from '@/models/quotes/QuoteType';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
-import { StoreWithPagination } from '@vocadb/route-sphere';
+import {
+	includesAny,
+	LocationStateStore,
+	StateChangeEvent,
+} from '@vocadb/route-sphere';
 import {
 	action,
 	computed,
@@ -14,8 +18,15 @@ import {
 	runInAction,
 } from 'mobx';
 
+const clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = [
+	'pageSize',
+	'sort',
+	'query',
+	'quoteType',
+];
+
 export class QuoteSearchStore
-	implements StoreWithPagination<IQuoteSearchRouteParams>
+	implements LocationStateStore<IQuoteSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteObject[] = [];
@@ -49,15 +60,6 @@ export class QuoteSearchStore
 	@action setQuoteType = (value: QuoteType | ''): void => {
 		this.quoteType = value;
 	};
-
-	popState = false;
-
-	clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = [
-		'pageSize',
-		'sort',
-		'query',
-		'quoteType',
-	];
 
 	@observable loading = false;
 
@@ -95,7 +97,7 @@ export class QuoteSearchStore
 		}
 	};
 
-	@computed.struct get routeParams(): IQuoteSearchRouteParams {
+	@computed.struct get locationState(): IQuoteSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -104,7 +106,7 @@ export class QuoteSearchStore
 			quoteType: this.quoteType ? this.quoteType : undefined,
 		};
 	}
-	set routeParams(value: IQuoteSearchRouteParams) {
+	set locationState(value: IQuoteSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? this.defaultSort;
@@ -112,12 +114,18 @@ export class QuoteSearchStore
 		this.quoteType = value.quoteType ?? '';
 	}
 
-	validateRouteParams = (data: any): data is IQuoteSearchRouteParams => {
+	validateLocationState = (data: any): data is IQuoteSearchRouteParams => {
 		return validators.quoteSearchRouteParams(data);
 	};
 
-	onClearResults = (): void => {
-		this.pagination.goToFirstPage();
+	onLocationStateChange = (
+		event: StateChangeEvent<IQuoteSearchRouteParams>,
+	): void => {
+		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
+
+		if (!event.popState && clearResults) this.pagination.goToFirstPage();
+
+		this.updateResults(clearResults);
 	};
 
 	@action submit = (): void => {

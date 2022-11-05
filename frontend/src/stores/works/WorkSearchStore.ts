@@ -5,7 +5,11 @@ import { WorkSortRule } from '@/models/works/WorkSortRule';
 import { WorkType } from '@/models/works/WorkType';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
-import { StoreWithPagination } from '@vocadb/route-sphere';
+import {
+	includesAny,
+	LocationStateStore,
+	StateChangeEvent,
+} from '@vocadb/route-sphere';
 import {
 	action,
 	computed,
@@ -14,8 +18,15 @@ import {
 	runInAction,
 } from 'mobx';
 
+const clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = [
+	'pageSize',
+	'sort',
+	'query',
+	'workType',
+];
+
 export class WorkSearchStore
-	implements StoreWithPagination<IWorkSearchRouteParams>
+	implements LocationStateStore<IWorkSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable works: IWorkObject[] = [];
@@ -44,15 +55,6 @@ export class WorkSearchStore
 	@action setWorkType = (value: WorkType | ''): void => {
 		this.workType = value;
 	};
-
-	popState = false;
-
-	clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = [
-		'pageSize',
-		'sort',
-		'query',
-		'workType',
-	];
 
 	@observable loading = false;
 
@@ -87,7 +89,7 @@ export class WorkSearchStore
 		}
 	};
 
-	@computed.struct get routeParams(): IWorkSearchRouteParams {
+	@computed.struct get locationState(): IWorkSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -96,7 +98,7 @@ export class WorkSearchStore
 			workType: this.workType ? this.workType : undefined,
 		};
 	}
-	set routeParams(value: IWorkSearchRouteParams) {
+	set locationState(value: IWorkSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? WorkSortRule.CreatedAsc;
@@ -104,12 +106,18 @@ export class WorkSearchStore
 		this.workType = value.workType ?? '';
 	}
 
-	validateRouteParams = (data: any): data is IWorkSearchRouteParams => {
+	validateLocationState = (data: any): data is IWorkSearchRouteParams => {
 		return validators.workSearchRouteParams(data);
 	};
 
-	onClearResults = (): void => {
-		this.pagination.goToFirstPage();
+	onLocationStateChange = (
+		event: StateChangeEvent<IWorkSearchRouteParams>,
+	): void => {
+		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
+
+		if (!event.popState && clearResults) this.pagination.goToFirstPage();
+
+		this.updateResults(clearResults);
 	};
 
 	@action submit = (): void => {

@@ -5,7 +5,11 @@ import { UserGroup } from '@/models/users/UserGroup';
 import { UserSortRule } from '@/models/users/UserSortRule';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
-import { StoreWithPagination } from '@vocadb/route-sphere';
+import {
+	includesAny,
+	LocationStateStore,
+	StateChangeEvent,
+} from '@vocadb/route-sphere';
 import {
 	action,
 	computed,
@@ -14,8 +18,15 @@ import {
 	runInAction,
 } from 'mobx';
 
+const clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = [
+	'pageSize',
+	'sort',
+	'query',
+	'userGroup',
+];
+
 export class UserSearchStore
-	implements StoreWithPagination<IUserSearchRouteParams>
+	implements LocationStateStore<IUserSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable users: IUserObject[] = [];
@@ -44,15 +55,6 @@ export class UserSearchStore
 	@action setUserGroup = (value: UserGroup | ''): void => {
 		this.userGroup = value;
 	};
-
-	popState = false;
-
-	clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = [
-		'pageSize',
-		'sort',
-		'query',
-		'userGroup',
-	];
 
 	@observable loading = false;
 
@@ -87,7 +89,7 @@ export class UserSearchStore
 		}
 	};
 
-	@computed.struct get routeParams(): IUserSearchRouteParams {
+	@computed.struct get locationState(): IUserSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -96,7 +98,7 @@ export class UserSearchStore
 			userGroup: this.userGroup ? this.userGroup : undefined,
 		};
 	}
-	set routeParams(value: IUserSearchRouteParams) {
+	set locationState(value: IUserSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? UserSortRule.CreatedAsc;
@@ -104,12 +106,18 @@ export class UserSearchStore
 		this.userGroup = value.userGroup ?? '';
 	}
 
-	validateRouteParams = (data: any): data is IUserSearchRouteParams => {
+	validateLocationState = (data: any): data is IUserSearchRouteParams => {
 		return validators.userSearchRouteParams(data);
 	};
 
-	onClearResults = (): void => {
-		this.pagination.goToFirstPage();
+	onLocationStateChange = (
+		event: StateChangeEvent<IUserSearchRouteParams>,
+	): void => {
+		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
+
+		if (!event.popState && clearResults) this.pagination.goToFirstPage();
+
+		this.updateResults(clearResults);
 	};
 
 	@action submit = (): void => {
