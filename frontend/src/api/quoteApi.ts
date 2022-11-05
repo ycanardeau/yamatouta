@@ -1,6 +1,6 @@
-import { IQuoteObject } from '@/dto/IQuoteObject';
-import { IRevisionObject } from '@/dto/IRevisionObject';
-import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { IQuoteDto } from '@/dto/IQuoteDto';
+import { IRevisionDto } from '@/dto/IRevisionDto';
+import { ISearchResultDto } from '@/dto/ISearchResultDto';
 import { IQuoteUpdateParams } from '@/models/quotes/IQuoteUpdateParams';
 import { QuoteOptionalField } from '@/models/quotes/QuoteOptionalField';
 import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
@@ -16,8 +16,8 @@ class QuoteApi {
 		artistId,
 		webLinks,
 		workLinks,
-	}: IQuoteUpdateParams): Promise<IQuoteObject> => {
-		const response = await axios.post<IQuoteObject>('/quotes/create', {
+	}: IQuoteUpdateParams): Promise<IQuoteDto> => {
+		const response = await axios.post<IQuoteDto>('/quotes/create', {
 			id: 0,
 			text,
 			quoteType,
@@ -40,8 +40,8 @@ class QuoteApi {
 	}: {
 		id: number;
 		fields?: QuoteOptionalField[];
-	}): Promise<IQuoteObject> => {
-		const response = await axios.get<IQuoteObject>(`/quotes/get`, {
+	}): Promise<IQuoteDto> => {
+		const response = await axios.get<IQuoteDto>(`/quotes/get`, {
 			params: { id: id, fields: fields },
 		});
 
@@ -64,8 +64,8 @@ class QuoteApi {
 		artistId?: number;
 		workId?: number;
 		hashtags?: string[];
-	}): Promise<ISearchResultObject<IQuoteObject>> => {
-		const response = await axios.get<ISearchResultObject<IQuoteObject>>(
+	}): Promise<ISearchResultDto<IQuoteDto>> => {
+		const response = await axios.get<ISearchResultDto<IQuoteDto>>(
 			'/quotes/list',
 			{
 				params: {
@@ -87,8 +87,8 @@ class QuoteApi {
 		id,
 	}: {
 		id: number;
-	}): Promise<ISearchResultObject<IRevisionObject>> => {
-		const response = await axios.get<ISearchResultObject<IRevisionObject>>(
+	}): Promise<ISearchResultDto<IRevisionDto>> => {
+		const response = await axios.get<ISearchResultDto<IRevisionDto>>(
 			`/quotes/list-revisions`,
 			{ params: { id: id } },
 		);
@@ -104,8 +104,8 @@ class QuoteApi {
 		artistId,
 		webLinks,
 		workLinks,
-	}: IQuoteUpdateParams): Promise<IQuoteObject> => {
-		const response = await axios.post<IQuoteObject>(`/quotes/update`, {
+	}: IQuoteUpdateParams): Promise<IQuoteDto> => {
+		const response = await axios.post<IQuoteDto>(`/quotes/update`, {
 			id: id,
 			text,
 			quoteType,

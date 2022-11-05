@@ -1,6 +1,6 @@
 import { orderByIds } from '@/database/queries/orderByIds';
-import { HashtagObject } from '@/dto/HashtagObject';
-import { SearchResultObject } from '@/dto/SearchResultObject';
+import { HashtagDto } from '@/dto/HashtagDto';
+import { SearchResultDto } from '@/dto/SearchResultDto';
 import { Hashtag } from '@/entities/Hashtag';
 import { HashtagListParams } from '@/models/hashtags/HashtagListParams';
 import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
@@ -122,7 +122,7 @@ export class HashtagListQueryHandler
 
 	async execute(
 		query: HashtagListQuery,
-	): Promise<SearchResultObject<HashtagObject>> {
+	): Promise<SearchResultDto<HashtagDto>> {
 		const { permissionContext, params } = query;
 
 		const result = HashtagListParams.schema.validate(params, {
@@ -137,9 +137,9 @@ export class HashtagListQueryHandler
 			this.getCount(params),
 		]);
 
-		return SearchResultObject.create<HashtagObject>(
+		return SearchResultDto.create<HashtagDto>(
 			hashtags.map((hashtag) =>
-				HashtagObject.create(permissionContext, hashtag),
+				HashtagDto.create(permissionContext, hashtag),
 			),
 			count,
 		);

@@ -1,4 +1,4 @@
-import { ArtistObject } from '@/dto/ArtistObject';
+import { ArtistDto } from '@/dto/ArtistDto';
 import { Artist } from '@/entities/Artist';
 import { ArtistGetParams } from '@/models/artists/ArtistGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -22,7 +22,7 @@ export class ArtistGetQueryHandler implements IQueryHandler<ArtistGetQuery> {
 		private readonly artistRepo: EntityRepository<Artist>,
 	) {}
 
-	async execute(query: ArtistGetQuery): Promise<ArtistObject> {
+	async execute(query: ArtistGetQuery): Promise<ArtistDto> {
 		const { permissionContext, params } = query;
 
 		const artist = await this.artistRepo.findOne(
@@ -41,6 +41,6 @@ export class ArtistGetQueryHandler implements IQueryHandler<ArtistGetQuery> {
 
 		if (!artist) throw new NotFoundException();
 
-		return ArtistObject.create(permissionContext, artist, params.fields);
+		return ArtistDto.create(permissionContext, artist, params.fields);
 	}
 }

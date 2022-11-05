@@ -2,7 +2,7 @@ import {
 	ArtistUpdateCommand,
 	ArtistUpdateCommandHandler,
 } from '@/database/commands/artists/ArtistUpdateCommandHandler';
-import { ArtistObject } from '@/dto/ArtistObject';
+import { ArtistDto } from '@/dto/ArtistDto';
 import { Artist } from '@/entities/Artist';
 import { ArtistAuditLogEntry } from '@/entities/AuditLogEntry';
 import { ArtistRevision } from '@/entities/Revision';
@@ -74,7 +74,7 @@ describe('ArtistCreateCommandHandler', () => {
 		const execute = (
 			permissionContext: PermissionContext,
 			params: ArtistUpdateParams,
-		): Promise<ArtistObject> => {
+		): Promise<ArtistDto> => {
 			return artistCreateCommandHandler.execute(
 				new ArtistUpdateCommand(permissionContext, params),
 			);
@@ -89,13 +89,13 @@ describe('ArtistCreateCommandHandler', () => {
 			params: ArtistUpdateParams;
 			snapshot: IArtistSnapshot;
 		}): Promise<void> => {
-			const artistObject = await execute(permissionContext, params);
+			const artistDto = await execute(permissionContext, params);
 
-			expect(artistObject.name).toBe(params.name);
-			expect(artistObject.artistType).toBe(params.artistType);
+			expect(artistDto.name).toBe(params.name);
+			expect(artistDto.artistType).toBe(params.artistType);
 
 			const artist = await em.findOneOrFail(Artist, {
-				id: artistObject.id,
+				id: artistDto.id,
 			});
 
 			const revision = artist.revisions[0];

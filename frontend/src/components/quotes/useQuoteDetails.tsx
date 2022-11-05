@@ -1,11 +1,11 @@
 import { quoteApi } from '@/api/quoteApi';
-import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IQuoteDto } from '@/dto/IQuoteDto';
 import { QuoteOptionalField } from '@/models/quotes/QuoteOptionalField';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
 export const useQuoteDetails = <T,>(
-	factory: (quote: IQuoteObject) => T,
+	factory: (quote: IQuoteDto) => T,
 ): [T | undefined] => {
 	const { id } = useParams();
 

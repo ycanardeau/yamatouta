@@ -1,4 +1,4 @@
-import { ITranslationObject } from '@/dto/ITranslationObject';
+import { ITranslationDto } from '@/dto/ITranslationDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiBreadcrumb,
@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface TranslationPageProps {
-	translation?: ITranslationObject;
+	translation?: ITranslationDto;
 	pageHeaderProps?: EuiPageHeaderProps;
 	children?: React.ReactNode;
 }

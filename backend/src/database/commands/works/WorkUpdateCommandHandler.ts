@@ -1,4 +1,4 @@
-import { WorkObject } from '@/dto/WorkObject';
+import { WorkDto } from '@/dto/WorkDto';
 import { WorkAuditLogEntry } from '@/entities/AuditLogEntry';
 import { Work } from '@/entities/Work';
 import { AuditedAction } from '@/models/AuditedAction';
@@ -46,7 +46,7 @@ export class WorkUpdateCommandHandler
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	async execute(command: WorkUpdateCommand): Promise<WorkObject> {
+	async execute(command: WorkUpdateCommand): Promise<WorkDto> {
 		const { permissionContext, params } = command;
 
 		permissionContext.verifyPermission(Permission.UpdateWorks);
@@ -117,7 +117,7 @@ export class WorkUpdateCommandHandler
 			return work;
 		});
 
-		return WorkObject.create(
+		return WorkDto.create(
 			permissionContext,
 			work,
 			Object.values(WorkOptionalField),

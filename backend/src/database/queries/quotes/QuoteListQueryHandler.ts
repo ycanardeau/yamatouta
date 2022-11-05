@@ -1,6 +1,6 @@
 import { orderByIds } from '@/database/queries/orderByIds';
-import { QuoteObject } from '@/dto/QuoteObject';
-import { SearchResultObject } from '@/dto/SearchResultObject';
+import { QuoteDto } from '@/dto/QuoteDto';
+import { SearchResultDto } from '@/dto/SearchResultDto';
 import { Artist } from '@/entities/Artist';
 import { Hashtag } from '@/entities/Hashtag';
 import { Quote } from '@/entities/Quote';
@@ -181,9 +181,7 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 		return count;
 	}
 
-	async execute(
-		query: QuoteListQuery,
-	): Promise<SearchResultObject<QuoteObject>> {
+	async execute(query: QuoteListQuery): Promise<SearchResultDto<QuoteDto>> {
 		const { permissionContext, params } = query;
 
 		const result = QuoteListParams.schema.validate(params, {
@@ -210,8 +208,8 @@ export class QuoteListQueryHandler implements IQueryHandler<QuoteListQuery> {
 			},
 		});
 
-		return SearchResultObject.create<QuoteObject>(
-			quotes.map((quote) => QuoteObject.create(permissionContext, quote)),
+		return SearchResultDto.create<QuoteDto>(
+			quotes.map((quote) => QuoteDto.create(permissionContext, quote)),
 			count,
 		);
 	}

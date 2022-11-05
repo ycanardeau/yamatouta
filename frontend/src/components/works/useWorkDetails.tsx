@@ -1,11 +1,11 @@
 import { workApi } from '@/api/workApi';
-import { IWorkObject } from '@/dto/IWorkObject';
+import { IWorkDto } from '@/dto/IWorkDto';
 import { WorkOptionalField } from '@/models/works/WorkOptionalField';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
 export const useWorkDetails = <T,>(
-	factory: (work: IWorkObject) => T,
+	factory: (work: IWorkDto) => T,
 ): [T | undefined] => {
 	const { id } = useParams();
 

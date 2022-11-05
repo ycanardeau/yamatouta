@@ -1,4 +1,4 @@
-import { IWebLinkObject } from '@/dto/IWebLinkObject';
+import { IWebLinkDto } from '@/dto/IWebLinkDto';
 import { hostnameTitlePairs } from '@/models/hostnameTitlePairs';
 import {
 	EuiDescriptionListDescription,
@@ -10,7 +10,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface WebLinkProps {
-	webLink: IWebLinkObject;
+	webLink: IWebLinkDto;
 }
 
 const WebLink = ({ webLink }: WebLinkProps): React.ReactElement => {
@@ -24,7 +24,7 @@ const WebLink = ({ webLink }: WebLinkProps): React.ReactElement => {
 };
 
 interface WebLinkListProps {
-	webLinks: IWebLinkObject[];
+	webLinks: IWebLinkDto[];
 }
 
 const WebLinkList = React.memo(
@@ -58,7 +58,7 @@ const WebLinkList = React.memo(
 );
 
 interface WebLinkDescriptionListProps {
-	webLinks: IWebLinkObject[];
+	webLinks: IWebLinkDto[];
 }
 
 export const WebLinkDescriptionList = ({

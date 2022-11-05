@@ -1,4 +1,4 @@
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { User } from '@/entities/User';
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
@@ -14,7 +14,7 @@ export class LocalSerializer extends PassportSerializer {
 		super();
 	}
 
-	serializeUser(user: AuthenticatedUserObject, done: CallableFunction): void {
+	serializeUser(user: AuthenticatedUserDto, done: CallableFunction): void {
 		done(null, user.id);
 	}
 
@@ -25,6 +25,6 @@ export class LocalSerializer extends PassportSerializer {
 
 		if (user.deleted || user.hidden) throw new UnauthorizedException();
 
-		done(null, AuthenticatedUserObject.create(user));
+		done(null, AuthenticatedUserDto.create(user));
 	}
 }

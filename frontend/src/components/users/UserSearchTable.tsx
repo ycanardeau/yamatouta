@@ -2,7 +2,7 @@ import { Avatar } from '@/components/Avatar';
 import { Link } from '@/components/Link';
 import { Pagination } from '@/components/Pagination';
 import { TableEmptyBody } from '@/components/TableEmptyBody';
-import { IUserObject } from '@/dto/IUserObject';
+import { IUserDto } from '@/dto/IUserDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { UserSearchStore } from '@/stores/users/UserSearchStore';
 import {
@@ -30,7 +30,7 @@ const UserSearchTableHeader = React.memo((): React.ReactElement => {
 });
 
 interface UserSearchTableRowProps {
-	user: IUserObject;
+	user: IUserDto;
 }
 
 const UserSearchTableRow = React.memo(

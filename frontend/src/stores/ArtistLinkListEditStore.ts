@@ -1,6 +1,6 @@
 import { artistApi } from '@/api/artistApi';
-import { IArtistObject } from '@/dto/IArtistObject';
-import { IArtistLinkObject } from '@/dto/ILinkObject';
+import { IArtistDto } from '@/dto/IArtistDto';
+import { IArtistLinkDto } from '@/dto/ILinkDto';
 import { IArtistLinkUpdateParams } from '@/models/IArtistLinkUpdateParams';
 import { LinkType } from '@/models/LinkType';
 import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
@@ -8,7 +8,7 @@ import { BasicListEditStore } from '@/stores/BasicListEditStore';
 import { action, makeObservable, observable } from 'mobx';
 
 export class ArtistLinkEditStore {
-	readonly relatedArtist = new BasicEntryLinkStore<IArtistObject>((id) =>
+	readonly relatedArtist = new BasicEntryLinkStore<IArtistDto>((id) =>
 		artistApi.get({ id: id }),
 	);
 	@observable linkType = LinkType.Unspecified;
@@ -16,7 +16,7 @@ export class ArtistLinkEditStore {
 	//readonly endDate: PartialDateEditStore;
 	@observable ended = false;
 
-	constructor(private readonly artistLink?: IArtistLinkObject) {
+	constructor(private readonly artistLink?: IArtistLinkDto) {
 		makeObservable(this);
 
 		if (artistLink) {
@@ -44,9 +44,9 @@ export class ArtistLinkEditStore {
 
 export class ArtistLinkListEditStore extends BasicListEditStore<
 	ArtistLinkEditStore,
-	IArtistLinkObject
+	IArtistLinkDto
 > {
-	constructor(objects: IArtistLinkObject[]) {
+	constructor(objects: IArtistLinkDto[]) {
 		super(ArtistLinkEditStore, objects);
 	}
 

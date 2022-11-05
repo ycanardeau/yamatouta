@@ -1,5 +1,5 @@
-import { QuoteDetailsObject } from '@/dto/QuoteDetailsObject';
+import { QuoteDetailsDto } from '@/dto/QuoteDetailsDto';
 
 export class QuoteDetailsStore {
-	constructor(readonly quote: QuoteDetailsObject) {}
+	constructor(readonly quote: QuoteDetailsDto) {}
 }

@@ -1,4 +1,4 @@
-import { IUserObject } from '@/dto/IUserObject';
+import { IUserDto } from '@/dto/IUserDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiBreadcrumb,
@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface UserPageProps {
-	user?: IUserObject;
+	user?: IUserDto;
 	pageHeaderProps?: EuiPageHeaderProps;
 	children?: React.ReactNode;
 }

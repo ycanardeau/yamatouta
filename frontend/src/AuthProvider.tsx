@@ -1,7 +1,7 @@
 import { AuthContext } from '@/AuthContext';
 import { PermissionContext } from '@/PermissionContext';
 import { userApi } from '@/api/userApi';
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import React from 'react';
 
 interface AuthProviderProps {
@@ -11,9 +11,7 @@ interface AuthProviderProps {
 export const AuthProvider = ({
 	children,
 }: AuthProviderProps): React.ReactElement => {
-	const [user, setUser] = React.useState<
-		IAuthenticatedUserObject | undefined
-	>();
+	const [user, setUser] = React.useState<IAuthenticatedUserDto | undefined>();
 	const [loading, setLoading] = React.useState(true);
 
 	React.useEffect(() => {

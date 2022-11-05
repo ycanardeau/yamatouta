@@ -1,8 +1,8 @@
 import { artistApi } from '@/api/artistApi';
 import { quoteApi } from '@/api/quoteApi';
-import { IArtistObject } from '@/dto/IArtistObject';
-import { IQuoteObject } from '@/dto/IQuoteObject';
-import { QuoteEditObject } from '@/dto/QuoteEditObject';
+import { IArtistDto } from '@/dto/IArtistDto';
+import { IQuoteDto } from '@/dto/IQuoteDto';
+import { QuoteEditDto } from '@/dto/QuoteEditDto';
 import { IQuoteUpdateParams } from '@/models/quotes/IQuoteUpdateParams';
 import { QuoteType } from '@/models/quotes/QuoteType';
 import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
@@ -21,13 +21,13 @@ export class QuoteEditStore {
 	@observable text = '';
 	@observable quoteType: QuoteType | '' = '';
 	@observable locale = 'ja';
-	readonly artist = new BasicEntryLinkStore<IArtistObject>((id) =>
+	readonly artist = new BasicEntryLinkStore<IArtistDto>((id) =>
 		artistApi.get({ id: id }),
 	);
 	readonly webLinks: WebLinkListEditStore;
 	readonly workLinks: WorkLinkListEditStore;
 
-	constructor(private readonly quote?: QuoteEditObject) {
+	constructor(private readonly quote?: QuoteEditDto) {
 		makeObservable(this);
 
 		if (quote) {
@@ -69,7 +69,7 @@ export class QuoteEditStore {
 		};
 	};
 
-	@action submit = async (): Promise<IQuoteObject> => {
+	@action submit = async (): Promise<IQuoteDto> => {
 		try {
 			this.submitting = true;
 

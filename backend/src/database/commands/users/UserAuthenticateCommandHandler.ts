@@ -1,4 +1,4 @@
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { UserAuditLogEntry } from '@/entities/AuditLogEntry';
 import { User } from '@/entities/User';
 import { AuditedAction } from '@/models/AuditedAction';
@@ -17,14 +17,14 @@ export enum LoginError {
 export type LoginResult =
 	| {
 			error: LoginError.None;
-			user: AuthenticatedUserObject;
+			user: AuthenticatedUserDto;
 	  }
 	| {
 			error: Exclude<LoginError, LoginError.None>;
 			user: undefined;
 	  };
 
-const createSuccess = (user: AuthenticatedUserObject): LoginResult => ({
+const createSuccess = (user: AuthenticatedUserDto): LoginResult => ({
 	error: LoginError.None,
 	user: user,
 });
@@ -95,7 +95,7 @@ export class UserAuthenticateCommandHandler
 					);
 				}
 
-				return createSuccess(AuthenticatedUserObject.create(user));
+				return createSuccess(AuthenticatedUserDto.create(user));
 			}
 
 			const auditLogEntry = new UserAuditLogEntry({

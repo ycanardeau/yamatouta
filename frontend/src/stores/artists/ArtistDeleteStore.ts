@@ -1,5 +1,5 @@
 import { artistApi } from '@/api/artistApi';
-import { IArtistObject } from '@/dto/IArtistObject';
+import { IArtistDto } from '@/dto/IArtistDto';
 import {
 	action,
 	computed,
@@ -11,7 +11,7 @@ import {
 export class ArtistDeleteStore {
 	@observable submitting = false;
 
-	constructor(private readonly artist: IArtistObject) {
+	constructor(private readonly artist: IArtistDto) {
 		makeObservable(this);
 	}
 

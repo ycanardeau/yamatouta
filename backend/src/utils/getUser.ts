@@ -1,12 +1,10 @@
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { Request } from 'express';
 
-export const getUser = (
-	request: Request,
-): AuthenticatedUserObject | undefined => {
+export const getUser = (request: Request): AuthenticatedUserDto | undefined => {
 	if (!request.user) return undefined;
 
-	if (request.user instanceof AuthenticatedUserObject) return request.user;
+	if (request.user instanceof AuthenticatedUserDto) return request.user;
 
-	throw new Error('user must be of type AuthenticatedUserObject.');
+	throw new Error('user must be of type AuthenticatedUserDto.');
 };

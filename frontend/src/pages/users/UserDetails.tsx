@@ -1,8 +1,8 @@
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import { UserPage } from '@/components/users/UserPage';
 import { useUserDetails } from '@/components/users/useUserDetails';
-import { IUserObject } from '@/dto/IUserObject';
-import { UserDetailsObject } from '@/dto/UserDetailsObject';
+import { IUserDto } from '@/dto/IUserDto';
+import { UserDetailsDto } from '@/dto/UserDetailsDto';
 import { UserDetailsStore } from '@/stores/users/UserDetailsStore';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
@@ -36,7 +36,7 @@ const UserDetails = (): React.ReactElement | null => {
 		React.useCallback(
 			(user) =>
 				new UserDetailsStore(
-					UserDetailsObject.create(user as Required<IUserObject>),
+					UserDetailsDto.create(user as Required<IUserDto>),
 				),
 			[],
 		),

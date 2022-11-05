@@ -1,6 +1,6 @@
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
-import { ISearchResultObject } from '@/dto/ISearchResultObject';
-import { IUserObject } from '@/dto/IUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
+import { ISearchResultDto } from '@/dto/ISearchResultDto';
+import { IUserDto } from '@/dto/IUserDto';
 import { UserGroup } from '@/models/users/UserGroup';
 import { UserSortRule } from '@/models/users/UserSortRule';
 import { IPaginationParams } from '@/stores/PaginationStore';
@@ -15,8 +15,8 @@ class UserApi {
 		email: string;
 		username: string;
 		password: string;
-	}): Promise<IAuthenticatedUserObject> => {
-		const response = await axios.post<IAuthenticatedUserObject>(
+	}): Promise<IAuthenticatedUserDto> => {
+		const response = await axios.post<IAuthenticatedUserDto>(
 			'/users/create',
 			{
 				email,
@@ -28,16 +28,16 @@ class UserApi {
 		return response.data;
 	};
 
-	get = async ({ id }: { id: number }): Promise<IUserObject> => {
-		const response = await axios.get<IUserObject>(`/users/get`, {
+	get = async ({ id }: { id: number }): Promise<IUserDto> => {
+		const response = await axios.get<IUserDto>(`/users/get`, {
 			params: { id: id },
 		});
 
 		return response.data;
 	};
 
-	getCurrent = async (): Promise<IAuthenticatedUserObject> => {
-		const response = await axios.get<IAuthenticatedUserObject>(
+	getCurrent = async (): Promise<IAuthenticatedUserDto> => {
+		const response = await axios.get<IAuthenticatedUserDto>(
 			'/users/get-current',
 		);
 
@@ -54,8 +54,8 @@ class UserApi {
 		sort?: UserSortRule;
 		query?: string;
 		userGroup?: UserGroup;
-	}): Promise<ISearchResultObject<IUserObject>> => {
-		const response = await axios.get<ISearchResultObject<IUserObject>>(
+	}): Promise<ISearchResultDto<IUserDto>> => {
+		const response = await axios.get<ISearchResultDto<IUserDto>>(
 			'/users/list',
 			{ params: { ...pagination, sort, query, userGroup } },
 		);
@@ -73,8 +73,8 @@ class UserApi {
 		email?: string;
 		username?: string;
 		newPassword?: string;
-	}): Promise<IAuthenticatedUserObject> => {
-		const response = await axios.post<IAuthenticatedUserObject>(
+	}): Promise<IAuthenticatedUserDto> => {
+		const response = await axios.post<IAuthenticatedUserDto>(
 			'/users/update',
 			{
 				password: password,

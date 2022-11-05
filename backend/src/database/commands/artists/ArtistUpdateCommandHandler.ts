@@ -1,4 +1,4 @@
-import { ArtistObject } from '@/dto/ArtistObject';
+import { ArtistDto } from '@/dto/ArtistDto';
 import { Artist } from '@/entities/Artist';
 import { ArtistAuditLogEntry } from '@/entities/AuditLogEntry';
 import { AuditedAction } from '@/models/AuditedAction';
@@ -42,7 +42,7 @@ export class ArtistUpdateCommandHandler
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	async execute(command: ArtistUpdateCommand): Promise<ArtistObject> {
+	async execute(command: ArtistUpdateCommand): Promise<ArtistDto> {
 		const { permissionContext, params } = command;
 
 		permissionContext.verifyPermission(Permission.UpdateArtists);
@@ -106,7 +106,7 @@ export class ArtistUpdateCommandHandler
 			return artist;
 		});
 
-		return ArtistObject.create(
+		return ArtistDto.create(
 			permissionContext,
 			artist,
 			Object.values(ArtistOptionalField),

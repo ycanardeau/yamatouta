@@ -1,5 +1,5 @@
-import { TranslationDetailsObject } from '@/dto/TranslationDetailsObject';
+import { TranslationDetailsDto } from '@/dto/TranslationDetailsDto';
 
 export class TranslationDetailsStore {
-	constructor(readonly translation: TranslationDetailsObject) {}
+	constructor(readonly translation: TranslationDetailsDto) {}
 }

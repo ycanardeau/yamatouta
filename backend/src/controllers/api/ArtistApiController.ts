@@ -3,9 +3,9 @@ import { ArtistUpdateCommand } from '@/database/commands/artists/ArtistUpdateCom
 import { ArtistListRevisionsQuery } from '@/database/queries/EntryListRevisionsQueryHandler';
 import { ArtistGetQuery } from '@/database/queries/artists/ArtistGetQueryHandler';
 import { ArtistListQuery } from '@/database/queries/artists/ArtistListQueryHandler';
-import { ArtistObject } from '@/dto/ArtistObject';
-import { RevisionObject } from '@/dto/RevisionObject';
-import { SearchResultObject } from '@/dto/SearchResultObject';
+import { ArtistDto } from '@/dto/ArtistDto';
+import { RevisionDto } from '@/dto/RevisionDto';
+import { SearchResultDto } from '@/dto/SearchResultDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { JoiValidationPipe } from '@/framework/pipes/JoiValidationPipe';
 import { EntryDeleteParams } from '@/models/EntryDeleteParams';
@@ -29,7 +29,7 @@ export class ArtistApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(ArtistUpdateParams.schema))
 		params: ArtistUpdateParams,
-	): Promise<ArtistObject> {
+	): Promise<ArtistDto> {
 		return this.commandBus.execute(
 			new ArtistUpdateCommand(permissionContext, params),
 		);
@@ -51,7 +51,7 @@ export class ArtistApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(ArtistGetParams.schema))
 		params: ArtistGetParams,
-	): Promise<ArtistObject> {
+	): Promise<ArtistDto> {
 		return this.queryBus.execute(
 			new ArtistGetQuery(permissionContext, params),
 		);
@@ -62,7 +62,7 @@ export class ArtistApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(ArtistListParams.schema))
 		params: ArtistListParams,
-	): Promise<SearchResultObject<ArtistObject>> {
+	): Promise<SearchResultDto<ArtistDto>> {
 		return this.queryBus.execute(
 			new ArtistListQuery(permissionContext, params),
 		);
@@ -73,7 +73,7 @@ export class ArtistApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(EntryListRevisionsParams.schema))
 		params: EntryListRevisionsParams,
-	): Promise<SearchResultObject<RevisionObject>> {
+	): Promise<SearchResultDto<RevisionDto>> {
 		return this.queryBus.execute(
 			new ArtistListRevisionsQuery(permissionContext, params),
 		);
@@ -84,7 +84,7 @@ export class ArtistApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(ArtistUpdateParams.schema))
 		params: ArtistUpdateParams,
-	): Promise<ArtistObject> {
+	): Promise<ArtistDto> {
 		return this.commandBus.execute(
 			new ArtistUpdateCommand(permissionContext, params),
 		);

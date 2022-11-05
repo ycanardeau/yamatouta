@@ -1,4 +1,4 @@
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import axios from 'axios';
 
 class AuthApi {
@@ -8,8 +8,8 @@ class AuthApi {
 	}: {
 		email: string;
 		password: string;
-	}): Promise<IAuthenticatedUserObject> => {
-		const response = await axios.post<IAuthenticatedUserObject>(
+	}): Promise<IAuthenticatedUserDto> => {
+		const response = await axios.post<IAuthenticatedUserDto>(
 			'/auth/login',
 			{
 				email,

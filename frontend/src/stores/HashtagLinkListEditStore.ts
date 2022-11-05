@@ -1,4 +1,4 @@
-import { IHashtagLinkObject } from '@/dto/IHashtagLinkObject';
+import { IHashtagLinkDto } from '@/dto/IHashtagLinkDto';
 import { IHashtagLinkUpdateParams } from '@/models/IHashtagLinkUpdateParams';
 import { BasicListEditStore } from '@/stores/BasicListEditStore';
 import { action, makeObservable, observable } from 'mobx';
@@ -7,7 +7,7 @@ export class HashtagLinkEditStore {
 	@observable id = 0;
 	@observable name = '';
 
-	constructor(hashtagLink?: IHashtagLinkObject) {
+	constructor(hashtagLink?: IHashtagLinkDto) {
 		makeObservable(this);
 
 		if (hashtagLink) {
@@ -30,9 +30,9 @@ export class HashtagLinkEditStore {
 
 export class HashtagLinkListEditStore extends BasicListEditStore<
 	HashtagLinkEditStore,
-	IHashtagLinkObject
+	IHashtagLinkDto
 > {
-	constructor(objects: IHashtagLinkObject[]) {
+	constructor(objects: IHashtagLinkDto[]) {
 		super(HashtagLinkEditStore, objects);
 	}
 

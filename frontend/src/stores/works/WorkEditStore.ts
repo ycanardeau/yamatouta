@@ -1,6 +1,6 @@
 import { workApi } from '@/api/workApi';
-import { IWorkObject } from '@/dto/IWorkObject';
-import { WorkEditObject } from '@/dto/WorkEditObject';
+import { IWorkDto } from '@/dto/IWorkDto';
+import { WorkEditDto } from '@/dto/WorkEditDto';
 import { IWorkUpdateParams } from '@/models/works/IWorkUpdateParams';
 import { WorkType } from '@/models/works/WorkType';
 import { ArtistLinkListEditStore } from '@/stores/ArtistLinkListEditStore';
@@ -20,7 +20,7 @@ export class WorkEditStore {
 	readonly webLinks: WebLinkListEditStore;
 	readonly artistLinks: ArtistLinkListEditStore;
 
-	constructor(private readonly work?: WorkEditObject) {
+	constructor(private readonly work?: WorkEditDto) {
 		makeObservable(this);
 
 		if (work) {
@@ -56,7 +56,7 @@ export class WorkEditStore {
 		};
 	};
 
-	@action submit = async (): Promise<IWorkObject> => {
+	@action submit = async (): Promise<IWorkDto> => {
 		try {
 			this.submitting = true;
 

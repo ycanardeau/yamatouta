@@ -1,7 +1,7 @@
 import { WebLinkDescriptionList } from '@/components/WebLinkDescriptionList';
 import { WorkLinkDescriptionList } from '@/components/WorkLinkDescriptionList';
 import { QuoteComment } from '@/components/quotes/QuoteComment';
-import { QuoteDetailsObject } from '@/dto/QuoteDetailsObject';
+import { QuoteDetailsDto } from '@/dto/QuoteDetailsDto';
 import {
 	EuiCommentList,
 	EuiDescriptionList,
@@ -13,7 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface QuoteBasicInfoProps {
-	quote: QuoteDetailsObject;
+	quote: QuoteDetailsDto;
 }
 
 const QuoteBasicInfo = ({ quote }: QuoteBasicInfoProps): React.ReactElement => {

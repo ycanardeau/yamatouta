@@ -1,10 +1,10 @@
 import { userApi } from '@/api/userApi';
-import { IUserObject } from '@/dto/IUserObject';
+import { IUserDto } from '@/dto/IUserDto';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
 export const useUserDetails = <T,>(
-	factory: (user: IUserObject) => T,
+	factory: (user: IUserDto) => T,
 ): [T | undefined] => {
 	const { id } = useParams();
 

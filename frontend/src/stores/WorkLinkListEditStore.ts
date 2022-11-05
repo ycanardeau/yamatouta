@@ -1,6 +1,6 @@
 import { workApi } from '@/api/workApi';
-import { IWorkLinkObject } from '@/dto/ILinkObject';
-import { IWorkObject } from '@/dto/IWorkObject';
+import { IWorkLinkDto } from '@/dto/ILinkDto';
+import { IWorkDto } from '@/dto/IWorkDto';
 import { IWorkLinkUpdateParams } from '@/models/IWorkLinkUpdateParams';
 import { LinkType } from '@/models/LinkType';
 import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
@@ -8,7 +8,7 @@ import { BasicListEditStore } from '@/stores/BasicListEditStore';
 import { action, makeObservable, observable } from 'mobx';
 
 export class WorkLinkEditStore {
-	readonly relatedWork = new BasicEntryLinkStore<IWorkObject>((id) =>
+	readonly relatedWork = new BasicEntryLinkStore<IWorkDto>((id) =>
 		workApi.get({ id: id }),
 	);
 	@observable linkType = LinkType.Unspecified;
@@ -16,7 +16,7 @@ export class WorkLinkEditStore {
 	//readonly endDate: PartialDateEditStore;
 	@observable ended = false;
 
-	constructor(private readonly workLink?: IWorkLinkObject) {
+	constructor(private readonly workLink?: IWorkLinkDto) {
 		makeObservable(this);
 
 		if (workLink) {
@@ -44,9 +44,9 @@ export class WorkLinkEditStore {
 
 export class WorkLinkListEditStore extends BasicListEditStore<
 	WorkLinkEditStore,
-	IWorkLinkObject
+	IWorkLinkDto
 > {
-	constructor(objects: IWorkLinkObject[]) {
+	constructor(objects: IWorkLinkDto[]) {
 		super(WorkLinkEditStore, objects);
 	}
 

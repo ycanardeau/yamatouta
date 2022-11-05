@@ -2,8 +2,8 @@ import { ArtistPage } from '@/components/artists/ArtistPage';
 import { useArtistDetails } from '@/components/artists/useArtistDetails';
 import { useAuth } from '@/components/useAuth';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
-import { ArtistDetailsObject } from '@/dto/ArtistDetailsObject';
-import { IArtistObject } from '@/dto/IArtistObject';
+import { ArtistDetailsDto } from '@/dto/ArtistDetailsDto';
+import { IArtistDto } from '@/dto/IArtistDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { Permission } from '@/models/Permission';
 import ArtistBasicInfo from '@/pages/artists/ArtistBasicInfo';
@@ -131,9 +131,7 @@ const ArtistDetails = (): React.ReactElement | null => {
 		React.useCallback(
 			(artist) =>
 				new ArtistDetailsStore(
-					ArtistDetailsObject.create(
-						artist as Required<IArtistObject>,
-					),
+					ArtistDetailsDto.create(artist as Required<IArtistDto>),
 				),
 			[],
 		),

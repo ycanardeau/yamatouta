@@ -2,8 +2,8 @@ import { TranslationPage } from '@/components/translations/TranslationPage';
 import { useTranslationDetails } from '@/components/translations/useTranslationDetails';
 import { useAuth } from '@/components/useAuth';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
-import { ITranslationObject } from '@/dto/ITranslationObject';
-import { TranslationDetailsObject } from '@/dto/TranslationDetailsObject';
+import { ITranslationDto } from '@/dto/ITranslationDto';
+import { TranslationDetailsDto } from '@/dto/TranslationDetailsDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { Permission } from '@/models/Permission';
 import TranslationBasicInfo from '@/pages/translations/TranslationBasicInfo';
@@ -119,8 +119,8 @@ const TranslationDetails = (): React.ReactElement | null => {
 		React.useCallback(
 			(translation) =>
 				new TranslationDetailsStore(
-					TranslationDetailsObject.create(
-						translation as Required<ITranslationObject>,
+					TranslationDetailsDto.create(
+						translation as Required<ITranslationDto>,
 					),
 				),
 			[],

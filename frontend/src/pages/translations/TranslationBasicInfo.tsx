@@ -1,7 +1,7 @@
 import { Link } from '@/components/Link';
 import { WebLinkDescriptionList } from '@/components/WebLinkDescriptionList';
 import { WorkLinkDescriptionList } from '@/components/WorkLinkDescriptionList';
-import { TranslationDetailsObject } from '@/dto/TranslationDetailsObject';
+import { TranslationDetailsDto } from '@/dto/TranslationDetailsDto';
 import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
 import {
 	EuiDescriptionList,
@@ -13,7 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface TranslationBasicInfoProps {
-	translation: TranslationDetailsObject;
+	translation: TranslationDetailsDto;
 }
 
 const TranslationBasicInfo = ({

@@ -3,14 +3,14 @@ import { RevisionComment } from '@/components/revisions/RevisionComment';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import { WorkPage } from '@/components/works/WorkPage';
 import { useWorkDetails } from '@/components/works/useWorkDetails';
-import { IRevisionObject } from '@/dto/IRevisionObject';
-import { IWorkObject } from '@/dto/IWorkObject';
+import { IRevisionDto } from '@/dto/IRevisionDto';
+import { IWorkDto } from '@/dto/IWorkDto';
 import { EuiCommentList } from '@elastic/eui';
 import React from 'react';
 
 interface LayoutProps {
-	work: IWorkObject;
-	revisions: IRevisionObject[];
+	work: IWorkDto;
+	revisions: IRevisionDto[];
 }
 
 const Layout = ({ work, revisions }: LayoutProps): React.ReactElement => {
@@ -32,7 +32,7 @@ const Layout = ({ work, revisions }: LayoutProps): React.ReactElement => {
 const WorkHistory = (): React.ReactElement | null => {
 	const [work] = useWorkDetails(React.useCallback((work) => work, []));
 
-	const [revisions, setRevisions] = React.useState<IRevisionObject[]>();
+	const [revisions, setRevisions] = React.useState<IRevisionDto[]>();
 
 	React.useEffect(() => {
 		if (!work) return;

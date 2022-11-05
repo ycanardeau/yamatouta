@@ -1,6 +1,6 @@
-import { IArtistObject } from '@/dto/IArtistObject';
-import { IRevisionObject } from '@/dto/IRevisionObject';
-import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { IArtistDto } from '@/dto/IArtistDto';
+import { IRevisionDto } from '@/dto/IRevisionDto';
+import { ISearchResultDto } from '@/dto/ISearchResultDto';
 import { ArtistOptionalField } from '@/models/artists/ArtistOptionalField';
 import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
 import { ArtistType } from '@/models/artists/ArtistType';
@@ -13,8 +13,8 @@ class ArtistApi {
 		name,
 		artistType,
 		webLinks,
-	}: IArtistUpdateParams): Promise<IArtistObject> => {
-		const response = await axios.post<IArtistObject>('/artists/create', {
+	}: IArtistUpdateParams): Promise<IArtistDto> => {
+		const response = await axios.post<IArtistDto>('/artists/create', {
 			id: 0,
 			name,
 			artistType,
@@ -34,8 +34,8 @@ class ArtistApi {
 	}: {
 		id: number;
 		fields?: ArtistOptionalField[];
-	}): Promise<IArtistObject> => {
-		const response = await axios.get<IArtistObject>(`/artists/get`, {
+	}): Promise<IArtistDto> => {
+		const response = await axios.get<IArtistDto>(`/artists/get`, {
 			params: { id: id, fields: fields },
 		});
 
@@ -52,8 +52,8 @@ class ArtistApi {
 		sort?: ArtistSortRule;
 		query?: string;
 		artistType?: ArtistType;
-	}): Promise<ISearchResultObject<IArtistObject>> => {
-		const response = await axios.get<ISearchResultObject<IArtistObject>>(
+	}): Promise<ISearchResultDto<IArtistDto>> => {
+		const response = await axios.get<ISearchResultDto<IArtistDto>>(
 			'/artists/list',
 			{ params: { ...pagination, sort, query, artistType } },
 		);
@@ -65,8 +65,8 @@ class ArtistApi {
 		id,
 	}: {
 		id: number;
-	}): Promise<ISearchResultObject<IRevisionObject>> => {
-		const response = await axios.get<ISearchResultObject<IRevisionObject>>(
+	}): Promise<ISearchResultDto<IRevisionDto>> => {
+		const response = await axios.get<ISearchResultDto<IRevisionDto>>(
 			`/artists/list-revisions`,
 			{ params: { id: id } },
 		);
@@ -79,8 +79,8 @@ class ArtistApi {
 		name,
 		artistType,
 		webLinks,
-	}: IArtistUpdateParams): Promise<IArtistObject> => {
-		const response = await axios.post<IArtistObject>(`/artists/update`, {
+	}: IArtistUpdateParams): Promise<IArtistDto> => {
+		const response = await axios.post<IArtistDto>(`/artists/update`, {
 			id: id,
 			name,
 			artistType,

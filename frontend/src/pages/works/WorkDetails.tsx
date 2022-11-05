@@ -2,8 +2,8 @@ import { useAuth } from '@/components/useAuth';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import { WorkPage } from '@/components/works/WorkPage';
 import { useWorkDetails } from '@/components/works/useWorkDetails';
-import { IWorkObject } from '@/dto/IWorkObject';
-import { WorkDetailsObject } from '@/dto/WorkDetailsObject';
+import { IWorkDto } from '@/dto/IWorkDto';
+import { WorkDetailsDto } from '@/dto/WorkDetailsDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { Permission } from '@/models/Permission';
 import WorkBasicInfo from '@/pages/works/WorkBasicInfo';
@@ -130,7 +130,7 @@ const WorkDetails = (): React.ReactElement | null => {
 		React.useCallback(
 			(work) =>
 				new WorkDetailsStore(
-					WorkDetailsObject.create(work as Required<IWorkObject>),
+					WorkDetailsDto.create(work as Required<IWorkDto>),
 				),
 			[],
 		),

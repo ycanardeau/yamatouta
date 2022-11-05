@@ -1,5 +1,5 @@
 import { translationApi } from '@/api/translationApi';
-import { ITranslationObject } from '@/dto/ITranslationObject';
+import { ITranslationDto } from '@/dto/ITranslationDto';
 import { ITranslationSearchRouteParams } from '@/models/translations/ITranslationSearchRouteParams';
 import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
 import { WordCategory } from '@/models/translations/WordCategory';
@@ -29,7 +29,7 @@ export class TranslationSearchStore
 	implements LocationStateStore<ITranslationSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
-	@observable translations: ITranslationObject[] = [];
+	@observable translations: ITranslationDto[] = [];
 	@observable sort = TranslationSortRule.HeadwordAsc;
 	@observable query = '';
 	@observable submittedQuery = '';

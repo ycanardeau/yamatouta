@@ -2,8 +2,8 @@ import { QuotePage } from '@/components/quotes/QuotePage';
 import { useQuoteDetails } from '@/components/quotes/useQuoteDetails';
 import { useAuth } from '@/components/useAuth';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
-import { IQuoteObject } from '@/dto/IQuoteObject';
-import { QuoteDetailsObject } from '@/dto/QuoteDetailsObject';
+import { IQuoteDto } from '@/dto/IQuoteDto';
+import { QuoteDetailsDto } from '@/dto/QuoteDetailsDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { Permission } from '@/models/Permission';
 import QuoteBasicInfo from '@/pages/quotes/QuoteBasicInfo';
@@ -113,7 +113,7 @@ const QuoteDetails = (): React.ReactElement | null => {
 		React.useCallback(
 			(quote) =>
 				new QuoteDetailsStore(
-					QuoteDetailsObject.create(quote as Required<IQuoteObject>),
+					QuoteDetailsDto.create(quote as Required<IQuoteDto>),
 				),
 			[],
 		),

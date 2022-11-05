@@ -1,4 +1,4 @@
-import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { ISearchResultDto } from '@/dto/ISearchResultDto';
 import { IEntryWithIdAndName } from '@/models/IEntryWithIdAndName';
 import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
 import { EuiComboBox, EuiComboBoxOptionOption } from '@elastic/eui';
@@ -8,7 +8,7 @@ import React from 'react';
 interface EntryComboBoxProps<T extends IEntryWithIdAndName> {
 	store: BasicEntryLinkStore<T>;
 	placeholder?: string;
-	onSearchChange: (searchValue: string) => Promise<ISearchResultObject<T>>;
+	onSearchChange: (searchValue: string) => Promise<ISearchResultDto<T>>;
 }
 
 export const EntryComboBox = observer(

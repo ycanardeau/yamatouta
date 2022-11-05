@@ -1,4 +1,4 @@
-import { TranslationObject } from '@/dto/TranslationObject';
+import { TranslationDto } from '@/dto/TranslationDto';
 import { TranslationAuditLogEntry } from '@/entities/AuditLogEntry';
 import { Translation } from '@/entities/Translation';
 import { AuditedAction } from '@/models/AuditedAction';
@@ -46,9 +46,7 @@ export class TranslationUpdateCommandHandler
 		private readonly revisionService: RevisionService,
 	) {}
 
-	async execute(
-		command: TranslationUpdateCommand,
-	): Promise<TranslationObject> {
+	async execute(command: TranslationUpdateCommand): Promise<TranslationDto> {
 		const { permissionContext, params } = command;
 
 		permissionContext.verifyPermission(Permission.UpdateTranslations);
@@ -122,7 +120,7 @@ export class TranslationUpdateCommandHandler
 			return translation;
 		});
 
-		return TranslationObject.create(
+		return TranslationDto.create(
 			permissionContext,
 			translation,
 			Object.values(TranslationOptionalField),

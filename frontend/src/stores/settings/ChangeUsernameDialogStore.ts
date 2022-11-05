@@ -1,5 +1,5 @@
 import { userApi } from '@/api/userApi';
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import {
 	action,
 	computed,
@@ -13,7 +13,7 @@ export class ChangeUsernameDialogStore {
 	@observable currentPassword = '';
 	@observable username = '';
 
-	constructor(user: IAuthenticatedUserObject) {
+	constructor(user: IAuthenticatedUserDto) {
 		makeObservable(this);
 
 		this.username = user.name;
@@ -31,7 +31,7 @@ export class ChangeUsernameDialogStore {
 		this.username = value;
 	};
 
-	@action submit = async (): Promise<IAuthenticatedUserObject> => {
+	@action submit = async (): Promise<IAuthenticatedUserDto> => {
 		try {
 			this.submitting = false;
 

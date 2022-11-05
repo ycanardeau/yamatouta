@@ -1,6 +1,6 @@
 import { renderReact } from '@/controllers/renderReact';
 import { WorkGetQuery } from '@/database/queries/works/WorkGetQueryHandler';
-import { WorkObject } from '@/dto/WorkObject';
+import { WorkDto } from '@/dto/WorkDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { WorkGetParams } from '@/models/works/WorkGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -31,7 +31,7 @@ export class WorkController {
 		@Param('id', ParseIntPipe) id: number,
 		@Res() response: Response,
 	): Promise<void> {
-		const work = await this.queryBus.execute<WorkGetQuery, WorkObject>(
+		const work = await this.queryBus.execute<WorkGetQuery, WorkDto>(
 			new WorkGetQuery(permissionContext, new WorkGetParams(id)),
 		);
 
@@ -46,7 +46,7 @@ export class WorkController {
 		@Param('id', ParseIntPipe) id: number,
 		@Res() response: Response,
 	): Promise<void> {
-		const work = await this.queryBus.execute<WorkGetQuery, WorkObject>(
+		const work = await this.queryBus.execute<WorkGetQuery, WorkDto>(
 			new WorkGetQuery(permissionContext, new WorkGetParams(id)),
 		);
 

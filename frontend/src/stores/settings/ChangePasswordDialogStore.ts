@@ -1,5 +1,5 @@
 import { userApi } from '@/api/userApi';
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import {
 	action,
 	computed,
@@ -39,7 +39,7 @@ export class ChangePasswordDialogStore {
 		this.confirmNewPassword = value;
 	};
 
-	@action submit = async (): Promise<IAuthenticatedUserObject> => {
+	@action submit = async (): Promise<IAuthenticatedUserDto> => {
 		try {
 			this.submitting = false;
 

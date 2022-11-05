@@ -1,4 +1,4 @@
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { UserAuditLogEntry } from '@/entities/AuditLogEntry';
 import { User } from '@/entities/User';
 import { UserEmailAlreadyExistsException } from '@/framework/exceptions/UserEmailAlreadyExistsException';
@@ -32,9 +32,7 @@ export class UserUpdateCommandHandler
 		private readonly ngramConverter: NgramConverter,
 	) {}
 
-	async execute(
-		command: UserUpdateCommand,
-	): Promise<AuthenticatedUserObject> {
+	async execute(command: UserUpdateCommand): Promise<AuthenticatedUserDto> {
 		const { permissionContext, params } = command;
 
 		const result = UserUpdateParams.schema.validate(params, {
@@ -133,7 +131,7 @@ export class UserUpdateCommandHandler
 				);
 			}
 
-			return AuthenticatedUserObject.create(user);
+			return AuthenticatedUserDto.create(user);
 		});
 	}
 }

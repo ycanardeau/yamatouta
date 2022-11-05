@@ -2,12 +2,12 @@ import { pull } from 'lodash-es';
 import { action, makeObservable, observable } from 'mobx';
 
 // Code from: https://github.com/VocaDB/vocadb/blob/11e105d6b0c838e6d3a089ecbe6c79cc4e8a0e7a/VocaDbWeb/Scripts/ViewModels/BasicListEditViewModel.ts.
-export class BasicListEditStore<TItem, TObject> {
+export class BasicListEditStore<TItem, TDto> {
 	@observable items: TItem[];
 
 	public constructor(
-		private readonly type: { new (object?: TObject): TItem },
-		objects: TObject[],
+		private readonly type: { new (object?: TDto): TItem },
+		objects: TDto[],
 	) {
 		makeObservable(this);
 

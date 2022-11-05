@@ -1,4 +1,4 @@
-import { QuoteObject } from '@/dto/QuoteObject';
+import { QuoteDto } from '@/dto/QuoteDto';
 import { Artist } from '@/entities/Artist';
 import { QuoteAuditLogEntry } from '@/entities/AuditLogEntry';
 import { Quote } from '@/entities/Quote';
@@ -68,7 +68,7 @@ export class QuoteUpdateCommandHandler
 		}));
 	}
 
-	async execute(command: QuoteUpdateCommand): Promise<QuoteObject> {
+	async execute(command: QuoteUpdateCommand): Promise<QuoteDto> {
 		const { permissionContext, params } = command;
 
 		permissionContext.verifyPermission(Permission.UpdateQuotes);
@@ -167,7 +167,7 @@ export class QuoteUpdateCommandHandler
 			return quote;
 		});
 
-		return QuoteObject.create(
+		return QuoteDto.create(
 			permissionContext,
 			quote,
 			Object.values(QuoteOptionalField),

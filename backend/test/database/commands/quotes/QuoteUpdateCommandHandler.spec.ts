@@ -2,7 +2,7 @@ import {
 	QuoteUpdateCommand,
 	QuoteUpdateCommandHandler,
 } from '@/database/commands/quotes/QuoteUpdateCommandHandler';
-import { QuoteObject } from '@/dto/QuoteObject';
+import { QuoteDto } from '@/dto/QuoteDto';
 import { Artist } from '@/entities/Artist';
 import { QuoteAuditLogEntry } from '@/entities/AuditLogEntry';
 import { Quote } from '@/entities/Quote';
@@ -97,7 +97,7 @@ describe('QuoteUpdateCommandHandler', () => {
 		const execute = (
 			permissionContext: PermissionContext,
 			params: QuoteUpdateParams,
-		): Promise<QuoteObject> => {
+		): Promise<QuoteDto> => {
 			return quoteUpdateCommandHandler.execute(
 				new QuoteUpdateCommand(permissionContext, params),
 			);
@@ -112,14 +112,14 @@ describe('QuoteUpdateCommandHandler', () => {
 			params: QuoteUpdateParams;
 			snapshot: IQuoteSnapshot;
 		}): Promise<void> => {
-			const quoteObject = await execute(permissionContext, params);
+			const quoteDto = await execute(permissionContext, params);
 
-			expect(quoteObject.text).toBe(params.text);
-			expect(quoteObject.quoteType).toBe(params.quoteType);
-			expect(quoteObject.locale).toBe(params.locale);
-			expect(quoteObject.artist.id).toBe(params.artistId);
+			expect(quoteDto.text).toBe(params.text);
+			expect(quoteDto.quoteType).toBe(params.quoteType);
+			expect(quoteDto.locale).toBe(params.locale);
+			expect(quoteDto.artist.id).toBe(params.artistId);
 
-			const quote = await em.findOneOrFail(Quote, { id: quoteObject.id });
+			const quote = await em.findOneOrFail(Quote, { id: quoteDto.id });
 
 			const ngramConverter = app.get(NgramConverter);
 			const searchIndex = quote.searchIndex.getEntity();

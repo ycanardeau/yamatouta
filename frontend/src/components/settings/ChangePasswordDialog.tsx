@@ -1,4 +1,4 @@
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import { ChangePasswordDialogStore } from '@/stores/settings/ChangePasswordDialogStore';
 import {
 	EuiButton,
@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 interface ChangePasswordDialogProps {
 	onClose: () => void;
-	onSuccess: (user: IAuthenticatedUserObject) => void;
+	onSuccess: (user: IAuthenticatedUserDto) => void;
 }
 
 export const ChangePasswordDialog = observer(

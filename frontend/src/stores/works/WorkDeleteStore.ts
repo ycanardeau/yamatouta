@@ -1,5 +1,5 @@
 import { workApi } from '@/api/workApi';
-import { IWorkObject } from '@/dto/IWorkObject';
+import { IWorkDto } from '@/dto/IWorkDto';
 import {
 	action,
 	computed,
@@ -11,7 +11,7 @@ import {
 export class WorkDeleteStore {
 	@observable submitting = false;
 
-	constructor(private readonly work: IWorkObject) {
+	constructor(private readonly work: IWorkDto) {
 		makeObservable(this);
 	}
 

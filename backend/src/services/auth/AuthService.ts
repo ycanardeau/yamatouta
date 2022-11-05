@@ -1,13 +1,11 @@
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { getUser } from '@/utils/getUser';
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
-	async login(
-		request: Request,
-	): Promise<AuthenticatedUserObject | undefined> {
+	async login(request: Request): Promise<AuthenticatedUserDto | undefined> {
 		return getUser(request);
 	}
 

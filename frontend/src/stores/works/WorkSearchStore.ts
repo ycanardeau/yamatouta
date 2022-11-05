@@ -1,5 +1,5 @@
 import { workApi } from '@/api/workApi';
-import { IWorkObject } from '@/dto/IWorkObject';
+import { IWorkDto } from '@/dto/IWorkDto';
 import { IWorkSearchRouteParams } from '@/models/works/IWorkSearchRouteParams';
 import { WorkSortRule } from '@/models/works/WorkSortRule';
 import { WorkType } from '@/models/works/WorkType';
@@ -29,7 +29,7 @@ export class WorkSearchStore
 	implements LocationStateStore<IWorkSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
-	@observable works: IWorkObject[] = [];
+	@observable works: IWorkDto[] = [];
 	@observable sort = WorkSortRule.CreatedAsc;
 	@observable query = '';
 	@observable submittedQuery = '';

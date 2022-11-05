@@ -1,5 +1,5 @@
 import { userApi } from '@/api/userApi';
-import { IUserObject } from '@/dto/IUserObject';
+import { IUserDto } from '@/dto/IUserDto';
 import {
 	action,
 	computed,
@@ -34,7 +34,7 @@ export class RegisterDialogStore {
 		this.password = value;
 	};
 
-	@action submit = async (): Promise<IUserObject> => {
+	@action submit = async (): Promise<IUserDto> => {
 		try {
 			this.submitting = true;
 

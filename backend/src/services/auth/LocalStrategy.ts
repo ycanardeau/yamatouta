@@ -4,7 +4,7 @@ import {
 	UserAuthenticateCommandHandler,
 	LoginError,
 } from '@/database/commands/users/UserAuthenticateCommandHandler';
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { TooManyRequestsException } from '@/framework/exceptions/TooManyRequestsException';
 import { RateLimiterMariaDb } from '@/services/auth/RateLimiterMariaDb';
 import { getClientIp } from '@/utils/getClientIp';
@@ -83,7 +83,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 		request: Request,
 		email: string,
 		password: string,
-	): Promise<AuthenticatedUserObject> {
+	): Promise<AuthenticatedUserDto> {
 		const clientIp = getClientIp(request);
 
 		const cacheKey = `${email}_${clientIp}`;

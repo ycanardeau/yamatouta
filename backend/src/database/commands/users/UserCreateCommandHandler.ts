@@ -1,5 +1,5 @@
 import config from '@/config';
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { UserAuditLogEntry } from '@/entities/AuditLogEntry';
 import { User } from '@/entities/User';
 import { UserEmailAlreadyExistsException } from '@/framework/exceptions/UserEmailAlreadyExistsException';
@@ -34,9 +34,7 @@ export class UserCreateCommandHandler
 	) {}
 
 	// TODO: Use CAPTCHA.
-	async execute(
-		command: UserCreateCommand,
-	): Promise<AuthenticatedUserObject> {
+	async execute(command: UserCreateCommand): Promise<AuthenticatedUserDto> {
 		const { permissionContext, params } = command;
 
 		if (config.disableAccountCreation)
@@ -94,6 +92,6 @@ export class UserCreateCommandHandler
 			return user;
 		});
 
-		return AuthenticatedUserObject.create(user);
+		return AuthenticatedUserDto.create(user);
 	}
 }

@@ -1,8 +1,8 @@
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import { Permission } from '@/models/Permission';
 
 export class PermissionContext {
-	constructor(private readonly user?: IAuthenticatedUserObject) {}
+	constructor(private readonly user?: IAuthenticatedUserDto) {}
 
 	hasPermission(permission: Permission): boolean {
 		if (!this.user) return false;

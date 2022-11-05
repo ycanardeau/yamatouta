@@ -1,6 +1,6 @@
 import { translationApi } from '@/api/translationApi';
-import { ITranslationObject } from '@/dto/ITranslationObject';
-import { TranslationEditObject } from '@/dto/TranslationEditObject';
+import { ITranslationDto } from '@/dto/ITranslationDto';
+import { TranslationEditDto } from '@/dto/TranslationEditDto';
 import { ITranslationUpdateParams } from '@/models/translations/ITranslationUpdateParams';
 import { WordCategory } from '@/models/translations/WordCategory';
 import { WebLinkListEditStore } from '@/stores/WebLinkListEditStore';
@@ -23,7 +23,7 @@ export class TranslationEditStore {
 	readonly webLinks: WebLinkListEditStore;
 	readonly workLinks: WorkLinkListEditStore;
 
-	constructor(private readonly translation?: TranslationEditObject) {
+	constructor(private readonly translation?: TranslationEditDto) {
 		makeObservable(this);
 
 		if (translation) {
@@ -85,7 +85,7 @@ export class TranslationEditStore {
 		};
 	};
 
-	@action submit = async (): Promise<ITranslationObject> => {
+	@action submit = async (): Promise<ITranslationDto> => {
 		try {
 			this.submitting = true;
 

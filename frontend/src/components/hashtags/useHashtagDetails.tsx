@@ -1,10 +1,10 @@
 import { hashtagApi } from '@/api/hashtagApi';
-import { IHashtagObject } from '@/dto/IHashtagObject';
+import { IHashtagDto } from '@/dto/IHashtagDto';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
 export const useHashtagDetails = <T,>(
-	factory: (hashtag: IHashtagObject) => T,
+	factory: (hashtag: IHashtagDto) => T,
 ): [T | undefined] => {
 	const { name } = useParams();
 

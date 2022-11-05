@@ -1,5 +1,5 @@
-import { UserDetailsObject } from '@/dto/UserDetailsObject';
+import { UserDetailsDto } from '@/dto/UserDetailsDto';
 
 export class UserDetailsStore {
-	constructor(readonly user: UserDetailsObject) {}
+	constructor(readonly user: UserDetailsDto) {}
 }

@@ -1,5 +1,5 @@
 import { translationApi } from '@/api/translationApi';
-import { ITranslationObject } from '@/dto/ITranslationObject';
+import { ITranslationDto } from '@/dto/ITranslationDto';
 import {
 	action,
 	computed,
@@ -11,7 +11,7 @@ import {
 export class TranslationDeleteStore {
 	@observable submitting = false;
 
-	constructor(private readonly translation: ITranslationObject) {
+	constructor(private readonly translation: ITranslationDto) {
 		makeObservable(this);
 	}
 

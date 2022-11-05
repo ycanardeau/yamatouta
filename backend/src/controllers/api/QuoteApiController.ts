@@ -3,9 +3,9 @@ import { QuoteUpdateCommand } from '@/database/commands/quotes/QuoteUpdateComman
 import { QuoteListRevisionsQuery } from '@/database/queries/EntryListRevisionsQueryHandler';
 import { QuoteGetQuery } from '@/database/queries/quotes/QuoteGetQueryHandler';
 import { QuoteListQuery } from '@/database/queries/quotes/QuoteListQueryHandler';
-import { QuoteObject } from '@/dto/QuoteObject';
-import { RevisionObject } from '@/dto/RevisionObject';
-import { SearchResultObject } from '@/dto/SearchResultObject';
+import { QuoteDto } from '@/dto/QuoteDto';
+import { RevisionDto } from '@/dto/RevisionDto';
+import { SearchResultDto } from '@/dto/SearchResultDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { JoiValidationPipe } from '@/framework/pipes/JoiValidationPipe';
 import { EntryDeleteParams } from '@/models/EntryDeleteParams';
@@ -29,7 +29,7 @@ export class QuoteApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(QuoteUpdateParams.schema))
 		params: QuoteUpdateParams,
-	): Promise<QuoteObject> {
+	): Promise<QuoteDto> {
 		return this.commandBus.execute(
 			new QuoteUpdateCommand(permissionContext, params),
 		);
@@ -51,7 +51,7 @@ export class QuoteApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(QuoteGetParams.schema))
 		params: QuoteGetParams,
-	): Promise<QuoteObject> {
+	): Promise<QuoteDto> {
 		return this.queryBus.execute(
 			new QuoteGetQuery(permissionContext, params),
 		);
@@ -62,7 +62,7 @@ export class QuoteApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(QuoteListParams.schema))
 		params: QuoteListParams,
-	): Promise<SearchResultObject<QuoteObject>> {
+	): Promise<SearchResultDto<QuoteDto>> {
 		return this.queryBus.execute(
 			new QuoteListQuery(permissionContext, params),
 		);
@@ -73,7 +73,7 @@ export class QuoteApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(EntryListRevisionsParams.schema))
 		params: EntryListRevisionsParams,
-	): Promise<SearchResultObject<RevisionObject>> {
+	): Promise<SearchResultDto<RevisionDto>> {
 		return this.queryBus.execute(
 			new QuoteListRevisionsQuery(permissionContext, params),
 		);
@@ -84,7 +84,7 @@ export class QuoteApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(QuoteUpdateParams.schema))
 		params: QuoteUpdateParams,
-	): Promise<QuoteObject> {
+	): Promise<QuoteDto> {
 		return this.commandBus.execute(
 			new QuoteUpdateCommand(permissionContext, params),
 		);

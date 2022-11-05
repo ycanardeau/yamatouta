@@ -5,7 +5,7 @@ import { TableEmptyBody } from '@/components/TableEmptyBody';
 import { useAuth } from '@/components/useAuth';
 import { useDialog } from '@/components/useDialog';
 import { WorkDeleteDialog } from '@/components/works/WorkDeleteDialog';
-import { IWorkObject } from '@/dto/IWorkObject';
+import { IWorkDto } from '@/dto/IWorkDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { Permission } from '@/models/Permission';
 import { WorkSearchStore } from '@/stores/works/WorkSearchStore';
@@ -49,7 +49,7 @@ const WorkSearchTableHeader = React.memo((): React.ReactElement => {
 
 interface WorkPopoverProps {
 	store: WorkSearchStore;
-	work: IWorkObject;
+	work: IWorkDto;
 }
 
 const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
@@ -158,7 +158,7 @@ const WorkPopover = ({ store, work }: WorkPopoverProps): React.ReactElement => {
 
 interface WorkSearchTableRowProps {
 	store: WorkSearchStore;
-	work: IWorkObject;
+	work: IWorkDto;
 }
 
 const WorkSearchTableRow = React.memo(

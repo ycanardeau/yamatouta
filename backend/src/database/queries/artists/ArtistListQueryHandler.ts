@@ -1,6 +1,6 @@
 import { orderByIds } from '@/database/queries/orderByIds';
-import { ArtistObject } from '@/dto/ArtistObject';
-import { SearchResultObject } from '@/dto/SearchResultObject';
+import { ArtistDto } from '@/dto/ArtistDto';
+import { SearchResultDto } from '@/dto/SearchResultDto';
 import { Artist } from '@/entities/Artist';
 import { ArtistListParams } from '@/models/artists/ArtistListParams';
 import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
@@ -139,9 +139,7 @@ export class ArtistListQueryHandler implements IQueryHandler<ArtistListQuery> {
 		return count;
 	}
 
-	async execute(
-		query: ArtistListQuery,
-	): Promise<SearchResultObject<ArtistObject>> {
+	async execute(query: ArtistListQuery): Promise<SearchResultDto<ArtistDto>> {
 		const { permissionContext, params } = query;
 
 		const result = ArtistListParams.schema.validate(params, {
@@ -156,9 +154,9 @@ export class ArtistListQueryHandler implements IQueryHandler<ArtistListQuery> {
 			this.getCount(params),
 		]);
 
-		return SearchResultObject.create<ArtistObject>(
+		return SearchResultDto.create<ArtistDto>(
 			artists.map((artist) =>
-				ArtistObject.create(permissionContext, artist),
+				ArtistDto.create(permissionContext, artist),
 			),
 			count,
 		);

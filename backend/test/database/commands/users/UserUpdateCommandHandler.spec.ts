@@ -2,7 +2,7 @@ import {
 	UserUpdateCommand,
 	UserUpdateCommandHandler,
 } from '@/database/commands/users/UserUpdateCommandHandler';
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { UserAuditLogEntry } from '@/entities/AuditLogEntry';
 import { User } from '@/entities/User';
 import { AuditedAction } from '@/models/AuditedAction';
@@ -67,7 +67,7 @@ describe('UserUpdateCommandHandler', () => {
 		const execute = (
 			permissionContext: PermissionContext,
 			params: UserUpdateParams,
-		): Promise<AuthenticatedUserObject> => {
+		): Promise<AuthenticatedUserDto> => {
 			return userUpdateCommandHandler.execute(
 				new UserUpdateCommand(permissionContext, params),
 			);
@@ -83,15 +83,15 @@ describe('UserUpdateCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				username: newUsername,
 			});
 
-			expect(userObject.id).toBe(existingUser.id);
-			expect(userObject.name).toBe(newUsername);
+			expect(userDto.id).toBe(existingUser.id);
+			expect(userDto.name).toBe(newUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			expect(user.name).toBe(newUsername);
 			expect(user.email).toBe(existingEmail);
@@ -120,15 +120,15 @@ describe('UserUpdateCommandHandler', () => {
 		});
 
 		test('username is not changed', async () => {
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				username: existingUsername,
 			});
 
-			expect(userObject.id).toBe(existingUser.id);
-			expect(userObject.name).toBe(existingUsername);
+			expect(userDto.id).toBe(existingUser.id);
+			expect(userDto.name).toBe(existingUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			expect(user.name).toBe(existingUsername);
 			expect(user.email).toBe(existingEmail);
@@ -144,14 +144,14 @@ describe('UserUpdateCommandHandler', () => {
 
 			expect(newUsername.length).toBe(2);
 
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				username: newUsername,
 			});
 
-			expect(userObject.name).toBe(newUsername);
+			expect(userDto.name).toBe(newUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
 				user: user,
@@ -173,14 +173,14 @@ describe('UserUpdateCommandHandler', () => {
 
 			expect(newUsername.length).toBe(32);
 
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				username: newUsername,
 			});
 
-			expect(userObject.name).toBe(newUsername);
+			expect(userDto.name).toBe(newUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
 				user: user,
@@ -197,15 +197,15 @@ describe('UserUpdateCommandHandler', () => {
 		});
 
 		test('username is undefined', async () => {
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				username: undefined,
 			});
 
-			expect(userObject.id).toBe(existingUser.id);
-			expect(userObject.name).toBe(existingUsername);
+			expect(userDto.id).toBe(existingUser.id);
+			expect(userDto.name).toBe(existingUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			expect(user.name).toBe(existingUsername);
 			expect(user.email).toBe(existingEmail);
@@ -280,15 +280,15 @@ describe('UserUpdateCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				email: newEmail,
 			});
 
-			expect(userObject.id).toBe(existingUser.id);
-			expect(userObject.name).toBe(existingUsername);
+			expect(userDto.id).toBe(existingUser.id);
+			expect(userDto.name).toBe(existingUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			expect(user.name).toBe(existingUsername);
 			expect(user.email).toBe(newEmail);
@@ -311,15 +311,15 @@ describe('UserUpdateCommandHandler', () => {
 		});
 
 		test('email is not changed', async () => {
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				email: existingEmail,
 			});
 
-			expect(userObject.id).toBe(existingUser.id);
-			expect(userObject.name).toBe(existingUsername);
+			expect(userDto.id).toBe(existingUser.id);
+			expect(userDto.name).toBe(existingUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			expect(user.name).toBe(existingUsername);
 			expect(user.email).toBe(existingEmail);
@@ -331,15 +331,15 @@ describe('UserUpdateCommandHandler', () => {
 		});
 
 		test('email is undefined', async () => {
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				email: undefined,
 			});
 
-			expect(userObject.id).toBe(existingUser.id);
-			expect(userObject.name).toBe(existingUsername);
+			expect(userDto.id).toBe(existingUser.id);
+			expect(userDto.name).toBe(existingUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			expect(user.name).toBe(existingUsername);
 			expect(user.email).toBe(existingEmail);
@@ -382,15 +382,15 @@ describe('UserUpdateCommandHandler', () => {
 				}),
 			).rejects.toThrow(BadRequestException);
 
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				newPassword: newPassword,
 			});
 
-			expect(userObject.id).toBe(existingUser.id);
-			expect(userObject.name).toBe(existingUsername);
+			expect(userDto.id).toBe(existingUser.id);
+			expect(userDto.name).toBe(existingUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			expect(user.name).toBe(existingUsername);
 			expect(user.email).toBe(existingEmail);
@@ -413,15 +413,15 @@ describe('UserUpdateCommandHandler', () => {
 		});
 
 		test('newPassword is undefined', async () => {
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				password: existingPassword,
 				newPassword: undefined,
 			});
 
-			expect(userObject.id).toBe(existingUser.id);
-			expect(userObject.name).toBe(existingUsername);
+			expect(userDto.id).toBe(existingUser.id);
+			expect(userDto.name).toBe(existingUsername);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			expect(user.name).toBe(existingUsername);
 			expect(user.email).toBe(existingEmail);

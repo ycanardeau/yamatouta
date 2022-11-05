@@ -1,5 +1,5 @@
 import { Link } from '@/components/Link';
-import { IWorkLinkObject } from '@/dto/ILinkObject';
+import { IWorkLinkDto } from '@/dto/ILinkDto';
 import {
 	EuiDescriptionListDescription,
 	EuiDescriptionListTitle,
@@ -7,7 +7,7 @@ import {
 import React from 'react';
 
 interface WorkLinkListProps {
-	workLinks: IWorkLinkObject[];
+	workLinks: IWorkLinkDto[];
 }
 
 const WorkLinkList = ({ workLinks }: WorkLinkListProps): React.ReactElement => {
@@ -27,7 +27,7 @@ const WorkLinkList = ({ workLinks }: WorkLinkListProps): React.ReactElement => {
 
 interface WorkLinkDescriptionListProps {
 	title: string;
-	workLinks: IWorkLinkObject[];
+	workLinks: IWorkLinkDto[];
 }
 
 export const WorkLinkDescriptionList = ({

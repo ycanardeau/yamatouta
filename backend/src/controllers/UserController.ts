@@ -1,6 +1,6 @@
 import { renderReact } from '@/controllers/renderReact';
 import { UserGetQuery } from '@/database/queries/users/UserGetQueryHandler';
-import { UserObject } from '@/dto/UserObject';
+import { UserDto } from '@/dto/UserDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { UserGetParams } from '@/models/users/UserGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -26,7 +26,7 @@ export class UserController {
 		@Param('id', ParseIntPipe) id: number,
 		@Res() response: Response,
 	): Promise<void> {
-		const user = await this.queryBus.execute<UserGetQuery, UserObject>(
+		const user = await this.queryBus.execute<UserGetQuery, UserDto>(
 			new UserGetQuery(permissionContext, new UserGetParams(id)),
 		);
 

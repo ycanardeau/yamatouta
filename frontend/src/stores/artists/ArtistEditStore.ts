@@ -1,6 +1,6 @@
 import { artistApi } from '@/api/artistApi';
-import { ArtistEditObject } from '@/dto/ArtistEditObject';
-import { IArtistObject } from '@/dto/IArtistObject';
+import { ArtistEditDto } from '@/dto/ArtistEditDto';
+import { IArtistDto } from '@/dto/IArtistDto';
 import { ArtistType } from '@/models/artists/ArtistType';
 import { IArtistUpdateParams } from '@/models/artists/IArtistUpdateParams';
 import { WebLinkListEditStore } from '@/stores/WebLinkListEditStore';
@@ -18,7 +18,7 @@ export class ArtistEditStore {
 	@observable artistType = ArtistType.Person;
 	readonly webLinks: WebLinkListEditStore;
 
-	constructor(private readonly artist?: ArtistEditObject) {
+	constructor(private readonly artist?: ArtistEditDto) {
 		makeObservable(this);
 
 		if (artist) {
@@ -51,7 +51,7 @@ export class ArtistEditStore {
 		};
 	};
 
-	@action submit = async (): Promise<IArtistObject> => {
+	@action submit = async (): Promise<IArtistDto> => {
 		try {
 			this.submitting = true;
 

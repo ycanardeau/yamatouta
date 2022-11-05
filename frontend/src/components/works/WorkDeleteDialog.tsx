@@ -1,4 +1,4 @@
-import { IWorkObject } from '@/dto/IWorkObject';
+import { IWorkDto } from '@/dto/IWorkDto';
 import { WorkDeleteStore } from '@/stores/works/WorkDeleteStore';
 import { EuiConfirmModal } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
@@ -6,7 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface WorkDeleteDialogProps {
-	work: IWorkObject;
+	work: IWorkDto;
 	onClose: () => void;
 	onSuccess: () => void;
 }

@@ -2,7 +2,7 @@ import {
 	WorkUpdateCommand,
 	WorkUpdateCommandHandler,
 } from '@/database/commands/works/WorkUpdateCommandHandler';
-import { WorkObject } from '@/dto/WorkObject';
+import { WorkDto } from '@/dto/WorkDto';
 import { WorkAuditLogEntry } from '@/entities/AuditLogEntry';
 import { WorkRevision } from '@/entities/Revision';
 import { User } from '@/entities/User';
@@ -75,7 +75,7 @@ describe('WorkCreateCommandHandler', () => {
 		const execute = (
 			permissionContext: PermissionContext,
 			params: WorkUpdateParams,
-		): Promise<WorkObject> => {
+		): Promise<WorkDto> => {
 			return workCreateCommandHandler.execute(
 				new WorkUpdateCommand(permissionContext, params),
 			);
@@ -90,12 +90,12 @@ describe('WorkCreateCommandHandler', () => {
 			params: WorkUpdateParams;
 			snapshot: IWorkSnapshot;
 		}): Promise<void> => {
-			const workObject = await execute(permissionContext, params);
+			const workDto = await execute(permissionContext, params);
 
-			expect(workObject.name).toBe(params.name);
-			expect(workObject.workType).toBe(params.workType);
+			expect(workDto.name).toBe(params.name);
+			expect(workDto.workType).toBe(params.workType);
 
-			const work = await em.findOneOrFail(Work, { id: workObject.id });
+			const work = await em.findOneOrFail(Work, { id: workDto.id });
 
 			const revision = work.revisions[0];
 

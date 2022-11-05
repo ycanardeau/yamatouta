@@ -1,5 +1,5 @@
-import { RevisionObject } from '@/dto/RevisionObject';
-import { SearchResultObject } from '@/dto/SearchResultObject';
+import { RevisionDto } from '@/dto/RevisionDto';
+import { SearchResultDto } from '@/dto/SearchResultDto';
 import { Artist } from '@/entities/Artist';
 import { Quote } from '@/entities/Quote';
 import { Translation } from '@/entities/Translation';
@@ -25,7 +25,7 @@ abstract class EntryListRevisionsQueryHandler<
 > {
 	constructor(private readonly entryFunc: (id: number) => Promise<TEntry>) {}
 
-	async execute(query: TQuery): Promise<SearchResultObject<RevisionObject>> {
+	async execute(query: TQuery): Promise<SearchResultDto<RevisionDto>> {
 		const { permissionContext, params } = query;
 
 		permissionContext.verifyPermission(Permission.ViewRevisions);
@@ -43,9 +43,9 @@ abstract class EntryListRevisionsQueryHandler<
 			populate: ['actor'],
 		});
 
-		return SearchResultObject.create(
+		return SearchResultDto.create(
 			revisions.map((revision) =>
-				RevisionObject.create(permissionContext, revision),
+				RevisionDto.create(permissionContext, revision),
 			),
 			revisions.length,
 		);

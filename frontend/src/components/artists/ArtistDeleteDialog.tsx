@@ -1,4 +1,4 @@
-import { IArtistObject } from '@/dto/IArtistObject';
+import { IArtistDto } from '@/dto/IArtistDto';
 import { ArtistDeleteStore } from '@/stores/artists/ArtistDeleteStore';
 import { EuiConfirmModal } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
@@ -6,7 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface ArtistDeleteDialogProps {
-	artist: IArtistObject;
+	artist: IArtistDto;
 	onClose: () => void;
 	onSuccess: () => void;
 }

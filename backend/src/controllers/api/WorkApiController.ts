@@ -3,9 +3,9 @@ import { WorkUpdateCommand } from '@/database/commands/works/WorkUpdateCommandHa
 import { WorkListRevisionsQuery } from '@/database/queries/EntryListRevisionsQueryHandler';
 import { WorkGetQuery } from '@/database/queries/works/WorkGetQueryHandler';
 import { WorkListQuery } from '@/database/queries/works/WorkListQueryHandler';
-import { RevisionObject } from '@/dto/RevisionObject';
-import { SearchResultObject } from '@/dto/SearchResultObject';
-import { WorkObject } from '@/dto/WorkObject';
+import { RevisionDto } from '@/dto/RevisionDto';
+import { SearchResultDto } from '@/dto/SearchResultDto';
+import { WorkDto } from '@/dto/WorkDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { JoiValidationPipe } from '@/framework/pipes/JoiValidationPipe';
 import { EntryDeleteParams } from '@/models/EntryDeleteParams';
@@ -29,7 +29,7 @@ export class WorkApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(WorkUpdateParams.schema))
 		params: WorkUpdateParams,
-	): Promise<WorkObject> {
+	): Promise<WorkDto> {
 		return this.commandBus.execute(
 			new WorkUpdateCommand(permissionContext, params),
 		);
@@ -51,7 +51,7 @@ export class WorkApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(WorkGetParams.schema))
 		params: WorkGetParams,
-	): Promise<WorkObject> {
+	): Promise<WorkDto> {
 		return this.queryBus.execute(
 			new WorkGetQuery(permissionContext, params),
 		);
@@ -62,7 +62,7 @@ export class WorkApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(WorkListParams.schema))
 		params: WorkListParams,
-	): Promise<SearchResultObject<WorkObject>> {
+	): Promise<SearchResultDto<WorkDto>> {
 		return this.queryBus.execute(
 			new WorkListQuery(permissionContext, params),
 		);
@@ -73,7 +73,7 @@ export class WorkApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(EntryListRevisionsParams.schema))
 		params: EntryListRevisionsParams,
-	): Promise<SearchResultObject<RevisionObject>> {
+	): Promise<SearchResultDto<RevisionDto>> {
 		return this.queryBus.execute(
 			new WorkListRevisionsQuery(permissionContext, params),
 		);
@@ -84,7 +84,7 @@ export class WorkApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(WorkUpdateParams.schema))
 		params: WorkUpdateParams,
-	): Promise<WorkObject> {
+	): Promise<WorkDto> {
 		return this.commandBus.execute(
 			new WorkUpdateCommand(permissionContext, params),
 		);

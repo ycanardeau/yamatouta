@@ -2,7 +2,7 @@ import {
 	TranslationUpdateCommand,
 	TranslationUpdateCommandHandler,
 } from '@/database/commands/translations/TranslationUpdateCommandHandler';
-import { TranslationObject } from '@/dto/TranslationObject';
+import { TranslationDto } from '@/dto/TranslationDto';
 import { TranslationAuditLogEntry } from '@/entities/AuditLogEntry';
 import { TranslationRevision } from '@/entities/Revision';
 import { Translation } from '@/entities/Translation';
@@ -80,7 +80,7 @@ describe('TranslationCreateCommandHandler', () => {
 		const execute = (
 			permissionContext: PermissionContext,
 			params: TranslationUpdateParams,
-		): Promise<TranslationObject> => {
+		): Promise<TranslationDto> => {
 			return translationCreateCommandHandler.execute(
 				new TranslationUpdateCommand(permissionContext, params),
 			);
@@ -95,16 +95,16 @@ describe('TranslationCreateCommandHandler', () => {
 			params: TranslationUpdateParams;
 			snapshot: ITranslationSnapshot;
 		}): Promise<void> => {
-			const translationObject = await execute(permissionContext, params);
+			const translationDto = await execute(permissionContext, params);
 
-			expect(translationObject.headword).toBe(params.headword);
-			expect(translationObject.locale).toBe(params.locale);
-			expect(translationObject.reading).toBe(params.reading);
-			expect(translationObject.yamatokotoba).toBe(params.yamatokotoba);
-			expect(translationObject.category).toBe(params.category);
+			expect(translationDto.headword).toBe(params.headword);
+			expect(translationDto.locale).toBe(params.locale);
+			expect(translationDto.reading).toBe(params.reading);
+			expect(translationDto.yamatokotoba).toBe(params.yamatokotoba);
+			expect(translationDto.category).toBe(params.category);
 
 			const translation = await em.findOneOrFail(Translation, {
-				id: translationObject.id,
+				id: translationDto.id,
 			});
 
 			const revision = translation.revisions[0];

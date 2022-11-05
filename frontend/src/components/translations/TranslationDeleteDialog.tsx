@@ -1,4 +1,4 @@
-import { ITranslationObject } from '@/dto/ITranslationObject';
+import { ITranslationDto } from '@/dto/ITranslationDto';
 import { TranslationDeleteStore } from '@/stores/translations/TranslationDeleteStore';
 import { EuiConfirmModal } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
@@ -6,7 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface TranslationDeleteDialogProps {
-	translation: ITranslationObject;
+	translation: ITranslationDto;
 	onClose: () => void;
 	onSuccess: () => void;
 }

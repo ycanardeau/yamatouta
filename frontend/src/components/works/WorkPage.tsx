@@ -1,4 +1,4 @@
-import { IWorkObject } from '@/dto/IWorkObject';
+import { IWorkDto } from '@/dto/IWorkDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiBreadcrumb,
@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface WorkPageProps {
-	work?: IWorkObject;
+	work?: IWorkDto;
 	pageHeaderProps?: EuiPageHeaderProps;
 	children?: React.ReactNode;
 }

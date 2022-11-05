@@ -1,4 +1,4 @@
-import { IWebLinkObject } from '@/dto/IWebLinkObject';
+import { IWebLinkDto } from '@/dto/IWebLinkDto';
 import { IWebLinkUpdateParams } from '@/models/IWebLinkUpdateParams';
 import { WebLinkCategory } from '@/models/WebLinkCategory';
 import { BasicListEditStore } from '@/stores/BasicListEditStore';
@@ -10,7 +10,7 @@ export class WebLinkEditStore {
 	@observable title = '';
 	@observable category = WebLinkCategory.Reference;
 
-	constructor(webLink?: IWebLinkObject) {
+	constructor(webLink?: IWebLinkDto) {
 		makeObservable(this);
 
 		if (webLink) {
@@ -45,9 +45,9 @@ export class WebLinkEditStore {
 
 export class WebLinkListEditStore extends BasicListEditStore<
 	WebLinkEditStore,
-	IWebLinkObject
+	IWebLinkDto
 > {
-	constructor(objects: IWebLinkObject[]) {
+	constructor(objects: IWebLinkDto[]) {
 		super(WebLinkEditStore, objects);
 	}
 

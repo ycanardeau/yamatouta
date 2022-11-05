@@ -1,6 +1,6 @@
 import { WebLinkListEdit } from '@/components/WebLinkListEdit';
 import { WorkLinkListEdit } from '@/components/WorkLinkListEdit';
-import { TranslationEditObject } from '@/dto/TranslationEditObject';
+import { TranslationEditDto } from '@/dto/TranslationEditDto';
 import { EntryType } from '@/models/EntryType';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { workLinkTypes } from '@/models/LinkType';
@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface TranslationEditFormProps {
-	translation?: TranslationEditObject;
+	translation?: TranslationEditDto;
 }
 
 export const TranslationEditForm = observer(

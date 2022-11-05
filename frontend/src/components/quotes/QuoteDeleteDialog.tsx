@@ -1,4 +1,4 @@
-import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IQuoteDto } from '@/dto/IQuoteDto';
 import { QuoteDeleteStore } from '@/stores/quotes/QuoteDeleteStore';
 import { EuiConfirmModal } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
@@ -6,7 +6,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface QuoteDeleteDialogProps {
-	quote: IQuoteObject;
+	quote: IQuoteDto;
 	onClose: () => void;
 	onSuccess: () => void;
 }

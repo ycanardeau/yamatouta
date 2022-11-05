@@ -2,7 +2,7 @@ import {
 	WorkUpdateCommand,
 	WorkUpdateCommandHandler,
 } from '@/database/commands/works/WorkUpdateCommandHandler';
-import { WorkObject } from '@/dto/WorkObject';
+import { WorkDto } from '@/dto/WorkDto';
 import { WorkAuditLogEntry } from '@/entities/AuditLogEntry';
 import { WorkRevision } from '@/entities/Revision';
 import { User } from '@/entities/User';
@@ -83,7 +83,7 @@ describe('WorkUpdateCommandHandler', () => {
 		const execute = (
 			permissionContext: PermissionContext,
 			params: WorkUpdateParams,
-		): Promise<WorkObject> => {
+		): Promise<WorkDto> => {
 			return workUpdateCommandHandler.execute(
 				new WorkUpdateCommand(permissionContext, params),
 			);
@@ -98,12 +98,12 @@ describe('WorkUpdateCommandHandler', () => {
 			params: WorkUpdateParams;
 			snapshot: IWorkSnapshot;
 		}): Promise<void> => {
-			const workObject = await execute(permissionContext, params);
+			const workDto = await execute(permissionContext, params);
 
-			expect(workObject.name).toBe(params.name);
-			expect(workObject.workType).toBe(params.workType);
+			expect(workDto.name).toBe(params.name);
+			expect(workDto.workType).toBe(params.workType);
 
-			const work = await em.findOneOrFail(Work, { id: workObject.id });
+			const work = await em.findOneOrFail(Work, { id: workDto.id });
 
 			const ngramConverter = app.get(NgramConverter);
 			const searchIndex = work.searchIndex.getEntity();

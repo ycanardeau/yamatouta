@@ -1,8 +1,8 @@
 import { HashtagPage } from '@/components/hashtags/HashtagPage';
 import { useHashtagDetails } from '@/components/hashtags/useHashtagDetails';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
-import { HashtagDetailsObject } from '@/dto/HashtagDetailsObject';
-import { IHashtagObject } from '@/dto/IHashtagObject';
+import { HashtagDetailsDto } from '@/dto/HashtagDetailsDto';
+import { IHashtagDto } from '@/dto/IHashtagDto';
 import HashtagQuotes from '@/pages/hashtags/HashtagQuotes';
 import { HashtagDetailsStore } from '@/stores/hashtags/HashtagDetailsStore';
 import { EuiIcon } from '@elastic/eui';
@@ -77,9 +77,7 @@ const HashtagDetails = (): React.ReactElement | null => {
 	const [store] = useHashtagDetails(
 		React.useCallback((hashtag) => {
 			const hashtagDetailsStore = new HashtagDetailsStore(
-				HashtagDetailsObject.create(
-					hashtag as Required<IHashtagObject>,
-				),
+				HashtagDetailsDto.create(hashtag as Required<IHashtagDto>),
 			);
 			hashtagDetailsStore.quoteSearchStore.hashtags = [hashtag.name];
 

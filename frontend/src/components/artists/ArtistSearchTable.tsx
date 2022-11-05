@@ -5,7 +5,7 @@ import { TableEmptyBody } from '@/components/TableEmptyBody';
 import { ArtistDeleteDialog } from '@/components/artists/ArtistDeleteDialog';
 import { useAuth } from '@/components/useAuth';
 import { useDialog } from '@/components/useDialog';
-import { IArtistObject } from '@/dto/IArtistObject';
+import { IArtistDto } from '@/dto/IArtistDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { Permission } from '@/models/Permission';
 import { ArtistSearchStore } from '@/stores/artists/ArtistSearchStore';
@@ -49,7 +49,7 @@ const ArtistSearchTableHeader = React.memo((): React.ReactElement => {
 
 interface ArtistPopoverProps {
 	store: ArtistSearchStore;
-	artist: IArtistObject;
+	artist: IArtistDto;
 }
 
 const ArtistPopover = ({
@@ -161,7 +161,7 @@ const ArtistPopover = ({
 
 interface ArtistSearchTableRowProps {
 	store: ArtistSearchStore;
-	artist: IArtistObject;
+	artist: IArtistDto;
 }
 
 const ArtistSearchTableRow = React.memo(

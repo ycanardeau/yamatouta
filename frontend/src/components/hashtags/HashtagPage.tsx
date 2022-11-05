@@ -1,4 +1,4 @@
-import { IHashtagObject } from '@/dto/IHashtagObject';
+import { IHashtagDto } from '@/dto/IHashtagDto';
 import {
 	EuiBreadcrumb,
 	EuiPageContent,
@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface HashtagPageProps {
-	hashtag?: IHashtagObject;
+	hashtag?: IHashtagDto;
 	pageHeaderProps?: EuiPageHeaderProps;
 	children?: React.ReactNode;
 }

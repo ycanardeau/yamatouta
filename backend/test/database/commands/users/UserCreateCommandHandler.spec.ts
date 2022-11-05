@@ -2,7 +2,7 @@ import {
 	UserCreateCommand,
 	UserCreateCommandHandler,
 } from '@/database/commands/users/UserCreateCommandHandler';
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { UserAuditLogEntry } from '@/entities/AuditLogEntry';
 import { User } from '@/entities/User';
 import { AuditedAction } from '@/models/AuditedAction';
@@ -65,16 +65,16 @@ describe('UserCreateCommandHandler', () => {
 		const execute = (
 			permissionContext: PermissionContext,
 			params: UserCreateParams,
-		): Promise<AuthenticatedUserObject> => {
+		): Promise<AuthenticatedUserDto> => {
 			return userCreateCommandHandler.execute(
 				new UserCreateCommand(permissionContext, params),
 			);
 		};
 
 		test('userCreate', async () => {
-			const userObject = await execute(permissionContext, defaultParams);
+			const userDto = await execute(permissionContext, defaultParams);
 
-			expect(userObject.name).toBe(defaultParams.username);
+			expect(userDto.name).toBe(defaultParams.username);
 
 			const newUser = await em.findOneOrFail(User, {
 				normalizedEmail: await normalizeEmail(defaultParams.email),
@@ -101,12 +101,12 @@ describe('UserCreateCommandHandler', () => {
 
 			expect(username.length).toBe(2);
 
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				...defaultParams,
 				username: username,
 			});
 
-			expect(userObject.name).toBe(username);
+			expect(userDto.name).toBe(username);
 
 			const newUser = await em.findOneOrFail(User, {
 				normalizedEmail: await normalizeEmail(defaultParams.email),
@@ -134,12 +134,12 @@ describe('UserCreateCommandHandler', () => {
 
 			expect(username.length).toBe(32);
 
-			const userObject = await execute(permissionContext, {
+			const userDto = await execute(permissionContext, {
 				...defaultParams,
 				username: username,
 			});
 
-			expect(userObject.name).toBe(username);
+			expect(userDto.name).toBe(username);
 
 			const newUser = await em.findOneOrFail(User, {
 				normalizedEmail: await normalizeEmail(defaultParams.email),

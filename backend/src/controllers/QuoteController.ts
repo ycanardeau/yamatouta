@@ -1,6 +1,6 @@
 import { renderReact } from '@/controllers/renderReact';
 import { QuoteGetQuery } from '@/database/queries/quotes/QuoteGetQueryHandler';
-import { QuoteObject } from '@/dto/QuoteObject';
+import { QuoteDto } from '@/dto/QuoteDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { QuoteGetParams } from '@/models/quotes/QuoteGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -31,7 +31,7 @@ export class QuoteController {
 		@Param('id', ParseIntPipe) id: number,
 		@Res() response: Response,
 	): Promise<void> {
-		const quote = await this.queryBus.execute<QuoteGetQuery, QuoteObject>(
+		const quote = await this.queryBus.execute<QuoteGetQuery, QuoteDto>(
 			new QuoteGetQuery(permissionContext, new QuoteGetParams(id)),
 		);
 

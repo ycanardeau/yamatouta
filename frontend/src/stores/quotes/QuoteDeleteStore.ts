@@ -1,5 +1,5 @@
 import { quoteApi } from '@/api/quoteApi';
-import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IQuoteDto } from '@/dto/IQuoteDto';
 import {
 	action,
 	computed,
@@ -11,7 +11,7 @@ import {
 export class QuoteDeleteStore {
 	@observable submitting = false;
 
-	constructor(private readonly quote: IQuoteObject) {
+	constructor(private readonly quote: IQuoteDto) {
 		makeObservable(this);
 	}
 

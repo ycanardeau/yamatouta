@@ -2,11 +2,11 @@ import { QuoteEditForm } from '@/components/quotes/QuoteEditForm';
 import { QuotePage } from '@/components/quotes/QuotePage';
 import { useQuoteDetails } from '@/components/quotes/useQuoteDetails';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
-import { QuoteEditObject } from '@/dto/QuoteEditObject';
+import { QuoteEditDto } from '@/dto/QuoteEditDto';
 import React from 'react';
 
 interface LayoutProps {
-	quote: QuoteEditObject;
+	quote: QuoteEditDto;
 }
 
 const Layout = ({ quote }: LayoutProps): React.ReactElement => {
@@ -23,7 +23,7 @@ const Layout = ({ quote }: LayoutProps): React.ReactElement => {
 
 const QuoteEdit = (): React.ReactElement | null => {
 	const [quote] = useQuoteDetails(
-		React.useCallback((quote) => quote as QuoteEditObject, []),
+		React.useCallback((quote) => quote as QuoteEditDto, []),
 	);
 
 	return quote ? <Layout quote={quote} /> : null;

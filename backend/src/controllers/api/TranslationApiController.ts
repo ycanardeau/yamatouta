@@ -3,9 +3,9 @@ import { TranslationUpdateCommand } from '@/database/commands/translations/Trans
 import { TranslationListRevisionsQuery } from '@/database/queries/EntryListRevisionsQueryHandler';
 import { TranslationGetQuery } from '@/database/queries/translations/TranslationGetQueryHandler';
 import { TranslationListQuery } from '@/database/queries/translations/TranslationListQueryHandler';
-import { RevisionObject } from '@/dto/RevisionObject';
-import { SearchResultObject } from '@/dto/SearchResultObject';
-import { TranslationObject } from '@/dto/TranslationObject';
+import { RevisionDto } from '@/dto/RevisionDto';
+import { SearchResultDto } from '@/dto/SearchResultDto';
+import { TranslationDto } from '@/dto/TranslationDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { JoiValidationPipe } from '@/framework/pipes/JoiValidationPipe';
 import { EntryDeleteParams } from '@/models/EntryDeleteParams';
@@ -29,7 +29,7 @@ export class TranslationApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(TranslationUpdateParams.schema))
 		params: TranslationUpdateParams,
-	): Promise<TranslationObject> {
+	): Promise<TranslationDto> {
 		return this.commandBus.execute(
 			new TranslationUpdateCommand(permissionContext, params),
 		);
@@ -51,7 +51,7 @@ export class TranslationApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(TranslationGetParams.schema))
 		params: TranslationGetParams,
-	): Promise<TranslationObject> {
+	): Promise<TranslationDto> {
 		return this.queryBus.execute(
 			new TranslationGetQuery(permissionContext, params),
 		);
@@ -62,7 +62,7 @@ export class TranslationApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(TranslationListParams.schema))
 		params: TranslationListParams,
-	): Promise<SearchResultObject<TranslationObject>> {
+	): Promise<SearchResultDto<TranslationDto>> {
 		return this.queryBus.execute(
 			new TranslationListQuery(permissionContext, params),
 		);
@@ -73,7 +73,7 @@ export class TranslationApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(EntryListRevisionsParams.schema))
 		params: EntryListRevisionsParams,
-	): Promise<SearchResultObject<RevisionObject>> {
+	): Promise<SearchResultDto<RevisionDto>> {
 		return this.queryBus.execute(
 			new TranslationListRevisionsQuery(permissionContext, params),
 		);
@@ -84,7 +84,7 @@ export class TranslationApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(TranslationUpdateParams.schema))
 		params: TranslationUpdateParams,
-	): Promise<TranslationObject> {
+	): Promise<TranslationDto> {
 		return this.commandBus.execute(
 			new TranslationUpdateCommand(permissionContext, params),
 		);

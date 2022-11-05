@@ -1,7 +1,7 @@
 import { Link } from '@/components/Link';
 import { Pagination } from '@/components/Pagination';
 import { TableEmptyBody } from '@/components/TableEmptyBody';
-import { IHashtagObject } from '@/dto/IHashtagObject';
+import { IHashtagDto } from '@/dto/IHashtagDto';
 import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
 import { HashtagSearchStore } from '@/stores/hashtags/HashtagSearchStore';
 import {
@@ -51,7 +51,7 @@ const HashtagSearchTableHeader = observer(
 );
 
 interface HashtagSearchTableRowProps {
-	hashtag: IHashtagObject;
+	hashtag: IHashtagDto;
 }
 
 const HashtagSearchTableRow = React.memo(

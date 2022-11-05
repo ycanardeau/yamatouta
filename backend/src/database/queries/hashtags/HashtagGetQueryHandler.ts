@@ -1,4 +1,4 @@
-import { HashtagObject } from '@/dto/HashtagObject';
+import { HashtagDto } from '@/dto/HashtagDto';
 import { Hashtag } from '@/entities/Hashtag';
 import { HashtagGetParams } from '@/models/hashtags/HashtagGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -18,7 +18,7 @@ export class HashtagGetQuery {
 export class HashtagGetQueryHandler implements IQueryHandler<HashtagGetQuery> {
 	constructor(private readonly em: EntityManager) {}
 
-	async execute(query: HashtagGetQuery): Promise<HashtagObject> {
+	async execute(query: HashtagGetQuery): Promise<HashtagDto> {
 		const { permissionContext, params } = query;
 
 		const hashtag = await this.em.findOne<Hashtag>(Hashtag, {
@@ -32,6 +32,6 @@ export class HashtagGetQueryHandler implements IQueryHandler<HashtagGetQuery> {
 
 		if (!hashtag) throw new NotFoundException();
 
-		return HashtagObject.create(permissionContext, hashtag);
+		return HashtagDto.create(permissionContext, hashtag);
 	}
 }

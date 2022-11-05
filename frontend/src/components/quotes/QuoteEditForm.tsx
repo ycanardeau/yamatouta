@@ -2,7 +2,7 @@ import { MarkdownEditor } from '@/components/MarkdownEditor';
 import { WebLinkListEdit } from '@/components/WebLinkListEdit';
 import { WorkLinkListEdit } from '@/components/WorkLinkListEdit';
 import { ArtistComboBox } from '@/components/artists/ArtistComboBox';
-import { QuoteEditObject } from '@/dto/QuoteEditObject';
+import { QuoteEditDto } from '@/dto/QuoteEditDto';
 import { EntryType } from '@/models/EntryType';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { workLinkTypes } from '@/models/LinkType';
@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface QuoteEditFormProps {
-	quote?: QuoteEditObject;
+	quote?: QuoteEditDto;
 }
 
 export const QuoteEditForm = observer(

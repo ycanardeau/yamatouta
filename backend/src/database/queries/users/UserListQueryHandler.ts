@@ -1,6 +1,6 @@
 import { orderByIds } from '@/database/queries/orderByIds';
-import { SearchResultObject } from '@/dto/SearchResultObject';
-import { UserObject } from '@/dto/UserObject';
+import { SearchResultDto } from '@/dto/SearchResultDto';
+import { UserDto } from '@/dto/UserDto';
 import { User } from '@/entities/User';
 import { UserListParams } from '@/models/users/UserListParams';
 import { UserSortRule } from '@/models/users/UserSortRule';
@@ -127,9 +127,7 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 		return count;
 	}
 
-	async execute(
-		query: UserListQuery,
-	): Promise<SearchResultObject<UserObject>> {
+	async execute(query: UserListQuery): Promise<SearchResultDto<UserDto>> {
 		const { permissionContext, params } = query;
 
 		const result = UserListParams.schema.validate(params, {
@@ -144,8 +142,8 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 			this.getCount(params),
 		]);
 
-		return SearchResultObject.create<UserObject>(
-			users.map((user) => UserObject.create(permissionContext, user)),
+		return SearchResultDto.create<UserDto>(
+			users.map((user) => UserDto.create(permissionContext, user)),
 			count,
 		);
 	}

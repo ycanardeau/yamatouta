@@ -3,7 +3,7 @@ import { TableEmptyBody } from '@/components/TableEmptyBody';
 import { TranslationDeleteDialog } from '@/components/translations/TranslationDeleteDialog';
 import { useAuth } from '@/components/useAuth';
 import { useDialog } from '@/components/useDialog';
-import { ITranslationObject } from '@/dto/ITranslationObject';
+import { ITranslationDto } from '@/dto/ITranslationDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { Permission } from '@/models/Permission';
 import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
@@ -82,7 +82,7 @@ const TranslationSearchTableHeader = observer(
 
 interface TranslationPopoverProps {
 	store: TranslationSearchStore;
-	translation: ITranslationObject;
+	translation: ITranslationDto;
 }
 
 const TranslationPopover = ({
@@ -267,7 +267,7 @@ const WordLinkList = observer(
 
 interface TranslationSearchTableRowProps {
 	store: TranslationSearchStore;
-	translation: ITranslationObject;
+	translation: ITranslationDto;
 }
 
 const TranslationSearchTableRow = observer(

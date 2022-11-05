@@ -1,5 +1,5 @@
 import { hashtagApi } from '@/api/hashtagApi';
-import { IHashtagObject } from '@/dto/IHashtagObject';
+import { IHashtagDto } from '@/dto/IHashtagDto';
 import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
 import { IHashtagSearchRouteParams } from '@/models/hashtags/IHashtagSearchRouteParams';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -27,7 +27,7 @@ export class HashtagSearchStore
 	implements LocationStateStore<IHashtagSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
-	@observable hashtags: IHashtagObject[] = [];
+	@observable hashtags: IHashtagDto[] = [];
 	@observable sort = HashtagSortRule.ReferenceCountDesc;
 	@observable query = '';
 	@observable submittedQuery = '';

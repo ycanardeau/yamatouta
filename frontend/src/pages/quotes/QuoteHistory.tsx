@@ -3,14 +3,14 @@ import { QuotePage } from '@/components/quotes/QuotePage';
 import { useQuoteDetails } from '@/components/quotes/useQuoteDetails';
 import { RevisionComment } from '@/components/revisions/RevisionComment';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
-import { IQuoteObject } from '@/dto/IQuoteObject';
-import { IRevisionObject } from '@/dto/IRevisionObject';
+import { IQuoteDto } from '@/dto/IQuoteDto';
+import { IRevisionDto } from '@/dto/IRevisionDto';
 import { EuiCommentList } from '@elastic/eui';
 import React from 'react';
 
 interface LayoutProps {
-	quote: IQuoteObject;
-	revisions: IRevisionObject[];
+	quote: IQuoteDto;
+	revisions: IRevisionDto[];
 }
 
 const Layout = ({ quote, revisions }: LayoutProps): React.ReactElement => {
@@ -32,7 +32,7 @@ const Layout = ({ quote, revisions }: LayoutProps): React.ReactElement => {
 const QuoteHistory = (): React.ReactElement | null => {
 	const [quote] = useQuoteDetails(React.useCallback((quote) => quote, []));
 
-	const [revisions, setRevisions] = React.useState<IRevisionObject[]>();
+	const [revisions, setRevisions] = React.useState<IRevisionDto[]>();
 
 	React.useEffect(() => {
 		if (!quote) return;

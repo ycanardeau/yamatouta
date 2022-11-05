@@ -1,4 +1,4 @@
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import { ChangeUsernameDialogStore } from '@/stores/settings/ChangeUsernameDialogStore';
 import {
 	EuiButton,
@@ -20,9 +20,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface ChangeUsernameDialogProps {
-	user: IAuthenticatedUserObject;
+	user: IAuthenticatedUserDto;
 	onClose: () => void;
-	onSuccess: (user: IAuthenticatedUserObject) => void;
+	onSuccess: (user: IAuthenticatedUserDto) => void;
 }
 
 export const ChangeUsernameDialog = observer(

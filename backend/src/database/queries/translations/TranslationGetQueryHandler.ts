@@ -1,4 +1,4 @@
-import { TranslationObject } from '@/dto/TranslationObject';
+import { TranslationDto } from '@/dto/TranslationDto';
 import { Translation } from '@/entities/Translation';
 import { TranslationGetParams } from '@/models/translations/TranslationGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -24,7 +24,7 @@ export class TranslationGetQueryHandler
 		private readonly translationRepo: EntityRepository<Translation>,
 	) {}
 
-	async execute(query: TranslationGetQuery): Promise<TranslationObject> {
+	async execute(query: TranslationGetQuery): Promise<TranslationDto> {
 		const { permissionContext, params } = query;
 
 		const translation = await this.translationRepo.findOne(
@@ -49,7 +49,7 @@ export class TranslationGetQueryHandler
 
 		if (!translation) throw new NotFoundException();
 
-		return TranslationObject.create(
+		return TranslationDto.create(
 			permissionContext,
 			translation,
 			params.fields,

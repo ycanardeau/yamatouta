@@ -1,4 +1,4 @@
-import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IQuoteDto } from '@/dto/IQuoteDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiBreadcrumb,
@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface QuotePageProps {
-	quote?: IQuoteObject;
+	quote?: IQuoteDto;
 	pageHeaderProps?: EuiPageHeaderProps;
 	children?: React.ReactNode;
 }

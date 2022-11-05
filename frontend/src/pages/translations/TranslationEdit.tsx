@@ -2,11 +2,11 @@ import { TranslationEditForm } from '@/components/translations/TranslationEditFo
 import { TranslationPage } from '@/components/translations/TranslationPage';
 import { useTranslationDetails } from '@/components/translations/useTranslationDetails';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
-import { TranslationEditObject } from '@/dto/TranslationEditObject';
+import { TranslationEditDto } from '@/dto/TranslationEditDto';
 import React from 'react';
 
 interface LayoutProps {
-	translation: TranslationEditObject;
+	translation: TranslationEditDto;
 }
 
 const Layout = ({ translation }: LayoutProps): React.ReactElement => {
@@ -27,7 +27,7 @@ const Layout = ({ translation }: LayoutProps): React.ReactElement => {
 const TranslationEdit = (): React.ReactElement | null => {
 	const [translation] = useTranslationDetails(
 		React.useCallback(
-			(translation) => translation as TranslationEditObject,
+			(translation) => translation as TranslationEditDto,
 			[],
 		),
 	);

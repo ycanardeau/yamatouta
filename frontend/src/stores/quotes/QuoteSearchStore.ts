@@ -1,5 +1,5 @@
 import { quoteApi } from '@/api/quoteApi';
-import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IQuoteDto } from '@/dto/IQuoteDto';
 import { IQuoteSearchRouteParams } from '@/models/quotes/IQuoteSearchRouteParams';
 import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
 import { QuoteType } from '@/models/quotes/QuoteType';
@@ -29,7 +29,7 @@ export class QuoteSearchStore
 	implements LocationStateStore<IQuoteSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
-	@observable quotes: IQuoteObject[] = [];
+	@observable quotes: IQuoteDto[] = [];
 	@observable sort: QuoteSortRule;
 	@observable query = '';
 	@observable submittedQuery = '';

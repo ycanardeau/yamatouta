@@ -1,5 +1,5 @@
 import { Link } from '@/components/Link';
-import { IArtistLinkObject } from '@/dto/ILinkObject';
+import { IArtistLinkDto } from '@/dto/ILinkDto';
 import {
 	EuiDescriptionListDescription,
 	EuiDescriptionListTitle,
@@ -7,7 +7,7 @@ import {
 import React from 'react';
 
 interface ArtistLinkListProps {
-	artistLinks: IArtistLinkObject[];
+	artistLinks: IArtistLinkDto[];
 }
 
 const ArtistLinkList = ({
@@ -29,7 +29,7 @@ const ArtistLinkList = ({
 
 interface ArtistLinkDescriptionListProps {
 	title: string;
-	artistLinks: IArtistLinkObject[];
+	artistLinks: IArtistLinkDto[];
 }
 
 export const ArtistLinkDescriptionList = ({

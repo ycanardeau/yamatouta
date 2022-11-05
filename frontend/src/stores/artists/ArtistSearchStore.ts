@@ -1,5 +1,5 @@
 import { artistApi } from '@/api/artistApi';
-import { IArtistObject } from '@/dto/IArtistObject';
+import { IArtistDto } from '@/dto/IArtistDto';
 import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
 import { ArtistType } from '@/models/artists/ArtistType';
 import { IArtistSearchRouteParams } from '@/models/artists/IArtistSearchRouteParams';
@@ -29,7 +29,7 @@ export class ArtistSearchStore
 	implements LocationStateStore<IArtistSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
-	@observable artists: IArtistObject[] = [];
+	@observable artists: IArtistDto[] = [];
 	@observable sort = ArtistSortRule.CreatedAsc;
 	@observable query = '';
 	@observable submittedQuery = '';

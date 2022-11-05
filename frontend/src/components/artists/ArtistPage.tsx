@@ -1,4 +1,4 @@
-import { IArtistObject } from '@/dto/IArtistObject';
+import { IArtistDto } from '@/dto/IArtistDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiBreadcrumb,
@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface ArtistPageProps {
-	artist?: IArtistObject;
+	artist?: IArtistDto;
 	pageHeaderProps?: EuiPageHeaderProps;
 	children?: React.ReactNode;
 }

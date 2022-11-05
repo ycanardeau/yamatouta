@@ -1,6 +1,6 @@
 import { Avatar } from '@/components/Avatar';
 import { Link } from '@/components/Link';
-import { IRevisionObject } from '@/dto/IRevisionObject';
+import { IRevisionDto } from '@/dto/IRevisionDto';
 import { RevisionEvent } from '@/models/RevisionEvent';
 import { EuiComment, EuiFlexGroup, EuiFlexItem, EuiIcon } from '@elastic/eui';
 import {
@@ -29,7 +29,7 @@ const TimelineIcon = ({ event }: TimelineIconProps): React.ReactElement => {
 };
 
 interface RevisionCommentProps {
-	revision: IRevisionObject;
+	revision: IRevisionDto;
 }
 
 export const RevisionComment = ({

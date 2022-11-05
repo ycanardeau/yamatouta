@@ -3,14 +3,14 @@ import { RevisionComment } from '@/components/revisions/RevisionComment';
 import { TranslationPage } from '@/components/translations/TranslationPage';
 import { useTranslationDetails } from '@/components/translations/useTranslationDetails';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
-import { IRevisionObject } from '@/dto/IRevisionObject';
-import { ITranslationObject } from '@/dto/ITranslationObject';
+import { IRevisionDto } from '@/dto/IRevisionDto';
+import { ITranslationDto } from '@/dto/ITranslationDto';
 import { EuiCommentList } from '@elastic/eui';
 import React from 'react';
 
 interface LayoutProps {
-	translation: ITranslationObject;
-	revisions: IRevisionObject[];
+	translation: ITranslationDto;
+	revisions: IRevisionDto[];
 }
 
 const Layout = ({
@@ -40,7 +40,7 @@ const TranslationHistory = (): React.ReactElement | null => {
 		React.useCallback((translation) => translation, []),
 	);
 
-	const [revisions, setRevisions] = React.useState<IRevisionObject[]>();
+	const [revisions, setRevisions] = React.useState<IRevisionDto[]>();
 
 	React.useEffect(() => {
 		if (!translation) return;

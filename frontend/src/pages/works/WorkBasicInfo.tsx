@@ -1,6 +1,6 @@
 import { ArtistLinkDescriptionList } from '@/components/ArtistLinkDescriptionList';
 import { WebLinkDescriptionList } from '@/components/WebLinkDescriptionList';
-import { WorkDetailsObject } from '@/dto/WorkDetailsObject';
+import { WorkDetailsDto } from '@/dto/WorkDetailsDto';
 import {
 	EuiDescriptionList,
 	EuiDescriptionListDescription,
@@ -10,7 +10,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface WorkBasicInfoProps {
-	work: WorkDetailsObject;
+	work: WorkDetailsDto;
 }
 
 const WorkBasicInfo = ({ work }: WorkBasicInfoProps): React.ReactElement => {

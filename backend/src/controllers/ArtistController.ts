@@ -1,6 +1,6 @@
 import { renderReact } from '@/controllers/renderReact';
 import { ArtistGetQuery } from '@/database/queries/artists/ArtistGetQueryHandler';
-import { ArtistObject } from '@/dto/ArtistObject';
+import { ArtistDto } from '@/dto/ArtistDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { ArtistGetParams } from '@/models/artists/ArtistGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -31,10 +31,9 @@ export class ArtistController {
 		@Param('id', ParseIntPipe) id: number,
 		@Res() response: Response,
 	): Promise<void> {
-		const artist = await this.queryBus.execute<
-			ArtistGetQuery,
-			ArtistObject
-		>(new ArtistGetQuery(permissionContext, new ArtistGetParams(id)));
+		const artist = await this.queryBus.execute<ArtistGetQuery, ArtistDto>(
+			new ArtistGetQuery(permissionContext, new ArtistGetParams(id)),
+		);
 
 		return renderReact(response, {
 			title: `${t('shared.artist')} "${artist.name}" - ${t(
@@ -49,10 +48,9 @@ export class ArtistController {
 		@Param('id', ParseIntPipe) id: number,
 		@Res() response: Response,
 	): Promise<void> {
-		const artist = await this.queryBus.execute<
-			ArtistGetQuery,
-			ArtistObject
-		>(new ArtistGetQuery(permissionContext, new ArtistGetParams(id)));
+		const artist = await this.queryBus.execute<ArtistGetQuery, ArtistDto>(
+			new ArtistGetQuery(permissionContext, new ArtistGetParams(id)),
+		);
 
 		return renderReact(response, {
 			title: `${t('shared.artist')} "${artist.name}"`,

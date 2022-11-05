@@ -1,4 +1,4 @@
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { LocalAuthGuard } from '@/framework/guards/LocalAuthGuard';
 import { AuthService } from '@/services/auth/AuthService';
 import {
@@ -22,9 +22,7 @@ export class AuthApiController {
 	@HttpCode(HttpStatus.OK)
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
-	login(
-		@Req() request: Request,
-	): Promise<AuthenticatedUserObject | undefined> {
+	login(@Req() request: Request): Promise<AuthenticatedUserDto | undefined> {
 		return this.authService.login(request);
 	}
 

@@ -1,6 +1,6 @@
 import { orderByIds } from '@/database/queries/orderByIds';
-import { SearchResultObject } from '@/dto/SearchResultObject';
-import { TranslationObject } from '@/dto/TranslationObject';
+import { SearchResultDto } from '@/dto/SearchResultDto';
+import { TranslationDto } from '@/dto/TranslationDto';
 import { Translation } from '@/entities/Translation';
 import { TranslationListParams } from '@/models/translations/TranslationListParams';
 import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
@@ -262,7 +262,7 @@ export class TranslationListQueryHandler
 
 	async execute(
 		query: TranslationListQuery,
-	): Promise<SearchResultObject<TranslationObject>> {
+	): Promise<SearchResultDto<TranslationDto>> {
 		const { permissionContext, params } = query;
 
 		const result = TranslationListParams.schema.validate(params, {
@@ -277,9 +277,9 @@ export class TranslationListQueryHandler
 			this.getCount(params),
 		]);
 
-		return SearchResultObject.create(
+		return SearchResultDto.create(
 			translations.map((translation) =>
-				TranslationObject.create(permissionContext, translation),
+				TranslationDto.create(permissionContext, translation),
 			),
 			count,
 		);

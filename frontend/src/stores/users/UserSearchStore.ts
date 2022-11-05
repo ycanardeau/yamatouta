@@ -1,5 +1,5 @@
 import { userApi } from '@/api/userApi';
-import { IUserObject } from '@/dto/IUserObject';
+import { IUserDto } from '@/dto/IUserDto';
 import { IUserSearchRouteParams } from '@/models/users/IUserSearchRouteParams';
 import { UserGroup } from '@/models/users/UserGroup';
 import { UserSortRule } from '@/models/users/UserSortRule';
@@ -29,7 +29,7 @@ export class UserSearchStore
 	implements LocationStateStore<IUserSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
-	@observable users: IUserObject[] = [];
+	@observable users: IUserDto[] = [];
 	@observable sort = UserSortRule.CreatedAsc;
 	@observable query = '';
 	@observable submittedQuery = '';

@@ -3,9 +3,9 @@ import { UserUpdateCommand } from '@/database/commands/users/UserUpdateCommandHa
 import { UserGetCurrentQuery } from '@/database/queries/users/UserGetCurrentQueryHandler';
 import { UserGetQuery } from '@/database/queries/users/UserGetQueryHandler';
 import { UserListQuery } from '@/database/queries/users/UserListQueryHandler';
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
-import { SearchResultObject } from '@/dto/SearchResultObject';
-import { UserObject } from '@/dto/UserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
+import { SearchResultDto } from '@/dto/SearchResultDto';
+import { UserDto } from '@/dto/UserDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { JoiValidationPipe } from '@/framework/pipes/JoiValidationPipe';
 import { UserCreateParams } from '@/models/users/UserCreateParams';
@@ -28,7 +28,7 @@ export class UserApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(UserCreateParams.schema))
 		params: UserCreateParams,
-	): Promise<AuthenticatedUserObject> {
+	): Promise<AuthenticatedUserDto> {
 		return this.commandBus.execute(
 			new UserCreateCommand(permissionContext, params),
 		);
@@ -39,7 +39,7 @@ export class UserApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(UserGetParams.schema))
 		params: UserGetParams,
-	): Promise<UserObject> {
+	): Promise<UserDto> {
 		return this.queryBus.execute(
 			new UserGetQuery(permissionContext, params),
 		);
@@ -48,7 +48,7 @@ export class UserApiController {
 	@Get('get-current')
 	getCurrent(
 		@GetPermissionContext() permissionContext: PermissionContext,
-	): Promise<AuthenticatedUserObject> {
+	): Promise<AuthenticatedUserDto> {
 		return this.queryBus.execute(
 			new UserGetCurrentQuery(permissionContext),
 		);
@@ -59,7 +59,7 @@ export class UserApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Query(new JoiValidationPipe(UserListParams.schema))
 		params: UserListParams,
-	): Promise<SearchResultObject<UserObject>> {
+	): Promise<SearchResultDto<UserDto>> {
 		return this.queryBus.execute(
 			new UserListQuery(permissionContext, params),
 		);
@@ -70,7 +70,7 @@ export class UserApiController {
 		@GetPermissionContext() permissionContext: PermissionContext,
 		@Body(new JoiValidationPipe(UserUpdateParams.schema))
 		params: UserUpdateParams,
-	): Promise<AuthenticatedUserObject> {
+	): Promise<AuthenticatedUserDto> {
 		return this.commandBus.execute(
 			new UserUpdateCommand(permissionContext, params),
 		);

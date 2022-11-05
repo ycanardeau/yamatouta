@@ -1,6 +1,6 @@
 import { ArtistLinkListEdit } from '@/components/ArtistLinkListEdit';
 import { WebLinkListEdit } from '@/components/WebLinkListEdit';
-import { WorkEditObject } from '@/dto/WorkEditObject';
+import { WorkEditDto } from '@/dto/WorkEditDto';
 import { EntryType } from '@/models/EntryType';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { artistLinkTypes } from '@/models/LinkType';
@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 interface WorkEditFormProps {
-	work?: WorkEditObject;
+	work?: WorkEditDto;
 }
 
 export const WorkEditForm = observer(

@@ -1,4 +1,4 @@
-import { QuoteObject } from '@/dto/QuoteObject';
+import { QuoteDto } from '@/dto/QuoteDto';
 import { Quote } from '@/entities/Quote';
 import { QuoteGetParams } from '@/models/quotes/QuoteGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -22,7 +22,7 @@ export class QuoteGetQueryHandler implements IQueryHandler<QuoteGetQuery> {
 		private readonly quoteRepo: EntityRepository<Quote>,
 	) {}
 
-	async execute(query: QuoteGetQuery): Promise<QuoteObject> {
+	async execute(query: QuoteGetQuery): Promise<QuoteDto> {
 		const { permissionContext, params } = query;
 
 		const quote = await this.quoteRepo.findOne(
@@ -50,6 +50,6 @@ export class QuoteGetQueryHandler implements IQueryHandler<QuoteGetQuery> {
 
 		if (!quote) throw new NotFoundException();
 
-		return QuoteObject.create(permissionContext, quote, params.fields);
+		return QuoteDto.create(permissionContext, quote, params.fields);
 	}
 }

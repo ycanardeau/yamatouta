@@ -1,6 +1,6 @@
 import { renderReact } from '@/controllers/renderReact';
 import { TranslationGetQuery } from '@/database/queries/translations/TranslationGetQueryHandler';
-import { TranslationObject } from '@/dto/TranslationObject';
+import { TranslationDto } from '@/dto/TranslationDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { TranslationGetParams } from '@/models/translations/TranslationGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -33,7 +33,7 @@ export class TranslationController {
 	): Promise<void> {
 		const translation = await this.queryBus.execute<
 			TranslationGetQuery,
-			TranslationObject
+			TranslationDto
 		>(
 			new TranslationGetQuery(
 				permissionContext,

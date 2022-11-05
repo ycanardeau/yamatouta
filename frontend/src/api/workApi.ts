@@ -1,6 +1,6 @@
-import { IRevisionObject } from '@/dto/IRevisionObject';
-import { ISearchResultObject } from '@/dto/ISearchResultObject';
-import { IWorkObject } from '@/dto/IWorkObject';
+import { IRevisionDto } from '@/dto/IRevisionDto';
+import { ISearchResultDto } from '@/dto/ISearchResultDto';
+import { IWorkDto } from '@/dto/IWorkDto';
 import { IWorkUpdateParams } from '@/models/works/IWorkUpdateParams';
 import { WorkOptionalField } from '@/models/works/WorkOptionalField';
 import { WorkSortRule } from '@/models/works/WorkSortRule';
@@ -14,8 +14,8 @@ class WorkApi {
 		workType,
 		webLinks,
 		artistLinks,
-	}: IWorkUpdateParams): Promise<IWorkObject> => {
-		const response = await axios.post<IWorkObject>('/works/create', {
+	}: IWorkUpdateParams): Promise<IWorkDto> => {
+		const response = await axios.post<IWorkDto>('/works/create', {
 			id: 0,
 			name,
 			workType,
@@ -36,8 +36,8 @@ class WorkApi {
 	}: {
 		id: number;
 		fields?: WorkOptionalField[];
-	}): Promise<IWorkObject> => {
-		const response = await axios.get<IWorkObject>(`/works/get`, {
+	}): Promise<IWorkDto> => {
+		const response = await axios.get<IWorkDto>(`/works/get`, {
 			params: { id: id, fields: fields },
 		});
 
@@ -54,8 +54,8 @@ class WorkApi {
 		sort?: WorkSortRule;
 		query?: string;
 		workType?: WorkType;
-	}): Promise<ISearchResultObject<IWorkObject>> => {
-		const response = await axios.get<ISearchResultObject<IWorkObject>>(
+	}): Promise<ISearchResultDto<IWorkDto>> => {
+		const response = await axios.get<ISearchResultDto<IWorkDto>>(
 			'/works/list',
 			{ params: { ...pagination, sort, query, workType } },
 		);
@@ -67,8 +67,8 @@ class WorkApi {
 		id,
 	}: {
 		id: number;
-	}): Promise<ISearchResultObject<IRevisionObject>> => {
-		const response = await axios.get<ISearchResultObject<IRevisionObject>>(
+	}): Promise<ISearchResultDto<IRevisionDto>> => {
+		const response = await axios.get<ISearchResultDto<IRevisionDto>>(
 			`/works/list-revisions`,
 			{ params: { id: id } },
 		);
@@ -82,8 +82,8 @@ class WorkApi {
 		workType,
 		webLinks,
 		artistLinks,
-	}: IWorkUpdateParams): Promise<IWorkObject> => {
-		const response = await axios.post<IWorkObject>(`/works/update`, {
+	}: IWorkUpdateParams): Promise<IWorkDto> => {
+		const response = await axios.post<IWorkDto>(`/works/update`, {
 			id: id,
 			name,
 			workType,

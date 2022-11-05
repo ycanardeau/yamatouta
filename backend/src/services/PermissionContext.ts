@@ -1,4 +1,4 @@
-import { AuthenticatedUserObject } from '@/dto/AuthenticatedUserObject';
+import { AuthenticatedUserDto } from '@/dto/AuthenticatedUserDto';
 import { User } from '@/entities/User';
 import { IEntryWithDeletedAndHidden } from '@/models/IEntryWithDeletedAndHidden';
 import { Permission } from '@/models/Permission';
@@ -10,7 +10,7 @@ import { Request } from 'express';
 
 export class PermissionContext {
 	readonly clientIp: string;
-	readonly user?: AuthenticatedUserObject;
+	readonly user?: AuthenticatedUserDto;
 
 	constructor(request: Request) {
 		this.clientIp = getClientIp(request);

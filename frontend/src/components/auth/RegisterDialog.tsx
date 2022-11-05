@@ -1,4 +1,4 @@
-import { IUserObject } from '@/dto/IUserObject';
+import { IUserDto } from '@/dto/IUserDto';
 import { RegisterDialogStore } from '@/stores/auth/RegisterDialogStore';
 import {
 	EuiButton,
@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 interface RegisterDialogProps {
 	onClose: () => void;
-	onSuccess: (user: IUserObject) => void;
+	onSuccess: (user: IUserDto) => void;
 }
 
 export const RegisterDialog = observer(

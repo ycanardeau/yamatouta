@@ -1,11 +1,11 @@
 import { PermissionContext } from '@/PermissionContext';
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import React from 'react';
 
 export interface IAuthContext {
 	isAuthenticated: boolean;
-	user?: IAuthenticatedUserObject;
-	setUser: (user?: IAuthenticatedUserObject) => void;
+	user?: IAuthenticatedUserDto;
+	setUser: (user?: IAuthenticatedUserDto) => void;
 	loading: boolean;
 	permissionContext: PermissionContext;
 }

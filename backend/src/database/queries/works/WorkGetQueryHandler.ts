@@ -1,4 +1,4 @@
-import { WorkObject } from '@/dto/WorkObject';
+import { WorkDto } from '@/dto/WorkDto';
 import { Work } from '@/entities/Work';
 import { WorkGetParams } from '@/models/works/WorkGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -22,7 +22,7 @@ export class WorkGetQueryHandler implements IQueryHandler<WorkGetQuery> {
 		private readonly workRepo: EntityRepository<Work>,
 	) {}
 
-	async execute(query: WorkGetQuery): Promise<WorkObject> {
+	async execute(query: WorkGetQuery): Promise<WorkDto> {
 		const { permissionContext, params } = query;
 
 		const work = await this.workRepo.findOne(
@@ -47,6 +47,6 @@ export class WorkGetQueryHandler implements IQueryHandler<WorkGetQuery> {
 
 		if (!work) throw new NotFoundException();
 
-		return WorkObject.create(permissionContext, work, params.fields);
+		return WorkDto.create(permissionContext, work, params.fields);
 	}
 }

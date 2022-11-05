@@ -77,12 +77,12 @@ describe('UserAuthenticateCommandHandler', () => {
 
 			if (!result.user) throw new Error();
 
-			const userObject = result.user;
+			const userDto = result.user;
 
-			expect(userObject.id).toBe(existingUser.id);
-			expect(userObject.name).toBe(existingUser.name);
+			expect(userDto.id).toBe(existingUser.id);
+			expect(userDto.name).toBe(existingUser.name);
 
-			const user = await em.findOneOrFail(User, { id: userObject.id });
+			const user = await em.findOneOrFail(User, { id: userDto.id });
 
 			const auditLogEntry = await em.findOneOrFail(UserAuditLogEntry, {
 				user: user,

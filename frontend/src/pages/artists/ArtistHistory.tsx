@@ -3,14 +3,14 @@ import { ArtistPage } from '@/components/artists/ArtistPage';
 import { useArtistDetails } from '@/components/artists/useArtistDetails';
 import { RevisionComment } from '@/components/revisions/RevisionComment';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
-import { IArtistObject } from '@/dto/IArtistObject';
-import { IRevisionObject } from '@/dto/IRevisionObject';
+import { IArtistDto } from '@/dto/IArtistDto';
+import { IRevisionDto } from '@/dto/IRevisionDto';
 import { EuiCommentList } from '@elastic/eui';
 import React from 'react';
 
 interface LayoutProps {
-	artist: IArtistObject;
-	revisions: IRevisionObject[];
+	artist: IArtistDto;
+	revisions: IRevisionDto[];
 }
 
 const Layout = ({ artist, revisions }: LayoutProps): React.ReactElement => {
@@ -34,7 +34,7 @@ const ArtistHistory = (): React.ReactElement | null => {
 		React.useCallback((artist) => artist, []),
 	);
 
-	const [revisions, setRevisions] = React.useState<IRevisionObject[]>();
+	const [revisions, setRevisions] = React.useState<IRevisionDto[]>();
 
 	React.useEffect(() => {
 		if (!artist) return;

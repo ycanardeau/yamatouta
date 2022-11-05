@@ -1,6 +1,6 @@
 import { orderByIds } from '@/database/queries/orderByIds';
-import { SearchResultObject } from '@/dto/SearchResultObject';
-import { WorkObject } from '@/dto/WorkObject';
+import { SearchResultDto } from '@/dto/SearchResultDto';
+import { WorkDto } from '@/dto/WorkDto';
 import { Work } from '@/entities/Work';
 import { WorkListParams } from '@/models/works/WorkListParams';
 import { WorkSortRule } from '@/models/works/WorkSortRule';
@@ -138,9 +138,7 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 		return count;
 	}
 
-	async execute(
-		query: WorkListQuery,
-	): Promise<SearchResultObject<WorkObject>> {
+	async execute(query: WorkListQuery): Promise<SearchResultDto<WorkDto>> {
 		const { permissionContext, params } = query;
 
 		const result = WorkListParams.schema.validate(params, {
@@ -155,8 +153,8 @@ export class WorkListQueryHandler implements IQueryHandler<WorkListQuery> {
 			this.getCount(params),
 		]);
 
-		return SearchResultObject.create<WorkObject>(
-			works.map((work) => WorkObject.create(permissionContext, work)),
+		return SearchResultDto.create<WorkDto>(
+			works.map((work) => WorkDto.create(permissionContext, work)),
 			count,
 		);
 	}

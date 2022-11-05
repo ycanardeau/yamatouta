@@ -1,4 +1,4 @@
-import { UserObject } from '@/dto/UserObject';
+import { UserDto } from '@/dto/UserDto';
 import { User } from '@/entities/User';
 import { UserGetParams } from '@/models/users/UserGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -22,7 +22,7 @@ export class UserGetQueryHandler implements IQueryHandler<UserGetQuery> {
 		private readonly userRepo: EntityRepository<User>,
 	) {}
 
-	async execute(query: UserGetQuery): Promise<UserObject> {
+	async execute(query: UserGetQuery): Promise<UserDto> {
 		const { permissionContext, params } = query;
 
 		const user = await this.userRepo.findOne({
@@ -35,6 +35,6 @@ export class UserGetQueryHandler implements IQueryHandler<UserGetQuery> {
 
 		if (!user) throw new NotFoundException();
 
-		return UserObject.create(permissionContext, user);
+		return UserDto.create(permissionContext, user);
 	}
 }

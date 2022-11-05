@@ -4,7 +4,7 @@ import { Markdown } from '@/components/Markdown';
 import { QuoteDeleteDialog } from '@/components/quotes/QuoteDeleteDialog';
 import { useAuth } from '@/components/useAuth';
 import { useDialog } from '@/components/useDialog';
-import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IQuoteDto } from '@/dto/IQuoteDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import { Permission } from '@/models/Permission';
 import { QuoteSearchStore } from '@/stores/quotes/QuoteSearchStore';
@@ -31,7 +31,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface QuotePopoverProps {
 	store?: QuoteSearchStore;
-	quote: IQuoteObject;
+	quote: IQuoteDto;
 }
 
 const QuotePopover = ({
@@ -143,7 +143,7 @@ const QuotePopover = ({
 
 interface QuoteCommentProps {
 	store?: QuoteSearchStore;
-	quote: IQuoteObject;
+	quote: IQuoteDto;
 }
 
 export const QuoteComment = ({

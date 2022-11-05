@@ -1,6 +1,6 @@
 import { renderReact } from '@/controllers/renderReact';
 import { HashtagGetQuery } from '@/database/queries/hashtags/HashtagGetQueryHandler';
-import { HashtagObject } from '@/dto/HashtagObject';
+import { HashtagDto } from '@/dto/HashtagDto';
 import { GetPermissionContext } from '@/framework/decorators/GetPermissionContext';
 import { HashtagGetParams } from '@/models/hashtags/HashtagGetParams';
 import { PermissionContext } from '@/services/PermissionContext';
@@ -28,7 +28,7 @@ export class HashtagController {
 	): Promise<void> {
 		const hashtag = await this.queryBus.execute<
 			HashtagGetQuery,
-			HashtagObject
+			HashtagDto
 		>(new HashtagGetQuery(permissionContext, new HashtagGetParams(name)));
 
 		return renderReact(response, {
@@ -46,7 +46,7 @@ export class HashtagController {
 	): Promise<void> {
 		const hashtag = await this.queryBus.execute<
 			HashtagGetQuery,
-			HashtagObject
+			HashtagDto
 		>(new HashtagGetQuery(permissionContext, new HashtagGetParams(name)));
 
 		return renderReact(response, {

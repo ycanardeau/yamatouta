@@ -1,4 +1,4 @@
-import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import { ChangeEmailDialogStore } from '@/stores/settings/ChangeEmailDialogStore';
 import {
 	EuiButton,
@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 
 interface ChangeEmailDialogProps {
 	onClose: () => void;
-	onSuccess: (user: IAuthenticatedUserObject) => void;
+	onSuccess: (user: IAuthenticatedUserDto) => void;
 }
 
 export const ChangeEmailDialog = observer(

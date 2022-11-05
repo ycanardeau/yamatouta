@@ -1,13 +1,13 @@
 import { workApi } from '@/api/workApi';
 import { EntryComboBox } from '@/components/EntryComboBox';
-import { ISearchResultObject } from '@/dto/ISearchResultObject';
-import { IWorkObject } from '@/dto/IWorkObject';
+import { ISearchResultDto } from '@/dto/ISearchResultDto';
+import { IWorkDto } from '@/dto/IWorkDto';
 import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface WorkComboBoxProps {
-	store: BasicEntryLinkStore<IWorkObject>;
+	store: BasicEntryLinkStore<IWorkDto>;
 }
 
 export const WorkComboBox = ({
@@ -16,7 +16,7 @@ export const WorkComboBox = ({
 	const { t } = useTranslation();
 
 	const handleSearchChange = React.useCallback(
-		(searchValue: string): Promise<ISearchResultObject<IWorkObject>> =>
+		(searchValue: string): Promise<ISearchResultDto<IWorkDto>> =>
 			workApi.list({
 				pagination: {
 					offset: 0,
