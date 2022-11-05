@@ -3,7 +3,7 @@ import {
 	EuiDescriptionListTitle,
 	EuiLink,
 } from '@elastic/eui';
-import _ from 'lodash';
+import { orderBy } from 'lodash-es';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -32,16 +32,16 @@ const WebLinkList = React.memo(
 	({ webLinks }: WebLinkListProps): React.ReactElement => {
 		const ordered = React.useMemo(
 			() =>
-				_.chain(webLinks)
-					.map((webLink) => ({
+				orderBy(
+					webLinks.map((webLink) => ({
 						...webLink,
 						title:
 							webLink.title ||
 							hostnameTitlePairs[new URL(webLink.url).hostname] ||
 							webLink.url,
-					}))
-					.orderBy((webLink) => webLink.title)
-					.value(),
+					})),
+					(webLink) => webLink.title,
+				),
 			[webLinks],
 		);
 
