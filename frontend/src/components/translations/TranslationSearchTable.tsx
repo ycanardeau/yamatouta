@@ -1,3 +1,14 @@
+import { Pagination } from '@/components/Pagination';
+import { TableEmptyBody } from '@/components/TableEmptyBody';
+import { TranslationDeleteDialog } from '@/components/translations/TranslationDeleteDialog';
+import { useAuth } from '@/components/useAuth';
+import { useDialog } from '@/components/useDialog';
+import { ITranslationObject } from '@/dto/ITranslationObject';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { Permission } from '@/models/Permission';
+import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { TranslationSearchStore } from '@/stores/translations/TranslationSearchStore';
 import {
 	EuiBadge,
 	EuiButtonIcon,
@@ -31,18 +42,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { ITranslationObject } from '../../dto/ITranslationObject';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { Permission } from '../../models/Permission';
-import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
-import { WordCategory } from '../../models/translations/WordCategory';
-import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
-import { Pagination } from '../Pagination';
-import { TableEmptyBody } from '../TableEmptyBody';
-import { useAuth } from '../useAuth';
-import { useDialog } from '../useDialog';
-import { TranslationDeleteDialog } from './TranslationDeleteDialog';
 
 interface TranslationSearchTableHeaderProps {
 	store: TranslationSearchStore;

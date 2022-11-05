@@ -1,9 +1,8 @@
+import { AuthContext } from '@/AuthContext';
+import { PermissionContext } from '@/PermissionContext';
+import { userApi } from '@/api/userApi';
+import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
 import React from 'react';
-
-import { AuthContext } from './AuthContext';
-import { PermissionContext } from './PermissionContext';
-import { userApi } from './api/userApi';
-import { IAuthenticatedUserObject } from './dto/IAuthenticatedUserObject';
 
 interface AuthProviderProps {
 	children: React.ReactNode;

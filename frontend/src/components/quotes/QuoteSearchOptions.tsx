@@ -1,3 +1,6 @@
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { QuoteSearchStore } from '@/stores/quotes/QuoteSearchStore';
 import {
 	EuiFieldSearch,
 	EuiFlexGroup,
@@ -8,10 +11,6 @@ import {
 } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
-
-import { QuoteSortRule } from '../../models/quotes/QuoteSortRule';
-import { QuoteType } from '../../models/quotes/QuoteType';
-import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 
 interface QuoteSearchOptionsProps {
 	store: QuoteSearchStore;

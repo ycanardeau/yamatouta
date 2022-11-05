@@ -1,9 +1,8 @@
+import { translationApi } from '@/api/translationApi';
+import { ITranslationObject } from '@/dto/ITranslationObject';
+import { TranslationOptionalField } from '@/models/translations/TranslationOptionalField';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-
-import { translationApi } from '../../api/translationApi';
-import { ITranslationObject } from '../../dto/ITranslationObject';
-import { TranslationOptionalField } from '../../models/translations/TranslationOptionalField';
 
 export const useTranslationDetails = <T,>(
 	factory: (translation: ITranslationObject) => T,

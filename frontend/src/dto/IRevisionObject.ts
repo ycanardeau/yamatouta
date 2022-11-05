@@ -1,5 +1,5 @@
-import { RevisionEvent } from '../models/RevisionEvent';
-import { IUserObject } from './IUserObject';
+import { IUserObject } from '@/dto/IUserObject';
+import { RevisionEvent } from '@/models/RevisionEvent';
 
 export interface IRevisionObject {
 	actor: IUserObject;

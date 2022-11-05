@@ -1,16 +1,15 @@
+import { HashtagPage } from '@/components/hashtags/HashtagPage';
+import { useHashtagDetails } from '@/components/hashtags/useHashtagDetails';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { HashtagDetailsObject } from '@/dto/HashtagDetailsObject';
+import { IHashtagObject } from '@/dto/IHashtagObject';
+import HashtagQuotes from '@/pages/hashtags/HashtagQuotes';
+import { HashtagDetailsStore } from '@/stores/hashtags/HashtagDetailsStore';
 import { EuiIcon } from '@elastic/eui';
 import { InfoRegular, MusicNote2Regular } from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-
-import { HashtagPage } from '../../components/hashtags/HashtagPage';
-import { useHashtagDetails } from '../../components/hashtags/useHashtagDetails';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { HashtagDetailsObject } from '../../dto/HashtagDetailsObject';
-import { IHashtagObject } from '../../dto/IHashtagObject';
-import { HashtagDetailsStore } from '../../stores/hashtags/HashtagDetailsStore';
-import HashtagQuotes from './HashtagQuotes';
 
 interface LayoutProps {
 	store: HashtagDetailsStore;

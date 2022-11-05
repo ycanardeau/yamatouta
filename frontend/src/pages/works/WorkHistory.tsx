@@ -1,13 +1,12 @@
+import { workApi } from '@/api/workApi';
+import { RevisionComment } from '@/components/revisions/RevisionComment';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { WorkPage } from '@/components/works/WorkPage';
+import { useWorkDetails } from '@/components/works/useWorkDetails';
+import { IRevisionObject } from '@/dto/IRevisionObject';
+import { IWorkObject } from '@/dto/IWorkObject';
 import { EuiCommentList } from '@elastic/eui';
 import React from 'react';
-
-import { workApi } from '../../api/workApi';
-import { RevisionComment } from '../../components/revisions/RevisionComment';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { WorkPage } from '../../components/works/WorkPage';
-import { useWorkDetails } from '../../components/works/useWorkDetails';
-import { IRevisionObject } from '../../dto/IRevisionObject';
-import { IWorkObject } from '../../dto/IWorkObject';
 
 interface LayoutProps {
 	work: IWorkObject;

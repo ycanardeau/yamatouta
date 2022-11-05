@@ -1,9 +1,9 @@
-import { EntryType } from '../models/EntryType';
-import { LinkType } from '../models/LinkType';
-import { WorkType } from '../models/works/WorkType';
-import { IArtistLinkObject } from './ILinkObject';
-import { IWebLinkObject } from './IWebLinkObject';
-import { IWorkObject } from './IWorkObject';
+import { IArtistLinkObject } from '@/dto/ILinkObject';
+import { IWebLinkObject } from '@/dto/IWebLinkObject';
+import { IWorkObject } from '@/dto/IWorkObject';
+import { EntryType } from '@/models/EntryType';
+import { LinkType } from '@/models/LinkType';
+import { WorkType } from '@/models/works/WorkType';
 
 export class WorkDetailsObject {
 	private constructor(

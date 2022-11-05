@@ -1,3 +1,10 @@
+import { translationApi } from '@/api/translationApi';
+import { ITranslationObject } from '@/dto/ITranslationObject';
+import { ITranslationSearchRouteParams } from '@/models/translations/ITranslationSearchRouteParams';
+import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { PaginationStore } from '@/stores/PaginationStore';
+import * as validators from '@/utils/validate';
 import { StoreWithPagination } from '@vocadb/route-sphere';
 import {
 	action,
@@ -6,14 +13,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { translationApi } from '../../api/translationApi';
-import { ITranslationObject } from '../../dto/ITranslationObject';
-import { ITranslationSearchRouteParams } from '../../models/translations/ITranslationSearchRouteParams';
-import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
-import { WordCategory } from '../../models/translations/WordCategory';
-import * as validators from '../../utils/validate';
-import { PaginationStore } from '../PaginationStore';
 
 export class TranslationSearchStore
 	implements StoreWithPagination<ITranslationSearchRouteParams>

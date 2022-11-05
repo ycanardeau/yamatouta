@@ -1,12 +1,11 @@
+import { QuoteSearchList } from '@/components/quotes/QuoteSearchList';
+import { QuoteSearchOptions } from '@/components/quotes/QuoteSearchOptions';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { HashtagDetailsStore } from '@/stores/hashtags/HashtagDetailsStore';
 import { EuiSpacer } from '@elastic/eui';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { QuoteSearchList } from '../../components/quotes/QuoteSearchList';
-import { QuoteSearchOptions } from '../../components/quotes/QuoteSearchOptions';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { HashtagDetailsStore } from '../../stores/hashtags/HashtagDetailsStore';
 
 interface HashtagQuotesProps {
 	hashtagDetailsStore: HashtagDetailsStore;

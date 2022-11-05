@@ -1,3 +1,10 @@
+import { Avatar } from '@/components/Avatar';
+import { Link } from '@/components/Link';
+import { Pagination } from '@/components/Pagination';
+import { TableEmptyBody } from '@/components/TableEmptyBody';
+import { IUserObject } from '@/dto/IUserObject';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { UserSearchStore } from '@/stores/users/UserSearchStore';
 import {
 	EuiSpacer,
 	EuiTable,
@@ -11,14 +18,6 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { IUserObject } from '../../dto/IUserObject';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { UserSearchStore } from '../../stores/users/UserSearchStore';
-import { Avatar } from '../Avatar';
-import { Link } from '../Link';
-import { Pagination } from '../Pagination';
-import { TableEmptyBody } from '../TableEmptyBody';
 
 const UserSearchTableHeader = React.memo((): React.ReactElement => {
 	const { t } = useTranslation();

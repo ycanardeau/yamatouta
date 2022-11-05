@@ -1,3 +1,10 @@
+import { quoteApi } from '@/api/quoteApi';
+import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IQuoteSearchRouteParams } from '@/models/quotes/IQuoteSearchRouteParams';
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { PaginationStore } from '@/stores/PaginationStore';
+import * as validators from '@/utils/validate';
 import { StoreWithPagination } from '@vocadb/route-sphere';
 import {
 	action,
@@ -6,14 +13,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { quoteApi } from '../../api/quoteApi';
-import { IQuoteObject } from '../../dto/IQuoteObject';
-import { IQuoteSearchRouteParams } from '../../models/quotes/IQuoteSearchRouteParams';
-import { QuoteSortRule } from '../../models/quotes/QuoteSortRule';
-import { QuoteType } from '../../models/quotes/QuoteType';
-import * as validators from '../../utils/validate';
-import { PaginationStore } from '../PaginationStore';
 
 export class QuoteSearchStore
 	implements StoreWithPagination<IQuoteSearchRouteParams>

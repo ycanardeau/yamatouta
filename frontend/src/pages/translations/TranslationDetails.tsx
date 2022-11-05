@@ -1,3 +1,13 @@
+import { TranslationPage } from '@/components/translations/TranslationPage';
+import { useTranslationDetails } from '@/components/translations/useTranslationDetails';
+import { useAuth } from '@/components/useAuth';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { ITranslationObject } from '@/dto/ITranslationObject';
+import { TranslationDetailsObject } from '@/dto/TranslationDetailsObject';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { Permission } from '@/models/Permission';
+import TranslationBasicInfo from '@/pages/translations/TranslationBasicInfo';
+import { TranslationDetailsStore } from '@/stores/translations/TranslationDetailsStore';
 import { EuiButton, EuiIcon } from '@elastic/eui';
 import {
 	EditRegular,
@@ -8,17 +18,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-
-import { TranslationPage } from '../../components/translations/TranslationPage';
-import { useTranslationDetails } from '../../components/translations/useTranslationDetails';
-import { useAuth } from '../../components/useAuth';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { ITranslationObject } from '../../dto/ITranslationObject';
-import { TranslationDetailsObject } from '../../dto/TranslationDetailsObject';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { Permission } from '../../models/Permission';
-import { TranslationDetailsStore } from '../../stores/translations/TranslationDetailsStore';
-import TranslationBasicInfo from './TranslationBasicInfo';
 
 interface LayoutProps {
 	store: TranslationDetailsStore;

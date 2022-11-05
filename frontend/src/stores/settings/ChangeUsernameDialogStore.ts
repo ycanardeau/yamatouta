@@ -1,3 +1,5 @@
+import { userApi } from '@/api/userApi';
+import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
 import {
 	action,
 	computed,
@@ -5,9 +7,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { userApi } from '../../api/userApi';
-import { IAuthenticatedUserObject } from '../../dto/IAuthenticatedUserObject';
 
 export class ChangeUsernameDialogStore {
 	@observable submitting = false;

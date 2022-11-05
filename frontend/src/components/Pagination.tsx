@@ -1,3 +1,4 @@
+import { PaginationStore } from '@/stores/PaginationStore';
 import {
 	EuiButtonEmpty,
 	EuiContextMenuItem,
@@ -9,8 +10,6 @@ import {
 } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-
-import { PaginationStore } from '../stores/PaginationStore';
 
 interface PaginationProps {
 	store: PaginationStore;

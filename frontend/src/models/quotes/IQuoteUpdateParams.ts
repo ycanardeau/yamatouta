@@ -1,6 +1,6 @@
-import { IWebLinkUpdateParams } from '../IWebLinkUpdateParams';
-import { IWorkLinkUpdateParams } from '../IWorkLinkUpdateParams';
-import { QuoteType } from './QuoteType';
+import { IWebLinkUpdateParams } from '@/models/IWebLinkUpdateParams';
+import { IWorkLinkUpdateParams } from '@/models/IWorkLinkUpdateParams';
+import { QuoteType } from '@/models/quotes/QuoteType';
 
 export interface IQuoteUpdateParams {
 	id: number;

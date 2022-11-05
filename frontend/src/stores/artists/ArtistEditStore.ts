@@ -1,3 +1,9 @@
+import { artistApi } from '@/api/artistApi';
+import { ArtistEditObject } from '@/dto/ArtistEditObject';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { IArtistUpdateParams } from '@/models/artists/IArtistUpdateParams';
+import { WebLinkListEditStore } from '@/stores/WebLinkListEditStore';
 import {
 	action,
 	computed,
@@ -5,13 +11,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { artistApi } from '../../api/artistApi';
-import { ArtistEditObject } from '../../dto/ArtistEditObject';
-import { IArtistObject } from '../../dto/IArtistObject';
-import { ArtistType } from '../../models/artists/ArtistType';
-import { IArtistUpdateParams } from '../../models/artists/IArtistUpdateParams';
-import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class ArtistEditStore {
 	@observable submitting = false;

@@ -1,3 +1,10 @@
+import { workApi } from '@/api/workApi';
+import { IWorkObject } from '@/dto/IWorkObject';
+import { WorkEditObject } from '@/dto/WorkEditObject';
+import { IWorkUpdateParams } from '@/models/works/IWorkUpdateParams';
+import { WorkType } from '@/models/works/WorkType';
+import { ArtistLinkListEditStore } from '@/stores/ArtistLinkListEditStore';
+import { WebLinkListEditStore } from '@/stores/WebLinkListEditStore';
 import {
 	action,
 	computed,
@@ -5,14 +12,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { workApi } from '../../api/workApi';
-import { IWorkObject } from '../../dto/IWorkObject';
-import { WorkEditObject } from '../../dto/WorkEditObject';
-import { IWorkUpdateParams } from '../../models/works/IWorkUpdateParams';
-import { WorkType } from '../../models/works/WorkType';
-import { ArtistLinkListEditStore } from '../ArtistLinkListEditStore';
-import { WebLinkListEditStore } from '../WebLinkListEditStore';
 
 export class WorkEditStore {
 	@observable submitting = false;

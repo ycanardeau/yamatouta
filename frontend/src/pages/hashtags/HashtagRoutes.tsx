@@ -1,7 +1,6 @@
+import { lazyImport } from '@/components/lazyImport';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-
-import { lazyImport } from '../../components/lazyImport';
 
 const HashtagIndex = lazyImport(() => import('./HashtagIndex'));
 const HashtagDetails = lazyImport(() => import('./HashtagDetails'));

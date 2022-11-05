@@ -1,6 +1,6 @@
-import { IArtistLinkUpdateParams } from '../IArtistLinkUpdateParams';
-import { IWebLinkUpdateParams } from '../IWebLinkUpdateParams';
-import { WorkType } from './WorkType';
+import { IArtistLinkUpdateParams } from '@/models/IArtistLinkUpdateParams';
+import { IWebLinkUpdateParams } from '@/models/IWebLinkUpdateParams';
+import { WorkType } from '@/models/works/WorkType';
 
 export interface IWorkUpdateParams {
 	id: number;

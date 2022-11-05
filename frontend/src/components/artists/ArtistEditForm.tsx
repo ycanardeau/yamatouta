@@ -1,3 +1,8 @@
+import { WebLinkListEdit } from '@/components/WebLinkListEdit';
+import { ArtistEditObject } from '@/dto/ArtistEditObject';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { ArtistEditStore } from '@/stores/artists/ArtistEditStore';
 import {
 	EuiButton,
 	EuiButtonEmpty,
@@ -12,12 +17,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { WebLinkListEdit } from '../../components/WebLinkListEdit';
-import { ArtistEditObject } from '../../dto/ArtistEditObject';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { ArtistType } from '../../models/artists/ArtistType';
-import { ArtistEditStore } from '../../stores/artists/ArtistEditStore';
 
 interface ArtistEditFormProps {
 	artist?: ArtistEditObject;

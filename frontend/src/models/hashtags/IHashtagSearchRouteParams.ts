@@ -1,4 +1,4 @@
-import { HashtagSortRule } from './HashtagSortRule';
+import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
 
 export interface IHashtagSearchRouteParams {
 	page?: number;

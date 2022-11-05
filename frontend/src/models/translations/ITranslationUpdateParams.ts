@@ -1,6 +1,6 @@
-import { IWebLinkUpdateParams } from '../IWebLinkUpdateParams';
-import { IWorkLinkUpdateParams } from '../IWorkLinkUpdateParams';
-import { WordCategory } from './WordCategory';
+import { IWebLinkUpdateParams } from '@/models/IWebLinkUpdateParams';
+import { IWorkLinkUpdateParams } from '@/models/IWorkLinkUpdateParams';
+import { WordCategory } from '@/models/translations/WordCategory';
 
 export interface ITranslationUpdateParams {
 	id: number;

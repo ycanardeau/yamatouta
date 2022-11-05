@@ -1,17 +1,16 @@
+import { useAuth } from '@/components/useAuth';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { WorkPage } from '@/components/works/WorkPage';
+import { WorkSearchOptions } from '@/components/works/WorkSearchOptions';
+import { WorkSearchTable } from '@/components/works/WorkSearchTable';
+import { Permission } from '@/models/Permission';
+import { WorkSearchStore } from '@/stores/works/WorkSearchStore';
 import { EuiButton, EuiSpacer } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { useAuth } from '../../components/useAuth';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { WorkPage } from '../../components/works/WorkPage';
-import { WorkSearchOptions } from '../../components/works/WorkSearchOptions';
-import { WorkSearchTable } from '../../components/works/WorkSearchTable';
-import { Permission } from '../../models/Permission';
-import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
 
 const WorkIndex = (): React.ReactElement => {
 	const { t, ready } = useTranslation();

@@ -1,5 +1,5 @@
-import { IWebLinkUpdateParams } from '../IWebLinkUpdateParams';
-import { ArtistType } from './ArtistType';
+import { IWebLinkUpdateParams } from '@/models/IWebLinkUpdateParams';
+import { ArtistType } from '@/models/artists/ArtistType';
 
 export interface IArtistUpdateParams {
 	id: number;

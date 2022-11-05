@@ -1,3 +1,5 @@
+import { workApi } from '@/api/workApi';
+import { IWorkObject } from '@/dto/IWorkObject';
 import {
 	action,
 	computed,
@@ -5,9 +7,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { workApi } from '../../api/workApi';
-import { IWorkObject } from '../../dto/IWorkObject';
 
 export class WorkDeleteStore {
 	@observable submitting = false;

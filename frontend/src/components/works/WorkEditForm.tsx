@@ -1,3 +1,11 @@
+import { ArtistLinkListEdit } from '@/components/ArtistLinkListEdit';
+import { WebLinkListEdit } from '@/components/WebLinkListEdit';
+import { WorkEditObject } from '@/dto/WorkEditObject';
+import { EntryType } from '@/models/EntryType';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { artistLinkTypes } from '@/models/LinkType';
+import { WorkType } from '@/models/works/WorkType';
+import { WorkEditStore } from '@/stores/works/WorkEditStore';
 import {
 	EuiButton,
 	EuiButtonEmpty,
@@ -12,15 +20,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { WebLinkListEdit } from '../../components/WebLinkListEdit';
-import { WorkEditObject } from '../../dto/WorkEditObject';
-import { EntryType } from '../../models/EntryType';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { artistLinkTypes } from '../../models/LinkType';
-import { WorkType } from '../../models/works/WorkType';
-import { WorkEditStore } from '../../stores/works/WorkEditStore';
-import { ArtistLinkListEdit } from '../ArtistLinkListEdit';
 
 interface WorkEditFormProps {
 	work?: WorkEditObject;

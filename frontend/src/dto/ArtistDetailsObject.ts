@@ -1,7 +1,7 @@
-import { EntryType } from '../models/EntryType';
-import { ArtistType } from '../models/artists/ArtistType';
-import { IArtistObject } from './IArtistObject';
-import { IWebLinkObject } from './IWebLinkObject';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { IWebLinkObject } from '@/dto/IWebLinkObject';
+import { EntryType } from '@/models/EntryType';
+import { ArtistType } from '@/models/artists/ArtistType';
 
 export class ArtistDetailsObject {
 	private constructor(

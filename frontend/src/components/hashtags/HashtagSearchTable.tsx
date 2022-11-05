@@ -1,3 +1,9 @@
+import { Link } from '@/components/Link';
+import { Pagination } from '@/components/Pagination';
+import { TableEmptyBody } from '@/components/TableEmptyBody';
+import { IHashtagObject } from '@/dto/IHashtagObject';
+import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
+import { HashtagSearchStore } from '@/stores/hashtags/HashtagSearchStore';
 import {
 	EuiSpacer,
 	EuiTable,
@@ -11,13 +17,6 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { IHashtagObject } from '../../dto/IHashtagObject';
-import { HashtagSortRule } from '../../models/hashtags/HashtagSortRule';
-import { HashtagSearchStore } from '../../stores/hashtags/HashtagSearchStore';
-import { Link } from '../Link';
-import { Pagination } from '../Pagination';
-import { TableEmptyBody } from '../TableEmptyBody';
 
 interface HashtagSearchTableHeaderProps {
 	store: HashtagSearchStore;

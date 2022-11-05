@@ -1,10 +1,9 @@
+import { ArtistEditForm } from '@/components/artists/ArtistEditForm';
+import { ArtistPage } from '@/components/artists/ArtistPage';
+import { useArtistDetails } from '@/components/artists/useArtistDetails';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { ArtistEditObject } from '@/dto/ArtistEditObject';
 import React from 'react';
-
-import { ArtistEditForm } from '../../components/artists/ArtistEditForm';
-import { ArtistPage } from '../../components/artists/ArtistPage';
-import { useArtistDetails } from '../../components/artists/useArtistDetails';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { ArtistEditObject } from '../../dto/ArtistEditObject';
 
 interface LayoutProps {
 	artist: ArtistEditObject;

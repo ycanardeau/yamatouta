@@ -1,8 +1,8 @@
-import { EntryType } from '../models/EntryType';
-import { IEntryWithEntryType } from '../models/IEntryWithEntryType';
-import { WordCategory } from '../models/translations/WordCategory';
-import { IWorkLinkObject } from './ILinkObject';
-import { IWebLinkObject } from './IWebLinkObject';
+import { IWorkLinkObject } from '@/dto/ILinkObject';
+import { IWebLinkObject } from '@/dto/IWebLinkObject';
+import { EntryType } from '@/models/EntryType';
+import { IEntryWithEntryType } from '@/models/IEntryWithEntryType';
+import { WordCategory } from '@/models/translations/WordCategory';
 
 export interface ITranslationObject
 	extends IEntryWithEntryType<EntryType.Translation> {

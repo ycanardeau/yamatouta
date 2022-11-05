@@ -1,3 +1,11 @@
+import { WebLinkListEdit } from '@/components/WebLinkListEdit';
+import { WorkLinkListEdit } from '@/components/WorkLinkListEdit';
+import { TranslationEditObject } from '@/dto/TranslationEditObject';
+import { EntryType } from '@/models/EntryType';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { workLinkTypes } from '@/models/LinkType';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { TranslationEditStore } from '@/stores/translations/TranslationEditStore';
 import {
 	EuiButton,
 	EuiButtonEmpty,
@@ -12,15 +20,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { WebLinkListEdit } from '../../components/WebLinkListEdit';
-import { TranslationEditObject } from '../../dto/TranslationEditObject';
-import { EntryType } from '../../models/EntryType';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { workLinkTypes } from '../../models/LinkType';
-import { WordCategory } from '../../models/translations/WordCategory';
-import { TranslationEditStore } from '../../stores/translations/TranslationEditStore';
-import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface TranslationEditFormProps {
 	translation?: TranslationEditObject;

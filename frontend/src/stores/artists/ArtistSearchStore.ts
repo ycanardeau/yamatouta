@@ -1,3 +1,10 @@
+import { artistApi } from '@/api/artistApi';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { IArtistSearchRouteParams } from '@/models/artists/IArtistSearchRouteParams';
+import { PaginationStore } from '@/stores/PaginationStore';
+import * as validators from '@/utils/validate';
 import { StoreWithPagination } from '@vocadb/route-sphere';
 import {
 	action,
@@ -6,14 +13,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { artistApi } from '../../api/artistApi';
-import { IArtistObject } from '../../dto/IArtistObject';
-import { ArtistSortRule } from '../../models/artists/ArtistSortRule';
-import { ArtistType } from '../../models/artists/ArtistType';
-import { IArtistSearchRouteParams } from '../../models/artists/IArtistSearchRouteParams';
-import * as validators from '../../utils/validate';
-import { PaginationStore } from '../PaginationStore';
 
 export class ArtistSearchStore
 	implements StoreWithPagination<IArtistSearchRouteParams>

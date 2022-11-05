@@ -1,9 +1,9 @@
-import { EntryType } from '../models/EntryType';
-import { LinkType } from '../models/LinkType';
-import { WordCategory } from '../models/translations/WordCategory';
-import { IWorkLinkObject } from './ILinkObject';
-import { ITranslationObject } from './ITranslationObject';
-import { IWebLinkObject } from './IWebLinkObject';
+import { IWorkLinkObject } from '@/dto/ILinkObject';
+import { ITranslationObject } from '@/dto/ITranslationObject';
+import { IWebLinkObject } from '@/dto/IWebLinkObject';
+import { EntryType } from '@/models/EntryType';
+import { LinkType } from '@/models/LinkType';
+import { WordCategory } from '@/models/translations/WordCategory';
 
 export class TranslationDetailsObject {
 	private constructor(

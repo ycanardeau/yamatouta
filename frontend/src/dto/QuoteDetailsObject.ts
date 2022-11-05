@@ -1,10 +1,10 @@
-import { EntryType } from '../models/EntryType';
-import { LinkType } from '../models/LinkType';
-import { QuoteType } from '../models/quotes/QuoteType';
-import { IArtistObject } from './IArtistObject';
-import { IWorkLinkObject } from './ILinkObject';
-import { IQuoteObject } from './IQuoteObject';
-import { IWebLinkObject } from './IWebLinkObject';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { IWorkLinkObject } from '@/dto/ILinkObject';
+import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IWebLinkObject } from '@/dto/IWebLinkObject';
+import { EntryType } from '@/models/EntryType';
+import { LinkType } from '@/models/LinkType';
+import { QuoteType } from '@/models/quotes/QuoteType';
 
 export class QuoteDetailsObject {
 	private constructor(

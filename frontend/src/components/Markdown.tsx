@@ -1,3 +1,4 @@
+import { Link } from '@/components/Link';
 import {
 	EuiLink,
 	EuiMarkdownFormat,
@@ -9,8 +10,6 @@ import {
 } from '@elastic/eui';
 import React from 'react';
 import visit from 'unist-util-visit';
-
-import { Link } from './Link';
 
 interface LinkOrTextNode {
 	type: string;

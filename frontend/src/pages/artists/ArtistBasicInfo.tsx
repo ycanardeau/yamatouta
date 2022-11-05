@@ -1,3 +1,5 @@
+import { WebLinkDescriptionList } from '@/components/WebLinkDescriptionList';
+import { ArtistDetailsStore } from '@/stores/artists/ArtistDetailsStore';
 import {
 	EuiDescriptionList,
 	EuiDescriptionListDescription,
@@ -5,9 +7,6 @@ import {
 } from '@elastic/eui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { WebLinkDescriptionList } from '../../components/WebLinkDescriptionList';
-import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 
 interface ArtistBasicInfoProps {
 	artistDetailsStore: ArtistDetailsStore;

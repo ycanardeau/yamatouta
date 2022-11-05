@@ -1,9 +1,8 @@
+import { IHashtagObject } from '@/dto/IHashtagObject';
+import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
+import { IPaginationParams } from '@/stores/PaginationStore';
 import axios from 'axios';
-
-import { IHashtagObject } from '../dto/IHashtagObject';
-import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { HashtagSortRule } from '../models/hashtags/HashtagSortRule';
-import { IPaginationParams } from '../stores/PaginationStore';
 
 class HashtagApi {
 	get = async ({ name }: { name: string }): Promise<IHashtagObject> => {

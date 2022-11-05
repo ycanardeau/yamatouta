@@ -1,11 +1,10 @@
+import { workApi } from '@/api/workApi';
+import { EntryComboBox } from '@/components/EntryComboBox';
+import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { IWorkObject } from '@/dto/IWorkObject';
+import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { workApi } from '../../api/workApi';
-import { ISearchResultObject } from '../../dto/ISearchResultObject';
-import { IWorkObject } from '../../dto/IWorkObject';
-import { BasicEntryLinkStore } from '../../stores/BasicEntryLinkStore';
-import { EntryComboBox } from '../EntryComboBox';
 
 interface WorkComboBoxProps {
 	store: BasicEntryLinkStore<IWorkObject>;

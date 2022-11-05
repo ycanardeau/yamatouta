@@ -1,3 +1,5 @@
+import { userApi } from '@/api/userApi';
+import { IUserObject } from '@/dto/IUserObject';
 import {
 	action,
 	computed,
@@ -5,9 +7,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { userApi } from '../../api/userApi';
-import { IUserObject } from '../../dto/IUserObject';
 
 export class RegisterDialogStore {
 	@observable submitting = false;

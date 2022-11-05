@@ -1,5 +1,5 @@
-import { IAuthenticatedUserObject } from './dto/IAuthenticatedUserObject';
-import { Permission } from './models/Permission';
+import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { Permission } from '@/models/Permission';
 
 export class PermissionContext {
 	constructor(private readonly user?: IAuthenticatedUserObject) {}

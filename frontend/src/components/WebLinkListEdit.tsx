@@ -1,3 +1,10 @@
+import { useAuth } from '@/components/useAuth';
+import { Permission } from '@/models/Permission';
+import { WebLinkCategory } from '@/models/WebLinkCategory';
+import {
+	WebLinkEditStore,
+	WebLinkListEditStore,
+} from '@/stores/WebLinkListEditStore';
 import {
 	EuiButton,
 	EuiButtonIcon,
@@ -21,14 +28,6 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { Permission } from '../models/Permission';
-import { WebLinkCategory } from '../models/WebLinkCategory';
-import {
-	WebLinkEditStore,
-	WebLinkListEditStore,
-} from '../stores/WebLinkListEditStore';
-import { useAuth } from './useAuth';
 
 interface WebLinkEditProps {
 	webLinkListEditStore: WebLinkListEditStore;

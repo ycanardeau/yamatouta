@@ -1,3 +1,5 @@
+import { quoteApi } from '@/api/quoteApi';
+import { IQuoteObject } from '@/dto/IQuoteObject';
 import {
 	action,
 	computed,
@@ -5,9 +7,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { quoteApi } from '../../api/quoteApi';
-import { IQuoteObject } from '../../dto/IQuoteObject';
 
 export class QuoteDeleteStore {
 	@observable submitting = false;

@@ -1,4 +1,4 @@
-import { WebLinkCategory } from '../models/WebLinkCategory';
+import { WebLinkCategory } from '@/models/WebLinkCategory';
 
 export interface IWebLinkUpdateParams {
 	id: number;

@@ -1,8 +1,7 @@
+import { IHashtagLinkObject } from '@/dto/IHashtagLinkObject';
+import { IHashtagLinkUpdateParams } from '@/models/IHashtagLinkUpdateParams';
+import { BasicListEditStore } from '@/stores/BasicListEditStore';
 import { action, makeObservable, observable } from 'mobx';
-
-import { IHashtagLinkObject } from '../dto/IHashtagLinkObject';
-import { IHashtagLinkUpdateParams } from '../models/IHashtagLinkUpdateParams';
-import { BasicListEditStore } from './BasicListEditStore';
 
 export class HashtagLinkEditStore {
 	@observable id = 0;

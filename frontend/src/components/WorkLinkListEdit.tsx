@@ -1,3 +1,9 @@
+import { WorkComboBox } from '@/components/works/WorkComboBox';
+import { LinkType } from '@/models/LinkType';
+import {
+	WorkLinkEditStore,
+	WorkLinkListEditStore,
+} from '@/stores/WorkLinkListEditStore';
 import {
 	EuiButton,
 	EuiButtonIcon,
@@ -14,13 +20,6 @@ import { AddRegular, DeleteRegular } from '@fluentui/react-icons';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
-
-import { LinkType } from '../models/LinkType';
-import {
-	WorkLinkEditStore,
-	WorkLinkListEditStore,
-} from '../stores/WorkLinkListEditStore';
-import { WorkComboBox } from './works/WorkComboBox';
 
 interface WorkLinkEditProps {
 	workLinkListEditStore: WorkLinkListEditStore;

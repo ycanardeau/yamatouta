@@ -1,6 +1,5 @@
+import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
 import axios from 'axios';
-
-import { IAuthenticatedUserObject } from '../dto/IAuthenticatedUserObject';
 
 class AuthApi {
 	login = async ({

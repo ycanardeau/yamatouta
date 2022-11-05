@@ -1,3 +1,8 @@
+import App from '@/App';
+import { AuthProvider } from '@/AuthProvider';
+import config from '@/config';
+import '@/i18n';
+import reportWebVitals from '@/reportWebVitals';
 import { EuiProvider } from '@elastic/eui';
 import '@elastic/eui/dist/eui_theme_dark.css';
 import createCache from '@emotion/cache';
@@ -6,12 +11,6 @@ import axiosRetry from 'axios-retry';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-
-import App from './App';
-import { AuthProvider } from './AuthProvider';
-import config from './config';
-import './i18n';
-import reportWebVitals from './reportWebVitals';
 
 axios.defaults.baseURL = config.apiEndpoint;
 axios.defaults.withCredentials = true;

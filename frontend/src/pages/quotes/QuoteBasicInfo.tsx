@@ -1,3 +1,7 @@
+import { WebLinkDescriptionList } from '@/components/WebLinkDescriptionList';
+import { WorkLinkDescriptionList } from '@/components/WorkLinkDescriptionList';
+import { QuoteComment } from '@/components/quotes/QuoteComment';
+import { QuoteDetailsObject } from '@/dto/QuoteDetailsObject';
 import {
 	EuiCommentList,
 	EuiDescriptionList,
@@ -7,11 +11,6 @@ import {
 } from '@elastic/eui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { WebLinkDescriptionList } from '../../components/WebLinkDescriptionList';
-import { WorkLinkDescriptionList } from '../../components/WorkLinkDescriptionList';
-import { QuoteComment } from '../../components/quotes/QuoteComment';
-import { QuoteDetailsObject } from '../../dto/QuoteDetailsObject';
 
 interface QuoteBasicInfoProps {
 	quote: QuoteDetailsObject;

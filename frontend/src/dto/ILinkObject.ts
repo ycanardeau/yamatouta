@@ -1,7 +1,7 @@
-import { LinkType } from '../models/LinkType';
-import { IArtistObject } from './IArtistObject';
-import { IPartialDateObject } from './IPartialDateObject';
-import { IWorkObject } from './IWorkObject';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { IPartialDateObject } from '@/dto/IPartialDateObject';
+import { IWorkObject } from '@/dto/IWorkObject';
+import { LinkType } from '@/models/LinkType';
 
 interface ILinkObject {
 	linkType: LinkType;

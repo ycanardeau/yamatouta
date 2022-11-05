@@ -1,3 +1,14 @@
+import { ArtistPage } from '@/components/artists/ArtistPage';
+import { useArtistDetails } from '@/components/artists/useArtistDetails';
+import { useAuth } from '@/components/useAuth';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { ArtistDetailsObject } from '@/dto/ArtistDetailsObject';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { Permission } from '@/models/Permission';
+import ArtistBasicInfo from '@/pages/artists/ArtistBasicInfo';
+import ArtistQuotes from '@/pages/artists/ArtistQuotes';
+import { ArtistDetailsStore } from '@/stores/artists/ArtistDetailsStore';
 import { EuiButton, EuiIcon } from '@elastic/eui';
 import {
 	EditRegular,
@@ -9,18 +20,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-
-import { ArtistPage } from '../../components/artists/ArtistPage';
-import { useArtistDetails } from '../../components/artists/useArtistDetails';
-import { useAuth } from '../../components/useAuth';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { ArtistDetailsObject } from '../../dto/ArtistDetailsObject';
-import { IArtistObject } from '../../dto/IArtistObject';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { Permission } from '../../models/Permission';
-import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
-import ArtistBasicInfo from './ArtistBasicInfo';
-import ArtistQuotes from './ArtistQuotes';
 
 interface LayoutProps {
 	store: ArtistDetailsStore;

@@ -1,3 +1,6 @@
+import { UserGroup } from '@/models/users/UserGroup';
+import { UserSortRule } from '@/models/users/UserSortRule';
+import { UserSearchStore } from '@/stores/users/UserSearchStore';
 import {
 	EuiFieldSearch,
 	EuiFlexGroup,
@@ -9,10 +12,6 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { UserGroup } from '../../models/users/UserGroup';
-import { UserSortRule } from '../../models/users/UserSortRule';
-import { UserSearchStore } from '../../stores/users/UserSearchStore';
 
 interface UserSearchOptionsProps {
 	store: UserSearchStore;

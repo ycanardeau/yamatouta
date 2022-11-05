@@ -1,3 +1,10 @@
+import { QuotePage } from '@/components/quotes/QuotePage';
+import { QuoteSearchList } from '@/components/quotes/QuoteSearchList';
+import { QuoteSearchOptions } from '@/components/quotes/QuoteSearchOptions';
+import { useAuth } from '@/components/useAuth';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { Permission } from '@/models/Permission';
+import { QuoteSearchStore } from '@/stores/quotes/QuoteSearchStore';
 import { EuiButton, EuiSpacer } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
@@ -5,14 +12,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { QuotePage } from '../../components/quotes/QuotePage';
-import { QuoteSearchList } from '../../components/quotes/QuoteSearchList';
-import { QuoteSearchOptions } from '../../components/quotes/QuoteSearchOptions';
-import { useAuth } from '../../components/useAuth';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { Permission } from '../../models/Permission';
-import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
 
 const QuoteIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();

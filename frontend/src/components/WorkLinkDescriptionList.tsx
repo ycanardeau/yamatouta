@@ -1,11 +1,10 @@
+import { Link } from '@/components/Link';
+import { IWorkLinkObject } from '@/dto/ILinkObject';
 import {
 	EuiDescriptionListDescription,
 	EuiDescriptionListTitle,
 } from '@elastic/eui';
 import React from 'react';
-
-import { IWorkLinkObject } from '../dto/ILinkObject';
-import { Link } from './Link';
 
 interface WorkLinkListProps {
 	workLinks: IWorkLinkObject[];

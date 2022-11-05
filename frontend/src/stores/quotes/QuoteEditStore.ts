@@ -1,3 +1,13 @@
+import { artistApi } from '@/api/artistApi';
+import { quoteApi } from '@/api/quoteApi';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { IQuoteObject } from '@/dto/IQuoteObject';
+import { QuoteEditObject } from '@/dto/QuoteEditObject';
+import { IQuoteUpdateParams } from '@/models/quotes/IQuoteUpdateParams';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
+import { WebLinkListEditStore } from '@/stores/WebLinkListEditStore';
+import { WorkLinkListEditStore } from '@/stores/WorkLinkListEditStore';
 import {
 	action,
 	computed,
@@ -5,17 +15,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { artistApi } from '../../api/artistApi';
-import { quoteApi } from '../../api/quoteApi';
-import { IArtistObject } from '../../dto/IArtistObject';
-import { IQuoteObject } from '../../dto/IQuoteObject';
-import { QuoteEditObject } from '../../dto/QuoteEditObject';
-import { IQuoteUpdateParams } from '../../models/quotes/IQuoteUpdateParams';
-import { QuoteType } from '../../models/quotes/QuoteType';
-import { BasicEntryLinkStore } from '../BasicEntryLinkStore';
-import { WebLinkListEditStore } from '../WebLinkListEditStore';
-import { WorkLinkListEditStore } from '../WorkLinkListEditStore';
 
 export class QuoteEditStore {
 	@observable submitting = false;

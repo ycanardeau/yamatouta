@@ -1,3 +1,6 @@
+import { adminApi } from '@/api/adminApi';
+import { useAuth } from '@/components/useAuth';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import {
 	EuiIcon,
 	EuiListGroup,
@@ -13,10 +16,6 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
-
-import { adminApi } from '../../api/adminApi';
-import { useAuth } from '../../components/useAuth';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 
 const AdminIndex = (): React.ReactElement => {
 	const { t, ready } = useTranslation();

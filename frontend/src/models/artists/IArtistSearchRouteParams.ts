@@ -1,5 +1,5 @@
-import { ArtistSortRule } from './ArtistSortRule';
-import { ArtistType } from './ArtistType';
+import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
+import { ArtistType } from '@/models/artists/ArtistType';
 
 export interface IArtistSearchRouteParams {
 	page?: number;

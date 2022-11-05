@@ -1,7 +1,6 @@
+import { lazyImport } from '@/components/lazyImport';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-
-import { lazyImport } from '../../components/lazyImport';
 
 const TranslationIndex = lazyImport(() => import('./TranslationIndex'));
 const TranslationCreate = lazyImport(() => import('./TranslationCreate'));

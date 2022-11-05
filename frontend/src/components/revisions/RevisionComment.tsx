@@ -1,3 +1,7 @@
+import { Avatar } from '@/components/Avatar';
+import { Link } from '@/components/Link';
+import { IRevisionObject } from '@/dto/IRevisionObject';
+import { RevisionEvent } from '@/models/RevisionEvent';
 import { EuiComment, EuiFlexGroup, EuiFlexItem, EuiIcon } from '@elastic/eui';
 import {
 	AddCircleRegular,
@@ -6,11 +10,6 @@ import {
 } from '@fluentui/react-icons';
 import moment from 'moment';
 import React from 'react';
-
-import { Avatar } from '../../components/Avatar';
-import { IRevisionObject } from '../../dto/IRevisionObject';
-import { RevisionEvent } from '../../models/RevisionEvent';
-import { Link } from '../Link';
 
 interface TimelineIconProps {
 	event: RevisionEvent;

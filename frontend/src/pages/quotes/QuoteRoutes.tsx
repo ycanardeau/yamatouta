@@ -1,7 +1,6 @@
+import { lazyImport } from '@/components/lazyImport';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-
-import { lazyImport } from '../../components/lazyImport';
 
 const QuoteIndex = lazyImport(() => import('./QuoteIndex'));
 const QuoteCreate = lazyImport(() => import('./QuoteCreate'));

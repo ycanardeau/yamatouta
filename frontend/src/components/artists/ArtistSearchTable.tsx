@@ -1,3 +1,14 @@
+import { Avatar } from '@/components/Avatar';
+import { Link } from '@/components/Link';
+import { Pagination } from '@/components/Pagination';
+import { TableEmptyBody } from '@/components/TableEmptyBody';
+import { ArtistDeleteDialog } from '@/components/artists/ArtistDeleteDialog';
+import { useAuth } from '@/components/useAuth';
+import { useDialog } from '@/components/useDialog';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { Permission } from '@/models/Permission';
+import { ArtistSearchStore } from '@/stores/artists/ArtistSearchStore';
 import {
 	EuiButtonIcon,
 	EuiContextMenuItem,
@@ -24,18 +35,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { Avatar } from '../../components/Avatar';
-import { Pagination } from '../../components/Pagination';
-import { IArtistObject } from '../../dto/IArtistObject';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { Permission } from '../../models/Permission';
-import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
-import { Link } from '../Link';
-import { TableEmptyBody } from '../TableEmptyBody';
-import { useAuth } from '../useAuth';
-import { useDialog } from '../useDialog';
-import { ArtistDeleteDialog } from './ArtistDeleteDialog';
 
 const ArtistSearchTableHeader = React.memo((): React.ReactElement => {
 	const { t } = useTranslation();

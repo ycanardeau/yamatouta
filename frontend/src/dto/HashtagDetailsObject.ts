@@ -1,4 +1,4 @@
-import { IHashtagObject } from './IHashtagObject';
+import { IHashtagObject } from '@/dto/IHashtagObject';
 
 export class HashtagDetailsObject {
 	private constructor(

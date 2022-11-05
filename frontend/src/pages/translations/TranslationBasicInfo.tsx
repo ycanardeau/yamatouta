@@ -1,3 +1,8 @@
+import { Link } from '@/components/Link';
+import { WebLinkDescriptionList } from '@/components/WebLinkDescriptionList';
+import { WorkLinkDescriptionList } from '@/components/WorkLinkDescriptionList';
+import { TranslationDetailsObject } from '@/dto/TranslationDetailsObject';
+import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
 import {
 	EuiDescriptionList,
 	EuiDescriptionListDescription,
@@ -6,12 +11,6 @@ import {
 import qs from 'qs';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { Link } from '../../components/Link';
-import { WebLinkDescriptionList } from '../../components/WebLinkDescriptionList';
-import { WorkLinkDescriptionList } from '../../components/WorkLinkDescriptionList';
-import { TranslationDetailsObject } from '../../dto/TranslationDetailsObject';
-import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
 
 interface TranslationBasicInfoProps {
 	translation: TranslationDetailsObject;

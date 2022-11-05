@@ -1,3 +1,6 @@
+import { WorkSortRule } from '@/models/works/WorkSortRule';
+import { WorkType } from '@/models/works/WorkType';
+import { WorkSearchStore } from '@/stores/works/WorkSearchStore';
 import {
 	EuiFieldSearch,
 	EuiFlexGroup,
@@ -9,10 +12,6 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { WorkSortRule } from '../../models/works/WorkSortRule';
-import { WorkType } from '../../models/works/WorkType';
-import { WorkSearchStore } from '../../stores/works/WorkSearchStore';
 
 interface WorkSearchOptionsProps {
 	store: WorkSearchStore;

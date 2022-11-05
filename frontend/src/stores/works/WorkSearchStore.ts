@@ -1,3 +1,10 @@
+import { workApi } from '@/api/workApi';
+import { IWorkObject } from '@/dto/IWorkObject';
+import { IWorkSearchRouteParams } from '@/models/works/IWorkSearchRouteParams';
+import { WorkSortRule } from '@/models/works/WorkSortRule';
+import { WorkType } from '@/models/works/WorkType';
+import { PaginationStore } from '@/stores/PaginationStore';
+import * as validators from '@/utils/validate';
 import { StoreWithPagination } from '@vocadb/route-sphere';
 import {
 	action,
@@ -6,14 +13,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { workApi } from '../../api/workApi';
-import { IWorkObject } from '../../dto/IWorkObject';
-import { IWorkSearchRouteParams } from '../../models/works/IWorkSearchRouteParams';
-import { WorkSortRule } from '../../models/works/WorkSortRule';
-import { WorkType } from '../../models/works/WorkType';
-import * as validators from '../../utils/validate';
-import { PaginationStore } from '../PaginationStore';
 
 export class WorkSearchStore
 	implements StoreWithPagination<IWorkSearchRouteParams>

@@ -1,10 +1,9 @@
+import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { IEntryWithIdAndName } from '@/models/IEntryWithIdAndName';
+import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
 import { EuiComboBox, EuiComboBoxOptionOption } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-
-import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { IEntryWithIdAndName } from '../models/IEntryWithIdAndName';
-import { BasicEntryLinkStore } from '../stores/BasicEntryLinkStore';
 
 interface EntryComboBoxProps<T extends IEntryWithIdAndName> {
 	store: BasicEntryLinkStore<T>;

@@ -1,11 +1,10 @@
+import { artistApi } from '@/api/artistApi';
+import { EntryComboBox } from '@/components/EntryComboBox';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { artistApi } from '../../api/artistApi';
-import { IArtistObject } from '../../dto/IArtistObject';
-import { ISearchResultObject } from '../../dto/ISearchResultObject';
-import { BasicEntryLinkStore } from '../../stores/BasicEntryLinkStore';
-import { EntryComboBox } from '../EntryComboBox';
 
 interface ArtistComboBoxProps {
 	store: BasicEntryLinkStore<IArtistObject>;

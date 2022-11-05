@@ -1,3 +1,14 @@
+import { useAuth } from '@/components/useAuth';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { WorkPage } from '@/components/works/WorkPage';
+import { useWorkDetails } from '@/components/works/useWorkDetails';
+import { IWorkObject } from '@/dto/IWorkObject';
+import { WorkDetailsObject } from '@/dto/WorkDetailsObject';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { Permission } from '@/models/Permission';
+import WorkBasicInfo from '@/pages/works/WorkBasicInfo';
+import WorkQuotes from '@/pages/works/WorkQuotes';
+import { WorkDetailsStore } from '@/stores/works/WorkDetailsStore';
 import { EuiButton, EuiIcon } from '@elastic/eui';
 import {
 	EditRegular,
@@ -9,18 +20,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-
-import { useAuth } from '../../components/useAuth';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { WorkPage } from '../../components/works/WorkPage';
-import { useWorkDetails } from '../../components/works/useWorkDetails';
-import { IWorkObject } from '../../dto/IWorkObject';
-import { WorkDetailsObject } from '../../dto/WorkDetailsObject';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { Permission } from '../../models/Permission';
-import { WorkDetailsStore } from '../../stores/works/WorkDetailsStore';
-import WorkBasicInfo from './WorkBasicInfo';
-import WorkQuotes from './WorkQuotes';
 
 interface LayoutProps {
 	store: WorkDetailsStore;

@@ -1,3 +1,5 @@
+import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
+import { LoginDialogStore } from '@/stores/auth/LoginDialogStore';
 import {
 	EuiButton,
 	EuiButtonEmpty,
@@ -16,9 +18,6 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { IAuthenticatedUserObject } from '../../dto/IAuthenticatedUserObject';
-import { LoginDialogStore } from '../../stores/auth/LoginDialogStore';
 
 interface LoginDialogProps {
 	onClose: () => void;

@@ -1,7 +1,6 @@
+import { lazyImport } from '@/components/lazyImport';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-
-import { lazyImport } from '../../components/lazyImport';
 
 const WorkIndex = lazyImport(() => import('./WorkIndex'));
 const WorkCreate = lazyImport(() => import('./WorkCreate'));

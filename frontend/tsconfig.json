@@ -16,7 +16,11 @@
 		"noEmit": true,
 		"jsx": "react-jsx",
 		"experimentalDecorators": true,
-		"useDefineForClassFields": true
+		"useDefineForClassFields": true,
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["src/*"]
+		}
 	},
 	"include": ["src", "scripts"],
 	"ts-node": {

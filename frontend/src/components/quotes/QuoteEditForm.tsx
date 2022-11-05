@@ -1,3 +1,13 @@
+import { MarkdownEditor } from '@/components/MarkdownEditor';
+import { WebLinkListEdit } from '@/components/WebLinkListEdit';
+import { WorkLinkListEdit } from '@/components/WorkLinkListEdit';
+import { ArtistComboBox } from '@/components/artists/ArtistComboBox';
+import { QuoteEditObject } from '@/dto/QuoteEditObject';
+import { EntryType } from '@/models/EntryType';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { workLinkTypes } from '@/models/LinkType';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { QuoteEditStore } from '@/stores/quotes/QuoteEditStore';
 import {
 	EuiButton,
 	EuiButtonEmpty,
@@ -11,17 +21,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { WebLinkListEdit } from '../../components/WebLinkListEdit';
-import { ArtistComboBox } from '../../components/artists/ArtistComboBox';
-import { QuoteEditObject } from '../../dto/QuoteEditObject';
-import { EntryType } from '../../models/EntryType';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { workLinkTypes } from '../../models/LinkType';
-import { QuoteType } from '../../models/quotes/QuoteType';
-import { QuoteEditStore } from '../../stores/quotes/QuoteEditStore';
-import { MarkdownEditor } from '../MarkdownEditor';
-import { WorkLinkListEdit } from '../WorkLinkListEdit';
 
 interface QuoteEditFormProps {
 	quote?: QuoteEditObject;

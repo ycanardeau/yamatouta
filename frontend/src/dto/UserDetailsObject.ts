@@ -1,5 +1,5 @@
-import { EntryType } from '../models/EntryType';
-import { IUserObject } from './IUserObject';
+import { IUserObject } from '@/dto/IUserObject';
+import { EntryType } from '@/models/EntryType';
 
 export class UserDetailsObject {
 	private constructor(

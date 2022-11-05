@@ -1,3 +1,5 @@
+import { IUserObject } from '@/dto/IUserObject';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiBreadcrumb,
 	EuiPageContent,
@@ -7,9 +9,6 @@ import {
 } from '@elastic/eui';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { IUserObject } from '../../dto/IUserObject';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
 
 interface UserPageProps {
 	user?: IUserObject;

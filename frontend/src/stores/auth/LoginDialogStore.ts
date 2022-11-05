@@ -1,3 +1,5 @@
+import { authApi } from '@/api/authApi';
+import { IAuthenticatedUserObject } from '@/dto/IAuthenticatedUserObject';
 import {
 	action,
 	computed,
@@ -5,9 +7,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { authApi } from '../../api/authApi';
-import { IAuthenticatedUserObject } from '../../dto/IAuthenticatedUserObject';
 
 export class LoginDialogStore {
 	@observable submitting = false;

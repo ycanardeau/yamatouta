@@ -1,13 +1,12 @@
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { UserPage } from '@/components/users/UserPage';
+import { useUserDetails } from '@/components/users/useUserDetails';
+import { IUserObject } from '@/dto/IUserObject';
+import { UserDetailsObject } from '@/dto/UserDetailsObject';
+import { UserDetailsStore } from '@/stores/users/UserDetailsStore';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { UserPage } from '../../components/users/UserPage';
-import { useUserDetails } from '../../components/users/useUserDetails';
-import { IUserObject } from '../../dto/IUserObject';
-import { UserDetailsObject } from '../../dto/UserDetailsObject';
-import { UserDetailsStore } from '../../stores/users/UserDetailsStore';
 
 interface LayoutProps {
 	store: UserDetailsStore;

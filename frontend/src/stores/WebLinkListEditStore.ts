@@ -1,9 +1,8 @@
+import { IWebLinkObject } from '@/dto/IWebLinkObject';
+import { IWebLinkUpdateParams } from '@/models/IWebLinkUpdateParams';
+import { WebLinkCategory } from '@/models/WebLinkCategory';
+import { BasicListEditStore } from '@/stores/BasicListEditStore';
 import { action, makeObservable, observable } from 'mobx';
-
-import { IWebLinkObject } from '../dto/IWebLinkObject';
-import { IWebLinkUpdateParams } from '../models/IWebLinkUpdateParams';
-import { WebLinkCategory } from '../models/WebLinkCategory';
-import { BasicListEditStore } from './BasicListEditStore';
 
 export class WebLinkEditStore {
 	@observable id = 0;

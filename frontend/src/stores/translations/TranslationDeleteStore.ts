@@ -1,3 +1,5 @@
+import { translationApi } from '@/api/translationApi';
+import { ITranslationObject } from '@/dto/ITranslationObject';
 import {
 	action,
 	computed,
@@ -5,9 +7,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { translationApi } from '../../api/translationApi';
-import { ITranslationObject } from '../../dto/ITranslationObject';
 
 export class TranslationDeleteStore {
 	@observable submitting = false;

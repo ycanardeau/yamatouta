@@ -1,3 +1,6 @@
+import { ArtistLinkDescriptionList } from '@/components/ArtistLinkDescriptionList';
+import { WebLinkDescriptionList } from '@/components/WebLinkDescriptionList';
+import { WorkDetailsObject } from '@/dto/WorkDetailsObject';
 import {
 	EuiDescriptionList,
 	EuiDescriptionListDescription,
@@ -5,10 +8,6 @@ import {
 } from '@elastic/eui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { ArtistLinkDescriptionList } from '../../components/ArtistLinkDescriptionList';
-import { WebLinkDescriptionList } from '../../components/WebLinkDescriptionList';
-import { WorkDetailsObject } from '../../dto/WorkDetailsObject';
 
 interface WorkBasicInfoProps {
 	work: WorkDetailsObject;

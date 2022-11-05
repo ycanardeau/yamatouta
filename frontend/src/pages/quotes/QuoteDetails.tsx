@@ -1,3 +1,13 @@
+import { QuotePage } from '@/components/quotes/QuotePage';
+import { useQuoteDetails } from '@/components/quotes/useQuoteDetails';
+import { useAuth } from '@/components/useAuth';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { IQuoteObject } from '@/dto/IQuoteObject';
+import { QuoteDetailsObject } from '@/dto/QuoteDetailsObject';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
+import { Permission } from '@/models/Permission';
+import QuoteBasicInfo from '@/pages/quotes/QuoteBasicInfo';
+import { QuoteDetailsStore } from '@/stores/quotes/QuoteDetailsStore';
 import { EuiButton, EuiIcon } from '@elastic/eui';
 import {
 	EditRegular,
@@ -8,17 +18,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-
-import { QuotePage } from '../../components/quotes/QuotePage';
-import { useQuoteDetails } from '../../components/quotes/useQuoteDetails';
-import { useAuth } from '../../components/useAuth';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { IQuoteObject } from '../../dto/IQuoteObject';
-import { QuoteDetailsObject } from '../../dto/QuoteDetailsObject';
-import { EntryUrlMapper } from '../../models/EntryUrlMapper';
-import { Permission } from '../../models/Permission';
-import { QuoteDetailsStore } from '../../stores/quotes/QuoteDetailsStore';
-import QuoteBasicInfo from './QuoteBasicInfo';
 
 interface LayoutProps {
 	store: QuoteDetailsStore;

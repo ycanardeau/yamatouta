@@ -1,3 +1,6 @@
+import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { TranslationSearchStore } from '@/stores/translations/TranslationSearchStore';
 import {
 	EuiFieldSearch,
 	EuiFlexGroup,
@@ -9,10 +12,6 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { TranslationSortRule } from '../../models/translations/TranslationSortRule';
-import { WordCategory } from '../../models/translations/WordCategory';
-import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
 
 interface TranslationSearchOptionsProps {
 	store: TranslationSearchStore;

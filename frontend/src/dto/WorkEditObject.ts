@@ -1,3 +1,3 @@
-import { IWorkObject } from './IWorkObject';
+import { IWorkObject } from '@/dto/IWorkObject';
 
 export type WorkEditObject = Required<IWorkObject>;

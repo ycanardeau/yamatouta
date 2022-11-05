@@ -1,5 +1,5 @@
-import { UserGroup } from './UserGroup';
-import { UserSortRule } from './UserSortRule';
+import { UserGroup } from '@/models/users/UserGroup';
+import { UserSortRule } from '@/models/users/UserSortRule';
 
 export interface IUserSearchRouteParams {
 	page?: number;

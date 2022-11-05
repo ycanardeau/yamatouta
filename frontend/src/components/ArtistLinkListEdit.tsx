@@ -1,3 +1,9 @@
+import { ArtistComboBox } from '@/components/artists/ArtistComboBox';
+import { LinkType } from '@/models/LinkType';
+import {
+	ArtistLinkEditStore,
+	ArtistLinkListEditStore,
+} from '@/stores/ArtistLinkListEditStore';
 import {
 	EuiButton,
 	EuiButtonIcon,
@@ -14,13 +20,6 @@ import { AddRegular, DeleteRegular } from '@fluentui/react-icons';
 import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
-
-import { LinkType } from '../models/LinkType';
-import {
-	ArtistLinkEditStore,
-	ArtistLinkListEditStore,
-} from '../stores/ArtistLinkListEditStore';
-import { ArtistComboBox } from './artists/ArtistComboBox';
 
 interface ArtistLinkEditProps {
 	artistLinkListEditStore: ArtistLinkListEditStore;

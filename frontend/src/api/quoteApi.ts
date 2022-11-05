@@ -1,13 +1,12 @@
+import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IRevisionObject } from '@/dto/IRevisionObject';
+import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { IQuoteUpdateParams } from '@/models/quotes/IQuoteUpdateParams';
+import { QuoteOptionalField } from '@/models/quotes/QuoteOptionalField';
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { IPaginationParams } from '@/stores/PaginationStore';
 import axios from 'axios';
-
-import { IQuoteObject } from '../dto/IQuoteObject';
-import { IRevisionObject } from '../dto/IRevisionObject';
-import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { IQuoteUpdateParams } from '../models/quotes/IQuoteUpdateParams';
-import { QuoteOptionalField } from '../models/quotes/QuoteOptionalField';
-import { QuoteSortRule } from '../models/quotes/QuoteSortRule';
-import { QuoteType } from '../models/quotes/QuoteType';
-import { IPaginationParams } from '../stores/PaginationStore';
 
 class QuoteApi {
 	create = async ({

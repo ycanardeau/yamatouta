@@ -1,9 +1,8 @@
+import { workApi } from '@/api/workApi';
+import { IWorkObject } from '@/dto/IWorkObject';
+import { WorkOptionalField } from '@/models/works/WorkOptionalField';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-
-import { workApi } from '../../api/workApi';
-import { IWorkObject } from '../../dto/IWorkObject';
-import { WorkOptionalField } from '../../models/works/WorkOptionalField';
 
 export const useWorkDetails = <T,>(
 	factory: (work: IWorkObject) => T,

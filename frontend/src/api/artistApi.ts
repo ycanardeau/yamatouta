@@ -1,13 +1,12 @@
+import { IArtistObject } from '@/dto/IArtistObject';
+import { IRevisionObject } from '@/dto/IRevisionObject';
+import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { ArtistOptionalField } from '@/models/artists/ArtistOptionalField';
+import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { IArtistUpdateParams } from '@/models/artists/IArtistUpdateParams';
+import { IPaginationParams } from '@/stores/PaginationStore';
 import axios from 'axios';
-
-import { IArtistObject } from '../dto/IArtistObject';
-import { IRevisionObject } from '../dto/IRevisionObject';
-import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { ArtistOptionalField } from '../models/artists/ArtistOptionalField';
-import { ArtistSortRule } from '../models/artists/ArtistSortRule';
-import { ArtistType } from '../models/artists/ArtistType';
-import { IArtistUpdateParams } from '../models/artists/IArtistUpdateParams';
-import { IPaginationParams } from '../stores/PaginationStore';
 
 class ArtistApi {
 	create = async ({

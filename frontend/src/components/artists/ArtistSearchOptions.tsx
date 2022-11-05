@@ -1,3 +1,6 @@
+import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
+import { ArtistType } from '@/models/artists/ArtistType';
+import { ArtistSearchStore } from '@/stores/artists/ArtistSearchStore';
 import {
 	EuiFieldSearch,
 	EuiFlexGroup,
@@ -9,10 +12,6 @@ import {
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { ArtistSortRule } from '../../models/artists/ArtistSortRule';
-import { ArtistType } from '../../models/artists/ArtistType';
-import { ArtistSearchStore } from '../../stores/artists/ArtistSearchStore';
 
 interface ArtistSearchOptionsProps {
 	store: ArtistSearchStore;

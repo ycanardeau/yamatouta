@@ -1,13 +1,12 @@
+import { IRevisionObject } from '@/dto/IRevisionObject';
+import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { ITranslationObject } from '@/dto/ITranslationObject';
+import { ITranslationUpdateParams } from '@/models/translations/ITranslationUpdateParams';
+import { TranslationOptionalField } from '@/models/translations/TranslationOptionalField';
+import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { IPaginationParams } from '@/stores/PaginationStore';
 import axios from 'axios';
-
-import { IRevisionObject } from '../dto/IRevisionObject';
-import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { ITranslationObject } from '../dto/ITranslationObject';
-import { ITranslationUpdateParams } from '../models/translations/ITranslationUpdateParams';
-import { TranslationOptionalField } from '../models/translations/TranslationOptionalField';
-import { TranslationSortRule } from '../models/translations/TranslationSortRule';
-import { WordCategory } from '../models/translations/WordCategory';
-import { IPaginationParams } from '../stores/PaginationStore';
 
 class TranslationApi {
 	create = async ({

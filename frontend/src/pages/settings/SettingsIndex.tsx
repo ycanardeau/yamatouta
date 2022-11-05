@@ -1,3 +1,9 @@
+import { ChangeEmailDialog } from '@/components/settings/ChangeEmailDialog';
+import { ChangePasswordDialog } from '@/components/settings/ChangePasswordDialog';
+import { ChangeUsernameDialog } from '@/components/settings/ChangeUsernameDialog';
+import { useAuth } from '@/components/useAuth';
+import { useDialog } from '@/components/useDialog';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import {
 	EuiIcon,
 	EuiListGroup,
@@ -9,13 +15,6 @@ import { KeyRegular, MailRegular, PersonRegular } from '@fluentui/react-icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
-
-import { ChangeEmailDialog } from '../../components/settings/ChangeEmailDialog';
-import { ChangePasswordDialog } from '../../components/settings/ChangePasswordDialog';
-import { ChangeUsernameDialog } from '../../components/settings/ChangeUsernameDialog';
-import { useAuth } from '../../components/useAuth';
-import { useDialog } from '../../components/useDialog';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
 
 const SettingsIndex = (): React.ReactElement => {
 	const { t, ready } = useTranslation();

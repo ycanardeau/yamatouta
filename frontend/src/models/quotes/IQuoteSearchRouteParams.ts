@@ -1,5 +1,5 @@
-import { QuoteSortRule } from './QuoteSortRule';
-import { QuoteType } from './QuoteType';
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
+import { QuoteType } from '@/models/quotes/QuoteType';
 
 export interface IQuoteSearchRouteParams {
 	page?: number;

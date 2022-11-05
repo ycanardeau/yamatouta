@@ -1,3 +1,10 @@
+import { TranslationPage } from '@/components/translations/TranslationPage';
+import { TranslationSearchOptions } from '@/components/translations/TranslationSearchOptions';
+import { TranslationSearchTable } from '@/components/translations/TranslationSearchTable';
+import { useAuth } from '@/components/useAuth';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { Permission } from '@/models/Permission';
+import { TranslationSearchStore } from '@/stores/translations/TranslationSearchStore';
 import { EuiButton, EuiSpacer } from '@elastic/eui';
 import { AddRegular } from '@fluentui/react-icons';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
@@ -5,14 +12,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { TranslationPage } from '../../components/translations/TranslationPage';
-import { TranslationSearchOptions } from '../../components/translations/TranslationSearchOptions';
-import { TranslationSearchTable } from '../../components/translations/TranslationSearchTable';
-import { useAuth } from '../../components/useAuth';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { Permission } from '../../models/Permission';
-import { TranslationSearchStore } from '../../stores/translations/TranslationSearchStore';
 
 const TranslationIndex = observer((): React.ReactElement => {
 	const { t, ready } = useTranslation();

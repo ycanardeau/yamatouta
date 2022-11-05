@@ -1,5 +1,5 @@
-import { IPartialDateUpdateParams } from './IPartialDateUpdateParams';
-import { LinkType } from './LinkType';
+import { IPartialDateUpdateParams } from '@/models//IPartialDateUpdateParams';
+import { LinkType } from '@/models/LinkType';
 
 export interface IWorkLinkUpdateParams {
 	id: number;

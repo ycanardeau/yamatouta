@@ -1,8 +1,7 @@
+import { userApi } from '@/api/userApi';
+import { IUserObject } from '@/dto/IUserObject';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-
-import { userApi } from '../../api/userApi';
-import { IUserObject } from '../../dto/IUserObject';
 
 export const useUserDetails = <T,>(
 	factory: (user: IUserObject) => T,

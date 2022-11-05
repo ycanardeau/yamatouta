@@ -1,3 +1,10 @@
+import { userApi } from '@/api/userApi';
+import { IUserObject } from '@/dto/IUserObject';
+import { IUserSearchRouteParams } from '@/models/users/IUserSearchRouteParams';
+import { UserGroup } from '@/models/users/UserGroup';
+import { UserSortRule } from '@/models/users/UserSortRule';
+import { PaginationStore } from '@/stores/PaginationStore';
+import * as validators from '@/utils/validate';
 import { StoreWithPagination } from '@vocadb/route-sphere';
 import {
 	action,
@@ -6,14 +13,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { userApi } from '../../api/userApi';
-import { IUserObject } from '../../dto/IUserObject';
-import { IUserSearchRouteParams } from '../../models/users/IUserSearchRouteParams';
-import { UserGroup } from '../../models/users/UserGroup';
-import { UserSortRule } from '../../models/users/UserSortRule';
-import * as validators from '../../utils/validate';
-import { PaginationStore } from '../PaginationStore';
 
 export class UserSearchStore
 	implements StoreWithPagination<IUserSearchRouteParams>

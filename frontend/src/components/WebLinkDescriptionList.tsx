@@ -1,3 +1,5 @@
+import { IWebLinkObject } from '@/dto/IWebLinkObject';
+import { hostnameTitlePairs } from '@/models/hostnameTitlePairs';
 import {
 	EuiDescriptionListDescription,
 	EuiDescriptionListTitle,
@@ -6,9 +8,6 @@ import {
 import { orderBy } from 'lodash-es';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { IWebLinkObject } from '../dto/IWebLinkObject';
-import { hostnameTitlePairs } from '../models/hostnameTitlePairs';
 
 interface WebLinkProps {
 	webLink: IWebLinkObject;

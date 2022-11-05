@@ -1,10 +1,9 @@
+import { Pagination } from '@/components/Pagination';
+import { QuoteComment } from '@/components/quotes/QuoteComment';
+import { QuoteSearchStore } from '@/stores/quotes/QuoteSearchStore';
 import { EuiCommentList, EuiProgress } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-
-import { QuoteSearchStore } from '../../stores/quotes/QuoteSearchStore';
-import { Pagination } from '../Pagination';
-import { QuoteComment } from './QuoteComment';
 
 interface QuoteSearchListProps {
 	store: QuoteSearchStore;

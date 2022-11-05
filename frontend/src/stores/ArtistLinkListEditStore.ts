@@ -1,12 +1,11 @@
+import { artistApi } from '@/api/artistApi';
+import { IArtistObject } from '@/dto/IArtistObject';
+import { IArtistLinkObject } from '@/dto/ILinkObject';
+import { IArtistLinkUpdateParams } from '@/models/IArtistLinkUpdateParams';
+import { LinkType } from '@/models/LinkType';
+import { BasicEntryLinkStore } from '@/stores/BasicEntryLinkStore';
+import { BasicListEditStore } from '@/stores/BasicListEditStore';
 import { action, makeObservable, observable } from 'mobx';
-
-import { artistApi } from '../api/artistApi';
-import { IArtistObject } from '../dto/IArtistObject';
-import { IArtistLinkObject } from '../dto/ILinkObject';
-import { IArtistLinkUpdateParams } from '../models/IArtistLinkUpdateParams';
-import { LinkType } from '../models/LinkType';
-import { BasicEntryLinkStore } from './BasicEntryLinkStore';
-import { BasicListEditStore } from './BasicListEditStore';
 
 export class ArtistLinkEditStore {
 	readonly relatedArtist = new BasicEntryLinkStore<IArtistObject>((id) =>

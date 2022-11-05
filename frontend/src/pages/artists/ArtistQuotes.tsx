@@ -1,13 +1,12 @@
+import { QuoteSearchList } from '@/components/quotes/QuoteSearchList';
+import { QuoteSearchOptions } from '@/components/quotes/QuoteSearchOptions';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { ArtistDetailsStore } from '@/stores/artists/ArtistDetailsStore';
 import { EuiSpacer } from '@elastic/eui';
 import { useStoreWithPagination } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
-import { QuoteSearchList } from '../../components/quotes/QuoteSearchList';
-import { QuoteSearchOptions } from '../../components/quotes/QuoteSearchOptions';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { ArtistDetailsStore } from '../../stores/artists/ArtistDetailsStore';
 
 interface ArtistQuotesProps {
 	artistDetailsStore: ArtistDetailsStore;

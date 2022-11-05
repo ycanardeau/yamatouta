@@ -1,5 +1,5 @@
-import { WorkSortRule } from './WorkSortRule';
-import { WorkType } from './WorkType';
+import { WorkSortRule } from '@/models/works/WorkSortRule';
+import { WorkType } from '@/models/works/WorkType';
 
 export interface IWorkSearchRouteParams {
 	page?: number;

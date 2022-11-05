@@ -1,13 +1,12 @@
+import { quoteApi } from '@/api/quoteApi';
+import { QuotePage } from '@/components/quotes/QuotePage';
+import { useQuoteDetails } from '@/components/quotes/useQuoteDetails';
+import { RevisionComment } from '@/components/revisions/RevisionComment';
+import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { IQuoteObject } from '@/dto/IQuoteObject';
+import { IRevisionObject } from '@/dto/IRevisionObject';
 import { EuiCommentList } from '@elastic/eui';
 import React from 'react';
-
-import { quoteApi } from '../../api/quoteApi';
-import { QuotePage } from '../../components/quotes/QuotePage';
-import { useQuoteDetails } from '../../components/quotes/useQuoteDetails';
-import { RevisionComment } from '../../components/revisions/RevisionComment';
-import { useYamatoutaTitle } from '../../components/useYamatoutaTitle';
-import { IQuoteObject } from '../../dto/IQuoteObject';
-import { IRevisionObject } from '../../dto/IRevisionObject';
 
 interface LayoutProps {
 	quote: IQuoteObject;

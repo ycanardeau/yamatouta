@@ -1,3 +1,10 @@
+import { translationApi } from '@/api/translationApi';
+import { ITranslationObject } from '@/dto/ITranslationObject';
+import { TranslationEditObject } from '@/dto/TranslationEditObject';
+import { ITranslationUpdateParams } from '@/models/translations/ITranslationUpdateParams';
+import { WordCategory } from '@/models/translations/WordCategory';
+import { WebLinkListEditStore } from '@/stores/WebLinkListEditStore';
+import { WorkLinkListEditStore } from '@/stores/WorkLinkListEditStore';
 import {
 	action,
 	computed,
@@ -5,14 +12,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { translationApi } from '../../api/translationApi';
-import { ITranslationObject } from '../../dto/ITranslationObject';
-import { TranslationEditObject } from '../../dto/TranslationEditObject';
-import { ITranslationUpdateParams } from '../../models/translations/ITranslationUpdateParams';
-import { WordCategory } from '../../models/translations/WordCategory';
-import { WebLinkListEditStore } from '../WebLinkListEditStore';
-import { WorkLinkListEditStore } from '../WorkLinkListEditStore';
 
 export class TranslationEditStore {
 	@observable submitting = false;

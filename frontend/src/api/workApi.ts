@@ -1,13 +1,12 @@
+import { IRevisionObject } from '@/dto/IRevisionObject';
+import { ISearchResultObject } from '@/dto/ISearchResultObject';
+import { IWorkObject } from '@/dto/IWorkObject';
+import { IWorkUpdateParams } from '@/models/works/IWorkUpdateParams';
+import { WorkOptionalField } from '@/models/works/WorkOptionalField';
+import { WorkSortRule } from '@/models/works/WorkSortRule';
+import { WorkType } from '@/models/works/WorkType';
+import { IPaginationParams } from '@/stores/PaginationStore';
 import axios from 'axios';
-
-import { IRevisionObject } from '../dto/IRevisionObject';
-import { ISearchResultObject } from '../dto/ISearchResultObject';
-import { IWorkObject } from '../dto/IWorkObject';
-import { IWorkUpdateParams } from '../models/works/IWorkUpdateParams';
-import { WorkOptionalField } from '../models/works/WorkOptionalField';
-import { WorkSortRule } from '../models/works/WorkSortRule';
-import { WorkType } from '../models/works/WorkType';
-import { IPaginationParams } from '../stores/PaginationStore';
 
 class WorkApi {
 	create = async ({

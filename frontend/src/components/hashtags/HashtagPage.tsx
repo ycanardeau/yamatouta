@@ -1,3 +1,4 @@
+import { IHashtagObject } from '@/dto/IHashtagObject';
 import {
 	EuiBreadcrumb,
 	EuiPageContent,
@@ -8,8 +9,6 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-
-import { IHashtagObject } from '../../dto/IHashtagObject';
 
 interface HashtagPageProps {
 	hashtag?: IHashtagObject;

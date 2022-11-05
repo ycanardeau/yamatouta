@@ -1,3 +1,4 @@
+import { parsingPluginList, processingPluginList } from '@/components/Markdown';
 import {
 	EuiMarkdownEditor,
 	EuiMarkdownEditorProps,
@@ -5,8 +6,6 @@ import {
 } from '@elastic/eui';
 import { NumberSymbolRegular } from '@fluentui/react-icons';
 import React from 'react';
-
-import { parsingPluginList, processingPluginList } from './Markdown';
 
 const uiPlugins = getDefaultEuiMarkdownUiPlugins();
 uiPlugins.push({

@@ -1,11 +1,10 @@
+import { Link } from '@/components/Link';
+import { IArtistLinkObject } from '@/dto/ILinkObject';
 import {
 	EuiDescriptionListDescription,
 	EuiDescriptionListTitle,
 } from '@elastic/eui';
 import React from 'react';
-
-import { IArtistLinkObject } from '../dto/ILinkObject';
-import { Link } from './Link';
 
 interface ArtistLinkListProps {
 	artistLinks: IArtistLinkObject[];

@@ -1,3 +1,12 @@
+import { authApi } from '@/api/authApi';
+import { LoginDialog } from '@/components/auth/LoginDialog';
+import { RegisterDialog } from '@/components/auth/RegisterDialog';
+import { useAuth } from '@/components/useAuth';
+import { useDialog } from '@/components/useDialog';
+import config from '@/config';
+import logoDiscord from '@/images/Discord-Logo-White.svg';
+import logoTwitter from '@/images/Twitter-Logo-White.svg';
+import { UserGroup } from '@/models/users/UserGroup';
 import {
 	EuiIcon,
 	EuiSideNav,
@@ -20,16 +29,6 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-import { authApi } from './api/authApi';
-import { LoginDialog } from './components/auth/LoginDialog';
-import { RegisterDialog } from './components/auth/RegisterDialog';
-import { useAuth } from './components/useAuth';
-import { useDialog } from './components/useDialog';
-import config from './config';
-import logoDiscord from './images/Discord-Logo-White.svg';
-import logoTwitter from './images/Twitter-Logo-White.svg';
-import { UserGroup } from './models/users/UserGroup';
 
 const SideNav = (): React.ReactElement => {
 	const { t } = useTranslation();

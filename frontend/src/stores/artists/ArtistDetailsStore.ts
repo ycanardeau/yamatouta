@@ -1,6 +1,6 @@
-import { ArtistDetailsObject } from '../../dto/ArtistDetailsObject';
-import { QuoteSortRule } from '../../models/quotes/QuoteSortRule';
-import { QuoteSearchStore } from '../quotes/QuoteSearchStore';
+import { ArtistDetailsObject } from '@/dto/ArtistDetailsObject';
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
+import { QuoteSearchStore } from '@/stores/quotes/QuoteSearchStore';
 
 export class ArtistDetailsStore {
 	readonly quoteSearchStore = new QuoteSearchStore(QuoteSortRule.UpdatedDesc);

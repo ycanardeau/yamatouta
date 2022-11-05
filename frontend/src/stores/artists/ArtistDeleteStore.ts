@@ -1,3 +1,5 @@
+import { artistApi } from '@/api/artistApi';
+import { IArtistObject } from '@/dto/IArtistObject';
 import {
 	action,
 	computed,
@@ -5,9 +7,6 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
-
-import { artistApi } from '../../api/artistApi';
-import { IArtistObject } from '../../dto/IArtistObject';
 
 export class ArtistDeleteStore {
 	@observable submitting = false;

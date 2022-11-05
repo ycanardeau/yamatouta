@@ -1,6 +1,5 @@
+import { usePageTracking } from '@/components/usePageTracking';
 import { useTitle } from 'react-use';
-
-import { usePageTracking } from './usePageTracking';
 
 export const useYamatoutaTitle = (
 	title: string | undefined,
