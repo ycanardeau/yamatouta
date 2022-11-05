@@ -10,7 +10,14 @@ export class AuthService {
 	}
 
 	logout(request: Request): void {
-		request.logOut();
-		request.session.cookie.maxAge = 0;
+		// See https://stackoverflow.com/questions/72336177/error-reqlogout-requires-a-callback-function/72336399#72336399
+		request.logOut((err) => {
+			if (err) {
+				// TODO: Log.
+				return;
+			}
+
+			request.session.cookie.maxAge = 0;
+		});
 	}
 }
