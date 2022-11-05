@@ -3,7 +3,6 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@craco/craco": "^6.4.3",
 		"@elastic/datemath": "^5.0.3",
 		"@elastic/eui": "^60.1.0",
 		"@emotion/react": "^11.8.1",
@@ -64,6 +63,7 @@
 		]
 	},
 	"devDependencies": {
+		"@craco/craco": "^7.0.0-alpha.9",
 		"@trivago/prettier-plugin-sort-imports": "^2.0.4",
 		"@types/lodash": "^4.14.178",
 		"@types/qs": "^6.9.7",
