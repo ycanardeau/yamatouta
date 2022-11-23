@@ -12,8 +12,8 @@ const schema = Joi.object<IConfig>({
 
 const config = ((): IConfig => {
 	const value = {
-		apiEndpoint: process.env.REACT_APP_API_ENDPOINT,
-		disableAccountCreation: process.env.REACT_APP_DISABLE_ACCOUNT_CREATION,
+		apiEndpoint: import.meta.env.VITE_API_ENDPOINT,
+		disableAccountCreation: import.meta.env.VITE_DISABLE_ACCOUNT_CREATION,
 	};
 
 	const result = schema.validate(value, { convert: true });

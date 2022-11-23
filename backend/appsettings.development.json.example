@@ -1,7 +1,7 @@
 {
 	"port": 5000,
 	"disableAccountCreation": false,
-	"clientBuildPath": "../frontend/build",
+	"clientBuildPath": "../frontend/dist",
 	"gaMeasurementId": "",
 	"cors": {
 		"allowedOrigins": ["http://localhost:3000"]

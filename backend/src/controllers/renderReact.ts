@@ -3,10 +3,10 @@ import { Response } from 'express';
 import { t } from 'i18next';
 
 const assetManifest: {
-	files: { 'main.css': string; 'main.js': string };
+	'index.html': { file: string; css: string[] };
 } =
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	require(`${config.clientBuildPath}/asset-manifest.json`);
+	require(`${config.clientBuildPath}/manifest.json`);
 
 interface IPageMetadata {
 	title?: string;
@@ -26,8 +26,8 @@ export const renderReact = (
 		keywords: pageMetadata.keywords || t('meta.keywords'),
 		description: pageMetadata.description || t('meta.description'),
 		image: pageMetadata.image,
-		script: assetManifest.files['main.js'],
-		style: assetManifest.files['main.css'],
+		script: assetManifest['index.html'].file,
+		style: assetManifest['index.html'].css[0],
 		gaMeasurementId: config.gaMeasurementId,
 	});
 };

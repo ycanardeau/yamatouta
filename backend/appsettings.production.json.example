@@ -1,7 +1,7 @@
 {
 	"port": 5000,
 	"disableAccountCreation": true,
-	"clientBuildPath": "../frontend/build",
+	"clientBuildPath": "../frontend/dist",
 	"gaMeasurementId": "",
 	"cors": {
 		"allowedOrigins": ["https://yamatouta.net"]
