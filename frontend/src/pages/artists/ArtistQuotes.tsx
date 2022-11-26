@@ -1,7 +1,9 @@
 import { QuoteSearchList } from '@/components/quotes/QuoteSearchList';
 import { QuoteSearchOptions } from '@/components/quotes/QuoteSearchOptions';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
 import { ArtistDetailsStore } from '@/stores/artists/ArtistDetailsStore';
+import { QuoteSearchStore } from '@/stores/quotes/QuoteSearchStore';
 import { EuiSpacer } from '@elastic/eui';
 import { useLocationStateStore } from '@vocadb/route-sphere';
 import { observer } from 'mobx-react-lite';
@@ -14,26 +16,32 @@ interface ArtistQuotesProps {
 
 const ArtistQuotes = observer(
 	({ artistDetailsStore }: ArtistQuotesProps): React.ReactElement => {
-		const { t, ready } = useTranslation();
-
 		const artist = artistDetailsStore.artist;
+
+		const [quoteSearchStore] = React.useState(() => {
+			const quoteSearchStore = new QuoteSearchStore(
+				QuoteSortRule.UpdatedDesc,
+			);
+			quoteSearchStore.artistId = artist.id;
+			return quoteSearchStore;
+		});
+
+		const { t, ready } = useTranslation();
 
 		useYamatoutaTitle(
 			`${t('shared.artist')} "${artist.name}" - ${t('shared.quotes')}`,
 			ready,
 		);
 
-		useLocationStateStore(artistDetailsStore.quoteSearchStore);
+		useLocationStateStore(quoteSearchStore);
 
 		return (
 			<>
-				<QuoteSearchOptions
-					store={artistDetailsStore.quoteSearchStore}
-				/>
+				<QuoteSearchOptions store={quoteSearchStore} />
 
 				<EuiSpacer size="m" />
 
-				<QuoteSearchList store={artistDetailsStore.quoteSearchStore} />
+				<QuoteSearchList store={quoteSearchStore} />
 			</>
 		);
 	},

@@ -79,7 +79,6 @@ const HashtagDetails = (): React.ReactElement | null => {
 			const hashtagDetailsStore = new HashtagDetailsStore(
 				HashtagDetailsDto.create(hashtag as Required<IHashtagDto>),
 			);
-			hashtagDetailsStore.quoteSearchStore.hashtags = [hashtag.name];
 
 			return hashtagDetailsStore;
 		}, []),

@@ -1,6 +1,8 @@
 import { QuoteSearchList } from '@/components/quotes/QuoteSearchList';
 import { QuoteSearchOptions } from '@/components/quotes/QuoteSearchOptions';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
+import { QuoteSearchStore } from '@/stores/quotes/QuoteSearchStore';
 import { WorkDetailsStore } from '@/stores/works/WorkDetailsStore';
 import { EuiSpacer } from '@elastic/eui';
 import { useLocationStateStore } from '@vocadb/route-sphere';
@@ -14,24 +16,32 @@ interface WorkQuotesProps {
 
 const WorkQuotes = observer(
 	({ workDetailsStore }: WorkQuotesProps): React.ReactElement => {
-		const { t, ready } = useTranslation();
-
 		const work = workDetailsStore.work;
+
+		const [quoteSearchStore] = React.useState(() => {
+			const quoteSearchStore = new QuoteSearchStore(
+				QuoteSortRule.UpdatedDesc,
+			);
+			quoteSearchStore.workId = work.id;
+			return quoteSearchStore;
+		});
+
+		const { t, ready } = useTranslation();
 
 		useYamatoutaTitle(
 			`${t('shared.work')} "${work.name}" - ${t('shared.quotes')}`,
 			ready,
 		);
 
-		useLocationStateStore(workDetailsStore.quoteSearchStore);
+		useLocationStateStore(quoteSearchStore);
 
 		return (
 			<>
-				<QuoteSearchOptions store={workDetailsStore.quoteSearchStore} />
+				<QuoteSearchOptions store={quoteSearchStore} />
 
 				<EuiSpacer size="m" />
 
-				<QuoteSearchList store={workDetailsStore.quoteSearchStore} />
+				<QuoteSearchList store={quoteSearchStore} />
 			</>
 		);
 	},
