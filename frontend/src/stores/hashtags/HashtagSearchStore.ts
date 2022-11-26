@@ -1,6 +1,5 @@
 import { hashtagApi } from '@/api/hashtagApi';
 import { IHashtagDto } from '@/dto/IHashtagDto';
-import { HashtagSearchRouteParams } from '@/models/hashtags/HashtagSearchRouteParams';
 import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
@@ -16,6 +15,13 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
+
+export interface HashtagSearchRouteParams {
+	page?: number;
+	pageSize?: number;
+	sort?: HashtagSortRule;
+	query?: string;
+}
 
 const clearResultsByQueryKeys: (keyof HashtagSearchRouteParams)[] = [
 	'pageSize',

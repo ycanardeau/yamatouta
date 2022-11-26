@@ -1,6 +1,5 @@
 import { translationApi } from '@/api/translationApi';
 import { ITranslationDto } from '@/dto/ITranslationDto';
-import { TranslationSearchRouteParams } from '@/models/translations/TranslationSearchRouteParams';
 import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
 import { WordCategory } from '@/models/translations/WordCategory';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -17,6 +16,14 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
+
+export interface TranslationSearchRouteParams {
+	page?: number;
+	pageSize?: number;
+	sort?: TranslationSortRule;
+	query?: string;
+	category?: WordCategory;
+}
 
 const clearResultsByQueryKeys: (keyof TranslationSearchRouteParams)[] = [
 	'pageSize',

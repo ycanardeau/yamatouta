@@ -1,6 +1,5 @@
 import { quoteApi } from '@/api/quoteApi';
 import { IQuoteDto } from '@/dto/IQuoteDto';
-import { QuoteSearchRouteParams } from '@/models/quotes/QuoteSearchRouteParams';
 import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
 import { QuoteType } from '@/models/quotes/QuoteType';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -17,6 +16,14 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
+
+export interface QuoteSearchRouteParams {
+	page?: number;
+	pageSize?: number;
+	sort?: QuoteSortRule;
+	query?: string;
+	quoteType?: QuoteType;
+}
 
 const clearResultsByQueryKeys: (keyof QuoteSearchRouteParams)[] = [
 	'pageSize',

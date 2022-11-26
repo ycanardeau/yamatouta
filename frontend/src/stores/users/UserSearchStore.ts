@@ -1,7 +1,6 @@
 import { userApi } from '@/api/userApi';
 import { IUserDto } from '@/dto/IUserDto';
 import { UserGroup } from '@/models/users/UserGroup';
-import { UserSearchRouteParams } from '@/models/users/UserSearchRouteParams';
 import { UserSortRule } from '@/models/users/UserSortRule';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
@@ -17,6 +16,14 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
+
+export interface UserSearchRouteParams {
+	page?: number;
+	pageSize?: number;
+	sort?: UserSortRule;
+	query?: string;
+	userGroup?: UserGroup;
+}
 
 const clearResultsByQueryKeys: (keyof UserSearchRouteParams)[] = [
 	'pageSize',

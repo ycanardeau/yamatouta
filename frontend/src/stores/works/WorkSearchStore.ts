@@ -1,6 +1,5 @@
 import { workApi } from '@/api/workApi';
 import { IWorkDto } from '@/dto/IWorkDto';
-import { WorkSearchRouteParams } from '@/models/works/WorkSearchRouteParams';
 import { WorkSortRule } from '@/models/works/WorkSortRule';
 import { WorkType } from '@/models/works/WorkType';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -17,6 +16,14 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
+
+export interface WorkSearchRouteParams {
+	page?: number;
+	pageSize?: number;
+	sort?: WorkSortRule;
+	query?: string;
+	workType?: WorkType;
+}
 
 const clearResultsByQueryKeys: (keyof WorkSearchRouteParams)[] = [
 	'pageSize',

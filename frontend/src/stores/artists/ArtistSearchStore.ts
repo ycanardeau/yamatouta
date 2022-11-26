@@ -1,6 +1,5 @@
 import { artistApi } from '@/api/artistApi';
 import { IArtistDto } from '@/dto/IArtistDto';
-import { ArtistSearchRouteParams } from '@/models/artists/ArtistSearchRouteParams';
 import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
 import { ArtistType } from '@/models/artists/ArtistType';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -17,6 +16,14 @@ import {
 	observable,
 	runInAction,
 } from 'mobx';
+
+export interface ArtistSearchRouteParams {
+	page?: number;
+	pageSize?: number;
+	sort?: ArtistSortRule;
+	query?: string;
+	artistType?: ArtistType;
+}
 
 const clearResultsByQueryKeys: (keyof ArtistSearchRouteParams)[] = [
 	'pageSize',
