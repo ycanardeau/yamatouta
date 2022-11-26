@@ -1,5 +1,6 @@
 import AppRoutes from '@/AppRoutes';
 import { AuthProvider } from '@/AuthProvider';
+import { Compose } from '@/Compose';
 import Header from '@/Header';
 import SideNav from '@/SideNav';
 import config from '@/config';
@@ -31,27 +32,25 @@ const emotionCache = createCache({
 
 const App = (): React.ReactElement => {
 	return (
-		<AuthProvider>
-			<BrowserRouter>
-				<EuiProvider colorMode="dark" cache={emotionCache}>
-					<ScrollToTop />
+		<Compose components={[AuthProvider, BrowserRouter]}>
+			<EuiProvider colorMode="dark" cache={emotionCache}>
+				<ScrollToTop />
 
-					<Header />
+				<Header />
 
-					<EuiPage paddingSize="none">
-						<EuiPageSideBar paddingSize="l" sticky>
-							<SideNav />
-						</EuiPageSideBar>
+				<EuiPage paddingSize="none">
+					<EuiPageSideBar paddingSize="l" sticky>
+						<SideNav />
+					</EuiPageSideBar>
 
-						<EuiPageBody panelled>
-							<React.Suspense fallback={null /* TODO */}>
-								<AppRoutes />
-							</React.Suspense>
-						</EuiPageBody>
-					</EuiPage>
-				</EuiProvider>
-			</BrowserRouter>
-		</AuthProvider>
+					<EuiPageBody panelled>
+						<React.Suspense fallback={null /* TODO */}>
+							<AppRoutes />
+						</React.Suspense>
+					</EuiPageBody>
+				</EuiPage>
+			</EuiProvider>
+		</Compose>
 	);
 };
 

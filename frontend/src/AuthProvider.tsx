@@ -5,7 +5,7 @@ import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import React from 'react';
 
 interface AuthProviderProps {
-	children: React.ReactNode;
+	children?: React.ReactNode;
 }
 
 export const AuthProvider = ({
