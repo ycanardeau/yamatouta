@@ -2,8 +2,8 @@ import { IUserDto } from '@/dto/IUserDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiBreadcrumb,
-	EuiPageContent,
-	EuiPageContentBody,
+	EuiPageContent_Deprecated as EuiPageContent,
+	EuiPageContentBody_Deprecated as EuiPageContentBody,
 	EuiPageHeader,
 	EuiPageHeaderProps,
 } from '@elastic/eui';

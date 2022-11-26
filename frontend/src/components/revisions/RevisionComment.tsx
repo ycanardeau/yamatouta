@@ -64,7 +64,7 @@ export const RevisionComment = ({
 					</EuiFlexItem>
 				</EuiFlexGroup>
 			}
-			type="update"
+			// TODO: type="update"
 			event={
 				<EuiFlexGroup
 					responsive={false}
@@ -75,7 +75,7 @@ export const RevisionComment = ({
 				</EuiFlexGroup>
 			}
 			timestamp={moment(revision.createdAt).fromNow()}
-			timelineIcon={<TimelineIcon event={revision.event} />}
+			timelineAvatar={<TimelineIcon event={revision.event} />}
 		/>
 	);
 };

@@ -8,8 +8,8 @@ import {
 	EuiIcon,
 	EuiListGroup,
 	EuiListGroupItem,
-	EuiPageContent,
-	EuiPageContentBody,
+	EuiPageContent_Deprecated as EuiPageContent,
+	EuiPageContentBody_Deprecated as EuiPageContentBody,
 } from '@elastic/eui';
 import { KeyRegular, MailRegular, PersonRegular } from '@fluentui/react-icons';
 import React from 'react';

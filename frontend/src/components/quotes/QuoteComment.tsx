@@ -172,7 +172,7 @@ export const QuoteComment = ({
 					{t('shared.unknownDate')}
 				</Link>
 			}
-			timelineIcon={<Avatar size="l" name={quote.artist.name} />}
+			timelineAvatar={<Avatar size="l" name={quote.artist.name} />}
 			actions={<QuotePopover store={store} quote={quote} />}
 		>
 			<EuiFlexGroup>

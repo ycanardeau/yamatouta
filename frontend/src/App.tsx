@@ -5,7 +5,7 @@ import Header from '@/Header';
 import SideNav from '@/SideNav';
 import config from '@/config';
 import '@/i18n';
-import { EuiPage, EuiPageBody, EuiPageSideBar } from '@elastic/eui';
+import { EuiPage, EuiPageBody, EuiPageSidebar } from '@elastic/eui';
 import { EuiProvider } from '@elastic/eui';
 import '@elastic/eui/dist/eui_theme_dark.css';
 import createCache from '@emotion/cache';
@@ -38,9 +38,9 @@ const App = (): React.ReactElement => {
 				<Header />
 
 				<EuiPage paddingSize="none">
-					<EuiPageSideBar paddingSize="l" sticky>
+					<EuiPageSidebar paddingSize="l" sticky>
 						<SideNav />
-					</EuiPageSideBar>
+					</EuiPageSidebar>
 
 					<EuiPageBody panelled>
 						<React.Suspense fallback={null /* TODO */}>
