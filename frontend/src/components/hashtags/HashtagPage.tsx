@@ -1,10 +1,8 @@
 import { IHashtagDto } from '@/dto/IHashtagDto';
 import {
 	EuiBreadcrumb,
-	EuiPageContent_Deprecated as EuiPageContent,
-	EuiPageContentBody_Deprecated as EuiPageContentBody,
-	EuiPageHeader,
 	EuiPageHeaderProps,
+	EuiPageTemplate,
 } from '@elastic/eui';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +25,7 @@ export const HashtagPage = ({
 
 	return (
 		<>
-			<EuiPageHeader
+			<EuiPageTemplate.Header
 				{...pageHeaderProps}
 				restrictWidth
 				breadcrumbs={([] as EuiBreadcrumb[])
@@ -52,18 +50,9 @@ export const HashtagPage = ({
 							: [],
 					)}
 			/>
-
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody restrictWidth>
-					{children}
-				</EuiPageContentBody>
-			</EuiPageContent>
+			<EuiPageTemplate.Section restrictWidth>
+				{children}
+			</EuiPageTemplate.Section>
 		</>
 	);
 };

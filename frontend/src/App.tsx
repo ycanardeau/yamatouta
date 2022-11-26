@@ -5,8 +5,7 @@ import Header from '@/Header';
 import SideNav from '@/SideNav';
 import config from '@/config';
 import '@/i18n';
-import { EuiPage, EuiPageBody, EuiPageSidebar } from '@elastic/eui';
-import { EuiProvider } from '@elastic/eui';
+import { EuiPageTemplate, EuiProvider } from '@elastic/eui';
 import '@elastic/eui/dist/eui_theme_dark.css';
 import createCache from '@emotion/cache';
 import { ScrollToTop } from '@vocadb/route-sphere';
@@ -37,17 +36,15 @@ const App = (): React.ReactElement => {
 
 				<Header />
 
-				<EuiPage paddingSize="none">
-					<EuiPageSidebar paddingSize="l" sticky>
+				<EuiPageTemplate panelled restrictWidth offset={0}>
+					<EuiPageTemplate.Sidebar sticky>
 						<SideNav />
-					</EuiPageSidebar>
+					</EuiPageTemplate.Sidebar>
 
-					<EuiPageBody panelled>
-						<React.Suspense fallback={null /* TODO */}>
-							<AppRoutes />
-						</React.Suspense>
-					</EuiPageBody>
-				</EuiPage>
+					<React.Suspense fallback={null /* TODO */}>
+						<AppRoutes />
+					</React.Suspense>
+				</EuiPageTemplate>
 			</EuiProvider>
 		</Compose>
 	);

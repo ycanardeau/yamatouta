@@ -5,8 +5,7 @@ import {
 	EuiIcon,
 	EuiListGroup,
 	EuiListGroupItem,
-	EuiPageContent_Deprecated as EuiPageContent,
-	EuiPageContentBody_Deprecated as EuiPageContentBody,
+	EuiPageTemplate,
 } from '@elastic/eui';
 import {
 	DatabaseSearchRegular,
@@ -25,50 +24,40 @@ const AdminIndex = (): React.ReactElement => {
 	useYamatoutaTitle(t('shared.manage'), ready);
 
 	return auth.user ? (
-		<EuiPageContent
-			hasBorder={false}
-			hasShadow={false}
-			paddingSize="none"
-			color="transparent"
-			borderRadius="none"
-		>
-			<EuiPageContentBody restrictWidth>
-				<EuiListGroup>
-					<EuiListGroupItem
-						icon={<EuiIcon type={HistoryRegular} />}
-						label={t('admin.createMissingRevisions')}
-						onClick={(): Promise<void> =>
-							adminApi.createMissingRevisions()
-						}
-						isActive
-					/>
-					<EuiListGroupItem
-						icon={<EuiIcon type={DatabaseSearchRegular} />}
-						label={t('admin.populateIndex')}
-						onClick={(): Promise<void> =>
-							adminApi.updateSearchIndex({ forceUpdate: false })
-						}
-						isActive
-					/>
-					<EuiListGroupItem
-						icon={<EuiIcon type={DatabaseSearchRegular} />}
-						label={t('admin.rebuildIndex')}
-						onClick={(): Promise<void> =>
-							adminApi.updateSearchIndex({ forceUpdate: true })
-						}
-						isActive
-					/>
-					<EuiListGroupItem
-						icon={<EuiIcon type={OrganizationRegular} />}
-						label={t('admin.generateSitemaps')}
-						onClick={(): Promise<void> =>
-							adminApi.generateSitemaps()
-						}
-						isActive
-					/>
-				</EuiListGroup>
-			</EuiPageContentBody>
-		</EuiPageContent>
+		<EuiPageTemplate.Section restrictWidth>
+			<EuiListGroup>
+				<EuiListGroupItem
+					icon={<EuiIcon type={HistoryRegular} />}
+					label={t('admin.createMissingRevisions')}
+					onClick={(): Promise<void> =>
+						adminApi.createMissingRevisions()
+					}
+					isActive
+				/>
+				<EuiListGroupItem
+					icon={<EuiIcon type={DatabaseSearchRegular} />}
+					label={t('admin.populateIndex')}
+					onClick={(): Promise<void> =>
+						adminApi.updateSearchIndex({ forceUpdate: false })
+					}
+					isActive
+				/>
+				<EuiListGroupItem
+					icon={<EuiIcon type={DatabaseSearchRegular} />}
+					label={t('admin.rebuildIndex')}
+					onClick={(): Promise<void> =>
+						adminApi.updateSearchIndex({ forceUpdate: true })
+					}
+					isActive
+				/>
+				<EuiListGroupItem
+					icon={<EuiIcon type={OrganizationRegular} />}
+					label={t('admin.generateSitemaps')}
+					onClick={(): Promise<void> => adminApi.generateSitemaps()}
+					isActive
+				/>
+			</EuiListGroup>
+		</EuiPageTemplate.Section>
 	) : (
 		<Navigate to="/" replace />
 	);

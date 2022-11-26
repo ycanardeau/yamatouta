@@ -2,10 +2,8 @@ import { IWorkDto } from '@/dto/IWorkDto';
 import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiBreadcrumb,
-	EuiPageContent_Deprecated as EuiPageContent,
-	EuiPageContentBody_Deprecated as EuiPageContentBody,
-	EuiPageHeader,
 	EuiPageHeaderProps,
+	EuiPageTemplate,
 } from '@elastic/eui';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +25,7 @@ export const WorkPage = ({
 
 	return (
 		<>
-			<EuiPageHeader
+			<EuiPageTemplate.Header
 				{...pageHeaderProps}
 				restrictWidth
 				breadcrumbs={([] as EuiBreadcrumb[])
@@ -52,18 +50,9 @@ export const WorkPage = ({
 							: [],
 					)}
 			/>
-
-			<EuiPageContent
-				hasBorder={false}
-				hasShadow={false}
-				paddingSize="none"
-				color="transparent"
-				borderRadius="none"
-			>
-				<EuiPageContentBody restrictWidth>
-					{children}
-				</EuiPageContentBody>
-			</EuiPageContent>
+			<EuiPageTemplate.Section restrictWidth>
+				{children}
+			</EuiPageTemplate.Section>
 		</>
 	);
 };

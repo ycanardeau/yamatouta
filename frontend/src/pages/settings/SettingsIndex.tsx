@@ -8,8 +8,7 @@ import {
 	EuiIcon,
 	EuiListGroup,
 	EuiListGroupItem,
-	EuiPageContent_Deprecated as EuiPageContent,
-	EuiPageContentBody_Deprecated as EuiPageContentBody,
+	EuiPageTemplate,
 } from '@elastic/eui';
 import { KeyRegular, MailRegular, PersonRegular } from '@fluentui/react-icons';
 import React from 'react';
@@ -28,58 +27,50 @@ const SettingsIndex = (): React.ReactElement => {
 	const changePasswordDialog = useDialog();
 
 	return auth.user ? (
-		<EuiPageContent
-			hasBorder={false}
-			hasShadow={false}
-			paddingSize="none"
-			color="transparent"
-			borderRadius="none"
-		>
-			<EuiPageContentBody restrictWidth>
-				<EuiListGroup>
-					<EuiListGroupItem
-						icon={<EuiIcon type={PersonRegular} />}
-						label={t('auth.username')}
-						onClick={changeUsernameDialog.show}
-						isActive
-					/>
-					<EuiListGroupItem
-						icon={<EuiIcon type={MailRegular} />}
-						label={t('auth.email')}
-						onClick={changeEmailDialog.show}
-						isActive
-					/>
-					<EuiListGroupItem
-						icon={<EuiIcon type={KeyRegular} />}
-						label={t('auth.password')}
-						onClick={changePasswordDialog.show}
-						isActive
-					/>
-				</EuiListGroup>
+		<EuiPageTemplate.Section restrictWidth>
+			<EuiListGroup>
+				<EuiListGroupItem
+					icon={<EuiIcon type={PersonRegular} />}
+					label={t('auth.username')}
+					onClick={changeUsernameDialog.show}
+					isActive
+				/>
+				<EuiListGroupItem
+					icon={<EuiIcon type={MailRegular} />}
+					label={t('auth.email')}
+					onClick={changeEmailDialog.show}
+					isActive
+				/>
+				<EuiListGroupItem
+					icon={<EuiIcon type={KeyRegular} />}
+					label={t('auth.password')}
+					onClick={changePasswordDialog.show}
+					isActive
+				/>
+			</EuiListGroup>
 
-				{changeUsernameDialog.visible && (
-					<ChangeUsernameDialog
-						user={auth.user}
-						onClose={changeUsernameDialog.close}
-						onSuccess={(user): void => auth.setUser(user)}
-					/>
-				)}
+			{changeUsernameDialog.visible && (
+				<ChangeUsernameDialog
+					user={auth.user}
+					onClose={changeUsernameDialog.close}
+					onSuccess={(user): void => auth.setUser(user)}
+				/>
+			)}
 
-				{changeEmailDialog.visible && (
-					<ChangeEmailDialog
-						onClose={changeEmailDialog.close}
-						onSuccess={(user): void => auth.setUser(user)}
-					/>
-				)}
+			{changeEmailDialog.visible && (
+				<ChangeEmailDialog
+					onClose={changeEmailDialog.close}
+					onSuccess={(user): void => auth.setUser(user)}
+				/>
+			)}
 
-				{changePasswordDialog.visible && (
-					<ChangePasswordDialog
-						onClose={changePasswordDialog.close}
-						onSuccess={(user): void => auth.setUser(user)}
-					/>
-				)}
-			</EuiPageContentBody>
-		</EuiPageContent>
+			{changePasswordDialog.visible && (
+				<ChangePasswordDialog
+					onClose={changePasswordDialog.close}
+					onSuccess={(user): void => auth.setUser(user)}
+				/>
+			)}
+		</EuiPageTemplate.Section>
 	) : (
 		<Navigate to="/" replace />
 	);
