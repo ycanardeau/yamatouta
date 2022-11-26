@@ -1,7 +1,7 @@
 import { Pagination } from '@/components/Pagination';
 import { QuoteComment } from '@/components/quotes/QuoteComment';
 import { QuoteSearchStore } from '@/stores/quotes/QuoteSearchStore';
-import { EuiCommentList, EuiProgress } from '@elastic/eui';
+import { EuiCommentList, EuiProgress, EuiSpacer } from '@elastic/eui';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 
@@ -15,11 +15,17 @@ export const QuoteSearchList = observer(
 			<EuiProgress size="xs" color="primary" />
 		) : (
 			<>
-				{store.quotes.map((quote) => (
-					<EuiCommentList key={quote.id}>
-						<QuoteComment store={store} quote={quote} />
-					</EuiCommentList>
-				))}
+				<EuiCommentList>
+					{store.quotes.map((quote) => (
+						<QuoteComment
+							store={store}
+							quote={quote}
+							key={quote.id}
+						/>
+					))}
+				</EuiCommentList>
+
+				<EuiSpacer size="m" />
 
 				<Pagination store={store.pagination} />
 			</>
