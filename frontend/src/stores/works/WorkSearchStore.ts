@@ -30,7 +30,7 @@ export class WorkSearchStore
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable works: IWorkDto[] = [];
-	@observable sort = WorkSortRule.CreatedAsc;
+	@observable sort = WorkSortRule.UpdatedDesc;
 	@observable query = '';
 	@observable submittedQuery = '';
 	@observable workType: WorkType | '' = '';
@@ -101,7 +101,7 @@ export class WorkSearchStore
 	set locationState(value: IWorkSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
-		this.sort = value.sort ?? WorkSortRule.CreatedAsc;
+		this.sort = value.sort ?? WorkSortRule.UpdatedDesc;
 		this.setSubmittedQuery(value.query ?? '');
 		this.workType = value.workType ?? '';
 	}

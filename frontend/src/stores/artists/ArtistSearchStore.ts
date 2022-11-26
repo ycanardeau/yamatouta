@@ -30,7 +30,7 @@ export class ArtistSearchStore
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable artists: IArtistDto[] = [];
-	@observable sort = ArtistSortRule.CreatedAsc;
+	@observable sort = ArtistSortRule.UpdatedDesc;
 	@observable query = '';
 	@observable submittedQuery = '';
 	@observable artistType: ArtistType | '' = '';
@@ -101,7 +101,7 @@ export class ArtistSearchStore
 	set locationState(value: IArtistSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
-		this.sort = value.sort ?? ArtistSortRule.CreatedAsc;
+		this.sort = value.sort ?? ArtistSortRule.UpdatedDesc;
 		this.setSubmittedQuery(value.query ?? '');
 		this.artistType = value.artistType ?? '';
 	}

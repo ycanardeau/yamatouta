@@ -38,7 +38,7 @@ export class QuoteSearchStore
 	@observable workId?: number;
 	@observable hashtags: string[] = [];
 
-	constructor(private readonly defaultSort = QuoteSortRule.CreatedAsc) {
+	constructor(private readonly defaultSort = QuoteSortRule.UpdatedDesc) {
 		makeObservable(this);
 
 		this.sort = this.defaultSort;
