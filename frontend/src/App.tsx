@@ -14,29 +14,26 @@ import axiosRetry from 'axios-retry';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import './App.scss';
-
 axios.defaults.baseURL = config.apiEndpoint;
 
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 // See https://github.com/elastic/eui/issues/5436 and https://elastic.github.io/eui/#/utilities/provider.
-const emotionCache = createCache({
-	key: 'app',
-	container:
-		document.querySelector<HTMLElement>('meta[name="emotion-global"]') ??
-		undefined,
+const euiCache = createCache({
+	key: 'eui',
+	container: document.querySelector('meta[name="eui-style-insert"]') as Node,
 });
+euiCache.compat = true;
 
 const App = (): React.ReactElement => {
 	return (
 		<Compose components={[AuthProvider, BrowserRouter]}>
-			<EuiProvider colorMode="dark" cache={emotionCache}>
+			<EuiProvider colorMode="dark" cache={euiCache}>
 				<ScrollToTop />
 
 				<Header />
 
-				<EuiPageTemplate panelled restrictWidth offset={0}>
+				<EuiPageTemplate panelled restrictWidth>
 					<EuiPageTemplate.Sidebar sticky>
 						<SideNav />
 					</EuiPageTemplate.Sidebar>

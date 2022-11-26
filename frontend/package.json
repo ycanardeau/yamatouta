@@ -55,7 +55,6 @@
 		"eslint-plugin-react": "^7.31.10",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"prettier": "^2.7.1",
-		"sass": "^1.56.1",
 		"typescript": "^4.6.4",
 		"vite": "^3.2.3"
 	}
