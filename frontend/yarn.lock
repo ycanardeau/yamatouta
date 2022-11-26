@@ -2539,13 +2539,10 @@
     "@typescript-eslint/types" "5.10.1"
     eslint-visitor-keys "^3.0.0"
 
-"@vocadb/route-sphere@^2.0.0-rc.6":
-  version "2.0.0-rc.6"
-  resolved "https://registry.yarnpkg.com/@vocadb/route-sphere/-/route-sphere-2.0.0-rc.6.tgz#4b31cbbee208c0fd887d18bb536d8cd0f23e62a1"
-  integrity sha512-Gk+OPsSBP5LnICSTPg8FnP885/ZwEwQaGJeTnCH8wueNacut2t1dCW0UuBNoa8um1mORwzjpgLZ/rEteqwPggA==
-  dependencies:
-    lodash-es "^4.17.21"
-    qs "^6.11.0"
+"@vocadb/route-sphere@^2.0.0-rc.8":
+  version "2.0.0-rc.8"
+  resolved "https://registry.yarnpkg.com/@vocadb/route-sphere/-/route-sphere-2.0.0-rc.8.tgz#32ac8805a01b7a5072d215b32f2d6becff81157d"
+  integrity sha512-3DYntRlTo/MzRmF3uEZ4YRfnDg2fKSOvAw8PJaqP+nOmBJ49fhmTdhwGOeKriLeXQTjcpvaqQ1nnxFiztpAbCQ==
 
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
@@ -8143,13 +8140,6 @@ qs@^6.10.1:
   version "6.10.3"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.3.tgz#d6cde1b2ffca87b5aa57889816c5f81535e22e8e"
   integrity sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==
-  dependencies:
-    side-channel "^1.0.4"
-
-qs@^6.11.0:
-  version "6.11.0"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.0.tgz#fd0d963446f7a65e1367e01abd85429453f0c37a"
-  integrity sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==
   dependencies:
     side-channel "^1.0.4"
 
