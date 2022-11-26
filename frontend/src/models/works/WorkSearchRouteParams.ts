@@ -1,7 +1,7 @@
 import { WorkSortRule } from '@/models/works/WorkSortRule';
 import { WorkType } from '@/models/works/WorkType';
 
-export interface IWorkSearchRouteParams {
+export interface WorkSearchRouteParams {
 	page?: number;
 	pageSize?: number;
 	sort?: WorkSortRule;

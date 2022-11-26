@@ -1,21 +1,21 @@
-import { IArtistSearchRouteParams } from '@/models/artists/IArtistSearchRouteParams';
-import { IHashtagSearchRouteParams } from '@/models/hashtags/IHashtagSearchRouteParams';
-import { IQuoteSearchRouteParams } from '@/models/quotes/IQuoteSearchRouteParams';
-import { ITranslationSearchRouteParams } from '@/models/translations/ITranslationSearchRouteParams';
-import { IUserSearchRouteParams } from '@/models/users/IUserSearchRouteParams';
-import { IWorkSearchRouteParams } from '@/models/works/IWorkSearchRouteParams';
+import { ArtistSearchRouteParams } from '@/models/artists/ArtistSearchRouteParams';
+import { HashtagSearchRouteParams } from '@/models/hashtags/HashtagSearchRouteParams';
+import { QuoteSearchRouteParams } from '@/models/quotes/QuoteSearchRouteParams';
+import { TranslationSearchRouteParams } from '@/models/translations/TranslationSearchRouteParams';
+import { UserSearchRouteParams } from '@/models/users/UserSearchRouteParams';
+import { WorkSearchRouteParams } from '@/models/works/WorkSearchRouteParams';
 import * as fns from '@/utils/validate-fns';
 import { ValidateFunction } from 'ajv';
 
 export const artistSearchRouteParams =
-	fns.IArtistSearchRouteParams as ValidateFunction<IArtistSearchRouteParams>;
+	fns.ArtistSearchRouteParams as ValidateFunction<ArtistSearchRouteParams>;
 export const hashtagSearchRouteParams =
-	fns.IHashtagSearchRouteParams as ValidateFunction<IHashtagSearchRouteParams>;
+	fns.HashtagSearchRouteParams as ValidateFunction<HashtagSearchRouteParams>;
 export const quoteSearchRouteParams =
-	fns.IQuoteSearchRouteParams as ValidateFunction<IQuoteSearchRouteParams>;
+	fns.QuoteSearchRouteParams as ValidateFunction<QuoteSearchRouteParams>;
 export const translationSearchRouteParams =
-	fns.ITranslationSearchRouteParams as ValidateFunction<ITranslationSearchRouteParams>;
+	fns.TranslationSearchRouteParams as ValidateFunction<TranslationSearchRouteParams>;
 export const userSearchRouteParams =
-	fns.IUserSearchRouteParams as ValidateFunction<IUserSearchRouteParams>;
+	fns.UserSearchRouteParams as ValidateFunction<UserSearchRouteParams>;
 export const workSearchRouteParams =
-	fns.IWorkSearchRouteParams as ValidateFunction<IWorkSearchRouteParams>;
+	fns.WorkSearchRouteParams as ValidateFunction<WorkSearchRouteParams>;

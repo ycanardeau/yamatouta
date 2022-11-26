@@ -1,7 +1,7 @@
 import { hashtagApi } from '@/api/hashtagApi';
 import { IHashtagDto } from '@/dto/IHashtagDto';
+import { HashtagSearchRouteParams } from '@/models/hashtags/HashtagSearchRouteParams';
 import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
-import { IHashtagSearchRouteParams } from '@/models/hashtags/IHashtagSearchRouteParams';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
 import {
@@ -17,14 +17,14 @@ import {
 	runInAction,
 } from 'mobx';
 
-const clearResultsByQueryKeys: (keyof IHashtagSearchRouteParams)[] = [
+const clearResultsByQueryKeys: (keyof HashtagSearchRouteParams)[] = [
 	'pageSize',
 	'sort',
 	'query',
 ];
 
 export class HashtagSearchStore
-	implements LocationStateStore<IHashtagSearchRouteParams>
+	implements LocationStateStore<HashtagSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable hashtags: IHashtagDto[] = [];
@@ -105,7 +105,7 @@ export class HashtagSearchStore
 		}
 	};
 
-	@computed.struct get locationState(): IHashtagSearchRouteParams {
+	@computed.struct get locationState(): HashtagSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -113,19 +113,19 @@ export class HashtagSearchStore
 			query: this.submittedQuery,
 		};
 	}
-	set locationState(value: IHashtagSearchRouteParams) {
+	set locationState(value: HashtagSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? HashtagSortRule.ReferenceCountDesc;
 		this.setSubmittedQuery(value.query ?? '');
 	}
 
-	validateLocationState = (data: any): data is IHashtagSearchRouteParams => {
+	validateLocationState = (data: any): data is HashtagSearchRouteParams => {
 		return validators.hashtagSearchRouteParams(data);
 	};
 
 	onLocationStateChange = (
-		event: StateChangeEvent<IHashtagSearchRouteParams>,
+		event: StateChangeEvent<HashtagSearchRouteParams>,
 	): void => {
 		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
 

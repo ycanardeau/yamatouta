@@ -20,13 +20,12 @@ const ajv = new Ajv({
 });
 
 const moduleCode = standaloneCode(ajv, {
-	IArtistSearchRouteParams: '#/definitions/IArtistSearchRouteParams',
-	IHashtagSearchRouteParams: '#/definitions/IHashtagSearchRouteParams',
-	IQuoteSearchRouteParams: '#/definitions/IQuoteSearchRouteParams',
-	ITranslationSearchRouteParams:
-		'#/definitions/ITranslationSearchRouteParams',
-	IUserSearchRouteParams: '#/definitions/IUserSearchRouteParams',
-	IWorkSearchRouteParams: '#/definitions/IWorkSearchRouteParams',
+	ArtistSearchRouteParams: '#/definitions/ArtistSearchRouteParams',
+	HashtagSearchRouteParams: '#/definitions/HashtagSearchRouteParams',
+	QuoteSearchRouteParams: '#/definitions/QuoteSearchRouteParams',
+	TranslationSearchRouteParams: '#/definitions/TranslationSearchRouteParams',
+	UserSearchRouteParams: '#/definitions/UserSearchRouteParams',
+	WorkSearchRouteParams: '#/definitions/WorkSearchRouteParams',
 });
 
 writeFileSync(outputPath, moduleCode);

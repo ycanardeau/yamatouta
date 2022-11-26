@@ -1,6 +1,6 @@
 import { translationApi } from '@/api/translationApi';
 import { ITranslationDto } from '@/dto/ITranslationDto';
-import { ITranslationSearchRouteParams } from '@/models/translations/ITranslationSearchRouteParams';
+import { TranslationSearchRouteParams } from '@/models/translations/TranslationSearchRouteParams';
 import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
 import { WordCategory } from '@/models/translations/WordCategory';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -18,7 +18,7 @@ import {
 	runInAction,
 } from 'mobx';
 
-const clearResultsByQueryKeys: (keyof ITranslationSearchRouteParams)[] = [
+const clearResultsByQueryKeys: (keyof TranslationSearchRouteParams)[] = [
 	'pageSize',
 	'sort',
 	'query',
@@ -26,7 +26,7 @@ const clearResultsByQueryKeys: (keyof ITranslationSearchRouteParams)[] = [
 ];
 
 export class TranslationSearchStore
-	implements LocationStateStore<ITranslationSearchRouteParams>
+	implements LocationStateStore<TranslationSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable translations: ITranslationDto[] = [];
@@ -117,7 +117,7 @@ export class TranslationSearchStore
 		}
 	};
 
-	@computed.struct get locationState(): ITranslationSearchRouteParams {
+	@computed.struct get locationState(): TranslationSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -126,7 +126,7 @@ export class TranslationSearchStore
 			category: this.category ? this.category : undefined,
 		};
 	}
-	set locationState(value: ITranslationSearchRouteParams) {
+	set locationState(value: TranslationSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? TranslationSortRule.HeadwordAsc;
@@ -136,12 +136,12 @@ export class TranslationSearchStore
 
 	validateLocationState = (
 		data: any,
-	): data is ITranslationSearchRouteParams => {
+	): data is TranslationSearchRouteParams => {
 		return validators.translationSearchRouteParams(data);
 	};
 
 	onLocationStateChange = (
-		event: StateChangeEvent<ITranslationSearchRouteParams>,
+		event: StateChangeEvent<TranslationSearchRouteParams>,
 	): void => {
 		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
 

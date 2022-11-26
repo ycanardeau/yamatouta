@@ -1,8 +1,8 @@
 import { artistApi } from '@/api/artistApi';
 import { IArtistDto } from '@/dto/IArtistDto';
+import { ArtistSearchRouteParams } from '@/models/artists/ArtistSearchRouteParams';
 import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
 import { ArtistType } from '@/models/artists/ArtistType';
-import { IArtistSearchRouteParams } from '@/models/artists/IArtistSearchRouteParams';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
 import {
@@ -18,7 +18,7 @@ import {
 	runInAction,
 } from 'mobx';
 
-const clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = [
+const clearResultsByQueryKeys: (keyof ArtistSearchRouteParams)[] = [
 	'pageSize',
 	'sort',
 	'query',
@@ -26,7 +26,7 @@ const clearResultsByQueryKeys: (keyof IArtistSearchRouteParams)[] = [
 ];
 
 export class ArtistSearchStore
-	implements LocationStateStore<IArtistSearchRouteParams>
+	implements LocationStateStore<ArtistSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable artists: IArtistDto[] = [];
@@ -89,7 +89,7 @@ export class ArtistSearchStore
 		}
 	};
 
-	@computed.struct get locationState(): IArtistSearchRouteParams {
+	@computed.struct get locationState(): ArtistSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -98,7 +98,7 @@ export class ArtistSearchStore
 			artistType: this.artistType ? this.artistType : undefined,
 		};
 	}
-	set locationState(value: IArtistSearchRouteParams) {
+	set locationState(value: ArtistSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? ArtistSortRule.UpdatedDesc;
@@ -106,12 +106,12 @@ export class ArtistSearchStore
 		this.artistType = value.artistType ?? '';
 	}
 
-	validateLocationState = (data: any): data is IArtistSearchRouteParams => {
+	validateLocationState = (data: any): data is ArtistSearchRouteParams => {
 		return validators.artistSearchRouteParams(data);
 	};
 
 	onLocationStateChange = (
-		event: StateChangeEvent<IArtistSearchRouteParams>,
+		event: StateChangeEvent<ArtistSearchRouteParams>,
 	): void => {
 		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
 

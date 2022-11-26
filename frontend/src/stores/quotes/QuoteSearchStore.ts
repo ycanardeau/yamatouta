@@ -1,6 +1,6 @@
 import { quoteApi } from '@/api/quoteApi';
 import { IQuoteDto } from '@/dto/IQuoteDto';
-import { IQuoteSearchRouteParams } from '@/models/quotes/IQuoteSearchRouteParams';
+import { QuoteSearchRouteParams } from '@/models/quotes/QuoteSearchRouteParams';
 import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
 import { QuoteType } from '@/models/quotes/QuoteType';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -18,7 +18,7 @@ import {
 	runInAction,
 } from 'mobx';
 
-const clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = [
+const clearResultsByQueryKeys: (keyof QuoteSearchRouteParams)[] = [
 	'pageSize',
 	'sort',
 	'query',
@@ -26,7 +26,7 @@ const clearResultsByQueryKeys: (keyof IQuoteSearchRouteParams)[] = [
 ];
 
 export class QuoteSearchStore
-	implements LocationStateStore<IQuoteSearchRouteParams>
+	implements LocationStateStore<QuoteSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable quotes: IQuoteDto[] = [];
@@ -97,7 +97,7 @@ export class QuoteSearchStore
 		}
 	};
 
-	@computed.struct get locationState(): IQuoteSearchRouteParams {
+	@computed.struct get locationState(): QuoteSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -106,7 +106,7 @@ export class QuoteSearchStore
 			quoteType: this.quoteType ? this.quoteType : undefined,
 		};
 	}
-	set locationState(value: IQuoteSearchRouteParams) {
+	set locationState(value: QuoteSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? this.defaultSort;
@@ -114,12 +114,12 @@ export class QuoteSearchStore
 		this.quoteType = value.quoteType ?? '';
 	}
 
-	validateLocationState = (data: any): data is IQuoteSearchRouteParams => {
+	validateLocationState = (data: any): data is QuoteSearchRouteParams => {
 		return validators.quoteSearchRouteParams(data);
 	};
 
 	onLocationStateChange = (
-		event: StateChangeEvent<IQuoteSearchRouteParams>,
+		event: StateChangeEvent<QuoteSearchRouteParams>,
 	): void => {
 		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
 

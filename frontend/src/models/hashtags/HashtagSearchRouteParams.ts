@@ -1,6 +1,6 @@
 import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
 
-export interface IHashtagSearchRouteParams {
+export interface HashtagSearchRouteParams {
 	page?: number;
 	pageSize?: number;
 	sort?: HashtagSortRule;

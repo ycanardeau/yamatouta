@@ -1,6 +1,6 @@
 import { workApi } from '@/api/workApi';
 import { IWorkDto } from '@/dto/IWorkDto';
-import { IWorkSearchRouteParams } from '@/models/works/IWorkSearchRouteParams';
+import { WorkSearchRouteParams } from '@/models/works/WorkSearchRouteParams';
 import { WorkSortRule } from '@/models/works/WorkSortRule';
 import { WorkType } from '@/models/works/WorkType';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -18,7 +18,7 @@ import {
 	runInAction,
 } from 'mobx';
 
-const clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = [
+const clearResultsByQueryKeys: (keyof WorkSearchRouteParams)[] = [
 	'pageSize',
 	'sort',
 	'query',
@@ -26,7 +26,7 @@ const clearResultsByQueryKeys: (keyof IWorkSearchRouteParams)[] = [
 ];
 
 export class WorkSearchStore
-	implements LocationStateStore<IWorkSearchRouteParams>
+	implements LocationStateStore<WorkSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable works: IWorkDto[] = [];
@@ -89,7 +89,7 @@ export class WorkSearchStore
 		}
 	};
 
-	@computed.struct get locationState(): IWorkSearchRouteParams {
+	@computed.struct get locationState(): WorkSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -98,7 +98,7 @@ export class WorkSearchStore
 			workType: this.workType ? this.workType : undefined,
 		};
 	}
-	set locationState(value: IWorkSearchRouteParams) {
+	set locationState(value: WorkSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? WorkSortRule.UpdatedDesc;
@@ -106,12 +106,12 @@ export class WorkSearchStore
 		this.workType = value.workType ?? '';
 	}
 
-	validateLocationState = (data: any): data is IWorkSearchRouteParams => {
+	validateLocationState = (data: any): data is WorkSearchRouteParams => {
 		return validators.workSearchRouteParams(data);
 	};
 
 	onLocationStateChange = (
-		event: StateChangeEvent<IWorkSearchRouteParams>,
+		event: StateChangeEvent<WorkSearchRouteParams>,
 	): void => {
 		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
 

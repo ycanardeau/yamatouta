@@ -1,7 +1,7 @@
 import { userApi } from '@/api/userApi';
 import { IUserDto } from '@/dto/IUserDto';
-import { IUserSearchRouteParams } from '@/models/users/IUserSearchRouteParams';
 import { UserGroup } from '@/models/users/UserGroup';
+import { UserSearchRouteParams } from '@/models/users/UserSearchRouteParams';
 import { UserSortRule } from '@/models/users/UserSortRule';
 import { PaginationStore } from '@/stores/PaginationStore';
 import * as validators from '@/utils/validate';
@@ -18,7 +18,7 @@ import {
 	runInAction,
 } from 'mobx';
 
-const clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = [
+const clearResultsByQueryKeys: (keyof UserSearchRouteParams)[] = [
 	'pageSize',
 	'sort',
 	'query',
@@ -26,7 +26,7 @@ const clearResultsByQueryKeys: (keyof IUserSearchRouteParams)[] = [
 ];
 
 export class UserSearchStore
-	implements LocationStateStore<IUserSearchRouteParams>
+	implements LocationStateStore<UserSearchRouteParams>
 {
 	readonly pagination = new PaginationStore({ pageSize: 50 });
 	@observable users: IUserDto[] = [];
@@ -89,7 +89,7 @@ export class UserSearchStore
 		}
 	};
 
-	@computed.struct get locationState(): IUserSearchRouteParams {
+	@computed.struct get locationState(): UserSearchRouteParams {
 		return {
 			page: this.pagination.page,
 			pageSize: this.pagination.pageSize,
@@ -98,7 +98,7 @@ export class UserSearchStore
 			userGroup: this.userGroup ? this.userGroup : undefined,
 		};
 	}
-	set locationState(value: IUserSearchRouteParams) {
+	set locationState(value: UserSearchRouteParams) {
 		this.pagination.page = value.page ?? 1;
 		this.pagination.pageSize = value.pageSize ?? 50;
 		this.sort = value.sort ?? UserSortRule.CreatedAsc;
@@ -106,12 +106,12 @@ export class UserSearchStore
 		this.userGroup = value.userGroup ?? '';
 	}
 
-	validateLocationState = (data: any): data is IUserSearchRouteParams => {
+	validateLocationState = (data: any): data is UserSearchRouteParams => {
 		return validators.userSearchRouteParams(data);
 	};
 
 	onLocationStateChange = (
-		event: StateChangeEvent<IUserSearchRouteParams>,
+		event: StateChangeEvent<UserSearchRouteParams>,
 	): void => {
 		const clearResults = includesAny(clearResultsByQueryKeys, event.keys);
 
