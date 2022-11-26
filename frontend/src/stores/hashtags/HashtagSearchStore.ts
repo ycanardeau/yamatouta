@@ -3,11 +3,11 @@ import { IHashtagDto } from '@/dto/IHashtagDto';
 import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
 import { PaginationStore } from '@/stores/PaginationStore';
 import {
-	includesAny,
 	LocationStateStore,
 	StateChangeEvent,
+	includesAny,
 } from '@vocadb/route-sphere';
-import Ajv from 'ajv';
+import validate from 'HashtagSearchRouteParams.jsonschema';
 import {
 	action,
 	computed,
@@ -16,21 +16,12 @@ import {
 	runInAction,
 } from 'mobx';
 
-/* TODO: assert { type: 'json' } */
-import schema from './HashtagSearchRouteParams.schema.json';
-
 export interface HashtagSearchRouteParams {
 	page?: number;
 	pageSize?: number;
 	sort?: HashtagSortRule;
 	query?: string;
 }
-
-// TODO: Use single Ajv instance. See https://ajv.js.org/guide/managing-schemas.html.
-const ajv = new Ajv({ coerceTypes: true });
-
-// TODO: Make sure that we compile schemas only once and re-use compiled validation functions. See https://ajv.js.org/guide/getting-started.html.
-export const validate = ajv.compile<HashtagSearchRouteParams>(schema);
 
 const clearResultsByQueryKeys: (keyof HashtagSearchRouteParams)[] = [
 	'pageSize',

@@ -4,11 +4,11 @@ import { WorkSortRule } from '@/models/works/WorkSortRule';
 import { WorkType } from '@/models/works/WorkType';
 import { PaginationStore } from '@/stores/PaginationStore';
 import {
-	includesAny,
 	LocationStateStore,
 	StateChangeEvent,
+	includesAny,
 } from '@vocadb/route-sphere';
-import Ajv from 'ajv';
+import validate from 'WorkSearchRouteParams.jsonschema';
 import {
 	action,
 	computed,
@@ -17,9 +17,6 @@ import {
 	runInAction,
 } from 'mobx';
 
-/* TODO: assert { type: 'json' } */
-import schema from './WorkSearchRouteParams.schema.json';
-
 export interface WorkSearchRouteParams {
 	page?: number;
 	pageSize?: number;
@@ -27,12 +24,6 @@ export interface WorkSearchRouteParams {
 	query?: string;
 	workType?: WorkType;
 }
-
-// TODO: Use single Ajv instance. See https://ajv.js.org/guide/managing-schemas.html.
-const ajv = new Ajv({ coerceTypes: true });
-
-// TODO: Make sure that we compile schemas only once and re-use compiled validation functions. See https://ajv.js.org/guide/getting-started.html.
-export const validate = ajv.compile<WorkSearchRouteParams>(schema);
 
 const clearResultsByQueryKeys: (keyof WorkSearchRouteParams)[] = [
 	'pageSize',
