@@ -18,7 +18,6 @@ import { BrowserRouter } from 'react-router-dom';
 import './App.scss';
 
 axios.defaults.baseURL = config.apiEndpoint;
-axios.defaults.withCredentials = true;
 
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 

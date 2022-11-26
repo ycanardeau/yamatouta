@@ -75,5 +75,6 @@
 		"ts-json-schema-generator": "^1.0.0",
 		"typescript-json-schema": "^0.53.0",
 		"webpack-retry-chunk-load-plugin": "^3.0.0"
-	}
+	},
+	"proxy": "http://localhost:5000"
 }
