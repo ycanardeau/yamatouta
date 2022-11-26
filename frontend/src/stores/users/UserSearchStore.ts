@@ -3,12 +3,12 @@ import { IUserDto } from '@/dto/IUserDto';
 import { UserGroup } from '@/models/users/UserGroup';
 import { UserSortRule } from '@/models/users/UserSortRule';
 import { PaginationStore } from '@/stores/PaginationStore';
-import * as validators from '@/utils/validate';
 import {
 	includesAny,
 	LocationStateStore,
 	StateChangeEvent,
 } from '@vocadb/route-sphere';
+import Ajv from 'ajv';
 import {
 	action,
 	computed,
@@ -17,6 +17,9 @@ import {
 	runInAction,
 } from 'mobx';
 
+/* TODO: assert { type: 'json' } */
+import schema from './UserSearchRouteParams.schema.json';
+
 export interface UserSearchRouteParams {
 	page?: number;
 	pageSize?: number;
@@ -24,6 +27,12 @@ export interface UserSearchRouteParams {
 	query?: string;
 	userGroup?: UserGroup;
 }
+
+// TODO: Use single Ajv instance. See https://ajv.js.org/guide/managing-schemas.html.
+const ajv = new Ajv({ coerceTypes: true });
+
+// TODO: Make sure that we compile schemas only once and re-use compiled validation functions. See https://ajv.js.org/guide/getting-started.html.
+export const validate = ajv.compile<UserSearchRouteParams>(schema);
 
 const clearResultsByQueryKeys: (keyof UserSearchRouteParams)[] = [
 	'pageSize',
@@ -114,7 +123,7 @@ export class UserSearchStore
 	}
 
 	validateLocationState = (data: any): data is UserSearchRouteParams => {
-		return validators.userSearchRouteParams(data);
+		return validate(data);
 	};
 
 	onLocationStateChange = (

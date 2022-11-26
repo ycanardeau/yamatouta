@@ -3,12 +3,12 @@ import { IQuoteDto } from '@/dto/IQuoteDto';
 import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
 import { QuoteType } from '@/models/quotes/QuoteType';
 import { PaginationStore } from '@/stores/PaginationStore';
-import * as validators from '@/utils/validate';
 import {
 	includesAny,
 	LocationStateStore,
 	StateChangeEvent,
 } from '@vocadb/route-sphere';
+import Ajv from 'ajv';
 import {
 	action,
 	computed,
@@ -17,6 +17,9 @@ import {
 	runInAction,
 } from 'mobx';
 
+/* TODO: assert { type: 'json' } */
+import schema from './QuoteSearchRouteParams.schema.json';
+
 export interface QuoteSearchRouteParams {
 	page?: number;
 	pageSize?: number;
@@ -24,6 +27,12 @@ export interface QuoteSearchRouteParams {
 	query?: string;
 	quoteType?: QuoteType;
 }
+
+// TODO: Use single Ajv instance. See https://ajv.js.org/guide/managing-schemas.html.
+const ajv = new Ajv({ coerceTypes: true });
+
+// TODO: Make sure that we compile schemas only once and re-use compiled validation functions. See https://ajv.js.org/guide/getting-started.html.
+export const validate = ajv.compile<QuoteSearchRouteParams>(schema);
 
 const clearResultsByQueryKeys: (keyof QuoteSearchRouteParams)[] = [
 	'pageSize',
@@ -122,7 +131,7 @@ export class QuoteSearchStore
 	}
 
 	validateLocationState = (data: any): data is QuoteSearchRouteParams => {
-		return validators.quoteSearchRouteParams(data);
+		return validate(data);
 	};
 
 	onLocationStateChange = (

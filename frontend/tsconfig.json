@@ -22,7 +22,7 @@
 			"@/*": ["src/*"]
 		}
 	},
-	"include": ["src", "scripts"],
+	"include": ["src"],
 	"ts-node": {
 		"compilerOptions": {
 			"module": "commonjs"

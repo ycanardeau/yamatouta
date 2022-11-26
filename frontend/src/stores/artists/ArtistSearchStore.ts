@@ -3,12 +3,12 @@ import { IArtistDto } from '@/dto/IArtistDto';
 import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
 import { ArtistType } from '@/models/artists/ArtistType';
 import { PaginationStore } from '@/stores/PaginationStore';
-import * as validators from '@/utils/validate';
 import {
 	includesAny,
 	LocationStateStore,
 	StateChangeEvent,
 } from '@vocadb/route-sphere';
+import Ajv from 'ajv';
 import {
 	action,
 	computed,
@@ -17,6 +17,9 @@ import {
 	runInAction,
 } from 'mobx';
 
+/* TODO: assert { type: 'json' } */
+import schema from './ArtistSearchRouteParams.schema.json';
+
 export interface ArtistSearchRouteParams {
 	page?: number;
 	pageSize?: number;
@@ -24,6 +27,12 @@ export interface ArtistSearchRouteParams {
 	query?: string;
 	artistType?: ArtistType;
 }
+
+// TODO: Use single Ajv instance. See https://ajv.js.org/guide/managing-schemas.html.
+const ajv = new Ajv({ coerceTypes: true });
+
+// TODO: Make sure that we compile schemas only once and re-use compiled validation functions. See https://ajv.js.org/guide/getting-started.html.
+export const validate = ajv.compile<ArtistSearchRouteParams>(schema);
 
 const clearResultsByQueryKeys: (keyof ArtistSearchRouteParams)[] = [
 	'pageSize',
@@ -114,7 +123,7 @@ export class ArtistSearchStore
 	}
 
 	validateLocationState = (data: any): data is ArtistSearchRouteParams => {
-		return validators.artistSearchRouteParams(data);
+		return validate(data);
 	};
 
 	onLocationStateChange = (

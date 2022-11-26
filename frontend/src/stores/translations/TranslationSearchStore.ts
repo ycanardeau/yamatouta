@@ -3,12 +3,12 @@ import { ITranslationDto } from '@/dto/ITranslationDto';
 import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
 import { WordCategory } from '@/models/translations/WordCategory';
 import { PaginationStore } from '@/stores/PaginationStore';
-import * as validators from '@/utils/validate';
 import {
 	includesAny,
 	LocationStateStore,
 	StateChangeEvent,
 } from '@vocadb/route-sphere';
+import Ajv from 'ajv';
 import {
 	action,
 	computed,
@@ -17,6 +17,9 @@ import {
 	runInAction,
 } from 'mobx';
 
+/* TODO: assert { type: 'json' } */
+import schema from './TranslationSearchRouteParams.schema.json';
+
 export interface TranslationSearchRouteParams {
 	page?: number;
 	pageSize?: number;
@@ -24,6 +27,12 @@ export interface TranslationSearchRouteParams {
 	query?: string;
 	category?: WordCategory;
 }
+
+// TODO: Use single Ajv instance. See https://ajv.js.org/guide/managing-schemas.html.
+const ajv = new Ajv({ coerceTypes: true });
+
+// TODO: Make sure that we compile schemas only once and re-use compiled validation functions. See https://ajv.js.org/guide/getting-started.html.
+export const validate = ajv.compile<TranslationSearchRouteParams>(schema);
 
 const clearResultsByQueryKeys: (keyof TranslationSearchRouteParams)[] = [
 	'pageSize',
@@ -144,7 +153,7 @@ export class TranslationSearchStore
 	validateLocationState = (
 		data: any,
 	): data is TranslationSearchRouteParams => {
-		return validators.translationSearchRouteParams(data);
+		return validate(data);
 	};
 
 	onLocationStateChange = (

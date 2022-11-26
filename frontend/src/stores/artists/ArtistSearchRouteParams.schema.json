@@ -1,0 +1,30 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"properties": {
+		"artistType": {
+			"enum": ["Character", "Group", "Other", "Person"],
+			"type": "string"
+		},
+		"page": {
+			"type": "number"
+		},
+		"pageSize": {
+			"type": "number"
+		},
+		"query": {
+			"type": "string"
+		},
+		"sort": {
+			"enum": [
+				"CreatedAsc",
+				"CreatedDesc",
+				"NameAsc",
+				"NameDesc",
+				"UpdatedAsc",
+				"UpdatedDesc"
+			],
+			"type": "string"
+		}
+	},
+	"type": "object"
+}
