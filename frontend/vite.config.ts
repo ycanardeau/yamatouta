@@ -62,5 +62,9 @@ export default defineConfig({
 	build: {
 		// https://vitejs.dev/guide/backend-integration.html#backend-integration
 		manifest: true,
+		// https://github.com/elastic/eui/issues/5463#issuecomment-1107665339
+		dynamicImportVarsOptions: {
+			exclude: [],
+		},
 	},
 });

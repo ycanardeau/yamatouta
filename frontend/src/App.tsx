@@ -5,6 +5,7 @@ import Header from '@/Header';
 import SideNav from '@/SideNav';
 import config from '@/config';
 import '@/i18n';
+import '@/icons';
 import { EuiPageTemplate, EuiProvider } from '@elastic/eui';
 import '@elastic/eui/dist/eui_theme_dark.css';
 import createCache from '@emotion/cache';
