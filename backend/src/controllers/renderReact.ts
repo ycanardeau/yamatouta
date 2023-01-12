@@ -1,6 +1,7 @@
 import config from '@/config';
 import { Response } from 'express';
 import { t } from 'i18next';
+import { join } from 'node:path';
 
 const assetManifest: {
 	'index.html': { file: string; css: string[] };
@@ -26,8 +27,8 @@ export const renderReact = (
 		keywords: pageMetadata.keywords || t('meta.keywords'),
 		description: pageMetadata.description || t('meta.description'),
 		image: pageMetadata.image,
-		script: assetManifest['index.html'].file,
-		style: assetManifest['index.html'].css[0],
+		script: join('/', assetManifest['index.html'].file),
+		style: join('/', assetManifest['index.html'].css[0]),
 		gaMeasurementId: config.gaMeasurementId,
 	});
 };
