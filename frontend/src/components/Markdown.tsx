@@ -3,8 +3,8 @@ import {
 	EuiLink,
 	EuiMarkdownFormat,
 	EuiMarkdownFormatProps,
-	euiMarkdownLinkValidator,
 	EuiMarkdownLinkValidatorOptions,
+	euiMarkdownLinkValidator,
 	getDefaultEuiMarkdownParsingPlugins,
 	getDefaultEuiMarkdownProcessingPlugins,
 } from '@elastic/eui';
@@ -76,7 +76,9 @@ const markdownLinkValidator = (options: EuiMarkdownLinkValidatorOptions) => {
 				const fragment = node.url.slice(1);
 
 				if (fragment.match(/^[あ-ん]+$/g)) {
-					node.url = `/hashtags/${fragment}/quotes`;
+					node.url = `/hashtags/${encodeURIComponent(
+						fragment,
+					)}/quotes`;
 					_node = node;
 				}
 			}

@@ -105,7 +105,7 @@ export class SitemapService {
 
 		for (const hashtag of hashtags) {
 			sms.write({
-				url: `/hashtags/${hashtag.name}/quotes`,
+				url: `/hashtags/${encodeURIComponent(hashtag.name)}/quotes`,
 				lastmodISO: hashtag.updatedAt.toISOString(),
 			});
 		}

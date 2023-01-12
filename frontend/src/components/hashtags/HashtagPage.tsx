@@ -41,10 +41,16 @@ export const HashtagPage = ({
 						hashtag
 							? {
 									text: `#${hashtag.name}`,
-									href: `/hashtags/${hashtag.name}`,
+									href: `/hashtags/${encodeURIComponent(
+										hashtag.name,
+									)}`,
 									onClick: (e): void => {
 										e.preventDefault();
-										navigate(`/hashtags/${hashtag.name}`);
+										navigate(
+											`/hashtags/${encodeURIComponent(
+												hashtag.name,
+											)}`,
+										);
 									},
 							  }
 							: [],

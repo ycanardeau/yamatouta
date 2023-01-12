@@ -65,7 +65,11 @@ const HashtagSearchTableRow = React.memo(
 						header: t('hashtags.name'),
 					}}
 				>
-					<Link to={`/hashtags/${hashtag.name}/quotes`}>
+					<Link
+						to={`/hashtags/${encodeURIComponent(
+							hashtag.name,
+						)}/quotes`}
+					>
 						#{hashtag.name}
 					</Link>
 				</EuiTableRowCell>

@@ -36,24 +36,32 @@ const Layout = ({ store }: LayoutProps): React.ReactElement => {
 				pageTitle: `#${hashtagName}`,
 				tabs: [
 					{
-						href: `/hashtags/${hashtagName}`,
+						href: `/hashtags/${encodeURIComponent(hashtagName)}`,
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(`/hashtags/${hashtagName}`);
+							navigate(
+								`/hashtags/${encodeURIComponent(hashtagName)}`,
+							);
 						},
 						prepend: <EuiIcon type={InfoRegular} />,
 						isSelected: tab === undefined,
 						label: t('shared.basicInfo'),
 					},
 					{
-						href: `/hashtags/${hashtagName}/quotes`,
+						href: `/hashtags/${encodeURIComponent(
+							hashtagName,
+						)}/quotes`,
 						onClick: (
 							e: React.MouseEvent<HTMLAnchorElement>,
 						): void => {
 							e.preventDefault();
-							navigate(`/hashtags/${hashtagName}/quotes`);
+							navigate(
+								`/hashtags/${encodeURIComponent(
+									hashtagName,
+								)}/quotes`,
+							);
 						},
 						prepend: <EuiIcon type={MusicNote2Regular} />,
 						isSelected: tab === 'quotes',
