@@ -1,6 +1,9 @@
 // https://github.com/elastic/eui/issues/5463#issuecomment-1107665339
 import { ICON_TYPES } from '@elastic/eui';
 import { icon as alert } from '@elastic/eui/es/components/icon/assets/alert';
+import { icon as apps } from '@elastic/eui/es/components/icon/assets/apps';
+import { icon as arrowEnd } from '@elastic/eui/es/components/icon/assets/arrowEnd';
+import { icon as arrowStart } from '@elastic/eui/es/components/icon/assets/arrowStart';
 import { icon as arrowDown } from '@elastic/eui/es/components/icon/assets/arrow_down';
 import { icon as arrowLeft } from '@elastic/eui/es/components/icon/assets/arrow_left';
 import { icon as arrowRight } from '@elastic/eui/es/components/icon/assets/arrow_right';
@@ -30,9 +33,12 @@ type IconComponentCacheType = Partial<Record<IconComponentNameType, unknown>>;
 
 const cachedIcons: IconComponentCacheType = {
 	alert,
+	apps,
 	arrowDown,
+	arrowEnd,
 	arrowLeft,
 	arrowRight,
+	arrowStart,
 	cross,
 	editorBold,
 	editorChecklist,
