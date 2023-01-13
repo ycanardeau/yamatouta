@@ -18,13 +18,13 @@ const HashtagQuotes = ({
 }: HashtagQuotesProps): React.ReactElement => {
 	const hashtag = hashtagDetailsStore.hashtag;
 
-	const [quoteSearchStore] = React.useState(() => {
+	const quoteSearchStore = React.useMemo(() => {
 		const quoteSearchStore = new QuoteSearchStore(
 			QuoteSortRule.UpdatedDesc,
 		);
 		quoteSearchStore.hashtags = [hashtag.name];
 		return quoteSearchStore;
-	});
+	}, [hashtag]);
 
 	const { t, ready } = useTranslation();
 

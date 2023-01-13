@@ -18,13 +18,13 @@ const ArtistQuotes = observer(
 	({ artistDetailsStore }: ArtistQuotesProps): React.ReactElement => {
 		const artist = artistDetailsStore.artist;
 
-		const [quoteSearchStore] = React.useState(() => {
+		const quoteSearchStore = React.useMemo(() => {
 			const quoteSearchStore = new QuoteSearchStore(
 				QuoteSortRule.UpdatedDesc,
 			);
 			quoteSearchStore.artistId = artist.id;
 			return quoteSearchStore;
-		});
+		}, [artist]);
 
 		const { t, ready } = useTranslation();
 

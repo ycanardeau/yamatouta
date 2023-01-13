@@ -18,13 +18,13 @@ const WorkQuotes = observer(
 	({ workDetailsStore }: WorkQuotesProps): React.ReactElement => {
 		const work = workDetailsStore.work;
 
-		const [quoteSearchStore] = React.useState(() => {
+		const quoteSearchStore = React.useMemo(() => {
 			const quoteSearchStore = new QuoteSearchStore(
 				QuoteSortRule.UpdatedDesc,
 			);
 			quoteSearchStore.workId = work.id;
 			return quoteSearchStore;
-		});
+		}, [work]);
 
 		const { t, ready } = useTranslation();
 
