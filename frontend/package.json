@@ -28,8 +28,8 @@
 		"moment": "^2.29.4",
 		"prop-types": "^15.8.1",
 		"qs": "^6.11.0",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2",
 		"react-ga4": "^1.4.1",
 		"react-i18next": "^12.0.0",
 		"react-router-dom": "^6.6.2",
@@ -41,8 +41,8 @@
 		"@types/lodash-es": "^4.17.6",
 		"@types/node": "^18.11.9",
 		"@types/qs": "^6.9.7",
-		"@types/react": "^18.0.24",
-		"@types/react-dom": "^18.0.8",
+		"@types/react": "^17.0.39",
+		"@types/react-dom": "^17.0.11",
 		"@typescript-eslint/eslint-plugin": "^5.43.0",
 		"@typescript-eslint/parser": "^5.43.0",
 		"@vitejs/plugin-react": "^2.2.0",
@@ -56,7 +56,7 @@
 		"eslint-plugin-react": "^7.31.10",
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"prettier": "^2.7.1",
-		"typescript": "^4.9.4",
+		"typescript": "^4.5.3",
 		"vite": "^3.2.3"
 	}
 }
