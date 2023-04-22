@@ -2,7 +2,7 @@ import { HashtagPage } from '@/components/hashtags/HashtagPage';
 import { HashtagSearchTable } from '@/components/hashtags/HashtagSearchTable';
 import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import { HashtagSearchStore } from '@/stores/hashtags/HashtagSearchStore';
-import { useLocationStateStore } from '@vocadb/route-sphere';
+import { useLocationStateStore } from '@aigamo/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

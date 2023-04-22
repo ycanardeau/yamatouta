@@ -7,7 +7,7 @@ import {
 	LocationStateStore,
 	StateChangeEvent,
 	includesAny,
-} from '@vocadb/route-sphere';
+} from '@aigamo/route-sphere';
 import validate from 'TranslationSearchRouteParams.jsonschema';
 import {
 	action,

@@ -9,7 +9,7 @@ import '@/icons';
 import { EuiPageTemplate, EuiProvider } from '@elastic/eui';
 import '@elastic/eui/dist/eui_theme_dark.css';
 import createCache from '@emotion/cache';
-import { ScrollToTop } from '@vocadb/route-sphere';
+import { ScrollToTop } from '@aigamo/route-sphere';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import React from 'react';

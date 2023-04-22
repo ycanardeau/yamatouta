@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@aigamo/route-sphere@^2.0.0-rc.8":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@aigamo/route-sphere/-/route-sphere-2.0.0.tgz#338364c9a2779974fa5d673fb9abcd23b7b0d03e"
+  integrity sha512-C26osPoU+VPNzQbU69uRE5pJiLltzwhinEu+4ofbaLtWV792naFofbnYjPFxDW7INCwFwZ9tIiVY7qxn/xMBEw==
+
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.0.tgz#56c133824780de3174aed5ab6834f3026790154d"
@@ -1752,11 +1757,6 @@
     "@babel/plugin-transform-react-jsx-source" "^7.19.6"
     magic-string "^0.26.7"
     react-refresh "^0.14.0"
-
-"@vocadb/route-sphere@^2.0.0-rc.8":
-  version "2.0.0-rc.8"
-  resolved "https://registry.yarnpkg.com/@vocadb/route-sphere/-/route-sphere-2.0.0-rc.8.tgz#32ac8805a01b7a5072d215b32f2d6becff81157d"
-  integrity sha512-3DYntRlTo/MzRmF3uEZ4YRfnDg2fKSOvAw8PJaqP+nOmBJ49fhmTdhwGOeKriLeXQTjcpvaqQ1nnxFiztpAbCQ==
 
 "@vue/compiler-core@3.2.45":
   version "3.2.45"

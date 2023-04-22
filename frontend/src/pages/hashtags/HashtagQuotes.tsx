@@ -4,8 +4,8 @@ import { useYamatoutaTitle } from '@/components/useYamatoutaTitle';
 import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
 import { HashtagDetailsStore } from '@/stores/hashtags/HashtagDetailsStore';
 import { QuoteSearchStore } from '@/stores/quotes/QuoteSearchStore';
+import { useLocationStateStore } from '@aigamo/route-sphere';
 import { EuiSpacer } from '@elastic/eui';
-import { useLocationStateStore } from '@vocadb/route-sphere';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
