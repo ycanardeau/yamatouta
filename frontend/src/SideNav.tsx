@@ -198,20 +198,23 @@ const SideNav = (): React.ReactElement => {
 						target: '_blank',
 					},
 					{
-						icon: <EuiIcon type={logoDiscord} />,
-						name: 'Discord',
-						id: htmlIdGenerator()(),
-						href: 'https://discord.gg/fEzJdbKnam',
-						target: '_blank',
-					},
-					{
 						icon: <EuiIcon type={logoTwitter} />,
 						name: 'Twitter',
 						id: htmlIdGenerator()(),
 						href: 'https://twitter.com/inishienomanabi',
 						target: '_blank',
 					},
-				],
+				].concat(
+					config.discordInvitationLink
+						? {
+								icon: <EuiIcon type={logoDiscord} />,
+								name: 'Discord',
+								id: htmlIdGenerator()(),
+								href: config.discordInvitationLink,
+								target: '_blank',
+						  }
+						: [],
+				),
 			},
 		],
 		[t, navigate, tab, auth, loginDialog, registerDialog],
