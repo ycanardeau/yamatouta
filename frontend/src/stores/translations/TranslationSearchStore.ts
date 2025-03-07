@@ -1,5 +1,6 @@
 import { translationApi } from '@/api/translationApi';
 import { ITranslationDto } from '@/dto/ITranslationDto';
+import { ajv } from '@/helpers/ajv';
 import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
 import { WordCategory } from '@/models/translations/WordCategory';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -8,7 +9,7 @@ import {
 	StateChangeEvent,
 	includesAny,
 } from '@aigamo/route-sphere';
-import validate from 'TranslationSearchRouteParams.jsonschema';
+import { JSONSchemaType } from 'ajv';
 import {
 	action,
 	computed,
@@ -24,6 +25,35 @@ export interface TranslationSearchRouteParams {
 	query?: string;
 	category?: WordCategory;
 }
+
+const TranslationSearchRouteParamsSchema: JSONSchemaType<TranslationSearchRouteParams> =
+	{
+		type: 'object',
+		properties: {
+			category: {
+				enum: Object.values(WordCategory),
+				type: 'string',
+				nullable: true,
+			},
+			page: {
+				type: 'number',
+				nullable: true,
+			},
+			pageSize: {
+				type: 'number',
+				nullable: true,
+			},
+			query: {
+				type: 'string',
+				nullable: true,
+			},
+			sort: {
+				enum: Object.values(TranslationSortRule),
+				type: 'string',
+				nullable: true,
+			},
+		},
+	};
 
 const clearResultsByQueryKeys: (keyof TranslationSearchRouteParams)[] = [
 	'pageSize',
@@ -144,7 +174,7 @@ export class TranslationSearchStore
 	validateLocationState = (
 		data: any,
 	): data is TranslationSearchRouteParams => {
-		return validate(data);
+		return ajv.validate(TranslationSearchRouteParamsSchema, data);
 	};
 
 	onLocationStateChange = (

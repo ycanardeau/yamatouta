@@ -1,5 +1,6 @@
 import { artistApi } from '@/api/artistApi';
 import { IArtistDto } from '@/dto/IArtistDto';
+import { ajv } from '@/helpers/ajv';
 import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
 import { ArtistType } from '@/models/artists/ArtistType';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -8,7 +9,7 @@ import {
 	StateChangeEvent,
 	includesAny,
 } from '@aigamo/route-sphere';
-import validate from 'ArtistSearchRouteParams.jsonschema';
+import { JSONSchemaType } from 'ajv';
 import {
 	action,
 	computed,
@@ -24,6 +25,34 @@ export interface ArtistSearchRouteParams {
 	query?: string;
 	artistType?: ArtistType;
 }
+
+const ArtistSearchRouteParamsSchema: JSONSchemaType<ArtistSearchRouteParams> = {
+	type: 'object',
+	properties: {
+		artistType: {
+			enum: Object.values(ArtistType),
+			type: 'string',
+			nullable: true,
+		},
+		page: {
+			type: 'number',
+			nullable: true,
+		},
+		pageSize: {
+			type: 'number',
+			nullable: true,
+		},
+		query: {
+			type: 'string',
+			nullable: true,
+		},
+		sort: {
+			enum: Object.values(ArtistSortRule),
+			type: 'string',
+			nullable: true,
+		},
+	},
+};
 
 const clearResultsByQueryKeys: (keyof ArtistSearchRouteParams)[] = [
 	'pageSize',
@@ -114,7 +143,7 @@ export class ArtistSearchStore
 	}
 
 	validateLocationState = (data: any): data is ArtistSearchRouteParams => {
-		return validate(data);
+		return ajv.validate(ArtistSearchRouteParamsSchema, data);
 	};
 
 	onLocationStateChange = (

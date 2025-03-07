@@ -1,5 +1,6 @@
 import { userApi } from '@/api/userApi';
 import { IUserDto } from '@/dto/IUserDto';
+import { ajv } from '@/helpers/ajv';
 import { UserGroup } from '@/models/users/UserGroup';
 import { UserSortRule } from '@/models/users/UserSortRule';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -8,7 +9,7 @@ import {
 	StateChangeEvent,
 	includesAny,
 } from '@aigamo/route-sphere';
-import validate from 'UserSearchRouteParams.jsonschema';
+import { JSONSchemaType } from 'ajv';
 import {
 	action,
 	computed,
@@ -24,6 +25,34 @@ export interface UserSearchRouteParams {
 	query?: string;
 	userGroup?: UserGroup;
 }
+
+const UserSearchRouteParamsSchema: JSONSchemaType<UserSearchRouteParams> = {
+	type: 'object',
+	properties: {
+		page: {
+			type: 'number',
+			nullable: true,
+		},
+		pageSize: {
+			type: 'number',
+			nullable: true,
+		},
+		query: {
+			type: 'string',
+			nullable: true,
+		},
+		sort: {
+			enum: Object.values(UserSortRule),
+			type: 'string',
+			nullable: true,
+		},
+		userGroup: {
+			enum: Object.values(UserGroup),
+			type: 'string',
+			nullable: true,
+		},
+	},
+};
 
 const clearResultsByQueryKeys: (keyof UserSearchRouteParams)[] = [
 	'pageSize',
@@ -114,7 +143,7 @@ export class UserSearchStore
 	}
 
 	validateLocationState = (data: any): data is UserSearchRouteParams => {
-		return validate(data);
+		return ajv.validate(UserSearchRouteParamsSchema, data);
 	};
 
 	onLocationStateChange = (

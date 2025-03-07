@@ -1,5 +1,6 @@
 import { hashtagApi } from '@/api/hashtagApi';
 import { IHashtagDto } from '@/dto/IHashtagDto';
+import { ajv } from '@/helpers/ajv';
 import { HashtagSortRule } from '@/models/hashtags/HashtagSortRule';
 import { PaginationStore } from '@/stores/PaginationStore';
 import {
@@ -7,7 +8,7 @@ import {
 	StateChangeEvent,
 	includesAny,
 } from '@aigamo/route-sphere';
-import validate from 'HashtagSearchRouteParams.jsonschema';
+import { JSONSchemaType } from 'ajv';
 import {
 	action,
 	computed,
@@ -22,6 +23,30 @@ export interface HashtagSearchRouteParams {
 	sort?: HashtagSortRule;
 	query?: string;
 }
+
+const HashtagSearchRouteParamsSchema: JSONSchemaType<HashtagSearchRouteParams> =
+	{
+		type: 'object',
+		properties: {
+			page: {
+				type: 'number',
+				nullable: true,
+			},
+			pageSize: {
+				type: 'number',
+				nullable: true,
+			},
+			query: {
+				type: 'string',
+				nullable: true,
+			},
+			sort: {
+				enum: Object.values(HashtagSortRule),
+				type: 'string',
+				nullable: true,
+			},
+		},
+	};
 
 const clearResultsByQueryKeys: (keyof HashtagSearchRouteParams)[] = [
 	'pageSize',
@@ -127,7 +152,7 @@ export class HashtagSearchStore
 	}
 
 	validateLocationState = (data: any): data is HashtagSearchRouteParams => {
-		return validate(data);
+		return ajv.validate(HashtagSearchRouteParamsSchema, data);
 	};
 
 	onLocationStateChange = (

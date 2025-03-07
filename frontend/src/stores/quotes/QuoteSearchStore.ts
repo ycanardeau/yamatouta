@@ -1,5 +1,6 @@
 import { quoteApi } from '@/api/quoteApi';
 import { IQuoteDto } from '@/dto/IQuoteDto';
+import { ajv } from '@/helpers/ajv';
 import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
 import { QuoteType } from '@/models/quotes/QuoteType';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -8,7 +9,7 @@ import {
 	StateChangeEvent,
 	includesAny,
 } from '@aigamo/route-sphere';
-import validate from 'QuoteSearchRouteParams.jsonschema';
+import { JSONSchemaType } from 'ajv';
 import {
 	action,
 	computed,
@@ -24,6 +25,34 @@ export interface QuoteSearchRouteParams {
 	query?: string;
 	quoteType?: QuoteType;
 }
+
+const QuoteSearchRouteParamsSchema: JSONSchemaType<QuoteSearchRouteParams> = {
+	type: 'object',
+	properties: {
+		page: {
+			type: 'number',
+			nullable: true,
+		},
+		pageSize: {
+			type: 'number',
+			nullable: true,
+		},
+		query: {
+			type: 'string',
+			nullable: true,
+		},
+		quoteType: {
+			enum: Object.values(QuoteType),
+			type: 'string',
+			nullable: true,
+		},
+		sort: {
+			enum: Object.values(QuoteSortRule),
+			type: 'string',
+			nullable: true,
+		},
+	},
+};
 
 const clearResultsByQueryKeys: (keyof QuoteSearchRouteParams)[] = [
 	'pageSize',
@@ -122,7 +151,7 @@ export class QuoteSearchStore
 	}
 
 	validateLocationState = (data: any): data is QuoteSearchRouteParams => {
-		return validate(data);
+		return ajv.validate(QuoteSearchRouteParamsSchema, data);
 	};
 
 	onLocationStateChange = (

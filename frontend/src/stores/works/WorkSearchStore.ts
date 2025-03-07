@@ -1,5 +1,6 @@
 import { workApi } from '@/api/workApi';
 import { IWorkDto } from '@/dto/IWorkDto';
+import { ajv } from '@/helpers/ajv';
 import { WorkSortRule } from '@/models/works/WorkSortRule';
 import { WorkType } from '@/models/works/WorkType';
 import { PaginationStore } from '@/stores/PaginationStore';
@@ -8,7 +9,7 @@ import {
 	StateChangeEvent,
 	includesAny,
 } from '@aigamo/route-sphere';
-import validate from 'WorkSearchRouteParams.jsonschema';
+import { JSONSchemaType } from 'ajv';
 import {
 	action,
 	computed,
@@ -24,6 +25,34 @@ export interface WorkSearchRouteParams {
 	query?: string;
 	workType?: WorkType;
 }
+
+const WorkSearchRouteParamsSchema: JSONSchemaType<WorkSearchRouteParams> = {
+	type: 'object',
+	properties: {
+		page: {
+			type: 'number',
+			nullable: true,
+		},
+		pageSize: {
+			type: 'number',
+			nullable: true,
+		},
+		query: {
+			type: 'string',
+			nullable: true,
+		},
+		sort: {
+			enum: Object.values(WorkSortRule),
+			type: 'string',
+			nullable: true,
+		},
+		workType: {
+			enum: Object.values(WorkType),
+			type: 'string',
+			nullable: true,
+		},
+	},
+};
 
 const clearResultsByQueryKeys: (keyof WorkSearchRouteParams)[] = [
 	'pageSize',
@@ -114,7 +143,7 @@ export class WorkSearchStore
 	}
 
 	validateLocationState = (data: any): data is WorkSearchRouteParams => {
-		return validate(data);
+		return ajv.validate(WorkSearchRouteParamsSchema, data);
 	};
 
 	onLocationStateChange = (
