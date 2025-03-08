@@ -9,11 +9,11 @@ import { IPaginationParams } from '@/stores/PaginationStore';
 import axios from 'axios';
 
 class ArtistApi {
-	create = async ({
+	async create({
 		name,
 		artistType,
 		webLinks,
-	}: IArtistUpdateParams): Promise<IArtistDto> => {
+	}: IArtistUpdateParams): Promise<IArtistDto> {
 		const response = await axios.post<IArtistDto>('/artists/create', {
 			id: 0,
 			name,
@@ -22,27 +22,27 @@ class ArtistApi {
 		});
 
 		return response.data;
-	};
+	}
 
-	delete = async ({ id }: { id: number }): Promise<void> => {
+	async delete({ id }: { id: number }): Promise<void> {
 		await axios.delete<void>(`/artists/delete`, { data: { id: id } });
-	};
+	}
 
-	get = async ({
+	async get({
 		id,
 		fields,
 	}: {
 		id: number;
 		fields?: ArtistOptionalField[];
-	}): Promise<IArtistDto> => {
+	}): Promise<IArtistDto> {
 		const response = await axios.get<IArtistDto>(`/artists/get`, {
 			params: { id: id, fields: fields },
 		});
 
 		return response.data;
-	};
+	}
 
-	list = async ({
+	async list({
 		pagination,
 		sort,
 		query,
@@ -52,34 +52,34 @@ class ArtistApi {
 		sort?: ArtistSortRule;
 		query?: string;
 		artistType?: ArtistType;
-	}): Promise<ISearchResultDto<IArtistDto>> => {
+	}): Promise<ISearchResultDto<IArtistDto>> {
 		const response = await axios.get<ISearchResultDto<IArtistDto>>(
 			'/artists/list',
 			{ params: { ...pagination, sort, query, artistType } },
 		);
 
 		return response.data;
-	};
+	}
 
-	listRevisions = async ({
+	async listRevisions({
 		id,
 	}: {
 		id: number;
-	}): Promise<ISearchResultDto<IRevisionDto>> => {
+	}): Promise<ISearchResultDto<IRevisionDto>> {
 		const response = await axios.get<ISearchResultDto<IRevisionDto>>(
 			`/artists/list-revisions`,
 			{ params: { id: id } },
 		);
 
 		return response.data;
-	};
+	}
 
-	update = async ({
+	async update({
 		id,
 		name,
 		artistType,
 		webLinks,
-	}: IArtistUpdateParams): Promise<IArtistDto> => {
+	}: IArtistUpdateParams): Promise<IArtistDto> {
 		const response = await axios.post<IArtistDto>(`/artists/update`, {
 			id: id,
 			name,
@@ -88,7 +88,7 @@ class ArtistApi {
 		});
 
 		return response.data;
-	};
+	}
 }
 
 export const artistApi = new ArtistApi();

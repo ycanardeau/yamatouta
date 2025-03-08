@@ -5,15 +5,15 @@ import { IPaginationParams } from '@/stores/PaginationStore';
 import axios from 'axios';
 
 class HashtagApi {
-	get = async ({ name }: { name: string }): Promise<IHashtagDto> => {
+	async get({ name }: { name: string }): Promise<IHashtagDto> {
 		const response = await axios.get<IHashtagDto>(`/hashtags/get`, {
 			params: { name: name },
 		});
 
 		return response.data;
-	};
+	}
 
-	list = async ({
+	async list({
 		pagination,
 		sort,
 		query,
@@ -21,14 +21,14 @@ class HashtagApi {
 		pagination: IPaginationParams;
 		sort?: HashtagSortRule;
 		query?: string;
-	}): Promise<ISearchResultDto<IHashtagDto>> => {
+	}): Promise<ISearchResultDto<IHashtagDto>> {
 		const response = await axios.get<ISearchResultDto<IHashtagDto>>(
 			'/hashtags/list',
 			{ params: { ...pagination, sort, query } },
 		);
 
 		return response.data;
-	};
+	}
 }
 
 export const hashtagApi = new HashtagApi();

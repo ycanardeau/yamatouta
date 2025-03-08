@@ -7,7 +7,7 @@ import { IPaginationParams } from '@/stores/PaginationStore';
 import axios from 'axios';
 
 class UserApi {
-	create = async ({
+	async create({
 		email,
 		username,
 		password,
@@ -15,7 +15,7 @@ class UserApi {
 		email: string;
 		username: string;
 		password: string;
-	}): Promise<IAuthenticatedUserDto> => {
+	}): Promise<IAuthenticatedUserDto> {
 		const response = await axios.post<IAuthenticatedUserDto>(
 			'/users/create',
 			{
@@ -26,25 +26,25 @@ class UserApi {
 		);
 
 		return response.data;
-	};
+	}
 
-	get = async ({ id }: { id: number }): Promise<IUserDto> => {
+	async get({ id }: { id: number }): Promise<IUserDto> {
 		const response = await axios.get<IUserDto>(`/users/get`, {
 			params: { id: id },
 		});
 
 		return response.data;
-	};
+	}
 
-	getCurrent = async (): Promise<IAuthenticatedUserDto> => {
+	async getCurrent(): Promise<IAuthenticatedUserDto> {
 		const response = await axios.get<IAuthenticatedUserDto>(
 			'/users/get-current',
 		);
 
 		return response.data;
-	};
+	}
 
-	list = async ({
+	async list({
 		pagination,
 		sort,
 		query,
@@ -54,16 +54,16 @@ class UserApi {
 		sort?: UserSortRule;
 		query?: string;
 		userGroup?: UserGroup;
-	}): Promise<ISearchResultDto<IUserDto>> => {
+	}): Promise<ISearchResultDto<IUserDto>> {
 		const response = await axios.get<ISearchResultDto<IUserDto>>(
 			'/users/list',
 			{ params: { ...pagination, sort, query, userGroup } },
 		);
 
 		return response.data;
-	};
+	}
 
-	update = async ({
+	async update({
 		password,
 		email,
 		username,
@@ -73,7 +73,7 @@ class UserApi {
 		email?: string;
 		username?: string;
 		newPassword?: string;
-	}): Promise<IAuthenticatedUserDto> => {
+	}): Promise<IAuthenticatedUserDto> {
 		const response = await axios.post<IAuthenticatedUserDto>(
 			'/users/update',
 			{
@@ -85,7 +85,7 @@ class UserApi {
 		);
 
 		return response.data;
-	};
+	}
 }
 
 export const userApi = new UserApi();

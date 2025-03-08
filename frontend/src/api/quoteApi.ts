@@ -9,14 +9,14 @@ import { IPaginationParams } from '@/stores/PaginationStore';
 import axios from 'axios';
 
 class QuoteApi {
-	create = async ({
+	async create({
 		text,
 		quoteType,
 		locale,
 		artistId,
 		webLinks,
 		workLinks,
-	}: IQuoteUpdateParams): Promise<IQuoteDto> => {
+	}: IQuoteUpdateParams): Promise<IQuoteDto> {
 		const response = await axios.post<IQuoteDto>('/quotes/create', {
 			id: 0,
 			text,
@@ -28,27 +28,27 @@ class QuoteApi {
 		});
 
 		return response.data;
-	};
+	}
 
-	delete = async ({ id }: { id: number }): Promise<void> => {
+	async delete({ id }: { id: number }): Promise<void> {
 		await axios.delete<void>(`/quotes/delete`, { data: { id: id } });
-	};
+	}
 
-	get = async ({
+	async get({
 		id,
 		fields,
 	}: {
 		id: number;
 		fields?: QuoteOptionalField[];
-	}): Promise<IQuoteDto> => {
+	}): Promise<IQuoteDto> {
 		const response = await axios.get<IQuoteDto>(`/quotes/get`, {
 			params: { id: id, fields: fields },
 		});
 
 		return response.data;
-	};
+	}
 
-	list = async ({
+	async list({
 		pagination,
 		sort,
 		query,
@@ -64,7 +64,7 @@ class QuoteApi {
 		artistId?: number;
 		workId?: number;
 		hashtags?: string[];
-	}): Promise<ISearchResultDto<IQuoteDto>> => {
+	}): Promise<ISearchResultDto<IQuoteDto>> {
 		const response = await axios.get<ISearchResultDto<IQuoteDto>>(
 			'/quotes/list',
 			{
@@ -81,22 +81,22 @@ class QuoteApi {
 		);
 
 		return response.data;
-	};
+	}
 
-	listRevisions = async ({
+	async listRevisions({
 		id,
 	}: {
 		id: number;
-	}): Promise<ISearchResultDto<IRevisionDto>> => {
+	}): Promise<ISearchResultDto<IRevisionDto>> {
 		const response = await axios.get<ISearchResultDto<IRevisionDto>>(
 			`/quotes/list-revisions`,
 			{ params: { id: id } },
 		);
 
 		return response.data;
-	};
+	}
 
-	update = async ({
+	async update({
 		id,
 		text,
 		quoteType,
@@ -104,7 +104,7 @@ class QuoteApi {
 		artistId,
 		webLinks,
 		workLinks,
-	}: IQuoteUpdateParams): Promise<IQuoteDto> => {
+	}: IQuoteUpdateParams): Promise<IQuoteDto> {
 		const response = await axios.post<IQuoteDto>(`/quotes/update`, {
 			id: id,
 			text,
@@ -116,7 +116,7 @@ class QuoteApi {
 		});
 
 		return response.data;
-	};
+	}
 }
 
 export const quoteApi = new QuoteApi();

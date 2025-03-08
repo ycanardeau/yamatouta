@@ -1,31 +1,31 @@
 import axios from 'axios';
 
 class AdminApi {
-	createMissingRevisions = async (): Promise<void> => {
+	async createMissingRevisions(): Promise<void> {
 		const response = await axios.post<void>(
 			'/admin/create-missing-revisions',
 		);
 
 		return response.data;
-	};
+	}
 
-	generateSitemaps = async (): Promise<void> => {
+	async generateSitemaps(): Promise<void> {
 		const response = await axios.post<void>('/admin/generate-sitemaps');
 
 		return response.data;
-	};
+	}
 
-	updateSearchIndex = async ({
+	async updateSearchIndex({
 		forceUpdate,
 	}: {
 		forceUpdate: boolean;
-	}): Promise<void> => {
+	}): Promise<void> {
 		const response = await axios.post<void>('/admin/update-search-index', {
 			forceUpdate: forceUpdate,
 		});
 
 		return response.data;
-	};
+	}
 }
 
 export const adminApi = new AdminApi();

@@ -2,13 +2,13 @@ import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import axios from 'axios';
 
 class AuthApi {
-	login = async ({
+	async login({
 		email,
 		password,
 	}: {
 		email: string;
 		password: string;
-	}): Promise<IAuthenticatedUserDto> => {
+	}): Promise<IAuthenticatedUserDto> {
 		const response = await axios.post<IAuthenticatedUserDto>(
 			'/auth/login',
 			{
@@ -18,11 +18,11 @@ class AuthApi {
 		);
 
 		return response.data;
-	};
+	}
 
-	logout = async (): Promise<void> => {
+	async logout(): Promise<void> {
 		return axios.post('/auth/logout');
-	};
+	}
 }
 
 export const authApi = new AuthApi();
