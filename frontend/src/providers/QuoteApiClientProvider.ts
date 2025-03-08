@@ -1,0 +1,121 @@
+import { IQuoteDto } from '@/dto/IQuoteDto';
+import { IRevisionDto } from '@/dto/IRevisionDto';
+import { ISearchResultDto } from '@/dto/ISearchResultDto';
+import { IQuoteUpdateParams } from '@/models/quotes/IQuoteUpdateParams';
+import { QuoteOptionalField } from '@/models/quotes/QuoteOptionalField';
+import { QuoteSortRule } from '@/models/quotes/QuoteSortRule';
+import { QuoteType } from '@/models/quotes/QuoteType';
+import { IQuoteApiClientProvider } from '@/providers.abstractions/IQuoteApiClientProvider';
+import { IPaginationParams } from '@/stores/PaginationStore';
+import axios from 'axios';
+
+export class QuoteApiClientProvider implements IQuoteApiClientProvider {
+	async create({
+		text,
+		quoteType,
+		locale,
+		artistId,
+		webLinks,
+		workLinks,
+	}: IQuoteUpdateParams): Promise<IQuoteDto> {
+		const response = await axios.post<IQuoteDto>('/quotes/create', {
+			id: 0,
+			text,
+			quoteType,
+			locale,
+			artistId,
+			webLinks,
+			workLinks,
+		});
+
+		return response.data;
+	}
+
+	async delete({ id }: { id: number }): Promise<void> {
+		await axios.delete<void>(`/quotes/delete`, { data: { id: id } });
+	}
+
+	async get({
+		id,
+		fields,
+	}: {
+		id: number;
+		fields?: QuoteOptionalField[];
+	}): Promise<IQuoteDto> {
+		const response = await axios.get<IQuoteDto>(`/quotes/get`, {
+			params: { id: id, fields: fields },
+		});
+
+		return response.data;
+	}
+
+	async list({
+		pagination,
+		sort,
+		query,
+		quoteType,
+		artistId,
+		workId,
+		hashtags,
+	}: {
+		pagination: IPaginationParams;
+		sort?: QuoteSortRule;
+		query?: string;
+		quoteType?: QuoteType;
+		artistId?: number;
+		workId?: number;
+		hashtags?: string[];
+	}): Promise<ISearchResultDto<IQuoteDto>> {
+		const response = await axios.get<ISearchResultDto<IQuoteDto>>(
+			'/quotes/list',
+			{
+				params: {
+					...pagination,
+					sort,
+					query,
+					quoteType,
+					artistId,
+					workId,
+					hashtags,
+				},
+			},
+		);
+
+		return response.data;
+	}
+
+	async listRevisions({
+		id,
+	}: {
+		id: number;
+	}): Promise<ISearchResultDto<IRevisionDto>> {
+		const response = await axios.get<ISearchResultDto<IRevisionDto>>(
+			`/quotes/list-revisions`,
+			{ params: { id: id } },
+		);
+
+		return response.data;
+	}
+
+	async update({
+		id,
+		text,
+		quoteType,
+		locale,
+		artistId,
+		webLinks,
+		workLinks,
+	}: IQuoteUpdateParams): Promise<IQuoteDto> {
+		const response = await axios.post<IQuoteDto>(`/quotes/update`, {
+			id: id,
+			text,
+			quoteType,
+			locale,
+			artistId,
+			webLinks,
+			workLinks,
+		});
+
+		return response.data;
+	}
+}
