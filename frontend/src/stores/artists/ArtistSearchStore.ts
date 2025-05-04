@@ -8,6 +8,8 @@ import {
 	StateChangeEvent,
 	includesAny,
 } from '@aigamo/route-sphere';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import validate from 'ArtistSearchRouteParams.jsonschema';
 import {
 	action,
