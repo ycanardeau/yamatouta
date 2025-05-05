@@ -3,10 +3,8 @@ import { SearchResultDto } from '@/dto/SearchResultDto';
 import { TranslationDto } from '@/dto/TranslationDto';
 import { Translation } from '@/entities/Translation';
 import { TranslationListParams } from '@/models/translations/TranslationListParams';
-import { TranslationSortRule } from '@/models/translations/TranslationSortRule';
 import { NgramConverter } from '@/services/NgramConverter';
 import { PermissionContext } from '@/services/PermissionContext';
-import { escapeWildcardCharacters } from '@/utils/escapeWildcardCharacters';
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
 import { BadRequestException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
@@ -56,164 +54,16 @@ export class TranslationListQueryHandler
 		return knex;
 	}
 
-	private orderByHeadwordExact(
-		knex: Knex.QueryBuilder,
-		query: string,
-	): Knex.QueryBuilder {
-		return knex.orderByRaw(
-			'translations.headword = ? or translations.reading = ? desc',
-			[query, query],
-		);
-	}
-
-	private orderByYamatokotobaExact(
-		knex: Knex.QueryBuilder,
-		query: string,
-	): Knex.QueryBuilder {
-		return knex.orderByRaw('translations.yamatokotoba = ? desc', query);
-	}
-
-	private orderByHeadwordPrefix(
-		knex: Knex.QueryBuilder,
-		query: string,
-	): Knex.QueryBuilder {
-		const prefixSearchQuery = `${escapeWildcardCharacters(query)}%`;
-
-		return knex.orderByRaw(
-			'translations.headword like ? or translations.reading like ? desc',
-			[prefixSearchQuery, prefixSearchQuery],
-		);
-	}
-
-	private orderByYamatokotobaPrefix(
-		knex: Knex.QueryBuilder,
-		query: string,
-	): Knex.QueryBuilder {
-		const prefixSearchQuery = `${escapeWildcardCharacters(query)}%`;
-
-		return knex.orderByRaw(
-			'translations.yamatokotoba like ? desc',
-			prefixSearchQuery,
-		);
-	}
-
-	private orderByQuery(
-		knex: Knex.QueryBuilder,
-		params: TranslationListParams,
-	): Knex.QueryBuilder {
-		if (!params.query) return knex;
-
-		switch (params.sort) {
-			case TranslationSortRule.HeadwordAsc:
-			case TranslationSortRule.HeadwordDesc:
-			default:
-				this.orderByHeadwordExact(knex, params.query);
-				this.orderByYamatokotobaExact(knex, params.query);
-				this.orderByHeadwordPrefix(knex, params.query);
-				this.orderByYamatokotobaPrefix(knex, params.query);
-				return knex;
-
-			case TranslationSortRule.YamatokotobaAsc:
-			case TranslationSortRule.YamatokotobaDesc:
-				this.orderByYamatokotobaExact(knex, params.query);
-				this.orderByHeadwordExact(knex, params.query);
-				this.orderByYamatokotobaPrefix(knex, params.query);
-				this.orderByHeadwordPrefix(knex, params.query);
-				return knex;
-		}
-	}
-
-	private orderByHeadword(
-		knex: Knex.QueryBuilder,
-		order: 'asc' | 'desc',
-	): Knex.QueryBuilder {
-		switch (order) {
-			case 'asc':
-				return knex
-					.orderBy('translations.reading', 'asc')
-					.orderBy('translations.headword', 'asc');
-
-			case 'desc':
-				return knex
-					.orderBy('translations.reading', 'desc')
-					.orderBy('translations.headword', 'desc');
-		}
-	}
-
-	private orderByYamatokotoba(
-		knex: Knex.QueryBuilder,
-		order: 'asc' | 'desc',
-	): Knex.QueryBuilder {
-		switch (order) {
-			case 'asc':
-				return knex.orderBy('translations.yamatokotoba', 'asc');
-
-			case 'desc':
-				return knex.orderBy('translations.yamatokotoba', 'desc');
-		}
-	}
-
 	private orderBy(
 		knex: Knex.QueryBuilder,
 		params: TranslationListParams,
 	): Knex.QueryBuilder {
-		this.orderByQuery(knex, params);
-
-		switch (params.sort) {
-			case TranslationSortRule.HeadwordAsc:
-			case undefined:
-				this.orderByHeadword(knex, 'asc');
-				this.orderByYamatokotoba(knex, 'asc');
-				return knex;
-
-			case TranslationSortRule.HeadwordDesc:
-				this.orderByHeadword(knex, 'desc');
-				this.orderByYamatokotoba(knex, 'desc');
-				return knex;
-
-			case TranslationSortRule.YamatokotobaAsc:
-				this.orderByYamatokotoba(knex, 'asc');
-				this.orderByHeadword(knex, 'asc');
-				return knex;
-
-			case TranslationSortRule.YamatokotobaDesc:
-				this.orderByYamatokotoba(knex, 'desc');
-				this.orderByHeadword(knex, 'desc');
-				return knex;
-
-			case TranslationSortRule.CreatedAsc:
-				return knex
-					.orderBy('translations.created_at', 'asc')
-					.orderBy('translations.id', 'asc');
-
-			case TranslationSortRule.CreatedDesc:
-				return knex
-					.orderBy('translations.created_at', 'desc')
-					.orderBy('translations.id', 'desc');
-
-			case TranslationSortRule.UpdatedAsc:
-				return knex
-					.orderBy('translations.updated_at', 'asc')
-					.orderBy('translations.id', 'asc');
-
-			case TranslationSortRule.UpdatedDesc:
-				return knex
-					.orderBy('translations.updated_at', 'desc')
-					.orderBy('translations.id', 'desc');
-		}
+		return knex.orderBy('translations.id', 'asc');
 	}
 
 	private async getIds(params: TranslationListParams): Promise<number[]> {
 		const knex = this.createKnex(params)
-			.select('translations.id')
-			.limit(
-				params.limit
-					? Math.min(
-							params.limit,
-							TranslationListQueryHandler.maxLimit,
-					  )
-					: TranslationListQueryHandler.defaultLimit,
-			);
+			.select('translations.id');
 
 		if (params.offset) knex.offset(params.offset);
 

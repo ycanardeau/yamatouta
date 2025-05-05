@@ -3,7 +3,6 @@ import { SearchResultDto } from '@/dto/SearchResultDto';
 import { UserDto } from '@/dto/UserDto';
 import { User } from '@/entities/User';
 import { UserListParams } from '@/models/users/UserListParams';
-import { UserSortRule } from '@/models/users/UserSortRule';
 import { NgramConverter } from '@/services/NgramConverter';
 import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
@@ -53,46 +52,13 @@ export class UserListQueryHandler implements IQueryHandler<UserListQuery> {
 		return knex;
 	}
 
-	private orderBy(
-		knex: Knex.QueryBuilder,
-		params: UserListParams,
-	): Knex.QueryBuilder {
-		switch (params.sort) {
-			case UserSortRule.NameAsc:
-				return knex
-					.orderBy('users.name', 'asc')
-					.orderBy('users.id', 'asc');
-
-			case UserSortRule.NameDesc:
-				return knex
-					.orderBy('users.name', 'desc')
-					.orderBy('users.id', 'desc');
-
-			case UserSortRule.CreatedAsc:
-			case undefined:
-				return knex
-					.orderBy('users.created_at', 'asc')
-					.orderBy('users.id', 'asc');
-
-			case UserSortRule.CreatedDesc:
-				return knex
-					.orderBy('users.created_at', 'desc')
-					.orderBy('users.id', 'desc');
-		}
-	}
-
 	private async getIds(params: UserListParams): Promise<number[]> {
 		const knex = this.createKnex(params)
-			.select('users.id')
-			.limit(
-				params.limit
-					? Math.min(params.limit, UserListQueryHandler.maxLimit)
-					: UserListQueryHandler.defaultLimit,
-			);
+			.select('users.id');
 
 		if (params.offset) knex.offset(params.offset);
 
-		this.orderBy(knex, params);
+		knex.orderBy('users.id', 'asc')
 
 		const ids = _.map(await this.em.execute(knex), 'id');
 

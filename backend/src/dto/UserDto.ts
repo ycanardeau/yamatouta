@@ -8,6 +8,8 @@ export class UserDto {
 	private constructor(
 		readonly id: number,
 		readonly entryType: EntryType.User,
+		readonly createdAt: Date,
+		readonly updatedAt: Date,
 		readonly deleted: boolean,
 		readonly hidden: boolean,
 		readonly name: string,
@@ -20,6 +22,8 @@ export class UserDto {
 		return new UserDto(
 			user.id,
 			user.entryType,
+			user.createdAt,
+			user.updatedAt,
 			user.deleted,
 			user.hidden,
 			user.name,

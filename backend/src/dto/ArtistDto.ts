@@ -11,6 +11,8 @@ export class ArtistDto {
 	private constructor(
 		readonly id: number,
 		readonly entryType: EntryType.Artist,
+		readonly createdAt: Date,
+		readonly updatedAt: Date,
 		readonly deleted: boolean,
 		readonly hidden: boolean,
 		readonly name: string,
@@ -35,6 +37,8 @@ export class ArtistDto {
 		return new ArtistDto(
 			artist.id,
 			artist.entryType,
+			artist.createdAt,
+			artist.updatedAt,
 			artist.deleted,
 			artist.hidden,
 			artist.name,

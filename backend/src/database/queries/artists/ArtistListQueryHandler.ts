@@ -3,7 +3,6 @@ import { ArtistDto } from '@/dto/ArtistDto';
 import { SearchResultDto } from '@/dto/SearchResultDto';
 import { Artist } from '@/entities/Artist';
 import { ArtistListParams } from '@/models/artists/ArtistListParams';
-import { ArtistSortRule } from '@/models/artists/ArtistSortRule';
 import { NgramConverter } from '@/services/NgramConverter';
 import { PermissionContext } from '@/services/PermissionContext';
 import { EntityManager, Knex } from '@mikro-orm/mariadb';
@@ -53,56 +52,13 @@ export class ArtistListQueryHandler implements IQueryHandler<ArtistListQuery> {
 		return knex;
 	}
 
-	private orderBy(
-		knex: Knex.QueryBuilder,
-		params: ArtistListParams,
-	): Knex.QueryBuilder {
-		switch (params.sort) {
-			case ArtistSortRule.NameAsc:
-				return knex
-					.orderBy('artists.name', 'asc')
-					.orderBy('artists.id', 'asc');
-
-			case ArtistSortRule.NameDesc:
-				return knex
-					.orderBy('artists.name', 'desc')
-					.orderBy('artists.id', 'desc');
-
-			case ArtistSortRule.CreatedAsc:
-			case undefined:
-				return knex
-					.orderBy('artists.created_at', 'asc')
-					.orderBy('artists.id', 'asc');
-
-			case ArtistSortRule.CreatedDesc:
-				return knex
-					.orderBy('artists.created_at', 'desc')
-					.orderBy('artists.id', 'desc');
-
-			case ArtistSortRule.UpdatedAsc:
-				return knex
-					.orderBy('artists.updated_at', 'asc')
-					.orderBy('artists.id', 'asc');
-
-			case ArtistSortRule.UpdatedDesc:
-				return knex
-					.orderBy('artists.updated_at', 'desc')
-					.orderBy('artists.id', 'desc');
-		}
-	}
-
 	private async getIds(params: ArtistListParams): Promise<number[]> {
 		const knex = this.createKnex(params)
-			.select('artists.id')
-			.limit(
-				params.limit
-					? Math.min(params.limit, ArtistListQueryHandler.maxLimit)
-					: ArtistListQueryHandler.defaultLimit,
-			);
+			.select('artists.id');
 
 		if (params.offset) knex.offset(params.offset);
 
-		this.orderBy(knex, params);
+		knex.orderBy('artists.id', 'asc')
 
 		const ids = _.map(await this.em.execute(knex), 'id');
 
