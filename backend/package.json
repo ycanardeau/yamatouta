@@ -35,7 +35,7 @@
 		"class-validator": "^0.14.0",
 		"connect-session-knex": "^3.0.1",
 		"cookie-parser": "^1.4.6",
-		"crypto-js": "^4.1.1",
+		"crypto-js": "^4.2.0",
 		"csurf": "^1.11.0",
 		"express-session": "^1.17.2",
 		"hbs": "^4.2.0",
