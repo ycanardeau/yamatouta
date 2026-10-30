@@ -17,7 +17,8 @@
 		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
 		"test:e2e": "jest --config ./e2e/jest-e2e.json",
 		"migration:create": "mikro-orm migration:create",
-		"migration:up": "mikro-orm migration:up"
+		"migration:up": "mikro-orm migration:up",
+		"export:json": "cross-env NODE_ENV=development ts-node -r tsconfig-paths/register src/database/export/main.ts"
 	},
 	"dependencies": {
 		"@mikro-orm/core": "^5.6.6",
