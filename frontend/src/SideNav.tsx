@@ -3,7 +3,7 @@ import { LoginDialog } from '@/components/auth/LoginDialog';
 import { RegisterDialog } from '@/components/auth/RegisterDialog';
 import { useAuth } from '@/components/useAuth';
 import { useDialog } from '@/components/useDialog';
-import config from '@/config';
+import config, { isReadOnly } from '@/config';
 import logoDiscord from '@/images/Discord-Logo-White.svg';
 import logoTwitter from '@/images/Twitter-Logo-White.svg';
 import { UserGroup } from '@/models/users/UserGroup';
@@ -139,53 +139,79 @@ const SideNav = (): React.ReactElement => {
 						: [],
 				),
 			},
-			{
-				name: t('shared.account'),
-				id: htmlIdGenerator()(),
-				items: auth.isAuthenticated
-					? [
-							{
-								icon: <EuiIcon type={SettingsRegular} />,
-								name: t('users.settings'),
-								id: htmlIdGenerator()(),
-								href: '/settings',
-								onClick: (e): void => {
-									e.preventDefault();
-									navigate('/settings');
-								},
-								isSelected: tab === 'settings',
-							},
-							{
-								icon: <EuiIcon type={SignOutRegular} />,
-								name: t('auth.logOut'),
-								id: htmlIdGenerator()(),
-								onClick: async (): Promise<void> => {
-									await authApi.logout();
+			...(isReadOnly
+				? []
+				: ([
+						{
+							name: t('shared.account'),
+							id: htmlIdGenerator()(),
+							items: auth.isAuthenticated
+								? [
+										{
+											icon: (
+												<EuiIcon
+													type={SettingsRegular}
+												/>
+											),
+											name: t('users.settings'),
+											id: htmlIdGenerator()(),
+											href: '/settings',
+											onClick: (e): void => {
+												e.preventDefault();
+												navigate('/settings');
+											},
+											isSelected: tab === 'settings',
+										},
+										{
+											icon: (
+												<EuiIcon
+													type={SignOutRegular}
+												/>
+											),
+											name: t('auth.logOut'),
+											id: htmlIdGenerator()(),
+											onClick:
+												async (): Promise<void> => {
+													await authApi.logout();
 
-									auth.setUser(undefined);
+													auth.setUser(undefined);
 
-									localStorage.removeItem('isAuthenticated');
+													localStorage.removeItem(
+														'isAuthenticated',
+													);
 
-									navigate('/');
-								},
-							},
-					  ]
-					: [
-							{
-								icon: <EuiIcon type={PersonArrowLeftRegular} />,
-								name: t('auth.logIn'),
-								id: htmlIdGenerator()(),
-								onClick: loginDialog.show,
-							},
-							{
-								icon: <EuiIcon type={PersonAddRegular} />,
-								name: t('auth.register'),
-								id: htmlIdGenerator()(),
-								onClick: registerDialog.show,
-								disabled: config.disableAccountCreation,
-							},
-					  ],
-			},
+													navigate('/');
+												},
+										},
+								  ]
+								: [
+										{
+											icon: (
+												<EuiIcon
+													type={
+														PersonArrowLeftRegular
+													}
+												/>
+											),
+											name: t('auth.logIn'),
+											id: htmlIdGenerator()(),
+											onClick: loginDialog.show,
+										},
+										{
+											icon: (
+												<EuiIcon
+													type={PersonAddRegular}
+												/>
+											),
+											name: t('auth.register'),
+											id: htmlIdGenerator()(),
+											onClick: registerDialog.show,
+											disabled:
+												config.disableAccountCreation,
+										},
+								  ],
+						},
+				  ] as EuiSideNavItemType<any>[])),
 			{
 				name: t('shared.community'),
 				id: htmlIdGenerator()(),

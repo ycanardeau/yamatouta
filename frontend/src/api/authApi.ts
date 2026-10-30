@@ -1,28 +1,7 @@
-import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
-import axios from 'axios';
+import { IAuthApi } from '@/api/IAuthApi';
+import { HttpAuthApi } from '@/api/http/HttpAuthApi';
+import { JsonAuthApi } from '@/api/json/JsonAuthApi';
+import config from '@/config';
 
-class AuthApi {
-	login = async ({
-		email,
-		password,
-	}: {
-		email: string;
-		password: string;
-	}): Promise<IAuthenticatedUserDto> => {
-		const response = await axios.post<IAuthenticatedUserDto>(
-			'/auth/login',
-			{
-				email,
-				password,
-			},
-		);
-
-		return response.data;
-	};
-
-	logout = async (): Promise<void> => {
-		return axios.post('/auth/logout');
-	};
-}
-
-export const authApi = new AuthApi();
+export const authApi: IAuthApi =
+	config.dataSource === 'json' ? new JsonAuthApi() : new HttpAuthApi();

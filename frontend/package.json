@@ -5,7 +5,9 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
+		"dev:static": "vite --mode static",
 		"build": "tsc && vite build",
+		"build:static": "tsc && vite build --mode static",
 		"preview": "vite preview"
 	},
 	"dependencies": {

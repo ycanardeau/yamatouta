@@ -1,6 +1,7 @@
 import { AuthContext } from '@/AuthContext';
 import { PermissionContext } from '@/PermissionContext';
 import { userApi } from '@/api/userApi';
+import { isReadOnly } from '@/config';
 import { IAuthenticatedUserDto } from '@/dto/IAuthenticatedUserDto';
 import React from 'react';
 
@@ -17,7 +18,10 @@ export const AuthProvider = ({
 	React.useEffect(() => {
 		(async (): Promise<void> => {
 			try {
-				if (localStorage.getItem('isAuthenticated') === 'true') {
+				if (
+					!isReadOnly &&
+					localStorage.getItem('isAuthenticated') === 'true'
+				) {
 					const user = await userApi.getCurrent();
 
 					setUser(user);

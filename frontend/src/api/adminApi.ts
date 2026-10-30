@@ -1,31 +1,7 @@
-import axios from 'axios';
+import { IAdminApi } from '@/api/IAdminApi';
+import { HttpAdminApi } from '@/api/http/HttpAdminApi';
+import { JsonAdminApi } from '@/api/json/JsonAdminApi';
+import config from '@/config';
 
-class AdminApi {
-	createMissingRevisions = async (): Promise<void> => {
-		const response = await axios.post<void>(
-			'/admin/create-missing-revisions',
-		);
-
-		return response.data;
-	};
-
-	generateSitemaps = async (): Promise<void> => {
-		const response = await axios.post<void>('/admin/generate-sitemaps');
-
-		return response.data;
-	};
-
-	updateSearchIndex = async ({
-		forceUpdate,
-	}: {
-		forceUpdate: boolean;
-	}): Promise<void> => {
-		const response = await axios.post<void>('/admin/update-search-index', {
-			forceUpdate: forceUpdate,
-		});
-
-		return response.data;
-	};
-}
-
-export const adminApi = new AdminApi();
+export const adminApi: IAdminApi =
+	config.dataSource === 'json' ? new JsonAdminApi() : new HttpAdminApi();
