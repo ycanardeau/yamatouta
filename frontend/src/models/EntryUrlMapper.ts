@@ -21,6 +21,13 @@ export class EntryUrlMapper {
 		}
 	}
 
+	// The default tab of artists and works.
+	static quotes(
+		entry: IEntryWithEntryType<EntryType.Artist | EntryType.Work>,
+	): string {
+		return `${EntryUrlMapper.details(entry)}/quotes`;
+	}
+
 	static edit(entry: IEntryWithEntryType<EntryType>): string {
 		return `${EntryUrlMapper.details(entry)}/edit`;
 	}

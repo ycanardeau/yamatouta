@@ -1,5 +1,6 @@
 import { Link } from '@/components/Link';
 import { IWorkLinkDto } from '@/dto/ILinkDto';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiDescriptionListDescription,
 	EuiDescriptionListTitle,
@@ -16,7 +17,7 @@ const WorkLinkList = ({ workLinks }: WorkLinkListProps): React.ReactElement => {
 			{workLinks.map((workLink, index) => (
 				<React.Fragment key={workLink.id}>
 					{index > 0 && <br />}
-					<Link to={`/works/${workLink.relatedWork.id}`}>
+					<Link to={EntryUrlMapper.quotes(workLink.relatedWork)}>
 						{workLink.relatedWork.name}
 					</Link>
 				</React.Fragment>

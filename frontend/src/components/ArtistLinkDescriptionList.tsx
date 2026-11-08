@@ -1,5 +1,6 @@
 import { Link } from '@/components/Link';
 import { IArtistLinkDto } from '@/dto/ILinkDto';
+import { EntryUrlMapper } from '@/models/EntryUrlMapper';
 import {
 	EuiDescriptionListDescription,
 	EuiDescriptionListTitle,
@@ -18,7 +19,7 @@ const ArtistLinkList = ({
 			{artistLinks.map((artistLink, index) => (
 				<React.Fragment key={artistLink.id}>
 					{index > 0 && <br />}
-					<Link to={`/artists/${artistLink.relatedArtist.id}`}>
+					<Link to={EntryUrlMapper.quotes(artistLink.relatedArtist)}>
 						{artistLink.relatedArtist.name}
 					</Link>
 				</React.Fragment>

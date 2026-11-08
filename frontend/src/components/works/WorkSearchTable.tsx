@@ -174,7 +174,7 @@ const WorkSearchTableRow = React.memo(
 				>
 					<span>
 						<Avatar size="m" name={work.name} />{' '}
-						<Link to={EntryUrlMapper.details(work)}>
+						<Link to={EntryUrlMapper.quotes(work)}>
 							{work.name}
 						</Link>
 					</span>

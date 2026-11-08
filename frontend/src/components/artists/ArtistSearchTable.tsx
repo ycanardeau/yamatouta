@@ -181,7 +181,7 @@ const ArtistSearchTableRow = React.memo(
 							name={artist.name}
 							imageUrl={artist.avatarUrl ?? ''}
 						/>{' '}
-						<Link to={EntryUrlMapper.details(artist)}>
+						<Link to={EntryUrlMapper.quotes(artist)}>
 							{artist.name}
 						</Link>
 					</span>

@@ -158,7 +158,7 @@ export const QuoteComment = ({
 				<Link
 					color="text"
 					style={{ fontSize: 'inherit', fontWeight: 'inherit' }}
-					to={`/artists/${quote.artist.id}`}
+					to={EntryUrlMapper.quotes(quote.artist)}
 				>
 					{quote.artist.name}
 				</Link>
