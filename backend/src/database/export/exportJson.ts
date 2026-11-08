@@ -1,3 +1,4 @@
+import { toQuoteRecord } from '@/database/export/QuoteRecord';
 import { QuoteDto } from '@/dto/QuoteDto';
 import { WorkDto } from '@/dto/WorkDto';
 import { Quote } from '@/entities/Quote';
@@ -192,6 +193,48 @@ const writeJson = async (path: string, value: unknown): Promise<void> => {
 	await fs.writeFile(path, `${JSON.stringify(value, null, '\t')}\n`);
 };
 
+// Cloudflare Pages serves files of up to 25 MiB.
+const maxFileSize = 20 * 1024 * 1024;
+
+// Writes items to `<name>.1.json`, `<name>.2.json` and so on, one item per
+// line, starting a new file before one would exceed the size limit.
+const writeSplitJson = async (
+	outDir: string,
+	name: string,
+	items: unknown[],
+): Promise<void> => {
+	const filePattern = new RegExp(`^${name}(\\.\\d+)?\\.json$`);
+	for (const file of await fs.readdir(outDir)) {
+		if (filePattern.test(file)) await fs.unlink(join(outDir, file));
+	}
+
+	let lines: string[] = [];
+	let size = 0;
+	let fileCount = 0;
+
+	const flush = async (): Promise<void> => {
+		fileCount++;
+		await fs.writeFile(
+			join(outDir, `${name}.${fileCount}.json`),
+			`{"items":[\n${lines.join(',\n')}\n]}\n`,
+		);
+		lines = [];
+		size = 0;
+	};
+
+	for (const item of items) {
+		const line = JSON.stringify(item);
+		const lineSize = Buffer.byteLength(line) + 2;
+
+		if (lines.length > 0 && size + lineSize > maxFileSize) await flush();
+
+		lines.push(line);
+		size += lineSize;
+	}
+
+	if (lines.length > 0) await flush();
+};
+
 export const exportJson = async (
 	em: EntityManager,
 	outDir: string,
@@ -199,7 +242,7 @@ export const exportJson = async (
 	await fs.mkdir(outDir, { recursive: true });
 
 	const quotes = await exportQuotes(em);
-	await writeJson(join(outDir, 'quotes.json'), quotes);
+	await writeSplitJson(outDir, 'quotes', quotes.items.map(toQuoteRecord));
 	logger.log(`Exported ${quotes.totalCount} quotes.`);
 
 	const works = await exportWorks(em);
