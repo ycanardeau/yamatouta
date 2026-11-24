@@ -1,0 +1,259 @@
+html {
+	overflow-y: scroll;
+}
+
+body {
+	padding-top: 80px;
+	padding-bottom: 20px;
+}
+
+h1 {
+	font-size: 1.8em;
+}
+h2 {
+	font-size: 1.5em;
+}
+h3 {
+	font-size: 1.2em;
+}
+h4 {
+	font-size: 1.1em;
+}
+
+p {
+	margin-bottom: 5px;
+}
+
+.label {
+	vertical-align: middle;
+}
+
+.result {
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 20px;
+}
+.result .result-heading .result-row,
+.result .result-body .result-row,
+.result tfoot .result-row,
+.result .result-heading .result-row,
+.result .result-body .result-row,
+.result tfoot .result-row {
+	padding: 8px;
+	line-height: 1.42857143;
+	vertical-align: top;
+	border-top: 1px solid #ddd;
+}
+.result .result-heading .result-row {
+	vertical-align: bottom;
+	border-bottom: 1px solid #ddd;
+}
+.result caption+.result-heading .result-row:first-child,
+.result colgroup+.result-heading .result-row:first-child,
+.result .result-heading:first-child .result-row:first-child,
+.result caption+.result-heading .result-row:first-child,
+.result colgroup+.result-heading .result-row:first-child,
+.result .result-heading:first-child .result-row:first-child {
+	border-top: 0;
+}
+.result .result-body+.result-body {
+	border-top: 1px solid #ddd;
+}
+.result .result {
+	background-color: #fff;
+}
+.result-condensed .result-heading .result-row,
+.result-condensed .result-body .result-row,
+.result-condensed tfoot .result-row,
+.result-condensed .result-heading .result-row,
+.result-condensed .result-body .result-row,
+.result-condensed tfoot .result-row {
+	padding: 5px;
+}
+.result-bordered {
+	border: 1px solid #ddd;
+}
+.result-bordered .result-heading .result-row,
+.result-bordered .result-body .result-row,
+.result-bordered tfoot .result-row,
+.result-bordered .result-heading .result-row,
+.result-bordered .result-body .result-row,
+.result-bordered tfoot .result-row {
+	border: 1px solid #ddd;
+}
+.result-bordered .result-heading .result-row,
+.result-bordered .result-heading .result-row {
+	border-bottom-width: 1px;
+}
+.result-s.result-rowiped .result-body .result-row:nth-child(odd),
+.result-s.result-rowiped .result-body .result-row:nth-child(odd){
+	background-color: #f9f9f9;
+}
+.result-hover .result-body .result-row:hover,
+.result-hover .result-body .result-row:hover {
+	background-color: #f5f5f5;
+}
+}
+table col[class*=col-] {
+	position: static;
+	display: table-column;
+	float: none;
+}
+table td[class*=col-],table th[class*=col-] {
+	position: static;
+	display: table-cell;
+	float: none;
+}
+.result .result-heading .result-row.active,
+.result .result-body .result-row.active,
+.result tfoot .result-row.active,
+.result .result-heading .result-row.active,
+.result .result-body .result-row.active,
+.result tfoot .result-row.active,
+.result .result-heading .result-row.active,
+.result .result-body .result-row.active,
+.result tfoot .result-row.active,
+.result .result-heading .result-row.active,
+.result .result-body .result-row.active,
+.result tfoot .result-row.active {
+	background-color: #f5f5f5;
+}
+.result-hover .result-body .result-row.active:hover,
+.result-hover .result-body .result-row.active:hover,
+.result-hover .result-body .result-row.active:hover,
+.result-hover .result-body .result-row:hover .active,
+.result-hover .result-body .result-row.active:hover {
+	background-color: #e8e8e8;
+}
+.result .result-heading .result-row.success,
+.result .result-body .result-row.success,
+.result tfoot .result-row.success,
+.result .result-heading .result-row.success,
+.result .result-body .result-row.success,
+.result tfoot .result-row.success,
+.result .result-heading .result-row.success,
+.result .result-body .result-row.success,
+.result tfoot .result-row.success,
+.result .result-heading .result-row.success,
+.result .result-body .result-row.success,
+.result tfoot .result-row.success {
+	background-color: #dff0d8;
+}
+.result-hover .result-body .result-row.success:hover,
+.result-hover .result-body .result-row.success:hover,
+.result-hover .result-body .result-row.success:hover,
+.result-hover .result-body .result-row:hover .success,
+.result-hover .result-body .result-row.success:hover {
+	background-color: #d0e9c6;
+}
+.result .result-heading .result-row.info,
+.result .result-body .result-row.info,
+.result tfoot .result-row.info,
+.result .result-heading .result-row.info,
+.result .result-body .result-row.info,
+.result tfoot .result-row.info,
+.result .result-heading .result-row.info,
+.result .result-body .result-row.info,
+.result tfoot .result-row.info,
+.result .result-heading .result-row.info,
+.result .result-body .result-row.info,
+.result tfoot .result-row.info {
+	background-color: #d9edf7;
+}
+.result-hover .result-body .result-row.info:hover,
+.result-hover .result-body .result-row.info:hover,
+.result-hover .result-body .result-row.info:hover,
+.result-hover .result-body .result-row:hover .info,
+.result-hover .result-body .result-row.info:hover {
+	background-color: #c4e3f3;
+}
+.result .result-heading .result-row.warning,
+.result .result-body .result-row.warning,
+.result tfoot .result-row.warning,
+.result .result-heading .result-row.warning,
+.result .result-body .result-row.warning,
+.result tfoot .result-row.warning,
+.result .result-heading .result-row.warning,
+.result .result-body .result-row.warning,
+.result tfoot .result-row.warning,
+.result .result-heading .result-row.warning,
+.result .result-body .result-row.warning,
+.result tfoot .result-row.warning {
+	background-color: #fcf8e3;
+}
+.result-hover .result-body .result-row.warning:hover,
+.result-hover .result-body .result-row.warning:hover,
+.result-hover .result-body .result-row.warning:hover,
+.result-hover .result-body .result-row:hover .warning,
+.result-hover .result-body .result-row.warning:hover {
+	background-color: #faf2cc;
+}
+.result .result-heading .result-row.danger,
+.result .result-body .result-row.danger,
+.result tfoot .result-row.danger,
+.result .result-heading .result-row.danger,
+.result .result-body .result-row.danger,
+.result tfoot .result-row.danger,
+.result .result-heading .result-row.danger,
+.result .result-body .result-row.danger,
+.result tfoot .result-row.danger,
+.result .result-heading .result-row.danger,
+.result .result-body .result-row.danger,
+.result tfoot .result-row.danger {
+	background-color: #f2dede;
+}
+.result-hover .result-body .result-row.danger:hover,
+.result-hover .result-body .result-row.danger:hover,
+.result-hover .result-body .result-row.danger:hover,
+.result-hover .result-body .result-row:hover .danger,
+.result-hover .result-body .result-row.danger:hover {
+	background-color: #ebcccc;
+}
+
+.result-heading img {
+	border: 1px solid #e0e0e0;
+}
+
+dd {
+	margin-left: 20px;
+}
+
+.search-form {
+	margin: 0 0 20px 0;
+}
+
+.text-default {
+	color: #333 !important;
+}
+
+.social-button {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.social-button li {
+	float: left;
+	margin: 0 5px 0 0;
+	padding: 0;
+}
+.social-button li div {
+	display: inline;
+}
+.social-button:before,
+.social-button:after {
+	content: " ";
+	display: table;
+}
+.social-button:after {
+	clear: both;
+}
+.social-button {
+	*zoom: 1;
+}
+.social-button iframe.twitter-share-button {
+    width: 90px !important;
+}
+
+blockquote {
+	font-size: 14px;
+}
