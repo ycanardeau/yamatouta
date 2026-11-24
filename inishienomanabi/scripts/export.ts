@@ -230,7 +230,7 @@ const main = (): void => {
 	for (const user of users) {
 		if (user.ImageData instanceof Buffer && user.ImageData.length > 0) {
 			writeFileSync(
-				join(profileImagesDir, `${str(user.Username)}.png`),
+				join(profileImagesDir, `${user.UserId}.png`),
 				user.ImageData,
 			);
 		}
