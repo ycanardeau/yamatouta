@@ -46,7 +46,13 @@ const parseDump = (sql: string): Map<string, Row[]> => {
 						if (c === '\\') {
 							const e = sql[i++];
 							value +=
-								{ n: '\n', r: '\r', t: '\t', '0': '\0', Z: '\x1a' }[e] ?? e;
+								{
+									n: '\n',
+									r: '\r',
+									t: '\t',
+									'0': '\0',
+									Z: '\x1a',
+								}[e] ?? e;
 						} else if (c === "'") {
 							if (sql[i] === "'") {
 								value += "'";
@@ -79,7 +85,9 @@ const parseDump = (sql: string): Map<string, Row[]> => {
 				throw new Error(`Unexpected ${sql[i]} at ${i}`);
 			}
 
-			rows.push(Object.fromEntries(columns.map((c, j) => [c, values[j]])));
+			rows.push(
+				Object.fromEntries(columns.map((c, j) => [c, values[j]])),
+			);
 
 			while (/\s/.test(sql[i])) i++;
 			if (sql[i] === ',') {
@@ -103,7 +111,9 @@ const tagNames = (value: Value): string[] =>
 const writeJson = (name: string, items: unknown[]): void => {
 	writeFileSync(
 		join(databaseDir, `${name}.json`),
-		`{"items":[\n${items.map((item) => JSON.stringify(item)).join(',\n')}\n]}\n`,
+		`{"items":[\n${items
+			.map((item) => JSON.stringify(item))
+			.join(',\n')}\n]}\n`,
 	);
 	console.log(`Exported ${items.length} ${name}.`);
 };
@@ -147,7 +157,10 @@ const main = (): void => {
 			source: str(t.Source),
 			score: t.Score,
 			voteCount: t.VoteCount,
-			...(voteCounts.get(t.TranslationId) ?? { upvotes: 0, downvotes: 0 }),
+			...(voteCounts.get(t.TranslationId) ?? {
+				upvotes: 0,
+				downvotes: 0,
+			}),
 			userId: t.UserId,
 			creationDate: t.CreationDate,
 			lastEditDate: t.LastEditDate,
@@ -172,16 +185,37 @@ const main = (): void => {
 			})),
 	);
 
+	const suggestedEdits = new Map(
+		table('SuggestedEdits').map((s) => [s.SuggestedEditId, s]),
+	);
+
+	// Each review carries the edit it voted for, as shown on the reviews page
+	// of users.
 	writeJson(
 		'reviews',
-		table('Reviews').map((r) => ({
-			id: r.ReviewId,
-			action: r.Action,
-			translationId: r.TranslationId,
-			userId: r.UserId,
-			summary: str(r.Summary),
-			creationDate: r.CreationDate,
-		})),
+		table('Reviews')
+			.filter((r) => translationIds.has(r.TranslationId))
+			.map((r) => {
+				const s = suggestedEdits.get(r.SuggestedEditId);
+				if (!s)
+					throw new Error(
+						`Review ${r.ReviewId} has no suggested edit.`,
+					);
+				return {
+					id: r.ReviewId,
+					action: r.Action,
+					translationId: r.TranslationId,
+					userId: r.UserId,
+					summary: str(r.Summary),
+					creationDate: r.CreationDate,
+					status: s.Status,
+					japanese: str(s.Japanese),
+					reading: str(s.Reading),
+					yamatokotoba: str(s.Yamatokotoba),
+					category: str(s.Category),
+					tags: tagNames(s.Tags),
+				};
+			}),
 	);
 
 	writeJson(
