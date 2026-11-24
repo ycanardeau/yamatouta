@@ -358,5 +358,5 @@ export const listReviewsByUser = async (
 
 export const profileImageUrl = (user: User): string =>
 	user.hasImage
-		? `/images/profiles/${encodeURIComponent(user.username)}.png`
+		? `/images/profiles/${user.id}.png`
 		: '/images/default_profile.png';
