@@ -40,3 +40,14 @@ export const usePagination = (): { page: number; pageSize: number } => {
 	);
 	return { page, pageSize };
 };
+
+// META_ROBOTS_CONTENT, on the pages of the dynamic site that set it.
+export const useNoIndex = (): void => {
+	React.useEffect(() => {
+		const meta = document.createElement('meta');
+		meta.name = 'robots';
+		meta.content = 'noindex,nofollow';
+		document.head.appendChild(meta);
+		return () => meta.remove();
+	}, []);
+};
