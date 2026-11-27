@@ -1,0 +1,47 @@
+# https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/#set-up-a-workflow
+
+name: Deploy inishienomanabi to Cloudflare Pages
+
+on:
+  push:
+    branches: ["static-site"]
+    paths:
+      - "inishienomanabi/**"
+      - ".github/workflows/pages-inishienomanabi.yaml"
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: "./inishienomanabi"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    name: Deploy to Cloudflare Pages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup Node
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ./inishienomanabi/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v4.1.3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy inishienomanabi/dist --project-name=inishienomanabi
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
